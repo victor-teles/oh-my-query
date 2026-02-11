@@ -18,8 +18,8 @@ export const Route = createRootRouteWithContext<RouterAppContext>()({
   head: () => ({
     links: [
       {
-        rel: "icon",
         href: "/favicon.ico",
+        rel: "icon",
       },
     ],
     meta: [
@@ -27,8 +27,8 @@ export const Route = createRootRouteWithContext<RouterAppContext>()({
         title: "oh-my-query",
       },
       {
-        name: "description",
         content: "oh-my-query is a web application",
+        name: "description",
       },
     ],
   }),
