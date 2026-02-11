@@ -62,3 +62,6 @@ Defined in `packages/env/src/web.ts` using Zod schemas. Web-specific env vars mu
 - **Linting**: Oxlint with Ultracite's core + React presets
 - **React 19**: Use ref as a prop directly, no `forwardRef`
 - **TypeScript**: Strict mode with `noUncheckedIndexedAccess`, `verbatimModuleSyntax`
+- Do not add comments to the code unless necessary for clarity
+- Try always to break down complex components into smaller ones, even if they are only used once. This promotes reusability and readability.
+- Create files new components: When a primitive or reusable create in src/components/ui, when is too specific for the screen create in the same folder as the screen.

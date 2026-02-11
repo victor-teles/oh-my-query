@@ -1,42 +1,24 @@
-import { Eye, PanelLeftClose, Table2 } from "lucide-react";
+import { Eye, Table2 } from "lucide-react";
 
 import type { DatabaseConnection } from "@/lib/connections";
 
-import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 
 interface WorkspaceSidebarProps {
   connection: DatabaseConnection;
-  onToggle: () => void;
 }
 
 const PLACEHOLDER_TABLES = ["users", "orders", "products", "categories"];
 const PLACEHOLDER_VIEWS = ["active_users", "order_summary"];
 
-export const WorkspaceSidebar = ({
-  connection,
-  onToggle,
-}: WorkspaceSidebarProps) => (
+export const WorkspaceSidebar = ({ connection }: WorkspaceSidebarProps) => (
   <div className="flex h-full flex-col bg-sidebar text-sidebar-foreground">
-    {/* macOS traffic light safe zone + window drag area */}
-    <div className="h-[52px] shrink-0" data-tauri-drag-region="" />
-
-    {/* Sidebar header */}
-    <div className="flex items-center justify-between px-3 pb-2">
+    <div className="px-3 py-2">
       <span className="truncate text-sm font-medium">{connection.name}</span>
-      <Button
-        variant="ghost"
-        size="icon-xs"
-        onClick={onToggle}
-        aria-label="Toggle sidebar"
-      >
-        <PanelLeftClose className="size-4" />
-      </Button>
     </div>
 
     <Separator />
 
-    {/* Database objects list */}
     <div className="flex-1 overflow-y-auto px-2 py-2">
       <div className="mb-2 px-1 text-xs font-medium uppercase tracking-wider text-muted-foreground">
         Tables

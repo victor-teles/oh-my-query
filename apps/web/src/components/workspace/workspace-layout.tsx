@@ -1,12 +1,12 @@
 import type { PanelSize } from "react-resizable-panels";
 
-import { PanelLeft } from "lucide-react";
 import { useCallback, useState } from "react";
 import { usePanelRef } from "react-resizable-panels";
 
 import type { DatabaseConnection } from "@/lib/connections";
 
-import { Button } from "@/components/ui/button";
+import { ConnectionToolbar } from "@/components/titlebar/connection-toolbar";
+import { Titlebar } from "@/components/titlebar/titlebar";
 import {
   ResizableHandle,
   ResizablePanel,
@@ -43,40 +43,31 @@ export const WorkspaceLayout = ({ connection }: WorkspaceLayoutProps) => {
   }, []);
 
   return (
-    <div className="h-svh">
-      <ResizablePanelGroup orientation="horizontal">
+    <div className="flex h-svh flex-col">
+      <Titlebar>
+        <ConnectionToolbar
+          connection={connection}
+          sidebarCollapsed={sidebarCollapsed}
+          onToggleSidebar={toggleSidebar}
+        />
+      </Titlebar>
+      <ResizablePanelGroup className="flex-1" orientation="horizontal">
         <ResizablePanel
           panelRef={sidebarRef}
-          defaultSize={25}
-          minSize={15}
-          maxSize={40}
+          defaultSize="25%"
+          minSize="15%"
+          maxSize="40%"
           collapsible
-          collapsedSize={0}
+          collapsedSize="0%"
           onResize={handleResize}
         >
-          <WorkspaceSidebar connection={connection} onToggle={toggleSidebar} />
+          <WorkspaceSidebar connection={connection} />
         </ResizablePanel>
 
         <ResizableHandle withHandle />
 
-        <ResizablePanel defaultSize={75} minSize={50}>
-          <div className="flex h-full flex-col">
-            {sidebarCollapsed && (
-              <div className="flex items-center border-b px-2 py-1">
-                <Button
-                  variant="ghost"
-                  size="icon-xs"
-                  onClick={toggleSidebar}
-                  aria-label="Open sidebar"
-                >
-                  <PanelLeft className="size-4" />
-                </Button>
-              </div>
-            )}
-            <div className="flex-1">
-              <WorkspaceContent connection={connection} />
-            </div>
-          </div>
+        <ResizablePanel defaultSize="75%" minSize="50%">
+          <WorkspaceContent connection={connection} />
         </ResizablePanel>
       </ResizablePanelGroup>
     </div>
