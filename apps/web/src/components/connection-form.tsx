@@ -1,3 +1,4 @@
+import { CheckCircle2, Loader2, XCircle } from "lucide-react";
 import { useCallback, useState } from "react";
 import { toast } from "sonner";
 
@@ -14,6 +15,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { DEFAULT_PORTS, saveConnection } from "@/lib/connections";
+import { testConnection } from "@/lib/tauri";
 
 interface ConnectionFormProps {
   onSuccess?: (connection: DatabaseConnection) => void;
@@ -28,6 +30,12 @@ interface FormState {
   username: string;
   password: string;
 }
+
+type TestStatus =
+  | { state: "idle" }
+  | { state: "testing" }
+  | { state: "success"; message: string; latencyMs: number }
+  | { state: "error"; message: string };
 
 const INITIAL_STATE: FormState = {
   database: "",
@@ -60,6 +68,44 @@ const buildConnection = (form: FormState): DatabaseConnection => {
   };
 };
 
+const buildConnectionParams = (form: FormState) => {
+  const isSqlite = form.type === "sqlite";
+  return {
+    database: form.database.trim(),
+    host: isSqlite ? "" : form.host.trim(),
+    password: isSqlite ? "" : form.password,
+    port: isSqlite ? 0 : Number(form.port),
+    type: form.type,
+    username: isSqlite ? "" : form.username.trim(),
+  };
+};
+
+const getErrorMessage = (err: unknown): string => {
+  if (err instanceof Error) {
+    return err.message;
+  }
+  if (typeof err === "object" && err !== null && "message" in err) {
+    return String((err as { message: unknown }).message);
+  }
+  return "Connection failed";
+};
+
+const attemptTestConnection = async (form: FormState): Promise<TestStatus> => {
+  try {
+    const result = await testConnection(buildConnectionParams(form));
+    if (result.success) {
+      return {
+        latencyMs: result.latencyMs,
+        message: result.message,
+        state: "success",
+      };
+    }
+    return { message: result.message, state: "error" };
+  } catch (error: unknown) {
+    return { message: getErrorMessage(error), state: "error" };
+  }
+};
+
 const validate = (form: FormState): string | null => {
   if (!form.name.trim()) {
     return "Connection name is required";
@@ -75,12 +121,14 @@ const validate = (form: FormState): string | null => {
 
 export const ConnectionForm = ({ onSuccess }: ConnectionFormProps) => {
   const [form, setForm] = useState<FormState>(INITIAL_STATE);
+  const [testStatus, setTestStatus] = useState<TestStatus>({ state: "idle" });
   const isSqlite = form.type === "sqlite";
 
   const updateField = useCallback(
     <K extends keyof FormState>(key: K) =>
       (e: React.ChangeEvent<HTMLInputElement>) => {
         setForm((prev) => ({ ...prev, [key]: e.target.value }));
+        setTestStatus({ state: "idle" });
       },
     []
   );
@@ -97,7 +145,26 @@ export const ConnectionForm = ({ onSuccess }: ConnectionFormProps) => {
       type: value,
       username: value === "sqlite" ? "" : prev.username,
     }));
+    setTestStatus({ state: "idle" });
   }, []);
+
+  const handleTestConnection = useCallback(async () => {
+    const validationError = validate(form);
+    if (validationError) {
+      toast.error(validationError);
+      return;
+    }
+
+    setTestStatus({ state: "testing" });
+    const status = await attemptTestConnection(form);
+    setTestStatus(status);
+
+    if (status.state === "success") {
+      toast.success(`Connected in ${status.latencyMs}ms`);
+    } else if (status.state === "error") {
+      toast.error(status.message);
+    }
+  }, [form]);
 
   const handleSubmit = useCallback(
     (e: React.FormEvent) => {
@@ -206,9 +273,39 @@ export const ConnectionForm = ({ onSuccess }: ConnectionFormProps) => {
         />
       </div>
 
-      <Button type="submit" className="mt-2">
-        Save connection
-      </Button>
+      <div className="flex items-center gap-2">
+        <Button
+          type="button"
+          variant="outline"
+          onClick={handleTestConnection}
+          disabled={testStatus.state === "testing"}
+        >
+          {testStatus.state === "testing" ? (
+            <>
+              <Loader2 className="animate-spin" />
+              Testing...
+            </>
+          ) : (
+            "Test connection"
+          )}
+        </Button>
+
+        {testStatus.state === "success" && (
+          <span className="flex items-center gap-1 text-xs text-emerald-500">
+            <CheckCircle2 className="size-3.5" />
+            Connected ({testStatus.latencyMs}ms)
+          </span>
+        )}
+
+        {testStatus.state === "error" && (
+          <span className="text-destructive flex items-center gap-1 text-xs">
+            <XCircle className="size-3.5" />
+            {testStatus.message}
+          </span>
+        )}
+      </div>
+
+      <Button type="submit">Save connection</Button>
     </form>
   );
 };

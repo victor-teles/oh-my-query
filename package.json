@@ -19,6 +19,7 @@
     "check-types": "turbo check-types",
     "dev:native": "turbo -F native dev",
     "dev:web": "turbo -F web dev",
+    "desktop:dev": "turbo -F web desktop:dev",
     "check": "ultracite check",
     "fix": "ultracite fix"
   },
