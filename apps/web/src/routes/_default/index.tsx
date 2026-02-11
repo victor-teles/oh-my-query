@@ -25,32 +25,43 @@ const ConnectionItem = ({
       ? connection.database
       : `${connection.host}:${connection.port}/${connection.database}`;
 
-  const handleClick = useCallback(() => {
-    onDelete(connection.id);
-  }, [onDelete, connection.id]);
+  const handleDelete = useCallback(
+    (e: React.MouseEvent) => {
+      e.preventDefault();
+      e.stopPropagation();
+      onDelete(connection.id);
+    },
+    [onDelete, connection.id]
+  );
 
   return (
-    <Card size="sm">
-      <CardHeader>
-        <div className="flex items-center gap-2">
-          <Database className="text-muted-foreground size-4" />
-          <div className="flex-1">
-            <CardTitle>{connection.name}</CardTitle>
-            <CardDescription>
-              {connection.type} &middot; {subtitle}
-            </CardDescription>
+    <Link
+      to="/workspace/$connectionId"
+      params={{ connectionId: connection.id }}
+      className="block"
+    >
+      <Card size="sm" className="transition-colors hover:bg-accent/50">
+        <CardHeader>
+          <div className="flex items-center gap-2">
+            <Database className="text-muted-foreground size-4" />
+            <div className="flex-1">
+              <CardTitle>{connection.name}</CardTitle>
+              <CardDescription>
+                {connection.type} &middot; {subtitle}
+              </CardDescription>
+            </div>
+            <Button
+              variant="ghost"
+              size="icon-xs"
+              onClick={handleDelete}
+              aria-label={`Delete ${connection.name}`}
+            >
+              <Trash2 />
+            </Button>
           </div>
-          <Button
-            variant="ghost"
-            size="icon-xs"
-            onClick={handleClick}
-            aria-label={`Delete ${connection.name}`}
-          >
-            <Trash2 />
-          </Button>
-        </div>
-      </CardHeader>
-    </Card>
+        </CardHeader>
+      </Card>
+    </Link>
   );
 };
 
@@ -90,7 +101,7 @@ const HomeComponent = () => {
   );
 };
 
-export const Route = createFileRoute("/")({
+export const Route = createFileRoute("/_default/")({
   beforeLoad: () => {
     const connections = getConnections();
     if (connections.length === 0) {
