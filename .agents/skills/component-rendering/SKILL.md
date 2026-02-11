@@ -69,7 +69,7 @@ import { useTamboComponentState, useTamboStreamStatus } from "@tambo-ai/react";
 function EditableCard({ title: streamedTitle }: { title?: string }) {
   const [title, setTitle, { isPending, flush }] = useTamboComponentState(
     "title",
-    "",
+    ""
   );
   const { streamStatus } = useTamboStreamStatus();
 
@@ -89,7 +89,7 @@ function EditableCard({ title: streamedTitle }: { title?: string }) {
 const [value, setValue, meta] = useTamboComponentState(
   key, // Unique state key within the component
   initialValue, // Initial value if no server state
-  debounceTime, // Debounce ms (default: 500)
+  debounceTime // Debounce ms (default: 500)
 );
 ```
 

@@ -1,4 +1,8 @@
-import { HeadContent, Outlet, createRootRouteWithContext } from "@tanstack/react-router";
+import {
+  HeadContent,
+  Outlet,
+  createRootRouteWithContext,
+} from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 
 import Header from "@/components/header";
@@ -12,6 +16,12 @@ export interface RouterAppContext {}
 export const Route = createRootRouteWithContext<RouterAppContext>()({
   component: RootComponent,
   head: () => ({
+    links: [
+      {
+        rel: "icon",
+        href: "/favicon.ico",
+      },
+    ],
     meta: [
       {
         title: "oh-my-query",
@@ -19,12 +29,6 @@ export const Route = createRootRouteWithContext<RouterAppContext>()({
       {
         name: "description",
         content: "oh-my-query is a web application",
-      },
-    ],
-    links: [
-      {
-        rel: "icon",
-        href: "/favicon.ico",
       },
     ],
   }),

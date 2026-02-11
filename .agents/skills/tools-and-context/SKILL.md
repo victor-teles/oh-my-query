@@ -213,7 +213,7 @@ registerResources(
     uri: `docs://${d.id}`,
     name: d.title,
     mimeType: "text/plain",
-  })),
+  }))
 );
 ```
 
