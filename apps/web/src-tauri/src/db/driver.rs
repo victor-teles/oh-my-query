@@ -1,0 +1,29 @@
+use async_trait::async_trait;
+
+use crate::db::error::DbError;
+use crate::db::mysql::MysqlDriver;
+use crate::db::postgres::PostgresDriver;
+use crate::db::sqlite::SqliteDriver;
+use crate::db::types::{ConnectionParams, TestConnectionResult};
+
+#[async_trait]
+pub trait DatabaseDriver: Send + Sync {
+    async fn test_connection(
+        &self,
+        params: &ConnectionParams,
+    ) -> Result<TestConnectionResult, DbError>;
+
+    fn driver_name(&self) -> &'static str;
+}
+
+pub fn get_driver(db_type: &str) -> Result<Box<dyn DatabaseDriver>, DbError> {
+    match db_type {
+        "postgresql" => Ok(Box::new(PostgresDriver)),
+        "mysql" => Ok(Box::new(MysqlDriver)),
+        "sqlite" => Ok(Box::new(SqliteDriver)),
+        other => Err(DbError {
+            code: "UNSUPPORTED_DRIVER".to_string(),
+            message: format!("Unsupported database type: {other}"),
+        }),
+    }
+}
