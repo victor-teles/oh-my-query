@@ -15,6 +15,7 @@ pub trait DatabaseDriver: Send + Sync {
         params: &ConnectionParams,
     ) -> Result<TestConnectionResult, DbError>;
 
+    #[allow(dead_code)]
     fn driver_name(&self) -> &'static str;
 }
 
