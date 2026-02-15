@@ -1,10 +1,14 @@
+import type { EditorView } from "@codemirror/view";
+
 import { sql, PostgreSQL, MySQL, SQLite } from "@codemirror/lang-sql";
 import { keymap } from "@codemirror/view";
 import { githubDark } from "@uiw/codemirror-theme-github";
 import CodeMirror from "@uiw/react-codemirror";
-import { useMemo } from "react";
+import { useCallback, useMemo } from "react";
 
 import type { DatabaseType } from "@/lib/connections";
+
+import { useEditorInsert } from "@/contexts/editor-insert-context";
 
 const DIALECT_MAP = {
   mysql: MySQL,
@@ -27,6 +31,15 @@ export const SqlEditor = ({
   databaseType,
   readOnly = false,
 }: SqlEditorProps) => {
+  const { registerEditor } = useEditorInsert();
+
+  const handleCreateEditor = useCallback(
+    (view: EditorView) => {
+      registerEditor(view);
+    },
+    [registerEditor]
+  );
+
   const extensions = useMemo(
     () => [
       sql({ dialect: DIALECT_MAP[databaseType] }),
@@ -47,6 +60,7 @@ export const SqlEditor = ({
     <CodeMirror
       value={value}
       onChange={onChange}
+      onCreateEditor={handleCreateEditor}
       extensions={extensions}
       theme={githubDark}
       placeholder="Write your SQL query here..."
