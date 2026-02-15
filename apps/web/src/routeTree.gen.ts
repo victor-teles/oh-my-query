@@ -8,117 +8,117 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
-import { Route as rootRouteImport } from './routes/__root'
-import { Route as DefaultRouteImport } from './routes/_default'
-import { Route as DefaultIndexRouteImport } from './routes/_default/index'
-import { Route as WorkspaceConnectionIdRouteImport } from './routes/workspace/$connectionId'
-import { Route as DefaultOnboardingRouteImport } from './routes/_default/onboarding'
+import { Route as rootRouteImport } from "./routes/__root";
+import { Route as DefaultRouteImport } from "./routes/_default";
+import { Route as DefaultIndexRouteImport } from "./routes/_default/index";
+import { Route as DefaultOnboardingRouteImport } from "./routes/_default/onboarding";
+import { Route as WorkspaceConnectionIdRouteImport } from "./routes/workspace/$connectionId";
 
 const DefaultRoute = DefaultRouteImport.update({
-  id: '/_default',
+  id: "/_default",
   getParentRoute: () => rootRouteImport,
-} as any)
+} as any);
 const DefaultIndexRoute = DefaultIndexRouteImport.update({
-  id: '/',
-  path: '/',
+  id: "/",
+  path: "/",
   getParentRoute: () => DefaultRoute,
-} as any)
+} as any);
 const WorkspaceConnectionIdRoute = WorkspaceConnectionIdRouteImport.update({
-  id: '/workspace/$connectionId',
-  path: '/workspace/$connectionId',
+  id: "/workspace/$connectionId",
+  path: "/workspace/$connectionId",
   getParentRoute: () => rootRouteImport,
-} as any)
+} as any);
 const DefaultOnboardingRoute = DefaultOnboardingRouteImport.update({
-  id: '/onboarding',
-  path: '/onboarding',
+  id: "/onboarding",
+  path: "/onboarding",
   getParentRoute: () => DefaultRoute,
-} as any)
+} as any);
 
 export interface FileRoutesByFullPath {
-  '/': typeof DefaultIndexRoute
-  '/onboarding': typeof DefaultOnboardingRoute
-  '/workspace/$connectionId': typeof WorkspaceConnectionIdRoute
+  "/": typeof DefaultIndexRoute;
+  "/onboarding": typeof DefaultOnboardingRoute;
+  "/workspace/$connectionId": typeof WorkspaceConnectionIdRoute;
 }
 export interface FileRoutesByTo {
-  '/onboarding': typeof DefaultOnboardingRoute
-  '/workspace/$connectionId': typeof WorkspaceConnectionIdRoute
-  '/': typeof DefaultIndexRoute
+  "/onboarding": typeof DefaultOnboardingRoute;
+  "/workspace/$connectionId": typeof WorkspaceConnectionIdRoute;
+  "/": typeof DefaultIndexRoute;
 }
 export interface FileRoutesById {
-  __root__: typeof rootRouteImport
-  '/_default': typeof DefaultRouteWithChildren
-  '/_default/onboarding': typeof DefaultOnboardingRoute
-  '/workspace/$connectionId': typeof WorkspaceConnectionIdRoute
-  '/_default/': typeof DefaultIndexRoute
+  __root__: typeof rootRouteImport;
+  "/_default": typeof DefaultRouteWithChildren;
+  "/_default/onboarding": typeof DefaultOnboardingRoute;
+  "/workspace/$connectionId": typeof WorkspaceConnectionIdRoute;
+  "/_default/": typeof DefaultIndexRoute;
 }
 export interface FileRouteTypes {
-  fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/onboarding' | '/workspace/$connectionId'
-  fileRoutesByTo: FileRoutesByTo
-  to: '/onboarding' | '/workspace/$connectionId' | '/'
+  fileRoutesByFullPath: FileRoutesByFullPath;
+  fullPaths: "/" | "/onboarding" | "/workspace/$connectionId";
+  fileRoutesByTo: FileRoutesByTo;
+  to: "/onboarding" | "/workspace/$connectionId" | "/";
   id:
-    | '__root__'
-    | '/_default'
-    | '/_default/onboarding'
-    | '/workspace/$connectionId'
-    | '/_default/'
-  fileRoutesById: FileRoutesById
+    | "__root__"
+    | "/_default"
+    | "/_default/onboarding"
+    | "/workspace/$connectionId"
+    | "/_default/";
+  fileRoutesById: FileRoutesById;
 }
 export interface RootRouteChildren {
-  DefaultRoute: typeof DefaultRouteWithChildren
-  WorkspaceConnectionIdRoute: typeof WorkspaceConnectionIdRoute
+  DefaultRoute: typeof DefaultRouteWithChildren;
+  WorkspaceConnectionIdRoute: typeof WorkspaceConnectionIdRoute;
 }
 
-declare module '@tanstack/react-router' {
+declare module "@tanstack/react-router" {
   interface FileRoutesByPath {
-    '/_default': {
-      id: '/_default'
-      path: ''
-      fullPath: '/'
-      preLoaderRoute: typeof DefaultRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/_default/': {
-      id: '/_default/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof DefaultIndexRouteImport
-      parentRoute: typeof DefaultRoute
-    }
-    '/workspace/$connectionId': {
-      id: '/workspace/$connectionId'
-      path: '/workspace/$connectionId'
-      fullPath: '/workspace/$connectionId'
-      preLoaderRoute: typeof WorkspaceConnectionIdRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/_default/onboarding': {
-      id: '/_default/onboarding'
-      path: '/onboarding'
-      fullPath: '/onboarding'
-      preLoaderRoute: typeof DefaultOnboardingRouteImport
-      parentRoute: typeof DefaultRoute
-    }
+    "/_default": {
+      id: "/_default";
+      path: "";
+      fullPath: "/";
+      preLoaderRoute: typeof DefaultRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
+    "/_default/": {
+      id: "/_default/";
+      path: "/";
+      fullPath: "/";
+      preLoaderRoute: typeof DefaultIndexRouteImport;
+      parentRoute: typeof DefaultRoute;
+    };
+    "/workspace/$connectionId": {
+      id: "/workspace/$connectionId";
+      path: "/workspace/$connectionId";
+      fullPath: "/workspace/$connectionId";
+      preLoaderRoute: typeof WorkspaceConnectionIdRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
+    "/_default/onboarding": {
+      id: "/_default/onboarding";
+      path: "/onboarding";
+      fullPath: "/onboarding";
+      preLoaderRoute: typeof DefaultOnboardingRouteImport;
+      parentRoute: typeof DefaultRoute;
+    };
   }
 }
 
 interface DefaultRouteChildren {
-  DefaultOnboardingRoute: typeof DefaultOnboardingRoute
-  DefaultIndexRoute: typeof DefaultIndexRoute
+  DefaultOnboardingRoute: typeof DefaultOnboardingRoute;
+  DefaultIndexRoute: typeof DefaultIndexRoute;
 }
 
 const DefaultRouteChildren: DefaultRouteChildren = {
   DefaultOnboardingRoute: DefaultOnboardingRoute,
   DefaultIndexRoute: DefaultIndexRoute,
-}
+};
 
 const DefaultRouteWithChildren =
-  DefaultRoute._addFileChildren(DefaultRouteChildren)
+  DefaultRoute._addFileChildren(DefaultRouteChildren);
 
 const rootRouteChildren: RootRouteChildren = {
   DefaultRoute: DefaultRouteWithChildren,
   WorkspaceConnectionIdRoute: WorkspaceConnectionIdRoute,
-}
+};
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
-  ._addFileTypes<FileRouteTypes>()
+  ._addFileTypes<FileRouteTypes>();
