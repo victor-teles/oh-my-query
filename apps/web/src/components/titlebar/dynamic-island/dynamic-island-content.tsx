@@ -104,7 +104,11 @@ export const DynamicIslandContent = ({
       {resolvedState === "query-success" && execState.result && (
         <QuerySuccessStatus
           key="query-success"
-          rowCount={execState.result.rowCount}
+          rowCount={
+            execState.result.resultType === "tabular"
+              ? execState.result.rowCount
+              : execState.result.count
+          }
           executionTimeMs={execState.result.executionTimeMs}
         />
       )}

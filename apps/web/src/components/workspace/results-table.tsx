@@ -6,7 +6,7 @@ import {
 } from "@tanstack/react-table";
 import { useMemo } from "react";
 
-import type { QueryResult } from "@/lib/tauri";
+import type { TabularResult } from "@/lib/tauri";
 
 import {
   Table,
@@ -20,7 +20,7 @@ import {
 import { ResultsPagination } from "./results-pagination";
 
 interface ResultsTableProps {
-  result: QueryResult;
+  result: TabularResult;
 }
 
 const formatCell = (value: unknown): string => {

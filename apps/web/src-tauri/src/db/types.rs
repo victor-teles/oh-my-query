@@ -102,3 +102,36 @@ pub struct QueryResult {
     pub execution_time_ms: u64,
     pub is_truncated: bool,
 }
+
+#[derive(Debug, Clone, Serialize)]
+#[serde(tag = "resultType")]
+pub enum ExecuteResult {
+    #[serde(rename = "tabular", rename_all = "camelCase")]
+    Tabular {
+        columns: Vec<ColumnInfo>,
+        rows: Vec<Vec<serde_json::Value>>,
+        row_count: u64,
+        execution_time_ms: u64,
+        is_truncated: bool,
+    },
+    #[serde(rename = "documents", rename_all = "camelCase")]
+    Documents {
+        documents: Vec<serde_json::Value>,
+        count: u64,
+        execution_time_ms: u64,
+        is_truncated: bool,
+    },
+}
+
+impl From<QueryResult> for ExecuteResult {
+    fn from(r: QueryResult) -> Self {
+        ExecuteResult::Tabular {
+            columns: r.columns,
+            rows: r.rows,
+            row_count: r.row_count,
+            execution_time_ms: r.execution_time_ms,
+            is_truncated: r.is_truncated,
+        }
+    }
+}
+

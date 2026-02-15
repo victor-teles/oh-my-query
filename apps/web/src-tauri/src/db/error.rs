@@ -38,3 +38,21 @@ impl From<sqlx::Error> for DbError {
         DbError { code, message }
     }
 }
+
+impl From<mongodb::error::Error> for DbError {
+    fn from(err: mongodb::error::Error) -> Self {
+        DbError {
+            code: "MONGO_ERROR".to_string(),
+            message: err.to_string(),
+        }
+    }
+}
+
+impl From<redis::RedisError> for DbError {
+    fn from(err: redis::RedisError) -> Self {
+        DbError {
+            code: "REDIS_ERROR".to_string(),
+            message: err.to_string(),
+        }
+    }
+}

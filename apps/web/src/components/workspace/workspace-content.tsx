@@ -2,7 +2,7 @@ import { Loader2, MessageSquare, Play, Send } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 
 import type { DatabaseConnection } from "@/lib/connections";
-import type { QueryResult } from "@/lib/tauri";
+import type { ExecuteResult } from "@/lib/tauri";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -21,9 +21,12 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Textarea } from "@/components/ui/textarea";
 import { useQueryExecution } from "@/contexts/query-execution-context";
 import { useQueryTabs } from "@/hooks/use-query-tabs";
+import { isSqlDatabase } from "@/lib/connections";
 
 import type { WorkspaceMode } from "./workspace-mode-toggle";
 
+import { CommandEditor } from "./command-editor";
+import { DocumentViewer } from "./document-viewer";
 import { ExecuteButton } from "./execute-button";
 import { QueryErrorDisplay } from "./query-error-display";
 import { QueryStatusBar } from "./query-status-bar";
@@ -51,7 +54,7 @@ export const WorkspaceContent = ({
   }
 
   return (
-    <SqlEditorContent
+    <EditorContent
       connection={connection}
       isConnected={isConnected}
       isConnecting={isConnecting}
@@ -60,18 +63,18 @@ export const WorkspaceContent = ({
   );
 };
 
-interface SqlEditorContentProps {
+interface EditorContentProps {
   connection: DatabaseConnection;
   isConnected: boolean;
   isConnecting: boolean;
   connectionError: string | null;
 }
 
-const SqlEditorContent = ({
+const EditorContent = ({
   connection,
   isConnecting,
   connectionError,
-}: SqlEditorContentProps) => {
+}: EditorContentProps) => {
   const {
     tabs,
     activeTab,
@@ -88,6 +91,7 @@ const SqlEditorContent = ({
   const activeStatus = activeTab?.status;
   const activeResult = activeTab?.result;
   const activeError = activeTab?.error;
+  const isSql = isSqlDatabase(connection.type);
 
   useEffect(() => {
     if (activeStatus) {
@@ -157,8 +161,18 @@ const SqlEditorContent = ({
               />
             </div>
             <div className="flex-1">
-              {activeTab && (
+              {activeTab && isSql && (
                 <SqlEditor
+                  value={activeTab.sql}
+                  onChange={handleSqlChange}
+                  onExecute={handleExecute}
+                  databaseType={
+                    connection.type as "postgresql" | "mysql" | "sqlite"
+                  }
+                />
+              )}
+              {activeTab && !isSql && (
+                <CommandEditor
                   value={activeTab.sql}
                   onChange={handleSqlChange}
                   onExecute={handleExecute}
@@ -176,6 +190,7 @@ const SqlEditorContent = ({
             status={activeTab?.status}
             result={activeTab?.result ?? null}
             error={activeTab?.error ?? null}
+            isSql={isSql}
           />
         </ResizablePanel>
       </ResizablePanelGroup>
@@ -187,11 +202,12 @@ const LOADING_SKELETON_IDS = ["s1", "s2", "s3", "s4", "s5"];
 
 interface ResultsPanelProps {
   status: string | undefined;
-  result: QueryResult | null;
+  result: ExecuteResult | null;
   error: string | null;
+  isSql: boolean;
 }
 
-const ResultsPanel = ({ status, result, error }: ResultsPanelProps) => {
+const ResultsPanel = ({ status, result, error, isSql }: ResultsPanelProps) => {
   if (status === "running") {
     return (
       <div className="flex h-full flex-col gap-2 p-4">
@@ -211,6 +227,17 @@ const ResultsPanel = ({ status, result, error }: ResultsPanelProps) => {
   }
 
   if (status === "success" && result) {
+    if (result.resultType === "documents") {
+      return (
+        <div className="flex h-full flex-col">
+          <div className="flex-1 overflow-auto">
+            <DocumentViewer result={result} />
+          </div>
+          <QueryStatusBar result={result} />
+        </div>
+      );
+    }
+
     return (
       <div className="flex h-full flex-col">
         <div className="flex-1 overflow-auto">
@@ -221,6 +248,10 @@ const ResultsPanel = ({ status, result, error }: ResultsPanelProps) => {
     );
   }
 
+  const emptyMessage = isSql
+    ? "Write SQL above and press Run or Cmd+Enter"
+    : "Write a command above and press Run or Cmd+Enter";
+
   return (
     <div className="flex h-full items-center justify-center">
       <Empty>
@@ -229,9 +260,7 @@ const ResultsPanel = ({ status, result, error }: ResultsPanelProps) => {
             <Play />
           </EmptyMedia>
           <EmptyTitle>Run a query</EmptyTitle>
-          <EmptyDescription>
-            Write SQL above and press Run or Cmd+Enter
-          </EmptyDescription>
+          <EmptyDescription>{emptyMessage}</EmptyDescription>
         </EmptyHeader>
       </Empty>
     </div>
