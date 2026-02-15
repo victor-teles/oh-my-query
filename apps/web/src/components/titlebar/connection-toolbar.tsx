@@ -1,11 +1,5 @@
 import { Link, useNavigate } from "@tanstack/react-router";
-import {
-  PanelLeft,
-  PanelLeftClose,
-  Plus,
-  ShieldCheck,
-  Unplug,
-} from "lucide-react";
+import { Plus, ShieldCheck, Unplug } from "lucide-react";
 import { useCallback, useState } from "react";
 
 import type { WorkspaceMode } from "@/components/workspace/workspace-mode-toggle";
@@ -18,16 +12,12 @@ import { WorkspaceModeToggle } from "@/components/workspace/workspace-mode-toggl
 
 interface ConnectionToolbarProps {
   connection: DatabaseConnection;
-  sidebarCollapsed: boolean;
-  onToggleSidebar: () => void;
   workspaceMode: WorkspaceMode;
   onWorkspaceModeChange: (mode: WorkspaceMode) => void;
 }
 
 export const ConnectionToolbar = ({
   connection,
-  sidebarCollapsed,
-  onToggleSidebar,
   workspaceMode,
   onWorkspaceModeChange,
 }: ConnectionToolbarProps) => {
@@ -44,21 +34,6 @@ export const ConnectionToolbar = ({
 
   return (
     <>
-      <Button
-        variant="ghost"
-        size="icon-xs"
-        onClick={onToggleSidebar}
-        aria-label={sidebarCollapsed ? "Open sidebar" : "Close sidebar"}
-      >
-        {sidebarCollapsed ? (
-          <PanelLeft className="size-3.5" />
-        ) : (
-          <PanelLeftClose className="size-3.5" />
-        )}
-      </Button>
-
-      <Separator orientation="vertical" className="mx-1 h-4" />
-
       <Badge variant="outline" className="gap-1 text-[0.6rem]">
         <span className="size-1.5 rounded-full bg-emerald-500" />
         {connection.name}

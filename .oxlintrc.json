@@ -3,5 +3,14 @@
   "extends": [
     "./node_modules/ultracite/config/oxlint/core/.oxlintrc.json",
     "./node_modules/ultracite/config/oxlint/react/.oxlintrc.json"
-  ]
+  ],
+  "ignorePatterns": ["**/*.gen.ts"],
+  "rules": {
+    "func-style": "off",
+    "no-danger": "off",
+    "max-statements": "off",
+    "no-negated-condition": "off",
+    "no-nodejs-modules": "off",
+    "filename-case": "off"
+  }
 }

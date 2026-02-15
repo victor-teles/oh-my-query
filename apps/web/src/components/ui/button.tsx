@@ -37,6 +37,8 @@ const buttonVariants = cva(
           "border-border dark:bg-input/30 hover:bg-input/50 hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground",
         secondary:
           "bg-secondary text-secondary-foreground hover:bg-secondary/80 aria-expanded:bg-secondary aria-expanded:text-secondary-foreground",
+        toolbar:
+          "border-border bg-muted/60 text-muted-foreground shadow-xs hover:bg-muted hover:text-foreground",
       },
     },
   }
