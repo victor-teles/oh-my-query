@@ -52,7 +52,4 @@ impl DatabaseDriver for RedisDriver {
         })
     }
 
-    fn driver_name(&self) -> &'static str {
-        "Redis"
-    }
 }

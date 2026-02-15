@@ -45,7 +45,4 @@ impl DatabaseDriver for PostgresDriver {
         })
     }
 
-    fn driver_name(&self) -> &'static str {
-        "PostgreSQL"
-    }
 }

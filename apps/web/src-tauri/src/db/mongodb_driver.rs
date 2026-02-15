@@ -61,7 +61,4 @@ impl DatabaseDriver for MongoDbDriver {
         })
     }
 
-    fn driver_name(&self) -> &'static str {
-        "MongoDB"
-    }
 }

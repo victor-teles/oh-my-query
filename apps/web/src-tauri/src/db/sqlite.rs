@@ -38,7 +38,4 @@ impl DatabaseDriver for SqliteDriver {
         })
     }
 
-    fn driver_name(&self) -> &'static str {
-        "SQLite"
-    }
 }

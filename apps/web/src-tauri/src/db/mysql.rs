@@ -45,7 +45,4 @@ impl DatabaseDriver for MysqlDriver {
         })
     }
 
-    fn driver_name(&self) -> &'static str {
-        "MySQL"
-    }
 }
