@@ -44,7 +44,7 @@ Workspace packages are prefixed `@oh-my-query/` and use `workspace:*` protocol. 
 ### Web App (`apps/web/`)
 
 - **Routing**: TanStack Router with file-based routing in `src/routes/`. Route tree is auto-generated (`routeTree.gen.ts`).
-- **Styling**: Tailwind CSS v4 via `@tailwindcss/vite` plugin. CSS entry point is `src/index.css`. Theme uses CSS variables with `oklch` color format for light/dark modes.
+- **Styling**: Tailwind CSS v4 via `@tailwindcss/vite` plugin. CSS entry point is `src/index.css`. Theme uses CSS variables with `oklch` color format for light/dark modes. Glassmorphism effects use `backdrop-blur-xl backdrop-saturate-200` with semi-transparent backgrounds (e.g., `bg-secondary/50`).
 - **UI Components**: shadcn/ui (base-mira style, non-RSC mode). Components live in `src/components/ui/`. Add new components with `bunx shadcn@latest add <component>` from the `apps/web/` directory.
 - **Path alias**: `@/` maps to `apps/web/src/` (configured in both `vite.config.ts` and `tsconfig.json`).
 - **Theming**: `next-themes` with dark mode default, class-based strategy.
@@ -52,8 +52,13 @@ Workspace packages are prefixed `@oh-my-query/` and use `workspace:*` protocol. 
   - Window config: `decorations: true`, `titleBarStyle: "Overlay"` (PascalCase required), `hiddenTitle: true`, `transparent: true`
   - macOS vibrancy via `windowEffects` with `effects: ["sidebar"]` (requires `macOSPrivateApi: true` + `macos-private-api` Cargo feature)
   - Use `data-tauri-drag-region=""` for draggable areas; `TRAFFIC_LIGHT_INSET` (~78px) reserves space for native window controls
+  - When overlaying interactive UI on `data-tauri-drag-region`, use `pointer-events-none` on the container and `pointer-events-auto` on the interactive element to allow both window dragging and UI interaction
   - Platform detection: `isTauri()` helper for conditional desktop vs browser logic
   - Frontend-to-Rust calls via `@tauri-apps/api/core`'s `invoke`
+  - Rust backend: Tauri commands use `sqlx` for database interactions. Dynamic SQL queries are dispatched based on database type (e.g., different `SELECT version()` syntax per DBMS).
+- **Animations**: `motion` (Framer Motion v12+) for complex animations. Use `layout` props for morphing transitions and `AnimatePresence` for enter/exit animations. Spring config `{ type: "spring", stiffness: 400, damping: 30 }` for iOS-like snappiness. Simple animations can use CSS `@keyframes`.
+- **State Management**: Custom React hooks (e.g., `useQueryTabs`, `useConnectionLifecycle`) centralize state logic. React Context (e.g., `QueryExecutionContext`) for cross-component state sharing between disconnected parts of the component tree.
+- **Titlebar**: Uses `leading`, `center`, and `children` slot props. The `center` slot uses absolute positioning to overlay content (like the Dynamic Island) without disrupting the flex layout.
 - **SQL Editor**: CodeMirror (`@uiw/react-codemirror` + `@codemirror/lang-sql`) with GitHub Dark theme. Override backgrounds with Tailwind `!bg-background` on `.cm-editor`, `.cm-gutters`, `.cm-activeLineGutter` for transparency.
 
 ### Environment Variables
