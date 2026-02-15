@@ -8,22 +8,28 @@ import {
 } from "lucide-react";
 import { useCallback, useState } from "react";
 
+import type { WorkspaceMode } from "@/components/workspace/workspace-mode-toggle";
 import type { DatabaseConnection } from "@/lib/connections";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import { WorkspaceModeToggle } from "@/components/workspace/workspace-mode-toggle";
 
 interface ConnectionToolbarProps {
   connection: DatabaseConnection;
   sidebarCollapsed: boolean;
   onToggleSidebar: () => void;
+  workspaceMode: WorkspaceMode;
+  onWorkspaceModeChange: (mode: WorkspaceMode) => void;
 }
 
 export const ConnectionToolbar = ({
   connection,
   sidebarCollapsed,
   onToggleSidebar,
+  workspaceMode,
+  onWorkspaceModeChange,
 }: ConnectionToolbarProps) => {
   const navigate = useNavigate();
   const [safeMode, setSafeMode] = useState(true);
@@ -57,6 +63,13 @@ export const ConnectionToolbar = ({
         <span className="size-1.5 rounded-full bg-emerald-500" />
         {connection.name}
       </Badge>
+
+      <Separator orientation="vertical" className="mx-1 h-4" />
+
+      <WorkspaceModeToggle
+        mode={workspaceMode}
+        onModeChange={onWorkspaceModeChange}
+      />
 
       <Separator orientation="vertical" className="mx-1 h-4" />
 

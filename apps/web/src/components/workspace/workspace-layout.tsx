@@ -13,18 +13,29 @@ import {
   ResizablePanelGroup,
 } from "@/components/ui/resizable";
 
+import type { WorkspaceMode } from "./workspace-mode-toggle";
+
 import { WorkspaceContent } from "./workspace-content";
 import { WorkspaceSidebar } from "./workspace-sidebar";
 
 interface WorkspaceLayoutProps {
   connection: DatabaseConnection;
+  isConnected: boolean;
+  isConnecting: boolean;
+  connectionError: string | null;
 }
 
 const COLLAPSED_THRESHOLD = 1;
 
-export const WorkspaceLayout = ({ connection }: WorkspaceLayoutProps) => {
+export const WorkspaceLayout = ({
+  connection,
+  isConnected,
+  isConnecting,
+  connectionError,
+}: WorkspaceLayoutProps) => {
   const sidebarRef = usePanelRef();
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [workspaceMode, setWorkspaceMode] = useState<WorkspaceMode>("sql");
 
   const toggleSidebar = useCallback(() => {
     const panel = sidebarRef.current;
@@ -49,6 +60,8 @@ export const WorkspaceLayout = ({ connection }: WorkspaceLayoutProps) => {
           connection={connection}
           sidebarCollapsed={sidebarCollapsed}
           onToggleSidebar={toggleSidebar}
+          workspaceMode={workspaceMode}
+          onWorkspaceModeChange={setWorkspaceMode}
         />
       </Titlebar>
       <ResizablePanelGroup className="flex-1" orientation="horizontal">
@@ -67,7 +80,13 @@ export const WorkspaceLayout = ({ connection }: WorkspaceLayoutProps) => {
         <ResizableHandle withHandle />
 
         <ResizablePanel defaultSize="75%" minSize="50%">
-          <WorkspaceContent connection={connection} />
+          <WorkspaceContent
+            connection={connection}
+            isConnected={isConnected}
+            isConnecting={isConnecting}
+            connectionError={connectionError}
+            mode={workspaceMode}
+          />
         </ResizablePanel>
       </ResizablePanelGroup>
     </div>

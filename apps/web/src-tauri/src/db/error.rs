@@ -12,6 +12,15 @@ impl std::fmt::Display for DbError {
     }
 }
 
+impl From<tokio::time::error::Elapsed> for DbError {
+    fn from(_: tokio::time::error::Elapsed) -> Self {
+        DbError {
+            code: "QUERY_TIMEOUT".to_string(),
+            message: "Query exceeded the configured timeout".to_string(),
+        }
+    }
+}
+
 impl From<sqlx::Error> for DbError {
     fn from(err: sqlx::Error) -> Self {
         let (code, message) = match &err {
