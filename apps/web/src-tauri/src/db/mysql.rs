@@ -44,8 +44,4 @@ impl DatabaseDriver for MysqlDriver {
             latency_ms: latency,
         })
     }
-
-    fn driver_name(&self) -> &'static str {
-        "MySQL"
-    }
 }

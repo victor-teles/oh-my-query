@@ -19,10 +19,7 @@ pub async fn list_databases(pool: &DatabasePool) -> Result<Vec<String>, DbError>
     }
 }
 
-pub async fn fetch_schema(
-    pool: &DatabasePool,
-    database_name: &str,
-) -> Result<SchemaInfo, DbError> {
+pub async fn fetch_schema(pool: &DatabasePool, database_name: &str) -> Result<SchemaInfo, DbError> {
     match pool {
         DatabasePool::Postgres(pool) => fetch_schema_postgres(pool, database_name).await,
         DatabasePool::MySql(pool) => fetch_schema_mysql(pool, database_name).await,
@@ -248,12 +245,14 @@ async fn fetch_fks_postgres(
         let ref_table: String = row.try_get("referenced_table").unwrap_or_default();
         let ref_column: String = row.try_get("referenced_column").unwrap_or_default();
 
-        let entry = fk_map.entry(name.clone()).or_insert_with(|| ForeignKeyItem {
-            name,
-            columns: Vec::new(),
-            referenced_table: ref_table,
-            referenced_columns: Vec::new(),
-        });
+        let entry = fk_map
+            .entry(name.clone())
+            .or_insert_with(|| ForeignKeyItem {
+                name,
+                columns: Vec::new(),
+                referenced_table: ref_table,
+                referenced_columns: Vec::new(),
+            });
         if !entry.columns.contains(&column) {
             entry.columns.push(column);
         }
@@ -459,12 +458,14 @@ async fn fetch_fks_mysql(
         let ref_table: String = row.try_get("REFERENCED_TABLE_NAME").unwrap_or_default();
         let ref_column: String = row.try_get("REFERENCED_COLUMN_NAME").unwrap_or_default();
 
-        let entry = fk_map.entry(name.clone()).or_insert_with(|| ForeignKeyItem {
-            name,
-            columns: Vec::new(),
-            referenced_table: ref_table,
-            referenced_columns: Vec::new(),
-        });
+        let entry = fk_map
+            .entry(name.clone())
+            .or_insert_with(|| ForeignKeyItem {
+                name,
+                columns: Vec::new(),
+                referenced_table: ref_table,
+                referenced_columns: Vec::new(),
+            });
         entry.columns.push(column);
         entry.referenced_columns.push(ref_column);
     }

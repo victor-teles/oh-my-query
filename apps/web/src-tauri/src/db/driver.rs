@@ -14,8 +14,6 @@ pub trait DatabaseDriver: Send + Sync {
         &self,
         params: &ConnectionParams,
     ) -> Result<TestConnectionResult, DbError>;
-
-    fn driver_name(&self) -> &'static str;
 }
 
 pub fn get_driver(db_type: &str) -> Result<Box<dyn DatabaseDriver>, DbError> {

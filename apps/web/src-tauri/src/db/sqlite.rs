@@ -37,8 +37,4 @@ impl DatabaseDriver for SqliteDriver {
             latency_ms: latency,
         })
     }
-
-    fn driver_name(&self) -> &'static str {
-        "SQLite"
-    }
 }

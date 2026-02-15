@@ -107,8 +107,7 @@ async fn connect_native(params: &ConnectionParams) -> Result<DatabasePool, DbErr
                 .map_err(DbError::from)?;
             client_options.connect_timeout = Some(std::time::Duration::from_secs(10));
             client_options.server_selection_timeout = Some(std::time::Duration::from_secs(10));
-            let client =
-                mongodb::Client::with_options(client_options).map_err(DbError::from)?;
+            let client = mongodb::Client::with_options(client_options).map_err(DbError::from)?;
             Ok(DatabasePool::MongoDB(client))
         }
         "redis" => {

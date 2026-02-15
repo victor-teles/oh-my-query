@@ -51,8 +51,4 @@ impl DatabaseDriver for RedisDriver {
             latency_ms,
         })
     }
-
-    fn driver_name(&self) -> &'static str {
-        "Redis"
-    }
 }

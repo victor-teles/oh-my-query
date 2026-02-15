@@ -36,15 +36,13 @@ impl DatabaseDriver for MongoDbDriver {
         let start = Instant::now();
 
         let uri = build_mongodb_uri(params);
-        let mut client_options =
-            mongodb::options::ClientOptions::parse(uri)
-                .await
-                .map_err(DbError::from)?;
+        let mut client_options = mongodb::options::ClientOptions::parse(uri)
+            .await
+            .map_err(DbError::from)?;
         client_options.connect_timeout = Some(std::time::Duration::from_secs(10));
         client_options.server_selection_timeout = Some(std::time::Duration::from_secs(10));
 
-        let client =
-            mongodb::Client::with_options(client_options).map_err(DbError::from)?;
+        let client = mongodb::Client::with_options(client_options).map_err(DbError::from)?;
 
         client
             .database("admin")
@@ -59,9 +57,5 @@ impl DatabaseDriver for MongoDbDriver {
             message: "Connection successful".to_string(),
             latency_ms,
         })
-    }
-
-    fn driver_name(&self) -> &'static str {
-        "MongoDB"
     }
 }

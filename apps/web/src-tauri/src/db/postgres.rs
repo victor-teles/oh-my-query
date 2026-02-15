@@ -44,8 +44,4 @@ impl DatabaseDriver for PostgresDriver {
             latency_ms: latency,
         })
     }
-
-    fn driver_name(&self) -> &'static str {
-        "PostgreSQL"
-    }
 }
