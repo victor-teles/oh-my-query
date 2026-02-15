@@ -78,6 +78,17 @@ export const connectToDatabase = async (
   });
 };
 
+export const getServerVersion = async (
+  connectionId: string
+): Promise<string> => {
+  if (!isTauri()) {
+    return "PostgreSQL 16.2";
+  }
+
+  const { invoke } = await import("@tauri-apps/api/core");
+  return invoke<string>("get_server_version", { connectionId });
+};
+
 export const disconnectFromDatabase = async (
   connectionId: string
 ): Promise<void> => {

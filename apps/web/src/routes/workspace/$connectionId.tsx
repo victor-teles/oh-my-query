@@ -1,21 +1,25 @@
 import { createFileRoute, redirect } from "@tanstack/react-router";
 
 import { WorkspaceLayout } from "@/components/workspace/workspace-layout";
+import { QueryExecutionProvider } from "@/contexts/query-execution-context";
 import { useConnectionLifecycle } from "@/hooks/use-connection-lifecycle";
 import { getConnections } from "@/lib/connections";
 
 const WorkspacePage = () => {
   const { connection } = Route.useRouteContext();
-  const { isConnected, isConnecting, error } =
+  const { isConnected, isConnecting, error, serverVersion } =
     useConnectionLifecycle(connection);
 
   return (
-    <WorkspaceLayout
-      connection={connection}
-      isConnected={isConnected}
-      isConnecting={isConnecting}
-      connectionError={error}
-    />
+    <QueryExecutionProvider>
+      <WorkspaceLayout
+        connection={connection}
+        isConnected={isConnected}
+        isConnecting={isConnecting}
+        connectionError={error}
+        serverVersion={serverVersion}
+      />
+    </QueryExecutionProvider>
   );
 };
 

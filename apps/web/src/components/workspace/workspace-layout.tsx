@@ -7,6 +7,7 @@ import { usePanelRef } from "react-resizable-panels";
 import type { DatabaseConnection } from "@/lib/connections";
 
 import { ConnectionToolbar } from "@/components/titlebar/connection-toolbar";
+import { DynamicIsland } from "@/components/titlebar/dynamic-island/dynamic-island";
 import { Titlebar } from "@/components/titlebar/titlebar";
 import { Button } from "@/components/ui/button";
 import {
@@ -25,6 +26,7 @@ interface WorkspaceLayoutProps {
   isConnected: boolean;
   isConnecting: boolean;
   connectionError: string | null;
+  serverVersion: string | null;
 }
 
 const COLLAPSED_THRESHOLD = 1;
@@ -34,6 +36,7 @@ export const WorkspaceLayout = ({
   isConnected,
   isConnecting,
   connectionError,
+  serverVersion,
 }: WorkspaceLayoutProps) => {
   const sidebarRef = usePanelRef();
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
@@ -74,6 +77,17 @@ export const WorkspaceLayout = ({
               <PanelLeftClose className="size-3.5" />
             )}
           </Button>
+        }
+        center={
+          <DynamicIsland
+            isConnecting={isConnecting}
+            isConnected={isConnected}
+            connectionError={connectionError}
+            connectionName={connection.name}
+            serverVersion={serverVersion}
+            username={connection.username}
+            database={connection.database}
+          />
         }
       >
         <ConnectionToolbar
