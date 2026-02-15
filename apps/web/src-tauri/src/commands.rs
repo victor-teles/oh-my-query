@@ -5,8 +5,9 @@ use tauri::State;
 use crate::db::driver::get_driver;
 use crate::db::error::DbError;
 use crate::db::pool::{ConnectionPoolManager, DatabasePool};
+use crate::db::schema::{fetch_schema, list_databases};
 use crate::db::types::{
-    ColumnInfo, ConnectionParams, QueryParams, QueryResult, TestConnectionResult,
+    ColumnInfo, ConnectionParams, QueryParams, QueryResult, SchemaInfo, TestConnectionResult,
 };
 
 const DEFAULT_MAX_ROWS: u64 = 10_000;
@@ -42,6 +43,25 @@ pub async fn get_server_version(
 ) -> Result<String, DbError> {
     let pool = state.get_pool(&connection_id).await?;
     fetch_version(&pool).await
+}
+
+#[tauri::command]
+pub async fn list_connection_databases(
+    connection_id: String,
+    state: State<'_, ConnectionPoolManager>,
+) -> Result<Vec<String>, DbError> {
+    let pool = state.get_pool(&connection_id).await?;
+    list_databases(&pool).await
+}
+
+#[tauri::command]
+pub async fn get_schema(
+    connection_id: String,
+    database_name: String,
+    state: State<'_, ConnectionPoolManager>,
+) -> Result<SchemaInfo, DbError> {
+    let pool = state.get_pool(&connection_id).await?;
+    fetch_schema(&pool, &database_name).await
 }
 
 #[tauri::command]

@@ -6,6 +6,7 @@ import {
 
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
+import { TooltipProvider } from "@/components/ui/tooltip";
 import "@/index.css";
 
 export interface RouterAppContext {
@@ -43,8 +44,10 @@ function RootComponent() {
         disableTransitionOnChange
         storageKey="vite-ui-theme"
       >
-        <Outlet />
-        <Toaster richColors />
+        <TooltipProvider>
+          <Outlet />
+          <Toaster richColors />
+        </TooltipProvider>
       </ThemeProvider>
     </>
   );

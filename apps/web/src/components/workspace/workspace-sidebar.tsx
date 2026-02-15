@@ -1,59 +1,199 @@
-import { Eye, Table2 } from "lucide-react";
+import { AlertCircle, Database, RefreshCw, Search } from "lucide-react";
+import { useCallback, useEffect, useState } from "react";
 
 import type { DatabaseConnection } from "@/lib/connections";
 
+import { Button } from "@/components/ui/button";
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupInput,
+  InputGroupText,
+} from "@/components/ui/input-group";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
+import { Skeleton } from "@/components/ui/skeleton";
+import { useSchema } from "@/hooks/use-schema";
 import { isTauri } from "@/lib/tauri";
 import { cn } from "@/lib/utils";
 
+import { SchemaTree } from "./schema-tree";
+
 interface WorkspaceSidebarProps {
   connection: DatabaseConnection;
+  isConnected: boolean;
 }
 
-const PLACEHOLDER_TABLES = ["users", "orders", "products", "categories"];
-const PLACEHOLDER_VIEWS = ["active_users", "order_summary"];
+const SKELETON_ITEMS = [
+  { id: "s1", width: "w-3/4" },
+  { id: "s2", width: "w-1/2" },
+  { id: "s3", width: "w-5/6" },
+  { id: "s4", width: "w-2/3" },
+  { id: "s5", width: "w-3/5" },
+  { id: "s6", width: "w-1/2" },
+];
 
-export const WorkspaceSidebar = ({ connection }: WorkspaceSidebarProps) => (
-  <div
-    className={cn(
-      "flex h-full flex-col text-sidebar-foreground",
-      isTauri() ? "bg-transparent" : "bg-sidebar"
-    )}
-  >
-    <div className="px-3 py-2">
-      <span className="truncate text-sm font-medium">{connection.name}</span>
-    </div>
-
-    <Separator className="bg-sidebar-border" />
-
-    <div className="flex-1 overflow-y-auto px-2 py-2">
-      <div className="mb-2 px-1 text-xs font-medium uppercase tracking-wider text-muted-foreground">
-        Tables
-      </div>
-      {PLACEHOLDER_TABLES.map((table) => (
-        <button
-          key={table}
-          type="button"
-          className="flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-xs hover:bg-sidebar-accent/50 hover:text-sidebar-accent-foreground"
-        >
-          <Table2 className="size-3.5 text-muted-foreground" />
-          {table}
-        </button>
-      ))}
-
-      <div className="mb-2 mt-4 px-1 text-xs font-medium uppercase tracking-wider text-muted-foreground">
-        Views
-      </div>
-      {PLACEHOLDER_VIEWS.map((view) => (
-        <button
-          key={view}
-          type="button"
-          className="flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-xs hover:bg-sidebar-accent/50 hover:text-sidebar-accent-foreground"
-        >
-          <Eye className="size-3.5 text-muted-foreground" />
-          {view}
-        </button>
-      ))}
-    </div>
+const SchemaLoadingState = () => (
+  <div className="space-y-2 px-3 py-2">
+    {SKELETON_ITEMS.map((item) => (
+      <Skeleton key={item.id} className={cn("h-5", item.width)} />
+    ))}
   </div>
 );
+
+interface SchemaErrorStateProps {
+  error: string;
+  onRetry: () => void;
+}
+
+const SchemaErrorState = ({ error, onRetry }: SchemaErrorStateProps) => (
+  <div className="flex flex-col items-center gap-2 px-3 py-6 text-center">
+    <AlertCircle className="size-5 text-destructive" />
+    <p className="text-xs text-muted-foreground">{error}</p>
+    <Button variant="outline" size="sm" onClick={onRetry}>
+      <RefreshCw className="mr-1.5 size-3" />
+      Retry
+    </Button>
+  </div>
+);
+
+interface DatabaseSelectorProps {
+  databases: string[];
+  selected: string;
+  onSelect: (value: string) => void;
+}
+
+const DatabaseSelector = ({
+  databases,
+  selected,
+  onSelect,
+}: DatabaseSelectorProps) => {
+  const handleChange = useCallback(
+    (value: string | null) => {
+      if (value) {
+        onSelect(value);
+      }
+    },
+    [onSelect]
+  );
+
+  return (
+    <div className="border-t border-sidebar-border px-2 py-2">
+      <Select value={selected} onValueChange={handleChange}>
+        <SelectTrigger size="sm" className="w-full">
+          <Database className="size-3 text-muted-foreground" />
+          <SelectValue />
+        </SelectTrigger>
+        <SelectContent side="top">
+          {databases.map((db) => (
+            <SelectItem key={db} value={db}>
+              {db}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+    </div>
+  );
+};
+
+export const WorkspaceSidebar = ({
+  connection,
+  isConnected,
+}: WorkspaceSidebarProps) => {
+  const {
+    schema,
+    isLoading,
+    error,
+    refresh,
+    databases,
+    selectedDatabase,
+    setSelectedDatabase,
+  } = useSchema(connection.id, isConnected);
+  const [filter, setFilter] = useState("");
+
+  const handleFilterChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setFilter(e.target.value);
+    },
+    []
+  );
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "F5") {
+        e.preventDefault();
+        refresh();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [refresh]);
+
+  const showDatabaseSelector =
+    databases && databases.length > 1 && selectedDatabase;
+
+  return (
+    <div
+      className={cn(
+        "flex h-full flex-col text-sidebar-foreground",
+        isTauri() ? "bg-transparent" : "bg-sidebar"
+      )}
+    >
+      <div className="flex items-center justify-between px-3 py-2">
+        <span className="truncate text-sm font-medium">{connection.name}</span>
+        {schema && (
+          <Button
+            variant="ghost"
+            size="icon-xs"
+            onClick={refresh}
+            aria-label="Refresh schema"
+            disabled={isLoading}
+          >
+            <RefreshCw className={cn("size-3", isLoading && "animate-spin")} />
+          </Button>
+        )}
+      </div>
+
+      <Separator className="bg-sidebar-border" />
+
+      {schema && (
+        <div className="px-2 py-2">
+          <InputGroup>
+            <InputGroupAddon>
+              <InputGroupText>
+                <Search />
+              </InputGroupText>
+            </InputGroupAddon>
+            <InputGroupInput
+              placeholder="Filter tables..."
+              value={filter}
+              onChange={handleFilterChange}
+            />
+          </InputGroup>
+        </div>
+      )}
+
+      <ScrollArea className="min-h-0 flex-1">
+        {isLoading && !schema && <SchemaLoadingState />}
+        {error && <SchemaErrorState error={error} onRetry={refresh} />}
+        {schema && <SchemaTree schema={schema} filter={filter} />}
+      </ScrollArea>
+
+      {showDatabaseSelector && (
+        <DatabaseSelector
+          databases={databases}
+          selected={selectedDatabase}
+          onSelect={setSelectedDatabase}
+        />
+      )}
+    </div>
+  );
+};

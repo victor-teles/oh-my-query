@@ -106,7 +106,7 @@ export const WorkspaceLayout = ({
           collapsedSize="0%"
           onResize={handleResize}
         >
-          <WorkspaceSidebar connection={connection} />
+          <WorkspaceSidebar connection={connection} isConnected={isConnected} />
         </ResizablePanel>
 
         <ResizableHandle withHandle />

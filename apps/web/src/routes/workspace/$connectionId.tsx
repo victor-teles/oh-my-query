@@ -1,6 +1,7 @@
 import { createFileRoute, redirect } from "@tanstack/react-router";
 
 import { WorkspaceLayout } from "@/components/workspace/workspace-layout";
+import { EditorInsertProvider } from "@/contexts/editor-insert-context";
 import { QueryExecutionProvider } from "@/contexts/query-execution-context";
 import { useConnectionLifecycle } from "@/hooks/use-connection-lifecycle";
 import { getConnections } from "@/lib/connections";
@@ -12,13 +13,15 @@ const WorkspacePage = () => {
 
   return (
     <QueryExecutionProvider>
-      <WorkspaceLayout
-        connection={connection}
-        isConnected={isConnected}
-        isConnecting={isConnecting}
-        connectionError={error}
-        serverVersion={serverVersion}
-      />
+      <EditorInsertProvider>
+        <WorkspaceLayout
+          connection={connection}
+          isConnected={isConnected}
+          isConnecting={isConnecting}
+          connectionError={error}
+          serverVersion={serverVersion}
+        />
+      </EditorInsertProvider>
     </QueryExecutionProvider>
   );
 };
