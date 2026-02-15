@@ -1,5 +1,6 @@
 import type { PanelSize } from "react-resizable-panels";
 
+import { PanelLeft, PanelLeftClose } from "lucide-react";
 import { useCallback, useState } from "react";
 import { usePanelRef } from "react-resizable-panels";
 
@@ -7,6 +8,7 @@ import type { DatabaseConnection } from "@/lib/connections";
 
 import { ConnectionToolbar } from "@/components/titlebar/connection-toolbar";
 import { Titlebar } from "@/components/titlebar/titlebar";
+import { Button } from "@/components/ui/button";
 import {
   ResizableHandle,
   ResizablePanel,
@@ -35,6 +37,7 @@ export const WorkspaceLayout = ({
 }: WorkspaceLayoutProps) => {
   const sidebarRef = usePanelRef();
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [sidebarWidthPct, setSidebarWidthPct] = useState(25);
   const [workspaceMode, setWorkspaceMode] = useState<WorkspaceMode>("sql");
 
   const toggleSidebar = useCallback(() => {
@@ -51,15 +54,30 @@ export const WorkspaceLayout = ({
 
   const handleResize = useCallback((size: PanelSize) => {
     setSidebarCollapsed(size.asPercentage < COLLAPSED_THRESHOLD);
+    setSidebarWidthPct(size.asPercentage);
   }, []);
 
   return (
     <div className="flex h-svh flex-col">
-      <Titlebar>
+      <Titlebar
+        leadingWidth={`${sidebarWidthPct}%`}
+        leading={
+          <Button
+            variant="ghost"
+            size="icon-xs"
+            onClick={toggleSidebar}
+            aria-label={sidebarCollapsed ? "Open sidebar" : "Close sidebar"}
+          >
+            {sidebarCollapsed ? (
+              <PanelLeft className="size-3.5" />
+            ) : (
+              <PanelLeftClose className="size-3.5" />
+            )}
+          </Button>
+        }
+      >
         <ConnectionToolbar
           connection={connection}
-          sidebarCollapsed={sidebarCollapsed}
-          onToggleSidebar={toggleSidebar}
           workspaceMode={workspaceMode}
           onWorkspaceModeChange={setWorkspaceMode}
         />

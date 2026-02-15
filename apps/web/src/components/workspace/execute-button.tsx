@@ -13,7 +13,7 @@ export const ExecuteButton = ({
   disabled,
   onClick,
 }: ExecuteButtonProps) => (
-  <Button variant="default" onClick={onClick} disabled={disabled || isRunning}>
+  <Button variant="toolbar" onClick={onClick} disabled={disabled || isRunning}>
     {isRunning ? (
       <Loader2 className="size-3 animate-spin" />
     ) : (
@@ -21,7 +21,7 @@ export const ExecuteButton = ({
     )}
     <span>{isRunning ? "Running..." : "Run"}</span>
     {!isRunning && (
-      <kbd className="ml-1 rounded border border-border/50 px-1 py-0.5 text-[0.55rem]">
+      <kbd className="ml-1 rounded border border-border/40 bg-background/50 px-1 py-0.5 text-[0.55rem] text-muted-foreground/70">
         ⌘↵
       </kbd>
     )}

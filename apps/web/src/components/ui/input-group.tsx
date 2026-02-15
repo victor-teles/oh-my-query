@@ -49,11 +49,13 @@ function InputGroupAddon({
   ...props
 }: React.ComponentProps<"div"> & VariantProps<typeof inputGroupAddonVariants>) {
   return (
+    // oxlint-disable-next-line jsx_a11y/click-events-have-key-events
     <div
       role="group"
       data-slot="input-group-addon"
       data-align={align}
       className={cn(inputGroupAddonVariants({ align }), className)}
+      // oxlint-disable-next-line react_perf/jsx-no-new-function-as-prop
       onClick={(e) => {
         if ((e.target as HTMLElement).closest("button")) {
           return;

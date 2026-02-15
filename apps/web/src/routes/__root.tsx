@@ -6,10 +6,11 @@ import {
 
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
+import "@/index.css";
 
-import "../index.css";
-
-export interface RouterAppContext {}
+export interface RouterAppContext {
+  noop: () => void;
+}
 
 export const Route = createRootRouteWithContext<RouterAppContext>()({
   component: RootComponent,
