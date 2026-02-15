@@ -10,7 +10,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import "@/index.css";
 
 export interface RouterAppContext {
-  noop: () => void;
+  noop?: () => void;
 }
 
 export const Route = createRootRouteWithContext<RouterAppContext>()({
