@@ -44,5 +44,4 @@ impl DatabaseDriver for PostgresDriver {
             latency_ms: latency,
         })
     }
-
 }

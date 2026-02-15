@@ -134,4 +134,3 @@ impl From<QueryResult> for ExecuteResult {
         }
     }
 }
-

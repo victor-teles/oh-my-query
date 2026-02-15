@@ -51,5 +51,4 @@ impl DatabaseDriver for RedisDriver {
             latency_ms,
         })
     }
-
 }

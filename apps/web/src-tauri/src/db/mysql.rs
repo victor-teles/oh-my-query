@@ -44,5 +44,4 @@ impl DatabaseDriver for MysqlDriver {
             latency_ms: latency,
         })
     }
-
 }

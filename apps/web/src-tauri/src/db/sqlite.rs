@@ -37,5 +37,4 @@ impl DatabaseDriver for SqliteDriver {
             latency_ms: latency,
         })
     }
-
 }

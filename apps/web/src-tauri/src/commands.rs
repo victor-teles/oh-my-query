@@ -106,9 +106,7 @@ async fn execute_for_pool(
     max_rows: usize,
 ) -> Result<ExecuteResult, DbError> {
     match pool {
-        DatabasePool::Postgres(_)
-        | DatabasePool::MySql(_)
-        | DatabasePool::Sqlite(_) => {
+        DatabasePool::Postgres(_) | DatabasePool::MySql(_) | DatabasePool::Sqlite(_) => {
             let (columns, rows, is_truncated) = fetch_sql_rows(pool, command, max_rows).await?;
             Ok(ExecuteResult::Tabular {
                 row_count: rows.len() as u64,
@@ -118,12 +116,8 @@ async fn execute_for_pool(
                 is_truncated,
             })
         }
-        DatabasePool::MongoDB(client) => {
-            execute_mongodb(client, command, max_rows).await
-        }
-        DatabasePool::Redis(conn) => {
-            execute_redis(&mut conn.clone(), command).await
-        }
+        DatabasePool::MongoDB(client) => execute_mongodb(client, command, max_rows).await,
+        DatabasePool::Redis(conn) => execute_redis(&mut conn.clone(), command).await,
     }
 }
 
@@ -298,11 +292,10 @@ fn split_json_args(input: &str) -> Vec<String> {
 }
 
 fn parse_bson_doc(json_str: &str) -> Result<mongodb::bson::Document, DbError> {
-    let value: serde_json::Value =
-        serde_json::from_str(json_str).map_err(|e| DbError {
-            code: "PARSE_ERROR".to_string(),
-            message: format!("Invalid JSON: {e}"),
-        })?;
+    let value: serde_json::Value = serde_json::from_str(json_str).map_err(|e| DbError {
+        code: "PARSE_ERROR".to_string(),
+        message: format!("Invalid JSON: {e}"),
+    })?;
     let bson = mongodb::bson::to_bson(&value).map_err(|e| DbError {
         code: "PARSE_ERROR".to_string(),
         message: format!("Cannot convert to BSON: {e}"),
@@ -624,11 +617,7 @@ async fn execute_redis(
     Ok(redis_value_to_result(&value, &cmd_name, is_hash_command))
 }
 
-fn redis_value_to_result(
-    value: &redis::Value,
-    cmd_name: &str,
-    is_hash: bool,
-) -> ExecuteResult {
+fn redis_value_to_result(value: &redis::Value, cmd_name: &str, is_hash: bool) -> ExecuteResult {
     match value {
         redis::Value::Nil => ExecuteResult::Tabular {
             columns: vec![ColumnInfo {
@@ -770,7 +759,11 @@ async fn fetch_version(pool: &DatabasePool) -> Result<String, DbError> {
                 .await
                 .map_err(DbError::from)?;
             let full: String = row.try_get(0).unwrap_or_default();
-            Ok(full.split_whitespace().take(2).collect::<Vec<_>>().join(" "))
+            Ok(full
+                .split_whitespace()
+                .take(2)
+                .collect::<Vec<_>>()
+                .join(" "))
         }
         DatabasePool::MySql(pool) => {
             let row = sqlx::query("SELECT VERSION()")
@@ -794,9 +787,7 @@ async fn fetch_version(pool: &DatabasePool) -> Result<String, DbError> {
                 .run_command(mongodb::bson::doc! { "buildInfo": 1 })
                 .await
                 .map_err(DbError::from)?;
-            let version = result
-                .get_str("version")
-                .unwrap_or("unknown");
+            let version = result.get_str("version").unwrap_or("unknown");
             Ok(format!("MongoDB {version}"))
         }
         DatabasePool::Redis(conn) => {
