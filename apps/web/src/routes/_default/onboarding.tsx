@@ -4,6 +4,7 @@ import { useCallback } from "react";
 import type { DatabaseConnection } from "@/lib/connections";
 
 import { ConnectionForm } from "@/components/connection-form";
+import { Titlebar } from "@/components/titlebar/titlebar";
 import {
   Card,
   CardContent,
@@ -26,19 +27,22 @@ const OnboardingComponent = () => {
   );
 
   return (
-    <div className="flex items-center justify-center p-6">
-      <Card className="w-full max-w-md">
-        <CardHeader>
-          <CardTitle>Add a connection</CardTitle>
-          <CardDescription>
-            Connect to a database to start querying.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <ConnectionForm onSuccess={handleSuccess} />
-        </CardContent>
-      </Card>
-    </div>
+    <>
+      <Titlebar />
+      <div className="flex flex-1 items-center justify-center p-6">
+        <Card className="w-full max-w-md">
+          <CardHeader>
+            <CardTitle>Add a connection</CardTitle>
+            <CardDescription>
+              Connect to a database to start querying.
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <ConnectionForm onSuccess={handleSuccess} />
+          </CardContent>
+        </Card>
+      </div>
+    </>
   );
 };
 
