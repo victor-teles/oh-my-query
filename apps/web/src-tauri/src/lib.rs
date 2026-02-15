@@ -16,6 +16,7 @@ pub fn run() {
             commands::test_connection,
             commands::connect_to_database,
             commands::disconnect_from_database,
+            commands::get_server_version,
             commands::execute_query,
         ])
         .run(tauri::generate_context!())

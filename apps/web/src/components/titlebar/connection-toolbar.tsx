@@ -5,7 +5,6 @@ import { useCallback, useState } from "react";
 import type { WorkspaceMode } from "@/components/workspace/workspace-mode-toggle";
 import type { DatabaseConnection } from "@/lib/connections";
 
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { WorkspaceModeToggle } from "@/components/workspace/workspace-mode-toggle";
@@ -34,13 +33,6 @@ export const ConnectionToolbar = ({
 
   return (
     <>
-      <Badge variant="outline" className="gap-1 text-[0.6rem]">
-        <span className="size-1.5 rounded-full bg-emerald-500" />
-        {connection.name}
-      </Badge>
-
-      <Separator orientation="vertical" className="mx-1 h-4" />
-
       <WorkspaceModeToggle
         mode={workspaceMode}
         onModeChange={onWorkspaceModeChange}

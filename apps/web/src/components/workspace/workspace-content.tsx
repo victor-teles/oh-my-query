@@ -1,5 +1,5 @@
 import { Loader2, MessageSquare, Play, Send } from "lucide-react";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import type { DatabaseConnection } from "@/lib/connections";
 import type { QueryResult } from "@/lib/tauri";
@@ -19,6 +19,7 @@ import {
 } from "@/components/ui/resizable";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Textarea } from "@/components/ui/textarea";
+import { useQueryExecution } from "@/contexts/query-execution-context";
 import { useQueryTabs } from "@/hooks/use-query-tabs";
 
 import type { WorkspaceMode } from "./workspace-mode-toggle";
@@ -81,6 +82,22 @@ const SqlEditorContent = ({
     updateTabSql,
     executeTab,
   } = useQueryTabs(connection.id);
+
+  const { setExecutionState } = useQueryExecution();
+
+  const activeStatus = activeTab?.status;
+  const activeResult = activeTab?.result;
+  const activeError = activeTab?.error;
+
+  useEffect(() => {
+    if (activeStatus) {
+      setExecutionState({
+        error: activeError ?? null,
+        result: activeResult ?? null,
+        status: activeStatus,
+      });
+    }
+  }, [activeStatus, activeResult, activeError, setExecutionState]);
 
   const handleExecute = useCallback(() => {
     if (activeTab) {

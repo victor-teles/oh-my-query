@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 
 interface TitlebarProps {
   children?: ReactNode;
+  center?: ReactNode;
   leading?: ReactNode;
   leadingWidth?: string;
   className?: string;
@@ -14,6 +15,7 @@ const TRAFFIC_LIGHT_INSET = "78px";
 
 export const Titlebar = ({
   children,
+  center,
   leading,
   leadingWidth,
   className,
@@ -40,9 +42,10 @@ export const Titlebar = ({
             <div className="ml-auto flex items-center">{leading}</div>
           </div>
           <div
-            className="flex h-full flex-1 items-center border-b bg-background"
+            className="relative flex h-full flex-1 items-center border-b bg-background"
             data-tauri-drag-region=""
           >
+            {center}
             {children && (
               <div className="ml-auto flex shrink-0 items-center gap-1 px-2">
                 {children}
@@ -53,7 +56,9 @@ export const Titlebar = ({
       ) : (
         <>
           {isTauri() && <div style={{ width: TRAFFIC_LIGHT_INSET }} />}
-          <div className="flex-1" data-tauri-drag-region="" />
+          <div className="relative flex-1" data-tauri-drag-region="">
+            {center}
+          </div>
           {children && (
             <div className="flex shrink-0 items-center gap-1 px-2">
               {children}

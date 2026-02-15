@@ -36,6 +36,15 @@ pub async fn disconnect_from_database(
 }
 
 #[tauri::command]
+pub async fn get_server_version(
+    connection_id: String,
+    state: State<'_, ConnectionPoolManager>,
+) -> Result<String, DbError> {
+    let pool = state.get_pool(&connection_id).await?;
+    fetch_version(&pool).await
+}
+
+#[tauri::command]
 pub async fn execute_query(
     params: QueryParams,
     state: State<'_, ConnectionPoolManager>,
@@ -147,5 +156,36 @@ async fn fetch_rows(
         DatabasePool::Postgres(pool) => fetch_rows_native!(pool, sql, max_rows),
         DatabasePool::MySql(pool) => fetch_rows_native!(pool, sql, max_rows),
         DatabasePool::Sqlite(pool) => fetch_rows_native!(pool, sql, max_rows),
+    }
+}
+
+async fn fetch_version(pool: &DatabasePool) -> Result<String, DbError> {
+    use sqlx::Row;
+
+    match pool {
+        DatabasePool::Postgres(pool) => {
+            let row = sqlx::query("SELECT version()")
+                .fetch_one(pool)
+                .await
+                .map_err(DbError::from)?;
+            let full: String = row.try_get(0).unwrap_or_default();
+            Ok(full.split_whitespace().take(2).collect::<Vec<_>>().join(" "))
+        }
+        DatabasePool::MySql(pool) => {
+            let row = sqlx::query("SELECT VERSION()")
+                .fetch_one(pool)
+                .await
+                .map_err(DbError::from)?;
+            let ver: String = row.try_get(0).unwrap_or_default();
+            Ok(format!("MySQL {ver}"))
+        }
+        DatabasePool::Sqlite(pool) => {
+            let row = sqlx::query("SELECT sqlite_version()")
+                .fetch_one(pool)
+                .await
+                .map_err(DbError::from)?;
+            let ver: String = row.try_get(0).unwrap_or_default();
+            Ok(format!("SQLite {ver}"))
+        }
     }
 }
