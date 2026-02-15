@@ -1,8 +1,8 @@
 [package]
-name = "app"
+name = "oh-my-query"
 version = "0.1.0"
-description = "A Tauri App"
-authors = ["you"]
+description = "A query UI tool"
+authors = ["victor"]
 license = ""
 repository = ""
 edition = "2021"
@@ -21,7 +21,7 @@ tauri-build = { version = "2.5.4", features = [] }
 serde_json = "1.0"
 serde = { version = "1.0", features = ["derive"] }
 log = "0.4"
-tauri = { version = "2.10.0", features = [] }
+tauri = { version = "2.10.0", features = ["devtools"] }
 tauri-plugin-log = "2"
 sqlx = { version = "0.8", features = [
   "runtime-tokio",
@@ -30,6 +30,7 @@ sqlx = { version = "0.8", features = [
   "mysql",
   "sqlite",
 ] }
+futures = "0.3"
 async-trait = "0.1"
 tokio = { version = "1", features = ["full"] }
 urlencoding = "2"
