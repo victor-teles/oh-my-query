@@ -47,13 +47,26 @@ export interface ColumnInfo {
   typeName: string;
 }
 
-export interface QueryResult {
+export interface TabularResult {
+  resultType: "tabular";
   columns: ColumnInfo[];
   rows: unknown[][];
   rowCount: number;
   executionTimeMs: number;
   isTruncated: boolean;
 }
+
+export interface DocumentResult {
+  resultType: "documents";
+  documents: unknown[];
+  count: number;
+  executionTimeMs: number;
+  isTruncated: boolean;
+}
+
+export type ExecuteResult = TabularResult | DocumentResult;
+
+export type QueryResult = TabularResult;
 
 export interface SchemaInfo {
   schemas: SchemaItem[];
@@ -143,7 +156,7 @@ export const disconnectFromDatabase = async (
   await invoke("disconnect_from_database", { connectionId });
 };
 
-const MOCK_QUERY_RESULT: QueryResult = {
+const MOCK_EXECUTE_RESULT: ExecuteResult = {
   columns: [
     { name: "id", typeName: "INT4" },
     { name: "name", typeName: "TEXT" },
@@ -151,6 +164,7 @@ const MOCK_QUERY_RESULT: QueryResult = {
   ],
   executionTimeMs: 42,
   isTruncated: false,
+  resultType: "tabular",
   rowCount: 3,
   rows: [
     [1, "Alice", true],
@@ -161,14 +175,14 @@ const MOCK_QUERY_RESULT: QueryResult = {
 
 export const executeQuery = async (
   params: QueryParams
-): Promise<QueryResult> => {
+): Promise<ExecuteResult> => {
   if (!isTauri()) {
-    return MOCK_QUERY_RESULT;
+    return MOCK_EXECUTE_RESULT;
   }
 
   const { invoke } = await import("@tauri-apps/api/core");
 
-  return invoke<QueryResult>("execute_query", { params });
+  return invoke<ExecuteResult>("execute_query", { params });
 };
 
 const MOCK_SCHEMA: SchemaInfo = {

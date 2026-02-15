@@ -2,13 +2,13 @@ import type { ReactNode } from "react";
 
 import { createContext, use, useCallback, useState } from "react";
 
-import type { QueryResult } from "@/lib/tauri";
+import type { ExecuteResult } from "@/lib/tauri";
 
 type ExecutionStatus = "idle" | "running" | "success" | "error";
 
 interface QueryExecutionState {
   status: ExecutionStatus;
-  result: QueryResult | null;
+  result: ExecuteResult | null;
   error: string | null;
 }
 

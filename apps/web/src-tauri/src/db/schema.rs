@@ -11,6 +11,11 @@ pub async fn list_databases(pool: &DatabasePool) -> Result<Vec<String>, DbError>
         DatabasePool::Postgres(pool) => list_databases_postgres(pool).await,
         DatabasePool::MySql(pool) => list_databases_mysql(pool).await,
         DatabasePool::Sqlite(_) => Ok(vec!["main".to_string()]),
+        DatabasePool::MongoDB(client) => {
+            let names = client.list_database_names().await.map_err(DbError::from)?;
+            Ok(names)
+        }
+        DatabasePool::Redis(_) => Ok(vec!["db0".to_string()]),
     }
 }
 
@@ -22,6 +27,14 @@ pub async fn fetch_schema(
         DatabasePool::Postgres(pool) => fetch_schema_postgres(pool, database_name).await,
         DatabasePool::MySql(pool) => fetch_schema_mysql(pool, database_name).await,
         DatabasePool::Sqlite(pool) => fetch_schema_sqlite(pool).await,
+        DatabasePool::MongoDB(client) => fetch_schema_mongodb(client, database_name).await,
+        DatabasePool::Redis(_) => Ok(SchemaInfo {
+            schemas: vec![SchemaItem {
+                name: "db0".to_string(),
+                tables: vec![],
+                views: vec![],
+            }],
+        }),
     }
 }
 
@@ -642,4 +655,32 @@ async fn fetch_fks_sqlite(
     }
 
     Ok(fk_map.into_values().collect())
+}
+
+// MongoDB introspection
+
+async fn fetch_schema_mongodb(
+    client: &mongodb::Client,
+    database_name: &str,
+) -> Result<SchemaInfo, DbError> {
+    let db = client.database(database_name);
+    let collection_names = db.list_collection_names().await.map_err(DbError::from)?;
+
+    let tables: Vec<TableItem> = collection_names
+        .into_iter()
+        .map(|name| TableItem {
+            name,
+            columns: vec![],
+            indexes: vec![],
+            foreign_keys: vec![],
+        })
+        .collect();
+
+    Ok(SchemaInfo {
+        schemas: vec![SchemaItem {
+            name: database_name.to_string(),
+            tables,
+            views: vec![],
+        }],
+    })
 }

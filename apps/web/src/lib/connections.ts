@@ -1,4 +1,9 @@
-export type DatabaseType = "postgresql" | "mysql" | "sqlite";
+export type DatabaseType =
+  | "postgresql"
+  | "mysql"
+  | "sqlite"
+  | "mongodb"
+  | "redis";
 
 export interface DatabaseConnection {
   id: string;
@@ -13,10 +18,15 @@ export interface DatabaseConnection {
 }
 
 export const DEFAULT_PORTS: Record<DatabaseType, number> = {
+  mongodb: 27_017,
   mysql: 3306,
   postgresql: 5432,
+  redis: 6379,
   sqlite: 0,
 };
+
+export const isSqlDatabase = (type: DatabaseType): boolean =>
+  type === "postgresql" || type === "mysql" || type === "sqlite";
 
 const STORAGE_KEY = "oh-my-query-connections";
 

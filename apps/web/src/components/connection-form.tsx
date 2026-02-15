@@ -51,32 +51,68 @@ const DATABASE_OPTIONS: { value: DatabaseType; label: string }[] = [
   { label: "PostgreSQL", value: "postgresql" },
   { label: "MySQL", value: "mysql" },
   { label: "SQLite", value: "sqlite" },
+  { label: "MongoDB", value: "mongodb" },
+  { label: "Redis", value: "redis" },
 ];
 
+const NEEDS_HOST = new Set<DatabaseType>([
+  "postgresql",
+  "mysql",
+  "mongodb",
+  "redis",
+]);
+const NEEDS_USERNAME = new Set<DatabaseType>([
+  "postgresql",
+  "mysql",
+  "mongodb",
+]);
+
+const getDatabaseLabel = (type: DatabaseType): string => {
+  if (type === "sqlite") {
+    return "File path";
+  }
+  if (type === "redis") {
+    return "Database index (0-15)";
+  }
+  return "Database";
+};
+
+const getDatabasePlaceholder = (type: DatabaseType): string => {
+  if (type === "sqlite") {
+    return "/path/to/database.db";
+  }
+  if (type === "redis") {
+    return "0";
+  }
+  return "my_database";
+};
+
 const buildConnection = (form: FormState): DatabaseConnection => {
-  const isSqlite = form.type === "sqlite";
+  const hasHost = NEEDS_HOST.has(form.type);
+  const hasUsername = NEEDS_USERNAME.has(form.type);
   return {
     createdAt: new Date().toISOString(),
     database: form.database.trim(),
-    host: isSqlite ? "" : form.host.trim(),
+    host: hasHost ? form.host.trim() : "",
     id: crypto.randomUUID(),
     name: form.name.trim(),
-    password: isSqlite ? "" : form.password,
-    port: isSqlite ? 0 : Number(form.port),
+    password: hasHost ? form.password : "",
+    port: hasHost ? Number(form.port) : 0,
     type: form.type,
-    username: isSqlite ? "" : form.username.trim(),
+    username: hasUsername ? form.username.trim() : "",
   };
 };
 
 const buildConnectionParams = (form: FormState) => {
-  const isSqlite = form.type === "sqlite";
+  const hasHost = NEEDS_HOST.has(form.type);
+  const hasUsername = NEEDS_USERNAME.has(form.type);
   return {
     database: form.database.trim(),
-    host: isSqlite ? "" : form.host.trim(),
-    password: isSqlite ? "" : form.password,
-    port: isSqlite ? 0 : Number(form.port),
+    host: hasHost ? form.host.trim() : "",
+    password: hasHost ? form.password : "",
+    port: hasHost ? Number(form.port) : 0,
     type: form.type,
-    username: isSqlite ? "" : form.username.trim(),
+    username: hasUsername ? form.username.trim() : "",
   };
 };
 
@@ -110,10 +146,10 @@ const validate = (form: FormState): string | null => {
   if (!form.name.trim()) {
     return "Connection name is required";
   }
-  if (!form.database.trim()) {
+  if (form.type !== "redis" && !form.database.trim()) {
     return "Database name is required";
   }
-  if (form.type !== "sqlite" && !form.host.trim()) {
+  if (NEEDS_HOST.has(form.type) && !form.host.trim()) {
     return "Host is required";
   }
   return null;
@@ -122,7 +158,9 @@ const validate = (form: FormState): string | null => {
 export const ConnectionForm = ({ onSuccess }: ConnectionFormProps) => {
   const [form, setForm] = useState<FormState>(INITIAL_STATE);
   const [testStatus, setTestStatus] = useState<TestStatus>({ state: "idle" });
-  const isSqlite = form.type === "sqlite";
+  const hasHost = NEEDS_HOST.has(form.type);
+  const hasUsername = NEEDS_USERNAME.has(form.type);
+  const showDatabase = form.type !== "redis" || true;
 
   const updateField = useCallback(
     <K extends keyof FormState>(key: K) =>
@@ -139,11 +177,12 @@ export const ConnectionForm = ({ onSuccess }: ConnectionFormProps) => {
     }
     setForm((prev) => ({
       ...prev,
-      host: value === "sqlite" ? "" : prev.host || "localhost",
-      password: value === "sqlite" ? "" : prev.password,
+      database: value === "redis" ? "0" : prev.database,
+      host: NEEDS_HOST.has(value) ? prev.host || "localhost" : "",
+      password: NEEDS_HOST.has(value) ? prev.password : "",
       port: String(DEFAULT_PORTS[value]),
       type: value,
-      username: value === "sqlite" ? "" : prev.username,
+      username: NEEDS_USERNAME.has(value) ? prev.username : "",
     }));
     setTestStatus({ state: "idle" });
   }, []);
@@ -211,67 +250,72 @@ export const ConnectionForm = ({ onSuccess }: ConnectionFormProps) => {
         </Select>
       </div>
 
-      {!isSqlite && (
-        <>
-          <div className="grid grid-cols-[1fr_100px] gap-3">
-            <div className="grid gap-1.5">
-              <Label htmlFor="conn-host">Host</Label>
-              <Input
-                id="conn-host"
-                placeholder="localhost"
-                value={form.host}
-                onChange={updateField("host")}
-                required
-              />
-            </div>
-            <div className="grid gap-1.5">
-              <Label htmlFor="conn-port">Port</Label>
-              <Input
-                id="conn-port"
-                type="number"
-                placeholder={String(DEFAULT_PORTS[form.type])}
-                value={form.port}
-                onChange={updateField("port")}
-                required
-              />
-            </div>
-          </div>
-
+      {hasHost && (
+        <div className="grid grid-cols-[1fr_100px] gap-3">
           <div className="grid gap-1.5">
-            <Label htmlFor="conn-username">Username</Label>
+            <Label htmlFor="conn-host">Host</Label>
             <Input
-              id="conn-username"
-              placeholder="postgres"
-              value={form.username}
-              onChange={updateField("username")}
+              id="conn-host"
+              placeholder="localhost"
+              value={form.host}
+              onChange={updateField("host")}
+              required
             />
           </div>
-
           <div className="grid gap-1.5">
-            <Label htmlFor="conn-password">Password</Label>
+            <Label htmlFor="conn-port">Port</Label>
             <Input
-              id="conn-password"
-              type="password"
-              placeholder="••••••••"
-              value={form.password}
-              onChange={updateField("password")}
+              id="conn-port"
+              type="number"
+              placeholder={String(DEFAULT_PORTS[form.type])}
+              value={form.port}
+              onChange={updateField("port")}
+              required
             />
           </div>
-        </>
+        </div>
       )}
 
-      <div className="grid gap-1.5">
-        <Label htmlFor="conn-database">
-          {isSqlite ? "File path" : "Database"}
-        </Label>
-        <Input
-          id="conn-database"
-          placeholder={isSqlite ? "/path/to/database.db" : "my_database"}
-          value={form.database}
-          onChange={updateField("database")}
-          required
-        />
-      </div>
+      {hasUsername && (
+        <div className="grid gap-1.5">
+          <Label htmlFor="conn-username">Username</Label>
+          <Input
+            id="conn-username"
+            placeholder={form.type === "mongodb" ? "" : "postgres"}
+            value={form.username}
+            onChange={updateField("username")}
+          />
+        </div>
+      )}
+
+      {hasHost && (
+        <div className="grid gap-1.5">
+          <Label htmlFor="conn-password">Password</Label>
+          <Input
+            id="conn-password"
+            type="password"
+            placeholder="••••••••"
+            value={form.password}
+            onChange={updateField("password")}
+          />
+        </div>
+      )}
+
+      {showDatabase && (
+        <div className="grid gap-1.5">
+          <Label htmlFor="conn-database">{getDatabaseLabel(form.type)}</Label>
+          <Input
+            id="conn-database"
+            placeholder={getDatabasePlaceholder(form.type)}
+            value={form.database}
+            onChange={updateField("database")}
+            type={form.type === "redis" ? "number" : "text"}
+            min={form.type === "redis" ? 0 : undefined}
+            max={form.type === "redis" ? 15 : undefined}
+            required={form.type !== "redis"}
+          />
+        </div>
+      )}
 
       <div className="flex items-center gap-2">
         <Button

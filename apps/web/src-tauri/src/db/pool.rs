@@ -3,6 +3,8 @@ use std::collections::HashMap;
 use tokio::sync::Mutex;
 
 use crate::db::error::DbError;
+use crate::db::mongodb_driver::build_mongodb_uri;
+use crate::db::redis_driver::build_redis_url;
 use crate::db::types::ConnectionParams;
 
 #[derive(Clone)]
@@ -10,6 +12,8 @@ pub enum DatabasePool {
     Postgres(sqlx::PgPool),
     MySql(sqlx::MySqlPool),
     Sqlite(sqlx::SqlitePool),
+    MongoDB(mongodb::Client),
+    Redis(redis::aio::MultiplexedConnection),
 }
 
 impl DatabasePool {
@@ -18,6 +22,7 @@ impl DatabasePool {
             DatabasePool::Postgres(pool) => pool.close().await,
             DatabasePool::MySql(pool) => pool.close().await,
             DatabasePool::Sqlite(pool) => pool.close().await,
+            DatabasePool::MongoDB(_) | DatabasePool::Redis(_) => {}
         }
     }
 }
@@ -34,8 +39,7 @@ impl ConnectionPoolManager {
     }
 
     pub async fn connect(&self, id: &str, params: &ConnectionParams) -> Result<(), DbError> {
-        let url = build_connection_url(params);
-        let pool = connect_native(params.db_type.as_str(), &url).await?;
+        let pool = connect_native(params).await?;
 
         verify_connection(&pool).await?;
 
@@ -64,34 +68,57 @@ impl ConnectionPoolManager {
     }
 }
 
-async fn connect_native(db_type: &str, url: &str) -> Result<DatabasePool, DbError> {
-    match db_type {
+async fn connect_native(params: &ConnectionParams) -> Result<DatabasePool, DbError> {
+    match params.db_type.as_str() {
         "postgresql" => {
+            let url = build_sql_connection_url(params);
             let pool = sqlx::postgres::PgPoolOptions::new()
                 .max_connections(5)
                 .acquire_timeout(std::time::Duration::from_secs(10))
-                .connect(url)
+                .connect(&url)
                 .await
                 .map_err(DbError::from)?;
             Ok(DatabasePool::Postgres(pool))
         }
         "mysql" => {
+            let url = build_sql_connection_url(params);
             let pool = sqlx::mysql::MySqlPoolOptions::new()
                 .max_connections(5)
                 .acquire_timeout(std::time::Duration::from_secs(10))
-                .connect(url)
+                .connect(&url)
                 .await
                 .map_err(DbError::from)?;
             Ok(DatabasePool::MySql(pool))
         }
         "sqlite" => {
+            let url = build_sql_connection_url(params);
             let pool = sqlx::sqlite::SqlitePoolOptions::new()
                 .max_connections(5)
                 .acquire_timeout(std::time::Duration::from_secs(10))
-                .connect(url)
+                .connect(&url)
                 .await
                 .map_err(DbError::from)?;
             Ok(DatabasePool::Sqlite(pool))
+        }
+        "mongodb" => {
+            let uri = build_mongodb_uri(params);
+            let mut client_options = mongodb::options::ClientOptions::parse(uri)
+                .await
+                .map_err(DbError::from)?;
+            client_options.connect_timeout = Some(std::time::Duration::from_secs(10));
+            client_options.server_selection_timeout = Some(std::time::Duration::from_secs(10));
+            let client =
+                mongodb::Client::with_options(client_options).map_err(DbError::from)?;
+            Ok(DatabasePool::MongoDB(client))
+        }
+        "redis" => {
+            let url = build_redis_url(params);
+            let client = redis::Client::open(url.as_str()).map_err(DbError::from)?;
+            let conn = client
+                .get_multiplexed_tokio_connection()
+                .await
+                .map_err(DbError::from)?;
+            Ok(DatabasePool::Redis(conn))
         }
         other => Err(DbError {
             code: "UNSUPPORTED_DRIVER".to_string(),
@@ -103,19 +130,41 @@ async fn connect_native(db_type: &str, url: &str) -> Result<DatabasePool, DbErro
 async fn verify_connection(pool: &DatabasePool) -> Result<(), DbError> {
     match pool {
         DatabasePool::Postgres(pool) => {
-            sqlx::query("SELECT 1").execute(pool).await.map_err(DbError::from)?;
+            sqlx::query("SELECT 1")
+                .execute(pool)
+                .await
+                .map_err(DbError::from)?;
         }
         DatabasePool::MySql(pool) => {
-            sqlx::query("SELECT 1").execute(pool).await.map_err(DbError::from)?;
+            sqlx::query("SELECT 1")
+                .execute(pool)
+                .await
+                .map_err(DbError::from)?;
         }
         DatabasePool::Sqlite(pool) => {
-            sqlx::query("SELECT 1").execute(pool).await.map_err(DbError::from)?;
+            sqlx::query("SELECT 1")
+                .execute(pool)
+                .await
+                .map_err(DbError::from)?;
+        }
+        DatabasePool::MongoDB(client) => {
+            client
+                .database("admin")
+                .run_command(mongodb::bson::doc! { "ping": 1 })
+                .await
+                .map_err(DbError::from)?;
+        }
+        DatabasePool::Redis(conn) => {
+            let _: String = redis::cmd("PING")
+                .query_async(&mut conn.clone())
+                .await
+                .map_err(DbError::from)?;
         }
     }
     Ok(())
 }
 
-fn build_connection_url(params: &ConnectionParams) -> String {
+fn build_sql_connection_url(params: &ConnectionParams) -> String {
     match params.db_type.as_str() {
         "sqlite" => format!("sqlite:{}", params.database),
         "mysql" => format!(

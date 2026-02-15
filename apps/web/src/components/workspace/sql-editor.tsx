@@ -6,21 +6,21 @@ import { githubDark } from "@uiw/codemirror-theme-github";
 import CodeMirror from "@uiw/react-codemirror";
 import { useCallback, useMemo } from "react";
 
-import type { DatabaseType } from "@/lib/connections";
-
 import { useEditorInsert } from "@/contexts/editor-insert-context";
 
-const DIALECT_MAP = {
+type SqlDatabaseType = "postgresql" | "mysql" | "sqlite";
+
+const DIALECT_MAP: Record<SqlDatabaseType, typeof PostgreSQL> = {
   mysql: MySQL,
   postgresql: PostgreSQL,
   sqlite: SQLite,
-} as const;
+};
 
 interface SqlEditorProps {
   value: string;
   onChange: (value: string) => void;
   onExecute: () => void;
-  databaseType: DatabaseType;
+  databaseType: SqlDatabaseType;
   readOnly?: boolean;
 }
 
