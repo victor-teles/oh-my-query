@@ -8,35 +8,6 @@ interface TestConnectionResult {
 
 export const isTauri = (): boolean => "__TAURI_INTERNALS__" in window;
 
-const getWindow = async () => {
-  const { getCurrentWindow } = await import("@tauri-apps/api/window");
-  return getCurrentWindow();
-};
-
-export const minimizeWindow = async (): Promise<void> => {
-  if (!isTauri()) {
-    return;
-  }
-  const win = await getWindow();
-  await win.minimize();
-};
-
-export const toggleMaximizeWindow = async (): Promise<void> => {
-  if (!isTauri()) {
-    return;
-  }
-  const win = await getWindow();
-  await win.toggleMaximize();
-};
-
-export const closeWindow = async (): Promise<void> => {
-  if (!isTauri()) {
-    return;
-  }
-  const win = await getWindow();
-  await win.close();
-};
-
 export const testConnection = async (
   connection: Omit<DatabaseConnection, "id" | "name" | "createdAt">
 ): Promise<TestConnectionResult> => {
