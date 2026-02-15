@@ -1,103 +1,111 @@
-import { createFileRoute, Link, redirect } from "@tanstack/react-router";
-import { Database, Trash2 } from "lucide-react";
-import { useCallback } from "react";
+import { createFileRoute, redirect, useNavigate } from "@tanstack/react-router";
+import { Plus } from "lucide-react";
+import { useCallback, useState } from "react";
 
 import type { DatabaseConnection } from "@/lib/connections";
 
+import { Titlebar } from "@/components/titlebar/titlebar";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import { deleteConnection, getConnections } from "@/lib/connections";
 
-const ConnectionItem = ({
-  connection,
-  onDelete,
-}: {
-  connection: DatabaseConnection;
-  onDelete: (id: string) => void;
-}) => {
-  const subtitle =
-    connection.type === "sqlite"
-      ? connection.database
-      : `${connection.host}:${connection.port}/${connection.database}`;
-
-  const handleDelete = useCallback(
-    (e: React.MouseEvent) => {
-      e.preventDefault();
-      e.stopPropagation();
-      onDelete(connection.id);
-    },
-    [onDelete, connection.id]
-  );
-
-  return (
-    <Link
-      to="/workspace/$connectionId"
-      params={{ connectionId: connection.id }}
-      className="block"
-    >
-      <Card size="sm" className="transition-colors hover:bg-accent/50">
-        <CardHeader>
-          <div className="flex items-center gap-2">
-            <Database className="text-muted-foreground size-4" />
-            <div className="flex-1">
-              <CardTitle>{connection.name}</CardTitle>
-              <CardDescription>
-                {connection.type} &middot; {subtitle}
-              </CardDescription>
-            </div>
-            <Button
-              variant="ghost"
-              size="icon-xs"
-              onClick={handleDelete}
-              aria-label={`Delete ${connection.name}`}
-            >
-              <Trash2 />
-            </Button>
-          </div>
-        </CardHeader>
-      </Card>
-    </Link>
-  );
-};
+import { AddConnectionDialog } from "./-components/add-connection-dialog";
+import { ConnectionList } from "./-components/connection-list";
+import { DeleteConnectionDialog } from "./-components/delete-connection-dialog";
 
 const HomeComponent = () => {
-  const connections = getConnections();
+  const navigate = useNavigate();
+  const [connections, setConnections] = useState(getConnections);
+  const [deleteTarget, setDeleteTarget] = useState<DatabaseConnection | null>(
+    null
+  );
+  const [addOpen, setAddOpen] = useState(false);
 
-  const handleDelete = useCallback((id: string) => {
-    deleteConnection(id);
+  const handleDeleteRequest = useCallback((connection: DatabaseConnection) => {
+    setDeleteTarget(connection);
+  }, []);
+
+  const handleDeleteConfirm = useCallback(() => {
+    if (!deleteTarget) {
+      return;
+    }
+
+    deleteConnection(deleteTarget.id);
+    setDeleteTarget(null);
+
     const remaining = getConnections();
     if (remaining.length === 0) {
-      window.location.href = "/onboarding";
+      navigate({ to: "/onboarding" });
     } else {
-      window.location.reload();
+      setConnections(remaining);
+    }
+  }, [deleteTarget, navigate]);
+
+  const handleDeleteOpenChange = useCallback((open: boolean) => {
+    if (!open) {
+      setDeleteTarget(null);
     }
   }, []);
 
+  const handleAddOpen = useCallback(() => {
+    setAddOpen(true);
+  }, []);
+
+  const handleAddSuccess = useCallback(
+    (connection: DatabaseConnection) => {
+      setAddOpen(false);
+      navigate({
+        params: { connectionId: connection.id },
+        to: "/workspace/$connectionId",
+      });
+    },
+    [navigate]
+  );
+
   return (
-    <div className="container mx-auto max-w-3xl px-4 py-6">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-medium">Connections</h1>
-        <Link to="/onboarding">
-          <Button variant="outline" size="sm">
-            Add connection
-          </Button>
-        </Link>
-      </div>
-      <div className="grid gap-3">
-        {connections.map((conn) => (
-          <ConnectionItem
-            key={conn.id}
-            connection={conn}
-            onDelete={handleDelete}
+    <>
+      <Titlebar>
+        <Button
+          variant="ghost"
+          size="icon-xs"
+          aria-label="New connection"
+          title="New connection"
+          onClick={handleAddOpen}
+        >
+          <Plus className="size-3.5" />
+        </Button>
+      </Titlebar>
+
+      <div className="flex flex-1 flex-col items-center justify-center px-6">
+        <div className="w-full max-w-sm">
+          <div className="mb-2 flex items-center justify-between px-1">
+            <h1 className="text-[0.625rem] font-medium uppercase tracking-wider text-muted-foreground">
+              Connections
+            </h1>
+            <span className="text-[0.625rem] text-muted-foreground">
+              {connections.length}
+            </span>
+          </div>
+
+          <ConnectionList
+            connections={connections}
+            onDeleteRequest={handleDeleteRequest}
           />
-        ))}
+        </div>
       </div>
-    </div>
+
+      <AddConnectionDialog
+        open={addOpen}
+        onOpenChange={setAddOpen}
+        onSuccess={handleAddSuccess}
+      />
+
+      <DeleteConnectionDialog
+        connection={deleteTarget}
+        open={deleteTarget !== null}
+        onOpenChange={handleDeleteOpenChange}
+        onConfirm={handleDeleteConfirm}
+      />
+    </>
   );
 };
 
