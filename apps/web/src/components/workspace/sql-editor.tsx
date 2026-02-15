@@ -1,6 +1,6 @@
 import { sql, PostgreSQL, MySQL, SQLite } from "@codemirror/lang-sql";
-import { oneDark } from "@codemirror/theme-one-dark";
 import { keymap } from "@codemirror/view";
+import { githubDark } from "@uiw/codemirror-theme-github";
 import CodeMirror from "@uiw/react-codemirror";
 import { useMemo } from "react";
 
@@ -48,7 +48,7 @@ export const SqlEditor = ({
       value={value}
       onChange={onChange}
       extensions={extensions}
-      theme={oneDark}
+      theme={githubDark}
       placeholder="Write your SQL query here..."
       readOnly={readOnly}
       basicSetup={{
@@ -58,7 +58,7 @@ export const SqlEditor = ({
         highlightActiveLine: true,
         lineNumbers: true,
       }}
-      className="h-full overflow-auto text-sm [&_.cm-editor]:h-full [&_.cm-scroller]:h-full"
+      className="h-full overflow-auto text-sm [&_.cm-editor]:h-full [&_.cm-scroller]:h-full [&_.cm-editor]:!bg-background [&_.cm-gutters]:!bg-background [&_.cm-gutters]:!border-r-0 [&_.cm-activeLineGutter]:!bg-background"
     />
   );
 };
