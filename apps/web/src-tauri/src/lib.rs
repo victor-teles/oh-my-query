@@ -1,4 +1,5 @@
 mod commands;
+mod config;
 mod db;
 
 use db::pool::ConnectionPoolManager;
@@ -20,6 +21,8 @@ pub fn run() {
             commands::execute_query,
             commands::list_connection_databases,
             commands::get_schema,
+            config::get_config,
+            config::save_config,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
