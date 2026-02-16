@@ -4,6 +4,7 @@ import { useCallback } from "react";
 import type { QueryTab, TabStatus } from "@/lib/query-types";
 
 import { Button } from "@/components/ui/button";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Tooltip,
   TooltipContent,
@@ -35,43 +36,29 @@ const StatusIcon = ({ status }: { status: TabStatus }) => {
   }
 };
 
-interface TabItemProps {
-  tab: QueryTab;
-  isActive: boolean;
-  onSelect: (tabId: string) => void;
+interface TabCloseButtonProps {
+  tabTitle: string;
+  tabId: string;
   onClose: (tabId: string) => void;
 }
 
-const TabItem = ({ tab, isActive, onSelect, onClose }: TabItemProps) => {
-  const handleSelect = useCallback(() => onSelect(tab.id), [onSelect, tab.id]);
-  const handleClose = useCallback(
+const TabCloseButton = ({ tabTitle, tabId, onClose }: TabCloseButtonProps) => {
+  const handleClick = useCallback(
     (e: React.MouseEvent) => {
       e.stopPropagation();
-      onClose(tab.id);
+      onClose(tabId);
     },
-    [onClose, tab.id]
+    [onClose, tabId]
   );
 
   return (
     <button
       type="button"
-      onClick={handleSelect}
-      className={`group flex items-center gap-1.5 border-b-2 px-3 py-1.5 text-xs transition-colors ${
-        isActive
-          ? "border-primary text-foreground"
-          : "border-transparent text-muted-foreground hover:text-foreground"
-      }`}
+      onClick={handleClick}
+      className="ml-0.5 rounded p-0.5 opacity-0 hover:bg-muted group-hover/tab:opacity-100"
+      aria-label={`Close ${tabTitle}`}
     >
-      <StatusIcon status={tab.status} />
-      <span className="max-w-[120px] truncate">{tab.title}</span>
-      <button
-        type="button"
-        onClick={handleClose}
-        className="ml-0.5 rounded p-0.5 opacity-0 hover:bg-muted group-hover:opacity-100"
-        aria-label={`Close ${tab.title}`}
-      >
-        <X className="size-3" />
-      </button>
+      <X className="size-3" />
     </button>
   );
 };
@@ -82,32 +69,51 @@ export const QueryTabBar = ({
   onSelectTab,
   onCloseTab,
   onAddTab,
-}: QueryTabBarProps) => (
-  <div className="flex items-center gap-0.5 border-b bg-muted/30 px-1">
-    {tabs.map((tab) => (
-      <TabItem
-        key={tab.id}
-        tab={tab}
-        isActive={tab.id === activeTabId}
-        onSelect={onSelectTab}
-        onClose={onCloseTab}
-      />
-    ))}
-    <Tooltip>
-      <TooltipTrigger
-        render={
-          <Button
-            variant="ghost"
-            size="icon-xs"
-            onClick={onAddTab}
-            className="ml-1"
-            aria-label="New query tab"
-          />
-        }
-      >
-        <Plus className="size-3.5" />
-      </TooltipTrigger>
-      <TooltipContent>New tab</TooltipContent>
-    </Tooltip>
-  </div>
-);
+}: QueryTabBarProps) => {
+  const handleValueChange = useCallback(
+    (value: unknown) => {
+      onSelectTab(value as string);
+    },
+    [onSelectTab]
+  );
+
+  return (
+    <Tabs
+      value={activeTabId}
+      onValueChange={handleValueChange}
+      className="gap-0"
+    >
+      <div className="flex items-center border-b">
+        <TabsList variant="segment" className="flex-1">
+          {tabs.map((tab) => (
+            <TabsTrigger key={tab.id} value={tab.id} className="group/tab">
+              <StatusIcon status={tab.status} />
+              <span className="max-w-[120px] truncate">{tab.title}</span>
+              <TabCloseButton
+                tabTitle={tab.title}
+                tabId={tab.id}
+                onClose={onCloseTab}
+              />
+            </TabsTrigger>
+          ))}
+        </TabsList>
+        <Tooltip>
+          <TooltipTrigger
+            render={
+              <Button
+                variant="ghost"
+                size="icon-xs"
+                onClick={onAddTab}
+                className="mx-1"
+                aria-label="New query tab"
+              />
+            }
+          >
+            <Plus className="size-3.5" />
+          </TooltipTrigger>
+          <TooltipContent>New tab</TooltipContent>
+        </Tooltip>
+      </div>
+    </Tabs>
+  );
+};

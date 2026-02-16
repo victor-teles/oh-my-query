@@ -36,7 +36,6 @@ export const WorkspaceLayout = ({
 }: WorkspaceLayoutProps) => {
   const sidebarRef = usePanelRef();
   const chatPanelRef = usePanelRef();
-  const [sidebarWidthPct, setSidebarWidthPct] = useState(25);
   const [isChatOpen, setIsChatOpen] = useState(false);
   const hasBeenOpenedRef = useRef(false);
 
@@ -49,10 +48,6 @@ export const WorkspaceLayout = ({
     selectedDatabase,
     setSelectedDatabase,
   } = useSchema(connection.id, isConnected);
-
-  const handleResize = useCallback((size: PanelSize) => {
-    setSidebarWidthPct(size.asPercentage);
-  }, []);
 
   const handleChatResize = useCallback((size: PanelSize) => {
     setIsChatOpen(size.asPercentage > 0);
@@ -86,8 +81,6 @@ export const WorkspaceLayout = ({
   return (
     <div className="flex h-svh flex-col">
       <Titlebar
-        leadingWidth={`${sidebarWidthPct - 0.08}%`}
-        leading={<div />}
         center={
           <DynamicIsland
             isConnecting={isConnecting}
@@ -114,7 +107,6 @@ export const WorkspaceLayout = ({
           maxSize="40%"
           collapsible
           collapsedSize="0%"
-          onResize={handleResize}
           className="border-r border-sidebar-border"
         >
           <WorkspaceSidebar

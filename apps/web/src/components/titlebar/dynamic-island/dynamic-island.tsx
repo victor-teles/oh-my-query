@@ -27,7 +27,7 @@ export const DynamicIsland = ({
     <motion.div
       layout
       transition={SPRING}
-      className="pointer-events-auto flex h-6 items-center rounded-full border border-border/60 bg-secondary/50 px-2.5 shadow-sm backdrop-blur-xl backdrop-saturate-200"
+      className="pointer-events-auto flex h-6 items-center rounded-full border border-border/60 bg-background px-2.5 shadow-sm backdrop-blur-xl backdrop-saturate-200"
     >
       <DynamicIslandContent
         isConnecting={isConnecting}
