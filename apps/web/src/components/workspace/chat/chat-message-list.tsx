@@ -54,7 +54,7 @@ export const ChatMessageList = ({
 
   return (
     <ScrollArea className="flex-1">
-      <div className="mx-auto flex max-w-2xl flex-col gap-4 p-4">
+      <div className="flex flex-col gap-4 p-4">
         {messages.map((msg) => (
           <ChatMessage
             key={msg.id}

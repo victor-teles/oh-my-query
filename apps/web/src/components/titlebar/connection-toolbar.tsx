@@ -2,7 +2,6 @@ import { Link, useNavigate } from "@tanstack/react-router";
 import { Plus, ShieldCheck, Unplug } from "lucide-react";
 import { useCallback, useState } from "react";
 
-import type { WorkspaceMode } from "@/components/workspace/workspace-mode-toggle";
 import type { DatabaseConnection } from "@/lib/connections";
 
 import { Button } from "@/components/ui/button";
@@ -12,18 +11,18 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { WorkspaceModeToggle } from "@/components/workspace/workspace-mode-toggle";
+import { ChatPanelToggle } from "@/components/workspace/chat-panel-toggle";
 
 interface ConnectionToolbarProps {
   connection: DatabaseConnection;
-  workspaceMode: WorkspaceMode;
-  onWorkspaceModeChange: (mode: WorkspaceMode) => void;
+  isChatOpen: boolean;
+  onChatToggle: () => void;
 }
 
 export const ConnectionToolbar = ({
   connection,
-  workspaceMode,
-  onWorkspaceModeChange,
+  isChatOpen,
+  onChatToggle,
 }: ConnectionToolbarProps) => {
   const navigate = useNavigate();
   const [safeMode, setSafeMode] = useState(true);
@@ -38,10 +37,7 @@ export const ConnectionToolbar = ({
 
   return (
     <>
-      <WorkspaceModeToggle
-        mode={workspaceMode}
-        onModeChange={onWorkspaceModeChange}
-      />
+      <ChatPanelToggle isOpen={isChatOpen} onToggle={onChatToggle} />
 
       <Separator orientation="vertical" className="mx-1 h-4" />
 
