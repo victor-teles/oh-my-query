@@ -2,6 +2,7 @@ import { AlertCircle, Database, RefreshCw, Search } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 
 import type { DatabaseConnection } from "@/lib/connections";
+import type { SchemaInfo } from "@/lib/tauri";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -20,7 +21,6 @@ import {
 } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useSchema } from "@/hooks/use-schema";
 import { isTauri } from "@/lib/tauri";
 import { cn } from "@/lib/utils";
 
@@ -28,7 +28,13 @@ import { SchemaTree } from "./schema-tree";
 
 interface WorkspaceSidebarProps {
   connection: DatabaseConnection;
-  isConnected: boolean;
+  schema: SchemaInfo | null;
+  isLoading: boolean;
+  error: string | null;
+  refresh: () => void;
+  databases: string[] | null;
+  selectedDatabase: string | null;
+  setSelectedDatabase: (db: string) => void;
 }
 
 const SKELETON_ITEMS = [
@@ -105,17 +111,14 @@ const DatabaseSelector = ({
 
 export const WorkspaceSidebar = ({
   connection,
-  isConnected,
+  schema,
+  isLoading,
+  error,
+  refresh,
+  databases,
+  selectedDatabase,
+  setSelectedDatabase,
 }: WorkspaceSidebarProps) => {
-  const {
-    schema,
-    isLoading,
-    error,
-    refresh,
-    databases,
-    selectedDatabase,
-    setSelectedDatabase,
-  } = useSchema(connection.id, isConnected);
   const [filter, setFilter] = useState("");
 
   const handleFilterChange = useCallback(

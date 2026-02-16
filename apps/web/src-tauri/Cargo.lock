@@ -2911,6 +2911,7 @@ name = "oh-my-query"
 version = "0.1.0"
 dependencies = [
  "async-trait",
+ "dirs",
  "futures",
  "log",
  "mongodb",

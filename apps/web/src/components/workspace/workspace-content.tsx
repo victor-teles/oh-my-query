@@ -1,10 +1,9 @@
-import { Loader2, MessageSquare, Play, Send } from "lucide-react";
+import { Loader2, Play } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 
 import type { DatabaseConnection } from "@/lib/connections";
-import type { ExecuteResult } from "@/lib/tauri";
+import type { ExecuteResult, SchemaInfo } from "@/lib/tauri";
 
-import { Button } from "@/components/ui/button";
 import {
   Empty,
   EmptyDescription,
@@ -18,13 +17,18 @@ import {
   ResizablePanelGroup,
 } from "@/components/ui/resizable";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Textarea } from "@/components/ui/textarea";
+import { useEditorInsert } from "@/contexts/editor-insert-context";
 import { useQueryExecution } from "@/contexts/query-execution-context";
+import { useAiChat } from "@/hooks/use-ai-chat";
 import { useQueryTabs } from "@/hooks/use-query-tabs";
+import { hasAISettings } from "@/lib/ai-settings";
 import { isSqlDatabase } from "@/lib/connections";
 
 import type { WorkspaceMode } from "./workspace-mode-toggle";
 
+import { AISettingsDialog } from "./ai-settings-dialog";
+import { ChatInput } from "./chat/chat-input";
+import { ChatMessageList } from "./chat/chat-message-list";
 import { CommandEditor } from "./command-editor";
 import { DocumentViewer } from "./document-viewer";
 import { ExecuteButton } from "./execute-button";
@@ -40,6 +44,8 @@ interface WorkspaceContentProps {
   isConnecting: boolean;
   connectionError: string | null;
   mode: WorkspaceMode;
+  schema: SchemaInfo | null;
+  onModeChange: (mode: WorkspaceMode) => void;
 }
 
 export const WorkspaceContent = ({
@@ -48,9 +54,17 @@ export const WorkspaceContent = ({
   isConnecting,
   connectionError,
   mode,
+  schema,
+  onModeChange,
 }: WorkspaceContentProps) => {
   if (mode === "chat") {
-    return <ChatContent connection={connection} />;
+    return (
+      <ChatContent
+        connection={connection}
+        schema={schema}
+        onModeChange={onModeChange}
+      />
+    );
   }
 
   return (
@@ -183,7 +197,7 @@ const EditorContent = ({
           </div>
         </ResizablePanel>
 
-        <ResizableHandle withHandle />
+        <ResizableHandle />
 
         <ResizablePanel defaultSize="60%" minSize="20%">
           <ResultsPanel
@@ -269,68 +283,68 @@ const ResultsPanel = ({ status, result, error, isSql }: ResultsPanelProps) => {
 
 interface ChatContentProps {
   connection: DatabaseConnection;
+  schema: SchemaInfo | null;
+  onModeChange: (mode: WorkspaceMode) => void;
 }
 
-const ChatContent = ({ connection }: ChatContentProps) => {
-  const [query, setQuery] = useState("");
+const ChatContent = ({
+  connection,
+  schema,
+  onModeChange,
+}: ChatContentProps) => {
+  const { messages, isStreaming, sendMessage, stopStreaming } = useAiChat({
+    databaseType: connection.type,
+    schema,
+  });
 
-  const handleChange = useCallback(
-    (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-      setQuery(e.target.value);
+  const { insertAtCursor } = useEditorInsert();
+  const [settingsOpen, setSettingsOpen] = useState(false);
+  const [isConfigured, setIsConfigured] = useState(false);
+
+  useEffect(() => {
+    const checkSettings = async () => {
+      const configured = await hasAISettings();
+      setIsConfigured(configured);
+    };
+    checkSettings();
+  }, [settingsOpen]);
+
+  const handleInsertSql = useCallback(
+    (sql: string) => {
+      insertAtCursor(sql);
+      onModeChange("sql");
     },
-    []
+    [insertAtCursor, onModeChange]
   );
 
-  const handleSubmit = useCallback((e: React.FormEvent) => {
-    e.preventDefault();
+  const handleRunSql = useCallback(
+    (sql: string) => {
+      insertAtCursor(sql);
+      onModeChange("sql");
+    },
+    [insertAtCursor, onModeChange]
+  );
+
+  const handleOpenSettings = useCallback(() => {
+    setSettingsOpen(true);
   }, []);
-
-  const handleKeyDown = useCallback(
-    (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-      if (e.key === "Enter" && !e.shiftKey) {
-        e.preventDefault();
-        handleSubmit(e);
-      }
-    },
-    [handleSubmit]
-  );
 
   return (
     <div className="flex h-full flex-col bg-background">
-      <div className="flex flex-1 items-center justify-center overflow-auto p-4">
-        <Empty>
-          <EmptyHeader>
-            <EmptyMedia variant="icon">
-              <MessageSquare />
-            </EmptyMedia>
-            <EmptyTitle>Ask a question about your data</EmptyTitle>
-            <EmptyDescription>
-              Type a query below to get started with {connection.name}
-            </EmptyDescription>
-          </EmptyHeader>
-        </Empty>
-      </div>
-
-      <div className="border-t p-3">
-        <form onSubmit={handleSubmit} className="flex items-end gap-2">
-          <Textarea
-            value={query}
-            onChange={handleChange}
-            onKeyDown={handleKeyDown}
-            placeholder="Ask about your database..."
-            className="max-h-[200px] min-h-[44px] flex-1 resize-none"
-            rows={1}
-          />
-          <Button
-            type="submit"
-            size="icon"
-            disabled={!query.trim()}
-            aria-label="Send query"
-          >
-            <Send className="size-4" />
-          </Button>
-        </form>
-      </div>
+      <ChatMessageList
+        messages={messages}
+        connectionName={connection.name}
+        onInsertSql={handleInsertSql}
+        onRunSql={handleRunSql}
+      />
+      <ChatInput
+        onSend={sendMessage}
+        onStop={stopStreaming}
+        onOpenSettings={handleOpenSettings}
+        isStreaming={isStreaming}
+        isConfigured={isConfigured}
+      />
+      <AISettingsDialog open={settingsOpen} onOpenChange={setSettingsOpen} />
     </div>
   );
 };
