@@ -1,6 +1,6 @@
 import type { PanelSize } from "react-resizable-panels";
 
-import { useCallback, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import { usePanelRef } from "react-resizable-panels";
 
 import type { DatabaseConnection } from "@/lib/connections";
@@ -15,8 +15,7 @@ import {
 } from "@/components/ui/resizable";
 import { useSchema } from "@/hooks/use-schema";
 
-import type { WorkspaceMode } from "./workspace-mode-toggle";
-
+import { ChatSidebar } from "./chat/chat-sidebar";
 import { WorkspaceContent } from "./workspace-content";
 import { WorkspaceSidebar } from "./workspace-sidebar";
 
@@ -36,8 +35,10 @@ export const WorkspaceLayout = ({
   serverVersion,
 }: WorkspaceLayoutProps) => {
   const sidebarRef = usePanelRef();
+  const chatPanelRef = usePanelRef();
   const [sidebarWidthPct, setSidebarWidthPct] = useState(25);
-  const [workspaceMode, setWorkspaceMode] = useState<WorkspaceMode>("sql");
+  const [isChatOpen, setIsChatOpen] = useState(false);
+  const hasBeenOpenedRef = useRef(false);
 
   const {
     schema,
@@ -52,6 +53,35 @@ export const WorkspaceLayout = ({
   const handleResize = useCallback((size: PanelSize) => {
     setSidebarWidthPct(size.asPercentage);
   }, []);
+
+  const handleChatResize = useCallback((size: PanelSize) => {
+    setIsChatOpen(size.asPercentage > 0);
+  }, []);
+
+  const handleChatToggle = useCallback(() => {
+    const panel = chatPanelRef.current;
+    if (!panel) {
+      return;
+    }
+
+    if (panel.isCollapsed()) {
+      if (!hasBeenOpenedRef.current) {
+        panel.resize("30%");
+        hasBeenOpenedRef.current = true;
+      } else {
+        panel.expand();
+      }
+      setIsChatOpen(true);
+    } else {
+      panel.collapse();
+      setIsChatOpen(false);
+    }
+  }, [chatPanelRef]);
+
+  const handleChatClose = useCallback(() => {
+    chatPanelRef.current?.collapse();
+    setIsChatOpen(false);
+  }, [chatPanelRef]);
 
   return (
     <div className="flex h-svh flex-col">
@@ -72,8 +102,8 @@ export const WorkspaceLayout = ({
       >
         <ConnectionToolbar
           connection={connection}
-          workspaceMode={workspaceMode}
-          onWorkspaceModeChange={setWorkspaceMode}
+          isChatOpen={isChatOpen}
+          onChatToggle={handleChatToggle}
         />
       </Titlebar>
       <ResizablePanelGroup className="flex-1" orientation="horizontal">
@@ -101,15 +131,30 @@ export const WorkspaceLayout = ({
 
         <ResizableHandle />
 
-        <ResizablePanel defaultSize="75%" minSize="50%">
+        <ResizablePanel defaultSize="75%" minSize="30%">
           <WorkspaceContent
             connection={connection}
             isConnected={isConnected}
             isConnecting={isConnecting}
             connectionError={connectionError}
-            mode={workspaceMode}
+          />
+        </ResizablePanel>
+
+        <ResizableHandle />
+
+        <ResizablePanel
+          panelRef={chatPanelRef}
+          defaultSize="0%"
+          minSize="20%"
+          maxSize="50%"
+          collapsible
+          collapsedSize="0%"
+          onResize={handleChatResize}
+        >
+          <ChatSidebar
+            connection={connection}
             schema={schema}
-            onModeChange={setWorkspaceMode}
+            onClose={handleChatClose}
           />
         </ResizablePanel>
       </ResizablePanelGroup>

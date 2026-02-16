@@ -1,8 +1,8 @@
 import { Loader2, Play } from "lucide-react";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect } from "react";
 
 import type { DatabaseConnection } from "@/lib/connections";
-import type { ExecuteResult, SchemaInfo } from "@/lib/tauri";
+import type { ExecuteResult } from "@/lib/tauri";
 
 import {
   Empty,
@@ -17,18 +17,10 @@ import {
   ResizablePanelGroup,
 } from "@/components/ui/resizable";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useEditorInsert } from "@/contexts/editor-insert-context";
 import { useQueryExecution } from "@/contexts/query-execution-context";
-import { useAiChat } from "@/hooks/use-ai-chat";
 import { useQueryTabs } from "@/hooks/use-query-tabs";
-import { hasAISettings } from "@/lib/ai-settings";
 import { isSqlDatabase } from "@/lib/connections";
 
-import type { WorkspaceMode } from "./workspace-mode-toggle";
-
-import { AISettingsDialog } from "./ai-settings-dialog";
-import { ChatInput } from "./chat/chat-input";
-import { ChatMessageList } from "./chat/chat-message-list";
 import { CommandEditor } from "./command-editor";
 import { DocumentViewer } from "./document-viewer";
 import { ExecuteButton } from "./execute-button";
@@ -43,52 +35,14 @@ interface WorkspaceContentProps {
   isConnected: boolean;
   isConnecting: boolean;
   connectionError: string | null;
-  mode: WorkspaceMode;
-  schema: SchemaInfo | null;
-  onModeChange: (mode: WorkspaceMode) => void;
 }
 
 export const WorkspaceContent = ({
   connection,
-  isConnected,
+  isConnected: _isConnected,
   isConnecting,
   connectionError,
-  mode,
-  schema,
-  onModeChange,
 }: WorkspaceContentProps) => {
-  if (mode === "chat") {
-    return (
-      <ChatContent
-        connection={connection}
-        schema={schema}
-        onModeChange={onModeChange}
-      />
-    );
-  }
-
-  return (
-    <EditorContent
-      connection={connection}
-      isConnected={isConnected}
-      isConnecting={isConnecting}
-      connectionError={connectionError}
-    />
-  );
-};
-
-interface EditorContentProps {
-  connection: DatabaseConnection;
-  isConnected: boolean;
-  isConnecting: boolean;
-  connectionError: string | null;
-}
-
-const EditorContent = ({
-  connection,
-  isConnecting,
-  connectionError,
-}: EditorContentProps) => {
   const {
     tabs,
     activeTab,
@@ -277,74 +231,6 @@ const ResultsPanel = ({ status, result, error, isSql }: ResultsPanelProps) => {
           <EmptyDescription>{emptyMessage}</EmptyDescription>
         </EmptyHeader>
       </Empty>
-    </div>
-  );
-};
-
-interface ChatContentProps {
-  connection: DatabaseConnection;
-  schema: SchemaInfo | null;
-  onModeChange: (mode: WorkspaceMode) => void;
-}
-
-const ChatContent = ({
-  connection,
-  schema,
-  onModeChange,
-}: ChatContentProps) => {
-  const { messages, isStreaming, sendMessage, stopStreaming } = useAiChat({
-    databaseType: connection.type,
-    schema,
-  });
-
-  const { insertAtCursor } = useEditorInsert();
-  const [settingsOpen, setSettingsOpen] = useState(false);
-  const [isConfigured, setIsConfigured] = useState(false);
-
-  useEffect(() => {
-    const checkSettings = async () => {
-      const configured = await hasAISettings();
-      setIsConfigured(configured);
-    };
-    checkSettings();
-  }, [settingsOpen]);
-
-  const handleInsertSql = useCallback(
-    (sql: string) => {
-      insertAtCursor(sql);
-      onModeChange("sql");
-    },
-    [insertAtCursor, onModeChange]
-  );
-
-  const handleRunSql = useCallback(
-    (sql: string) => {
-      insertAtCursor(sql);
-      onModeChange("sql");
-    },
-    [insertAtCursor, onModeChange]
-  );
-
-  const handleOpenSettings = useCallback(() => {
-    setSettingsOpen(true);
-  }, []);
-
-  return (
-    <div className="flex h-full flex-col bg-background">
-      <ChatMessageList
-        messages={messages}
-        connectionName={connection.name}
-        onInsertSql={handleInsertSql}
-        onRunSql={handleRunSql}
-      />
-      <ChatInput
-        onSend={sendMessage}
-        onStop={stopStreaming}
-        onOpenSettings={handleOpenSettings}
-        isStreaming={isStreaming}
-        isConfigured={isConfigured}
-      />
-      <AISettingsDialog open={settingsOpen} onOpenChange={setSettingsOpen} />
     </div>
   );
 };
