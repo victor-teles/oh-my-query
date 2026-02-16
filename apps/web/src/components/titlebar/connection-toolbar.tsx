@@ -5,7 +5,6 @@ import { useCallback, useState } from "react";
 import type { DatabaseConnection } from "@/lib/connections";
 
 import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
 import {
   Tooltip,
   TooltipContent,
