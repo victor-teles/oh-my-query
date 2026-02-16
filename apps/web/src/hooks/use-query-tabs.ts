@@ -41,6 +41,13 @@ export const useQueryTabs = (connectionId: string) => {
     setActiveTabId(tab.id);
   }, []);
 
+  const addTabWithSql = useCallback((sql: string) => {
+    counterRef.current += 1;
+    const tab: QueryTab = { ...createNewTab(counterRef.current), sql };
+    setTabs((prev) => [...prev, tab]);
+    setActiveTabId(tab.id);
+  }, []);
+
   const closeTab = useCallback(
     (tabId: string) => {
       setTabs((prev) => {
@@ -112,6 +119,7 @@ export const useQueryTabs = (connectionId: string) => {
     activeTab,
     activeTabId,
     addTab,
+    addTabWithSql,
     closeTab,
     executeTab,
     setActiveTabId,

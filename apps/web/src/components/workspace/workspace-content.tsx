@@ -17,9 +17,11 @@ import {
   ResizablePanelGroup,
 } from "@/components/ui/resizable";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useEditorInsert } from "@/contexts/editor-insert-context";
 import { useQueryExecution } from "@/contexts/query-execution-context";
 import { useQueryTabs } from "@/hooks/use-query-tabs";
 import { isSqlDatabase } from "@/lib/connections";
+import { downloadCsv, tabularResultToCsv } from "@/lib/csv";
 
 import { CommandEditor } from "./command-editor";
 import { DocumentViewer } from "./document-viewer";
@@ -48,6 +50,7 @@ export const WorkspaceContent = ({
     activeTab,
     activeTabId,
     addTab,
+    addTabWithSql,
     closeTab,
     setActiveTabId,
     updateTabSql,
@@ -55,6 +58,7 @@ export const WorkspaceContent = ({
   } = useQueryTabs(connection.id);
 
   const { setExecutionState } = useQueryExecution();
+  const { registerQueryTable } = useEditorInsert();
 
   const activeStatus = activeTab?.status;
   const activeResult = activeTab?.result;
@@ -70,6 +74,18 @@ export const WorkspaceContent = ({
       });
     }
   }, [activeStatus, activeResult, activeError, setExecutionState]);
+
+  const handleQueryTable = useCallback(
+    (tableName: string) => {
+      addTabWithSql(`SELECT * FROM ${tableName};`);
+    },
+    [addTabWithSql]
+  );
+
+  useEffect(() => {
+    registerQueryTable(handleQueryTable);
+    return () => registerQueryTable(null);
+  }, [registerQueryTable, handleQueryTable]);
 
   const handleExecute = useCallback(() => {
     if (activeTab) {
@@ -176,6 +192,13 @@ interface ResultsPanelProps {
 }
 
 const ResultsPanel = ({ status, result, error, isSql }: ResultsPanelProps) => {
+  const handleDownloadCsv = useCallback(() => {
+    if (result?.resultType === "tabular") {
+      const csv = tabularResultToCsv(result);
+      downloadCsv(csv, `query-results-${Date.now()}.csv`);
+    }
+  }, [result]);
+
   if (status === "running") {
     return (
       <div className="flex h-full flex-col gap-2 p-4">
@@ -211,7 +234,7 @@ const ResultsPanel = ({ status, result, error, isSql }: ResultsPanelProps) => {
         <div className="flex-1 overflow-auto">
           <ResultsTable result={result} />
         </div>
-        <QueryStatusBar result={result} />
+        <QueryStatusBar result={result} onDownloadCsv={handleDownloadCsv} />
       </div>
     );
   }
