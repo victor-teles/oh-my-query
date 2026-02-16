@@ -7,6 +7,11 @@ import type { DatabaseConnection } from "@/lib/connections";
 
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { WorkspaceModeToggle } from "@/components/workspace/workspace-mode-toggle";
 
 interface ConnectionToolbarProps {
@@ -40,36 +45,56 @@ export const ConnectionToolbar = ({
 
       <Separator orientation="vertical" className="mx-1 h-4" />
 
-      <Button
-        variant={safeMode ? "secondary" : "ghost"}
-        size="icon-xs"
-        onClick={handleToggleSafeMode}
-        aria-label={safeMode ? "Disable safe mode" : "Enable safe mode"}
-        title={safeMode ? "Safe mode: ON" : "Safe mode: OFF"}
-      >
-        <ShieldCheck className="size-3.5" />
-      </Button>
+      <Tooltip>
+        <TooltipTrigger
+          render={
+            <Button
+              variant={safeMode ? "secondary" : "ghost"}
+              size="icon-xs"
+              onClick={handleToggleSafeMode}
+              aria-label={safeMode ? "Disable safe mode" : "Enable safe mode"}
+            />
+          }
+        >
+          <ShieldCheck className="size-3.5" />
+        </TooltipTrigger>
+        <TooltipContent>
+          {safeMode ? "Safe mode: ON" : "Safe mode: OFF"}
+        </TooltipContent>
+      </Tooltip>
 
-      <Link to="/onboarding">
-        <Button
-          variant="ghost"
-          size="icon-xs"
-          aria-label="New connection"
-          title="Connect to new database"
+      <Tooltip>
+        <TooltipTrigger
+          render={
+            <Link to="/onboarding">
+              <Button
+                variant="ghost"
+                size="icon-xs"
+                aria-label="New connection"
+              />
+            </Link>
+          }
         >
           <Plus className="size-3.5" />
-        </Button>
-      </Link>
+        </TooltipTrigger>
+        <TooltipContent>New connection</TooltipContent>
+      </Tooltip>
 
-      <Button
-        variant="ghost"
-        size="icon-xs"
-        onClick={handleDisconnect}
-        aria-label="Disconnect"
-        title={`Disconnect from ${connection.name}`}
-      >
-        <Unplug className="size-3.5" />
-      </Button>
+      <Tooltip>
+        <TooltipTrigger
+          render={
+            <Button
+              variant="ghost"
+              size="icon-xs"
+              onClick={handleDisconnect}
+              aria-label="Disconnect"
+            />
+          }
+        >
+          <Unplug className="size-3.5" />
+        </TooltipTrigger>
+        <TooltipContent>Disconnect from {connection.name}</TooltipContent>
+      </Tooltip>
     </>
   );
 };

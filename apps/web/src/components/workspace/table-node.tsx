@@ -8,6 +8,11 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { useEditorInsert } from "@/contexts/editor-insert-context";
 
 import { ColumnNode } from "./column-node";
@@ -41,14 +46,21 @@ export const TableNode = ({ table, isView = false }: TableNodeProps) => {
           )}
           <span className="truncate">{table.name}</span>
         </CollapsibleTrigger>
-        <button
-          type="button"
-          className="mr-1 rounded p-0.5 text-muted-foreground opacity-0 hover:bg-sidebar-accent/50 hover:text-sidebar-foreground group-hover/table:opacity-100"
-          onClick={handleInsert}
-          aria-label={`Insert ${table.name}`}
-        >
-          <Table2 className="size-3" />
-        </button>
+        <Tooltip>
+          <TooltipTrigger
+            render={
+              <button
+                type="button"
+                className="mr-1 rounded p-0.5 text-muted-foreground opacity-0 hover:bg-sidebar-accent/50 hover:text-sidebar-foreground group-hover/table:opacity-100"
+                onClick={handleInsert}
+                aria-label={`Insert ${table.name}`}
+              />
+            }
+          >
+            <Table2 className="size-3" />
+          </TooltipTrigger>
+          <TooltipContent>Insert table name</TooltipContent>
+        </Tooltip>
       </div>
       <CollapsibleContent>
         <div className="ml-3 border-l border-sidebar-border pl-2">
