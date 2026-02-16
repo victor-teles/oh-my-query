@@ -2,6 +2,11 @@ import { Check, Copy, Play, SquarePen } from "lucide-react";
 import { useCallback, useState } from "react";
 
 import { Button } from "@/components/ui/button";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 interface SqlCodeBlockProps {
   code: string;
@@ -31,40 +36,58 @@ export const SqlCodeBlock = ({ code, onInsert, onRun }: SqlCodeBlockProps) => {
       <div className="flex items-center justify-between border-b px-3 py-1.5">
         <span className="text-xs text-muted-foreground">SQL</span>
         <div className="flex items-center gap-0.5">
-          <Button
-            variant="ghost"
-            size="icon-xs"
-            onClick={handleCopy}
-            aria-label={copied ? "Copied" : "Copy SQL"}
-            title={copied ? "Copied!" : "Copy"}
-          >
-            {copied ? (
-              <Check className="size-3" />
-            ) : (
-              <Copy className="size-3" />
-            )}
-          </Button>
-          {onInsert && (
-            <Button
-              variant="ghost"
-              size="icon-xs"
-              onClick={handleInsert}
-              aria-label="Insert to editor"
-              title="Insert to editor"
+          <Tooltip>
+            <TooltipTrigger
+              render={
+                <Button
+                  variant="ghost"
+                  size="icon-xs"
+                  onClick={handleCopy}
+                  aria-label={copied ? "Copied" : "Copy SQL"}
+                />
+              }
             >
-              <SquarePen className="size-3" />
-            </Button>
+              {copied ? (
+                <Check className="size-3" />
+              ) : (
+                <Copy className="size-3" />
+              )}
+            </TooltipTrigger>
+            <TooltipContent>{copied ? "Copied!" : "Copy"}</TooltipContent>
+          </Tooltip>
+          {onInsert && (
+            <Tooltip>
+              <TooltipTrigger
+                render={
+                  <Button
+                    variant="ghost"
+                    size="icon-xs"
+                    onClick={handleInsert}
+                    aria-label="Insert to editor"
+                  />
+                }
+              >
+                <SquarePen className="size-3" />
+              </TooltipTrigger>
+              <TooltipContent>Insert to editor</TooltipContent>
+            </Tooltip>
           )}
           {onRun && (
-            <Button
-              variant="ghost"
-              size="icon-xs"
-              onClick={handleRun}
-              aria-label="Run query"
-              title="Run in editor"
-            >
-              <Play className="size-3" />
-            </Button>
+            <Tooltip>
+              <TooltipTrigger
+                render={
+                  <Button
+                    variant="ghost"
+                    size="icon-xs"
+                    onClick={handleRun}
+                    aria-label="Run query"
+                  />
+                }
+              >
+                <Play className="size-3" />
+              </TooltipTrigger>
+              <TooltipContent>Run query</TooltipContent>
+            </Tooltip>
           )}
         </div>
       </div>

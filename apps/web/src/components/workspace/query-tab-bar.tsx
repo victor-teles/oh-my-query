@@ -4,6 +4,11 @@ import { useCallback } from "react";
 import type { QueryTab, TabStatus } from "@/lib/query-types";
 
 import { Button } from "@/components/ui/button";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 interface QueryTabBarProps {
   tabs: QueryTab[];
@@ -88,14 +93,21 @@ export const QueryTabBar = ({
         onClose={onCloseTab}
       />
     ))}
-    <Button
-      variant="ghost"
-      size="icon-xs"
-      onClick={onAddTab}
-      className="ml-1"
-      aria-label="New query tab"
-    >
-      <Plus className="size-3.5" />
-    </Button>
+    <Tooltip>
+      <TooltipTrigger
+        render={
+          <Button
+            variant="ghost"
+            size="icon-xs"
+            onClick={onAddTab}
+            className="ml-1"
+            aria-label="New query tab"
+          />
+        }
+      >
+        <Plus className="size-3.5" />
+      </TooltipTrigger>
+      <TooltipContent>New tab</TooltipContent>
+    </Tooltip>
   </div>
 );

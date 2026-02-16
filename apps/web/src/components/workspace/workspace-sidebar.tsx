@@ -21,6 +21,11 @@ import {
 } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { isTauri } from "@/lib/tauri";
 import { cn } from "@/lib/utils";
 
@@ -153,15 +158,24 @@ export const WorkspaceSidebar = ({
       <div className="flex items-center justify-between px-3 py-2">
         <span className="truncate text-sm font-medium">{connection.name}</span>
         {schema && (
-          <Button
-            variant="ghost"
-            size="icon-xs"
-            onClick={refresh}
-            aria-label="Refresh schema"
-            disabled={isLoading}
-          >
-            <RefreshCw className={cn("size-3", isLoading && "animate-spin")} />
-          </Button>
+          <Tooltip>
+            <TooltipTrigger
+              render={
+                <Button
+                  variant="ghost"
+                  size="icon-xs"
+                  onClick={refresh}
+                  aria-label="Refresh schema"
+                  disabled={isLoading}
+                />
+              }
+            >
+              <RefreshCw
+                className={cn("size-3", isLoading && "animate-spin")}
+              />
+            </TooltipTrigger>
+            <TooltipContent>Refresh schema</TooltipContent>
+          </Tooltip>
         )}
       </div>
 

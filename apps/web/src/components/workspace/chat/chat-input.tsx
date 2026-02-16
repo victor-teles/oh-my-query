@@ -3,6 +3,11 @@ import { useCallback, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 interface ChatInputProps {
   onSend: (message: string) => void;
@@ -75,23 +80,37 @@ export const ChatInput = ({
           disabled={isStreaming}
         />
         {isStreaming ? (
-          <Button
-            size="icon"
-            variant="secondary"
-            onClick={onStop}
-            aria-label="Stop generating"
-          >
-            <Square className="size-4" />
-          </Button>
+          <Tooltip>
+            <TooltipTrigger
+              render={
+                <Button
+                  size="icon"
+                  variant="secondary"
+                  onClick={onStop}
+                  aria-label="Stop generating"
+                />
+              }
+            >
+              <Square className="size-4" />
+            </TooltipTrigger>
+            <TooltipContent>Stop generating</TooltipContent>
+          </Tooltip>
         ) : (
-          <Button
-            size="icon"
-            onClick={handleSubmit}
-            disabled={!value.trim()}
-            aria-label="Send message"
-          >
-            <Send className="size-4" />
-          </Button>
+          <Tooltip>
+            <TooltipTrigger
+              render={
+                <Button
+                  size="icon"
+                  onClick={handleSubmit}
+                  disabled={!value.trim()}
+                  aria-label="Send message"
+                />
+              }
+            >
+              <Send className="size-4" />
+            </TooltipTrigger>
+            <TooltipContent>Send message</TooltipContent>
+          </Tooltip>
         )}
       </div>
     </div>

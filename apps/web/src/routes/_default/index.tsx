@@ -6,6 +6,11 @@ import type { DatabaseConnection } from "@/lib/connections";
 
 import { Titlebar } from "@/components/titlebar/titlebar";
 import { Button } from "@/components/ui/button";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { deleteConnection, getConnections } from "@/lib/connections";
 
 import { AddConnectionDialog } from "./-components/add-connection-dialog";
@@ -81,15 +86,21 @@ const HomeComponent = () => {
   return (
     <>
       <Titlebar>
-        <Button
-          variant="ghost"
-          size="icon-xs"
-          aria-label="New connection"
-          title="New connection"
-          onClick={handleAddOpen}
-        >
-          <Plus className="size-3.5" />
-        </Button>
+        <Tooltip>
+          <TooltipTrigger
+            render={
+              <Button
+                variant="ghost"
+                size="icon-xs"
+                aria-label="New connection"
+                onClick={handleAddOpen}
+              />
+            }
+          >
+            <Plus className="size-3.5" />
+          </TooltipTrigger>
+          <TooltipContent>New connection</TooltipContent>
+        </Tooltip>
       </Titlebar>
 
       <div className="flex flex-1 flex-col items-center justify-center px-6">
