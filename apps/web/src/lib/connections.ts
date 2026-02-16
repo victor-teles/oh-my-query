@@ -44,6 +44,13 @@ export const saveConnection = (connection: DatabaseConnection): void => {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(connections));
 };
 
+export const updateConnection = (updated: DatabaseConnection): void => {
+  const connections = getConnections().map((c) =>
+    c.id === updated.id ? updated : c
+  );
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(connections));
+};
+
 export const deleteConnection = (id: string): void => {
   const connections = getConnections().filter((c) => c.id !== id);
   localStorage.setItem(STORAGE_KEY, JSON.stringify(connections));

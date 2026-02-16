@@ -10,9 +10,11 @@ const SPRING = { damping: 30, stiffness: 400, type: "spring" } as const;
 
 const ConnectionList = ({
   connections,
+  onEditRequest,
   onDeleteRequest,
 }: {
   connections: DatabaseConnection[];
+  onEditRequest: (connection: DatabaseConnection) => void;
   onDeleteRequest: (connection: DatabaseConnection) => void;
 }) => (
   <div className="overflow-hidden rounded-lg ring-1 ring-foreground/10">
@@ -29,6 +31,7 @@ const ConnectionList = ({
           {index > 0 && <Separator />}
           <ConnectionListItem
             connection={conn}
+            onEditRequest={onEditRequest}
             onDeleteRequest={onDeleteRequest}
           />
         </motion.div>
