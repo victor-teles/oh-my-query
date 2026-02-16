@@ -1,7 +1,17 @@
+import { Download } from "lucide-react";
+
 import type { ExecuteResult } from "@/lib/tauri";
+
+import { Button } from "@/components/ui/button";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 interface QueryStatusBarProps {
   result: ExecuteResult;
+  onDownloadCsv?: () => void;
 }
 
 const getLabel = (resultType: string, count: number): string => {
@@ -11,7 +21,10 @@ const getLabel = (resultType: string, count: number): string => {
   return count === 1 ? "row" : "rows";
 };
 
-export const QueryStatusBar = ({ result }: QueryStatusBarProps) => {
+export const QueryStatusBar = ({
+  result,
+  onDownloadCsv,
+}: QueryStatusBarProps) => {
   const count =
     result.resultType === "tabular" ? result.rowCount : result.count;
   const label = getLabel(result.resultType, count);
@@ -24,6 +37,24 @@ export const QueryStatusBar = ({ result }: QueryStatusBarProps) => {
       <span>{result.executionTimeMs}ms</span>
       {result.isTruncated && (
         <span className="text-amber-500">Result truncated</span>
+      )}
+      {onDownloadCsv && (
+        <Tooltip>
+          <TooltipTrigger
+            render={
+              <Button
+                variant="ghost"
+                size="icon-xs"
+                className="ml-auto"
+                onClick={onDownloadCsv}
+                aria-label="Download as CSV"
+              />
+            }
+          >
+            <Download className="size-3" />
+          </TooltipTrigger>
+          <TooltipContent>Download as CSV</TooltipContent>
+        </Tooltip>
       )}
     </div>
   );

@@ -1,4 +1,11 @@
-import { ChevronRight, Eye, Link, ListOrdered, Table2 } from "lucide-react";
+import {
+  ChevronRight,
+  Eye,
+  Link,
+  ListOrdered,
+  Play,
+  Table2,
+} from "lucide-react";
 import { useCallback } from "react";
 
 import type { TableItem, ViewItem } from "@/lib/tauri";
@@ -26,13 +33,13 @@ const isTableItem = (item: TableItem | ViewItem): item is TableItem =>
   "indexes" in item;
 
 export const TableNode = ({ table, isView = false }: TableNodeProps) => {
-  const { insertAtCursor } = useEditorInsert();
+  const { queryTable } = useEditorInsert();
   const hasIndexes = isTableItem(table) && table.indexes.length > 0;
   const hasForeignKeys = isTableItem(table) && table.foreignKeys.length > 0;
 
-  const handleInsert = useCallback(() => {
-    insertAtCursor(table.name);
-  }, [insertAtCursor, table.name]);
+  const handleQueryTable = useCallback(() => {
+    queryTable(table.name);
+  }, [queryTable, table.name]);
 
   return (
     <Collapsible className="group/table">
@@ -52,14 +59,14 @@ export const TableNode = ({ table, isView = false }: TableNodeProps) => {
               <button
                 type="button"
                 className="mr-1 rounded p-0.5 text-muted-foreground opacity-0 hover:bg-sidebar-accent/50 hover:text-sidebar-foreground group-hover/table:opacity-100"
-                onClick={handleInsert}
-                aria-label={`Insert ${table.name}`}
+                onClick={handleQueryTable}
+                aria-label={`Query ${table.name}`}
               />
             }
           >
-            <Table2 className="size-3" />
+            <Play className="size-3" />
           </TooltipTrigger>
-          <TooltipContent>Insert table name</TooltipContent>
+          <TooltipContent>Query table</TooltipContent>
         </Tooltip>
       </div>
       <CollapsibleContent>
