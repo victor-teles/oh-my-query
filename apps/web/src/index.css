@@ -152,4 +152,25 @@
     @apply font-sans;
     overflow: hidden;
   }
+
+  [data-variant="segment"]
+    > [data-slot="tabs-trigger"]
+    + [data-slot="tabs-trigger"]::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 25%;
+    height: 50%;
+    width: 1px;
+    background-color: var(--border);
+    opacity: 0.5;
+    transition: opacity 150ms;
+  }
+
+  [data-variant="segment"]
+    > [data-slot="tabs-trigger"][data-active]
+    + [data-slot="tabs-trigger"]::before,
+  [data-variant="segment"] > [data-slot="tabs-trigger"][data-active]::before {
+    opacity: 0;
+  }
 }
