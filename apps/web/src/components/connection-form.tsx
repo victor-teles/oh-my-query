@@ -14,10 +14,15 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { DEFAULT_PORTS, saveConnection } from "@/lib/connections";
+import {
+  DEFAULT_PORTS,
+  saveConnection,
+  updateConnection,
+} from "@/lib/connections";
 import { testConnection } from "@/lib/tauri";
 
 interface ConnectionFormProps {
+  connection?: DatabaseConnection;
   onSuccess?: (connection: DatabaseConnection) => void;
 }
 
@@ -46,6 +51,16 @@ const INITIAL_STATE: FormState = {
   type: "postgresql",
   username: "",
 };
+
+const connectionToFormState = (conn: DatabaseConnection): FormState => ({
+  database: conn.database,
+  host: conn.host,
+  name: conn.name,
+  password: conn.password,
+  port: String(conn.port),
+  type: conn.type,
+  username: conn.username,
+});
 
 const DATABASE_OPTIONS: { value: DatabaseType; label: string }[] = [
   { label: "PostgreSQL", value: "postgresql" },
@@ -155,8 +170,13 @@ const validate = (form: FormState): string | null => {
   return null;
 };
 
-export const ConnectionForm = ({ onSuccess }: ConnectionFormProps) => {
-  const [form, setForm] = useState<FormState>(INITIAL_STATE);
+export const ConnectionForm = ({
+  connection,
+  onSuccess,
+}: ConnectionFormProps) => {
+  const [form, setForm] = useState<FormState>(
+    connection ? connectionToFormState(connection) : INITIAL_STATE
+  );
   const [testStatus, setTestStatus] = useState<TestStatus>({ state: "idle" });
   const hasHost = NEEDS_HOST.has(form.type);
   const hasUsername = NEEDS_USERNAME.has(form.type);
@@ -213,12 +233,24 @@ export const ConnectionForm = ({ onSuccess }: ConnectionFormProps) => {
         toast.error(error);
         return;
       }
-      const connection = buildConnection(form);
-      saveConnection(connection);
-      toast.success(`Connection "${connection.name}" saved`);
-      onSuccess?.(connection);
+
+      if (connection) {
+        const updated: DatabaseConnection = {
+          ...buildConnection(form),
+          createdAt: connection.createdAt,
+          id: connection.id,
+        };
+        updateConnection(updated);
+        toast.success(`Connection "${updated.name}" updated`);
+        onSuccess?.(updated);
+      } else {
+        const newConn = buildConnection(form);
+        saveConnection(newConn);
+        toast.success(`Connection "${newConn.name}" saved`);
+        onSuccess?.(newConn);
+      }
     },
-    [form, onSuccess]
+    [form, connection, onSuccess]
   );
 
   return (
@@ -349,7 +381,9 @@ export const ConnectionForm = ({ onSuccess }: ConnectionFormProps) => {
         )}
       </div>
 
-      <Button type="submit">Save connection</Button>
+      <Button type="submit">
+        {connection ? "Update connection" : "Save connection"}
+      </Button>
     </form>
   );
 };

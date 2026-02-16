@@ -11,6 +11,7 @@ import { deleteConnection, getConnections } from "@/lib/connections";
 import { AddConnectionDialog } from "./-components/add-connection-dialog";
 import { ConnectionList } from "./-components/connection-list";
 import { DeleteConnectionDialog } from "./-components/delete-connection-dialog";
+import { EditConnectionDialog } from "./-components/edit-connection-dialog";
 
 const HomeComponent = () => {
   const navigate = useNavigate();
@@ -18,6 +19,7 @@ const HomeComponent = () => {
   const [deleteTarget, setDeleteTarget] = useState<DatabaseConnection | null>(
     null
   );
+  const [editTarget, setEditTarget] = useState<DatabaseConnection | null>(null);
   const [addOpen, setAddOpen] = useState(false);
 
   const handleDeleteRequest = useCallback((connection: DatabaseConnection) => {
@@ -43,6 +45,21 @@ const HomeComponent = () => {
   const handleDeleteOpenChange = useCallback((open: boolean) => {
     if (!open) {
       setDeleteTarget(null);
+    }
+  }, []);
+
+  const handleEditRequest = useCallback((connection: DatabaseConnection) => {
+    setEditTarget(connection);
+  }, []);
+
+  const handleEditSuccess = useCallback(() => {
+    setEditTarget(null);
+    setConnections(getConnections());
+  }, []);
+
+  const handleEditOpenChange = useCallback((open: boolean) => {
+    if (!open) {
+      setEditTarget(null);
     }
   }, []);
 
@@ -88,6 +105,7 @@ const HomeComponent = () => {
 
           <ConnectionList
             connections={connections}
+            onEditRequest={handleEditRequest}
             onDeleteRequest={handleDeleteRequest}
           />
         </div>
@@ -97,6 +115,13 @@ const HomeComponent = () => {
         open={addOpen}
         onOpenChange={setAddOpen}
         onSuccess={handleAddSuccess}
+      />
+
+      <EditConnectionDialog
+        connection={editTarget}
+        open={editTarget !== null}
+        onOpenChange={handleEditOpenChange}
+        onSuccess={handleEditSuccess}
       />
 
       <DeleteConnectionDialog

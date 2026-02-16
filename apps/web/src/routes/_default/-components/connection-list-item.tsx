@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { Database, Trash2 } from "lucide-react";
+import { Database, Pencil, Trash2 } from "lucide-react";
 import { useCallback } from "react";
 
 import type { DatabaseConnection } from "@/lib/connections";
@@ -8,20 +8,27 @@ import {
   ContextMenu,
   ContextMenuContent,
   ContextMenuItem,
+  ContextMenuSeparator,
   ContextMenuTrigger,
 } from "@/components/ui/context-menu";
 
 const ConnectionListItem = ({
   connection,
+  onEditRequest,
   onDeleteRequest,
 }: {
   connection: DatabaseConnection;
+  onEditRequest: (connection: DatabaseConnection) => void;
   onDeleteRequest: (connection: DatabaseConnection) => void;
 }) => {
   const subtitle =
     connection.type === "sqlite"
       ? connection.database
       : `${connection.host}:${connection.port}/${connection.database}`;
+
+  const handleEdit = useCallback(() => {
+    onEditRequest(connection);
+  }, [onEditRequest, connection]);
 
   const handleDelete = useCallback(() => {
     onDeleteRequest(connection);
@@ -45,7 +52,12 @@ const ConnectionListItem = ({
         </span>
       </ContextMenuTrigger>
       <ContextMenuContent>
-        <ContextMenuItem onSelect={handleDelete} variant="destructive">
+        <ContextMenuItem onClick={handleEdit}>
+          <Pencil />
+          Edit
+        </ContextMenuItem>
+        <ContextMenuSeparator />
+        <ContextMenuItem onClick={handleDelete} variant="destructive">
           <Trash2 />
           Delete
         </ContextMenuItem>
