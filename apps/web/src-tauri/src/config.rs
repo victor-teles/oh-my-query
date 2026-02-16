@@ -43,7 +43,10 @@ fn config_path() -> Result<PathBuf, ConfigError> {
         code: "HOME_NOT_FOUND".to_string(),
         message: "Could not determine home directory".to_string(),
     })?;
-    Ok(home.join(".config").join("oh-my-query").join("oh-my-query.json"))
+    Ok(home
+        .join(".config")
+        .join("oh-my-query")
+        .join("oh-my-query.json"))
 }
 
 #[tauri::command]
