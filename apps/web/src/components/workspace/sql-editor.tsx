@@ -1,4 +1,4 @@
-import type { EditorView } from "@codemirror/view";
+import type { EditorView, ViewUpdate } from "@codemirror/view";
 
 import { sql, PostgreSQL, MySQL, SQLite } from "@codemirror/lang-sql";
 import { keymap } from "@codemirror/view";
@@ -6,7 +6,14 @@ import { githubDark } from "@uiw/codemirror-theme-github";
 import CodeMirror from "@uiw/react-codemirror";
 import { useCallback, useMemo } from "react";
 
+import type { SchemaInfo } from "@/lib/tauri";
+
 import { useEditorInsert } from "@/contexts/editor-insert-context";
+import {
+  createColumnCompletionSource,
+  createTableCompletionSource,
+  schemaInfoToSQLNamespace,
+} from "@/lib/sql-schema";
 
 type SqlDatabaseType = "postgresql" | "mysql" | "sqlite";
 
@@ -20,16 +27,22 @@ interface SqlEditorProps {
   value: string;
   onChange: (value: string) => void;
   onExecute: () => void;
+  onUpdate?: (update: ViewUpdate) => void;
+  onToggleSyntaxTree?: () => void;
   databaseType: SqlDatabaseType;
   readOnly?: boolean;
+  schema: SchemaInfo | null;
 }
 
 export const SqlEditor = ({
   value,
   onChange,
   onExecute,
+  onUpdate,
+  onToggleSyntaxTree,
   databaseType,
   readOnly = false,
+  schema,
 }: SqlEditorProps) => {
   const { registerEditor } = useEditorInsert();
 
@@ -40,26 +53,80 @@ export const SqlEditor = ({
     [registerEditor]
   );
 
-  const extensions = useMemo(
-    () => [
-      sql({ dialect: DIALECT_MAP[databaseType] }),
-      keymap.of([
-        {
-          key: "Mod-Enter",
-          run: () => {
-            onExecute();
-            return true;
-          },
-        },
-      ]),
-    ],
-    [databaseType, onExecute]
+  const sqlNamespace = useMemo(
+    () => (schema ? schemaInfoToSQLNamespace(schema) : undefined),
+    [schema]
   );
+
+  const columnCompletionSource = useMemo(
+    () => (schema ? createColumnCompletionSource(schema) : null),
+    [schema]
+  );
+
+  const tableCompletionSource = useMemo(
+    () => (schema ? createTableCompletionSource(schema) : null),
+    [schema]
+  );
+
+  const extensions = useMemo(() => {
+    const langSupport = sql({
+      dialect: DIALECT_MAP[databaseType],
+      schema: sqlNamespace,
+    });
+
+    const keybindings = [
+      {
+        key: "Mod-Enter",
+        run: () => {
+          onExecute();
+          return true;
+        },
+      },
+    ];
+
+    if (onToggleSyntaxTree) {
+      keybindings.push({
+        key: "Mod-Shift-d",
+        run: () => {
+          onToggleSyntaxTree();
+          return true;
+        },
+      });
+    }
+
+    const exts = [langSupport, keymap.of(keybindings)];
+
+    if (tableCompletionSource) {
+      exts.push(
+        langSupport.language.data.of({
+          autocomplete: tableCompletionSource,
+        })
+      );
+    }
+
+    if (columnCompletionSource) {
+      exts.push(
+        langSupport.language.data.of({
+          autocomplete: columnCompletionSource,
+        })
+      );
+    }
+
+    return exts;
+  }, [
+    databaseType,
+    onExecute,
+    onToggleSyntaxTree,
+    sqlNamespace,
+    tableCompletionSource,
+    columnCompletionSource,
+  ]);
 
   return (
     <CodeMirror
       value={value}
       onChange={onChange}
+      onUpdate={onUpdate}
       onCreateEditor={handleCreateEditor}
       extensions={extensions}
       theme={githubDark}
@@ -72,7 +139,7 @@ export const SqlEditor = ({
         highlightActiveLine: true,
         lineNumbers: true,
       }}
-      className="h-full overflow-auto text-sm [&_.cm-editor]:h-full [&_.cm-scroller]:h-full [&_.cm-editor]:!bg-background [&_.cm-gutters]:!bg-background [&_.cm-gutters]:!border-r-0 [&_.cm-activeLineGutter]:!bg-background"
+      className="h-full overflow-auto text-sm [&_.cm-editor]:h-full [&_.cm-scroller]:h-full [&_.cm-editor]:bg-background! [&_.cm-gutters]:bg-background! [&_.cm-gutters]:border-r-0! [&_.cm-activeLineGutter]:bg-background!"
     />
   );
 };

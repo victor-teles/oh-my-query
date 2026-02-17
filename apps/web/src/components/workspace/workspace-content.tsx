@@ -1,8 +1,8 @@
 import { Loader2, Play } from "lucide-react";
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import type { DatabaseConnection } from "@/lib/connections";
-import type { ExecuteResult } from "@/lib/tauri";
+import type { ExecuteResult, SchemaInfo } from "@/lib/tauri";
 
 import {
   Empty,
@@ -17,9 +17,11 @@ import {
   ResizablePanelGroup,
 } from "@/components/ui/resizable";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useEditorInsert } from "@/contexts/editor-insert-context";
 import { useQueryExecution } from "@/contexts/query-execution-context";
 import { useQueryTabs } from "@/hooks/use-query-tabs";
+import { useSyntaxTree } from "@/hooks/use-syntax-tree";
 import { isSqlDatabase } from "@/lib/connections";
 import { downloadCsv, tabularResultToCsv } from "@/lib/csv";
 
@@ -31,12 +33,15 @@ import { QueryStatusBar } from "./query-status-bar";
 import { QueryTabBar } from "./query-tab-bar";
 import { ResultsTable } from "./results-table";
 import { SqlEditor } from "./sql-editor";
+import { SyntaxTreePanel } from "./syntax-tree-panel";
+import { SyntaxTreeToggle } from "./syntax-tree-toggle";
 
 interface WorkspaceContentProps {
   connection: DatabaseConnection;
   isConnected: boolean;
   isConnecting: boolean;
   connectionError: string | null;
+  schema: SchemaInfo | null;
 }
 
 export const WorkspaceContent = ({
@@ -44,6 +49,7 @@ export const WorkspaceContent = ({
   isConnected: _isConnected,
   isConnecting,
   connectionError,
+  schema,
 }: WorkspaceContentProps) => {
   const {
     tabs,
@@ -60,10 +66,17 @@ export const WorkspaceContent = ({
   const { setExecutionState } = useQueryExecution();
   const { registerQueryTable } = useEditorInsert();
 
+  const [isSyntaxTreeOpen, setIsSyntaxTreeOpen] = useState(false);
+  const { treeData, handleEditorUpdate } = useSyntaxTree(isSyntaxTreeOpen);
+
   const activeStatus = activeTab?.status;
   const activeResult = activeTab?.result;
   const activeError = activeTab?.error;
   const isSql = isSqlDatabase(connection.type);
+
+  const toggleSyntaxTree = useCallback(() => {
+    setIsSyntaxTreeOpen((prev) => !prev);
+  }, []);
 
   useEffect(() => {
     if (activeStatus) {
@@ -138,11 +151,19 @@ export const WorkspaceContent = ({
               <span className="text-xs text-muted-foreground">
                 {activeTab?.title}
               </span>
-              <ExecuteButton
-                isRunning={activeTab?.status === "running"}
-                disabled={!activeTab?.sql.trim()}
-                onClick={handleExecute}
-              />
+              <div className="flex items-center gap-1">
+                {isSql && (
+                  <SyntaxTreeToggle
+                    isOpen={isSyntaxTreeOpen}
+                    onToggle={toggleSyntaxTree}
+                  />
+                )}
+                <ExecuteButton
+                  isRunning={activeTab?.status === "running"}
+                  disabled={!activeTab?.sql.trim()}
+                  onClick={handleExecute}
+                />
+              </div>
             </div>
             <div className="flex-1">
               {activeTab && isSql && (
@@ -150,9 +171,12 @@ export const WorkspaceContent = ({
                   value={activeTab.sql}
                   onChange={handleSqlChange}
                   onExecute={handleExecute}
+                  onUpdate={isSyntaxTreeOpen ? handleEditorUpdate : undefined}
+                  onToggleSyntaxTree={toggleSyntaxTree}
                   databaseType={
                     connection.type as "postgresql" | "mysql" | "sqlite"
                   }
+                  schema={schema}
                 />
               )}
               {activeTab && !isSql && (
@@ -170,7 +194,9 @@ export const WorkspaceContent = ({
         <ResizableHandle />
 
         <ResizablePanel defaultSize="60%" minSize="20%">
-          <ResultsPanel
+          <BottomPanel
+            isSyntaxTreeOpen={isSyntaxTreeOpen}
+            treeData={treeData}
             status={activeTab?.status}
             result={activeTab?.result ?? null}
             error={activeTab?.error ?? null}
@@ -255,5 +281,35 @@ const ResultsPanel = ({ status, result, error, isSql }: ResultsPanelProps) => {
         </EmptyHeader>
       </Empty>
     </div>
+  );
+};
+
+interface BottomPanelProps extends ResultsPanelProps {
+  isSyntaxTreeOpen: boolean;
+  treeData: ReturnType<typeof useSyntaxTree>["treeData"];
+}
+
+const BottomPanel = ({
+  isSyntaxTreeOpen,
+  treeData,
+  ...resultsPanelProps
+}: BottomPanelProps) => {
+  if (!isSyntaxTreeOpen) {
+    return <ResultsPanel {...resultsPanelProps} />;
+  }
+
+  return (
+    <Tabs defaultValue="syntaxTree" className="flex h-full flex-col gap-0">
+      <TabsList variant="segment" className="shrink-0">
+        <TabsTrigger value="results">Results</TabsTrigger>
+        <TabsTrigger value="syntaxTree">Syntax Tree</TabsTrigger>
+      </TabsList>
+      <TabsContent value="results" className="min-h-0 flex-1">
+        <ResultsPanel {...resultsPanelProps} />
+      </TabsContent>
+      <TabsContent value="syntaxTree" className="min-h-0 flex-1">
+        <SyntaxTreePanel treeData={treeData} />
+      </TabsContent>
+    </Tabs>
   );
 };
