@@ -107,7 +107,6 @@ export const WorkspaceLayout = ({
           maxSize="40%"
           collapsible
           collapsedSize="0%"
-          className="border-r border-sidebar-border"
         >
           <WorkspaceSidebar
             connection={connection}

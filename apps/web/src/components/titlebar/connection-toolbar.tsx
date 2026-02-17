@@ -1,11 +1,10 @@
-import { Link, useNavigate } from "@tanstack/react-router";
-import { Plus, ShieldCheck, Unplug } from "lucide-react";
+import { useNavigate } from "@tanstack/react-router";
+import { ShieldCheck, Unplug } from "lucide-react";
 import { useCallback, useState } from "react";
 
 import type { DatabaseConnection } from "@/lib/connections";
 
 import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
 import {
   Tooltip,
   TooltipContent,
@@ -36,10 +35,8 @@ export const ConnectionToolbar = ({
   }, []);
 
   return (
-    <>
+    <div className="flex items-center space-x-2">
       <ChatPanelToggle isOpen={isChatOpen} onToggle={onChatToggle} />
-
-      <Separator orientation="vertical" className="mx-1 h-4" />
 
       <Tooltip>
         <TooltipTrigger
@@ -62,23 +59,6 @@ export const ConnectionToolbar = ({
       <Tooltip>
         <TooltipTrigger
           render={
-            <Link to="/onboarding">
-              <Button
-                variant="ghost"
-                size="icon-xs"
-                aria-label="New connection"
-              />
-            </Link>
-          }
-        >
-          <Plus className="size-3.5" />
-        </TooltipTrigger>
-        <TooltipContent>New connection</TooltipContent>
-      </Tooltip>
-
-      <Tooltip>
-        <TooltipTrigger
-          render={
             <Button
               variant="ghost"
               size="icon-xs"
@@ -91,6 +71,6 @@ export const ConnectionToolbar = ({
         </TooltipTrigger>
         <TooltipContent>Disconnect from {connection.name}</TooltipContent>
       </Tooltip>
-    </>
+    </div>
   );
 };

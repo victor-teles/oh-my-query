@@ -5,7 +5,9 @@ import { createContext, use, useCallback, useRef } from "react";
 
 interface EditorInsertContextValue {
   insertAtCursor: (text: string) => void;
+  queryTable: (tableName: string) => void;
   registerEditor: (view: EditorView | null) => void;
+  registerQueryTable: (handler: ((tableName: string) => void) | null) => void;
 }
 
 const EditorInsertContext = createContext<EditorInsertContextValue | null>(
@@ -14,10 +16,18 @@ const EditorInsertContext = createContext<EditorInsertContextValue | null>(
 
 export const EditorInsertProvider = ({ children }: { children: ReactNode }) => {
   const editorRef = useRef<EditorView | null>(null);
+  const queryTableRef = useRef<((tableName: string) => void) | null>(null);
 
   const registerEditor = useCallback((view: EditorView | null) => {
     editorRef.current = view;
   }, []);
+
+  const registerQueryTable = useCallback(
+    (handler: ((tableName: string) => void) | null) => {
+      queryTableRef.current = handler;
+    },
+    []
+  );
 
   const insertAtCursor = useCallback((text: string) => {
     const view = editorRef.current;
@@ -33,8 +43,14 @@ export const EditorInsertProvider = ({ children }: { children: ReactNode }) => {
     view.focus();
   }, []);
 
+  const queryTable = useCallback((tableName: string) => {
+    queryTableRef.current?.(tableName);
+  }, []);
+
   return (
-    <EditorInsertContext value={{ insertAtCursor, registerEditor }}>
+    <EditorInsertContext
+      value={{ insertAtCursor, queryTable, registerEditor, registerQueryTable }}
+    >
       {children}
     </EditorInsertContext>
   );
