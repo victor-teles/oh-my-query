@@ -1,3 +1,6 @@
+import type { ViewUpdate } from "@codemirror/view";
+
+import { useHotkey } from "@tanstack/react-hotkeys";
 import { Loader2, Play } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 
@@ -64,10 +67,12 @@ export const WorkspaceContent = ({
   } = useQueryTabs(connection.id);
 
   const { setExecutionState } = useQueryExecution();
-  const { registerQueryTable } = useEditorInsert();
+  const { getSelectedText, registerQueryTable } = useEditorInsert();
 
   const [isSyntaxTreeOpen, setIsSyntaxTreeOpen] = useState(false);
-  const { treeData, handleEditorUpdate } = useSyntaxTree(isSyntaxTreeOpen);
+  const [hasSelection, setHasSelection] = useState(false);
+  const { treeData, handleEditorUpdate: handleSyntaxTreeUpdate } =
+    useSyntaxTree(isSyntaxTreeOpen);
 
   const activeStatus = activeTab?.status;
   const activeResult = activeTab?.result;
@@ -102,9 +107,23 @@ export const WorkspaceContent = ({
 
   const handleExecute = useCallback(() => {
     if (activeTab) {
-      executeTab(activeTab.id);
+      const selectedText = getSelectedText();
+      executeTab(activeTab.id, selectedText ?? undefined);
     }
-  }, [activeTab, executeTab]);
+  }, [activeTab, executeTab, getSelectedText]);
+
+  const handleEditorUpdate = useCallback(
+    (update: ViewUpdate) => {
+      if (isSyntaxTreeOpen) {
+        handleSyntaxTreeUpdate(update);
+      }
+      if (update.selectionSet) {
+        const { from, to } = update.state.selection.main;
+        setHasSelection(from !== to);
+      }
+    },
+    [isSyntaxTreeOpen, handleSyntaxTreeUpdate]
+  );
 
   const handleSqlChange = useCallback(
     (val: string) => {
@@ -114,6 +133,70 @@ export const WorkspaceContent = ({
     },
     [activeTab, updateTabSql]
   );
+
+  useHotkey("Mod+T", () => {
+    addTab();
+  });
+
+  useHotkey("Mod+W", () => {
+    if (activeTab) {
+      closeTab(activeTab.id);
+    }
+  });
+
+  useHotkey("Mod+1", () => {
+    if (tabs[0]) {
+      setActiveTabId(tabs[0].id);
+    }
+  });
+
+  useHotkey("Mod+2", () => {
+    if (tabs[1]) {
+      setActiveTabId(tabs[1].id);
+    }
+  });
+
+  useHotkey("Mod+3", () => {
+    if (tabs[2]) {
+      setActiveTabId(tabs[2].id);
+    }
+  });
+
+  useHotkey("Mod+4", () => {
+    if (tabs[3]) {
+      setActiveTabId(tabs[3].id);
+    }
+  });
+
+  useHotkey("Mod+5", () => {
+    if (tabs[4]) {
+      setActiveTabId(tabs[4].id);
+    }
+  });
+
+  useHotkey("Mod+6", () => {
+    if (tabs[5]) {
+      setActiveTabId(tabs[5].id);
+    }
+  });
+
+  useHotkey("Mod+7", () => {
+    if (tabs[6]) {
+      setActiveTabId(tabs[6].id);
+    }
+  });
+
+  useHotkey("Mod+8", () => {
+    if (tabs[7]) {
+      setActiveTabId(tabs[7].id);
+    }
+  });
+
+  useHotkey("Mod+9", () => {
+    if (tabs[8]) {
+      setActiveTabId(tabs[8].id);
+    }
+  });
 
   if (isConnecting) {
     return (
@@ -153,7 +236,7 @@ export const WorkspaceContent = ({
                   value={activeTab.sql}
                   onChange={handleSqlChange}
                   onExecute={handleExecute}
-                  onUpdate={isSyntaxTreeOpen ? handleEditorUpdate : undefined}
+                  onUpdate={handleEditorUpdate}
                   onToggleSyntaxTree={toggleSyntaxTree}
                   databaseType={
                     connection.type as "postgresql" | "mysql" | "sqlite"
@@ -190,6 +273,7 @@ export const WorkspaceContent = ({
               <ExecuteButton
                 isRunning={activeTab?.status === "running"}
                 disabled={!activeTab?.sql.trim()}
+                hasSelection={hasSelection}
                 onClick={handleExecute}
               />
             </div>

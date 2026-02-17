@@ -1,4 +1,5 @@
-import { useCallback } from "react";
+import { useHotkey } from "@tanstack/react-hotkeys";
+import { useCallback, useRef } from "react";
 
 import type { DatabaseType } from "@/lib/connections";
 
@@ -22,14 +23,14 @@ export const CommandEditor = ({
   databaseType,
   readOnly = false,
 }: CommandEditorProps) => {
-  const handleKeyDown = useCallback(
-    (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-      if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) {
-        e.preventDefault();
-        onExecute();
-      }
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  useHotkey(
+    "Mod+Enter",
+    () => {
+      onExecute();
     },
-    [onExecute]
+    { target: textareaRef }
   );
 
   const handleChange = useCallback(
@@ -41,9 +42,9 @@ export const CommandEditor = ({
 
   return (
     <textarea
+      ref={textareaRef}
       value={value}
       onChange={handleChange}
-      onKeyDown={handleKeyDown}
       readOnly={readOnly}
       placeholder={PLACEHOLDERS[databaseType] ?? "Enter command..."}
       className="h-full w-full resize-none bg-background p-3 font-mono text-sm text-foreground outline-none placeholder:text-muted-foreground"

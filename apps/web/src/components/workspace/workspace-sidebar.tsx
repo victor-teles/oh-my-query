@@ -1,5 +1,6 @@
+import { useHotkey } from "@tanstack/react-hotkeys";
 import { AlertCircle, Database, RefreshCw, Search } from "lucide-react";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 
 import type { DatabaseConnection } from "@/lib/connections";
 import type { SchemaInfo } from "@/lib/tauri";
@@ -133,17 +134,9 @@ export const WorkspaceSidebar = ({
     []
   );
 
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "F5") {
-        e.preventDefault();
-        refresh();
-      }
-    };
-
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [refresh]);
+  useHotkey("F5", () => {
+    refresh();
+  });
 
   const showDatabaseSelector =
     databases && databases.length > 1 && selectedDatabase;

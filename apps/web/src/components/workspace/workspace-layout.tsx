@@ -1,5 +1,6 @@
 import type { PanelSize } from "react-resizable-panels";
 
+import { useHotkey } from "@tanstack/react-hotkeys";
 import { useCallback, useRef, useState } from "react";
 import { usePanelRef } from "react-resizable-panels";
 
@@ -77,6 +78,26 @@ export const WorkspaceLayout = ({
     chatPanelRef.current?.collapse();
     setIsChatOpen(false);
   }, [chatPanelRef]);
+
+  const handleSidebarToggle = useCallback(() => {
+    const panel = sidebarRef.current;
+    if (!panel) {
+      return;
+    }
+    if (panel.isCollapsed()) {
+      panel.expand();
+    } else {
+      panel.collapse();
+    }
+  }, [sidebarRef]);
+
+  useHotkey("Mod+B", () => {
+    handleSidebarToggle();
+  });
+
+  useHotkey("Mod+Shift+C", () => {
+    handleChatToggle();
+  });
 
   return (
     <div className="flex h-svh flex-col">

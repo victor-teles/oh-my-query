@@ -75,9 +75,10 @@ export const useQueryTabs = (connectionId: string) => {
   }, []);
 
   const executeTab = useCallback(
-    async (tabId: string) => {
+    async (tabId: string, sqlOverride?: string) => {
       const tab = tabs.find((t) => t.id === tabId);
-      if (!tab?.sql.trim()) {
+      const sqlToExecute = sqlOverride ?? tab?.sql;
+      if (!sqlToExecute?.trim()) {
         return;
       }
 
@@ -92,7 +93,7 @@ export const useQueryTabs = (connectionId: string) => {
       try {
         const result = await executeQuery({
           connectionId,
-          sql: tab.sql,
+          sql: sqlToExecute,
         });
         setTabs((prev) =>
           prev.map((t) =>

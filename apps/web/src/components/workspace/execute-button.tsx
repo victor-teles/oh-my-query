@@ -10,12 +10,14 @@ import {
 interface ExecuteButtonProps {
   isRunning: boolean;
   disabled: boolean;
+  hasSelection?: boolean;
   onClick: () => void;
 }
 
 export const ExecuteButton = ({
   isRunning,
   disabled,
+  hasSelection,
   onClick,
 }: ExecuteButtonProps) => (
   <Tooltip>
@@ -34,6 +36,8 @@ export const ExecuteButton = ({
         </Button>
       }
     />
-    <TooltipContent>Run query (⌘↵)</TooltipContent>
+    <TooltipContent>
+      {hasSelection ? "Run selection (⌘↵)" : "Run query (⌘↵)"}
+    </TooltipContent>
   </Tooltip>
 );

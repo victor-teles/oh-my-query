@@ -1,3 +1,4 @@
+import { HotkeysProvider } from "@tanstack/react-hotkeys";
 import {
   HeadContent,
   Outlet,
@@ -44,10 +45,12 @@ function RootComponent() {
         disableTransitionOnChange
         storageKey="vite-ui-theme"
       >
-        <TooltipProvider>
-          <Outlet />
-          <Toaster richColors />
-        </TooltipProvider>
+        <HotkeysProvider>
+          <TooltipProvider>
+            <Outlet />
+            <Toaster richColors />
+          </TooltipProvider>
+        </HotkeysProvider>
       </ThemeProvider>
     </>
   );
