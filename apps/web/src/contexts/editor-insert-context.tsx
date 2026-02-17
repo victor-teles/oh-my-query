@@ -4,6 +4,7 @@ import type { ReactNode } from "react";
 import { createContext, use, useCallback, useRef } from "react";
 
 interface EditorInsertContextValue {
+  getSelectedText: () => string | null;
   insertAtCursor: (text: string) => void;
   queryTable: (tableName: string) => void;
   registerEditor: (view: EditorView | null) => void;
@@ -29,6 +30,18 @@ export const EditorInsertProvider = ({ children }: { children: ReactNode }) => {
     []
   );
 
+  const getSelectedText = useCallback((): string | null => {
+    const view = editorRef.current;
+    if (!view) {
+      return null;
+    }
+    const { from, to } = view.state.selection.main;
+    if (from === to) {
+      return null;
+    }
+    return view.state.sliceDoc(from, to);
+  }, []);
+
   const insertAtCursor = useCallback((text: string) => {
     const view = editorRef.current;
     if (!view) {
@@ -49,7 +62,13 @@ export const EditorInsertProvider = ({ children }: { children: ReactNode }) => {
 
   return (
     <EditorInsertContext
-      value={{ insertAtCursor, queryTable, registerEditor, registerQueryTable }}
+      value={{
+        getSelectedText,
+        insertAtCursor,
+        queryTable,
+        registerEditor,
+        registerQueryTable,
+      }}
     >
       {children}
     </EditorInsertContext>

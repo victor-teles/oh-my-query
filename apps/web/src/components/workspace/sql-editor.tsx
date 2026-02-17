@@ -1,7 +1,10 @@
+import type { Extension } from "@codemirror/state";
 import type { EditorView, ViewUpdate } from "@codemirror/view";
 
 import { sql, PostgreSQL, MySQL, SQLite } from "@codemirror/lang-sql";
+import { Prec } from "@codemirror/state";
 import { keymap } from "@codemirror/view";
+import { useHotkey } from "@tanstack/react-hotkeys";
 import { githubDark } from "@uiw/codemirror-theme-github";
 import CodeMirror from "@uiw/react-codemirror";
 import { useCallback, useMemo } from "react";
@@ -68,33 +71,38 @@ export const SqlEditor = ({
     [schema]
   );
 
+  const preventNewlineOnExecute = useMemo(
+    () =>
+      Prec.highest(
+        keymap.of([
+          {
+            key: "Mod-Enter",
+            run: () => true,
+          },
+        ])
+      ),
+    []
+  );
+
+  useHotkey("Mod+Enter", () => {
+    onExecute();
+  });
+
+  useHotkey(
+    "Mod+Shift+D",
+    () => {
+      onToggleSyntaxTree?.();
+    },
+    { enabled: !!onToggleSyntaxTree }
+  );
+
   const extensions = useMemo(() => {
     const langSupport = sql({
       dialect: DIALECT_MAP[databaseType],
       schema: sqlNamespace,
     });
 
-    const keybindings = [
-      {
-        key: "Mod-Enter",
-        run: () => {
-          onExecute();
-          return true;
-        },
-      },
-    ];
-
-    if (onToggleSyntaxTree) {
-      keybindings.push({
-        key: "Mod-Shift-d",
-        run: () => {
-          onToggleSyntaxTree();
-          return true;
-        },
-      });
-    }
-
-    const exts = [langSupport, keymap.of(keybindings)];
+    const exts: Extension[] = [preventNewlineOnExecute, langSupport];
 
     if (tableCompletionSource) {
       exts.push(
@@ -114,9 +122,8 @@ export const SqlEditor = ({
 
     return exts;
   }, [
+    preventNewlineOnExecute,
     databaseType,
-    onExecute,
-    onToggleSyntaxTree,
     sqlNamespace,
     tableCompletionSource,
     columnCompletionSource,
