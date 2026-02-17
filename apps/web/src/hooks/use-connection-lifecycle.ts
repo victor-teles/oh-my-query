@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import type { DatabaseConnection } from "@/lib/connections";
 
@@ -11,19 +11,28 @@ import {
 interface ConnectionLifecycleState {
   isConnected: boolean;
   isConnecting: boolean;
+  isReconnecting: boolean;
   error: string | null;
   serverVersion: string | null;
+  reconnect: () => void;
 }
 
 export const useConnectionLifecycle = (
   connection: DatabaseConnection
 ): ConnectionLifecycleState => {
-  const [state, setState] = useState<ConnectionLifecycleState>({
+  const [reconnectCount, setReconnectCount] = useState(0);
+  const [state, setState] = useState<
+    Omit<ConnectionLifecycleState, "reconnect" | "isReconnecting">
+  >({
     error: null,
     isConnected: false,
     isConnecting: true,
     serverVersion: null,
   });
+
+  const reconnect = useCallback(() => {
+    setReconnectCount((c) => c + 1);
+  }, []);
 
   useEffect(() => {
     let cancelled = false;
@@ -77,7 +86,11 @@ export const useConnectionLifecycle = (
       cancelled = true;
       disconnectFromDatabase(connection.id);
     };
-  }, [connection]);
+  }, [connection, reconnectCount]);
 
-  return state;
+  return {
+    ...state,
+    isReconnecting: reconnectCount > 0 && state.isConnecting,
+    reconnect,
+  };
 };

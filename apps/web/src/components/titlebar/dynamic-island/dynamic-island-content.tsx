@@ -7,6 +7,7 @@ import {
   ConnectedIdleStatus,
   ConnectingStatus,
   ConnectionErrorStatus,
+  ReconnectingStatus,
 } from "./island-connection-status";
 import {
   QueryErrorStatus,
@@ -16,6 +17,7 @@ import {
 
 type IslandState =
   | "connecting"
+  | "reconnecting"
   | "connection-error"
   | "query-running"
   | "query-error"
@@ -25,11 +27,13 @@ type IslandState =
 interface DynamicIslandContentProps {
   isConnecting: boolean;
   isConnected: boolean;
+  isReconnecting: boolean;
   connectionError: string | null;
   connectionName: string;
   serverVersion: string | null;
   username: string;
   database: string;
+  onReconnect: () => void;
 }
 
 const DISMISS_DELAY_SUCCESS = 3000;
@@ -38,11 +42,13 @@ const DISMISS_DELAY_ERROR = 4000;
 export const DynamicIslandContent = ({
   isConnecting,
   isConnected,
+  isReconnecting,
   connectionError,
   connectionName,
   serverVersion,
   username,
   database,
+  onReconnect,
 }: DynamicIslandContentProps) => {
   const { state: execState } = useQueryExecution();
   const [dismissed, setDismissed] = useState(false);
@@ -51,6 +57,7 @@ export const DynamicIslandContent = ({
   const resolvedState = resolveIslandState(
     isConnecting,
     isConnected,
+    isReconnecting,
     connectionError,
     execState.status,
     dismissed
@@ -90,7 +97,17 @@ export const DynamicIslandContent = ({
   return (
     <AnimatePresence mode="wait">
       {resolvedState === "connection-error" && connectionError && (
-        <ConnectionErrorStatus key="conn-error" error={connectionError} />
+        <ConnectionErrorStatus
+          key="conn-error"
+          error={connectionError}
+          onReconnect={onReconnect}
+        />
+      )}
+      {resolvedState === "reconnecting" && (
+        <ReconnectingStatus
+          key="reconnecting"
+          connectionName={connectionName}
+        />
       )}
       {resolvedState === "connecting" && (
         <ConnectingStatus key="connecting" connectionName={connectionName} />
@@ -127,10 +144,14 @@ export const DynamicIslandContent = ({
 const resolveIslandState = (
   isConnecting: boolean,
   isConnected: boolean,
+  isReconnecting: boolean,
   connectionError: string | null,
   queryStatus: string,
   dismissed: boolean
 ): IslandState => {
+  if (isReconnecting) {
+    return "reconnecting";
+  }
   if (connectionError) {
     return "connection-error";
   }

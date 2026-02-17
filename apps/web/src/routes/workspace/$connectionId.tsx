@@ -8,8 +8,14 @@ import { getConnections } from "@/lib/connections";
 
 const WorkspacePage = () => {
   const { connection } = Route.useRouteContext();
-  const { isConnected, isConnecting, error, serverVersion } =
-    useConnectionLifecycle(connection);
+  const {
+    isConnected,
+    isConnecting,
+    isReconnecting,
+    error,
+    serverVersion,
+    reconnect,
+  } = useConnectionLifecycle(connection);
 
   return (
     <QueryExecutionProvider>
@@ -18,8 +24,10 @@ const WorkspacePage = () => {
           connection={connection}
           isConnected={isConnected}
           isConnecting={isConnecting}
+          isReconnecting={isReconnecting}
           connectionError={error}
           serverVersion={serverVersion}
+          onReconnect={reconnect}
         />
       </EditorInsertProvider>
     </QueryExecutionProvider>
