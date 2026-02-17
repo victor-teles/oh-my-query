@@ -122,6 +122,7 @@ export const SqlEditor = ({
 
     return exts;
   }, [
+    preventNewlineOnExecute,
     databaseType,
     sqlNamespace,
     tableCompletionSource,
