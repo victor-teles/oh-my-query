@@ -147,24 +147,6 @@ export const WorkspaceContent = ({
       <ResizablePanelGroup className="flex-1" orientation="vertical">
         <ResizablePanel defaultSize="40%" minSize="15%">
           <div className="flex h-full flex-col">
-            <div className="flex items-center justify-between border-b px-2 py-1">
-              <span className="text-xs text-muted-foreground">
-                {activeTab?.title}
-              </span>
-              <div className="flex items-center gap-1">
-                {isSql && (
-                  <SyntaxTreeToggle
-                    isOpen={isSyntaxTreeOpen}
-                    onToggle={toggleSyntaxTree}
-                  />
-                )}
-                <ExecuteButton
-                  isRunning={activeTab?.status === "running"}
-                  disabled={!activeTab?.sql.trim()}
-                  onClick={handleExecute}
-                />
-              </div>
-            </div>
             <div className="flex-1">
               {activeTab && isSql && (
                 <SqlEditor
@@ -194,6 +176,24 @@ export const WorkspaceContent = ({
         <ResizableHandle />
 
         <ResizablePanel defaultSize="60%" minSize="20%">
+          <div className="flex items-center justify-between border-b px-2 py-1">
+            <span className="text-xs text-muted-foreground">
+              {activeTab?.title}
+            </span>
+            <div className="flex items-center gap-1">
+              {isSql && (
+                <SyntaxTreeToggle
+                  isOpen={isSyntaxTreeOpen}
+                  onToggle={toggleSyntaxTree}
+                />
+              )}
+              <ExecuteButton
+                isRunning={activeTab?.status === "running"}
+                disabled={!activeTab?.sql.trim()}
+                onClick={handleExecute}
+              />
+            </div>
+          </div>
           <BottomPanel
             isSyntaxTreeOpen={isSyntaxTreeOpen}
             treeData={treeData}
