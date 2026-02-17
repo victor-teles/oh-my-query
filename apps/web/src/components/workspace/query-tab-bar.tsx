@@ -1,7 +1,7 @@
-import { AlertCircle, CheckCircle2, Loader2, Plus, X } from "lucide-react";
+import { Plus, X } from "lucide-react";
 import { useCallback } from "react";
 
-import type { QueryTab, TabStatus } from "@/lib/query-types";
+import type { QueryTab } from "@/lib/query-types";
 
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -18,23 +18,6 @@ interface QueryTabBarProps {
   onCloseTab: (tabId: string) => void;
   onAddTab: () => void;
 }
-
-const StatusIcon = ({ status }: { status: TabStatus }) => {
-  switch (status) {
-    case "running": {
-      return <Loader2 className="size-3 animate-spin text-muted-foreground" />;
-    }
-    case "success": {
-      return <CheckCircle2 className="size-3 text-emerald-500" />;
-    }
-    case "error": {
-      return <AlertCircle className="size-3 text-destructive" />;
-    }
-    default: {
-      return null;
-    }
-  }
-};
 
 interface TabCloseButtonProps {
   tabTitle: string;
@@ -87,7 +70,6 @@ export const QueryTabBar = ({
         <TabsList variant="segment" className="flex-1">
           {tabs.map((tab) => (
             <TabsTrigger key={tab.id} value={tab.id} className="group/tab">
-              <StatusIcon status={tab.status} />
               <span className="max-w-[120px] truncate">{tab.title}</span>
               <TabCloseButton
                 tabTitle={tab.title}
