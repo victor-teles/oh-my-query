@@ -129,6 +129,7 @@ export const WorkspaceLayout = ({
             isConnected={isConnected}
             isConnecting={isConnecting}
             connectionError={connectionError}
+            schema={schema}
           />
         </ResizablePanel>
 
