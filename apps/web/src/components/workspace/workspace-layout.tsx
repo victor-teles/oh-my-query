@@ -24,16 +24,20 @@ interface WorkspaceLayoutProps {
   connection: DatabaseConnection;
   isConnected: boolean;
   isConnecting: boolean;
+  isReconnecting: boolean;
   connectionError: string | null;
   serverVersion: string | null;
+  onReconnect: () => void;
 }
 
 export const WorkspaceLayout = ({
   connection,
   isConnected,
   isConnecting,
+  isReconnecting,
   connectionError,
   serverVersion,
+  onReconnect,
 }: WorkspaceLayoutProps) => {
   const sidebarRef = usePanelRef();
   const chatPanelRef = usePanelRef();
@@ -106,11 +110,13 @@ export const WorkspaceLayout = ({
           <DynamicIsland
             isConnecting={isConnecting}
             isConnected={isConnected}
+            isReconnecting={isReconnecting}
             connectionError={connectionError}
             connectionName={connection.name}
             serverVersion={serverVersion}
             username={connection.username}
             database={connection.database}
+            onReconnect={onReconnect}
           />
         }
       >
