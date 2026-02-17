@@ -27,10 +27,12 @@ import { useQueryTabs } from "@/hooks/use-query-tabs";
 import { useSyntaxTree } from "@/hooks/use-syntax-tree";
 import { isSqlDatabase } from "@/lib/connections";
 import { downloadCsv, tabularResultToCsv } from "@/lib/csv";
+import { formatSql } from "@/lib/format-sql";
 
 import { CommandEditor } from "./command-editor";
 import { DocumentViewer } from "./document-viewer";
 import { ExecuteButton } from "./execute-button";
+import { FormatButton } from "./format-button";
 import { QueryErrorDisplay } from "./query-error-display";
 import { QueryStatusBar } from "./query-status-bar";
 import { QueryTabBar } from "./query-tab-bar";
@@ -125,6 +127,16 @@ export const WorkspaceContent = ({
     [isSyntaxTreeOpen, handleSyntaxTreeUpdate]
   );
 
+  const handleFormat = useCallback(() => {
+    if (activeTab?.sql.trim() && isSql) {
+      const formatted = formatSql(
+        activeTab.sql,
+        connection.type as "postgresql" | "mysql" | "sqlite"
+      );
+      updateTabSql(activeTab.id, formatted);
+    }
+  }, [activeTab, isSql, connection.type, updateTabSql]);
+
   const handleSqlChange = useCallback(
     (val: string) => {
       if (activeTab) {
@@ -133,6 +145,10 @@ export const WorkspaceContent = ({
     },
     [activeTab, updateTabSql]
   );
+
+  useHotkey("Mod+Shift+F", () => {
+    handleFormat();
+  });
 
   useHotkey("Mod+T", () => {
     addTab();
@@ -265,10 +281,16 @@ export const WorkspaceContent = ({
             </span>
             <div className="flex items-center gap-1">
               {isSql && (
-                <SyntaxTreeToggle
-                  isOpen={isSyntaxTreeOpen}
-                  onToggle={toggleSyntaxTree}
-                />
+                <>
+                  <FormatButton
+                    disabled={!activeTab?.sql.trim()}
+                    onClick={handleFormat}
+                  />
+                  <SyntaxTreeToggle
+                    isOpen={isSyntaxTreeOpen}
+                    onToggle={toggleSyntaxTree}
+                  />
+                </>
               )}
               <ExecuteButton
                 isRunning={activeTab?.status === "running"}
