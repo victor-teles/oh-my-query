@@ -78,7 +78,7 @@ pub async fn execute_query(
 
     let result = tokio::time::timeout(
         std::time::Duration::from_secs(timeout_secs),
-        execute_for_pool(&pool, &params.sql, max_rows),
+        execute_for_pool(&pool, &params.sql, max_rows, params.schema.as_deref()),
     )
     .await
     .map_err(DbError::from)?;
@@ -104,10 +104,12 @@ async fn execute_for_pool(
     pool: &DatabasePool,
     command: &str,
     max_rows: usize,
+    schema: Option<&str>,
 ) -> Result<ExecuteResult, DbError> {
     match pool {
         DatabasePool::Postgres(_) | DatabasePool::MySql(_) | DatabasePool::Sqlite(_) => {
-            let (columns, rows, is_truncated) = fetch_sql_rows(pool, command, max_rows).await?;
+            let (columns, rows, is_truncated) =
+                fetch_sql_rows(pool, command, max_rows, schema).await?;
             Ok(ExecuteResult::Tabular {
                 row_count: rows.len() as u64,
                 columns,
@@ -197,14 +199,49 @@ macro_rules! fetch_rows_native {
     }};
 }
 
+fn validate_schema_name(name: &str) -> Result<(), DbError> {
+    if name.is_empty()
+        || !name
+            .chars()
+            .all(|c| c.is_alphanumeric() || c == '_' || c == '-' || c == '.')
+    {
+        return Err(DbError {
+            code: "INVALID_SCHEMA".to_string(),
+            message: format!("Invalid schema name: {name}"),
+        });
+    }
+    Ok(())
+}
+
 async fn fetch_sql_rows(
     pool: &DatabasePool,
     sql: &str,
     max_rows: usize,
+    schema: Option<&str>,
 ) -> Result<(Vec<ColumnInfo>, Vec<Vec<serde_json::Value>>, bool), DbError> {
     match pool {
-        DatabasePool::Postgres(pool) => fetch_rows_native!(pool, sql, max_rows),
-        DatabasePool::MySql(pool) => fetch_rows_native!(pool, sql, max_rows),
+        DatabasePool::Postgres(pool) => {
+            let mut conn = pool.acquire().await.map_err(DbError::from)?;
+            if let Some(schema_name) = schema {
+                validate_schema_name(schema_name)?;
+                sqlx::query(&format!("SET search_path TO \"{}\"", schema_name))
+                    .execute(&mut *conn)
+                    .await
+                    .map_err(DbError::from)?;
+            }
+            fetch_rows_native!(&mut *conn, sql, max_rows)
+        }
+        DatabasePool::MySql(pool) => {
+            let mut conn = pool.acquire().await.map_err(DbError::from)?;
+            if let Some(schema_name) = schema {
+                validate_schema_name(schema_name)?;
+                sqlx::query(&format!("USE `{}`", schema_name))
+                    .execute(&mut *conn)
+                    .await
+                    .map_err(DbError::from)?;
+            }
+            fetch_rows_native!(&mut *conn, sql, max_rows)
+        }
         DatabasePool::Sqlite(pool) => fetch_rows_native!(pool, sql, max_rows),
         _ => unreachable!(),
     }
