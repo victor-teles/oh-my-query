@@ -156,6 +156,7 @@ export const WorkspaceLayout = ({
             isConnecting={isConnecting}
             connectionError={connectionError}
             schema={schema}
+            selectedDatabase={selectedDatabase}
           />
         </ResizablePanel>
 

@@ -23,7 +23,10 @@ const extractErrorMessage = (error: unknown): string => {
   return "Query execution failed";
 };
 
-export const useQueryTabs = (connectionId: string) => {
+export const useQueryTabs = (
+  connectionId: string,
+  selectedDatabase: string | null
+) => {
   const counterRef = useRef(1);
   const [tabs, setTabs] = useState<QueryTab[]>(() => [
     createNewTab(counterRef.current),
@@ -93,6 +96,7 @@ export const useQueryTabs = (connectionId: string) => {
       try {
         const result = await executeQuery({
           connectionId,
+          schema: selectedDatabase ?? undefined,
           sql: sqlToExecute,
         });
         setTabs((prev) =>
@@ -113,7 +117,7 @@ export const useQueryTabs = (connectionId: string) => {
         );
       }
     },
-    [connectionId, tabs]
+    [connectionId, selectedDatabase, tabs]
   );
 
   return {

@@ -84,6 +84,7 @@ pub struct QueryParams {
     pub sql: String,
     pub max_rows: Option<u64>,
     pub timeout_secs: Option<u64>,
+    pub schema: Option<String>,
 }
 
 #[derive(Debug, Clone, Serialize)]

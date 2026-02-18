@@ -47,6 +47,7 @@ interface WorkspaceContentProps {
   isConnecting: boolean;
   connectionError: string | null;
   schema: SchemaInfo | null;
+  selectedDatabase: string | null;
 }
 
 export const WorkspaceContent = ({
@@ -55,6 +56,7 @@ export const WorkspaceContent = ({
   isConnecting,
   connectionError,
   schema,
+  selectedDatabase,
 }: WorkspaceContentProps) => {
   const {
     tabs,
@@ -66,7 +68,7 @@ export const WorkspaceContent = ({
     setActiveTabId,
     updateTabSql,
     executeTab,
-  } = useQueryTabs(connection.id);
+  } = useQueryTabs(connection.id, selectedDatabase);
 
   const { setExecutionState } = useQueryExecution();
   const { getSelectedText, registerQueryTable } = useEditorInsert();

@@ -40,6 +40,7 @@ export interface QueryParams {
   sql: string;
   maxRows?: number;
   timeoutSecs?: number;
+  schema?: string;
 }
 
 export interface ColumnInfo {
