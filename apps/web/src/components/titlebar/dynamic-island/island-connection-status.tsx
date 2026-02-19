@@ -118,7 +118,7 @@ export const ConnectionErrorStatus = ({
     exit={{ filter: "blur(4px)", opacity: 0 }}
   >
     <AlertCircle className="size-3 shrink-0 text-destructive" />
-    <span className="max-w-[140px] truncate text-[0.625rem] text-destructive">
+    <span className="max-w-[280px] truncate text-[0.625rem] text-destructive">
       {error}
     </span>
     <motion.button
