@@ -61,7 +61,7 @@ export const QueryErrorStatus = ({ error }: QueryErrorStatusProps) => (
     exit={{ filter: "blur(4px)", opacity: 0 }}
   >
     <AlertTriangle className="size-3 shrink-0 text-amber-500" />
-    <span className="max-w-[180px] truncate text-[0.625rem] text-amber-500">
+    <span className="max-w-[360px] truncate text-[0.625rem] text-amber-500">
       {error}
     </span>
   </motion.div>

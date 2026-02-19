@@ -131,7 +131,7 @@ macro_rules! fetch_rows_native {
     ($pool:expr, $sql:expr, $max_rows:expr) => {{
         use sqlx::{Column, Row, TypeInfo, ValueRef};
 
-        let mut stream = sqlx::query($sql).fetch($pool);
+        let mut stream = sqlx::raw_sql($sql).fetch($pool);
         let mut columns: Option<Vec<ColumnInfo>> = None;
         let mut rows: Vec<Vec<serde_json::Value>> = Vec::new();
         let mut is_truncated = false;
