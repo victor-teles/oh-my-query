@@ -4,6 +4,7 @@ import {
   getPaginationRowModel,
   useReactTable,
 } from "@tanstack/react-table";
+import { SearchX } from "lucide-react";
 import { useMemo } from "react";
 
 import type { TabularResult } from "@/lib/tauri";
@@ -67,9 +68,17 @@ export const ResultsTable = ({ result }: ResultsTableProps) => {
     },
   });
 
+  const isEmpty = table.getRowModel().rows.length === 0;
+
   return (
     <div className="flex h-full flex-col">
-      <div className="flex-1 overflow-auto">
+      <div
+        className={
+          isEmpty
+            ? "flex flex-1 flex-col overflow-auto"
+            : "flex-1 overflow-auto"
+        }
+      >
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
@@ -93,23 +102,37 @@ export const ResultsTable = ({ result }: ResultsTableProps) => {
               </TableRow>
             ))}
           </TableHeader>
-          <TableBody>
-            {table.getRowModel().rows.map((row) => (
-              <TableRow key={row.id}>
-                {row.getVisibleCells().map((cell) => (
-                  <TableCell
-                    key={cell.id}
-                    className={
-                      isNumber(cell.getValue()) ? "text-right tabular-nums" : ""
-                    }
-                  >
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </TableCell>
-                ))}
-              </TableRow>
-            ))}
-          </TableBody>
+          {!isEmpty && (
+            <TableBody>
+              {table.getRowModel().rows.map((row) => (
+                <TableRow key={row.id}>
+                  {row.getVisibleCells().map((cell) => (
+                    <TableCell
+                      key={cell.id}
+                      className={
+                        isNumber(cell.getValue())
+                          ? "text-right tabular-nums"
+                          : ""
+                      }
+                    >
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext()
+                      )}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              ))}
+            </TableBody>
+          )}
         </Table>
+        {isEmpty && (
+          <div className="flex flex-1 flex-col items-center justify-center gap-1 text-muted-foreground">
+            <SearchX className="size-5" />
+            <span className="text-sm">No results</span>
+            <span className="text-xs">Your query returned no rows</span>
+          </div>
+        )}
       </div>
       {table.getPageCount() > 1 && <ResultsPagination table={table} />}
     </div>

@@ -6,7 +6,7 @@ use crate::db::types::ColumnInfo;
 
 macro_rules! fetch_rows_native {
     ($pool:expr, $sql:expr, $max_rows:expr) => {{
-        use sqlx::{Column, Row, TypeInfo, ValueRef};
+        use sqlx::{Column, Executor as _, Row, TypeInfo, ValueRef};
 
         let mut stream = sqlx::raw_sql($sql).fetch($pool);
         let mut columns: Option<Vec<ColumnInfo>> = None;
@@ -70,6 +70,21 @@ macro_rules! fetch_rows_native {
                 vals.push(val);
             }
             rows.push(vals);
+        }
+
+        drop(stream);
+
+        if columns.is_none() {
+            if let Ok(desc) = ($pool).describe($sql).await {
+                let mut col_info = Vec::with_capacity(desc.columns.len());
+                for col in &desc.columns {
+                    col_info.push(ColumnInfo {
+                        name: col.name().to_string(),
+                        type_name: col.type_info().name().to_string(),
+                    });
+                }
+                columns = Some(col_info);
+            }
         }
 
         Ok::<_, DbError>((columns.unwrap_or_default(), rows, is_truncated))
