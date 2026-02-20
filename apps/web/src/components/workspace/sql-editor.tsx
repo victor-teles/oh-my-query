@@ -33,6 +33,7 @@ interface SqlEditorProps {
   onUpdate?: (update: ViewUpdate) => void;
   onToggleSyntaxTree?: () => void;
   databaseType: SqlDatabaseType;
+  writingDialect?: SqlDatabaseType;
   readOnly?: boolean;
   schema: SchemaInfo | null;
 }
@@ -44,6 +45,7 @@ export const SqlEditor = ({
   onUpdate,
   onToggleSyntaxTree,
   databaseType,
+  writingDialect,
   readOnly = false,
   schema,
 }: SqlEditorProps) => {
@@ -96,9 +98,11 @@ export const SqlEditor = ({
     { enabled: !!onToggleSyntaxTree }
   );
 
+  const effectiveDialect = writingDialect ?? databaseType;
+
   const extensions = useMemo(() => {
     const langSupport = sql({
-      dialect: DIALECT_MAP[databaseType],
+      dialect: DIALECT_MAP[effectiveDialect],
       schema: sqlNamespace,
     });
 
@@ -123,7 +127,7 @@ export const SqlEditor = ({
     return exts;
   }, [
     preventNewlineOnExecute,
-    databaseType,
+    effectiveDialect,
     sqlNamespace,
     tableCompletionSource,
     columnCompletionSource,

@@ -9,4 +9,5 @@ export interface QueryTab {
   result: ExecuteResult | null;
   error: string | null;
   status: TabStatus;
+  sourceDialect: string | null;
 }

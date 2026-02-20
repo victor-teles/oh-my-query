@@ -8,5 +8,6 @@ pub mod postgres;
 pub mod redis_driver;
 pub mod schema;
 pub mod sqlite;
+pub mod transpile;
 pub mod types;
 pub mod version;
