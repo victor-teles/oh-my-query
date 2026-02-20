@@ -1,3 +1,4 @@
+import { formatDistanceToNow } from "date-fns";
 import { CheckCircle2, Clock, History, XCircle } from "lucide-react";
 import { memo, useCallback } from "react";
 
@@ -20,29 +21,6 @@ import {
 import { useEditorInsert } from "@/contexts/editor-insert-context";
 import { useQueryHistory } from "@/hooks/use-query-history";
 import { cn } from "@/lib/utils";
-
-const SECONDS_PER_MINUTE = 60;
-const SECONDS_PER_HOUR = 3600;
-const SECONDS_PER_DAY = 86_400;
-
-const formatRelativeTime = (timestamp: string): string => {
-  const seconds = Math.floor(
-    (Date.now() - new Date(timestamp).getTime()) / 1000
-  );
-  if (seconds < SECONDS_PER_MINUTE) {
-    return "just now";
-  }
-  if (seconds < SECONDS_PER_HOUR) {
-    const minutes = Math.floor(seconds / SECONDS_PER_MINUTE);
-    return `${minutes}m ago`;
-  }
-  if (seconds < SECONDS_PER_DAY) {
-    const hours = Math.floor(seconds / SECONDS_PER_HOUR);
-    return `${hours}h ago`;
-  }
-  const days = Math.floor(seconds / SECONDS_PER_DAY);
-  return `${days}d ago`;
-};
 
 const MAX_SQL_DISPLAY_LENGTH = 120;
 
@@ -139,7 +117,11 @@ const HistoryItem = memo(function HistoryItem({ entry }: HistoryItemProps) {
           </div>
           <div className="flex items-center gap-1 text-[10px] text-muted-foreground">
             <Clock className="size-2.5" />
-            <span>{formatRelativeTime(entry.timestamp)}</span>
+            <span>
+              {formatDistanceToNow(new Date(entry.timestamp), {
+                addSuffix: true,
+              })}
+            </span>
           </div>
         </div>
         <p className="line-clamp-2 text-xs font-mono text-foreground/80">
