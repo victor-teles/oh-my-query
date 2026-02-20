@@ -4,6 +4,7 @@ import { toast } from "sonner";
 
 import type { DatabaseConnection, DatabaseType } from "@/lib/connections";
 
+import { DATABASE_ICON_MAP } from "@/components/icons/database-icons";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -273,11 +274,15 @@ export const ConnectionForm = ({
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
-            {DATABASE_OPTIONS.map((opt) => (
-              <SelectItem key={opt.value} value={opt.value}>
-                {opt.label}
-              </SelectItem>
-            ))}
+            {DATABASE_OPTIONS.map((opt) => {
+              const Icon = DATABASE_ICON_MAP[opt.value];
+              return (
+                <SelectItem key={opt.value} value={opt.value}>
+                  <Icon className="size-4 shrink-0" />
+                  {opt.label}
+                </SelectItem>
+              );
+            })}
           </SelectContent>
         </Select>
       </div>
