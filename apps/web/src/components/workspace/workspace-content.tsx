@@ -23,6 +23,10 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useEditorInsert } from "@/contexts/editor-insert-context";
 import { useQueryExecution } from "@/contexts/query-execution-context";
+import {
+  QueryTabsProvider,
+  useQueryTabsContext,
+} from "@/contexts/query-tabs-context";
 import { useQueryTabs } from "@/hooks/use-query-tabs";
 import { useSyntaxTree } from "@/hooks/use-syntax-tree";
 import { useWorkspaceHotkeys } from "@/hooks/use-workspace-hotkeys";
@@ -72,22 +76,10 @@ export const WorkspaceContent = ({
   schema,
   selectedDatabase,
 }: WorkspaceContentProps) => {
-  const {
-    tabs,
-    activeTab,
-    activeTabId,
-    addTab,
-    addTabWithSql,
-    closeTab,
-    setActiveTabId,
-    updateTabDialect,
-    updateTabSql,
-    executeTab,
-  } = useQueryTabs(connection.id, selectedDatabase);
-
+  const queryTabs = useQueryTabs(connection.id, selectedDatabase);
   const isSql = isSqlDatabase(connection.type);
 
-  if (isConnecting) {
+  if (!queryTabs.isRestored || isConnecting) {
     return (
       <div className="flex h-full flex-col items-center justify-center gap-3 bg-background">
         <Loader2 className="size-6 animate-spin text-muted-foreground" />
@@ -107,22 +99,13 @@ export const WorkspaceContent = ({
   }
 
   return (
-    <ConnectedWorkspace
-      connection={connection}
-      schema={schema}
-      selectedDatabase={selectedDatabase}
-      tabs={tabs}
-      activeTab={activeTab}
-      activeTabId={activeTabId}
-      isSql={isSql}
-      addTab={addTab}
-      addTabWithSql={addTabWithSql}
-      closeTab={closeTab}
-      setActiveTabId={setActiveTabId}
-      updateTabDialect={updateTabDialect}
-      updateTabSql={updateTabSql}
-      executeTab={executeTab}
-    />
+    <QueryTabsProvider value={queryTabs}>
+      <ConnectedWorkspace
+        connection={connection}
+        schema={schema}
+        isSql={isSql}
+      />
+    </QueryTabsProvider>
   );
 };
 
@@ -181,61 +164,54 @@ const EditorPanel = ({
 interface ConnectedWorkspaceProps {
   connection: DatabaseConnection;
   schema: SchemaInfo | null;
-  selectedDatabase: string | null;
-  tabs: QueryTab[];
-  activeTab: QueryTab | undefined;
-  activeTabId: string;
   isSql: boolean;
-  addTab: () => void;
-  addTabWithSql: (sql: string) => void;
-  closeTab: (tabId: string) => void;
-  setActiveTabId: (id: string) => void;
-  updateTabDialect: (tabId: string, dialect: string | null) => void;
-  updateTabSql: (tabId: string, sql: string) => void;
-  executeTab: (tabId: string, sqlOverride?: string) => void;
 }
 
 const ConnectedWorkspace = ({
   connection,
   schema,
-  selectedDatabase: _selectedDatabase,
-  tabs,
-  activeTab,
-  activeTabId,
   isSql,
-  addTab,
-  addTabWithSql,
-  closeTab,
-  setActiveTabId,
-  updateTabDialect,
-  updateTabSql,
-  executeTab,
 }: ConnectedWorkspaceProps) => {
+  const {
+    tabs,
+    activeTab,
+    activeTabId,
+    addTab,
+    addTabWithSql,
+    closeTab,
+    setActiveTabId,
+    updateTabDialect,
+    updateTabSql,
+    executeTab,
+  } = useQueryTabsContext();
+
   const { setExecutionState } = useQueryExecution();
-  const { getSelectedText, registerQueryTable } = useEditorInsert();
+  const { getSelectedText, registerQueryTable, registerOpenQuery } =
+    useEditorInsert();
 
   const [isSyntaxTreeOpen, setIsSyntaxTreeOpen] = useState(false);
   const [hasSelection, setHasSelection] = useState(false);
   const { treeData, handleEditorUpdate: handleSyntaxTreeUpdate } =
     useSyntaxTree(isSyntaxTreeOpen);
 
-  const activeStatus = activeTab?.status;
-  const activeResult = activeTab?.result;
-  const activeError = activeTab?.error;
-
   const toggleSyntaxTree = useCallback(() => {
     setIsSyntaxTreeOpen((prev) => !prev);
   }, []);
 
   useEffect(() => {
-    if (activeStatus) {
+    if (activeTab?.status) {
       setExecutionState({
-        error: activeError ?? null,
-        result: activeResult ?? null,
-        status: activeStatus,
+        error: activeTab.error ?? null,
+        result: activeTab.result ?? null,
+        status: activeTab.status,
       });
     }
-  }, [activeStatus, activeResult, activeError, setExecutionState]);
+  }, [
+    activeTab?.status,
+    activeTab?.result,
+    activeTab?.error,
+    setExecutionState,
+  ]);
 
   const handleQueryTable = useCallback(
     (tableName: string) => {
@@ -248,6 +224,11 @@ const ConnectedWorkspace = ({
     registerQueryTable(handleQueryTable);
     return () => registerQueryTable(null);
   }, [registerQueryTable, handleQueryTable]);
+
+  useEffect(() => {
+    registerOpenQuery(addTabWithSql);
+    return () => registerOpenQuery(null);
+  }, [registerOpenQuery, addTabWithSql]);
 
   const handleExecute = useCallback(() => {
     if (activeTab) {

@@ -1,6 +1,7 @@
 mod commands;
 mod config;
 mod db;
+mod persistence;
 
 use db::pool::ConnectionPoolManager;
 
@@ -24,6 +25,10 @@ pub fn run() {
             commands::format_sql,
             config::get_config,
             config::save_config,
+            persistence::get_tabs,
+            persistence::save_tabs,
+            persistence::append_history,
+            persistence::get_history,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

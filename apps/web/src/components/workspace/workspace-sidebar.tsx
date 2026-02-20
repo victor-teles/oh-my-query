@@ -22,6 +22,7 @@ import {
 } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Tooltip,
   TooltipContent,
@@ -30,6 +31,7 @@ import {
 import { isTauri } from "@/lib/tauri";
 import { cn } from "@/lib/utils";
 
+import { QueryHistoryList } from "./query-history-list";
 import { SchemaTree } from "./schema-tree";
 
 interface WorkspaceSidebarProps {
@@ -115,6 +117,49 @@ const DatabaseSelector = ({
   );
 };
 
+interface SchemaTabContentProps {
+  schema: SchemaInfo | null;
+  isLoading: boolean;
+  error: string | null;
+  filter: string;
+  onFilterChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onRetry: () => void;
+}
+
+const SchemaTabContent = ({
+  schema,
+  isLoading,
+  error,
+  filter,
+  onFilterChange,
+  onRetry,
+}: SchemaTabContentProps) => (
+  <>
+    {schema && (
+      <div className="px-2 py-2">
+        <InputGroup>
+          <InputGroupAddon>
+            <InputGroupText>
+              <Search />
+            </InputGroupText>
+          </InputGroupAddon>
+          <InputGroupInput
+            placeholder="Filter tables..."
+            value={filter}
+            onChange={onFilterChange}
+          />
+        </InputGroup>
+      </div>
+    )}
+
+    <ScrollArea className="min-h-0 flex-1">
+      {isLoading && !schema && <SchemaLoadingState />}
+      {error && <SchemaErrorState error={error} onRetry={onRetry} />}
+      {schema && <SchemaTree schema={schema} filter={filter} />}
+    </ScrollArea>
+  </>
+);
+
 export const WorkspaceSidebar = ({
   connection,
   schema,
@@ -174,28 +219,29 @@ export const WorkspaceSidebar = ({
 
       <Separator className="bg-sidebar-border" />
 
-      {schema && (
-        <div className="px-2 py-2">
-          <InputGroup>
-            <InputGroupAddon>
-              <InputGroupText>
-                <Search />
-              </InputGroupText>
-            </InputGroupAddon>
-            <InputGroupInput
-              placeholder="Filter tables..."
-              value={filter}
-              onChange={handleFilterChange}
-            />
-          </InputGroup>
+      <Tabs defaultValue="schema" className="flex min-h-0 flex-1 flex-col">
+        <div className="px-2 pt-2">
+          <TabsList className="w-full bg-transparent">
+            <TabsTrigger value="schema">Schema</TabsTrigger>
+            <TabsTrigger value="history">History</TabsTrigger>
+          </TabsList>
         </div>
-      )}
 
-      <ScrollArea className="min-h-0 flex-1">
-        {isLoading && !schema && <SchemaLoadingState />}
-        {error && <SchemaErrorState error={error} onRetry={refresh} />}
-        {schema && <SchemaTree schema={schema} filter={filter} />}
-      </ScrollArea>
+        <TabsContent value="schema" className="flex min-h-0 flex-1 flex-col">
+          <SchemaTabContent
+            schema={schema}
+            isLoading={isLoading}
+            error={error}
+            filter={filter}
+            onFilterChange={handleFilterChange}
+            onRetry={refresh}
+          />
+        </TabsContent>
+
+        <TabsContent value="history" className="min-h-0 flex-1">
+          <QueryHistoryList connectionId={connection.id} />
+        </TabsContent>
+      </Tabs>
 
       {showDatabaseSelector && (
         <DatabaseSelector
