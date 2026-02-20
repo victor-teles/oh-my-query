@@ -32,7 +32,11 @@ Chat with an AI that understands your schema. It sees your tables, columns, type
 
 ### Smart editor
 
-CodeMirror-powered SQL editor with schema-aware autocomplete, syntax highlighting, SQL beautifier, and a syntax tree inspector. Work across multiple query tabs with full keyboard shortcut support.
+CodeMirror-powered SQL editor with schema-aware autocomplete, syntax highlighting, and a syntax tree inspector. Work across multiple query tabs with full keyboard shortcut support.
+
+### SQL dialect engine
+
+Write SQL in any dialect and run it against any database. Powered by [polyglot-sql](https://github.com/polyglot-sql/polyglot-sql), queries are automatically transpiled between dialects at execution time. The built-in SQL formatter is also dialect-aware, supporting 30+ SQL dialects including PostgreSQL, MySQL, BigQuery, Snowflake, DuckDB, ClickHouse, Spark, and more.
 
 ### Native experience
 
@@ -99,7 +103,7 @@ oh-my-query/
 
 **Frontend** — React 19, TanStack Router, Tailwind CSS v4, shadcn/ui, CodeMirror, Framer Motion, Vercel AI SDK
 
-**Desktop** — Tauri v2, Rust, sqlx (PostgreSQL/MySQL/SQLite), mongodb, redis
+**Desktop** — Tauri v2, Rust, sqlx (PostgreSQL/MySQL/SQLite), mongodb, redis, polyglot-sql (transpilation & formatting)
 
 **Tooling** — Turborepo, Bun, TypeScript 5, Ultracite (Oxlint + Oxfmt)
 
