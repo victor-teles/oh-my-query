@@ -24,9 +24,7 @@ pub async fn execute_for_pool(
                 is_truncated,
             })
         }
-        DatabasePool::MongoDB(client) => {
-            mongodb::execute_mongodb(client, command, max_rows).await
-        }
+        DatabasePool::MongoDB(client) => mongodb::execute_mongodb(client, command, max_rows).await,
         DatabasePool::Redis(conn) => redis::execute_redis(&mut conn.clone(), command).await,
     }
 }
