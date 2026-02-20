@@ -1,10 +1,10 @@
 import type { ViewUpdate } from "@codemirror/view";
 
-import { useHotkey } from "@tanstack/react-hotkeys";
 import { Loader2, Play } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 
-import type { DatabaseConnection } from "@/lib/connections";
+import type { DatabaseConnection, DatabaseType } from "@/lib/connections";
+import type { QueryTab } from "@/lib/query-types";
 import type { ExecuteResult, SchemaInfo } from "@/lib/tauri";
 
 import {
@@ -25,11 +25,13 @@ import { useEditorInsert } from "@/contexts/editor-insert-context";
 import { useQueryExecution } from "@/contexts/query-execution-context";
 import { useQueryTabs } from "@/hooks/use-query-tabs";
 import { useSyntaxTree } from "@/hooks/use-syntax-tree";
+import { useWorkspaceHotkeys } from "@/hooks/use-workspace-hotkeys";
 import { isSqlDatabase } from "@/lib/connections";
 import { downloadCsv, tabularResultToCsv } from "@/lib/csv";
 import { formatSql } from "@/lib/format-sql";
 
 import { CommandEditor } from "./command-editor";
+import { DialectSelector } from "./dialect-selector";
 import { DocumentViewer } from "./document-viewer";
 import { ExecuteButton } from "./execute-button";
 import { FormatButton } from "./format-button";
@@ -40,6 +42,18 @@ import { ResultsTable } from "./results-table";
 import { SqlEditor } from "./sql-editor";
 import { SyntaxTreePanel } from "./syntax-tree-panel";
 import { SyntaxTreeToggle } from "./syntax-tree-toggle";
+
+type SqlDialect = "postgresql" | "mysql" | "sqlite";
+
+const SQL_DIALECTS = new Set<string>(["postgresql", "mysql", "sqlite"]);
+
+const resolveEditorDialect = (
+  sourceDialect: string | null,
+  connectionType: string
+): SqlDialect =>
+  sourceDialect && SQL_DIALECTS.has(sourceDialect)
+    ? (sourceDialect as SqlDialect)
+    : (connectionType as SqlDialect);
 
 interface WorkspaceContentProps {
   connection: DatabaseConnection;
@@ -66,10 +80,137 @@ export const WorkspaceContent = ({
     addTabWithSql,
     closeTab,
     setActiveTabId,
+    updateTabDialect,
     updateTabSql,
     executeTab,
   } = useQueryTabs(connection.id, selectedDatabase);
 
+  const isSql = isSqlDatabase(connection.type);
+
+  if (isConnecting) {
+    return (
+      <div className="flex h-full flex-col items-center justify-center gap-3 bg-background">
+        <Loader2 className="size-6 animate-spin text-muted-foreground" />
+        <p className="text-sm text-muted-foreground">
+          Connecting to {connection.name}...
+        </p>
+      </div>
+    );
+  }
+
+  if (connectionError) {
+    return (
+      <div className="flex h-full items-center justify-center bg-background">
+        <QueryErrorDisplay error={connectionError} />
+      </div>
+    );
+  }
+
+  return (
+    <ConnectedWorkspace
+      connection={connection}
+      schema={schema}
+      selectedDatabase={selectedDatabase}
+      tabs={tabs}
+      activeTab={activeTab}
+      activeTabId={activeTabId}
+      isSql={isSql}
+      addTab={addTab}
+      addTabWithSql={addTabWithSql}
+      closeTab={closeTab}
+      setActiveTabId={setActiveTabId}
+      updateTabDialect={updateTabDialect}
+      updateTabSql={updateTabSql}
+      executeTab={executeTab}
+    />
+  );
+};
+
+interface EditorPanelProps {
+  activeTab: QueryTab | undefined;
+  isSql: boolean;
+  connectionType: DatabaseType;
+  editorDialect: SqlDialect;
+  schema: SchemaInfo | null;
+  onSqlChange: (val: string) => void;
+  onExecute: () => void;
+  onEditorUpdate: (update: ViewUpdate) => void;
+  onToggleSyntaxTree: () => void;
+}
+
+const EditorPanel = ({
+  activeTab,
+  isSql,
+  connectionType,
+  editorDialect,
+  schema,
+  onSqlChange,
+  onExecute,
+  onEditorUpdate,
+  onToggleSyntaxTree,
+}: EditorPanelProps) => {
+  if (!activeTab) {
+    return null;
+  }
+
+  if (isSql) {
+    return (
+      <SqlEditor
+        value={activeTab.sql}
+        onChange={onSqlChange}
+        onExecute={onExecute}
+        onUpdate={onEditorUpdate}
+        onToggleSyntaxTree={onToggleSyntaxTree}
+        databaseType={connectionType as "postgresql" | "mysql" | "sqlite"}
+        writingDialect={editorDialect}
+        schema={schema}
+      />
+    );
+  }
+
+  return (
+    <CommandEditor
+      value={activeTab.sql}
+      onChange={onSqlChange}
+      onExecute={onExecute}
+      databaseType={connectionType}
+    />
+  );
+};
+
+interface ConnectedWorkspaceProps {
+  connection: DatabaseConnection;
+  schema: SchemaInfo | null;
+  selectedDatabase: string | null;
+  tabs: QueryTab[];
+  activeTab: QueryTab | undefined;
+  activeTabId: string;
+  isSql: boolean;
+  addTab: () => void;
+  addTabWithSql: (sql: string) => void;
+  closeTab: (tabId: string) => void;
+  setActiveTabId: (id: string) => void;
+  updateTabDialect: (tabId: string, dialect: string | null) => void;
+  updateTabSql: (tabId: string, sql: string) => void;
+  executeTab: (tabId: string, sqlOverride?: string) => void;
+}
+
+const ConnectedWorkspace = ({
+  connection,
+  schema,
+  selectedDatabase: _selectedDatabase,
+  tabs,
+  activeTab,
+  activeTabId,
+  isSql,
+  addTab,
+  addTabWithSql,
+  closeTab,
+  setActiveTabId,
+  updateTabDialect,
+  updateTabSql,
+  executeTab,
+}: ConnectedWorkspaceProps) => {
   const { setExecutionState } = useQueryExecution();
   const { getSelectedText, registerQueryTable } = useEditorInsert();
 
@@ -81,7 +222,6 @@ export const WorkspaceContent = ({
   const activeStatus = activeTab?.status;
   const activeResult = activeTab?.result;
   const activeError = activeTab?.error;
-  const isSql = isSqlDatabase(connection.type);
 
   const toggleSyntaxTree = useCallback(() => {
     setIsSyntaxTreeOpen((prev) => !prev);
@@ -129,15 +269,17 @@ export const WorkspaceContent = ({
     [isSyntaxTreeOpen, handleSyntaxTreeUpdate]
   );
 
+  const editorDialect = resolveEditorDialect(
+    activeTab?.sourceDialect ?? null,
+    connection.type
+  );
+
   const handleFormat = useCallback(() => {
     if (activeTab?.sql.trim() && isSql) {
-      const formatted = formatSql(
-        activeTab.sql,
-        connection.type as "postgresql" | "mysql" | "sqlite"
-      );
+      const formatted = formatSql(activeTab.sql, editorDialect);
       updateTabSql(activeTab.id, formatted);
     }
-  }, [activeTab, isSql, connection.type, updateTabSql]);
+  }, [activeTab, isSql, editorDialect, updateTabSql]);
 
   const handleSqlChange = useCallback(
     (val: string) => {
@@ -148,92 +290,24 @@ export const WorkspaceContent = ({
     [activeTab, updateTabSql]
   );
 
-  useHotkey("Mod+Shift+F", () => {
-    handleFormat();
+  const handleDialectChange = useCallback(
+    (dialect: string) => {
+      if (activeTab) {
+        const newDialect = dialect === connection.type ? null : dialect;
+        updateTabDialect(activeTab.id, newDialect);
+      }
+    },
+    [activeTab, connection.type, updateTabDialect]
+  );
+
+  useWorkspaceHotkeys({
+    activeTab,
+    addTab,
+    closeTab,
+    handleFormat,
+    setActiveTabId,
+    tabs,
   });
-
-  useHotkey("Mod+T", () => {
-    addTab();
-  });
-
-  useHotkey("Mod+W", () => {
-    if (activeTab) {
-      closeTab(activeTab.id);
-    }
-  });
-
-  useHotkey("Mod+1", () => {
-    if (tabs[0]) {
-      setActiveTabId(tabs[0].id);
-    }
-  });
-
-  useHotkey("Mod+2", () => {
-    if (tabs[1]) {
-      setActiveTabId(tabs[1].id);
-    }
-  });
-
-  useHotkey("Mod+3", () => {
-    if (tabs[2]) {
-      setActiveTabId(tabs[2].id);
-    }
-  });
-
-  useHotkey("Mod+4", () => {
-    if (tabs[3]) {
-      setActiveTabId(tabs[3].id);
-    }
-  });
-
-  useHotkey("Mod+5", () => {
-    if (tabs[4]) {
-      setActiveTabId(tabs[4].id);
-    }
-  });
-
-  useHotkey("Mod+6", () => {
-    if (tabs[5]) {
-      setActiveTabId(tabs[5].id);
-    }
-  });
-
-  useHotkey("Mod+7", () => {
-    if (tabs[6]) {
-      setActiveTabId(tabs[6].id);
-    }
-  });
-
-  useHotkey("Mod+8", () => {
-    if (tabs[7]) {
-      setActiveTabId(tabs[7].id);
-    }
-  });
-
-  useHotkey("Mod+9", () => {
-    if (tabs[8]) {
-      setActiveTabId(tabs[8].id);
-    }
-  });
-
-  if (isConnecting) {
-    return (
-      <div className="flex h-full flex-col items-center justify-center gap-3 bg-background">
-        <Loader2 className="size-6 animate-spin text-muted-foreground" />
-        <p className="text-sm text-muted-foreground">
-          Connecting to {connection.name}...
-        </p>
-      </div>
-    );
-  }
-
-  if (connectionError) {
-    return (
-      <div className="flex h-full items-center justify-center bg-background">
-        <QueryErrorDisplay error={connectionError} />
-      </div>
-    );
-  }
 
   return (
     <div className="flex h-full flex-col bg-background">
@@ -249,27 +323,17 @@ export const WorkspaceContent = ({
         <ResizablePanel defaultSize="40%" minSize="15%">
           <div className="flex h-full flex-col">
             <div className="flex-1">
-              {activeTab && isSql && (
-                <SqlEditor
-                  value={activeTab.sql}
-                  onChange={handleSqlChange}
-                  onExecute={handleExecute}
-                  onUpdate={handleEditorUpdate}
-                  onToggleSyntaxTree={toggleSyntaxTree}
-                  databaseType={
-                    connection.type as "postgresql" | "mysql" | "sqlite"
-                  }
-                  schema={schema}
-                />
-              )}
-              {activeTab && !isSql && (
-                <CommandEditor
-                  value={activeTab.sql}
-                  onChange={handleSqlChange}
-                  onExecute={handleExecute}
-                  databaseType={connection.type}
-                />
-              )}
+              <EditorPanel
+                activeTab={activeTab}
+                isSql={isSql}
+                connectionType={connection.type}
+                editorDialect={editorDialect}
+                schema={schema}
+                onSqlChange={handleSqlChange}
+                onExecute={handleExecute}
+                onEditorUpdate={handleEditorUpdate}
+                onToggleSyntaxTree={toggleSyntaxTree}
+              />
             </div>
           </div>
         </ResizablePanel>
@@ -277,31 +341,21 @@ export const WorkspaceContent = ({
         <ResizableHandle />
 
         <ResizablePanel defaultSize="60%" minSize="20%">
-          <div className="flex items-center justify-between border-b px-2 py-1">
-            <span className="text-xs text-muted-foreground">
-              {activeTab?.title}
-            </span>
-            <div className="flex items-center gap-1">
-              {isSql && (
-                <>
-                  <FormatButton
-                    disabled={!activeTab?.sql.trim()}
-                    onClick={handleFormat}
-                  />
-                  <SyntaxTreeToggle
-                    isOpen={isSyntaxTreeOpen}
-                    onToggle={toggleSyntaxTree}
-                  />
-                </>
-              )}
-              <ExecuteButton
-                isRunning={activeTab?.status === "running"}
-                disabled={!activeTab?.sql.trim()}
-                hasSelection={hasSelection}
-                onClick={handleExecute}
-              />
-            </div>
-          </div>
+          <EditorToolbar
+            title={activeTab?.title}
+            isSql={isSql}
+            sourceDialect={activeTab?.sourceDialect ?? null}
+            connectionType={connection.type}
+            onDialectChange={handleDialectChange}
+            isFormatDisabled={!activeTab?.sql.trim()}
+            onFormat={handleFormat}
+            isSyntaxTreeOpen={isSyntaxTreeOpen}
+            onToggleSyntaxTree={toggleSyntaxTree}
+            isRunning={activeTab?.status === "running"}
+            isExecuteDisabled={!activeTab?.sql.trim()}
+            hasSelection={hasSelection}
+            onExecute={handleExecute}
+          />
           <BottomPanel
             isSyntaxTreeOpen={isSyntaxTreeOpen}
             treeData={treeData}
@@ -315,6 +369,68 @@ export const WorkspaceContent = ({
     </div>
   );
 };
+
+interface EditorToolbarProps {
+  title: string | undefined;
+  isSql: boolean;
+  sourceDialect: string | null;
+  connectionType: string;
+  onDialectChange: (dialect: string) => void;
+  isFormatDisabled: boolean;
+  onFormat: () => void;
+  isSyntaxTreeOpen: boolean;
+  onToggleSyntaxTree: () => void;
+  isRunning: boolean;
+  isExecuteDisabled: boolean;
+  hasSelection: boolean;
+  onExecute: () => void;
+}
+
+const EditorToolbar = ({
+  title,
+  isSql,
+  sourceDialect,
+  connectionType,
+  onDialectChange,
+  isFormatDisabled,
+  onFormat,
+  isSyntaxTreeOpen,
+  onToggleSyntaxTree,
+  isRunning,
+  isExecuteDisabled,
+  hasSelection,
+  onExecute,
+}: EditorToolbarProps) => (
+  <div className="flex items-center justify-between border-b px-2 py-1">
+    <div className="flex items-center gap-2">
+      <span className="text-xs text-muted-foreground">{title}</span>
+      {isSql && (
+        <DialectSelector
+          value={sourceDialect ?? connectionType}
+          connectionDialect={connectionType}
+          onChange={onDialectChange}
+        />
+      )}
+    </div>
+    <div className="flex items-center gap-1">
+      {isSql && (
+        <>
+          <FormatButton disabled={isFormatDisabled} onClick={onFormat} />
+          <SyntaxTreeToggle
+            isOpen={isSyntaxTreeOpen}
+            onToggle={onToggleSyntaxTree}
+          />
+        </>
+      )}
+      <ExecuteButton
+        isRunning={isRunning}
+        disabled={isExecuteDisabled}
+        hasSelection={hasSelection}
+        onClick={onExecute}
+      />
+    </div>
+  </div>
+);
 
 const LOADING_SKELETON_IDS = ["s1", "s2", "s3", "s4", "s5"];
 

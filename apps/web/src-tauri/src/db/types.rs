@@ -85,6 +85,7 @@ pub struct QueryParams {
     pub max_rows: Option<u64>,
     pub timeout_secs: Option<u64>,
     pub schema: Option<String>,
+    pub source_dialect: Option<String>,
 }
 
 #[derive(Debug, Clone, Serialize)]

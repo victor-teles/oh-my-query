@@ -8,6 +8,7 @@ const createNewTab = (counter: number): QueryTab => ({
   error: null,
   id: crypto.randomUUID(),
   result: null,
+  sourceDialect: null,
   sql: "",
   status: "idle",
   title: `Query ${counter}`,
@@ -77,6 +78,15 @@ export const useQueryTabs = (
     setTabs((prev) => prev.map((t) => (t.id === tabId ? { ...t, sql } : t)));
   }, []);
 
+  const updateTabDialect = useCallback(
+    (tabId: string, dialect: string | null) => {
+      setTabs((prev) =>
+        prev.map((t) => (t.id === tabId ? { ...t, sourceDialect: dialect } : t))
+      );
+    },
+    []
+  );
+
   const executeTab = useCallback(
     async (tabId: string, sqlOverride?: string) => {
       const tab = tabs.find((t) => t.id === tabId);
@@ -97,6 +107,7 @@ export const useQueryTabs = (
         const result = await executeQuery({
           connectionId,
           schema: selectedDatabase ?? undefined,
+          sourceDialect: tab?.sourceDialect ?? undefined,
           sql: sqlToExecute,
         });
         setTabs((prev) =>
@@ -129,6 +140,7 @@ export const useQueryTabs = (
     executeTab,
     setActiveTabId,
     tabs,
+    updateTabDialect,
     updateTabSql,
   };
 };

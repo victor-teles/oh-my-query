@@ -7,6 +7,7 @@ use crate::db::error::DbError;
 use crate::db::execute::execute_for_pool;
 use crate::db::pool::ConnectionPoolManager;
 use crate::db::schema::{fetch_schema, list_databases};
+use crate::db::transpile::{pool_dialect, transpile_sql};
 use crate::db::types::{
     ConnectionParams, ExecuteResult, QueryParams, SchemaInfo, TestConnectionResult,
 };
@@ -75,11 +76,19 @@ pub async fn execute_query(
     let max_rows = params.max_rows.unwrap_or(DEFAULT_MAX_ROWS) as usize;
     let timeout_secs = params.timeout_secs.unwrap_or(DEFAULT_TIMEOUT_SECS);
 
+    let sql = match params.source_dialect.as_deref() {
+        Some(source) => {
+            let target = pool_dialect(&pool);
+            transpile_sql(&params.sql, source, target)?
+        }
+        None => params.sql.clone(),
+    };
+
     let start = Instant::now();
 
     let result = tokio::time::timeout(
         std::time::Duration::from_secs(timeout_secs),
-        execute_for_pool(&pool, &params.sql, max_rows, params.schema.as_deref()),
+        execute_for_pool(&pool, &sql, max_rows, params.schema.as_deref()),
     )
     .await
     .map_err(DbError::from)?;

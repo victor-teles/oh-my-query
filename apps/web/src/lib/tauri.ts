@@ -41,6 +41,7 @@ export interface QueryParams {
   maxRows?: number;
   timeoutSecs?: number;
   schema?: string;
+  sourceDialect?: string;
 }
 
 export interface ColumnInfo {

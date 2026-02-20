@@ -2915,6 +2915,7 @@ dependencies = [
  "futures",
  "log",
  "mongodb",
+ "polyglot-sql",
  "redis",
  "serde",
  "serde_json",
@@ -3261,6 +3262,18 @@ dependencies = [
  "fdeflate",
  "flate2",
  "miniz_oxide",
+]
+
+[[package]]
+name = "polyglot-sql"
+version = "0.1.4"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "5bccd5cbca75edb3852dad81a34d9fa14c3abb2725d3cbc5dcb2d9e8250e4801"
+dependencies = [
+ "serde",
+ "serde_json",
+ "thiserror 1.0.69",
+ "unicode-segmentation",
 ]
 
 [[package]]
