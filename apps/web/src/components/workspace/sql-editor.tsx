@@ -18,9 +18,10 @@ import {
   schemaInfoToSQLNamespace,
 } from "@/lib/sql-schema";
 
-type SqlDatabaseType = "postgresql" | "mysql" | "sqlite";
+type SqlDatabaseType = "postgresql" | "mysql" | "sqlite" | "clickhouse";
 
 const DIALECT_MAP: Record<SqlDatabaseType, typeof PostgreSQL> = {
+  clickhouse: PostgreSQL,
   mysql: MySQL,
   postgresql: PostgreSQL,
   sqlite: SQLite,

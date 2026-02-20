@@ -1,5 +1,6 @@
 use sqlx::Row;
 
+use crate::db::clickhouse::ClickHouseConnection;
 use crate::db::error::DbError;
 use crate::db::pool::DatabasePool;
 use crate::db::types::{
@@ -16,6 +17,7 @@ pub async fn list_databases(pool: &DatabasePool) -> Result<Vec<String>, DbError>
             Ok(names)
         }
         DatabasePool::Redis(_) => Ok(vec!["db0".to_string()]),
+        DatabasePool::ClickHouse(conn) => list_databases_clickhouse(conn).await,
     }
 }
 
@@ -32,6 +34,7 @@ pub async fn fetch_schema(pool: &DatabasePool, database_name: &str) -> Result<Sc
                 views: vec![],
             }],
         }),
+        DatabasePool::ClickHouse(conn) => fetch_schema_clickhouse(conn, database_name).await,
     }
 }
 
@@ -684,4 +687,194 @@ async fn fetch_schema_mongodb(
             views: vec![],
         }],
     })
+}
+
+// ClickHouse introspection
+
+async fn list_databases_clickhouse(conn: &ClickHouseConnection) -> Result<Vec<String>, DbError> {
+    let (_, rows, _, _) = conn
+        .query(
+            "SELECT name FROM system.databases \
+             WHERE name NOT IN ('system', 'information_schema', 'INFORMATION_SCHEMA') \
+             ORDER BY name",
+            None,
+            None,
+        )
+        .await?;
+
+    Ok(rows
+        .into_iter()
+        .filter_map(|row| row.into_iter().next().and_then(|v| match v {
+            serde_json::Value::String(s) => Some(s),
+            _ => None,
+        }))
+        .collect())
+}
+
+async fn fetch_schema_clickhouse(
+    conn: &ClickHouseConnection,
+    database_name: &str,
+) -> Result<SchemaInfo, DbError> {
+    let tables = fetch_tables_clickhouse(conn, database_name).await?;
+    let views = fetch_views_clickhouse(conn, database_name).await?;
+
+    Ok(SchemaInfo {
+        schemas: vec![SchemaItem {
+            name: database_name.to_string(),
+            tables,
+            views,
+        }],
+    })
+}
+
+async fn fetch_tables_clickhouse(
+    conn: &ClickHouseConnection,
+    database_name: &str,
+) -> Result<Vec<TableItem>, DbError> {
+    let (_, table_rows, _, _) = conn
+        .query(
+            &format!(
+                "SELECT name FROM system.tables \
+                 WHERE database = '{database_name}' \
+                 AND engine NOT IN ('View', 'MaterializedView') \
+                 ORDER BY name"
+            ),
+            None,
+            None,
+        )
+        .await?;
+
+    let mut tables = Vec::with_capacity(table_rows.len());
+
+    for table_row in &table_rows {
+        let table_name = table_row
+            .first()
+            .and_then(|v| v.as_str())
+            .unwrap_or_default();
+
+        let columns = fetch_columns_clickhouse(conn, database_name, table_name).await?;
+        let indexes = fetch_indexes_clickhouse(conn, database_name, table_name).await?;
+
+        tables.push(TableItem {
+            name: table_name.to_string(),
+            columns,
+            indexes,
+            foreign_keys: vec![],
+        });
+    }
+
+    Ok(tables)
+}
+
+async fn fetch_views_clickhouse(
+    conn: &ClickHouseConnection,
+    database_name: &str,
+) -> Result<Vec<ViewItem>, DbError> {
+    let (_, view_rows, _, _) = conn
+        .query(
+            &format!(
+                "SELECT name FROM system.tables \
+                 WHERE database = '{database_name}' \
+                 AND engine IN ('View', 'MaterializedView') \
+                 ORDER BY name"
+            ),
+            None,
+            None,
+        )
+        .await?;
+
+    let mut views = Vec::with_capacity(view_rows.len());
+
+    for view_row in &view_rows {
+        let view_name = view_row
+            .first()
+            .and_then(|v| v.as_str())
+            .unwrap_or_default();
+
+        let columns = fetch_columns_clickhouse(conn, database_name, view_name).await?;
+
+        views.push(ViewItem {
+            name: view_name.to_string(),
+            columns,
+        });
+    }
+
+    Ok(views)
+}
+
+async fn fetch_columns_clickhouse(
+    conn: &ClickHouseConnection,
+    database_name: &str,
+    table_name: &str,
+) -> Result<Vec<ColumnDetail>, DbError> {
+    let (_, rows, _, _) = conn
+        .query(
+            &format!(
+                "SELECT name, type, default_kind, default_expression, is_in_primary_key \
+                 FROM system.columns \
+                 WHERE database = '{database_name}' AND table = '{table_name}' \
+                 ORDER BY position"
+            ),
+            None,
+            None,
+        )
+        .await?;
+
+    Ok(rows
+        .into_iter()
+        .map(|row| {
+            let name = row.first().and_then(|v| v.as_str()).unwrap_or_default().to_string();
+            let data_type = row.get(1).and_then(|v| v.as_str()).unwrap_or_default().to_string();
+            let default_kind = row.get(2).and_then(|v| v.as_str()).unwrap_or_default();
+            let default_expr = row.get(3).and_then(|v| v.as_str()).unwrap_or_default();
+            let is_pk = row.get(4).and_then(|v| v.as_u64()).unwrap_or(0) == 1;
+
+            let is_nullable = data_type.starts_with("Nullable(");
+            let default_value = if default_kind.is_empty() {
+                None
+            } else {
+                Some(default_expr.to_string())
+            };
+
+            ColumnDetail {
+                name,
+                data_type,
+                is_nullable,
+                is_primary_key: is_pk,
+                default_value,
+            }
+        })
+        .collect())
+}
+
+async fn fetch_indexes_clickhouse(
+    conn: &ClickHouseConnection,
+    database_name: &str,
+    table_name: &str,
+) -> Result<Vec<IndexItem>, DbError> {
+    let (_, rows, _, _) = conn
+        .query(
+            &format!(
+                "SELECT name, expr, type \
+                 FROM system.data_skipping_indices \
+                 WHERE database = '{database_name}' AND table = '{table_name}'"
+            ),
+            None,
+            None,
+        )
+        .await?;
+
+    Ok(rows
+        .into_iter()
+        .map(|row| {
+            let name = row.first().and_then(|v| v.as_str()).unwrap_or_default().to_string();
+            let expr = row.get(1).and_then(|v| v.as_str()).unwrap_or_default().to_string();
+
+            IndexItem {
+                name,
+                columns: vec![expr],
+                is_unique: false,
+            }
+        })
+        .collect())
 }

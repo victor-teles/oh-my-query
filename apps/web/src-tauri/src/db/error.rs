@@ -56,3 +56,12 @@ impl From<redis::RedisError> for DbError {
         }
     }
 }
+
+impl From<reqwest::Error> for DbError {
+    fn from(err: reqwest::Error) -> Self {
+        DbError {
+            code: "CLICKHOUSE_ERROR".to_string(),
+            message: err.to_string(),
+        }
+    }
+}
