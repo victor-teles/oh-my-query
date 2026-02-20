@@ -1,4 +1,4 @@
-import { ChevronDown, ChevronRight } from "lucide-react";
+import { ChevronDown, ChevronRight, SearchX } from "lucide-react";
 import { useCallback, useState } from "react";
 
 import type { DocumentResult } from "@/lib/tauri";
@@ -11,6 +11,17 @@ const DOCS_PER_PAGE = 50;
 
 export const DocumentViewer = ({ result }: DocumentViewerProps) => {
   const [page, setPage] = useState(0);
+
+  if (result.documents.length === 0) {
+    return (
+      <div className="flex h-full flex-col items-center justify-center gap-1 text-muted-foreground">
+        <SearchX className="size-5" />
+        <span className="text-sm">No results</span>
+        <span className="text-xs">Your query returned no documents</span>
+      </div>
+    );
+  }
+
   const totalPages = Math.ceil(result.documents.length / DOCS_PER_PAGE);
   const start = page * DOCS_PER_PAGE;
   const pageDocuments = result.documents.slice(start, start + DOCS_PER_PAGE);
