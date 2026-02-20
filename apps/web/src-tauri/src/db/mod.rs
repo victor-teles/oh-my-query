@@ -1,5 +1,6 @@
 pub mod driver;
 pub mod error;
+pub mod execute;
 pub mod mongodb_driver;
 pub mod mysql;
 pub mod pool;
@@ -8,3 +9,4 @@ pub mod redis_driver;
 pub mod schema;
 pub mod sqlite;
 pub mod types;
+pub mod version;
