@@ -274,10 +274,16 @@ const ConnectedWorkspace = ({
     connection.type
   );
 
-  const handleFormat = useCallback(() => {
-    if (activeTab?.sql.trim() && isSql) {
-      const formatted = formatSql(activeTab.sql, editorDialect);
+  const handleFormat = useCallback(async () => {
+    if (!activeTab?.sql.trim() || !isSql) {
+      return;
+    }
+
+    try {
+      const formatted = await formatSql(activeTab.sql, editorDialect);
       updateTabSql(activeTab.id, formatted);
+    } catch {
+      // Leave SQL unchanged on format error
     }
   }, [activeTab, isSql, editorDialect, updateTabSql]);
 

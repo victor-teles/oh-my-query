@@ -7,7 +7,7 @@ use crate::db::error::DbError;
 use crate::db::execute::execute_for_pool;
 use crate::db::pool::ConnectionPoolManager;
 use crate::db::schema::{fetch_schema, list_databases};
-use crate::db::transpile::{pool_dialect, transpile_sql};
+use crate::db::transpile::{format_sql as do_format_sql, pool_dialect, transpile_sql};
 use crate::db::types::{
     ConnectionParams, ExecuteResult, QueryParams, SchemaInfo, TestConnectionResult,
 };
@@ -108,4 +108,9 @@ pub async fn execute_query(
     }
 
     Ok(execute_result)
+}
+
+#[tauri::command]
+pub async fn format_sql(sql: String, dialect: String) -> Result<String, DbError> {
+    do_format_sql(&sql, &dialect)
 }
