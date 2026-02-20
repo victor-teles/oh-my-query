@@ -704,10 +704,12 @@ async fn list_databases_clickhouse(conn: &ClickHouseConnection) -> Result<Vec<St
 
     Ok(rows
         .into_iter()
-        .filter_map(|row| row.into_iter().next().and_then(|v| match v {
-            serde_json::Value::String(s) => Some(s),
-            _ => None,
-        }))
+        .filter_map(|row| {
+            row.into_iter().next().and_then(|v| match v {
+                serde_json::Value::String(s) => Some(s),
+                _ => None,
+            })
+        })
         .collect())
 }
 
@@ -823,8 +825,16 @@ async fn fetch_columns_clickhouse(
     Ok(rows
         .into_iter()
         .map(|row| {
-            let name = row.first().and_then(|v| v.as_str()).unwrap_or_default().to_string();
-            let data_type = row.get(1).and_then(|v| v.as_str()).unwrap_or_default().to_string();
+            let name = row
+                .first()
+                .and_then(|v| v.as_str())
+                .unwrap_or_default()
+                .to_string();
+            let data_type = row
+                .get(1)
+                .and_then(|v| v.as_str())
+                .unwrap_or_default()
+                .to_string();
             let default_kind = row.get(2).and_then(|v| v.as_str()).unwrap_or_default();
             let default_expr = row.get(3).and_then(|v| v.as_str()).unwrap_or_default();
             let is_pk = row.get(4).and_then(|v| v.as_u64()).unwrap_or(0) == 1;
@@ -867,8 +877,16 @@ async fn fetch_indexes_clickhouse(
     Ok(rows
         .into_iter()
         .map(|row| {
-            let name = row.first().and_then(|v| v.as_str()).unwrap_or_default().to_string();
-            let expr = row.get(1).and_then(|v| v.as_str()).unwrap_or_default().to_string();
+            let name = row
+                .first()
+                .and_then(|v| v.as_str())
+                .unwrap_or_default()
+                .to_string();
+            let expr = row
+                .get(1)
+                .and_then(|v| v.as_str())
+                .unwrap_or_default()
+                .to_string();
 
             IndexItem {
                 name,

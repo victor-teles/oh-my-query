@@ -8,8 +8,7 @@ pub async fn execute_clickhouse(
     max_rows: usize,
     schema: Option<&str>,
 ) -> Result<ExecuteResult, DbError> {
-    let (columns, rows, row_count, is_truncated) =
-        conn.query(sql, schema, Some(max_rows)).await?;
+    let (columns, rows, row_count, is_truncated) = conn.query(sql, schema, Some(max_rows)).await?;
 
     Ok(ExecuteResult::Tabular {
         columns,

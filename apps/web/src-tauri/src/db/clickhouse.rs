@@ -97,11 +97,10 @@ impl ClickHouseConnection {
             });
         }
 
-        let ch_response: ClickHouseResponse =
-            response.json().await.map_err(|e| DbError {
-                code: "CLICKHOUSE_ERROR".to_string(),
-                message: format!("Failed to parse ClickHouse response: {e}"),
-            })?;
+        let ch_response: ClickHouseResponse = response.json().await.map_err(|e| DbError {
+            code: "CLICKHOUSE_ERROR".to_string(),
+            message: format!("Failed to parse ClickHouse response: {e}"),
+        })?;
 
         let columns: Vec<ColumnInfo> = ch_response
             .meta
