@@ -21,6 +21,7 @@ pub fn run() {
             commands::execute_query,
             commands::list_connection_databases,
             commands::get_schema,
+            commands::format_sql,
             config::get_config,
             config::save_config,
         ])

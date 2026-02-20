@@ -1,17 +1,13 @@
-import { format } from "sql-formatter";
+import { isTauri } from "@/lib/tauri";
 
-type SqlDatabaseType = "postgresql" | "mysql" | "sqlite";
+export const formatSql = async (
+  sql: string,
+  dialect: string
+): Promise<string> => {
+  if (!isTauri()) {
+    return sql;
+  }
 
-const LANGUAGE_MAP: Record<SqlDatabaseType, "postgresql" | "mysql" | "sqlite"> =
-  {
-    mysql: "mysql",
-    postgresql: "postgresql",
-    sqlite: "sqlite",
-  };
-
-export const formatSql = (sql: string, databaseType: SqlDatabaseType): string =>
-  format(sql, {
-    keywordCase: "upper",
-    language: LANGUAGE_MAP[databaseType],
-    tabWidth: 2,
-  });
+  const { invoke } = await import("@tauri-apps/api/core");
+  return invoke<string>("format_sql", { dialect, sql });
+};
