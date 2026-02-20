@@ -3,8 +3,9 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import type { PersistedTab, TabState } from "@/lib/persistence";
 import type { QueryTab } from "@/lib/query-types";
 
-import { appendHistory, getTabs, saveTabs } from "@/lib/persistence";
-import { executeQuery } from "@/lib/tauri";
+import { getTabs, saveTabs } from "@/lib/persistence";
+
+import { useTabExecution } from "./use-tab-execution";
 
 const SAVE_DEBOUNCE_MS = 500;
 
@@ -35,16 +36,6 @@ const fromPersistedTab = (persisted: PersistedTab): QueryTab => ({
   title: persisted.title,
 });
 
-const extractErrorMessage = (error: unknown): string => {
-  if (error instanceof Error) {
-    return error.message;
-  }
-  if (typeof error === "object" && error !== null && "message" in error) {
-    return String((error as { message: unknown }).message);
-  }
-  return "Query execution failed";
-};
-
 export const useQueryTabs = (
   connectionId: string,
   selectedDatabase: string | null
@@ -58,6 +49,14 @@ export const useQueryTabs = (
   );
   const [isRestored, setIsRestored] = useState(false);
   const saveTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const tabsRef = useRef(tabs);
+  tabsRef.current = tabs;
+
+  const { execute } = useTabExecution({
+    connectionId,
+    selectedDatabase,
+    setTabs,
+  });
 
   useEffect(() => {
     const restore = async () => {
@@ -159,70 +158,15 @@ export const useQueryTabs = (
   );
 
   const executeTab = useCallback(
-    async (tabId: string, sqlOverride?: string) => {
-      const tab = tabs.find((t) => t.id === tabId);
+    (tabId: string, sqlOverride?: string) => {
+      const tab = tabsRef.current.find((t) => t.id === tabId);
       const sqlToExecute = sqlOverride ?? tab?.sql;
       if (!sqlToExecute?.trim()) {
         return;
       }
-
-      setTabs((prev) =>
-        prev.map((t) =>
-          t.id === tabId
-            ? { ...t, error: null, result: null, status: "running" as const }
-            : t
-        )
-      );
-
-      const startTime = performance.now();
-      let success = false;
-      let errorMessage: string | null = null;
-      let executionTimeMs = 0;
-
-      try {
-        const result = await executeQuery({
-          connectionId,
-          schema: selectedDatabase ?? undefined,
-          sourceDialect: tab?.sourceDialect ?? undefined,
-          sql: sqlToExecute,
-        });
-        ({ executionTimeMs } = result);
-        success = true;
-        setTabs((prev) =>
-          prev.map((t) =>
-            t.id === tabId
-              ? { ...t, error: null, result, status: "success" as const }
-              : t
-          )
-        );
-      } catch (error) {
-        const message = extractErrorMessage(error);
-        errorMessage = message;
-        executionTimeMs = Math.round(performance.now() - startTime);
-        setTabs((prev) =>
-          prev.map((t) =>
-            t.id === tabId
-              ? { ...t, error: message, result: null, status: "error" as const }
-              : t
-          )
-        );
-      }
-
-      try {
-        await appendHistory({
-          connectionId,
-          database: selectedDatabase,
-          error: errorMessage,
-          executionTimeMs,
-          sql: sqlToExecute,
-          success,
-          timestamp: new Date().toISOString(),
-        });
-      } catch {
-        // Silently ignore history write failures
-      }
+      execute(tabId, sqlToExecute, tab?.sourceDialect);
     },
-    [connectionId, selectedDatabase, tabs]
+    [execute]
   );
 
   return {

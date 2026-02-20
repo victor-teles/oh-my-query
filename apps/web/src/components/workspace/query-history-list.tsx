@@ -1,5 +1,5 @@
 import { CheckCircle2, Clock, History, XCircle } from "lucide-react";
-import { useCallback } from "react";
+import { memo, useCallback } from "react";
 
 import type { HistoryEntry } from "@/lib/persistence";
 
@@ -96,7 +96,7 @@ export const QueryHistoryList = ({ connectionId }: QueryHistoryListProps) => {
     <ScrollArea className="h-full">
       <div className="flex flex-col gap-0.5 px-2 py-1">
         {entries.map((entry) => (
-          <HistoryItem key={`${entry.timestamp}-${entry.sql}`} entry={entry} />
+          <HistoryItem key={entry.timestamp} entry={entry} />
         ))}
       </div>
     </ScrollArea>
@@ -107,7 +107,7 @@ interface HistoryItemProps {
   entry: HistoryEntry;
 }
 
-const HistoryItem = ({ entry }: HistoryItemProps) => {
+const HistoryItem = memo(function HistoryItem({ entry }: HistoryItemProps) {
   const { openQuery } = useEditorInsert();
 
   const handleClick = useCallback(() => {
@@ -151,4 +151,4 @@ const HistoryItem = ({ entry }: HistoryItemProps) => {
       </TooltipContent>
     </Tooltip>
   );
-};
+});

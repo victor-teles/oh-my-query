@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 
 import type { HistoryEntry } from "@/lib/persistence";
 
-import { getHistory } from "@/lib/persistence";
+import { getHistory, HISTORY_UPDATED_EVENT } from "@/lib/persistence";
 
 export const useQueryHistory = (connectionId: string) => {
   const [entries, setEntries] = useState<HistoryEntry[]>([]);
@@ -21,6 +21,14 @@ export const useQueryHistory = (connectionId: string) => {
 
   useEffect(() => {
     refresh();
+  }, [refresh]);
+
+  useEffect(() => {
+    const handler = () => {
+      refresh();
+    };
+    window.addEventListener(HISTORY_UPDATED_EVENT, handler);
+    return () => window.removeEventListener(HISTORY_UPDATED_EVENT, handler);
   }, [refresh]);
 
   return { entries, isLoading, refresh };

@@ -23,9 +23,27 @@ export interface HistoryEntry {
   executionTimeMs: number;
 }
 
+export const HISTORY_UPDATED_EVENT = "oh-my-query:history-updated";
+
 const TABS_STORAGE_PREFIX = "oh-my-query-tabs-";
 const HISTORY_STORAGE_PREFIX = "oh-my-query-history-";
 const MAX_BROWSER_HISTORY = 500;
+
+const safeParse = <T>(raw: string, fallback: T): T => {
+  try {
+    return JSON.parse(raw) as T;
+  } catch {
+    return fallback;
+  }
+};
+
+const isValidTabState = (value: unknown): value is TabState => {
+  if (typeof value !== "object" || value === null) {
+    return false;
+  }
+  const obj = value as Record<string, unknown>;
+  return Array.isArray(obj.tabs) && typeof obj.activeTabId === "string";
+};
 
 export const getTabs = async (
   connectionId: string
@@ -35,7 +53,8 @@ export const getTabs = async (
     if (!raw) {
       return null;
     }
-    return JSON.parse(raw) as TabState;
+    const parsed = safeParse<unknown>(raw, null);
+    return isValidTabState(parsed) ? parsed : null;
   }
 
   const { invoke } = await import("@tauri-apps/api/core");
@@ -62,9 +81,7 @@ export const appendHistory = async (entry: HistoryEntry): Promise<void> => {
   if (!isTauri()) {
     const key = `${HISTORY_STORAGE_PREFIX}${entry.connectionId}`;
     const raw = localStorage.getItem(key);
-    const entries: HistoryEntry[] = raw
-      ? (JSON.parse(raw) as HistoryEntry[])
-      : [];
+    const entries = raw ? safeParse<HistoryEntry[]>(raw, []) : [];
     entries.push(entry);
     const trimmed = entries.slice(-MAX_BROWSER_HISTORY);
     localStorage.setItem(key, JSON.stringify(trimmed));
@@ -87,7 +104,7 @@ export const getHistory = async (
     if (!raw) {
       return [];
     }
-    const entries = (JSON.parse(raw) as HistoryEntry[]).toReversed();
+    const entries = safeParse<HistoryEntry[]>(raw, []).toReversed();
     const start = offset ?? 0;
     return entries.slice(start, start + (limit ?? 100));
   }
