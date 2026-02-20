@@ -6,8 +6,10 @@ import { createContext, use, useCallback, useRef } from "react";
 interface EditorInsertContextValue {
   getSelectedText: () => string | null;
   insertAtCursor: (text: string) => void;
+  openQuery: (sql: string) => void;
   queryTable: (tableName: string) => void;
   registerEditor: (view: EditorView | null) => void;
+  registerOpenQuery: (handler: ((sql: string) => void) | null) => void;
   registerQueryTable: (handler: ((tableName: string) => void) | null) => void;
 }
 
@@ -18,6 +20,7 @@ const EditorInsertContext = createContext<EditorInsertContextValue | null>(
 export const EditorInsertProvider = ({ children }: { children: ReactNode }) => {
   const editorRef = useRef<EditorView | null>(null);
   const queryTableRef = useRef<((tableName: string) => void) | null>(null);
+  const openQueryRef = useRef<((sql: string) => void) | null>(null);
 
   const registerEditor = useCallback((view: EditorView | null) => {
     editorRef.current = view;
@@ -26,6 +29,13 @@ export const EditorInsertProvider = ({ children }: { children: ReactNode }) => {
   const registerQueryTable = useCallback(
     (handler: ((tableName: string) => void) | null) => {
       queryTableRef.current = handler;
+    },
+    []
+  );
+
+  const registerOpenQuery = useCallback(
+    (handler: ((sql: string) => void) | null) => {
+      openQueryRef.current = handler;
     },
     []
   );
@@ -60,13 +70,19 @@ export const EditorInsertProvider = ({ children }: { children: ReactNode }) => {
     queryTableRef.current?.(tableName);
   }, []);
 
+  const openQuery = useCallback((sql: string) => {
+    openQueryRef.current?.(sql);
+  }, []);
+
   return (
     <EditorInsertContext
       value={{
         getSelectedText,
         insertAtCursor,
+        openQuery,
         queryTable,
         registerEditor,
+        registerOpenQuery,
         registerQueryTable,
       }}
     >

@@ -1,8 +1,12 @@
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
+import type { PersistedTab, TabState } from "@/lib/persistence";
 import type { QueryTab } from "@/lib/query-types";
 
+import { appendHistory, getTabs, saveTabs } from "@/lib/persistence";
 import { executeQuery } from "@/lib/tauri";
+
+const SAVE_DEBOUNCE_MS = 500;
 
 const createNewTab = (counter: number): QueryTab => ({
   error: null,
@@ -12,6 +16,23 @@ const createNewTab = (counter: number): QueryTab => ({
   sql: "",
   status: "idle",
   title: `Query ${counter}`,
+});
+
+const toPersistedTab = (tab: QueryTab): PersistedTab => ({
+  id: tab.id,
+  sourceDialect: tab.sourceDialect,
+  sql: tab.sql,
+  title: tab.title,
+});
+
+const fromPersistedTab = (persisted: PersistedTab): QueryTab => ({
+  error: null,
+  id: persisted.id,
+  result: null,
+  sourceDialect: persisted.sourceDialect,
+  sql: persisted.sql,
+  status: "idle",
+  title: persisted.title,
 });
 
 const extractErrorMessage = (error: unknown): string => {
@@ -35,6 +56,56 @@ export const useQueryTabs = (
   const [activeTabId, setActiveTabId] = useState<string>(
     () => tabs[0]?.id ?? ""
   );
+  const [isRestored, setIsRestored] = useState(false);
+  const saveTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    const restore = async () => {
+      try {
+        const saved = await getTabs(connectionId);
+        if (saved && saved.tabs.length > 0) {
+          const restoredTabs = saved.tabs.map(fromPersistedTab);
+          counterRef.current = saved.counter;
+          setTabs(restoredTabs);
+          setActiveTabId(saved.activeTabId);
+        }
+      } catch {
+        // Fall back to default tab on restore failure
+      } finally {
+        setIsRestored(true);
+      }
+    };
+    restore();
+  }, [connectionId]);
+
+  useEffect(() => {
+    if (!isRestored) {
+      return;
+    }
+
+    if (saveTimeoutRef.current) {
+      clearTimeout(saveTimeoutRef.current);
+    }
+
+    saveTimeoutRef.current = setTimeout(async () => {
+      const state: TabState = {
+        activeTabId,
+        counter: counterRef.current,
+        tabs: tabs.map(toPersistedTab),
+      };
+      try {
+        await saveTabs(connectionId, state);
+      } catch {
+        // Silently ignore save failures
+      }
+    }, SAVE_DEBOUNCE_MS);
+
+    return () => {
+      if (saveTimeoutRef.current) {
+        clearTimeout(saveTimeoutRef.current);
+      }
+    };
+  }, [tabs, activeTabId, connectionId, isRestored]);
 
   const activeTab = tabs.find((t) => t.id === activeTabId) ?? tabs[0];
 
@@ -57,7 +128,7 @@ export const useQueryTabs = (
       setTabs((prev) => {
         const next = prev.filter((t) => t.id !== tabId);
         if (next.length === 0) {
-          counterRef.current += 1;
+          counterRef.current = 1;
           const tab = createNewTab(counterRef.current);
           setActiveTabId(tab.id);
           return [tab];
@@ -103,6 +174,11 @@ export const useQueryTabs = (
         )
       );
 
+      const startTime = performance.now();
+      let success = false;
+      let errorMessage: string | null = null;
+      let executionTimeMs = 0;
+
       try {
         const result = await executeQuery({
           connectionId,
@@ -110,6 +186,8 @@ export const useQueryTabs = (
           sourceDialect: tab?.sourceDialect ?? undefined,
           sql: sqlToExecute,
         });
+        ({ executionTimeMs } = result);
+        success = true;
         setTabs((prev) =>
           prev.map((t) =>
             t.id === tabId
@@ -119,6 +197,8 @@ export const useQueryTabs = (
         );
       } catch (error) {
         const message = extractErrorMessage(error);
+        errorMessage = message;
+        executionTimeMs = Math.round(performance.now() - startTime);
         setTabs((prev) =>
           prev.map((t) =>
             t.id === tabId
@@ -126,6 +206,20 @@ export const useQueryTabs = (
               : t
           )
         );
+      }
+
+      try {
+        await appendHistory({
+          connectionId,
+          database: selectedDatabase,
+          error: errorMessage,
+          executionTimeMs,
+          sql: sqlToExecute,
+          success,
+          timestamp: new Date().toISOString(),
+        });
+      } catch {
+        // Silently ignore history write failures
       }
     },
     [connectionId, selectedDatabase, tabs]
@@ -138,6 +232,7 @@ export const useQueryTabs = (
     addTabWithSql,
     closeTab,
     executeTab,
+    isRestored,
     setActiveTabId,
     tabs,
     updateTabDialect,

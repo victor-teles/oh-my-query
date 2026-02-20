@@ -83,11 +83,12 @@ export const WorkspaceContent = ({
     updateTabDialect,
     updateTabSql,
     executeTab,
+    isRestored,
   } = useQueryTabs(connection.id, selectedDatabase);
 
   const isSql = isSqlDatabase(connection.type);
 
-  if (isConnecting) {
+  if (!isRestored || isConnecting) {
     return (
       <div className="flex h-full flex-col items-center justify-center gap-3 bg-background">
         <Loader2 className="size-6 animate-spin text-muted-foreground" />
@@ -212,7 +213,8 @@ const ConnectedWorkspace = ({
   executeTab,
 }: ConnectedWorkspaceProps) => {
   const { setExecutionState } = useQueryExecution();
-  const { getSelectedText, registerQueryTable } = useEditorInsert();
+  const { getSelectedText, registerQueryTable, registerOpenQuery } =
+    useEditorInsert();
 
   const [isSyntaxTreeOpen, setIsSyntaxTreeOpen] = useState(false);
   const [hasSelection, setHasSelection] = useState(false);
@@ -248,6 +250,11 @@ const ConnectedWorkspace = ({
     registerQueryTable(handleQueryTable);
     return () => registerQueryTable(null);
   }, [registerQueryTable, handleQueryTable]);
+
+  useEffect(() => {
+    registerOpenQuery(addTabWithSql);
+    return () => registerOpenQuery(null);
+  }, [registerOpenQuery, addTabWithSql]);
 
   const handleExecute = useCallback(() => {
     if (activeTab) {
