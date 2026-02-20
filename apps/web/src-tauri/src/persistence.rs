@@ -1,5 +1,5 @@
 use serde::{Deserialize, Serialize};
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 use tokio::io::AsyncWriteExt;
 
 use crate::config::ConfigError;
@@ -59,14 +59,14 @@ fn history_path(connection_id: &str) -> Result<PathBuf, ConfigError> {
         .join(format!("{connection_id}.jsonl")))
 }
 
-async fn ensure_parent_dir(path: &PathBuf) -> Result<(), ConfigError> {
+async fn ensure_parent_dir(path: &Path) -> Result<(), ConfigError> {
     if let Some(parent) = path.parent() {
         tokio::fs::create_dir_all(parent).await?;
     }
     Ok(())
 }
 
-async fn enforce_history_limit(path: &PathBuf) -> Result<(), ConfigError> {
+async fn enforce_history_limit(path: &Path) -> Result<(), ConfigError> {
     let content = tokio::fs::read_to_string(path).await?;
     let lines: Vec<&str> = content.lines().collect();
     if lines.len() <= MAX_HISTORY_ENTRIES {

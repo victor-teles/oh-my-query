@@ -95,7 +95,7 @@ const DatabaseSelector = ({
         onSelect(value);
       }
     },
-    [onSelect],
+    [onSelect]
   );
 
   return (
@@ -176,7 +176,7 @@ export const WorkspaceSidebar = ({
     (e: React.ChangeEvent<HTMLInputElement>) => {
       setFilter(e.target.value);
     },
-    [],
+    []
   );
 
   useHotkey("F5", () => {
@@ -190,7 +190,7 @@ export const WorkspaceSidebar = ({
     <div
       className={cn(
         "flex h-full flex-col text-sidebar-foreground",
-        isTauri() ? "bg-transparent" : "bg-sidebar",
+        isTauri() ? "bg-transparent" : "bg-sidebar"
       )}
     >
       <div className="flex items-center justify-between px-3 py-2">
