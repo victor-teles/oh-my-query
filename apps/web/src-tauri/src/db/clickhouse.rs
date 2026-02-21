@@ -321,7 +321,9 @@ mod tests {
         assert!(is_data_query("EXISTS TABLE t"));
         assert!(is_data_query("WITH cte AS (SELECT 1) SELECT * FROM cte"));
 
-        assert!(!is_data_query("CREATE TABLE t (id UInt32) ENGINE = MergeTree() ORDER BY id"));
+        assert!(!is_data_query(
+            "CREATE TABLE t (id UInt32) ENGINE = MergeTree() ORDER BY id"
+        ));
         assert!(!is_data_query("DROP TABLE t"));
         assert!(!is_data_query("ALTER TABLE t ADD COLUMN c String"));
         assert!(!is_data_query("INSERT INTO t VALUES (1)"));
