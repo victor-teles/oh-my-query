@@ -1,13 +1,17 @@
-import { Send, Settings, Square } from "lucide-react";
+import { Settings } from "lucide-react";
 import { useCallback, useState } from "react";
 
-import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
+import type { PromptInputMessage } from "@/components/ai-elements/prompt-input";
+
 import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+  PromptInput,
+  PromptInputBody,
+  PromptInputButton,
+  PromptInputFooter,
+  PromptInputSubmit,
+  PromptInputTextarea,
+  PromptInputTools,
+} from "@/components/ai-elements/prompt-input";
 
 interface ChatInputProps {
   onSend: (message: string) => void;
@@ -33,23 +37,16 @@ export const ChatInput = ({
     []
   );
 
-  const handleSubmit = useCallback(() => {
-    const trimmed = value.trim();
-    if (!trimmed || isStreaming) {
-      return;
-    }
-    onSend(trimmed);
-    setValue("");
-  }, [value, isStreaming, onSend]);
-
-  const handleKeyDown = useCallback(
-    (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-      if (e.key === "Enter" && !e.shiftKey) {
-        e.preventDefault();
-        handleSubmit();
+  const handleSubmit = useCallback(
+    (message: PromptInputMessage) => {
+      const text = message.text?.trim();
+      if (!text) {
+        return;
       }
+      onSend(text);
+      setValue("");
     },
-    [handleSubmit]
+    [onSend]
   );
 
   if (!isConfigured) {
@@ -69,50 +66,28 @@ export const ChatInput = ({
 
   return (
     <div className="border-t p-3">
-      <div className="flex items-end gap-2">
-        <Textarea
-          value={value}
-          onChange={handleChange}
-          onKeyDown={handleKeyDown}
-          placeholder="Ask about your database..."
-          className="max-h-[200px] min-h-[44px] flex-1 resize-none"
-          rows={1}
-          disabled={isStreaming}
-        />
-        {isStreaming ? (
-          <Tooltip>
-            <TooltipTrigger
-              render={
-                <Button
-                  size="icon"
-                  variant="secondary"
-                  onClick={onStop}
-                  aria-label="Stop generating"
-                />
-              }
-            >
-              <Square className="size-4" />
-            </TooltipTrigger>
-            <TooltipContent>Stop generating</TooltipContent>
-          </Tooltip>
-        ) : (
-          <Tooltip>
-            <TooltipTrigger
-              render={
-                <Button
-                  size="icon"
-                  onClick={handleSubmit}
-                  disabled={!value.trim()}
-                  aria-label="Send message"
-                />
-              }
-            >
-              <Send className="size-4" />
-            </TooltipTrigger>
-            <TooltipContent>Send message</TooltipContent>
-          </Tooltip>
-        )}
-      </div>
+      <PromptInput onSubmit={handleSubmit}>
+        <PromptInputBody>
+          <PromptInputTextarea
+            value={value}
+            onChange={handleChange}
+            placeholder="Ask about your database..."
+            className="min-h-11"
+          />
+        </PromptInputBody>
+        <PromptInputFooter>
+          <PromptInputTools>
+            <PromptInputButton onClick={onOpenSettings} tooltip="AI Settings">
+              <Settings className="size-4" />
+            </PromptInputButton>
+          </PromptInputTools>
+          <PromptInputSubmit
+            status={isStreaming ? "streaming" : "ready"}
+            disabled={!value.trim() && !isStreaming}
+            onStop={onStop}
+          />
+        </PromptInputFooter>
+      </PromptInput>
     </div>
   );
 };

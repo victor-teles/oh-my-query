@@ -1,24 +1,29 @@
 import { MessageSquare } from "lucide-react";
-import { useEffect, useRef } from "react";
 
 import type { ChatMessage as ChatMessageType } from "@/hooks/use-ai-chat";
 
 import {
-  Empty,
-  EmptyDescription,
-  EmptyHeader,
-  EmptyMedia,
-  EmptyTitle,
-} from "@/components/ui/empty";
-import { ScrollArea } from "@/components/ui/scroll-area";
+  Conversation,
+  ConversationContent,
+  ConversationEmptyState,
+  ConversationScrollButton,
+} from "@/components/ai-elements/conversation";
+import { Suggestion, Suggestions } from "@/components/ai-elements/suggestion";
 
 import { ChatMessage } from "./chat-message";
+
+const SQL_SUGGESTIONS = [
+  "Show all tables",
+  "Count rows in each table",
+  "Describe the schema",
+];
 
 interface ChatMessageListProps {
   messages: ChatMessageType[];
   connectionName: string;
   onInsertSql?: (sql: string) => void;
   onRunSql?: (sql: string) => void;
+  onSendSuggestion?: (text: string) => void;
 }
 
 export const ChatMessageList = ({
@@ -26,45 +31,35 @@ export const ChatMessageList = ({
   connectionName,
   onInsertSql,
   onRunSql,
-}: ChatMessageListProps) => {
-  const bottomRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
-
-  if (messages.length === 0) {
-    return (
-      <div className="flex flex-1 items-center justify-center p-4">
-        <Empty>
-          <EmptyHeader>
-            <EmptyMedia variant="icon">
-              <MessageSquare />
-            </EmptyMedia>
-            <EmptyTitle>Ask a question about your data</EmptyTitle>
-            <EmptyDescription>
-              Describe what you need in plain English and get SQL queries for{" "}
-              {connectionName}
-            </EmptyDescription>
-          </EmptyHeader>
-        </Empty>
-      </div>
-    );
-  }
-
-  return (
-    <ScrollArea className="flex-1">
-      <div className="flex flex-col gap-4 p-4">
-        {messages.map((msg) => (
+  onSendSuggestion,
+}: ChatMessageListProps) => (
+  <Conversation className="flex-1">
+    <ConversationContent>
+      {messages.length === 0 ? (
+        <ConversationEmptyState
+          icon={<MessageSquare className="size-6" />}
+          title="Ask a question about your data"
+          description={`Describe what you need in plain English and get SQL queries for ${connectionName}`}
+        >
+          {onSendSuggestion && (
+            <Suggestions className="mt-4 flex-wrap justify-center">
+              {SQL_SUGGESTIONS.map((s) => (
+                <Suggestion key={s} suggestion={s} onClick={onSendSuggestion} />
+              ))}
+            </Suggestions>
+          )}
+        </ConversationEmptyState>
+      ) : (
+        messages.map((msg) => (
           <ChatMessage
             key={msg.id}
             message={msg}
             onInsertSql={onInsertSql}
             onRunSql={onRunSql}
           />
-        ))}
-        <div ref={bottomRef} />
-      </div>
-    </ScrollArea>
-  );
-};
+        ))
+      )}
+    </ConversationContent>
+    <ConversationScrollButton />
+  </Conversation>
+);

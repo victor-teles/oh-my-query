@@ -1,5 +1,3 @@
-"use client";
-
 import type { VariantProps } from "class-variance-authority";
 
 import { Button as ButtonPrimitive } from "@base-ui/react/button";
@@ -38,7 +36,7 @@ const buttonVariants = cva(
         secondary:
           "bg-secondary text-secondary-foreground hover:bg-secondary/80 aria-expanded:bg-secondary aria-expanded:text-secondary-foreground",
         toolbar:
-          "border-border bg-muted/60 text-muted-foreground shadow-xs hover:bg-muted hover:text-foreground",
+          "bg-transparent text-muted-foreground hover:bg-muted hover:text-foreground",
       },
     },
   }

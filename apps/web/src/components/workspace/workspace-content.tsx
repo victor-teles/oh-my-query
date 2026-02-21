@@ -311,10 +311,10 @@ const ConnectedWorkspace = ({
         onAddTab={addTab}
       />
 
-      <ResizablePanelGroup className="flex-1" orientation="vertical">
+      <ResizablePanelGroup className="min-h-0 flex-1" orientation="vertical">
         <ResizablePanel defaultSize="40%" minSize="15%">
           <div className="flex h-full flex-col">
-            <div className="flex-1">
+            <div className="min-h-0 flex-1">
               <EditorPanel
                 activeTab={activeTab}
                 isSql={isSql}

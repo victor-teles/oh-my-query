@@ -73,6 +73,7 @@ export const ChatSidebar = ({
         connectionName={connection.name}
         onInsertSql={handleInsertSql}
         onRunSql={handleInsertSql}
+        onSendSuggestion={sendMessage}
       />
       <ChatInput
         onSend={sendMessage}

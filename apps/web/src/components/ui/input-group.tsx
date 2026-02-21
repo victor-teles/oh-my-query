@@ -1,3 +1,5 @@
+"use client";
+
 import type { VariantProps } from "class-variance-authority";
 
 import { cva } from "class-variance-authority";
@@ -48,20 +50,23 @@ function InputGroupAddon({
   align = "inline-start",
   ...props
 }: React.ComponentProps<"div"> & VariantProps<typeof inputGroupAddonVariants>) {
+  const handleClick = React.useCallback(
+    (e: React.MouseEvent<HTMLDivElement>) => {
+      if ((e.target as HTMLElement).closest("button")) {
+        return;
+      }
+      e.currentTarget.parentElement?.querySelector("input")?.focus();
+    },
+    []
+  );
+
   return (
-    // oxlint-disable-next-line jsx_a11y/click-events-have-key-events
+    // oxlint-disable-next-line eslint-plugin-jsx-a11y(click-events-have-key-events)
     <div
-      role="group"
       data-slot="input-group-addon"
       data-align={align}
       className={cn(inputGroupAddonVariants({ align }), className)}
-      // oxlint-disable-next-line react_perf/jsx-no-new-function-as-prop
-      onClick={(e) => {
-        if ((e.target as HTMLElement).closest("button")) {
-          return;
-        }
-        e.currentTarget.parentElement?.querySelector("input")?.focus();
-      }}
+      onClick={handleClick}
       {...props}
     />
   );
