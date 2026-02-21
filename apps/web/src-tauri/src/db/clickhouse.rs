@@ -61,14 +61,51 @@ impl ClickHouseConnection {
         })
     }
 
+    async fn execute_mutation(
+        &self,
+        sql: &str,
+        database_override: Option<&str>,
+    ) -> Result<(), DbError> {
+        let db = database_override.unwrap_or(&self.database);
+
+        let mut request = self
+            .client
+            .post(&self.base_url)
+            .query(&[("database", db)])
+            .body(sql.to_string());
+
+        if !self.username.is_empty() {
+            request = request.basic_auth(&self.username, Some(&self.password));
+        }
+
+        let response = request.send().await.map_err(DbError::from)?;
+
+        if !response.status().is_success() {
+            let body = response.text().await.unwrap_or_default();
+            return Err(DbError {
+                code: "CLICKHOUSE_ERROR".to_string(),
+                message: body,
+            });
+        }
+
+        Ok(())
+    }
+
     pub async fn query(
         &self,
         sql: &str,
         database_override: Option<&str>,
         max_rows: Option<usize>,
     ) -> Result<(Vec<ColumnInfo>, Vec<Vec<serde_json::Value>>, u64, bool), DbError> {
+        let sql_clean = sql.trim().trim_end_matches(';').trim();
+
+        if !is_data_query(sql_clean) {
+            self.execute_mutation(sql_clean, database_override).await?;
+            return Ok((vec![], vec![], 0, false));
+        }
+
         let db = database_override.unwrap_or(&self.database);
-        let query_with_format = format!("{sql} FORMAT JSON");
+        let query_with_format = format!("{sql_clean} FORMAT JSON");
 
         let mut request = self
             .client
@@ -170,6 +207,17 @@ impl ClickHouseConnection {
     }
 }
 
+fn is_data_query(sql: &str) -> bool {
+    let upper = sql.trim_start().to_uppercase();
+    upper.starts_with("SELECT")
+        || upper.starts_with("SHOW")
+        || upper.starts_with("DESCRIBE")
+        || upper.starts_with("DESC ")
+        || upper.starts_with("EXPLAIN")
+        || upper.starts_with("EXISTS")
+        || upper.starts_with("WITH")
+}
+
 fn normalize_value(val: serde_json::Value) -> serde_json::Value {
     match &val {
         serde_json::Value::Array(_) | serde_json::Value::Object(_) => {
@@ -260,5 +308,23 @@ mod tests {
             result,
             serde_json::Value::String("{\"key\":\"val\"}".into())
         );
+    }
+
+    #[test]
+    fn test_is_data_query() {
+        assert!(is_data_query("SELECT * FROM t"));
+        assert!(is_data_query("  select 1"));
+        assert!(is_data_query("SHOW DATABASES"));
+        assert!(is_data_query("DESCRIBE TABLE t"));
+        assert!(is_data_query("DESC t"));
+        assert!(is_data_query("EXPLAIN SELECT 1"));
+        assert!(is_data_query("EXISTS TABLE t"));
+        assert!(is_data_query("WITH cte AS (SELECT 1) SELECT * FROM cte"));
+
+        assert!(!is_data_query("CREATE TABLE t (id UInt32) ENGINE = MergeTree() ORDER BY id"));
+        assert!(!is_data_query("DROP TABLE t"));
+        assert!(!is_data_query("ALTER TABLE t ADD COLUMN c String"));
+        assert!(!is_data_query("INSERT INTO t VALUES (1)"));
+        assert!(!is_data_query("TRUNCATE TABLE t"));
     }
 }
