@@ -7,6 +7,7 @@ pub struct AppConfig {
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
+#[serde(rename_all = "camelCase")]
 pub struct AISettings {
     pub provider: String,
     pub api_key: String,

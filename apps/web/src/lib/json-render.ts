@@ -1,7 +1,12 @@
 import type { Components } from "@json-render/react";
 
 import { defineCatalog } from "@json-render/core";
-import { defineRegistry, Renderer, schema } from "@json-render/react";
+import {
+  defineRegistry,
+  JSONUIProvider,
+  Renderer,
+  schema,
+} from "@json-render/react";
 import { shadcnComponents } from "@json-render/shadcn";
 import { shadcnComponentDefinitions } from "@json-render/shadcn/catalog";
 
@@ -50,4 +55,4 @@ const { registry } = defineRegistry(catalog, {
   } as unknown as Components<AppCatalog>,
 });
 
-export { Renderer, registry };
+export { JSONUIProvider, Renderer, registry };

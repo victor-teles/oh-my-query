@@ -9,7 +9,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { Renderer, registry } from "@/lib/json-render";
+import { JSONUIProvider, Renderer, registry } from "@/lib/json-render";
 
 interface UIRenderBlockProps {
   code: string;
@@ -115,7 +115,9 @@ export const UIRenderBlock = ({ code }: UIRenderBlockProps) => {
       </div>
       {!collapsed && (
         <div className="p-3">
-          <Renderer spec={spec} registry={registry} />
+          <JSONUIProvider registry={registry}>
+            <Renderer spec={spec} registry={registry} />
+          </JSONUIProvider>
         </div>
       )}
     </div>
