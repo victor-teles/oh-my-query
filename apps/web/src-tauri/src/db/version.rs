@@ -56,5 +56,14 @@ pub async fn fetch_version(pool: &DatabasePool) -> Result<String, DbError> {
                 .trim();
             Ok(format!("Redis {version}"))
         }
+        DatabasePool::ClickHouse(conn) => {
+            let (_, rows, _, _) = conn.query("SELECT version()", None, None).await?;
+            let ver = rows
+                .first()
+                .and_then(|row| row.first())
+                .and_then(|v| v.as_str())
+                .unwrap_or("unknown");
+            Ok(format!("ClickHouse {ver}"))
+        }
     }
 }

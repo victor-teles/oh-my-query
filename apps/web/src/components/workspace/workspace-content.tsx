@@ -47,9 +47,14 @@ import { SqlEditor } from "./sql-editor";
 import { SyntaxTreePanel } from "./syntax-tree-panel";
 import { SyntaxTreeToggle } from "./syntax-tree-toggle";
 
-type SqlDialect = "postgresql" | "mysql" | "sqlite";
+type SqlDialect = "postgresql" | "mysql" | "sqlite" | "clickhouse";
 
-const SQL_DIALECTS = new Set<string>(["postgresql", "mysql", "sqlite"]);
+const SQL_DIALECTS = new Set<string>([
+  "postgresql",
+  "mysql",
+  "sqlite",
+  "clickhouse",
+]);
 
 const resolveEditorDialect = (
   sourceDialect: string | null,
@@ -144,7 +149,7 @@ const EditorPanel = ({
         onExecute={onExecute}
         onUpdate={onEditorUpdate}
         onToggleSyntaxTree={onToggleSyntaxTree}
-        databaseType={connectionType as "postgresql" | "mysql" | "sqlite"}
+        databaseType={connectionType as SqlDialect}
         writingDialect={editorDialect}
         schema={schema}
       />

@@ -9,6 +9,7 @@ pub fn pool_dialect(pool: &DatabasePool) -> DialectType {
         DatabasePool::Postgres(_) => DialectType::PostgreSQL,
         DatabasePool::MySql(_) => DialectType::MySQL,
         DatabasePool::Sqlite(_) => DialectType::SQLite,
+        DatabasePool::ClickHouse(_) => DialectType::ClickHouse,
         _ => unreachable!("transpile only applies to SQL pools"),
     }
 }

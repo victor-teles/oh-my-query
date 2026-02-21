@@ -1,3 +1,4 @@
+mod clickhouse;
 mod mongodb;
 mod redis;
 mod sql;
@@ -26,5 +27,8 @@ pub async fn execute_for_pool(
         }
         DatabasePool::MongoDB(client) => mongodb::execute_mongodb(client, command, max_rows).await,
         DatabasePool::Redis(conn) => redis::execute_redis(&mut conn.clone(), command).await,
+        DatabasePool::ClickHouse(conn) => {
+            clickhouse::execute_clickhouse(conn, command, max_rows, schema).await
+        }
     }
 }

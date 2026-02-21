@@ -2,6 +2,7 @@ use std::collections::HashMap;
 
 use tokio::sync::Mutex;
 
+use crate::db::clickhouse::ClickHouseConnection;
 use crate::db::error::DbError;
 use crate::db::mongodb_driver::build_mongodb_uri;
 use crate::db::redis_driver::build_redis_url;
@@ -14,6 +15,7 @@ pub enum DatabasePool {
     Sqlite(sqlx::SqlitePool),
     MongoDB(mongodb::Client),
     Redis(redis::aio::MultiplexedConnection),
+    ClickHouse(ClickHouseConnection),
 }
 
 impl DatabasePool {
@@ -22,7 +24,7 @@ impl DatabasePool {
             DatabasePool::Postgres(pool) => pool.close().await,
             DatabasePool::MySql(pool) => pool.close().await,
             DatabasePool::Sqlite(pool) => pool.close().await,
-            DatabasePool::MongoDB(_) | DatabasePool::Redis(_) => {}
+            DatabasePool::MongoDB(_) | DatabasePool::Redis(_) | DatabasePool::ClickHouse(_) => {}
         }
     }
 }
@@ -119,6 +121,10 @@ async fn connect_native(params: &ConnectionParams) -> Result<DatabasePool, DbErr
                 .map_err(DbError::from)?;
             Ok(DatabasePool::Redis(conn))
         }
+        "clickhouse" => {
+            let conn = ClickHouseConnection::new(params)?;
+            Ok(DatabasePool::ClickHouse(conn))
+        }
         other => Err(DbError {
             code: "UNSUPPORTED_DRIVER".to_string(),
             message: format!("Unsupported database type: {other}"),
@@ -158,6 +164,9 @@ async fn verify_connection(pool: &DatabasePool) -> Result<(), DbError> {
                 .query_async(&mut conn.clone())
                 .await
                 .map_err(DbError::from)?;
+        }
+        DatabasePool::ClickHouse(conn) => {
+            conn.ping().await?;
         }
     }
     Ok(())

@@ -1,5 +1,6 @@
 use async_trait::async_trait;
 
+use crate::db::clickhouse::ClickHouseDriver;
 use crate::db::error::DbError;
 use crate::db::mongodb_driver::MongoDbDriver;
 use crate::db::mysql::MysqlDriver;
@@ -23,6 +24,7 @@ pub fn get_driver(db_type: &str) -> Result<Box<dyn DatabaseDriver>, DbError> {
         "sqlite" => Ok(Box::new(SqliteDriver)),
         "mongodb" => Ok(Box::new(MongoDbDriver)),
         "redis" => Ok(Box::new(RedisDriver)),
+        "clickhouse" => Ok(Box::new(ClickHouseDriver)),
         other => Err(DbError {
             code: "UNSUPPORTED_DRIVER".to_string(),
             message: format!("Unsupported database type: {other}"),

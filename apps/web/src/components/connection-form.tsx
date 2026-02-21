@@ -67,6 +67,7 @@ const DATABASE_OPTIONS: { value: DatabaseType; label: string }[] = [
   { label: "PostgreSQL", value: "postgresql" },
   { label: "MySQL", value: "mysql" },
   { label: "SQLite", value: "sqlite" },
+  { label: "ClickHouse", value: "clickhouse" },
   { label: "MongoDB", value: "mongodb" },
   { label: "Redis", value: "redis" },
 ];
@@ -74,12 +75,14 @@ const DATABASE_OPTIONS: { value: DatabaseType; label: string }[] = [
 const NEEDS_HOST = new Set<DatabaseType>([
   "postgresql",
   "mysql",
+  "clickhouse",
   "mongodb",
   "redis",
 ]);
 const NEEDS_USERNAME = new Set<DatabaseType>([
   "postgresql",
   "mysql",
+  "clickhouse",
   "mongodb",
 ]);
 
@@ -91,6 +94,16 @@ const getDatabaseLabel = (type: DatabaseType): string => {
     return "Database index (0-15)";
   }
   return "Database";
+};
+
+const getUsernamePlaceholder = (type: DatabaseType): string => {
+  if (type === "mongodb") {
+    return "";
+  }
+  if (type === "clickhouse") {
+    return "default";
+  }
+  return "postgres";
 };
 
 const getDatabasePlaceholder = (type: DatabaseType): string => {
@@ -318,7 +331,7 @@ export const ConnectionForm = ({
           <Label htmlFor="conn-username">Username</Label>
           <Input
             id="conn-username"
-            placeholder={form.type === "mongodb" ? "" : "postgres"}
+            placeholder={getUsernamePlaceholder(form.type)}
             value={form.username}
             onChange={updateField("username")}
           />
