@@ -8,6 +8,7 @@ import type { ChatMessage as ChatMessageType } from "@/hooks/use-ai-chat";
 import { cn } from "@/lib/utils";
 
 import { SqlCodeBlock } from "./sql-code-block";
+import { UIRenderBlock } from "./ui-render-block";
 
 interface ChatMessageProps {
   message: ChatMessageType;
@@ -68,6 +69,10 @@ const AssistantMessage = ({
         return (
           <SqlCodeBlock code={code} onInsert={onInsertSql} onRun={onRunSql} />
         );
+      }
+
+      if (lang === "jsonrender") {
+        return <UIRenderBlock code={code} />;
       }
 
       if (lang) {
