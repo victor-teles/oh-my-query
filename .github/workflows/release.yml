@@ -75,7 +75,7 @@ jobs:
         with:
           projectPath: apps/web
           tagName: ${{ github.ref_name }}
-          releaseName: "oh-my-query ${{ github.ref_name }}"
+          releaseName: "oh_my_query ${{ github.ref_name }}"
           releaseBody: "See assets below to download. Install via Homebrew: `brew install --cask victor-teles/tap/oh-my-query`"
           releaseDraft: false
           prerelease: false
@@ -96,8 +96,8 @@ jobs:
           VERSION="${{ steps.version.outputs.version }}"
           BASE="https://github.com/victor-teles/oh-my-query/releases/download/${{ github.ref_name }}"
 
-          curl -sL "${BASE}/oh-my-query_${VERSION}_aarch64.dmg" -o arm64.dmg
-          curl -sL "${BASE}/oh-my-query_${VERSION}_x64.dmg" -o x64.dmg
+          curl -sL "${BASE}/oh_my_query_${VERSION}_aarch64.dmg" -o arm64.dmg
+          curl -sL "${BASE}/oh_my_query_${VERSION}_x64.dmg" -o x64.dmg
 
           echo "aarch64_sha=$(shasum -a 256 arm64.dmg | awk '{print $1}')" >> $GITHUB_OUTPUT
           echo "x64_sha=$(shasum -a 256 x64.dmg | awk '{print $1}')" >> $GITHUB_OUTPUT
