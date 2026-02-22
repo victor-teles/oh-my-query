@@ -1,6 +1,6 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
-  "productName": "oh-my-query",
+  "productName": "oh_my_query",
   "version": "0.0.4",
   "identifier": "dev.ohmyquery.app",
   "build": {
@@ -13,7 +13,7 @@
     "macOSPrivateApi": true,
     "windows": [
       {
-        "title": "oh-my-query",
+        "title": "Oh my query",
         "width": 1280,
         "height": 860,
         "resizable": true,
@@ -23,9 +23,7 @@
         "hiddenTitle": true,
         "transparent": true,
         "windowEffects": {
-          "effects": [
-            "sidebar"
-          ],
+          "effects": ["sidebar"],
           "state": "followsWindowActiveState"
         }
       }
