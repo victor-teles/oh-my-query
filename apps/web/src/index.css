@@ -1,6 +1,7 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
+@import "streamdown/styles.css";
 
 :root {
   --background: oklch(0.9821 0 0);
@@ -42,11 +43,11 @@
 }
 
 .dark {
-  --background: oklch(0.1776 0 0);
+  --background: oklch(18.2% 0.00699 34.3deg);
   --foreground: oklch(0.9491 0 0);
-  --card: oklch(0.2134 0 0);
+  --card: oklch(28% 0.00696 48.5deg);
   --card-foreground: oklch(0.9491 0 0);
-  --popover: oklch(0.2134 0 0);
+  --popover: oklch(28% 0.00696 48.5deg);
   --popover-foreground: oklch(0.9491 0 0);
   --primary: oklch(0.9247 0.0524 66.1732);
   --primary-foreground: oklch(0.2029 0.024 200.1962);
@@ -54,7 +55,7 @@
   --secondary-foreground: oklch(0.9247 0.0524 66.1732);
   --muted: oklch(0.252 0 0);
   --muted-foreground: oklch(0.7699 0 0);
-  --accent: oklch(0.285 0 0);
+  --accent: oklch(32.1% 0.0084 48.4deg);
   --accent-foreground: oklch(0.9491 0 0);
   --destructive: oklch(0.6271 0.1936 33.339);
   --destructive-foreground: oklch(1 0 0);
