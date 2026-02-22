@@ -58,9 +58,30 @@ Built with Tauri v2 for a true macOS-native feel. Vibrancy effects, a Dynamic Is
 
 <br />
 
-## Getting Started
+## Installation
 
-**Prerequisites** — [Bun](https://bun.sh) (v1.3.9+) and [Rust](https://rustup.rs) (for the desktop app).
+### Homebrew (recommended)
+
+```bash
+brew install --cask victor-teles/tap/oh-my-query
+```
+
+### Manual download
+
+Download the latest `.dmg` from the [GitHub Releases](https://github.com/victor-teles/oh-my-query/releases) page. Open the DMG and drag **Oh my query** to your Applications folder.
+
+> Available for macOS (Apple Silicon and Intel).
+
+<br />
+
+## Development
+
+### Prerequisites
+
+- [Bun](https://bun.sh) v1.3.9+
+- [Rust](https://rustup.rs) (for the desktop app)
+
+### Getting started
 
 ```bash
 # Install dependencies
