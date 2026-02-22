@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 import type { DatabaseConnection } from "@/lib/connections";
 import type { SchemaInfo } from "@/lib/tauri";
 
+import { Suggestion, Suggestions } from "@/components/ai-elements/suggestion";
 import { Button } from "@/components/ui/button";
 import { AISettingsDialog } from "@/components/workspace/ai-settings-dialog";
 import { useEditorInsert } from "@/contexts/editor-insert-context";
@@ -12,6 +13,12 @@ import { hasAISettings } from "@/lib/ai-settings";
 
 import { ChatInput } from "./chat-input";
 import { ChatMessageList } from "./chat-message-list";
+
+const SQL_SUGGESTIONS = [
+  "Show all tables",
+  "Count rows in each table",
+  "Describe the schema",
+];
 
 interface ChatSidebarProps {
   connection: DatabaseConnection;
@@ -29,7 +36,7 @@ export const ChatSidebar = ({
     schema,
   });
 
-  const { insertAtCursor } = useEditorInsert();
+  const { insertAtCursor, openQuery } = useEditorInsert();
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [isConfigured, setIsConfigured] = useState(false);
 
@@ -46,6 +53,13 @@ export const ChatSidebar = ({
       insertAtCursor(sql);
     },
     [insertAtCursor]
+  );
+
+  const handleRunSql = useCallback(
+    (sql: string) => {
+      openQuery(sql);
+    },
+    [openQuery]
   );
 
   const handleOpenSettings = useCallback(() => {
@@ -72,9 +86,15 @@ export const ChatSidebar = ({
         messages={messages}
         connectionName={connection.name}
         onInsertSql={handleInsertSql}
-        onRunSql={handleInsertSql}
-        onSendSuggestion={sendMessage}
+        onRunSql={handleRunSql}
       />
+      {messages.length === 0 && (
+        <Suggestions className="flex-wrap justify-center px-3 pb-2">
+          {SQL_SUGGESTIONS.map((s) => (
+            <Suggestion key={s} suggestion={s} onClick={sendMessage} />
+          ))}
+        </Suggestions>
+      )}
       <ChatInput
         onSend={sendMessage}
         onStop={stopStreaming}
