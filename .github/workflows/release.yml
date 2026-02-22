@@ -48,7 +48,7 @@ jobs:
           projectPath: apps/web
           tagName: ${{ github.ref_name }}
           releaseName: "oh-my-query ${{ github.ref_name }}"
-          releaseBody: "See assets below to download. Install via Homebrew: `brew install --cask victor-teles/oh-my-query/oh-my-query`"
+          releaseBody: "See assets below to download. Install via Homebrew: `brew install --cask victor-teles/tap/oh-my-query`"
           releaseDraft: false
           prerelease: false
           args: --target ${{ matrix.target }}
@@ -78,7 +78,7 @@ jobs:
         uses: peter-evans/repository-dispatch@v3
         with:
           token: ${{ secrets.HOMEBREW_TAP_TOKEN }}
-          repository: victor-teles/homebrew-oh-my-query
+          repository: victor-teles/homebrew-tap
           event-type: update-cask
           client-payload: |
             {
