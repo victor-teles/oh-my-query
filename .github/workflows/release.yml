@@ -10,8 +10,34 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  bump-version:
+    name: Bump version from tag
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Bump version in config files
+        run: |
+          VERSION="${GITHUB_REF_NAME#v}"
+          jq --arg v "$VERSION" '.version = $v' apps/web/src-tauri/tauri.conf.json > tmp.json && mv tmp.json apps/web/src-tauri/tauri.conf.json
+          sed -i "s/^version = \".*\"/version = \"$VERSION\"/" apps/web/src-tauri/Cargo.toml
+
+      - name: Commit version bump
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add apps/web/src-tauri/tauri.conf.json apps/web/src-tauri/Cargo.toml
+          git diff --staged --quiet && exit 0
+          git commit -m "chore: bump version to ${GITHUB_REF_NAME#v}"
+          git push origin main
+
   build-macos:
     name: Build macOS (${{ matrix.label }})
+    needs: bump-version
     permissions:
       contents: write
     strategy:
@@ -25,6 +51,8 @@ jobs:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: main
 
       - uses: oven-sh/setup-bun@v2
         with:
