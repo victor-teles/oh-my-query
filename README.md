@@ -16,6 +16,11 @@ A modern database client for querying with AI.
 
 <br />
 
+> [!WARNING]
+> This project is under active development. Features may change, break, or be incomplete. Use at your own risk.
+
+<br />
+
 oh-my-query is a native desktop database client with a built-in AI assistant. Connect to your databases, explore schemas, write queries with intelligent autocomplete, and let AI help you along the way — all wrapped in a macOS-native interface with vibrancy effects and a glassmorphism design.
 
 <br />
