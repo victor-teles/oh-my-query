@@ -123,7 +123,7 @@ interface EditorPanelProps {
   onSqlChange: (val: string) => void;
   onExecute: () => void;
   onEditorUpdate: (update: ViewUpdate) => void;
-  onToggleSyntaxTree: () => void;
+  onToggleSyntaxTree?: () => void;
 }
 
 const EditorPanel = ({
@@ -196,8 +196,9 @@ const ConnectedWorkspace = ({
 
   const [isSyntaxTreeOpen, setIsSyntaxTreeOpen] = useState(false);
   const [hasSelection, setHasSelection] = useState(false);
+  const syntaxTreeEnabled = import.meta.env.DEV && isSyntaxTreeOpen;
   const { treeData, handleEditorUpdate: handleSyntaxTreeUpdate } =
-    useSyntaxTree(isSyntaxTreeOpen);
+    useSyntaxTree(syntaxTreeEnabled);
 
   const toggleSyntaxTree = useCallback(() => {
     setIsSyntaxTreeOpen((prev) => !prev);
@@ -244,7 +245,7 @@ const ConnectedWorkspace = ({
 
   const handleEditorUpdate = useCallback(
     (update: ViewUpdate) => {
-      if (isSyntaxTreeOpen) {
+      if (syntaxTreeEnabled) {
         handleSyntaxTreeUpdate(update);
       }
       if (update.selectionSet) {
@@ -252,7 +253,7 @@ const ConnectedWorkspace = ({
         setHasSelection(from !== to);
       }
     },
-    [isSyntaxTreeOpen, handleSyntaxTreeUpdate]
+    [syntaxTreeEnabled, handleSyntaxTreeUpdate]
   );
 
   const editorDialect = resolveEditorDialect(
@@ -324,7 +325,9 @@ const ConnectedWorkspace = ({
                 onSqlChange={handleSqlChange}
                 onExecute={handleExecute}
                 onEditorUpdate={handleEditorUpdate}
-                onToggleSyntaxTree={toggleSyntaxTree}
+                onToggleSyntaxTree={
+                  import.meta.env.DEV ? toggleSyntaxTree : undefined
+                }
               />
             </div>
           </div>
@@ -341,7 +344,7 @@ const ConnectedWorkspace = ({
             onDialectChange={handleDialectChange}
             isFormatDisabled={!activeTab?.sql.trim()}
             onFormat={handleFormat}
-            isSyntaxTreeOpen={isSyntaxTreeOpen}
+            isSyntaxTreeOpen={syntaxTreeEnabled}
             onToggleSyntaxTree={toggleSyntaxTree}
             isRunning={activeTab?.status === "running"}
             isExecuteDisabled={!activeTab?.sql.trim()}
@@ -349,7 +352,7 @@ const ConnectedWorkspace = ({
             onExecute={handleExecute}
           />
           <BottomPanel
-            isSyntaxTreeOpen={isSyntaxTreeOpen}
+            isSyntaxTreeOpen={syntaxTreeEnabled}
             treeData={treeData}
             status={activeTab?.status}
             result={activeTab?.result ?? null}
@@ -408,10 +411,12 @@ const EditorToolbar = ({
       {isSql && (
         <>
           <FormatButton disabled={isFormatDisabled} onClick={onFormat} />
-          <SyntaxTreeToggle
-            isOpen={isSyntaxTreeOpen}
-            onToggle={onToggleSyntaxTree}
-          />
+          {import.meta.env.DEV && (
+            <SyntaxTreeToggle
+              isOpen={isSyntaxTreeOpen}
+              onToggle={onToggleSyntaxTree}
+            />
+          )}
         </>
       )}
       <ExecuteButton

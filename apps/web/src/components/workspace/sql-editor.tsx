@@ -96,7 +96,7 @@ export const SqlEditor = ({
     () => {
       onToggleSyntaxTree?.();
     },
-    { enabled: !!onToggleSyntaxTree }
+    { enabled: import.meta.env.DEV && !!onToggleSyntaxTree }
   );
 
   const effectiveDialect = writingDialect ?? databaseType;
