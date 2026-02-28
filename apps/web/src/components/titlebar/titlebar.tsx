@@ -26,7 +26,7 @@ export const Titlebar = ({
     <header
       className={cn(
         "flex h-9.5 shrink-0 select-none items-center",
-        !hasSidebar && "border-b border-sidebar-border bg-sidebar-background",
+        !hasSidebar && "border-b border-sidebar-border bg-sidebar/80",
         className
       )}
       data-tauri-drag-region=""

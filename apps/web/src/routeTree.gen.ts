@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as DefaultRouteImport } from './routes/_default'
 import { Route as DefaultIndexRouteImport } from './routes/_default/index'
 import { Route as WorkspaceConnectionIdRouteImport } from './routes/workspace/$connectionId'
+import { Route as DefaultSettingsRouteImport } from './routes/_default/settings'
 import { Route as DefaultOnboardingRouteImport } from './routes/_default/onboarding'
 
 const DefaultRoute = DefaultRouteImport.update({
@@ -28,6 +29,11 @@ const WorkspaceConnectionIdRoute = WorkspaceConnectionIdRouteImport.update({
   path: '/workspace/$connectionId',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DefaultSettingsRoute = DefaultSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => DefaultRoute,
+} as any)
 const DefaultOnboardingRoute = DefaultOnboardingRouteImport.update({
   id: '/onboarding',
   path: '/onboarding',
@@ -37,10 +43,12 @@ const DefaultOnboardingRoute = DefaultOnboardingRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof DefaultIndexRoute
   '/onboarding': typeof DefaultOnboardingRoute
+  '/settings': typeof DefaultSettingsRoute
   '/workspace/$connectionId': typeof WorkspaceConnectionIdRoute
 }
 export interface FileRoutesByTo {
   '/onboarding': typeof DefaultOnboardingRoute
+  '/settings': typeof DefaultSettingsRoute
   '/workspace/$connectionId': typeof WorkspaceConnectionIdRoute
   '/': typeof DefaultIndexRoute
 }
@@ -48,18 +56,20 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_default': typeof DefaultRouteWithChildren
   '/_default/onboarding': typeof DefaultOnboardingRoute
+  '/_default/settings': typeof DefaultSettingsRoute
   '/workspace/$connectionId': typeof WorkspaceConnectionIdRoute
   '/_default/': typeof DefaultIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/onboarding' | '/workspace/$connectionId'
+  fullPaths: '/' | '/onboarding' | '/settings' | '/workspace/$connectionId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/onboarding' | '/workspace/$connectionId' | '/'
+  to: '/onboarding' | '/settings' | '/workspace/$connectionId' | '/'
   id:
     | '__root__'
     | '/_default'
     | '/_default/onboarding'
+    | '/_default/settings'
     | '/workspace/$connectionId'
     | '/_default/'
   fileRoutesById: FileRoutesById
@@ -92,6 +102,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof WorkspaceConnectionIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_default/settings': {
+      id: '/_default/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof DefaultSettingsRouteImport
+      parentRoute: typeof DefaultRoute
+    }
     '/_default/onboarding': {
       id: '/_default/onboarding'
       path: '/onboarding'
@@ -104,11 +121,13 @@ declare module '@tanstack/react-router' {
 
 interface DefaultRouteChildren {
   DefaultOnboardingRoute: typeof DefaultOnboardingRoute
+  DefaultSettingsRoute: typeof DefaultSettingsRoute
   DefaultIndexRoute: typeof DefaultIndexRoute
 }
 
 const DefaultRouteChildren: DefaultRouteChildren = {
   DefaultOnboardingRoute: DefaultOnboardingRoute,
+  DefaultSettingsRoute: DefaultSettingsRoute,
   DefaultIndexRoute: DefaultIndexRoute,
 }
 

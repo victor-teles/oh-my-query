@@ -47,6 +47,7 @@
         "@tanstack/react-table": "^8.21.3",
         "@tauri-apps/api": "^2.10.1",
         "@uiw/codemirror-theme-github": "^4.25.4",
+        "@uiw/codemirror-themes-all": "^4.25.5",
         "@uiw/react-codemirror": "^4.25.4",
         "ai": "^6.0.97",
         "class-variance-authority": "^0.7.1",
@@ -841,9 +842,79 @@
 
     "@uiw/codemirror-extensions-basic-setup": ["@uiw/codemirror-extensions-basic-setup@4.25.4", "", { "dependencies": { "@codemirror/autocomplete": "^6.0.0", "@codemirror/commands": "^6.0.0", "@codemirror/language": "^6.0.0", "@codemirror/lint": "^6.0.0", "@codemirror/search": "^6.0.0", "@codemirror/state": "^6.0.0", "@codemirror/view": "^6.0.0" } }, "sha512-YzNwkm0AbPv1EXhCHYR5v0nqfemG2jEB0Z3Att4rBYqKrlG7AA9Rhjc3IyBaOzsBu18wtrp9/+uhTyu7TXSRng=="],
 
+    "@uiw/codemirror-theme-abcdef": ["@uiw/codemirror-theme-abcdef@4.25.5", "", { "dependencies": { "@uiw/codemirror-themes": "4.25.5" } }, "sha512-QyYTRLHLrGgaQ+O0/rmk4UQ5tU+woYlOVdX1iH4S/XekghHt0O7RtAke+Of5LlrMMXhdz831tN9+cr0b2R5yrA=="],
+
+    "@uiw/codemirror-theme-abyss": ["@uiw/codemirror-theme-abyss@4.25.5", "", { "dependencies": { "@uiw/codemirror-themes": "4.25.5" } }, "sha512-4mZPCxc85w3jH2UeS4d9RqawNvfJZ5Rk+jy/5ZAMzE8pZ7BmlkkemTpq2n1/xSon4JMFih57rPSEhaSTq2Sheg=="],
+
+    "@uiw/codemirror-theme-androidstudio": ["@uiw/codemirror-theme-androidstudio@4.25.5", "", { "dependencies": { "@uiw/codemirror-themes": "4.25.5" } }, "sha512-EPqBsJfcm2sykjpXcBb0ANojp5jEqFWCIijXFA/4DjiT3BWTp+lWfDz8tvC6EAacpLAw72Lff4swV8+uVYuQZg=="],
+
+    "@uiw/codemirror-theme-andromeda": ["@uiw/codemirror-theme-andromeda@4.25.5", "", { "dependencies": { "@uiw/codemirror-themes": "4.25.5" } }, "sha512-22fbIskJcStmCxcZ23TBSJXoRh79CkQ5JbXntctPtImyFtTqvhFlqKhdsqjZV9iQKDNS8MZM8HgZ9TuXr/ZshA=="],
+
+    "@uiw/codemirror-theme-atomone": ["@uiw/codemirror-theme-atomone@4.25.5", "", { "dependencies": { "@uiw/codemirror-themes": "4.25.5" } }, "sha512-xazbBg6pRo5nY3Y5qf0aCgzKAsRrpYQtNGdC8bPQNHRVeAHSdRC3Ur2LTgKLFPZOCYM15BwK0xcHNwY/kXxf5A=="],
+
+    "@uiw/codemirror-theme-aura": ["@uiw/codemirror-theme-aura@4.25.5", "", { "dependencies": { "@uiw/codemirror-themes": "4.25.5" } }, "sha512-NUiLToPCA0RutAi0mRpf9tq//+7Va3oEu7fkXjdDnCvxQ2iuVX+KcQuYB9m7qxNu3XhoTYGoiapSeazhMhOX0w=="],
+
+    "@uiw/codemirror-theme-basic": ["@uiw/codemirror-theme-basic@4.25.5", "", { "dependencies": { "@uiw/codemirror-themes": "4.25.5" } }, "sha512-UREiY7NEFMjeBOGp8ssKf1jx8uDMWxGHjZV2myee+llPCPvPzfWq8Oa6ACFhilByl/poJ7KM1GjvrdYEJNY9eA=="],
+
+    "@uiw/codemirror-theme-bbedit": ["@uiw/codemirror-theme-bbedit@4.25.5", "", { "dependencies": { "@uiw/codemirror-themes": "4.25.5" } }, "sha512-6B8ebidbja0RqIx1n5/pq/ssGXB989Tiq2BG5QM2/KRCIwvMnmrRvrjRt8sryirlhw+gS5fKeaITL6CfyjzdKg=="],
+
+    "@uiw/codemirror-theme-bespin": ["@uiw/codemirror-theme-bespin@4.25.5", "", { "dependencies": { "@uiw/codemirror-themes": "4.25.5" } }, "sha512-RaolTBN6EmxbUSsX754QCBkWWq9TU8YETtuA5gduCZRboNxtfFE1fIkF2oKDMXJQpLv9ouTmf3s8n9REhEPyxw=="],
+
+    "@uiw/codemirror-theme-console": ["@uiw/codemirror-theme-console@4.25.5", "", { "dependencies": { "@uiw/codemirror-themes": "4.25.5" } }, "sha512-YSAfNMG2Zt9Fey2Njc8gtu9MAjfJ6mksV5t7BBjE9HeeBSy1EvninoFfO/pfN5OGSk+ndm6dfx0KvXEcj2/4Gw=="],
+
+    "@uiw/codemirror-theme-copilot": ["@uiw/codemirror-theme-copilot@4.25.5", "", { "dependencies": { "@uiw/codemirror-themes": "4.25.5" } }, "sha512-mGMlHNJoHIec9mbJ1q69pmwpJAGGh+ejgfg1q3QNnTEu+mI1MiylekSgH48q7cv5nxaoLrARsCoJ0h9AxLpIbQ=="],
+
+    "@uiw/codemirror-theme-darcula": ["@uiw/codemirror-theme-darcula@4.25.5", "", { "dependencies": { "@uiw/codemirror-themes": "4.25.5" } }, "sha512-StEvIU2DV1a+SnVpLdD3voQ70FoIGwllYDnQH19WCO8STNEdS52P0+79Vpt0aPtl9sNSRhIh9AHyXie3Osp/nA=="],
+
+    "@uiw/codemirror-theme-dracula": ["@uiw/codemirror-theme-dracula@4.25.5", "", { "dependencies": { "@uiw/codemirror-themes": "4.25.5" } }, "sha512-3sRgqSB6egzoZZt+5sBgvkHMQns7XmzVUdsZTgoWzBCK8sFplbNnDI8RfBy2wZNGwnCFANnkryAkZVRVv4brVw=="],
+
+    "@uiw/codemirror-theme-duotone": ["@uiw/codemirror-theme-duotone@4.25.5", "", { "dependencies": { "@uiw/codemirror-themes": "4.25.5" } }, "sha512-nlRjWzvidJ3nZ3fgtrKlQKhvWwuSgLdUIX5lvXTByL8vwz8Ogt+gNma26W+XxE3dCdUbjB/bCxN2ekS90prj1g=="],
+
+    "@uiw/codemirror-theme-eclipse": ["@uiw/codemirror-theme-eclipse@4.25.5", "", { "dependencies": { "@uiw/codemirror-themes": "4.25.5" } }, "sha512-L8n1MKNcNvKH4VJE19b2U769sNurWcPQpTsfV1s5AwzlN7D5BfWd43fhg3fUjPNKvijp9YgkhVYPwH+lFABHKg=="],
+
     "@uiw/codemirror-theme-github": ["@uiw/codemirror-theme-github@4.25.4", "", { "dependencies": { "@uiw/codemirror-themes": "4.25.4" } }, "sha512-M5zRT2vIpNsuKN0Lz+DwLnmhHW8Eddp1M9zC0hm3V+bvffmaSn/pUDey1eqGIv5xNNmjhqvDAz0a90xLYCzvSw=="],
 
+    "@uiw/codemirror-theme-gruvbox-dark": ["@uiw/codemirror-theme-gruvbox-dark@4.25.5", "", { "dependencies": { "@uiw/codemirror-themes": "4.25.5" } }, "sha512-bbSaXPH75FIahV/PoTpjrx+mSBy7MWbgvN9wluExlPo2yP6zaXrHP+zoaxx/20prLayLhTWrnqcYEW3rnRtbbg=="],
+
+    "@uiw/codemirror-theme-kimbie": ["@uiw/codemirror-theme-kimbie@4.25.5", "", { "dependencies": { "@uiw/codemirror-themes": "4.25.5" } }, "sha512-VZQ0FEAvSWqWgEJzZgvwftbvDv1YOXDOqU5y4WY/EZaDei3Iz+3YU1N+AenhU/ZYUmdqlcq8fan3LVGRea+CIg=="],
+
+    "@uiw/codemirror-theme-material": ["@uiw/codemirror-theme-material@4.25.5", "", { "dependencies": { "@uiw/codemirror-themes": "4.25.5" } }, "sha512-CEbeigZuddW42L0qhstjFuULMEc8wjMUisSmdOoCsmimlsPX9OC173bNlit22Zpjxu4XQzoaQq+OTPV565AZjA=="],
+
+    "@uiw/codemirror-theme-monokai": ["@uiw/codemirror-theme-monokai@4.25.5", "", { "dependencies": { "@uiw/codemirror-themes": "4.25.5" } }, "sha512-Mp1VJvJluysbMAxjlOpwVrKHFN19kcBgP8xw2NABGhooM2+86rFjH/m1MEHO4PmaSSIPdqna3rWZo6maQ+IqQw=="],
+
+    "@uiw/codemirror-theme-monokai-dimmed": ["@uiw/codemirror-theme-monokai-dimmed@4.25.5", "", { "dependencies": { "@uiw/codemirror-themes": "4.25.5" } }, "sha512-B/o2Cmi3p1KQQbROgaSGuJpLu4kSWL1IXhLofsfXcLKfrvZbQ8y/1dfHTiCuvWPkUyFIH5BGFgGhl1IXjQDuVg=="],
+
+    "@uiw/codemirror-theme-noctis-lilac": ["@uiw/codemirror-theme-noctis-lilac@4.25.5", "", { "dependencies": { "@uiw/codemirror-themes": "4.25.5" } }, "sha512-eQ9ckqc6Y0Z4mWMCRlVijeAb5kcgyg052MDpq2zdECXs3WLd7kmEh1wVTrT8rCsMX7a/EADqMbLgBWirpIN5CA=="],
+
+    "@uiw/codemirror-theme-nord": ["@uiw/codemirror-theme-nord@4.25.5", "", { "dependencies": { "@uiw/codemirror-themes": "4.25.5" } }, "sha512-2U2/auzCanIYWKPOYrOubsMF9hGDzbWshuhKpnUnD0P/61j/mIOsy0SnMUwwlA3hfRG58awCEy20dvknRJdpIQ=="],
+
+    "@uiw/codemirror-theme-okaidia": ["@uiw/codemirror-theme-okaidia@4.25.5", "", { "dependencies": { "@uiw/codemirror-themes": "4.25.5" } }, "sha512-M+KK0rx9ruX4Wo3Es8b8n38OcGeNhaLwJARPLGSMjlOW4UPho4OGWLv9fVJndf8a9IhgxWeMBwDxfEwCb0oLag=="],
+
+    "@uiw/codemirror-theme-quietlight": ["@uiw/codemirror-theme-quietlight@4.25.5", "", { "dependencies": { "@uiw/codemirror-themes": "4.25.5" } }, "sha512-M9NJW3+OcaKTvp9EAQUSn665zpGG6PRoUqo3Zkr185PKIpY3uA7BzZzjxh8Us9p1MZ/ZWgqFvVPO/d4CE9rKdw=="],
+
+    "@uiw/codemirror-theme-red": ["@uiw/codemirror-theme-red@4.25.5", "", { "dependencies": { "@uiw/codemirror-themes": "4.25.5" } }, "sha512-Khh2TfC/VIbv9cHg1xcHafeBAAFsSg+kR+/Z8T3KwgU6GIrJcLuhfvtsUhsASKUSJavNFrLzUaImYbMphaEhbw=="],
+
+    "@uiw/codemirror-theme-solarized": ["@uiw/codemirror-theme-solarized@4.25.5", "", { "dependencies": { "@uiw/codemirror-themes": "4.25.5" } }, "sha512-+uzEgMUPNmoZtxfsEV1l3fFYQbiJ5oxqSxzOLqDe+gcO2OA/uZay1SG+o/7QeBcBMuuxciS7tHjf/BITX11+cw=="],
+
+    "@uiw/codemirror-theme-sublime": ["@uiw/codemirror-theme-sublime@4.25.5", "", { "dependencies": { "@uiw/codemirror-themes": "4.25.5" } }, "sha512-dtGcZTZEgEbnHZIcQawSUS4qxhiQ3JnlxGJXmzvgMjwhQoQVC5r4OTepuRiMv1HbyI/SdNv4wIOlPCvVYQbYjg=="],
+
+    "@uiw/codemirror-theme-tokyo-night": ["@uiw/codemirror-theme-tokyo-night@4.25.5", "", { "dependencies": { "@uiw/codemirror-themes": "4.25.5" } }, "sha512-p6T1Nj5j3AQmdOT180TmiKMv/TB4aR+tLg3LOoUEKeNV6K2iZyti4qNMTvhPpQnKP0wY6NtuCA1SD5sAPDD0Ow=="],
+
+    "@uiw/codemirror-theme-tokyo-night-day": ["@uiw/codemirror-theme-tokyo-night-day@4.25.5", "", { "dependencies": { "@uiw/codemirror-themes": "4.25.5" } }, "sha512-Lp4EJEuhdbX5lJaFnMQQXcyjQVjgg60g4lfwSBsJOxgsX7EsnY+NvGJa9c94SImCPtfAco9UhWBUWoPBVm6LmQ=="],
+
+    "@uiw/codemirror-theme-tokyo-night-storm": ["@uiw/codemirror-theme-tokyo-night-storm@4.25.5", "", { "dependencies": { "@uiw/codemirror-themes": "4.25.5" } }, "sha512-3ahmnAOwGhFdMkmibymLpmdS5DR/7GY3WjOeHp9afeFbSN54QYyV1hrpwEoYOo7VEouUlzXTfrUYz/E0YOmQsg=="],
+
+    "@uiw/codemirror-theme-tomorrow-night-blue": ["@uiw/codemirror-theme-tomorrow-night-blue@4.25.5", "", { "dependencies": { "@uiw/codemirror-themes": "4.25.5" } }, "sha512-zPNlGS51Wfcrv2FEmehe0EznYL3EZhU29CLQKIMtz2pH05EnE+Wfraq5qsDkydoS+SF1xqAvhr/n1emettYyzw=="],
+
+    "@uiw/codemirror-theme-vscode": ["@uiw/codemirror-theme-vscode@4.25.5", "", { "dependencies": { "@uiw/codemirror-themes": "4.25.5" } }, "sha512-oLOFdNabcmvrGMgNjqDsUjaUeRfOK0N+NGGcfe7hhiCPtug84JFho5t2naOtdNyRpY1U41PNkzsgpHEjDxoUJg=="],
+
+    "@uiw/codemirror-theme-white": ["@uiw/codemirror-theme-white@4.25.5", "", { "dependencies": { "@uiw/codemirror-themes": "4.25.5" } }, "sha512-MUq3xkJD8Wim+D44T2AW/WNeWDYUzNVX1scmcO+bIwJnNGyFfkjla5y9S4xqVQPN5jpVV0n+CEThocKszAg6EQ=="],
+
+    "@uiw/codemirror-theme-xcode": ["@uiw/codemirror-theme-xcode@4.25.5", "", { "dependencies": { "@uiw/codemirror-themes": "4.25.5" } }, "sha512-/v/pec5gO1ZDdF2Qv7YTlf1g/s5Fd8tlCVB7KMYJ1Ge/2HS6dLmwumND9Vz0QavsZtc0em8d0e0Ng4XLvrnrrQ=="],
+
     "@uiw/codemirror-themes": ["@uiw/codemirror-themes@4.25.4", "", { "dependencies": { "@codemirror/language": "^6.0.0", "@codemirror/state": "^6.0.0", "@codemirror/view": "^6.0.0" } }, "sha512-2SLktItgcZC4p0+PfFusEbAHwbuAWe3bOOntCevVgHtrWGtGZX3IPv2k8IKZMgOXtAHyGKpJvT9/nspPn/uCQg=="],
+
+    "@uiw/codemirror-themes-all": ["@uiw/codemirror-themes-all@4.25.5", "", { "dependencies": { "@uiw/codemirror-theme-abcdef": "4.25.5", "@uiw/codemirror-theme-abyss": "4.25.5", "@uiw/codemirror-theme-androidstudio": "4.25.5", "@uiw/codemirror-theme-andromeda": "4.25.5", "@uiw/codemirror-theme-atomone": "4.25.5", "@uiw/codemirror-theme-aura": "4.25.5", "@uiw/codemirror-theme-basic": "4.25.5", "@uiw/codemirror-theme-bbedit": "4.25.5", "@uiw/codemirror-theme-bespin": "4.25.5", "@uiw/codemirror-theme-console": "4.25.5", "@uiw/codemirror-theme-copilot": "4.25.5", "@uiw/codemirror-theme-darcula": "4.25.5", "@uiw/codemirror-theme-dracula": "4.25.5", "@uiw/codemirror-theme-duotone": "4.25.5", "@uiw/codemirror-theme-eclipse": "4.25.5", "@uiw/codemirror-theme-github": "4.25.5", "@uiw/codemirror-theme-gruvbox-dark": "4.25.5", "@uiw/codemirror-theme-kimbie": "4.25.5", "@uiw/codemirror-theme-material": "4.25.5", "@uiw/codemirror-theme-monokai": "4.25.5", "@uiw/codemirror-theme-monokai-dimmed": "4.25.5", "@uiw/codemirror-theme-noctis-lilac": "4.25.5", "@uiw/codemirror-theme-nord": "4.25.5", "@uiw/codemirror-theme-okaidia": "4.25.5", "@uiw/codemirror-theme-quietlight": "4.25.5", "@uiw/codemirror-theme-red": "4.25.5", "@uiw/codemirror-theme-solarized": "4.25.5", "@uiw/codemirror-theme-sublime": "4.25.5", "@uiw/codemirror-theme-tokyo-night": "4.25.5", "@uiw/codemirror-theme-tokyo-night-day": "4.25.5", "@uiw/codemirror-theme-tokyo-night-storm": "4.25.5", "@uiw/codemirror-theme-tomorrow-night-blue": "4.25.5", "@uiw/codemirror-theme-vscode": "4.25.5", "@uiw/codemirror-theme-white": "4.25.5", "@uiw/codemirror-theme-xcode": "4.25.5", "@uiw/codemirror-themes": "4.25.5" } }, "sha512-zPtwrP78oaUNlL80pxAu6vCR3VPxHgB/KC8eoulqbvaTnCnQaFf8e1xbz3Ub4MkeQFLWTDGacQyE+sbA0lPBsw=="],
 
     "@uiw/react-codemirror": ["@uiw/react-codemirror@4.25.4", "", { "dependencies": { "@babel/runtime": "^7.18.6", "@codemirror/commands": "^6.1.0", "@codemirror/state": "^6.1.1", "@codemirror/theme-one-dark": "^6.0.0", "@uiw/codemirror-extensions-basic-setup": "4.25.4", "codemirror": "^6.0.0" }, "peerDependencies": { "@codemirror/view": ">=6.0.0", "react": ">=17.0.0", "react-dom": ">=17.0.0" } }, "sha512-ipO067oyfUw+DVaXhQCxkB0ZD9b7RnY+ByrprSYSKCHaULvJ3sqWYC/Zen6zVQ8/XC4o5EPBfatGiX20kC7XGA=="],
 
@@ -2104,6 +2175,78 @@
     "@tanstack/router-generator/zod": ["zod@3.25.76", "", {}, "sha512-gzUt/qt81nXsFGKIFcC3YnfEAx5NkunCfnDlvuBSSFS02bcXu4Lmea0AFIUwbLWxWPx3d9p8S5QoaujKcNQxcQ=="],
 
     "@tanstack/router-plugin/zod": ["zod@3.25.76", "", {}, "sha512-gzUt/qt81nXsFGKIFcC3YnfEAx5NkunCfnDlvuBSSFS02bcXu4Lmea0AFIUwbLWxWPx3d9p8S5QoaujKcNQxcQ=="],
+
+    "@uiw/codemirror-theme-abcdef/@uiw/codemirror-themes": ["@uiw/codemirror-themes@4.25.5", "", { "dependencies": { "@codemirror/language": "^6.0.0", "@codemirror/state": "^6.0.0", "@codemirror/view": "^6.0.0" } }, "sha512-mvNFy1eEkWTPSztL+N6cmOOZN26Wn9mGZUsFeIIRRkGqR4+Z9NBjzWF8JHqhZ73pEMOYe3UO+cRF/M9cxiTk9Q=="],
+
+    "@uiw/codemirror-theme-abyss/@uiw/codemirror-themes": ["@uiw/codemirror-themes@4.25.5", "", { "dependencies": { "@codemirror/language": "^6.0.0", "@codemirror/state": "^6.0.0", "@codemirror/view": "^6.0.0" } }, "sha512-mvNFy1eEkWTPSztL+N6cmOOZN26Wn9mGZUsFeIIRRkGqR4+Z9NBjzWF8JHqhZ73pEMOYe3UO+cRF/M9cxiTk9Q=="],
+
+    "@uiw/codemirror-theme-androidstudio/@uiw/codemirror-themes": ["@uiw/codemirror-themes@4.25.5", "", { "dependencies": { "@codemirror/language": "^6.0.0", "@codemirror/state": "^6.0.0", "@codemirror/view": "^6.0.0" } }, "sha512-mvNFy1eEkWTPSztL+N6cmOOZN26Wn9mGZUsFeIIRRkGqR4+Z9NBjzWF8JHqhZ73pEMOYe3UO+cRF/M9cxiTk9Q=="],
+
+    "@uiw/codemirror-theme-andromeda/@uiw/codemirror-themes": ["@uiw/codemirror-themes@4.25.5", "", { "dependencies": { "@codemirror/language": "^6.0.0", "@codemirror/state": "^6.0.0", "@codemirror/view": "^6.0.0" } }, "sha512-mvNFy1eEkWTPSztL+N6cmOOZN26Wn9mGZUsFeIIRRkGqR4+Z9NBjzWF8JHqhZ73pEMOYe3UO+cRF/M9cxiTk9Q=="],
+
+    "@uiw/codemirror-theme-atomone/@uiw/codemirror-themes": ["@uiw/codemirror-themes@4.25.5", "", { "dependencies": { "@codemirror/language": "^6.0.0", "@codemirror/state": "^6.0.0", "@codemirror/view": "^6.0.0" } }, "sha512-mvNFy1eEkWTPSztL+N6cmOOZN26Wn9mGZUsFeIIRRkGqR4+Z9NBjzWF8JHqhZ73pEMOYe3UO+cRF/M9cxiTk9Q=="],
+
+    "@uiw/codemirror-theme-aura/@uiw/codemirror-themes": ["@uiw/codemirror-themes@4.25.5", "", { "dependencies": { "@codemirror/language": "^6.0.0", "@codemirror/state": "^6.0.0", "@codemirror/view": "^6.0.0" } }, "sha512-mvNFy1eEkWTPSztL+N6cmOOZN26Wn9mGZUsFeIIRRkGqR4+Z9NBjzWF8JHqhZ73pEMOYe3UO+cRF/M9cxiTk9Q=="],
+
+    "@uiw/codemirror-theme-basic/@uiw/codemirror-themes": ["@uiw/codemirror-themes@4.25.5", "", { "dependencies": { "@codemirror/language": "^6.0.0", "@codemirror/state": "^6.0.0", "@codemirror/view": "^6.0.0" } }, "sha512-mvNFy1eEkWTPSztL+N6cmOOZN26Wn9mGZUsFeIIRRkGqR4+Z9NBjzWF8JHqhZ73pEMOYe3UO+cRF/M9cxiTk9Q=="],
+
+    "@uiw/codemirror-theme-bbedit/@uiw/codemirror-themes": ["@uiw/codemirror-themes@4.25.5", "", { "dependencies": { "@codemirror/language": "^6.0.0", "@codemirror/state": "^6.0.0", "@codemirror/view": "^6.0.0" } }, "sha512-mvNFy1eEkWTPSztL+N6cmOOZN26Wn9mGZUsFeIIRRkGqR4+Z9NBjzWF8JHqhZ73pEMOYe3UO+cRF/M9cxiTk9Q=="],
+
+    "@uiw/codemirror-theme-bespin/@uiw/codemirror-themes": ["@uiw/codemirror-themes@4.25.5", "", { "dependencies": { "@codemirror/language": "^6.0.0", "@codemirror/state": "^6.0.0", "@codemirror/view": "^6.0.0" } }, "sha512-mvNFy1eEkWTPSztL+N6cmOOZN26Wn9mGZUsFeIIRRkGqR4+Z9NBjzWF8JHqhZ73pEMOYe3UO+cRF/M9cxiTk9Q=="],
+
+    "@uiw/codemirror-theme-console/@uiw/codemirror-themes": ["@uiw/codemirror-themes@4.25.5", "", { "dependencies": { "@codemirror/language": "^6.0.0", "@codemirror/state": "^6.0.0", "@codemirror/view": "^6.0.0" } }, "sha512-mvNFy1eEkWTPSztL+N6cmOOZN26Wn9mGZUsFeIIRRkGqR4+Z9NBjzWF8JHqhZ73pEMOYe3UO+cRF/M9cxiTk9Q=="],
+
+    "@uiw/codemirror-theme-copilot/@uiw/codemirror-themes": ["@uiw/codemirror-themes@4.25.5", "", { "dependencies": { "@codemirror/language": "^6.0.0", "@codemirror/state": "^6.0.0", "@codemirror/view": "^6.0.0" } }, "sha512-mvNFy1eEkWTPSztL+N6cmOOZN26Wn9mGZUsFeIIRRkGqR4+Z9NBjzWF8JHqhZ73pEMOYe3UO+cRF/M9cxiTk9Q=="],
+
+    "@uiw/codemirror-theme-darcula/@uiw/codemirror-themes": ["@uiw/codemirror-themes@4.25.5", "", { "dependencies": { "@codemirror/language": "^6.0.0", "@codemirror/state": "^6.0.0", "@codemirror/view": "^6.0.0" } }, "sha512-mvNFy1eEkWTPSztL+N6cmOOZN26Wn9mGZUsFeIIRRkGqR4+Z9NBjzWF8JHqhZ73pEMOYe3UO+cRF/M9cxiTk9Q=="],
+
+    "@uiw/codemirror-theme-dracula/@uiw/codemirror-themes": ["@uiw/codemirror-themes@4.25.5", "", { "dependencies": { "@codemirror/language": "^6.0.0", "@codemirror/state": "^6.0.0", "@codemirror/view": "^6.0.0" } }, "sha512-mvNFy1eEkWTPSztL+N6cmOOZN26Wn9mGZUsFeIIRRkGqR4+Z9NBjzWF8JHqhZ73pEMOYe3UO+cRF/M9cxiTk9Q=="],
+
+    "@uiw/codemirror-theme-duotone/@uiw/codemirror-themes": ["@uiw/codemirror-themes@4.25.5", "", { "dependencies": { "@codemirror/language": "^6.0.0", "@codemirror/state": "^6.0.0", "@codemirror/view": "^6.0.0" } }, "sha512-mvNFy1eEkWTPSztL+N6cmOOZN26Wn9mGZUsFeIIRRkGqR4+Z9NBjzWF8JHqhZ73pEMOYe3UO+cRF/M9cxiTk9Q=="],
+
+    "@uiw/codemirror-theme-eclipse/@uiw/codemirror-themes": ["@uiw/codemirror-themes@4.25.5", "", { "dependencies": { "@codemirror/language": "^6.0.0", "@codemirror/state": "^6.0.0", "@codemirror/view": "^6.0.0" } }, "sha512-mvNFy1eEkWTPSztL+N6cmOOZN26Wn9mGZUsFeIIRRkGqR4+Z9NBjzWF8JHqhZ73pEMOYe3UO+cRF/M9cxiTk9Q=="],
+
+    "@uiw/codemirror-theme-gruvbox-dark/@uiw/codemirror-themes": ["@uiw/codemirror-themes@4.25.5", "", { "dependencies": { "@codemirror/language": "^6.0.0", "@codemirror/state": "^6.0.0", "@codemirror/view": "^6.0.0" } }, "sha512-mvNFy1eEkWTPSztL+N6cmOOZN26Wn9mGZUsFeIIRRkGqR4+Z9NBjzWF8JHqhZ73pEMOYe3UO+cRF/M9cxiTk9Q=="],
+
+    "@uiw/codemirror-theme-kimbie/@uiw/codemirror-themes": ["@uiw/codemirror-themes@4.25.5", "", { "dependencies": { "@codemirror/language": "^6.0.0", "@codemirror/state": "^6.0.0", "@codemirror/view": "^6.0.0" } }, "sha512-mvNFy1eEkWTPSztL+N6cmOOZN26Wn9mGZUsFeIIRRkGqR4+Z9NBjzWF8JHqhZ73pEMOYe3UO+cRF/M9cxiTk9Q=="],
+
+    "@uiw/codemirror-theme-material/@uiw/codemirror-themes": ["@uiw/codemirror-themes@4.25.5", "", { "dependencies": { "@codemirror/language": "^6.0.0", "@codemirror/state": "^6.0.0", "@codemirror/view": "^6.0.0" } }, "sha512-mvNFy1eEkWTPSztL+N6cmOOZN26Wn9mGZUsFeIIRRkGqR4+Z9NBjzWF8JHqhZ73pEMOYe3UO+cRF/M9cxiTk9Q=="],
+
+    "@uiw/codemirror-theme-monokai/@uiw/codemirror-themes": ["@uiw/codemirror-themes@4.25.5", "", { "dependencies": { "@codemirror/language": "^6.0.0", "@codemirror/state": "^6.0.0", "@codemirror/view": "^6.0.0" } }, "sha512-mvNFy1eEkWTPSztL+N6cmOOZN26Wn9mGZUsFeIIRRkGqR4+Z9NBjzWF8JHqhZ73pEMOYe3UO+cRF/M9cxiTk9Q=="],
+
+    "@uiw/codemirror-theme-monokai-dimmed/@uiw/codemirror-themes": ["@uiw/codemirror-themes@4.25.5", "", { "dependencies": { "@codemirror/language": "^6.0.0", "@codemirror/state": "^6.0.0", "@codemirror/view": "^6.0.0" } }, "sha512-mvNFy1eEkWTPSztL+N6cmOOZN26Wn9mGZUsFeIIRRkGqR4+Z9NBjzWF8JHqhZ73pEMOYe3UO+cRF/M9cxiTk9Q=="],
+
+    "@uiw/codemirror-theme-noctis-lilac/@uiw/codemirror-themes": ["@uiw/codemirror-themes@4.25.5", "", { "dependencies": { "@codemirror/language": "^6.0.0", "@codemirror/state": "^6.0.0", "@codemirror/view": "^6.0.0" } }, "sha512-mvNFy1eEkWTPSztL+N6cmOOZN26Wn9mGZUsFeIIRRkGqR4+Z9NBjzWF8JHqhZ73pEMOYe3UO+cRF/M9cxiTk9Q=="],
+
+    "@uiw/codemirror-theme-nord/@uiw/codemirror-themes": ["@uiw/codemirror-themes@4.25.5", "", { "dependencies": { "@codemirror/language": "^6.0.0", "@codemirror/state": "^6.0.0", "@codemirror/view": "^6.0.0" } }, "sha512-mvNFy1eEkWTPSztL+N6cmOOZN26Wn9mGZUsFeIIRRkGqR4+Z9NBjzWF8JHqhZ73pEMOYe3UO+cRF/M9cxiTk9Q=="],
+
+    "@uiw/codemirror-theme-okaidia/@uiw/codemirror-themes": ["@uiw/codemirror-themes@4.25.5", "", { "dependencies": { "@codemirror/language": "^6.0.0", "@codemirror/state": "^6.0.0", "@codemirror/view": "^6.0.0" } }, "sha512-mvNFy1eEkWTPSztL+N6cmOOZN26Wn9mGZUsFeIIRRkGqR4+Z9NBjzWF8JHqhZ73pEMOYe3UO+cRF/M9cxiTk9Q=="],
+
+    "@uiw/codemirror-theme-quietlight/@uiw/codemirror-themes": ["@uiw/codemirror-themes@4.25.5", "", { "dependencies": { "@codemirror/language": "^6.0.0", "@codemirror/state": "^6.0.0", "@codemirror/view": "^6.0.0" } }, "sha512-mvNFy1eEkWTPSztL+N6cmOOZN26Wn9mGZUsFeIIRRkGqR4+Z9NBjzWF8JHqhZ73pEMOYe3UO+cRF/M9cxiTk9Q=="],
+
+    "@uiw/codemirror-theme-red/@uiw/codemirror-themes": ["@uiw/codemirror-themes@4.25.5", "", { "dependencies": { "@codemirror/language": "^6.0.0", "@codemirror/state": "^6.0.0", "@codemirror/view": "^6.0.0" } }, "sha512-mvNFy1eEkWTPSztL+N6cmOOZN26Wn9mGZUsFeIIRRkGqR4+Z9NBjzWF8JHqhZ73pEMOYe3UO+cRF/M9cxiTk9Q=="],
+
+    "@uiw/codemirror-theme-solarized/@uiw/codemirror-themes": ["@uiw/codemirror-themes@4.25.5", "", { "dependencies": { "@codemirror/language": "^6.0.0", "@codemirror/state": "^6.0.0", "@codemirror/view": "^6.0.0" } }, "sha512-mvNFy1eEkWTPSztL+N6cmOOZN26Wn9mGZUsFeIIRRkGqR4+Z9NBjzWF8JHqhZ73pEMOYe3UO+cRF/M9cxiTk9Q=="],
+
+    "@uiw/codemirror-theme-sublime/@uiw/codemirror-themes": ["@uiw/codemirror-themes@4.25.5", "", { "dependencies": { "@codemirror/language": "^6.0.0", "@codemirror/state": "^6.0.0", "@codemirror/view": "^6.0.0" } }, "sha512-mvNFy1eEkWTPSztL+N6cmOOZN26Wn9mGZUsFeIIRRkGqR4+Z9NBjzWF8JHqhZ73pEMOYe3UO+cRF/M9cxiTk9Q=="],
+
+    "@uiw/codemirror-theme-tokyo-night/@uiw/codemirror-themes": ["@uiw/codemirror-themes@4.25.5", "", { "dependencies": { "@codemirror/language": "^6.0.0", "@codemirror/state": "^6.0.0", "@codemirror/view": "^6.0.0" } }, "sha512-mvNFy1eEkWTPSztL+N6cmOOZN26Wn9mGZUsFeIIRRkGqR4+Z9NBjzWF8JHqhZ73pEMOYe3UO+cRF/M9cxiTk9Q=="],
+
+    "@uiw/codemirror-theme-tokyo-night-day/@uiw/codemirror-themes": ["@uiw/codemirror-themes@4.25.5", "", { "dependencies": { "@codemirror/language": "^6.0.0", "@codemirror/state": "^6.0.0", "@codemirror/view": "^6.0.0" } }, "sha512-mvNFy1eEkWTPSztL+N6cmOOZN26Wn9mGZUsFeIIRRkGqR4+Z9NBjzWF8JHqhZ73pEMOYe3UO+cRF/M9cxiTk9Q=="],
+
+    "@uiw/codemirror-theme-tokyo-night-storm/@uiw/codemirror-themes": ["@uiw/codemirror-themes@4.25.5", "", { "dependencies": { "@codemirror/language": "^6.0.0", "@codemirror/state": "^6.0.0", "@codemirror/view": "^6.0.0" } }, "sha512-mvNFy1eEkWTPSztL+N6cmOOZN26Wn9mGZUsFeIIRRkGqR4+Z9NBjzWF8JHqhZ73pEMOYe3UO+cRF/M9cxiTk9Q=="],
+
+    "@uiw/codemirror-theme-tomorrow-night-blue/@uiw/codemirror-themes": ["@uiw/codemirror-themes@4.25.5", "", { "dependencies": { "@codemirror/language": "^6.0.0", "@codemirror/state": "^6.0.0", "@codemirror/view": "^6.0.0" } }, "sha512-mvNFy1eEkWTPSztL+N6cmOOZN26Wn9mGZUsFeIIRRkGqR4+Z9NBjzWF8JHqhZ73pEMOYe3UO+cRF/M9cxiTk9Q=="],
+
+    "@uiw/codemirror-theme-vscode/@uiw/codemirror-themes": ["@uiw/codemirror-themes@4.25.5", "", { "dependencies": { "@codemirror/language": "^6.0.0", "@codemirror/state": "^6.0.0", "@codemirror/view": "^6.0.0" } }, "sha512-mvNFy1eEkWTPSztL+N6cmOOZN26Wn9mGZUsFeIIRRkGqR4+Z9NBjzWF8JHqhZ73pEMOYe3UO+cRF/M9cxiTk9Q=="],
+
+    "@uiw/codemirror-theme-white/@uiw/codemirror-themes": ["@uiw/codemirror-themes@4.25.5", "", { "dependencies": { "@codemirror/language": "^6.0.0", "@codemirror/state": "^6.0.0", "@codemirror/view": "^6.0.0" } }, "sha512-mvNFy1eEkWTPSztL+N6cmOOZN26Wn9mGZUsFeIIRRkGqR4+Z9NBjzWF8JHqhZ73pEMOYe3UO+cRF/M9cxiTk9Q=="],
+
+    "@uiw/codemirror-theme-xcode/@uiw/codemirror-themes": ["@uiw/codemirror-themes@4.25.5", "", { "dependencies": { "@codemirror/language": "^6.0.0", "@codemirror/state": "^6.0.0", "@codemirror/view": "^6.0.0" } }, "sha512-mvNFy1eEkWTPSztL+N6cmOOZN26Wn9mGZUsFeIIRRkGqR4+Z9NBjzWF8JHqhZ73pEMOYe3UO+cRF/M9cxiTk9Q=="],
+
+    "@uiw/codemirror-themes-all/@uiw/codemirror-theme-github": ["@uiw/codemirror-theme-github@4.25.5", "", { "dependencies": { "@uiw/codemirror-themes": "4.25.5" } }, "sha512-0AyW9mYzrY+mZRU/V1ekx/zpyhlnSTZOLKTESzt++MMQLVFXd9yLyoZgZ49vaaNNphMfxw3wBeE+lOOMwHGrew=="],
+
+    "@uiw/codemirror-themes-all/@uiw/codemirror-themes": ["@uiw/codemirror-themes@4.25.5", "", { "dependencies": { "@codemirror/language": "^6.0.0", "@codemirror/state": "^6.0.0", "@codemirror/view": "^6.0.0" } }, "sha512-mvNFy1eEkWTPSztL+N6cmOOZN26Wn9mGZUsFeIIRRkGqR4+Z9NBjzWF8JHqhZ73pEMOYe3UO+cRF/M9cxiTk9Q=="],
 
     "anymatch/picomatch": ["picomatch@2.3.1", "", {}, "sha512-JU3teHTNjmE2VCGFzuY8EXzCDVwEqB2a8fsIvwaStHhAWJEeVd1o1QD80CU6+ZdEXXSLbSsuLwJjkCBWqRQUVA=="],
 
