@@ -7,6 +7,8 @@ import { TableNode } from "./table-node";
 interface SchemaTreeProps {
   schema: SchemaInfo;
   filter: string;
+  pinnedTables: string[];
+  onTogglePin: (tableName: string) => void;
 }
 
 const filterSchema = (schema: SchemaItem, query: string): SchemaItem => {
@@ -18,7 +20,12 @@ const filterSchema = (schema: SchemaItem, query: string): SchemaItem => {
   };
 };
 
-export const SchemaTree = ({ schema, filter }: SchemaTreeProps) => {
+export const SchemaTree = ({
+  schema,
+  filter,
+  pinnedTables,
+  onTogglePin,
+}: SchemaTreeProps) => {
   const filtered = useMemo(() => {
     const [first] = schema.schemas;
     if (!first) {
@@ -26,6 +33,23 @@ export const SchemaTree = ({ schema, filter }: SchemaTreeProps) => {
     }
     return filter ? filterSchema(first, filter) : first;
   }, [schema, filter]);
+
+  const sortedTables = useMemo(() => {
+    if (!filtered) {
+      return [];
+    }
+    return [...filtered.tables].toSorted((a, b) => {
+      const aPinned = pinnedTables.includes(a.name);
+      const bPinned = pinnedTables.includes(b.name);
+      if (aPinned && !bPinned) {
+        return -1;
+      }
+      if (!aPinned && bPinned) {
+        return 1;
+      }
+      return 0;
+    });
+  }, [filtered, pinnedTables]);
 
   if (
     !filtered ||
@@ -40,13 +64,18 @@ export const SchemaTree = ({ schema, filter }: SchemaTreeProps) => {
 
   return (
     <div className="px-1 py-1">
-      {filtered.tables.length > 0 && (
+      {sortedTables.length > 0 && (
         <>
           <div className="mb-0.5 px-2 text-[10px] font-medium uppercase tracking-wider text-muted-foreground">
-            Tables ({filtered.tables.length})
+            Tables ({sortedTables.length})
           </div>
-          {filtered.tables.map((table) => (
-            <TableNode key={table.name} table={table} />
+          {sortedTables.map((table) => (
+            <TableNode
+              key={table.name}
+              table={table}
+              isPinned={pinnedTables.includes(table.name)}
+              onTogglePin={onTogglePin}
+            />
           ))}
         </>
       )}

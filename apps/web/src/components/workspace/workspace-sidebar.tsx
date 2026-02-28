@@ -28,6 +28,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { usePinnedTables } from "@/hooks/use-pinned-tables";
 import { isTauri } from "@/lib/tauri";
 import { cn } from "@/lib/utils";
 
@@ -124,6 +125,8 @@ interface SchemaTabContentProps {
   filter: string;
   onFilterChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onRetry: () => void;
+  pinnedTables: string[];
+  onTogglePin: (tableName: string) => void;
 }
 
 const SchemaTabContent = ({
@@ -133,6 +136,8 @@ const SchemaTabContent = ({
   filter,
   onFilterChange,
   onRetry,
+  pinnedTables,
+  onTogglePin,
 }: SchemaTabContentProps) => (
   <>
     {schema && (
@@ -155,7 +160,14 @@ const SchemaTabContent = ({
     <ScrollArea className="min-h-0 flex-1">
       {isLoading && !schema && <SchemaLoadingState />}
       {error && <SchemaErrorState error={error} onRetry={onRetry} />}
-      {schema && <SchemaTree schema={schema} filter={filter} />}
+      {schema && (
+        <SchemaTree
+          schema={schema}
+          filter={filter}
+          pinnedTables={pinnedTables}
+          onTogglePin={onTogglePin}
+        />
+      )}
     </ScrollArea>
   </>
 );
@@ -171,6 +183,7 @@ export const WorkspaceSidebar = ({
   setSelectedDatabase,
 }: WorkspaceSidebarProps) => {
   const [filter, setFilter] = useState("");
+  const { pinnedTables, togglePin } = usePinnedTables(connection.id);
 
   const handleFilterChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -235,6 +248,8 @@ export const WorkspaceSidebar = ({
             filter={filter}
             onFilterChange={handleFilterChange}
             onRetry={refresh}
+            pinnedTables={pinnedTables}
+            onTogglePin={togglePin}
           />
         </TabsContent>
 
