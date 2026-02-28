@@ -27,6 +27,7 @@ import {
   QueryTabsProvider,
   useQueryTabsContext,
 } from "@/contexts/query-tabs-context";
+import { useExportSettings } from "@/hooks/use-export-settings";
 import { useQueryTabs } from "@/hooks/use-query-tabs";
 import { useSyntaxTree } from "@/hooks/use-syntax-tree";
 import { useWorkspaceHotkeys } from "@/hooks/use-workspace-hotkeys";
@@ -439,12 +440,19 @@ interface ResultsPanelProps {
 }
 
 const ResultsPanel = ({ status, result, error, isSql }: ResultsPanelProps) => {
+  const { settings: exportSettings } = useExportSettings();
+
   const handleDownloadCsv = useCallback(() => {
     if (result?.resultType === "tabular") {
-      const csv = tabularResultToCsv(result);
+      const csv = tabularResultToCsv(result, {
+        delimiter: exportSettings.csvDelimiter,
+        includeBom: exportSettings.includeBom,
+        includeHeaders: exportSettings.includeHeaders,
+        nullDisplay: exportSettings.nullDisplay,
+      });
       downloadCsv(csv, `query-results-${Date.now()}.csv`);
     }
-  }, [result]);
+  }, [result, exportSettings]);
 
   if (status === "running") {
     return (
