@@ -1,6 +1,13 @@
 import type { ReactNode } from "react";
 
-import { Clipboard, Copy, Pin, Play, Trash2 } from "lucide-react";
+import {
+  Clipboard,
+  Copy,
+  Pin,
+  Play,
+  TableProperties,
+  Trash2,
+} from "lucide-react";
 import { useCallback } from "react";
 
 import type { TableItem, ViewItem } from "@/lib/tauri";
@@ -28,6 +35,7 @@ interface TableContextMenuProps {
   isView: boolean;
   isPinned: boolean;
   onTogglePin: (tableName: string) => void;
+  onOpenStructure: () => void;
   children: ReactNode;
 }
 
@@ -36,6 +44,7 @@ export const TableContextMenu = ({
   isView,
   isPinned,
   onTogglePin,
+  onOpenStructure,
   children,
 }: TableContextMenuProps) => {
   const { openQuery } = useEditorInsert();
@@ -72,6 +81,10 @@ export const TableContextMenu = ({
     <ContextMenu>
       <ContextMenuTrigger className="block">{children}</ContextMenuTrigger>
       <ContextMenuContent>
+        <ContextMenuItem onClick={onOpenStructure}>
+          <TableProperties />
+          Open Structure
+        </ContextMenuItem>
         <ContextMenuItem onClick={handleSelectTop100}>
           <Play />
           Select top 100

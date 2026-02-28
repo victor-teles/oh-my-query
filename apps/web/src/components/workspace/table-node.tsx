@@ -7,8 +7,9 @@ import {
   Play,
   Table2,
 } from "lucide-react";
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 
+import type { DatabaseType } from "@/lib/connections";
 import type { TableItem, ViewItem } from "@/lib/tauri";
 
 import {
@@ -25,12 +26,16 @@ import { useEditorInsert } from "@/contexts/editor-insert-context";
 
 import { ColumnNode } from "./column-node";
 import { TableContextMenu } from "./table-context-menu";
+import { TableStructureDialog } from "./table-structure-dialog";
 
 interface TableNodeProps {
   table: TableItem | ViewItem;
   isView?: boolean;
   isPinned?: boolean;
   onTogglePin?: (tableName: string) => void;
+  connectionId: string;
+  databaseType: DatabaseType;
+  onRefreshSchema: () => void;
 }
 
 const isTableItem = (item: TableItem | ViewItem): item is TableItem =>
@@ -41,8 +46,12 @@ export const TableNode = ({
   isView = false,
   isPinned = false,
   onTogglePin,
+  connectionId,
+  databaseType,
+  onRefreshSchema,
 }: TableNodeProps) => {
   const { queryTable } = useEditorInsert();
+  const [structureOpen, setStructureOpen] = useState(false);
   const hasIndexes = isTableItem(table) && table.indexes.length > 0;
   const hasForeignKeys = isTableItem(table) && table.foreignKeys.length > 0;
 
@@ -57,12 +66,17 @@ export const TableNode = ({
     [onTogglePin]
   );
 
+  const handleOpenStructure = useCallback(() => {
+    setStructureOpen(true);
+  }, []);
+
   return (
     <TableContextMenu
       table={table}
       isView={isView}
       isPinned={isPinned}
       onTogglePin={handleTogglePin}
+      onOpenStructure={handleOpenStructure}
     >
       <Collapsible className="group/table">
         <div className="flex items-center">
@@ -144,6 +158,15 @@ export const TableNode = ({
           </div>
         </CollapsibleContent>
       </Collapsible>
+      <TableStructureDialog
+        table={table}
+        isView={isView}
+        databaseType={databaseType}
+        connectionId={connectionId}
+        open={structureOpen}
+        onOpenChange={setStructureOpen}
+        onRefreshSchema={onRefreshSchema}
+      />
     </TableContextMenu>
   );
 };

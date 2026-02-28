@@ -1,5 +1,6 @@
 import { useMemo } from "react";
 
+import type { DatabaseType } from "@/lib/connections";
 import type { SchemaInfo, SchemaItem } from "@/lib/tauri";
 
 import { TableNode } from "./table-node";
@@ -9,6 +10,9 @@ interface SchemaTreeProps {
   filter: string;
   pinnedTables: string[];
   onTogglePin: (tableName: string) => void;
+  connectionId: string;
+  databaseType: DatabaseType;
+  onRefreshSchema: () => void;
 }
 
 const filterSchema = (schema: SchemaItem, query: string): SchemaItem => {
@@ -25,6 +29,9 @@ export const SchemaTree = ({
   filter,
   pinnedTables,
   onTogglePin,
+  connectionId,
+  databaseType,
+  onRefreshSchema,
 }: SchemaTreeProps) => {
   const filtered = useMemo(() => {
     const [first] = schema.schemas;
@@ -75,6 +82,9 @@ export const SchemaTree = ({
               table={table}
               isPinned={pinnedTables.includes(table.name)}
               onTogglePin={onTogglePin}
+              connectionId={connectionId}
+              databaseType={databaseType}
+              onRefreshSchema={onRefreshSchema}
             />
           ))}
         </>
@@ -86,7 +96,14 @@ export const SchemaTree = ({
             Views ({filtered.views.length})
           </div>
           {filtered.views.map((view) => (
-            <TableNode key={view.name} table={view} isView />
+            <TableNode
+              key={view.name}
+              table={view}
+              isView
+              connectionId={connectionId}
+              databaseType={databaseType}
+              onRefreshSchema={onRefreshSchema}
+            />
           ))}
         </>
       )}

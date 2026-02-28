@@ -2,7 +2,7 @@ import { useHotkey } from "@tanstack/react-hotkeys";
 import { AlertCircle, Database, RefreshCw, Search } from "lucide-react";
 import { useCallback, useState } from "react";
 
-import type { DatabaseConnection } from "@/lib/connections";
+import type { DatabaseConnection, DatabaseType } from "@/lib/connections";
 import type { SchemaInfo } from "@/lib/tauri";
 
 import { Button } from "@/components/ui/button";
@@ -127,6 +127,8 @@ interface SchemaTabContentProps {
   onRetry: () => void;
   pinnedTables: string[];
   onTogglePin: (tableName: string) => void;
+  connectionId: string;
+  databaseType: DatabaseType;
 }
 
 const SchemaTabContent = ({
@@ -138,6 +140,8 @@ const SchemaTabContent = ({
   onRetry,
   pinnedTables,
   onTogglePin,
+  connectionId,
+  databaseType,
 }: SchemaTabContentProps) => (
   <>
     {schema && (
@@ -166,6 +170,9 @@ const SchemaTabContent = ({
           filter={filter}
           pinnedTables={pinnedTables}
           onTogglePin={onTogglePin}
+          connectionId={connectionId}
+          databaseType={databaseType}
+          onRefreshSchema={onRetry}
         />
       )}
     </ScrollArea>
@@ -250,6 +257,8 @@ export const WorkspaceSidebar = ({
             onRetry={refresh}
             pinnedTables={pinnedTables}
             onTogglePin={togglePin}
+            connectionId={connection.id}
+            databaseType={connection.type}
           />
         </TabsContent>
 
