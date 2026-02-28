@@ -8,6 +8,7 @@ import {
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { useMenuNavigation } from "@/hooks/use-menu-navigation";
 import "@/index.css";
 
 export interface RouterAppContext {
@@ -36,6 +37,8 @@ export const Route = createRootRouteWithContext<RouterAppContext>()({
 });
 
 function RootComponent() {
+  useMenuNavigation();
+
   return (
     <>
       <HeadContent />

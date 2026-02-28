@@ -1,5 +1,5 @@
 import type { Extension } from "@codemirror/state";
-import type { EditorView, ViewUpdate } from "@codemirror/view";
+import type { ViewUpdate, EditorView } from "@codemirror/view";
 
 import { sql, PostgreSQL, MySQL, SQLite } from "@codemirror/lang-sql";
 import { Prec } from "@codemirror/state";
@@ -7,11 +7,16 @@ import { keymap } from "@codemirror/view";
 import { useHotkey } from "@tanstack/react-hotkeys";
 import { githubDark } from "@uiw/codemirror-theme-github";
 import CodeMirror from "@uiw/react-codemirror";
-import { useCallback, useMemo } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 import type { SchemaInfo } from "@/lib/tauri";
 
 import { useEditorInsert } from "@/contexts/editor-insert-context";
+import { useEditorSettings } from "@/hooks/use-editor-settings";
+import {
+  createFontExtension,
+  getThemeExtension,
+} from "@/lib/codemirror-themes";
 import {
   createColumnCompletionSource,
   createTableCompletionSource,
@@ -51,6 +56,27 @@ export const SqlEditor = ({
   schema,
 }: SqlEditorProps) => {
   const { registerEditor } = useEditorInsert();
+  const { settings } = useEditorSettings();
+  const [themeExtension, setThemeExtension] = useState<Extension>(githubDark);
+
+  useEffect(() => {
+    let cancelled = false;
+    const load = async () => {
+      const ext = await getThemeExtension(settings.syntaxTheme);
+      if (!cancelled) {
+        setThemeExtension(ext);
+      }
+    };
+    load();
+    return () => {
+      cancelled = true;
+    };
+  }, [settings.syntaxTheme]);
+
+  const fontExtension = useMemo(
+    () => createFontExtension(settings.fontFamily, settings.fontSize),
+    [settings.fontFamily, settings.fontSize]
+  );
 
   const handleCreateEditor = useCallback(
     (view: EditorView) => {
@@ -107,7 +133,11 @@ export const SqlEditor = ({
       schema: sqlNamespace,
     });
 
-    const exts: Extension[] = [preventNewlineOnExecute, langSupport];
+    const exts: Extension[] = [
+      preventNewlineOnExecute,
+      langSupport,
+      fontExtension,
+    ];
 
     if (tableCompletionSource) {
       exts.push(
@@ -132,6 +162,7 @@ export const SqlEditor = ({
     sqlNamespace,
     tableCompletionSource,
     columnCompletionSource,
+    fontExtension,
   ]);
 
   return (
@@ -141,7 +172,7 @@ export const SqlEditor = ({
       onUpdate={onUpdate}
       onCreateEditor={handleCreateEditor}
       extensions={extensions}
-      theme={githubDark}
+      theme={themeExtension}
       placeholder="Write your SQL query here..."
       readOnly={readOnly}
       basicSetup={{

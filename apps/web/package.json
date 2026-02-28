@@ -39,6 +39,7 @@
     "@tanstack/react-table": "^8.21.3",
     "@tauri-apps/api": "^2.10.1",
     "@uiw/codemirror-theme-github": "^4.25.4",
+    "@uiw/codemirror-themes-all": "^4.25.5",
     "@uiw/react-codemirror": "^4.25.4",
     "ai": "^6.0.97",
     "class-variance-authority": "^0.7.1",

@@ -1,5 +1,5 @@
 import { createFileRoute, redirect, useNavigate } from "@tanstack/react-router";
-import { Plus } from "lucide-react";
+import { Plus, Settings } from "lucide-react";
 import { useCallback, useState } from "react";
 
 import type { DatabaseConnection } from "@/lib/connections";
@@ -68,6 +68,10 @@ const HomeComponent = () => {
     }
   }, []);
 
+  const handleSettings = useCallback(() => {
+    navigate({ to: "/settings" });
+  }, [navigate]);
+
   const handleAddOpen = useCallback(() => {
     setAddOpen(true);
   }, []);
@@ -86,6 +90,21 @@ const HomeComponent = () => {
   return (
     <>
       <Titlebar>
+        <Tooltip>
+          <TooltipTrigger
+            render={
+              <Button
+                variant="ghost"
+                size="icon-xs"
+                aria-label="Settings"
+                onClick={handleSettings}
+              />
+            }
+          >
+            <Settings className="size-3.5" />
+          </TooltipTrigger>
+          <TooltipContent>Settings</TooltipContent>
+        </Tooltip>
         <Tooltip>
           <TooltipTrigger
             render={

@@ -190,7 +190,7 @@ export const WorkspaceSidebar = ({
     <div
       className={cn(
         "flex h-full flex-col text-sidebar-foreground",
-        isTauri() ? "bg-transparent" : "bg-sidebar"
+        isTauri() ? "bg-sidebar/80" : "bg-sidebar"
       )}
     >
       <div className="flex items-center justify-between px-3 py-2">

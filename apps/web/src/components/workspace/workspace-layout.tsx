@@ -104,7 +104,7 @@ export const WorkspaceLayout = ({
   });
 
   return (
-    <div className="flex h-svh flex-col">
+    <div className="flex h-svh flex-col bg-background">
       <Titlebar
         center={
           <DynamicIsland
