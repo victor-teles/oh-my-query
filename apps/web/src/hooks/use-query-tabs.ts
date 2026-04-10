@@ -11,6 +11,7 @@ const SAVE_DEBOUNCE_MS = 500;
 
 const createNewTab = (counter: number): QueryTab => ({
   error: null,
+  executedSql: null,
   id: crypto.randomUUID(),
   result: null,
   sourceDialect: null,
@@ -28,6 +29,7 @@ const toPersistedTab = (tab: QueryTab): PersistedTab => ({
 
 const fromPersistedTab = (persisted: PersistedTab): QueryTab => ({
   error: null,
+  executedSql: null,
   id: persisted.id,
   result: null,
   sourceDialect: persisted.sourceDialect,

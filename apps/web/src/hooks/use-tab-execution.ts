@@ -31,7 +31,13 @@ export const useTabExecution = ({
       setTabs((prev) =>
         prev.map((t) =>
           t.id === tabId
-            ? { ...t, error: null, result: null, status: "running" as const }
+            ? {
+                ...t,
+                error: null,
+                executedSql: null,
+                result: null,
+                status: "running" as const,
+              }
             : t
         )
       );
@@ -53,7 +59,13 @@ export const useTabExecution = ({
         setTabs((prev) =>
           prev.map((t) =>
             t.id === tabId
-              ? { ...t, error: null, result, status: "success" as const }
+              ? {
+                  ...t,
+                  error: null,
+                  executedSql: sql,
+                  result,
+                  status: "success" as const,
+                }
               : t
           )
         );

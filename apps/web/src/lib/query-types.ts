@@ -6,6 +6,7 @@ export interface QueryTab {
   id: string;
   title: string;
   sql: string;
+  executedSql: string | null;
   result: ExecuteResult | null;
   error: string | null;
   status: TabStatus;

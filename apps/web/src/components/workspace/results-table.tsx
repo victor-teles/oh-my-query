@@ -1,3 +1,7 @@
+import type { RowSelectionState } from "@tanstack/react-table";
+import type { MouseEvent } from "react";
+
+import { useHotkey } from "@tanstack/react-hotkeys";
 import {
   flexRender,
   getCoreRowModel,
@@ -5,7 +9,7 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { SearchX } from "lucide-react";
-import { useMemo } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import type { TabularResult } from "@/lib/tauri";
 
@@ -17,11 +21,14 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { useExportSettings } from "@/hooks/use-export-settings";
 
 import { ResultsPagination } from "./results-pagination";
+import { ResultsRowContextMenu } from "./results-row-context-menu";
 
 interface ResultsTableProps {
   result: TabularResult;
+  executedSql: string | null;
 }
 
 const formatCell = (value: unknown): string => {
@@ -39,7 +46,19 @@ const isNull = (value: unknown): boolean =>
 
 const isNumber = (value: unknown): boolean => typeof value === "number";
 
-export const ResultsTable = ({ result }: ResultsTableProps) => {
+export const ResultsTable = ({ result, executedSql }: ResultsTableProps) => {
+  const { settings: exportSettings } = useExportSettings();
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
+  const [lastSelectedIndex, setLastSelectedIndex] = useState<number | null>(
+    null
+  );
+
+  useEffect(() => {
+    setRowSelection({});
+    setLastSelectedIndex(null);
+  }, [result]);
+
   const columns = useMemo(
     () =>
       result.columns.map((col, idx) => ({
@@ -61,23 +80,76 @@ export const ResultsTable = ({ result }: ResultsTableProps) => {
   const table = useReactTable({
     columns,
     data: result.rows,
+    enableRowSelection: true,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     initialState: {
       pagination: { pageSize: 50 },
     },
+    onRowSelectionChange: setRowSelection,
+    state: { rowSelection },
   });
+
+  const selectedRowIndices = useMemo(
+    () =>
+      Object.keys(rowSelection)
+        .filter((key) => rowSelection[key])
+        .map(Number),
+    [rowSelection]
+  );
+
+  const selectAll = useCallback(() => {
+    const next: RowSelectionState = {};
+    for (let i = 0; i < result.rows.length; i += 1) {
+      next[i] = true;
+    }
+    setRowSelection(next);
+  }, [result.rows.length]);
+
+  useHotkey("Mod+A", selectAll, { target: containerRef });
+
+  const handleRowClick = useCallback(
+    (event: MouseEvent, rowIndex: number) => {
+      containerRef.current?.focus();
+      if (event.shiftKey && lastSelectedIndex !== null) {
+        const start = Math.min(lastSelectedIndex, rowIndex);
+        const end = Math.max(lastSelectedIndex, rowIndex);
+        const next: RowSelectionState = {};
+        for (let i = start; i <= end; i += 1) {
+          next[i] = true;
+        }
+        setRowSelection(next);
+        return;
+      }
+      if (event.metaKey || event.ctrlKey) {
+        setRowSelection((prev) => {
+          if (prev[rowIndex]) {
+            const { [rowIndex]: _removed, ...rest } = prev;
+            return rest;
+          }
+          return { ...prev, [rowIndex]: true };
+        });
+        setLastSelectedIndex(rowIndex);
+        return;
+      }
+      setRowSelection({ [rowIndex]: true });
+      setLastSelectedIndex(rowIndex);
+    },
+    [lastSelectedIndex]
+  );
 
   const isEmpty = table.getRowModel().rows.length === 0;
 
   return (
     <div className="flex h-full flex-col">
       <div
-        className={
+        ref={containerRef}
+        tabIndex={-1}
+        className={`outline-none ${
           isEmpty
             ? "flex flex-1 flex-col overflow-auto"
             : "flex-1 overflow-auto"
-        }
+        }`}
       >
         <Table>
           <TableHeader>
@@ -105,7 +177,16 @@ export const ResultsTable = ({ result }: ResultsTableProps) => {
           {!isEmpty && (
             <TableBody>
               {table.getRowModel().rows.map((row) => (
-                <TableRow key={row.id}>
+                <ResultsRowContextMenu
+                  key={row.id}
+                  result={result}
+                  executedSql={executedSql}
+                  rowIndex={row.index}
+                  selectedRowIndices={selectedRowIndices}
+                  exportSettings={exportSettings}
+                  isSelected={row.getIsSelected()}
+                  onRowClick={handleRowClick}
+                >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell
                       key={cell.id}
@@ -121,7 +202,7 @@ export const ResultsTable = ({ result }: ResultsTableProps) => {
                       )}
                     </TableCell>
                   ))}
-                </TableRow>
+                </ResultsRowContextMenu>
               ))}
             </TableBody>
           )}

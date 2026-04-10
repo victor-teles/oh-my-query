@@ -173,6 +173,17 @@ interface ConnectedWorkspaceProps {
   isSql: boolean;
 }
 
+const getResultsPanelProps = (
+  activeTab: QueryTab | undefined,
+  isSql: boolean
+): ResultsPanelProps => ({
+  error: activeTab?.error ?? null,
+  executedSql: activeTab?.executedSql ?? null,
+  isSql,
+  result: activeTab?.result ?? null,
+  status: activeTab?.status,
+});
+
 const ConnectedWorkspace = ({
   connection,
   schema,
@@ -355,10 +366,7 @@ const ConnectedWorkspace = ({
           <BottomPanel
             isSyntaxTreeOpen={syntaxTreeEnabled}
             treeData={treeData}
-            status={activeTab?.status}
-            result={activeTab?.result ?? null}
-            error={activeTab?.error ?? null}
-            isSql={isSql}
+            {...getResultsPanelProps(activeTab, isSql)}
           />
         </ResizablePanel>
       </ResizablePanelGroup>
@@ -435,11 +443,18 @@ const LOADING_SKELETON_IDS = ["s1", "s2", "s3", "s4", "s5"];
 interface ResultsPanelProps {
   status: string | undefined;
   result: ExecuteResult | null;
+  executedSql: string | null;
   error: string | null;
   isSql: boolean;
 }
 
-const ResultsPanel = ({ status, result, error, isSql }: ResultsPanelProps) => {
+const ResultsPanel = ({
+  status,
+  result,
+  executedSql,
+  error,
+  isSql,
+}: ResultsPanelProps) => {
   const { settings: exportSettings } = useExportSettings();
 
   const handleDownloadCsv = useCallback(() => {
@@ -487,7 +502,7 @@ const ResultsPanel = ({ status, result, error, isSql }: ResultsPanelProps) => {
     return (
       <div className="flex h-full flex-col">
         <div className="flex-1 overflow-auto">
-          <ResultsTable result={result} />
+          <ResultsTable result={result} executedSql={executedSql} />
         </div>
         <QueryStatusBar result={result} onDownloadCsv={handleDownloadCsv} />
       </div>
