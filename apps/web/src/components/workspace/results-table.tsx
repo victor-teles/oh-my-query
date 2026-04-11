@@ -158,13 +158,13 @@ export const ResultsTable = ({ result, executedSql }: ResultsTableProps) => {
                 {headerGroup.headers.map((header) => (
                   <TableHead key={header.id}>
                     <div className="flex flex-col gap-0.5">
-                      <span>
+                      <span className="font-medium tracking-tight">
                         {flexRender(
                           header.column.columnDef.header,
                           header.getContext()
                         )}
                       </span>
-                      <span className="text-[0.6rem] font-normal text-muted-foreground">
+                      <span className="font-mono text-[10px] uppercase tracking-wider text-muted-foreground/70">
                         {(header.column.columnDef.meta as { typeName: string })
                           ?.typeName ?? ""}
                       </span>

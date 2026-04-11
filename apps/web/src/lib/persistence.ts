@@ -1,10 +1,18 @@
 import { isTauri } from "@/lib/tauri";
 
+export interface PendingExecution {
+  sql: string;
+  database: string | null;
+  sourceDialect: string | null;
+  startedAt: string;
+}
+
 export interface PersistedTab {
   id: string;
   title: string;
   sql: string;
   sourceDialect: string | null;
+  pendingExecution?: PendingExecution | null;
 }
 
 export interface TabState {

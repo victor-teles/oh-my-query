@@ -2,6 +2,15 @@
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 @import "streamdown/styles.css";
+@import "@fontsource-variable/jetbrains-mono";
+
+@font-face {
+  font-family: "Switzer";
+  src: url("/fonts/switzer-variable.woff2") format("woff2-variations");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
 
 :root {
   --background: oklch(0.9821 0 0);
@@ -38,8 +47,12 @@
   --sidebar-ring: oklch(0.709 0.01 56.259);
   --radius: 0.45rem;
   --font-sans:
-    -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, Roboto,
-    "Helvetica Neue", Arial, sans-serif;
+    "Switzer", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui,
+    sans-serif;
+  --font-mono:
+    "JetBrains Mono Variable", ui-monospace, SFMono-Regular, "SF Mono", Menlo,
+    Consolas, monospace;
+  --tracking-normal: -0.003em;
 }
 
 .dark {
@@ -77,8 +90,12 @@
   --sidebar-ring: oklch(0.553 0.013 58.071);
   --radius: 0.45rem;
   --font-sans:
-    -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, Roboto,
-    "Helvetica Neue", Arial, sans-serif;
+    "Switzer", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui,
+    sans-serif;
+  --font-mono:
+    "JetBrains Mono Variable", ui-monospace, SFMono-Regular, "SF Mono", Menlo,
+    Consolas, monospace;
+  --tracking-normal: -0.003em;
 }
 
 @theme inline {
@@ -117,7 +134,6 @@
 
   --font-sans: var(--font-sans);
   --font-mono: var(--font-mono);
-  --font-serif: var(--font-serif);
 
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
@@ -145,13 +161,29 @@
   * {
     @apply border-border outline-ring/50;
   }
+  html {
+    @apply font-sans;
+    overflow: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    font-feature-settings: "ss01", "ss03", "cv11", "calt", "kern";
+  }
   body {
     @apply font-sans bg-transparent text-foreground;
     letter-spacing: var(--tracking-normal);
   }
-  html {
-    @apply font-sans;
-    overflow: hidden;
+  .font-mono,
+  code,
+  kbd,
+  pre,
+  samp,
+  .cm-editor {
+    font-feature-settings:
+      "calt",
+      "liga" 0,
+      "zero",
+      "ss02";
   }
 
   [data-variant="segment"]

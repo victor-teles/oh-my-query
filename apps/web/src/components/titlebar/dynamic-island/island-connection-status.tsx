@@ -31,7 +31,7 @@ export const ConnectingStatus = ({ connectionName }: ConnectingStatusProps) => (
         />
       ))}
     </div>
-    <span className="text-[0.625rem] text-muted-foreground">
+    <span className="text-[11px] font-medium tracking-tight text-muted-foreground">
       {connectionName}
     </span>
   </motion.div>
@@ -61,7 +61,7 @@ export const ReconnectingStatus = ({
         />
       ))}
     </div>
-    <span className="text-[0.625rem] text-amber-500">
+    <span className="text-[11px] font-medium tracking-tight text-amber-500">
       Reconnecting to {connectionName}…
     </span>
   </motion.div>
@@ -91,12 +91,12 @@ export const ConnectedIdleStatus = ({
       <span className="relative inline-flex size-2 rounded-full bg-emerald-500" />
     </span>
     {serverVersion && (
-      <span className="text-[0.625rem] text-muted-foreground">
+      <span className="font-mono text-[10.5px] tabular-nums tracking-tight text-muted-foreground">
         {serverVersion}
       </span>
     )}
-    <span className="text-[0.625rem] text-muted-foreground/40">|</span>
-    <span className="text-[0.625rem] text-muted-foreground">
+    <span className="text-[11px] text-muted-foreground/30">·</span>
+    <span className="font-mono text-[10.5px] tabular-nums tracking-tight text-muted-foreground">
       {username}@{database}
     </span>
   </motion.div>
@@ -118,13 +118,13 @@ export const ConnectionErrorStatus = ({
     exit={{ filter: "blur(4px)", opacity: 0 }}
   >
     <AlertCircle className="size-3 shrink-0 text-destructive" />
-    <span className="max-w-[280px] truncate text-[0.625rem] text-destructive">
+    <span className="max-w-[280px] truncate text-[11px] font-medium tracking-tight text-destructive">
       {error}
     </span>
     <motion.button
       type="button"
       onClick={onReconnect}
-      className="cursor-pointer text-[0.625rem] text-destructive underline underline-offset-2"
+      className="cursor-pointer text-[11px] font-medium tracking-tight text-destructive underline underline-offset-2"
       whileHover={{ scale: 1.05 }}
       whileTap={{ scale: 0.92 }}
       transition={BUTTON_SPRING}

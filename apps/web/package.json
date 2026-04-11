@@ -24,6 +24,7 @@
     "@codemirror/language": "^6.12.1",
     "@codemirror/state": "^6.5.4",
     "@codemirror/view": "^6.39.14",
+    "@fontsource-variable/jetbrains-mono": "^5.2.8",
     "@hookform/resolvers": "^5.1.1",
     "@json-render/core": "^0.8.0",
     "@json-render/react": "^0.8.0",

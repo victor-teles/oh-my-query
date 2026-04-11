@@ -76,3 +76,37 @@ Defined in `packages/env/src/web.ts` using Zod schemas. Web-specific env vars mu
 - Do not add comments to the code unless necessary for clarity
 - Try always to break down complex components into smaller ones, even if they are only used once. This promotes reusability and readability.
 - Create files new components: When a primitive or reusable create in src/components/ui, when is too specific for the screen create in the same folder as the screen.
+
+## Design Context
+
+### Users
+
+Backend and full-stack developers who live in terminals and IDEs and treat oh-my-query as a daily driver alongside their editor. Keyboard-first, long sessions debugging and exploring data, running on macOS as a native Tauri app alongside a code editor. Connecting to PostgreSQL, MySQL, SQLite, MongoDB, or Redis.
+
+**Job to be done**: "Give me a fast, beautiful, trustworthy place to talk to my databases — with an AI that helps without getting in the way."
+
+### Brand Personality
+
+- **Three words**: _warm · craft · trustworthy_
+- **Voice**: Quiet confidence. No marketing language, no hype, no "✨ AI-powered." Talks to the user like a senior colleague who respects their time.
+- **Emotional goal**: A tool you're genuinely happy to sit inside for a 3-hour debugging session — the kind of care you feel in Things 3, Postico, or Linear.
+
+### Aesthetic Direction
+
+- **Lineage**: Refined & native-calm. Positive references: **TablePlus, Postico, Things 3, Linear, Arc**.
+- **Anti-references**:
+  - **DBeaver / phpMyAdmin / pgAdmin** — bureaucratic grey panels, icon-heavy toolbars, zero personality.
+  - **Generic AI-app UI** — purple/cyan gradients, neon accents on dark, sparkle icons, chatbot drawer bolted onto an admin UI.
+- **Theme**: Dark-first with warm amber accent, to be refined rather than replaced. Light mode exists but dark is the hero. Current palette (`oklch` warm neutrals, amber primary ~`0.92 0.052 66°`) is the starting point, not a placeholder.
+- **Typography**: The `-apple-system` stack is a placeholder — the biggest gap to fill. Pair a distinctive display/UI face with a refined mono for SQL and data. Avoid Inter, IBM Plex, Space Grotesk, Fraunces, Instrument Sans.
+- **Motion**: iOS-like springs, purposeful, never decorative. Must degrade cleanly under `prefers-reduced-motion`.
+- **Signature moment**: The **Dynamic Island-style connection indicator** in the titlebar is the "wait, what was that?" — invest here first.
+
+### Design Principles
+
+1. **Warmth is structural, not decorative.** Amber and vibrancy exist because they make long sessions feel cared-for, not because dark mode needs "pop."
+2. **Native-calm, not native-cosplay.** Inherit macOS discipline (keyboard-first, quiet chrome, real vibrancy, deliberate motion) — don't imitate macOS widgets.
+3. **The AI disappears into the editor.** No chatbot drawer aesthetic, no sparkle iconography. AI output lands in the editor like a colleague pasted it, not like a product feature.
+4. **Density with breathing room.** Resolve pro-user density and calm space through typographic rhythm and varied spacing — not cards on cards or hidden disclosure.
+5. **Keyboard + AT are non-negotiable.** Focus rings always visible. WCAG AA contrast everywhere, including results tables and the Dynamic Island. `prefers-reduced-motion` fully respected.
+6. **Make the Dynamic Island the signature.** When something wants to be distinctive, put the effort here first.

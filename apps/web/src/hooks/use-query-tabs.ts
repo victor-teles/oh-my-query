@@ -1,17 +1,23 @@
 import { useCallback, useEffect, useRef, useState } from "react";
+import { toast } from "sonner";
 
 import type { PersistedTab, TabState } from "@/lib/persistence";
 import type { QueryTab } from "@/lib/query-types";
 
 import { getTabs, saveTabs } from "@/lib/persistence";
 import { createNewQueryTab, restoreQueryTabState } from "@/lib/query-tab-state";
+import { isTauri } from "@/lib/tauri";
 
 import { useTabExecution } from "./use-tab-execution";
 
-const SAVE_DEBOUNCE_MS = 500;
+const SAVE_DEBOUNCE_MS = 150;
+const SAVE_ERROR_TOAST_THROTTLE_MS = 10_000;
+const DESTRUCTIVE_SQL_PATTERN =
+  /^\s*(insert|update|delete|drop|truncate|alter|create|grant|revoke|merge|replace)\b/i;
 
 const toPersistedTab = (tab: QueryTab): PersistedTab => ({
   id: tab.id,
+  pendingExecution: tab.pendingExecution,
   sourceDialect: tab.sourceDialect,
   sql: tab.sql,
   title: tab.title,
@@ -30,16 +36,56 @@ export const useQueryTabs = (
   );
   const [isRestored, setIsRestored] = useState(false);
   const saveTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const lastSaveErrorToastRef = useRef(0);
+  const autoResumedRef = useRef(false);
   const tabsRef = useRef(tabs);
   tabsRef.current = tabs;
+  const activeTabIdRef = useRef(activeTabId);
+  activeTabIdRef.current = activeTabId;
+  const connectionIdRef = useRef(connectionId);
+  connectionIdRef.current = connectionId;
+
+  const runSave = useCallback(async () => {
+    if (saveTimeoutRef.current) {
+      clearTimeout(saveTimeoutRef.current);
+      saveTimeoutRef.current = null;
+    }
+    const state: TabState = {
+      activeTabId: activeTabIdRef.current,
+      counter: counterRef.current,
+      tabs: tabsRef.current.map(toPersistedTab),
+    };
+    try {
+      await saveTabs(connectionIdRef.current, state);
+    } catch {
+      const now = Date.now();
+      if (now - lastSaveErrorToastRef.current > SAVE_ERROR_TOAST_THROTTLE_MS) {
+        lastSaveErrorToastRef.current = now;
+        toast.error("Couldn't save your tabs", {
+          description:
+            "Your recent edits may not survive a restart. Check disk space and permissions.",
+        });
+      }
+    }
+  }, []);
+
+  const flushSave = useCallback(async () => {
+    if (!isRestored) {
+      return;
+    }
+    await runSave();
+  }, [isRestored, runSave]);
 
   const { execute } = useTabExecution({
     connectionId,
+    flushSave,
     selectedDatabase,
     setTabs,
   });
 
   useEffect(() => {
+    autoResumedRef.current = false;
+    setIsRestored(false);
     const restore = async () => {
       try {
         const restored = restoreQueryTabState(await getTabs(connectionId));
@@ -65,16 +111,7 @@ export const useQueryTabs = (
     }
 
     saveTimeoutRef.current = setTimeout(async () => {
-      const state: TabState = {
-        activeTabId,
-        counter: counterRef.current,
-        tabs: tabs.map(toPersistedTab),
-      };
-      try {
-        await saveTabs(connectionId, state);
-      } catch {
-        // Silently ignore save failures
-      }
+      await runSave();
     }, SAVE_DEBOUNCE_MS);
 
     return () => {
@@ -82,7 +119,101 @@ export const useQueryTabs = (
         clearTimeout(saveTimeoutRef.current);
       }
     };
-  }, [tabs, activeTabId, connectionId, isRestored]);
+  }, [tabs, activeTabId, isRestored, runSave]);
+
+  useEffect(() => {
+    if (!isRestored || autoResumedRef.current || !selectedDatabase) {
+      return;
+    }
+    const pendingTabs = tabsRef.current.filter((t) => t.pendingExecution);
+    if (pendingTabs.length === 0) {
+      autoResumedRef.current = true;
+      return;
+    }
+    autoResumedRef.current = true;
+
+    for (const tab of pendingTabs) {
+      const pending = tab.pendingExecution;
+      if (!pending) {
+        continue;
+      }
+      if (pending.database !== null && pending.database !== selectedDatabase) {
+        continue;
+      }
+      if (DESTRUCTIVE_SQL_PATTERN.test(pending.sql)) {
+        setTabs((prev) =>
+          prev.map((t) =>
+            t.id === tab.id
+              ? {
+                  ...t,
+                  error:
+                    "Query was interrupted — click Run to retry. Not auto-resumed because it may modify data.",
+                  pendingExecution: null,
+                  status: "error" as const,
+                }
+              : t
+          )
+        );
+        toast.warning("Interrupted query not auto-resumed", {
+          description: `${tab.title} may modify data — click Run to retry.`,
+        });
+        continue;
+      }
+      toast.info("Resuming interrupted query", { description: tab.title });
+      execute(tab.id, pending.sql, pending.sourceDialect);
+    }
+  }, [isRestored, selectedDatabase, execute]);
+
+  useEffect(() => {
+    if (!isRestored) {
+      return;
+    }
+
+    const handleFlush = () => {
+      runSave();
+    };
+    const handleVisibility = () => {
+      if (document.visibilityState === "hidden") {
+        handleFlush();
+      }
+    };
+
+    window.addEventListener("beforeunload", handleFlush);
+    document.addEventListener("visibilitychange", handleVisibility);
+
+    let disposed = false;
+    let unlistenTauri: (() => void) | null = null;
+
+    const setupTauriClose = async () => {
+      if (!isTauri()) {
+        return;
+      }
+      try {
+        const { getCurrentWindow } = await import("@tauri-apps/api/window");
+        if (disposed) {
+          return;
+        }
+        const unlisten = await getCurrentWindow().onCloseRequested(async () => {
+          await runSave();
+        });
+        if (disposed) {
+          unlisten();
+          return;
+        }
+        unlistenTauri = unlisten;
+      } catch {
+        // Best-effort — ignore close-flush setup failures
+      }
+    };
+    setupTauriClose();
+
+    return () => {
+      disposed = true;
+      window.removeEventListener("beforeunload", handleFlush);
+      document.removeEventListener("visibilitychange", handleVisibility);
+      unlistenTauri?.();
+    };
+  }, [isRestored, runSave]);
 
   const activeTab = tabs.find((t) => t.id === activeTabId) ?? tabs[0];
 

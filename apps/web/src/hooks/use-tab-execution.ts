@@ -1,9 +1,12 @@
-import { useCallback } from "react";
+import { useCallback, useRef } from "react";
+import { toast } from "sonner";
 
 import type { QueryTab } from "@/lib/query-types";
 
 import { appendHistory, HISTORY_UPDATED_EVENT } from "@/lib/persistence";
 import { executeQuery } from "@/lib/tauri";
+
+const HISTORY_ERROR_TOAST_THROTTLE_MS = 10_000;
 
 const extractErrorMessage = (error: unknown): string => {
   if (error instanceof Error) {
@@ -19,15 +22,20 @@ interface UseTabExecutionParams {
   connectionId: string;
   selectedDatabase: string | null;
   setTabs: React.Dispatch<React.SetStateAction<QueryTab[]>>;
+  flushSave: () => Promise<void>;
 }
 
 export const useTabExecution = ({
   connectionId,
   selectedDatabase,
   setTabs,
+  flushSave,
 }: UseTabExecutionParams) => {
+  const lastHistoryErrorToastRef = useRef(0);
+
   const execute = useCallback(
     async (tabId: string, sql: string, sourceDialect?: string | null) => {
+      const startedAt = new Date().toISOString();
       setTabs((prev) =>
         prev.map((t) =>
           t.id === tabId
@@ -35,12 +43,20 @@ export const useTabExecution = ({
                 ...t,
                 error: null,
                 executedSql: null,
+                pendingExecution: {
+                  database: selectedDatabase,
+                  sourceDialect: sourceDialect ?? null,
+                  sql,
+                  startedAt,
+                },
                 result: null,
                 status: "running" as const,
               }
             : t
         )
       );
+
+      await flushSave();
 
       const startTime = performance.now();
       let success = false;
@@ -63,6 +79,7 @@ export const useTabExecution = ({
                   ...t,
                   error: null,
                   executedSql: sql,
+                  pendingExecution: null,
                   result,
                   status: "success" as const,
                 }
@@ -76,7 +93,13 @@ export const useTabExecution = ({
         setTabs((prev) =>
           prev.map((t) =>
             t.id === tabId
-              ? { ...t, error: message, result: null, status: "error" as const }
+              ? {
+                  ...t,
+                  error: message,
+                  pendingExecution: null,
+                  result: null,
+                  status: "error" as const,
+                }
               : t
           )
         );
@@ -94,10 +117,19 @@ export const useTabExecution = ({
         });
         window.dispatchEvent(new CustomEvent(HISTORY_UPDATED_EVENT));
       } catch {
-        // Silently ignore history write failures
+        const now = Date.now();
+        if (
+          now - lastHistoryErrorToastRef.current >
+          HISTORY_ERROR_TOAST_THROTTLE_MS
+        ) {
+          lastHistoryErrorToastRef.current = now;
+          toast.error("Couldn't save query history", {
+            description: "The query ran, but it wasn't added to history.",
+          });
+        }
       }
     },
-    [connectionId, selectedDatabase, setTabs]
+    [connectionId, selectedDatabase, setTabs, flushSave]
   );
 
   return { execute };
