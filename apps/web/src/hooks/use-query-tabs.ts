@@ -4,21 +4,11 @@ import type { PersistedTab, TabState } from "@/lib/persistence";
 import type { QueryTab } from "@/lib/query-types";
 
 import { getTabs, saveTabs } from "@/lib/persistence";
+import { createNewQueryTab, restoreQueryTabState } from "@/lib/query-tab-state";
 
 import { useTabExecution } from "./use-tab-execution";
 
 const SAVE_DEBOUNCE_MS = 500;
-
-const createNewTab = (counter: number): QueryTab => ({
-  error: null,
-  executedSql: null,
-  id: crypto.randomUUID(),
-  result: null,
-  sourceDialect: null,
-  sql: "",
-  status: "idle",
-  title: `Query ${counter}`,
-});
 
 const toPersistedTab = (tab: QueryTab): PersistedTab => ({
   id: tab.id,
@@ -27,24 +17,13 @@ const toPersistedTab = (tab: QueryTab): PersistedTab => ({
   title: tab.title,
 });
 
-const fromPersistedTab = (persisted: PersistedTab): QueryTab => ({
-  error: null,
-  executedSql: null,
-  id: persisted.id,
-  result: null,
-  sourceDialect: persisted.sourceDialect,
-  sql: persisted.sql,
-  status: "idle",
-  title: persisted.title,
-});
-
 export const useQueryTabs = (
   connectionId: string,
   selectedDatabase: string | null
 ) => {
   const counterRef = useRef(1);
   const [tabs, setTabs] = useState<QueryTab[]>(() => [
-    createNewTab(counterRef.current),
+    createNewQueryTab(counterRef.current),
   ]);
   const [activeTabId, setActiveTabId] = useState<string>(
     () => tabs[0]?.id ?? ""
@@ -63,13 +42,10 @@ export const useQueryTabs = (
   useEffect(() => {
     const restore = async () => {
       try {
-        const saved = await getTabs(connectionId);
-        if (saved && saved.tabs.length > 0) {
-          const restoredTabs = saved.tabs.map(fromPersistedTab);
-          counterRef.current = saved.counter;
-          setTabs(restoredTabs);
-          setActiveTabId(saved.activeTabId);
-        }
+        const restored = restoreQueryTabState(await getTabs(connectionId));
+        counterRef.current = restored.counter;
+        setTabs(restored.tabs);
+        setActiveTabId(restored.activeTabId);
       } catch {
         // Fall back to default tab on restore failure
       } finally {
@@ -112,14 +88,14 @@ export const useQueryTabs = (
 
   const addTab = useCallback(() => {
     counterRef.current += 1;
-    const tab = createNewTab(counterRef.current);
+    const tab = createNewQueryTab(counterRef.current);
     setTabs((prev) => [...prev, tab]);
     setActiveTabId(tab.id);
   }, []);
 
   const addTabWithSql = useCallback((sql: string) => {
     counterRef.current += 1;
-    const tab: QueryTab = { ...createNewTab(counterRef.current), sql };
+    const tab: QueryTab = { ...createNewQueryTab(counterRef.current), sql };
     setTabs((prev) => [...prev, tab]);
     setActiveTabId(tab.id);
   }, []);
@@ -130,7 +106,7 @@ export const useQueryTabs = (
         const next = prev.filter((t) => t.id !== tabId);
         if (next.length === 0) {
           counterRef.current = 1;
-          const tab = createNewTab(counterRef.current);
+          const tab = createNewQueryTab(counterRef.current);
           setActiveTabId(tab.id);
           return [tab];
         }
