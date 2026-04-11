@@ -40,7 +40,9 @@ const sliceToResult = (slice: RowSlice, stringify = false): TabularResult => ({
   isTruncated: false,
   resultType: "tabular",
   rowCount: slice.rows.length,
-  rows: stringify ? slice.rows.map((row) => row.map(stringifyCell)) : slice.rows,
+  rows: stringify
+    ? slice.rows.map((row) => row.map(stringifyCell))
+    : slice.rows,
 });
 
 export const rowsToCsv = (slice: RowSlice, options: CsvOptions): string =>
@@ -131,11 +133,8 @@ export const extractTableName = (sql: string | null): string | null => {
   return raw;
 };
 
-const escapeMarkdownCell = (value: unknown): string => {
-  return stringifyCell(value)
-    .replaceAll("|", "\\|")
-    .replaceAll("\n", "<br/>");
-};
+const escapeMarkdownCell = (value: unknown): string =>
+  stringifyCell(value).replaceAll("|", "\\|").replaceAll("\n", "<br/>");
 
 export const rowsToMarkdown = (slice: RowSlice): string => {
   const header = `| ${slice.columns.map((col) => escapeMarkdownCell(col.name)).join(" | ")} |`;

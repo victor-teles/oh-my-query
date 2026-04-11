@@ -46,7 +46,9 @@ export const canSaveAISettingsDraft = (
   return normalized.provider === "local" || normalized.apiKey.length > 0;
 };
 
-export const isAISettingsConfigured = (settings: AISettings | null): boolean => {
+export const isAISettingsConfigured = (
+  settings: AISettings | null
+): boolean => {
   if (!settings) {
     return false;
   }

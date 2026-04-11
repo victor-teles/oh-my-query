@@ -2,23 +2,20 @@ import { describe, expect, it } from "vitest";
 
 import type { TabState } from "@/lib/persistence";
 
-import {
-  createNewQueryTab,
-  restoreQueryTabState,
-} from "@/lib/query-tab-state";
+import { createNewQueryTab, restoreQueryTabState } from "@/lib/query-tab-state";
 
-describe("restoreQueryTabState", () => {
+describe("query tab state restoration", () => {
   it("keeps the saved active tab when it still exists", () => {
     const saved: TabState = {
       activeTabId: "tab-2",
       counter: 4,
       tabs: [
-        { id: "tab-1", title: "Query 1", sql: "select 1", sourceDialect: null },
+        { id: "tab-1", sourceDialect: null, sql: "select 1", title: "Query 1" },
         {
           id: "tab-2",
-          title: "Query 2",
-          sql: "select 2",
           sourceDialect: "postgresql",
+          sql: "select 2",
+          title: "Query 2",
         },
       ],
     };
@@ -35,7 +32,7 @@ describe("restoreQueryTabState", () => {
       activeTabId: "missing",
       counter: 2,
       tabs: [
-        { id: "tab-9", title: "Query 9", sql: "select 9", sourceDialect: null },
+        { id: "tab-9", sourceDialect: null, sql: "select 9", title: "Query 9" },
       ],
     };
 
@@ -50,7 +47,7 @@ describe("restoreQueryTabState", () => {
 
     expect(restored.activeTabId).toBe("generated-tab-id");
     expect(restored.counter).toBe(1);
-    expect(restored.tabs).toEqual([
+    expect(restored.tabs).toStrictEqual([
       {
         error: null,
         executedSql: null,
@@ -65,9 +62,9 @@ describe("restoreQueryTabState", () => {
   });
 });
 
-describe("createNewQueryTab", () => {
+describe("new query tab creation", () => {
   it("creates an idle query tab with a predictable title", () => {
-    expect(createNewQueryTab(3, () => "tab-3")).toEqual({
+    expect(createNewQueryTab(3, () => "tab-3")).toStrictEqual({
       error: null,
       executedSql: null,
       id: "tab-3",

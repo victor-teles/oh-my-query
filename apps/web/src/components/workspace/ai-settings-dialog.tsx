@@ -1,7 +1,7 @@
 import { Loader2 } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 
-import type { AIProvider, AISettings } from "@/lib/ai-settings";
+import type { AIProvider } from "@/lib/ai-settings";
 
 import { Button } from "@/components/ui/button";
 import {

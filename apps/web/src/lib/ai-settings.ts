@@ -1,9 +1,8 @@
-import { isTauri } from "@/lib/tauri";
-
 import {
   isAISettingsConfigured,
   normalizeAISettingsDraft,
 } from "@/lib/ai-settings-form";
+import { isTauri } from "@/lib/tauri";
 
 export type AIProvider = "openai" | "anthropic" | "openrouter" | "local";
 

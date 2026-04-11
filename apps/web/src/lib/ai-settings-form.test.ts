@@ -6,7 +6,7 @@ import {
   normalizeAISettingsDraft,
 } from "@/lib/ai-settings-form";
 
-describe("normalizeAISettingsDraft", () => {
+describe("ai settings draft normalization", () => {
   it("trims hosted-provider fields and fills a default model", () => {
     expect(
       normalizeAISettingsDraft({
@@ -15,7 +15,7 @@ describe("normalizeAISettingsDraft", () => {
         model: "",
         provider: "openai",
       })
-    ).toEqual({
+    ).toStrictEqual({
       apiKey: "sk-key",
       baseUrl: undefined,
       model: "gpt-4o",
@@ -31,7 +31,7 @@ describe("normalizeAISettingsDraft", () => {
         model: "",
         provider: "local",
       })
-    ).toEqual({
+    ).toStrictEqual({
       apiKey: "",
       baseUrl: "http://localhost:11434/v1",
       model: "llama3",
@@ -40,7 +40,7 @@ describe("normalizeAISettingsDraft", () => {
   });
 });
 
-describe("AI settings gating", () => {
+describe("ai settings gating", () => {
   it("treats local settings without an API key as configured", () => {
     const settings = normalizeAISettingsDraft({
       apiKey: "",
@@ -49,8 +49,8 @@ describe("AI settings gating", () => {
       provider: "local",
     });
 
-    expect(canSaveAISettingsDraft(settings)).toBe(true);
-    expect(isAISettingsConfigured(settings)).toBe(true);
+    expect(canSaveAISettingsDraft(settings)).toBeTruthy();
+    expect(isAISettingsConfigured(settings)).toBeTruthy();
   });
 
   it("requires a non-empty API key for hosted providers", () => {
@@ -61,7 +61,7 @@ describe("AI settings gating", () => {
       provider: "anthropic",
     });
 
-    expect(canSaveAISettingsDraft(settings)).toBe(false);
-    expect(isAISettingsConfigured(settings)).toBe(false);
+    expect(canSaveAISettingsDraft(settings)).toBeFalsy();
+    expect(isAISettingsConfigured(settings)).toBeFalsy();
   });
 });
