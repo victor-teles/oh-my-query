@@ -185,7 +185,23 @@
       "zero",
       "ss02";
   }
+}
 
+@layer components {
+  .text-section-label {
+    @apply text-[10px] font-medium uppercase tracking-wider text-muted-foreground;
+  }
+
+  .text-chrome {
+    @apply text-[11px] font-medium tracking-tight;
+  }
+
+  .text-data {
+    @apply font-mono tabular-nums tracking-tight;
+  }
+}
+
+@layer base {
   [data-variant="segment"]
     > [data-slot="tabs-trigger"]
     + [data-slot="tabs-trigger"]::before {

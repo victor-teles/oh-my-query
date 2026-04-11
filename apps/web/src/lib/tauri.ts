@@ -9,7 +9,10 @@ interface TestConnectionResult {
 export const isTauri = (): boolean => "__TAURI_INTERNALS__" in window;
 
 export const testConnection = async (
-  connection: Omit<DatabaseConnection, "id" | "name" | "createdAt">
+  connection: Omit<
+    DatabaseConnection,
+    "id" | "name" | "createdAt" | "pinned" | "lastConnectedAt"
+  >
 ): Promise<TestConnectionResult> => {
   if (!isTauri()) {
     return {

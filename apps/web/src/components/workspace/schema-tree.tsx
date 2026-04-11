@@ -66,7 +66,7 @@ export const SchemaTree = ({
     <div className="px-1 py-1">
       {sortedTables.length > 0 && (
         <>
-          <div className="mb-0.5 px-2 text-[10px] font-medium uppercase tracking-wider text-muted-foreground">
+          <div className="mb-0.5 px-2 text-section-label">
             Tables ({sortedTables.length})
           </div>
           {sortedTables.map((table) => (
@@ -82,7 +82,7 @@ export const SchemaTree = ({
 
       {filtered.views.length > 0 && (
         <>
-          <div className="mb-0.5 mt-3 px-2 text-[10px] font-medium uppercase tracking-wider text-muted-foreground">
+          <div className="mb-0.5 mt-3 px-2 text-section-label">
             Views ({filtered.views.length})
           </div>
           {filtered.views.map((view) => (

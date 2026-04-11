@@ -124,8 +124,10 @@ const buildConnection = (form: FormState): DatabaseConnection => {
     database: form.database.trim(),
     host: hasHost ? form.host.trim() : "",
     id: crypto.randomUUID(),
+    lastConnectedAt: null,
     name: form.name.trim(),
     password: hasHost ? form.password : "",
+    pinned: false,
     port: hasHost ? Number(form.port) : 0,
     type: form.type,
     username: hasUsername ? form.username.trim() : "",
@@ -253,6 +255,8 @@ export const ConnectionForm = ({
           ...buildConnection(form),
           createdAt: connection.createdAt,
           id: connection.id,
+          lastConnectedAt: connection.lastConnectedAt,
+          pinned: connection.pinned,
         };
         updateConnection(updated);
         toast.success(`Connection "${updated.name}" updated`);

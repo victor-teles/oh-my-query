@@ -9,9 +9,7 @@ export const QueryRunningStatus = () => (
     exit={{ filter: "blur(4px)", opacity: 0 }}
   >
     <Loader2 className="size-3 shrink-0 animate-spin text-muted-foreground" />
-    <span className="text-[11px] font-medium tracking-tight text-muted-foreground">
-      Executing…
-    </span>
+    <span className="text-chrome text-muted-foreground">Executing…</span>
   </motion.div>
 );
 
@@ -44,13 +42,11 @@ export const QuerySuccessStatus = ({
     >
       <Check className="size-3 shrink-0 text-emerald-500" />
     </motion.div>
-    <span className="flex items-baseline gap-1 text-[11px] text-muted-foreground">
-      <span className="font-mono tabular-nums tracking-tight text-foreground">
-        {rowCount}
-      </span>
-      <span className="tracking-tight">{rowCount === 1 ? "row" : "rows"}</span>
+    <span className="text-chrome flex items-baseline gap-1 text-muted-foreground">
+      <span className="text-data text-foreground">{rowCount}</span>
+      <span>{rowCount === 1 ? "row" : "rows"}</span>
       <span className="text-muted-foreground/40">·</span>
-      <span className="font-mono tabular-nums tracking-tight text-foreground">
+      <span className="text-data text-foreground">
         {formatTime(executionTimeMs)}
       </span>
     </span>
@@ -69,7 +65,7 @@ export const QueryErrorStatus = ({ error }: QueryErrorStatusProps) => (
     exit={{ filter: "blur(4px)", opacity: 0 }}
   >
     <AlertTriangle className="size-3 shrink-0 text-amber-500" />
-    <span className="max-w-[360px] truncate text-[11px] font-medium tracking-tight text-amber-500">
+    <span className="text-chrome max-w-[360px] truncate text-amber-500">
       {error}
     </span>
   </motion.div>
