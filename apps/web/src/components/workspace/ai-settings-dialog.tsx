@@ -26,6 +26,10 @@ import {
   getDefaultModel,
   saveAISettings,
 } from "@/lib/ai-settings";
+import {
+  canSaveAISettingsDraft,
+  normalizeAISettingsDraft,
+} from "@/lib/ai-settings-form";
 
 interface AISettingsDialogProps {
   open: boolean;
@@ -109,12 +113,12 @@ export const AISettingsDialog = ({
   const handleSave = useCallback(async () => {
     setSaving(true);
     try {
-      const settings: AISettings = {
+      const settings = normalizeAISettingsDraft({
         apiKey,
-        baseUrl: baseUrl || undefined,
-        model: model || undefined,
+        baseUrl,
+        model,
         provider,
-      };
+      });
       await saveAISettings(settings);
       onOpenChange(false);
     } finally {
@@ -193,7 +197,10 @@ export const AISettingsDialog = ({
           </Button>
           <Button
             onClick={handleSave}
-            disabled={saving || (!apiKey && provider !== "local")}
+            disabled={
+              saving ||
+              !canSaveAISettingsDraft({ apiKey, baseUrl, model, provider })
+            }
           >
             {saving && <Loader2 className="mr-2 size-4 animate-spin" />}
             Save

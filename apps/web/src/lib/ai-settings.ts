@@ -1,5 +1,10 @@
 import { isTauri } from "@/lib/tauri";
 
+import {
+  isAISettingsConfigured,
+  normalizeAISettingsDraft,
+} from "@/lib/ai-settings-form";
+
 export type AIProvider = "openai" | "anthropic" | "openrouter" | "local";
 
 export interface AISettings {
@@ -40,12 +45,19 @@ export const saveAISettings = async (settings: AISettings): Promise<void> => {
 
   const { invoke } = await import("@tauri-apps/api/core");
   const config = await invoke<AppConfig>("get_config");
+  const normalized = normalizeAISettingsDraft({
+    apiKey: settings.apiKey,
+    baseUrl: settings.baseUrl ?? "",
+    model: settings.model ?? "",
+    provider: settings.provider,
+  });
+
   await invoke("save_config", {
-    config: { ...config, ai: settings },
+    config: { ...config, ai: normalized },
   });
 };
 
 export const hasAISettings = async (): Promise<boolean> => {
   const settings = await getAISettings();
-  return settings !== null && settings.apiKey.length > 0;
+  return isAISettingsConfigured(settings);
 };
