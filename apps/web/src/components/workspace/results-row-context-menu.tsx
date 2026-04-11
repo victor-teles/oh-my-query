@@ -22,6 +22,7 @@ import {
   rowsToInserts,
   rowsToJson,
   rowsToMarkdown,
+  rowsToMultiRowInsert,
   rowsToTsv,
 } from "@/lib/row-serializers";
 
@@ -90,6 +91,16 @@ export const ResultsRowContextMenu = ({
     );
   }, [result, executedSql, rowIndex, selectedRowIndices]);
 
+  const handleCopyMultiRowInsert = useCallback(() => {
+    const tableName = extractTableName(executedSql) ?? undefined;
+    copy(
+      rowsToMultiRowInsert(
+        buildSlice(result, rowIndex, selectedRowIndices),
+        tableName
+      )
+    );
+  }, [result, executedSql, rowIndex, selectedRowIndices]);
+
   const handleCopyMarkdown = useCallback(() => {
     copy(rowsToMarkdown(buildSlice(result, rowIndex, selectedRowIndices)));
   }, [result, rowIndex, selectedRowIndices]);
@@ -134,6 +145,10 @@ export const ResultsRowContextMenu = ({
             <ContextMenuItem onClick={handleCopyInsert}>
               <FileCode />
               INSERT
+            </ContextMenuItem>
+            <ContextMenuItem onClick={handleCopyMultiRowInsert}>
+              <FileCode />
+              INSERT (multi-row)
             </ContextMenuItem>
             <ContextMenuItem onClick={handleCopyMarkdown}>
               <LetterText />

@@ -7,6 +7,26 @@ export interface RowSlice {
   rows: unknown[][];
 }
 
+const stringifyCell = (value: unknown): string => {
+  if (value === null || value === undefined) {
+    return "";
+  }
+
+  if (typeof value === "string") {
+    return value;
+  }
+
+  if (
+    typeof value === "number" ||
+    typeof value === "bigint" ||
+    typeof value === "boolean"
+  ) {
+    return String(value);
+  }
+
+  return JSON.stringify(value);
+};
+
 interface CsvOptions {
   delimiter: string;
   nullDisplay: string;
@@ -14,20 +34,20 @@ interface CsvOptions {
   includeBom: boolean;
 }
 
-const sliceToResult = (slice: RowSlice): TabularResult => ({
+const sliceToResult = (slice: RowSlice, stringify = false): TabularResult => ({
   columns: slice.columns,
   executionTimeMs: 0,
   isTruncated: false,
   resultType: "tabular",
   rowCount: slice.rows.length,
-  rows: slice.rows,
+  rows: stringify ? slice.rows.map((row) => row.map(stringifyCell)) : slice.rows,
 });
 
 export const rowsToCsv = (slice: RowSlice, options: CsvOptions): string =>
-  tabularResultToCsv(sliceToResult(slice), options);
+  tabularResultToCsv(sliceToResult(slice, true), options);
 
 export const rowsToTsv = (slice: RowSlice): string =>
-  tabularResultToCsv(sliceToResult(slice), {
+  tabularResultToCsv(sliceToResult(slice, true), {
     delimiter: "\t",
     includeBom: false,
     includeHeaders: true,
@@ -56,7 +76,7 @@ const formatSqlLiteral = (value: unknown): string => {
     return value ? "TRUE" : "FALSE";
   }
   // Simple single-quote doubling. Display-only — not injection-safe.
-  const str = String(value).replaceAll("'", "''");
+  const str = stringifyCell(value).replaceAll("'", "''");
   return `'${str}'`;
 };
 
@@ -71,6 +91,20 @@ export const rowsToInserts = (
       return `INSERT INTO ${tableName} (${columnList}) VALUES (${values});`;
     })
     .join("\n");
+};
+
+export const rowsToMultiRowInsert = (
+  slice: RowSlice,
+  tableName = "table_name"
+): string => {
+  if (slice.rows.length === 0) {
+    return "";
+  }
+  const columnList = slice.columns.map((col) => col.name).join(", ");
+  const valueTuples = slice.rows
+    .map((row) => `  (${row.map(formatSqlLiteral).join(", ")})`)
+    .join(",\n");
+  return `INSERT INTO ${tableName} (${columnList}) VALUES\n${valueTuples};`;
 };
 
 const TABLE_NAME_REGEX =
@@ -98,10 +132,9 @@ export const extractTableName = (sql: string | null): string | null => {
 };
 
 const escapeMarkdownCell = (value: unknown): string => {
-  if (value === null || value === undefined) {
-    return "";
-  }
-  return String(value).replaceAll("|", "\\|").replaceAll("\n", "<br/>");
+  return stringifyCell(value)
+    .replaceAll("|", "\\|")
+    .replaceAll("\n", "<br/>");
 };
 
 export const rowsToMarkdown = (slice: RowSlice): string => {
