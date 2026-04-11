@@ -11,7 +11,7 @@ interface TitlebarProps {
   className?: string;
 }
 
-const TRAFFIC_LIGHT_INSET = "78px";
+export const TRAFFIC_LIGHT_INSET = "78px";
 
 export const Titlebar = ({
   children,

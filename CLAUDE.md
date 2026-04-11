@@ -81,7 +81,7 @@ Defined in `packages/env/src/web.ts` using Zod schemas. Web-specific env vars mu
 
 ### Users
 
-Backend and full-stack developers who live in terminals and IDEs and treat oh-my-query as a daily driver alongside their editor. Keyboard-first, long sessions debugging and exploring data, running on macOS as a native Tauri app alongside a code editor. Connecting to PostgreSQL, MySQL, SQLite, MongoDB, or Redis.
+Backend and full-stack developers who live in terminals and IDEs and treat oh-my-query as a daily driver alongside their editor. Keyboard-first, long sessions debugging and exploring data, running on macOS as a native Tauri app alongside a code editor. Connecting to PostgreSQL, MySQL, SQLite, MongoDB, Redis, or ClickHouse.
 
 **Job to be done**: "Give me a fast, beautiful, trustworthy place to talk to my databases — with an AI that helps without getting in the way."
 

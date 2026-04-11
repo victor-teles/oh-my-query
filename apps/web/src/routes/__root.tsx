@@ -6,8 +6,10 @@ import {
 } from "@tanstack/react-router";
 
 import { ThemeProvider } from "@/components/theme-provider";
+import { AppIsland } from "@/components/titlebar/dynamic-island/dynamic-island";
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { IslandProvider } from "@/contexts/island-context";
 import { useMenuNavigation } from "@/hooks/use-menu-navigation";
 import "@/index.css";
 
@@ -50,7 +52,10 @@ function RootComponent() {
       >
         <HotkeysProvider>
           <TooltipProvider>
-            <Outlet />
+            <IslandProvider>
+              <Outlet />
+              <AppIsland />
+            </IslandProvider>
             <Toaster richColors />
           </TooltipProvider>
         </HotkeysProvider>

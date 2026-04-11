@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { X } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import { Titlebar } from "@/components/titlebar/titlebar";
 import { Button } from "@/components/ui/button";
@@ -13,6 +13,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { useIsland } from "@/contexts/island-context";
 import { useEditorSettings } from "@/hooks/use-editor-settings";
 
 import { EditorFontSection } from "./-components/editor-font-section";
@@ -23,6 +24,11 @@ import { SyntaxThemeSection } from "./-components/syntax-theme-section";
 const SettingsComponent = () => {
   const { settings, updateSettings } = useEditorSettings();
   const [activeTab, setActiveTab] = useState("general");
+  const { setSnapshot } = useIsland();
+
+  useEffect(() => {
+    setSnapshot({ kind: "hidden" });
+  }, [setSnapshot]);
 
   const handleClose = useCallback(() => {
     window.history.back();

@@ -11,6 +11,7 @@ const BUTTON_SPRING = { damping: 20, stiffness: 400, type: "spring" } as const;
 
 export const ConnectingStatus = ({ connectionName }: ConnectingStatusProps) => (
   <motion.div
+    aria-hidden="true"
     className="flex items-center gap-1.5"
     initial={{ filter: "blur(4px)", opacity: 0 }}
     animate={{ filter: "blur(0px)", opacity: 1 }}
@@ -41,6 +42,7 @@ export const ReconnectingStatus = ({
   connectionName,
 }: ConnectingStatusProps) => (
   <motion.div
+    aria-hidden="true"
     className="flex items-center gap-1.5"
     initial={{ filter: "blur(4px)", opacity: 0 }}
     animate={{ filter: "blur(0px)", opacity: 1 }}
@@ -79,6 +81,7 @@ export const ConnectedIdleStatus = ({
   database,
 }: ConnectedIdleStatusProps) => (
   <motion.div
+    aria-hidden="true"
     className="flex cursor-default items-center gap-1.5"
     initial={{ filter: "blur(4px)", opacity: 0 }}
     animate={{ filter: "blur(0px)", opacity: 1 }}
@@ -112,12 +115,16 @@ export const ConnectionErrorStatus = ({
   onReconnect,
 }: ConnectionErrorStatusProps) => (
   <motion.div
+    role="alert"
     className="flex items-center gap-1.5"
     initial={{ filter: "blur(4px)", opacity: 0 }}
     animate={{ filter: "blur(0px)", opacity: 1 }}
     exit={{ filter: "blur(4px)", opacity: 0 }}
   >
-    <AlertCircle className="size-3 shrink-0 text-destructive" />
+    <AlertCircle
+      aria-hidden="true"
+      className="size-3 shrink-0 text-destructive"
+    />
     <span className="text-chrome max-w-[280px] truncate text-destructive">
       {error}
     </span>
@@ -131,5 +138,41 @@ export const ConnectionErrorStatus = ({
     >
       Retry
     </motion.button>
+  </motion.div>
+);
+
+interface AmbientStatusProps {
+  connectionName: string;
+}
+
+export const AmbientStatus = ({ connectionName }: AmbientStatusProps) => (
+  <motion.div
+    aria-hidden="true"
+    className="flex items-center gap-1.5"
+    initial={{ filter: "blur(4px)", opacity: 0 }}
+    animate={{ filter: "blur(0px)", opacity: 1 }}
+    exit={{ filter: "blur(4px)", opacity: 0 }}
+  >
+    <span className="size-1 shrink-0 rounded-full bg-muted-foreground/40" />
+    <span className="text-chrome max-w-[240px] truncate text-muted-foreground">
+      {connectionName}
+    </span>
+  </motion.div>
+);
+
+export const WelcomeStatus = () => (
+  <motion.div
+    aria-live="polite"
+    className="flex items-center gap-1.5"
+    initial={{ filter: "blur(4px)", opacity: 0 }}
+    animate={{ filter: "blur(0px)", opacity: 1 }}
+    exit={{ filter: "blur(4px)", opacity: 0 }}
+    role="status"
+  >
+    <span
+      aria-hidden="true"
+      className="size-1.5 shrink-0 rounded-full bg-primary"
+    />
+    <span className="text-chrome text-muted-foreground">Welcome</span>
   </motion.div>
 );

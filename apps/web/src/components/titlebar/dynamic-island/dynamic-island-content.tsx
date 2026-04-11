@@ -1,13 +1,14 @@
 import { AnimatePresence } from "motion/react";
-import { useEffect, useRef, useState } from "react";
 
-import { useQueryExecution } from "@/contexts/query-execution-context";
+import type { IslandSnapshot } from "@/contexts/island-context";
 
 import {
+  AmbientStatus,
   ConnectedIdleStatus,
   ConnectingStatus,
   ConnectionErrorStatus,
   ReconnectingStatus,
+  WelcomeStatus,
 } from "./island-connection-status";
 import {
   QueryErrorStatus,
@@ -15,160 +16,62 @@ import {
   QuerySuccessStatus,
 } from "./island-query-status";
 
-type IslandState =
-  | "connecting"
-  | "reconnecting"
-  | "connection-error"
-  | "query-running"
-  | "query-error"
-  | "query-success"
-  | "idle";
-
 interface DynamicIslandContentProps {
-  isConnecting: boolean;
-  isConnected: boolean;
-  isReconnecting: boolean;
-  connectionError: string | null;
-  connectionName: string;
-  serverVersion: string | null;
-  username: string;
-  database: string;
-  onReconnect: () => void;
+  snapshot: IslandSnapshot;
 }
 
-const DISMISS_DELAY_SUCCESS = 3000;
-const DISMISS_DELAY_ERROR = 4000;
-
 export const DynamicIslandContent = ({
-  isConnecting,
-  isConnected,
-  isReconnecting,
-  connectionError,
-  connectionName,
-  serverVersion,
-  username,
-  database,
-  onReconnect,
+  snapshot,
 }: DynamicIslandContentProps) => {
-  const { state: execState } = useQueryExecution();
-  const [dismissed, setDismissed] = useState(false);
-  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  const resolvedState = resolveIslandState(
-    isConnecting,
-    isConnected,
-    isReconnecting,
-    connectionError,
-    execState.status,
-    dismissed
-  );
-
-  useEffect(() => {
-    if (execState.status === "running") {
-      setDismissed(false);
-      if (timerRef.current) {
-        clearTimeout(timerRef.current);
-        timerRef.current = null;
-      }
-    }
-  }, [execState.status]);
-
-  useEffect(() => {
-    if (resolvedState === "query-success") {
-      timerRef.current = setTimeout(
-        () => setDismissed(true),
-        DISMISS_DELAY_SUCCESS
-      );
-    } else if (resolvedState === "query-error") {
-      timerRef.current = setTimeout(
-        () => setDismissed(true),
-        DISMISS_DELAY_ERROR
-      );
-    }
-
-    return () => {
-      if (timerRef.current) {
-        clearTimeout(timerRef.current);
-        timerRef.current = null;
-      }
-    };
-  }, [resolvedState]);
+  const handleReconnect =
+    snapshot.kind === "connection-error" ? snapshot.onReconnect : undefined;
 
   return (
     <AnimatePresence mode="wait">
-      {resolvedState === "connection-error" && connectionError && (
-        <ConnectionErrorStatus
-          key="conn-error"
-          error={connectionError}
-          onReconnect={onReconnect}
+      {snapshot.kind === "welcome" && <WelcomeStatus key="welcome" />}
+      {snapshot.kind === "ambient" && (
+        <AmbientStatus key="ambient" connectionName={snapshot.connectionName} />
+      )}
+      {snapshot.kind === "connecting" && (
+        <ConnectingStatus
+          key="connecting"
+          connectionName={snapshot.connectionName}
         />
       )}
-      {resolvedState === "reconnecting" && (
+      {snapshot.kind === "reconnecting" && (
         <ReconnectingStatus
           key="reconnecting"
-          connectionName={connectionName}
+          connectionName={snapshot.connectionName}
         />
       )}
-      {resolvedState === "connecting" && (
-        <ConnectingStatus key="connecting" connectionName={connectionName} />
+      {snapshot.kind === "connection-error" && handleReconnect && (
+        <ConnectionErrorStatus
+          key="connection-error"
+          error={snapshot.error}
+          onReconnect={handleReconnect}
+        />
       )}
-      {resolvedState === "query-running" && (
+      {snapshot.kind === "connected-idle" && (
+        <ConnectedIdleStatus
+          key="connected-idle"
+          serverVersion={snapshot.serverVersion}
+          username={snapshot.username}
+          database={snapshot.database}
+        />
+      )}
+      {snapshot.kind === "query-running" && (
         <QueryRunningStatus key="query-running" />
       )}
-      {resolvedState === "query-error" && execState.error && (
-        <QueryErrorStatus key="query-error" error={execState.error} />
-      )}
-      {resolvedState === "query-success" && execState.result && (
+      {snapshot.kind === "query-success" && (
         <QuerySuccessStatus
           key="query-success"
-          rowCount={
-            execState.result.resultType === "tabular"
-              ? execState.result.rowCount
-              : execState.result.count
-          }
-          executionTimeMs={execState.result.executionTimeMs}
+          rowCount={snapshot.rowCount}
+          executionTimeMs={snapshot.executionTimeMs}
         />
       )}
-      {resolvedState === "idle" && (
-        <ConnectedIdleStatus
-          key="idle"
-          serverVersion={serverVersion}
-          username={username}
-          database={database}
-        />
+      {snapshot.kind === "query-error" && (
+        <QueryErrorStatus key="query-error" error={snapshot.error} />
       )}
     </AnimatePresence>
   );
-};
-
-const resolveIslandState = (
-  isConnecting: boolean,
-  isConnected: boolean,
-  isReconnecting: boolean,
-  connectionError: string | null,
-  queryStatus: string,
-  dismissed: boolean
-): IslandState => {
-  if (isReconnecting) {
-    return "reconnecting";
-  }
-  if (connectionError) {
-    return "connection-error";
-  }
-  if (isConnecting) {
-    return "connecting";
-  }
-  if (!isConnected) {
-    return "idle";
-  }
-  if (queryStatus === "running") {
-    return "query-running";
-  }
-  if (queryStatus === "error" && !dismissed) {
-    return "query-error";
-  }
-  if (queryStatus === "success" && !dismissed) {
-    return "query-success";
-  }
-  return "idle";
 };

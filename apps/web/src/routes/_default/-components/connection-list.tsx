@@ -11,17 +11,19 @@ const SPRING = { damping: 30, stiffness: 400, type: "spring" } as const;
 const ConnectionList = ({
   connections,
   selectedId,
+  glowingId,
   onEditRequest,
   onDeleteRequest,
   onTogglePin,
-  onSelect,
+  onLaunch,
 }: {
   connections: DatabaseConnection[];
   selectedId: string | null;
+  glowingId?: string | null;
   onEditRequest: (connection: DatabaseConnection) => void;
   onDeleteRequest: (connection: DatabaseConnection) => void;
   onTogglePin: (connection: DatabaseConnection) => void;
-  onSelect: (id: string) => void;
+  onLaunch: (connection: DatabaseConnection) => void;
 }) => (
   <div className="overflow-hidden rounded-lg ring-1 ring-foreground/10">
     <AnimatePresence initial={false}>
@@ -38,10 +40,11 @@ const ConnectionList = ({
           <ConnectionListItem
             connection={conn}
             isSelected={selectedId === conn.id}
+            isGlowing={glowingId === conn.id}
             onEditRequest={onEditRequest}
             onDeleteRequest={onDeleteRequest}
             onTogglePin={onTogglePin}
-            onSelect={onSelect}
+            onLaunch={onLaunch}
           />
         </motion.div>
       ))}

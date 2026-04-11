@@ -1,5 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { Pencil, Pin, PinOff, Trash2 } from "lucide-react";
+import { motion, useReducedMotion } from "motion/react";
 import { useCallback } from "react";
 
 import type { DatabaseConnection } from "@/lib/connections";
@@ -13,6 +14,8 @@ import {
   ContextMenuShortcut,
   ContextMenuTrigger,
 } from "@/components/ui/context-menu";
+import { ListCursor } from "@/components/ui/list-cursor";
+import { cn } from "@/lib/utils";
 
 const MINUTE = 60_000;
 const HOUR = 60 * MINUTE;
@@ -58,21 +61,24 @@ const getIdentifier = (connection: DatabaseConnection): string =>
 const ConnectionListItem = ({
   connection,
   isSelected,
+  isGlowing,
   onEditRequest,
   onDeleteRequest,
   onTogglePin,
-  onSelect,
+  onLaunch,
 }: {
   connection: DatabaseConnection;
   isSelected: boolean;
+  isGlowing?: boolean;
   onEditRequest: (connection: DatabaseConnection) => void;
   onDeleteRequest: (connection: DatabaseConnection) => void;
   onTogglePin: (connection: DatabaseConnection) => void;
-  onSelect: (id: string) => void;
+  onLaunch: (connection: DatabaseConnection) => void;
 }) => {
   const identifier = getIdentifier(connection);
   const relativeTime = formatRelativeTime(connection.lastConnectedAt);
   const Icon = DATABASE_ICON_MAP[connection.type];
+  const shouldReduceMotion = useReducedMotion();
 
   const handleEdit = useCallback(() => {
     onEditRequest(connection);
@@ -86,9 +92,11 @@ const ConnectionListItem = ({
     onTogglePin(connection);
   }, [onTogglePin, connection]);
 
-  const handlePointerEnter = useCallback(() => {
-    onSelect(connection.id);
-  }, [onSelect, connection.id]);
+  const handleClick = useCallback(() => {
+    onLaunch(connection);
+  }, [onLaunch, connection]);
+
+  const pinLabel = connection.pinned ? "Unpin" : "Pin";
 
   return (
     <ContextMenu>
@@ -99,19 +107,44 @@ const ConnectionListItem = ({
             params={{ connectionId: connection.id }}
           />
         }
-        onPointerEnter={handlePointerEnter}
+        id={connection.id}
+        role="option"
+        aria-selected={isSelected}
         data-selected={isSelected ? "true" : undefined}
-        className="group/row flex items-center gap-3 px-3.5 py-2.5 transition-colors hover:bg-accent/50 data-[selected=true]:bg-accent/70"
+        onClick={handleClick}
+        className="group/row relative flex items-center gap-3 px-3.5 py-2.5 transition-colors hover:bg-accent/50 data-[selected=true]:bg-accent/70"
       >
+        {isSelected && (
+          <ListCursor
+            layoutId="connection-cursor"
+            className="inset-y-2 left-0 w-0.5"
+          />
+        )}
+        {isGlowing && !shouldReduceMotion && (
+          <motion.span
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-0 bg-primary/15"
+            initial={{ opacity: 1 }}
+            animate={{ opacity: 0 }}
+            transition={{ duration: 0.6, ease: "easeOut" }}
+          />
+        )}
         <Icon className="size-4 shrink-0 text-muted-foreground" />
         <div className="flex min-w-0 flex-1 flex-col gap-0.5">
           <div className="flex items-baseline justify-between gap-3">
             <span className="truncate text-sm font-medium tracking-tight text-foreground">
               {connection.name}
             </span>
-            <span className="shrink-0 text-[11px] tracking-tight text-muted-foreground/70">
-              {relativeTime}
-            </span>
+            <div className="relative shrink-0">
+              <span
+                className={cn(
+                  "text-[11px] tracking-tight text-muted-foreground/70 transition-opacity duration-150",
+                  isSelected ? "opacity-0" : "group-hover/row:opacity-0"
+                )}
+              >
+                {relativeTime}
+              </span>
+            </div>
           </div>
           <span className="text-data truncate text-[11px] text-muted-foreground/80">
             {identifier}
@@ -121,7 +154,7 @@ const ConnectionListItem = ({
       <ContextMenuContent>
         <ContextMenuItem onClick={handleTogglePin}>
           {connection.pinned ? <PinOff /> : <Pin />}
-          {connection.pinned ? "Unpin" : "Pin"}
+          {pinLabel}
         </ContextMenuItem>
         <ContextMenuItem onClick={handleEdit}>
           <Pencil />
@@ -131,7 +164,7 @@ const ConnectionListItem = ({
         <ContextMenuItem onClick={handleDelete} variant="destructive">
           <Trash2 />
           Delete
-          <ContextMenuShortcut>⌫</ContextMenuShortcut>
+          <ContextMenuShortcut>⌘⌫</ContextMenuShortcut>
         </ContextMenuItem>
       </ContextMenuContent>
     </ContextMenu>

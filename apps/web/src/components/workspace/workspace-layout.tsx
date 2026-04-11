@@ -7,7 +7,6 @@ import { usePanelRef } from "react-resizable-panels";
 import type { DatabaseConnection } from "@/lib/connections";
 
 import { ConnectionToolbar } from "@/components/titlebar/connection-toolbar";
-import { DynamicIsland } from "@/components/titlebar/dynamic-island/dynamic-island";
 import { Titlebar } from "@/components/titlebar/titlebar";
 import {
   ResizableHandle,
@@ -15,6 +14,7 @@ import {
   ResizablePanelGroup,
 } from "@/components/ui/resizable";
 import { useSchema } from "@/hooks/use-schema";
+import { useWorkspaceIslandSync } from "@/hooks/use-workspace-island-sync";
 
 import { ChatSidebar } from "./chat/chat-sidebar";
 import { WorkspaceContent } from "./workspace-content";
@@ -43,6 +43,16 @@ export const WorkspaceLayout = ({
   const chatPanelRef = usePanelRef();
   const [isChatOpen, setIsChatOpen] = useState(false);
   const hasBeenOpenedRef = useRef(false);
+
+  useWorkspaceIslandSync({
+    connection,
+    connectionError,
+    isConnected,
+    isConnecting,
+    isReconnecting,
+    onReconnect,
+    serverVersion,
+  });
 
   const {
     schema,
@@ -105,21 +115,7 @@ export const WorkspaceLayout = ({
 
   return (
     <div className="flex h-svh flex-col bg-background">
-      <Titlebar
-        center={
-          <DynamicIsland
-            isConnecting={isConnecting}
-            isConnected={isConnected}
-            isReconnecting={isReconnecting}
-            connectionError={connectionError}
-            connectionName={connection.name}
-            serverVersion={serverVersion}
-            username={connection.username}
-            database={connection.database}
-            onReconnect={onReconnect}
-          />
-        }
-      >
+      <Titlebar>
         <ConnectionToolbar
           connection={connection}
           isChatOpen={isChatOpen}
