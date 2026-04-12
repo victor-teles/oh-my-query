@@ -11,6 +11,7 @@ interface QueryTabsContextValue {
   addTab: () => void;
   addTabWithSql: (sql: string) => void;
   closeTab: (tabId: string) => void;
+  reopenTab: () => void;
   setActiveTabId: (id: string) => void;
   updateTabDialect: (tabId: string, dialect: string | null) => void;
   updateTabSql: (tabId: string, sql: string) => void;

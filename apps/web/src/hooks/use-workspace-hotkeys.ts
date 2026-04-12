@@ -7,6 +7,7 @@ interface WorkspaceHotkeysParams {
   activeTab: QueryTab | undefined;
   addTab: () => void;
   closeTab: (tabId: string) => void;
+  reopenTab: () => void;
   setActiveTabId: (id: string) => void;
   handleFormat: () => void;
 }
@@ -16,6 +17,7 @@ export const useWorkspaceHotkeys = ({
   activeTab,
   addTab,
   closeTab,
+  reopenTab,
   setActiveTabId,
   handleFormat,
 }: WorkspaceHotkeysParams) => {
@@ -31,6 +33,10 @@ export const useWorkspaceHotkeys = ({
     if (activeTab) {
       closeTab(activeTab.id);
     }
+  });
+
+  useHotkey("Mod+Shift+T", () => {
+    reopenTab();
   });
 
   useHotkey("Mod+1", () => {

@@ -12,6 +12,7 @@ import { useTabExecution } from "./use-tab-execution";
 
 const SAVE_DEBOUNCE_MS = 150;
 const SAVE_ERROR_TOAST_THROTTLE_MS = 10_000;
+const MAX_CLOSED_TABS = 5;
 const DESTRUCTIVE_SQL_PATTERN =
   /^\s*(insert|update|delete|drop|truncate|alter|create|grant|revoke|merge|replace)\b/i;
 
@@ -44,6 +45,7 @@ export const useQueryTabs = (
   activeTabIdRef.current = activeTabId;
   const connectionIdRef = useRef(connectionId);
   connectionIdRef.current = connectionId;
+  const closedTabsRef = useRef<{ tab: QueryTab; index: number }[]>([]);
 
   const runSave = useCallback(async () => {
     if (saveTimeoutRef.current) {
@@ -235,6 +237,15 @@ export const useQueryTabs = (
   const closeTab = useCallback(
     (tabId: string) => {
       setTabs((prev) => {
+        const closedIdx = prev.findIndex((t) => t.id === tabId);
+        const closed = prev[closedIdx];
+        if (closed) {
+          closedTabsRef.current = [
+            { index: closedIdx, tab: closed },
+            ...closedTabsRef.current,
+          ].slice(0, MAX_CLOSED_TABS);
+        }
+
         const next = prev.filter((t) => t.id !== tabId);
         if (next.length === 0) {
           counterRef.current = 1;
@@ -243,7 +254,6 @@ export const useQueryTabs = (
           return [tab];
         }
         if (tabId === activeTabId) {
-          const closedIdx = prev.findIndex((t) => t.id === tabId);
           setActiveTabId(
             next[Math.min(closedIdx, next.length - 1)]?.id ?? next[0]?.id ?? ""
           );
@@ -253,6 +263,29 @@ export const useQueryTabs = (
     },
     [activeTabId]
   );
+
+  const reopenTab = useCallback(() => {
+    const [entry] = closedTabsRef.current;
+    if (!entry) {
+      return;
+    }
+    closedTabsRef.current = closedTabsRef.current.slice(1);
+    const restoredTab: QueryTab = {
+      ...entry.tab,
+      error: null,
+      errorCode: null,
+      executedSql: null,
+      pendingExecution: null,
+      result: null,
+      runningQueryId: null,
+      status: "idle",
+    };
+    setTabs((prev) => {
+      const insertAt = Math.min(entry.index, prev.length);
+      return [...prev.slice(0, insertAt), restoredTab, ...prev.slice(insertAt)];
+    });
+    setActiveTabId(restoredTab.id);
+  }, []);
 
   const updateTabSql = useCallback((tabId: string, sql: string) => {
     setTabs((prev) => prev.map((t) => (t.id === tabId ? { ...t, sql } : t)));
@@ -299,6 +332,7 @@ export const useQueryTabs = (
     closeTab,
     executeTab,
     isRestored,
+    reopenTab,
     setActiveTabId,
     tabs,
     updateTabDialect,

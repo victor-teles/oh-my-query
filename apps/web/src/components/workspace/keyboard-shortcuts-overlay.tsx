@@ -34,6 +34,7 @@ const SECTIONS: ShortcutSection[] = [
     entries: [
       { keys: ["⌘", "T"], label: "New tab" },
       { keys: ["⌘", "W"], label: "Close tab" },
+      { keys: ["⇧", "⌘", "T"], label: "Reopen closed tab" },
       { keys: ["⌘", "1…9"], label: "Switch to tab" },
     ],
     heading: "Tabs",

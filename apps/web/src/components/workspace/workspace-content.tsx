@@ -195,6 +195,7 @@ const ConnectedWorkspace = ({
     addTab,
     addTabWithSql,
     closeTab,
+    reopenTab,
     setActiveTabId,
     updateTabDialect,
     updateTabSql,
@@ -309,6 +310,7 @@ const ConnectedWorkspace = ({
     addTab,
     closeTab,
     handleFormat,
+    reopenTab,
     setActiveTabId,
     tabs,
   });
@@ -464,7 +466,7 @@ const REDUCED_MOTION_TRANSITION = { duration: 0 } as const;
 const RunningSqlPreview = ({ sql }: { sql: string }) => (
   <pre
     aria-hidden="true"
-    className="max-h-48 max-w-2xl overflow-hidden whitespace-pre-wrap break-words text-center font-mono text-muted-foreground/60 text-xs leading-relaxed"
+    className="max-h-48 max-w-2xl overflow-hidden whitespace-pre-wrap wrap-break-word text-center font-mono text-muted-foreground/60 text-xs leading-relaxed"
     style={{
       WebkitMaskImage:
         "linear-gradient(to bottom, black 55%, transparent 100%)",
@@ -489,7 +491,7 @@ const RunningStatusBar = ({ onCancel }: RunningStatusBarProps) => {
     >
       <span
         aria-hidden="true"
-        className="-translate-x-full pointer-events-none absolute inset-y-0 left-0 w-1/3 bg-gradient-to-r from-transparent via-primary/20 to-transparent motion-safe:animate-[query-shimmer_1.8s_ease-in-out_infinite] motion-reduce:hidden"
+        className="-translate-x-full pointer-events-none absolute inset-y-0 left-0 w-1/3 bg-linear-to-r from-transparent via-primary/20 to-transparent motion-safe:animate-[query-shimmer_1.8s_ease-in-out_infinite] motion-reduce:hidden"
       />
       <span className="relative inline-flex size-1.5 rounded-full bg-primary motion-safe:animate-pulse" />
       <span className="relative font-medium text-foreground">Running…</span>

@@ -1,7 +1,7 @@
 import { Plus, X } from "lucide-react";
 import { useCallback } from "react";
 
-import type { QueryTab } from "@/lib/query-types";
+import type { QueryTab, TabStatus } from "@/lib/query-types";
 
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -10,6 +10,19 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+
+const statusDescription: Record<TabStatus, string> = {
+  error: "has an error",
+  idle: "",
+  running: "is running",
+  success: "has results",
+};
+
+const statusDotClass: Partial<Record<TabStatus, string>> = {
+  error: "bg-destructive",
+  running: "bg-primary motion-safe:animate-pulse",
+  success: "bg-foreground/40",
+};
 
 interface QueryTabBarProps {
   tabs: QueryTab[];
@@ -37,7 +50,7 @@ const TabCloseButton = ({ tabTitle, tabId, onClose }: TabCloseButtonProps) => {
   return (
     <button
       aria-label={`Close ${tabTitle}`}
-      className="ml-0.5 rounded p-0.5 text-muted-foreground/50 hover:bg-muted hover:text-foreground group-hover/tab:text-muted-foreground"
+      className="ml-0.5 rounded-sm p-0.5 text-muted-foreground/70 hover:bg-muted hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:outline-none group-hover/tab:text-muted-foreground"
       onClick={handleClick}
       title={`Close ${tabTitle} (⌘W)`}
       type="button"
@@ -70,8 +83,18 @@ export const QueryTabBar = ({
       <div className="flex items-center border-b">
         <TabsList variant="segment" className="flex-1">
           {tabs.map((tab) => (
-            <TabsTrigger key={tab.id} value={tab.id} className="group/tab">
-              <span className="max-w-[120px] truncate">{tab.title}</span>
+            <TabsTrigger
+              key={tab.id}
+              value={tab.id}
+              className="group/tab"
+              aria-description={statusDescription[tab.status] || undefined}
+            >
+              {statusDotClass[tab.status] && (
+                <span
+                  className={`inline-block size-1.5 shrink-0 rounded-full ${statusDotClass[tab.status]}`}
+                />
+              )}
+              <span className="max-w-30 truncate">{tab.title}</span>
               <TabCloseButton
                 tabTitle={tab.title}
                 tabId={tab.id}
