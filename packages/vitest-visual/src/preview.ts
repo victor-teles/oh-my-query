@@ -41,8 +41,28 @@ interface BrowserContext {
 }
 
 declare global {
-  // Set by the vitest-visual setup file; absent in Storybook dev.
   var __VITEST_VISUAL_BROWSER_CONTEXT__: BrowserContext | undefined;
+}
+
+function delay(ms: number): Promise<void> {
+  // eslint-disable-next-line promise/avoid-new, promise/param-names, no-promise-executor-return, no-void -- setTimeout needs a raw promise
+  return new Promise<void>((r) => void setTimeout(r, ms));
+}
+
+async function waitForStability(
+  element: HTMLElement,
+  timeout: number
+): Promise<void> {
+  const animations = element.getAnimations({ subtree: true });
+  if (animations.length > 0) {
+    await Promise.race([
+      Promise.allSettled(animations.map((a) => a.finished)),
+      delay(timeout),
+    ]);
+    return;
+  }
+
+  await delay(100);
 }
 
 export const afterEach = async (context: AfterEachContext) => {
@@ -64,6 +84,9 @@ export const afterEach = async (context: AfterEachContext) => {
   const snapshotDir = (vr.snapshotDir as string) ?? ".storybook/snapshots";
   const threshold = (vr.threshold as number) ?? 0.2;
   const failThreshold = (vr.failThreshold as number) ?? 0.01;
+  const stabilityTimeout = (vr.stabilityTimeout as number) ?? 1000;
+
+  await waitForStability(canvasElement, stabilityTimeout);
 
   const locator = ctx.page.elementLocator(canvasElement);
   const { base64 } = await locator.screenshot({ base64: true });

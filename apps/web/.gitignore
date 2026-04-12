@@ -65,3 +65,4 @@ storybook-static
 # Visual regression (diff/actual outputs on failure)
 .storybook/snapshots/__actual__/
 .storybook/snapshots/__diff__/
+__screenshots__/

@@ -52,6 +52,7 @@ export default defineConfig({
               },
             ],
             provider: "playwright",
+            screenshotFailures: false,
           },
           name: "storybook",
         },

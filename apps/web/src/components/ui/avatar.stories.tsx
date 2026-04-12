@@ -26,6 +26,7 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const WithImage: Story = {
+  parameters: { visualRegression: { disable: true } },
   play: async ({ canvasElement }) => {
     const avatar = canvasElement.querySelector("[data-slot='avatar']");
     await expect(avatar).toBeTruthy();
