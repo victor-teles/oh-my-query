@@ -4,6 +4,8 @@ import type { SchemaInfo, SchemaItem } from "@/lib/tauri";
 
 import { TableNode } from "./table-node";
 
+const LABEL_MIN_ITEMS = 6;
+
 interface SchemaTreeProps {
   schema: SchemaInfo;
   filter: string;
@@ -62,31 +64,43 @@ export const SchemaTree = ({
     );
   }
 
+  const hasTables = sortedTables.length > 0;
+  const hasViews = filtered.views.length > 0;
+  const showBothLabels = hasTables && hasViews;
+  const showTablesLabel =
+    showBothLabels || sortedTables.length >= LABEL_MIN_ITEMS;
+  const showViewsLabel =
+    showBothLabels || filtered.views.length >= LABEL_MIN_ITEMS;
+
   return (
     <div className="px-1 py-1">
-      {sortedTables.length > 0 && (
+      {hasTables && (
         <>
-          <div className="mb-0.5 px-2 text-section-label">
-            Tables ({sortedTables.length})
-          </div>
+          {showTablesLabel && (
+            <div className="mb-0.5 px-2 text-section-label">
+              Tables ({sortedTables.length})
+            </div>
+          )}
           {sortedTables.map((table) => (
             <TableNode
-              key={table.name}
-              table={table}
               isPinned={pinnedTables.includes(table.name)}
+              key={table.name}
               onTogglePin={onTogglePin}
+              table={table}
             />
           ))}
         </>
       )}
 
-      {filtered.views.length > 0 && (
+      {hasViews && (
         <>
-          <div className="mb-0.5 mt-3 px-2 text-section-label">
-            Views ({filtered.views.length})
-          </div>
+          {showViewsLabel && (
+            <div className="mb-0.5 mt-3 px-2 text-section-label">
+              Views ({filtered.views.length})
+            </div>
+          )}
           {filtered.views.map((view) => (
-            <TableNode key={view.name} table={view} isView />
+            <TableNode isView key={view.name} table={view} />
           ))}
         </>
       )}

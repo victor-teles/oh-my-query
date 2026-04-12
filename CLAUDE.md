@@ -74,8 +74,37 @@ Defined in `packages/env/src/web.ts` using Zod schemas. Web-specific env vars mu
 - **React 19**: Use ref as a prop directly, no `forwardRef`
 - **TypeScript**: Strict mode with `noUncheckedIndexedAccess`, `verbatimModuleSyntax`
 - Do not add comments to the code unless necessary for clarity
-- Try always to break down complex components into smaller ones, even if they are only used once. This promotes reusability and readability.
-- Create files new components: When a primitive or reusable create in src/components/ui, when is too specific for the screen create in the same folder as the screen.
+
+## Component & Route Composition
+
+Keep route files thin. A route's job is to orchestrate — wire hooks, render layout slots, route between panels — not to implement. If a route file is growing past ~100 lines, extract.
+
+**File placement**
+
+- Reusable primitives (buttons, inputs, popovers, etc.): `apps/web/src/components/ui/`
+- Cross-screen feature components: `apps/web/src/components/<feature>/`
+- Screen-specific components: `<route>/-components/` (TanStack Router ignores `-`-prefixed dirs)
+- Screen-specific hooks: `<route>/-hooks/`
+- App-wide hooks: `apps/web/src/hooks/`
+
+**Extraction patterns**
+
+- Prefer many small, single-purpose components over one large one — even if a piece is used only once. Readability wins.
+- Each extracted panel/tab/section should own the hooks and handlers it needs (e.g., a tab that edits editor settings calls `useEditorSettings` itself instead of receiving props from the page). Don't thread state through the route when the child can own it.
+- Group related state + effects into purpose-named hooks (`useConnections`, `useConnectionSelection`, `useHomeIslandSync`, `useHomeHotkeys`) rather than piling `useState`/`useEffect` into the route component.
+- Extract titlebar actions, empty states, and populated states as separate components. Routes switch between them via `AnimatePresence` — they don't inline the JSX.
+- Hotkey wiring belongs in a dedicated `useXxxHotkeys` hook, not inline in the route.
+
+**What stays in the route**
+
+- `useState` for cross-cutting flow that spans multiple extracted pieces (e.g., welcome/glow timers coordinating with the island + dialog state).
+- Dialog mounts (`<AddConnectionDialog>`, `<EditConnectionDialog>`) — they're siblings of the main view, so the route owns their open state.
+- The top-level layout scaffold: `<Titlebar>`, scroll container, `AnimatePresence` switcher.
+
+**Don't over-engineer**
+
+- Don't create a primitive in `components/ui/` for something used once. Keep it local until a second caller appears.
+- Don't split a 30-line component just to hit a line count. Split when there are distinct responsibilities (data, layout, interaction) worth naming.
 
 ## Design Context
 

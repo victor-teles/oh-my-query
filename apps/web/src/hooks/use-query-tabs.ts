@@ -76,7 +76,7 @@ export const useQueryTabs = (
     await runSave();
   }, [isRestored, runSave]);
 
-  const { execute } = useTabExecution({
+  const { cancel, execute } = useTabExecution({
     connectionId,
     flushSave,
     selectedDatabase,
@@ -278,11 +278,23 @@ export const useQueryTabs = (
     [execute]
   );
 
+  const cancelTab = useCallback(
+    (tabId: string) => {
+      const tab = tabsRef.current.find((t) => t.id === tabId);
+      if (!tab?.runningQueryId) {
+        return;
+      }
+      cancel(tab.runningQueryId);
+    },
+    [cancel]
+  );
+
   return {
     activeTab,
     activeTabId,
     addTab,
     addTabWithSql,
+    cancelTab,
     closeTab,
     executeTab,
     isRestored,

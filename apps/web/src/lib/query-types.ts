@@ -13,4 +13,5 @@ export interface QueryTab {
   status: TabStatus;
   sourceDialect: string | null;
   pendingExecution: PendingExecution | null;
+  runningQueryId: string | null;
 }

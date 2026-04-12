@@ -12,7 +12,8 @@
   font-display: swap;
 }
 
-:root {
+:root,
+.light {
   --background: oklch(0.9821 0 0);
   --foreground: oklch(0.2435 0 0);
   --card: oklch(0.9911 0 0);
@@ -39,8 +40,8 @@
   --chart-5: oklch(0.4338 0.0437 41.6746);
   --sidebar: oklch(0.985 0.001 106.423);
   --sidebar-foreground: oklch(0.147 0.004 49.25);
-  --sidebar-primary: oklch(0.216 0.006 56.043);
-  --sidebar-primary-foreground: oklch(0.985 0.001 106.423);
+  --sidebar-primary: var(--primary);
+  --sidebar-primary-foreground: var(--primary-foreground);
   --sidebar-accent: oklch(0.97 0.001 106.424);
   --sidebar-accent-foreground: oklch(0.216 0.006 56.043);
   --sidebar-border: oklch(0.923 0.003 48.717);
@@ -53,6 +54,10 @@
     "JetBrains Mono Variable", ui-monospace, SFMono-Regular, "SF Mono", Menlo,
     Consolas, monospace;
   --tracking-normal: -0.003em;
+  --json-key: oklch(0.5 0.08 60);
+  --json-string: oklch(0.5 0.09 135);
+  --json-number: oklch(0.55 0.14 40);
+  --json-boolean: oklch(0.55 0.14 70);
 }
 
 .dark {
@@ -82,8 +87,8 @@
   --chart-5: oklch(0.9245 0.0533 67.0855);
   --sidebar: oklch(0.216 0.006 56.043);
   --sidebar-foreground: oklch(0.985 0.001 106.423);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0.001 106.423);
+  --sidebar-primary: var(--primary);
+  --sidebar-primary-foreground: var(--primary-foreground);
   --sidebar-accent: oklch(0.268 0.007 34.298);
   --sidebar-accent-foreground: oklch(0.985 0.001 106.423);
   --sidebar-border: oklch(1 0 0 / 10%);
@@ -96,6 +101,10 @@
     "JetBrains Mono Variable", ui-monospace, SFMono-Regular, "SF Mono", Menlo,
     Consolas, monospace;
   --tracking-normal: -0.003em;
+  --json-key: oklch(0.78 0.1 60);
+  --json-string: oklch(0.78 0.09 135);
+  --json-number: oklch(0.8 0.13 40);
+  --json-boolean: oklch(0.84 0.14 70);
 }
 
 @theme inline {
@@ -123,6 +132,10 @@
   --color-chart-3: var(--chart-3);
   --color-chart-4: var(--chart-4);
   --color-chart-5: var(--chart-5);
+  --color-json-key: var(--json-key);
+  --color-json-string: var(--json-string);
+  --color-json-number: var(--json-number);
+  --color-json-boolean: var(--json-boolean);
   --color-sidebar: var(--sidebar);
   --color-sidebar-foreground: var(--sidebar-foreground);
   --color-sidebar-primary: var(--sidebar-primary);
@@ -243,5 +256,14 @@
     font-weight: 700;
     font-size: 100%;
     color: oklch(0.65 0.12 25);
+  }
+
+  @keyframes query-shimmer {
+    0% {
+      transform: translateX(-100%);
+    }
+    100% {
+      transform: translateX(400%);
+    }
   }
 }

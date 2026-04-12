@@ -1,130 +1,86 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { X } from "lucide-react";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { AnimatePresence, motion } from "motion/react";
 import { useCallback, useEffect, useState } from "react";
 
-import { Titlebar } from "@/components/titlebar/titlebar";
-import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Separator } from "@/components/ui/separator";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
 import { useIsland } from "@/contexts/island-context";
-import { useEditorSettings } from "@/hooks/use-editor-settings";
+
+import type { SettingsSectionId } from "./-components/settings-sidebar";
 
 import { EditorFontSection } from "./-components/editor-font-section";
 import { ExportSettingsSection } from "./-components/export-settings-section";
 import { GeneralThemeSection } from "./-components/general-theme-section";
+import { SavedIndicator } from "./-components/saved-indicator";
+import { SettingsFeedbackProvider } from "./-components/settings-feedback-context";
+import { SettingsSidebar } from "./-components/settings-sidebar";
+import { SettingsTitlebar } from "./-components/settings-titlebar";
 import { SyntaxThemeSection } from "./-components/syntax-theme-section";
+import { useSettingsHotkeys } from "./-hooks/use-settings-hotkeys";
+
+const SectionPanel = ({ section }: { section: SettingsSectionId }) => {
+  if (section === "appearance") {
+    return <GeneralThemeSection />;
+  }
+  if (section === "syntax-theme") {
+    return <SyntaxThemeSection />;
+  }
+  if (section === "code-font") {
+    return <EditorFontSection />;
+  }
+  return <ExportSettingsSection />;
+};
 
 const SettingsComponent = () => {
-  const { settings, updateSettings } = useEditorSettings();
-  const [activeTab, setActiveTab] = useState("general");
+  const [activeSection, setActiveSection] =
+    useState<SettingsSectionId>("appearance");
   const { setSnapshot } = useIsland();
+  const navigate = useNavigate();
 
   useEffect(() => {
     setSnapshot({ kind: "hidden" });
   }, [setSnapshot]);
 
   const handleClose = useCallback(() => {
-    window.history.back();
-  }, []);
+    if (window.history.length > 1) {
+      window.history.back();
+      return;
+    }
+    navigate({ to: "/" });
+  }, [navigate]);
 
-  const handleThemeChange = useCallback(
-    (theme: string) => {
-      updateSettings({ syntaxTheme: theme });
-    },
-    [updateSettings]
-  );
-
-  const handleFontFamilyChange = useCallback(
-    (fontFamily: string) => {
-      updateSettings({ fontFamily });
-    },
-    [updateSettings]
-  );
-
-  const handleFontSizeChange = useCallback(
-    (fontSize: number) => {
-      updateSettings({ fontSize });
-    },
-    [updateSettings]
-  );
+  useSettingsHotkeys({
+    onClose: handleClose,
+    onSelectSection: setActiveSection,
+  });
 
   return (
     <>
-      <Titlebar>
-        <Tooltip>
-          <TooltipTrigger
-            render={
-              <Button
-                variant="ghost"
-                size="icon-xs"
-                aria-label="Close settings"
-                onClick={handleClose}
-              />
-            }
-          >
-            <X className="size-3.5" />
-          </TooltipTrigger>
-          <TooltipContent>Close</TooltipContent>
-        </Tooltip>
-      </Titlebar>
+      <SettingsTitlebar onClose={handleClose} />
 
-      <ScrollArea className="flex-1 overflow-hidden">
-        <div className="mx-auto max-w-2xl px-6 py-8">
-          <h1 className="mb-6 text-lg font-semibold">Settings</h1>
+      <SettingsFeedbackProvider>
+        <div className="flex flex-1 overflow-hidden">
+          <SettingsSidebar active={activeSection} onSelect={setActiveSection} />
 
-          <Tabs value={activeTab} onValueChange={setActiveTab}>
-            <TabsList variant="segment" className="mb-8">
-              <TabsTrigger value="general">General</TabsTrigger>
-              <TabsTrigger value="editor">Editor</TabsTrigger>
-            </TabsList>
-          </Tabs>
-
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={activeTab}
-              initial={{ filter: "blur(4px)", opacity: 0 }}
-              animate={{ filter: "blur(0px)", opacity: 1 }}
-              exit={{ filter: "blur(4px)", opacity: 0 }}
-              transition={{ duration: 0.15 }}
-            >
-              {activeTab === "general" && (
-                <>
-                  <GeneralThemeSection />
-                  <Separator className="my-8" />
-                  <ExportSettingsSection />
-                </>
-              )}
-              {activeTab === "editor" && (
-                <>
-                  <SyntaxThemeSection
-                    value={settings.syntaxTheme}
-                    fontFamily={settings.fontFamily}
-                    fontSize={settings.fontSize}
-                    onChange={handleThemeChange}
-                  />
-
-                  <Separator className="my-8" />
-
-                  <EditorFontSection
-                    fontFamily={settings.fontFamily}
-                    fontSize={settings.fontSize}
-                    syntaxTheme={settings.syntaxTheme}
-                    onFontFamilyChange={handleFontFamilyChange}
-                    onFontSizeChange={handleFontSizeChange}
-                  />
-                </>
-              )}
-            </motion.div>
-          </AnimatePresence>
+          <div className="relative flex flex-1 flex-col overflow-hidden">
+            <ScrollArea className="min-h-0 flex-1">
+              <div className="max-w-2xl px-10 py-10">
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    animate={{ filter: "blur(0px)", opacity: 1 }}
+                    exit={{ filter: "blur(4px)", opacity: 0 }}
+                    initial={{ filter: "blur(4px)", opacity: 0 }}
+                    key={activeSection}
+                    transition={{ duration: 0.15 }}
+                  >
+                    <SectionPanel section={activeSection} />
+                  </motion.div>
+                </AnimatePresence>
+              </div>
+            </ScrollArea>
+            <SavedIndicator />
+          </div>
         </div>
-      </ScrollArea>
+      </SettingsFeedbackProvider>
     </>
   );
 };

@@ -17,6 +17,7 @@ import { useSchema } from "@/hooks/use-schema";
 import { useWorkspaceIslandSync } from "@/hooks/use-workspace-island-sync";
 
 import { ChatSidebar } from "./chat/chat-sidebar";
+import { KeyboardShortcutsOverlay } from "./keyboard-shortcuts-overlay";
 import { WorkspaceContent } from "./workspace-content";
 import { WorkspaceSidebar } from "./workspace-sidebar";
 
@@ -42,6 +43,7 @@ export const WorkspaceLayout = ({
   const sidebarRef = usePanelRef();
   const chatPanelRef = usePanelRef();
   const [isChatOpen, setIsChatOpen] = useState(false);
+  const [shortcutsOpen, setShortcutsOpen] = useState(false);
   const hasBeenOpenedRef = useRef(false);
 
   useWorkspaceIslandSync({
@@ -113,6 +115,14 @@ export const WorkspaceLayout = ({
     handleChatToggle();
   });
 
+  useHotkey("Mod+/", () => {
+    setShortcutsOpen((prev) => !prev);
+  });
+
+  const handleShowShortcuts = useCallback(() => {
+    setShortcutsOpen(true);
+  }, []);
+
   return (
     <div className="flex h-svh flex-col bg-background">
       <Titlebar>
@@ -120,6 +130,7 @@ export const WorkspaceLayout = ({
           connection={connection}
           isChatOpen={isChatOpen}
           onChatToggle={handleChatToggle}
+          onShowShortcuts={handleShowShortcuts}
         />
       </Titlebar>
       <ResizablePanelGroup className="flex-1" orientation="horizontal">
@@ -148,9 +159,10 @@ export const WorkspaceLayout = ({
         <ResizablePanel defaultSize="75%" minSize="30%">
           <WorkspaceContent
             connection={connection}
+            connectionError={connectionError}
             isConnected={isConnected}
             isConnecting={isConnecting}
-            connectionError={connectionError}
+            onReconnect={onReconnect}
             schema={schema}
             selectedDatabase={selectedDatabase}
           />
@@ -159,21 +171,26 @@ export const WorkspaceLayout = ({
         <ResizableHandle />
 
         <ResizablePanel
-          panelRef={chatPanelRef}
-          defaultSize="0%"
-          minSize="20%"
-          maxSize="50%"
-          collapsible
           collapsedSize="0%"
+          collapsible
+          defaultSize="0%"
+          maxSize="50%"
+          minSize="20%"
           onResize={handleChatResize}
+          panelRef={chatPanelRef}
         >
           <ChatSidebar
             connection={connection}
-            schema={schema}
             onClose={handleChatClose}
+            schema={schema}
           />
         </ResizablePanel>
       </ResizablePanelGroup>
+
+      <KeyboardShortcutsOverlay
+        onOpenChange={setShortcutsOpen}
+        open={shortcutsOpen}
+      />
     </div>
   );
 };

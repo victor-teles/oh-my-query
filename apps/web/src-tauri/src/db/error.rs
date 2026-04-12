@@ -12,6 +12,15 @@ impl std::fmt::Display for DbError {
     }
 }
 
+impl DbError {
+    pub fn cancelled() -> Self {
+        DbError {
+            code: "QUERY_CANCELLED".to_string(),
+            message: "Query cancelled".to_string(),
+        }
+    }
+}
+
 impl From<tokio::time::error::Elapsed> for DbError {
     fn from(_: tokio::time::error::Elapsed) -> Self {
         DbError {

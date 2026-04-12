@@ -3,8 +3,17 @@ import { toast } from "sonner";
 
 import type { QueryTab } from "@/lib/query-types";
 
+import { useSafeMode } from "@/contexts/safe-mode-context";
 import { appendHistory, HISTORY_UPDATED_EVENT } from "@/lib/persistence";
-import { executeQuery } from "@/lib/tauri";
+import { cancelQuery, executeQuery } from "@/lib/tauri";
+
+const isCancellationError = (error: unknown): boolean => {
+  if (typeof error !== "object" || error === null) {
+    return false;
+  }
+  const { code } = error as { code?: unknown };
+  return code === "QUERY_CANCELLED";
+};
 
 const HISTORY_ERROR_TOAST_THROTTLE_MS = 10_000;
 
@@ -32,9 +41,16 @@ export const useTabExecution = ({
   flushSave,
 }: UseTabExecutionParams) => {
   const lastHistoryErrorToastRef = useRef(0);
+  const { requestConfirmation } = useSafeMode();
 
   const execute = useCallback(
     async (tabId: string, sql: string, sourceDialect?: string | null) => {
+      const confirmed = await requestConfirmation(sql);
+      if (!confirmed) {
+        return;
+      }
+
+      const queryId = crypto.randomUUID();
       const startedAt = new Date().toISOString();
       setTabs((prev) =>
         prev.map((t) =>
@@ -50,6 +66,7 @@ export const useTabExecution = ({
                   startedAt,
                 },
                 result: null,
+                runningQueryId: queryId,
                 status: "running" as const,
               }
             : t
@@ -62,10 +79,12 @@ export const useTabExecution = ({
       let success = false;
       let errorMessage: string | null = null;
       let executionTimeMs = 0;
+      let cancelled = false;
 
       try {
         const result = await executeQuery({
           connectionId,
+          queryId,
           schema: selectedDatabase ?? undefined,
           sourceDialect: sourceDialect ?? undefined,
           sql,
@@ -81,13 +100,17 @@ export const useTabExecution = ({
                   executedSql: sql,
                   pendingExecution: null,
                   result,
+                  runningQueryId: null,
                   status: "success" as const,
                 }
               : t
           )
         );
       } catch (error) {
-        const message = extractErrorMessage(error);
+        cancelled = isCancellationError(error);
+        const message = cancelled
+          ? "Query cancelled"
+          : extractErrorMessage(error);
         errorMessage = message;
         executionTimeMs = Math.round(performance.now() - startTime);
         setTabs((prev) =>
@@ -95,14 +118,19 @@ export const useTabExecution = ({
             t.id === tabId
               ? {
                   ...t,
-                  error: message,
+                  error: cancelled ? null : message,
+                  executedSql: sql,
                   pendingExecution: null,
                   result: null,
-                  status: "error" as const,
+                  runningQueryId: null,
+                  status: cancelled ? ("idle" as const) : ("error" as const),
                 }
               : t
           )
         );
+        if (cancelled) {
+          toast.info("Query cancelled");
+        }
       }
 
       try {
@@ -129,8 +157,16 @@ export const useTabExecution = ({
         }
       }
     },
-    [connectionId, selectedDatabase, setTabs, flushSave]
+    [connectionId, selectedDatabase, setTabs, flushSave, requestConfirmation]
   );
 
-  return { execute };
+  const cancel = useCallback(async (queryId: string) => {
+    try {
+      await cancelQuery(queryId);
+    } catch {
+      toast.error("Couldn't cancel query");
+    }
+  }, []);
+
+  return { cancel, execute };
 };

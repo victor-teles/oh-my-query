@@ -1,4 +1,4 @@
-import { WandSparkles } from "lucide-react";
+import { AlignLeft } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -17,15 +17,15 @@ export const FormatButton = ({ disabled, onClick }: FormatButtonProps) => (
     <TooltipTrigger
       render={
         <Button
-          variant="ghost"
-          size="icon-xs"
-          onClick={onClick}
-          disabled={disabled}
           aria-label="Format SQL"
+          disabled={disabled}
+          onClick={onClick}
+          size="icon-xs"
+          variant="ghost"
         />
       }
     >
-      <WandSparkles className="size-3.5" />
+      <AlignLeft className="size-3.5" />
     </TooltipTrigger>
     <TooltipContent>Format SQL (⇧⌘F)</TooltipContent>
   </Tooltip>

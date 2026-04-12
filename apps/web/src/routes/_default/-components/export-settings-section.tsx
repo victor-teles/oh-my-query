@@ -1,3 +1,4 @@
+import { Info } from "lucide-react";
 import { useCallback, useState } from "react";
 
 import type { CsvDelimiter } from "@/lib/export-settings";
@@ -12,35 +13,60 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { useExportSettings } from "@/hooks/use-export-settings";
 import { CSV_DELIMITERS, NULL_DISPLAY_PRESETS } from "@/lib/export-settings";
 
+import { useSettingsFeedback } from "./settings-feedback-context";
+
 const CUSTOM_NULL_SENTINEL = "__custom__";
+
+interface CheckboxFieldProps {
+  id: string;
+  label: string;
+  checked: boolean;
+  hint?: string;
+  onCheckedChange: (checked: boolean) => void;
+}
 
 const CheckboxField = ({
   id,
   label,
   checked,
+  hint,
   onCheckedChange,
-}: {
-  id: string;
-  label: string;
-  checked: boolean;
-  onCheckedChange: (checked: boolean) => void;
-}) => (
+}: CheckboxFieldProps) => (
   <div className="flex items-center gap-2">
-    <Checkbox id={id} checked={checked} onCheckedChange={onCheckedChange} />
-    <Label
-      htmlFor={id}
-      className="cursor-pointer text-xs text-muted-foreground"
-    >
+    <Checkbox checked={checked} id={id} onCheckedChange={onCheckedChange} />
+    <Label className="cursor-pointer text-sm text-foreground" htmlFor={id}>
       {label}
     </Label>
+    {hint && (
+      <Tooltip>
+        <TooltipTrigger
+          render={
+            <button
+              aria-label={`What does ${label} mean?`}
+              className="cursor-pointer text-muted-foreground/60 transition-colors hover:text-muted-foreground focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sidebar-ring"
+              type="button"
+            />
+          }
+        >
+          <Info className="size-3.5" />
+        </TooltipTrigger>
+        <TooltipContent>{hint}</TooltipContent>
+      </Tooltip>
+    )}
   </div>
 );
 
 export const ExportSettingsSection = () => {
   const { settings, updateSettings } = useExportSettings();
+  const { notifySaved } = useSettingsFeedback();
 
   const isCustomNull = !NULL_DISPLAY_PRESETS.some(
     (o) => o.value === settings.nullDisplay
@@ -53,22 +79,25 @@ export const ExportSettingsSection = () => {
     (v: string | null) => {
       if (v) {
         updateSettings({ csvDelimiter: v as CsvDelimiter });
+        notifySaved();
       }
     },
-    [updateSettings]
+    [updateSettings, notifySaved]
   );
 
   const handleNullPresetChange = useCallback(
     (v: string | null) => {
       if (v === CUSTOM_NULL_SENTINEL) {
         updateSettings({ nullDisplay: customNullValue });
+        notifySaved();
         return;
       }
       if (v !== null) {
         updateSettings({ nullDisplay: v });
+        notifySaved();
       }
     },
-    [updateSettings, customNullValue]
+    [updateSettings, customNullValue, notifySaved]
   );
 
   const handleCustomNullChange = useCallback(
@@ -76,22 +105,25 @@ export const ExportSettingsSection = () => {
       const val = e.target.value;
       setCustomNullValue(val);
       updateSettings({ nullDisplay: val });
+      notifySaved();
     },
-    [updateSettings]
+    [updateSettings, notifySaved]
   );
 
   const handleIncludeBomChange = useCallback(
     (checked: boolean) => {
       updateSettings({ includeBom: checked });
+      notifySaved();
     },
-    [updateSettings]
+    [updateSettings, notifySaved]
   );
 
   const handleIncludeHeadersChange = useCallback(
     (checked: boolean) => {
       updateSettings({ includeHeaders: checked });
+      notifySaved();
     },
-    [updateSettings]
+    [updateSettings, notifySaved]
   );
 
   const nullSelectValue = isCustomNull
@@ -100,14 +132,16 @@ export const ExportSettingsSection = () => {
 
   return (
     <section>
-      <h2 className="mb-1 text-sm font-medium">CSV Export</h2>
-      <p className="mb-4 text-xs text-muted-foreground">
-        Configure how query results are exported as CSV files.
+      <h2 className="text-xl font-semibold tracking-tight">CSV Export</h2>
+      <p className="mt-1.5 mb-6 text-sm text-muted-foreground">
+        Tune how your results look when you export a CSV.
       </p>
 
-      <div className="mb-4 flex items-end gap-4">
+      <div className="mb-6 flex flex-wrap items-end gap-5">
         <div className="flex flex-col gap-1.5">
-          <Label className="text-xs text-muted-foreground">Delimiter</Label>
+          <Label className="text-xs font-medium text-foreground">
+            Delimiter
+          </Label>
           <Select
             value={settings.csvDelimiter}
             onValueChange={handleDelimiterChange}
@@ -126,7 +160,7 @@ export const ExportSettingsSection = () => {
         </div>
 
         <div className="flex flex-col gap-1.5">
-          <Label className="text-xs text-muted-foreground">
+          <Label className="text-xs font-medium text-foreground">
             Null value display
           </Label>
           <Select
@@ -149,7 +183,9 @@ export const ExportSettingsSection = () => {
 
         {(isCustomNull || nullSelectValue === CUSTOM_NULL_SENTINEL) && (
           <div className="flex flex-col gap-1.5">
-            <Label className="text-xs text-muted-foreground">Custom text</Label>
+            <Label className="text-xs font-medium text-foreground">
+              Custom text
+            </Label>
             <Input
               value={customNullValue}
               onChange={handleCustomNullChange}
@@ -160,7 +196,7 @@ export const ExportSettingsSection = () => {
         )}
       </div>
 
-      <div className="flex items-center gap-6">
+      <div className="flex flex-wrap items-center gap-x-6 gap-y-3">
         <CheckboxField
           id="include-headers"
           label="Include column headers"
@@ -168,9 +204,10 @@ export const ExportSettingsSection = () => {
           onCheckedChange={handleIncludeHeadersChange}
         />
         <CheckboxField
+          checked={settings.includeBom}
+          hint="Excel on Windows needs this to show non-ASCII characters correctly. Skip if your CSVs go elsewhere."
           id="include-bom"
           label="Include BOM (Excel UTF-8)"
-          checked={settings.includeBom}
           onCheckedChange={handleIncludeBomChange}
         />
       </div>

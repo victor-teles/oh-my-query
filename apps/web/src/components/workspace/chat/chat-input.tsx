@@ -12,6 +12,7 @@ import {
   PromptInputTextarea,
   PromptInputTools,
 } from "@/components/ai-elements/prompt-input";
+import { Button } from "@/components/ui/button";
 
 interface ChatInputProps {
   onSend: (message: string) => void;
@@ -49,30 +50,27 @@ export const ChatInput = ({
     [onSend]
   );
 
-  if (!isConfigured) {
-    return (
-      <div className="border-t p-3">
-        <button
-          type="button"
-          onClick={onOpenSettings}
-          className="flex w-full items-center justify-center gap-2 rounded-lg border border-dashed p-4 text-sm text-muted-foreground transition-colors hover:border-primary/50 hover:text-foreground"
-        >
-          <Settings className="size-4" />
-          Configure an AI provider to get started
-        </button>
-      </div>
-    );
-  }
+  const submitDisabled = !isConfigured || (!value.trim() && !isStreaming);
 
   return (
     <div className="border-t p-3">
+      {!isConfigured && (
+        <div className="mb-2 flex items-center justify-between gap-2 rounded-md border border-border bg-muted/30 px-3 py-2 text-xs text-muted-foreground">
+          <span>Connect an AI provider to start chatting.</span>
+          <Button onClick={onOpenSettings} size="sm" variant="outline">
+            <Settings />
+            Configure
+          </Button>
+        </div>
+      )}
       <PromptInput onSubmit={handleSubmit}>
         <PromptInputBody>
           <PromptInputTextarea
-            value={value}
+            className="min-h-11"
+            disabled={!isConfigured}
             onChange={handleChange}
             placeholder="Ask about your database..."
-            className="min-h-11"
+            value={value}
           />
         </PromptInputBody>
         <PromptInputFooter>
@@ -82,9 +80,9 @@ export const ChatInput = ({
             </PromptInputButton>
           </PromptInputTools>
           <PromptInputSubmit
-            status={isStreaming ? "streaming" : "ready"}
-            disabled={!value.trim() && !isStreaming}
+            disabled={submitDisabled}
             onStop={onStop}
+            status={isStreaming ? "streaming" : "ready"}
           />
         </PromptInputFooter>
       </PromptInput>

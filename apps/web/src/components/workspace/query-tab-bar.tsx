@@ -36,10 +36,11 @@ const TabCloseButton = ({ tabTitle, tabId, onClose }: TabCloseButtonProps) => {
 
   return (
     <button
-      type="button"
-      onClick={handleClick}
-      className="ml-0.5 rounded p-0.5 opacity-0 hover:bg-muted group-hover/tab:opacity-100"
       aria-label={`Close ${tabTitle}`}
+      className="ml-0.5 rounded p-0.5 text-muted-foreground/50 hover:bg-muted hover:text-foreground group-hover/tab:text-muted-foreground"
+      onClick={handleClick}
+      title={`Close ${tabTitle} (⌘W)`}
+      type="button"
     >
       <X className="size-3" />
     </button>
