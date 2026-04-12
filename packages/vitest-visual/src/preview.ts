@@ -83,7 +83,7 @@ export const afterEach = async (context: AfterEachContext) => {
 
   const snapshotDir = (vr.snapshotDir as string) ?? ".storybook/snapshots";
   const threshold = (vr.threshold as number) ?? 0.2;
-  const failThreshold = (vr.failThreshold as number) ?? 0.01;
+  const failThreshold = (vr.failThreshold as number) ?? 0.03;
   const stabilityTimeout = (vr.stabilityTimeout as number) ?? 1000;
 
   await waitForStability(canvasElement, stabilityTimeout);
