@@ -86,7 +86,10 @@ pub async fn execute_query(
         None => params.sql.clone(),
     };
 
-    let cancel_rx = params.query_id.as_ref().map(|id| cancellation.register(id.clone()));
+    let cancel_rx = params
+        .query_id
+        .as_ref()
+        .map(|id| cancellation.register(id.clone()));
 
     let start = Instant::now();
 
