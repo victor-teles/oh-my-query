@@ -19,12 +19,6 @@ export const useConnectionSelection = (flatList: DatabaseConnection[]) => {
     });
   }, [flatList]);
 
-  useEffect(() => {
-    if (flatList.length > 0) {
-      listboxRef.current?.focus();
-    }
-  }, [flatList.length]);
-
   const selectedConnection = useMemo(
     () => flatList.find((c) => c.id === selectedId) ?? null,
     [flatList, selectedId]

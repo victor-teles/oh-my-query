@@ -65,6 +65,18 @@ Workspace packages are prefixed `@oh-my-query/` and use `workspace:*` protocol. 
 
 Defined in `packages/env/src/web.ts` using Zod schemas. Web-specific env vars must be prefixed with `VITE_`.
 
+## Skills
+
+When working with React/TypeScript frontend code, activate these skills:
+
+- `vercel-composition-patterns`
+- `vercel-react-best-practices`
+- `web-design-guidelines`
+
+When working with Rust code (`src-tauri/`), activate this skill:
+
+- `rust-best-practices`
+
 ## Key Conventions
 
 - **Package manager**: bun (v1.3.9)
