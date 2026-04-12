@@ -99,13 +99,6 @@ export const useQueryTabs = (
         counterRef.current = restored.counter;
         setTabs(restored.tabs);
         setActiveTabId(restored.activeTabId);
-
-        const hasContent = restored.tabs.some((t) => t.sql.trim().length > 0);
-        if (hasContent) {
-          toast.success("Session restored", {
-            description: `${restored.tabs.length} tab${restored.tabs.length !== 1 ? "s" : ""} recovered`,
-          });
-        }
       } catch {
         // Fall back to default tab on restore failure
       } finally {
