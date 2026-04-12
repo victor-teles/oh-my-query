@@ -148,6 +148,7 @@ export const useQueryTabs = (
                   ...t,
                   error:
                     "Query was interrupted — click Run to retry. Not auto-resumed because it may modify data.",
+                  errorCode: null,
                   pendingExecution: null,
                   status: "error" as const,
                 }

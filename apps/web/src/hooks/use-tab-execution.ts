@@ -17,14 +17,23 @@ const isCancellationError = (error: unknown): boolean => {
 
 const HISTORY_ERROR_TOAST_THROTTLE_MS = 10_000;
 
-const extractErrorMessage = (error: unknown): string => {
+interface ExtractedError {
+  message: string;
+  code: string | null;
+}
+
+const extractError = (error: unknown): ExtractedError => {
+  if (typeof error === "object" && error !== null) {
+    const obj = error as Record<string, unknown>;
+    const code = typeof obj.code === "string" ? obj.code : null;
+    if ("message" in obj) {
+      return { code, message: String(obj.message) };
+    }
+  }
   if (error instanceof Error) {
-    return error.message;
+    return { code: null, message: error.message };
   }
-  if (typeof error === "object" && error !== null && "message" in error) {
-    return String((error as { message: unknown }).message);
-  }
-  return "Query execution failed";
+  return { code: null, message: "Query execution failed" };
 };
 
 interface UseTabExecutionParams {
@@ -58,6 +67,7 @@ export const useTabExecution = ({
             ? {
                 ...t,
                 error: null,
+                errorCode: null,
                 executedSql: null,
                 pendingExecution: {
                   database: selectedDatabase,
@@ -97,6 +107,7 @@ export const useTabExecution = ({
               ? {
                   ...t,
                   error: null,
+                  errorCode: null,
                   executedSql: sql,
                   pendingExecution: null,
                   result,
@@ -108,9 +119,8 @@ export const useTabExecution = ({
         );
       } catch (error) {
         cancelled = isCancellationError(error);
-        const message = cancelled
-          ? "Query cancelled"
-          : extractErrorMessage(error);
+        const extracted = extractError(error);
+        const message = cancelled ? "Query cancelled" : extracted.message;
         errorMessage = message;
         executionTimeMs = Math.round(performance.now() - startTime);
         setTabs((prev) =>
@@ -119,6 +129,7 @@ export const useTabExecution = ({
               ? {
                   ...t,
                   error: cancelled ? null : message,
+                  errorCode: cancelled ? null : (extracted.code ?? null),
                   executedSql: sql,
                   pendingExecution: null,
                   result: null,

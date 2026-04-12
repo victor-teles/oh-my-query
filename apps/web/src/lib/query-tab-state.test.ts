@@ -50,10 +50,12 @@ describe("query tab state restoration", () => {
     expect(restored.tabs).toStrictEqual([
       {
         error: null,
+        errorCode: null,
         executedSql: null,
         id: "generated-tab-id",
         pendingExecution: null,
         result: null,
+        runningQueryId: null,
         sourceDialect: null,
         sql: "",
         status: "idle",
@@ -67,10 +69,12 @@ describe("new query tab creation", () => {
   it("creates an idle query tab with a predictable title", () => {
     expect(createNewQueryTab(3, () => "tab-3")).toStrictEqual({
       error: null,
+      errorCode: null,
       executedSql: null,
       id: "tab-3",
       pendingExecution: null,
       result: null,
+      runningQueryId: null,
       sourceDialect: null,
       sql: "",
       status: "idle",

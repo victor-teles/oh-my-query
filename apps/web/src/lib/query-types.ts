@@ -10,6 +10,7 @@ export interface QueryTab {
   executedSql: string | null;
   result: ExecuteResult | null;
   error: string | null;
+  errorCode: string | null;
   status: TabStatus;
   sourceDialect: string | null;
   pendingExecution: PendingExecution | null;

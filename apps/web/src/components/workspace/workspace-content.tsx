@@ -175,6 +175,7 @@ const getResultsPanelProps = (
   isSql: boolean
 ): ResultsPanelProps => ({
   error: activeTab?.error ?? null,
+  errorCode: activeTab?.errorCode ?? null,
   executedSql: activeTab?.executedSql ?? null,
   isSql,
   result: activeTab?.result ?? null,
@@ -512,6 +513,7 @@ interface ResultsPanelProps {
   executedSql: string | null;
   runningSql: string | null;
   error: string | null;
+  errorCode: string | null;
   isSql: boolean;
 }
 
@@ -521,6 +523,7 @@ const ResultsPanel = ({
   executedSql,
   runningSql,
   error,
+  errorCode,
   isSql,
 }: ResultsPanelProps) => {
   const { settings: exportSettings } = useExportSettings();
@@ -554,6 +557,7 @@ const ResultsPanel = ({
 
   const { stateKey, content } = renderResultsState({
     error,
+    errorCode,
     executedSql,
     handleCancel,
     handleDownloadCsv,
@@ -583,6 +587,7 @@ const ResultsPanel = ({
 
 interface RenderResultsStateArgs {
   error: string | null;
+  errorCode: string | null;
   executedSql: string | null;
   handleCancel: () => void;
   handleDownloadCsv: () => void;
@@ -596,6 +601,7 @@ interface RenderResultsStateArgs {
 
 const renderResultsState = ({
   error,
+  errorCode,
   executedSql,
   handleCancel,
   handleDownloadCsv,
@@ -626,6 +632,7 @@ const renderResultsState = ({
         <div className="h-full overflow-auto">
           <QueryErrorDisplay
             error={error}
+            errorCode={errorCode}
             onJumpToLine={jumpTo}
             onRetry={executedSql ? handleRetry : undefined}
             sql={executedSql}
