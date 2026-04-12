@@ -118,15 +118,6 @@ export const useQueryTabs = (
           initialMap.set(tab.id, tab.sql);
         }
         lastPersistedSqlRef.current = initialMap;
-
-        const restoredWithContent = restored.tabs.filter(
-          (t) => t.sql.trim().length > 0
-        );
-        if (restoredWithContent.length > 0) {
-          toast.info(
-            `Restored ${restoredWithContent.length} tab${restoredWithContent.length === 1 ? "" : "s"}`
-          );
-        }
       } catch {
         toast.warning("Couldn't restore your tabs — starting fresh");
       } finally {
