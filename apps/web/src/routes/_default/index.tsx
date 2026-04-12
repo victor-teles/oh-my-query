@@ -27,6 +27,7 @@ const HomeComponent = () => {
   const navigate = useNavigate();
   const {
     connections,
+    isLoading,
     pinned,
     unpinned,
     flatList,
@@ -149,7 +150,7 @@ const HomeComponent = () => {
     setSelectedId,
   });
 
-  const isEmpty = connections.length === 0;
+  const isEmpty = !isLoading && connections.length === 0;
 
   return (
     <>

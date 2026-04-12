@@ -91,6 +91,8 @@ pub fn run() {
             persistence::save_tabs,
             persistence::append_history,
             persistence::get_history,
+            persistence::get_connections,
+            persistence::save_connections,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

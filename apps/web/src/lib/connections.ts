@@ -1,3 +1,5 @@
+import { isTauri } from "@/lib/tauri";
+
 export type DatabaseType =
   | "postgresql"
   | "mysql"
@@ -46,11 +48,7 @@ const normalizeConnection = (
     pinned: raw.pinned ?? false,
   }) as DatabaseConnection;
 
-const writeConnections = (connections: DatabaseConnection[]): void => {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(connections));
-};
-
-export const getConnections = (): DatabaseConnection[] => {
+const readLocalStorage = (): DatabaseConnection[] => {
   const raw = localStorage.getItem(STORAGE_KEY);
   if (!raw) {
     return [];
@@ -59,34 +57,80 @@ export const getConnections = (): DatabaseConnection[] => {
   return parsed.map(normalizeConnection);
 };
 
-export const saveConnection = (connection: DatabaseConnection): void => {
-  const connections = getConnections();
-  connections.push(normalizeConnection(connection));
-  writeConnections(connections);
+const writeLocalStorage = (connections: DatabaseConnection[]): void => {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(connections));
 };
 
-export const updateConnection = (updated: DatabaseConnection): void => {
-  const connections = getConnections().map((c) =>
+const migration = { done: false };
+
+export const getConnections = async (): Promise<DatabaseConnection[]> => {
+  if (!isTauri()) {
+    return readLocalStorage();
+  }
+
+  const { invoke } = await import("@tauri-apps/api/core");
+  const connections = await invoke<DatabaseConnection[]>("get_connections");
+
+  if (connections.length === 0 && !migration.done) {
+    migration.done = true;
+    const local = readLocalStorage();
+    if (local.length > 0) {
+      await invoke("save_connections", { connections: local });
+      return local;
+    }
+  }
+
+  migration.done = true;
+  return connections.map(normalizeConnection);
+};
+
+const writeConnections = async (
+  connections: DatabaseConnection[]
+): Promise<void> => {
+  if (!isTauri()) {
+    writeLocalStorage(connections);
+    return;
+  }
+  const { invoke } = await import("@tauri-apps/api/core");
+  await invoke("save_connections", { connections });
+};
+
+export const saveConnection = async (
+  connection: DatabaseConnection
+): Promise<void> => {
+  const connections = await getConnections();
+  connections.push(normalizeConnection(connection));
+  await writeConnections(connections);
+};
+
+export const updateConnection = async (
+  updated: DatabaseConnection
+): Promise<void> => {
+  const current = await getConnections();
+  const connections = current.map((c) =>
     c.id === updated.id ? normalizeConnection(updated) : c
   );
-  writeConnections(connections);
+  await writeConnections(connections);
 };
 
-export const deleteConnection = (id: string): void => {
-  const connections = getConnections().filter((c) => c.id !== id);
-  writeConnections(connections);
+export const deleteConnection = async (id: string): Promise<void> => {
+  const current = await getConnections();
+  const connections = current.filter((c) => c.id !== id);
+  await writeConnections(connections);
 };
 
-export const togglePinConnection = (id: string): void => {
-  const connections = getConnections().map((c) =>
+export const togglePinConnection = async (id: string): Promise<void> => {
+  const current = await getConnections();
+  const connections = current.map((c) =>
     c.id === id ? { ...c, pinned: !c.pinned } : c
   );
-  writeConnections(connections);
+  await writeConnections(connections);
 };
 
-export const markConnectionUsed = (id: string): void => {
-  const connections = getConnections().map((c) =>
+export const markConnectionUsed = async (id: string): Promise<void> => {
+  const current = await getConnections();
+  const connections = current.map((c) =>
     c.id === id ? { ...c, lastConnectedAt: new Date().toISOString() } : c
   );
-  writeConnections(connections);
+  await writeConnections(connections);
 };

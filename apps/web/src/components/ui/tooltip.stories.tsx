@@ -30,7 +30,7 @@ export const Default: Story = {
   play: async ({ canvasElement }) => {
     const body = within(canvasElement.ownerDocument.body);
     const trigger = canvasElement.querySelector(
-      "[data-slot='button']"
+      "[data-slot='tooltip-trigger']"
     ) as HTMLElement;
     await expect(trigger).toBeTruthy();
     await userEvent.hover(trigger);
@@ -41,9 +41,7 @@ export const Default: Story = {
   },
   render: () => (
     <Tooltip>
-      <TooltipTrigger asChild>
-        <Button variant="outline">Hover me</Button>
-      </TooltipTrigger>
+      <TooltipTrigger render={<Button variant="outline">Hover me</Button>} />
       <TooltipContent>This is a tooltip</TooltipContent>
     </Tooltip>
   ),
@@ -53,7 +51,7 @@ export const OnIconButton: Story = {
   play: async ({ canvasElement }) => {
     const body = within(canvasElement.ownerDocument.body);
     const trigger = canvasElement.querySelector(
-      "[data-slot='button']"
+      "[data-slot='tooltip-trigger']"
     ) as HTMLElement;
     await userEvent.hover(trigger);
     await expect(
@@ -63,11 +61,13 @@ export const OnIconButton: Story = {
   },
   render: () => (
     <Tooltip>
-      <TooltipTrigger asChild>
-        <Button size="icon" variant="ghost" aria-label="Add new">
-          <PlusIcon />
-        </Button>
-      </TooltipTrigger>
+      <TooltipTrigger
+        render={
+          <Button size="icon" variant="ghost" aria-label="Add new">
+            <PlusIcon />
+          </Button>
+        }
+      />
       <TooltipContent>Add new connection</TooltipContent>
     </Tooltip>
   ),
@@ -80,9 +80,7 @@ export const Bottom: Story = {
   },
   render: () => (
     <Tooltip defaultOpen>
-      <TooltipTrigger asChild>
-        <Button variant="outline">Below</Button>
-      </TooltipTrigger>
+      <TooltipTrigger render={<Button variant="outline">Below</Button>} />
       <TooltipContent side="bottom">Tooltip below</TooltipContent>
     </Tooltip>
   ),
@@ -98,9 +96,7 @@ export const Left: Story = {
   render: () => (
     <div className="ml-40">
       <Tooltip defaultOpen>
-        <TooltipTrigger asChild>
-          <Button variant="outline">Left</Button>
-        </TooltipTrigger>
+        <TooltipTrigger render={<Button variant="outline">Left</Button>} />
         <TooltipContent side="left">Tooltip on the left</TooltipContent>
       </Tooltip>
     </div>
@@ -116,9 +112,7 @@ export const Right: Story = {
   },
   render: () => (
     <Tooltip defaultOpen>
-      <TooltipTrigger asChild>
-        <Button variant="outline">Right</Button>
-      </TooltipTrigger>
+      <TooltipTrigger render={<Button variant="outline">Right</Button>} />
       <TooltipContent side="right">Tooltip on the right</TooltipContent>
     </Tooltip>
   ),

@@ -19,11 +19,13 @@ export const Default: Story = {
   },
   render: () => (
     <HoverCard defaultOpen>
-      <HoverCardTrigger asChild>
-        <span className="cursor-pointer text-xs underline underline-offset-4">
-          users
-        </span>
-      </HoverCardTrigger>
+      <HoverCardTrigger
+        render={
+          <span className="cursor-pointer text-xs underline underline-offset-4">
+            users
+          </span>
+        }
+      />
       <HoverCardContent>
         <div className="space-y-1">
           <h4 className="text-sm font-medium">public.users</h4>

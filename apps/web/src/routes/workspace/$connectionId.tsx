@@ -38,8 +38,8 @@ const WorkspacePage = () => {
 };
 
 export const Route = createFileRoute("/workspace/$connectionId")({
-  beforeLoad: ({ params }) => {
-    const connections = getConnections();
+  beforeLoad: async ({ params }) => {
+    const connections = await getConnections();
     const connection = connections.find((c) => c.id === params.connectionId);
     if (!connection) {
       throw redirect({ to: "/" });

@@ -10,6 +10,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { isTabDirty } from "@/lib/query-tab-state";
 
 const statusDescription: Record<TabStatus, string> = {
   error: "has an error",
@@ -89,10 +90,14 @@ export const QueryTabBar = ({
               className="group/tab"
               aria-description={statusDescription[tab.status] || undefined}
             >
-              {statusDotClass[tab.status] && (
+              {statusDotClass[tab.status] ? (
                 <span
                   className={`inline-block size-1.5 shrink-0 rounded-full ${statusDotClass[tab.status]}`}
                 />
+              ) : (
+                isTabDirty(tab) && (
+                  <span className="inline-block size-1.5 shrink-0 rounded-full bg-foreground/25" />
+                )
               )}
               <span className="max-w-30 truncate">{tab.title}</span>
               <TabCloseButton

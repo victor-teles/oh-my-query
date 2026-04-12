@@ -5,7 +5,11 @@ import type { PersistedTab, TabState } from "@/lib/persistence";
 import type { QueryTab } from "@/lib/query-types";
 
 import { getTabs, saveTabs } from "@/lib/persistence";
-import { createNewQueryTab, restoreQueryTabState } from "@/lib/query-tab-state";
+import {
+  createNewQueryTab,
+  isTabDirty,
+  restoreQueryTabState,
+} from "@/lib/query-tab-state";
 import { isTauri } from "@/lib/tauri";
 
 import { useTabExecution } from "./use-tab-execution";
@@ -36,6 +40,7 @@ export const useQueryTabs = (
     () => tabs[0]?.id ?? ""
   );
   const [isRestored, setIsRestored] = useState(false);
+  const [closeRequested, setCloseRequested] = useState(false);
   const saveTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const lastSaveErrorToastRef = useRef(0);
   const autoResumedRef = useRef(false);
@@ -172,12 +177,16 @@ export const useQueryTabs = (
       return;
     }
 
-    const handleFlush = () => {
+    const handleFlush = (event: BeforeUnloadEvent) => {
       runSave();
+      if (tabsRef.current.some(isTabDirty)) {
+        event.preventDefault();
+        event.returnValue = "";
+      }
     };
     const handleVisibility = () => {
       if (document.visibilityState === "hidden") {
-        handleFlush();
+        runSave();
       }
     };
 
@@ -196,9 +205,15 @@ export const useQueryTabs = (
         if (disposed) {
           return;
         }
-        const unlisten = await getCurrentWindow().onCloseRequested(async () => {
-          await runSave();
-        });
+        const unlisten = await getCurrentWindow().onCloseRequested(
+          async (event) => {
+            await runSave();
+            if (tabsRef.current.some(isTabDirty)) {
+              event.preventDefault();
+              setCloseRequested(true);
+            }
+          }
+        );
         if (disposed) {
           unlisten();
           return;
@@ -323,15 +338,35 @@ export const useQueryTabs = (
     [cancel]
   );
 
+  const onConfirmClose = useCallback(async () => {
+    setCloseRequested(false);
+    if (!isTauri()) {
+      return;
+    }
+    try {
+      const { getCurrentWindow } = await import("@tauri-apps/api/window");
+      await getCurrentWindow().destroy();
+    } catch {
+      // Best-effort
+    }
+  }, []);
+
+  const onCancelClose = useCallback(() => {
+    setCloseRequested(false);
+  }, []);
+
   return {
     activeTab,
     activeTabId,
     addTab,
     addTabWithSql,
     cancelTab,
+    closeRequested,
     closeTab,
     executeTab,
     isRestored,
+    onCancelClose,
+    onConfirmClose,
     reopenTab,
     setActiveTabId,
     tabs,

@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 
 import type { DatabaseConnection } from "@/lib/connections";
@@ -19,11 +19,22 @@ const sortByRecency = (a: DatabaseConnection, b: DatabaseConnection) => {
 };
 
 export const useConnections = () => {
-  const [connections, setConnections] = useState(getConnections);
+  const [connections, setConnections] = useState<DatabaseConnection[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  const load = useCallback(async () => {
+    const loaded = await getConnections();
+    setConnections(loaded);
+    setIsLoading(false);
+  }, []);
+
+  useEffect(() => {
+    load();
+  }, [load]);
 
   const refresh = useCallback(() => {
-    setConnections(getConnections());
-  }, []);
+    load();
+  }, [load]);
 
   const { pinned, unpinned } = useMemo(
     () => ({
@@ -35,29 +46,35 @@ export const useConnections = () => {
 
   const flatList = useMemo(() => [...pinned, ...unpinned], [pinned, unpinned]);
 
-  const remove = useCallback((connection: DatabaseConnection) => {
-    deleteConnection(connection.id);
-    setConnections(getConnections());
-    toast(`"${connection.name}" deleted`, {
-      action: {
-        label: "Undo",
-        onClick: () => {
-          saveConnection(connection);
-          setConnections(getConnections());
+  const remove = useCallback(
+    async (connection: DatabaseConnection) => {
+      await deleteConnection(connection.id);
+      const updated = await getConnections();
+      setConnections(updated);
+      toast(`"${connection.name}" deleted`, {
+        action: {
+          label: "Undo",
+          onClick: async () => {
+            await saveConnection(connection);
+            await load();
+          },
         },
-      },
-      duration: UNDO_DURATION_MS,
-    });
-  }, []);
+        duration: UNDO_DURATION_MS,
+      });
+    },
+    [load]
+  );
 
-  const togglePin = useCallback((connection: DatabaseConnection) => {
-    togglePinConnection(connection.id);
-    setConnections(getConnections());
+  const togglePin = useCallback(async (connection: DatabaseConnection) => {
+    await togglePinConnection(connection.id);
+    const updated = await getConnections();
+    setConnections(updated);
   }, []);
 
   return {
     connections,
     flatList,
+    isLoading,
     pinned,
     refresh,
     remove,

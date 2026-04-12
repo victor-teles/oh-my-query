@@ -36,9 +36,9 @@ export const Default: Story = {
   },
   render: () => (
     <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button variant="outline">Open Menu</Button>
-      </DropdownMenuTrigger>
+      <DropdownMenuTrigger
+        render={<Button variant="outline">Open Menu</Button>}
+      />
       <DropdownMenuContent>
         <DropdownMenuLabel>My Account</DropdownMenuLabel>
         <DropdownMenuSeparator />
@@ -66,9 +66,9 @@ export const Default: Story = {
 export const WithActions: Story = {
   render: () => (
     <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button variant="outline">Actions</Button>
-      </DropdownMenuTrigger>
+      <DropdownMenuTrigger
+        render={<Button variant="outline">Actions</Button>}
+      />
       <DropdownMenuContent>
         <DropdownMenuItem>
           <CopyIcon />

@@ -48,7 +48,11 @@ export const useConnectionLifecycle = (
 
       try {
         await connectToDatabase(connection.id, connection);
-        markConnectionUsed(connection.id);
+        try {
+          await markConnectionUsed(connection.id);
+        } catch {
+          // non-critical — timestamp update is best-effort
+        }
         if (cancelled) {
           return;
         }
