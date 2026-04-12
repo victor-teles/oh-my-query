@@ -1,0 +1,25 @@
+{
+  "name": "@oh-my-query/vitest-visual",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./preview": "./src/preview.ts",
+    "./preset": "./preset.js",
+    "./package.json": "./package.json"
+  },
+  "dependencies": {
+    "pixelmatch": "^6.0.0",
+    "pngjs": "^7.0.0"
+  },
+  "devDependencies": {
+    "@oh-my-query/config": "workspace:*",
+    "@types/node": "^22.13.14",
+    "@types/pngjs": "^6.0.5"
+  },
+  "peerDependencies": {
+    "vite": ">=6.0.0",
+    "vitest": ">=3.0.0"
+  }
+}
