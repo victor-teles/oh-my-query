@@ -127,6 +127,7 @@
         "@oh-my-query/config": "workspace:*",
         "@types/node": "^22.13.14",
         "@types/pngjs": "^6.0.5",
+        "esbuild": "^0.25.0",
       },
       "peerDependencies": {
         "vite": ">=6.0.0",

@@ -5,8 +5,8 @@ import { fileURLToPath } from "node:url";
 
 import { compareVisualSnapshot, updateVisualBaseline } from "./commands.ts";
 
-const dir = dirname(fileURLToPath(import.meta.url));
-const setupFile = join(dir, "setup.ts");
+const pkgRoot = join(dirname(fileURLToPath(import.meta.url)), "..");
+const setupFile = join(pkgRoot, "src", "setup.ts");
 
 export function visualRegression(): Plugin {
   return {
