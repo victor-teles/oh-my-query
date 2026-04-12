@@ -7,14 +7,14 @@ export interface EditorSettings {
 const STORAGE_KEY = "oh-my-query-editor-settings";
 
 const DEFAULT_SETTINGS: EditorSettings = {
-  fontFamily: "system-default",
+  fontFamily: "JetBrains Mono Variable",
   fontSize: 14,
   syntaxTheme: "githubDark",
 };
 
 export const FONT_FAMILIES = [
+  { label: "JetBrains Mono", value: "JetBrains Mono Variable" },
   { label: "System Default", value: "system-default" },
-  { label: "JetBrains Mono", value: "JetBrains Mono" },
   { label: "Fira Code", value: "Fira Code" },
   { label: "SF Mono", value: "SF Mono" },
   { label: "Menlo", value: "Menlo" },

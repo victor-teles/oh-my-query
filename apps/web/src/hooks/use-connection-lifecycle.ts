@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 
 import type { DatabaseConnection } from "@/lib/connections";
 
+import { markConnectionUsed } from "@/lib/connections";
 import {
   connectToDatabase,
   disconnectFromDatabase,
@@ -47,6 +48,7 @@ export const useConnectionLifecycle = (
 
       try {
         await connectToDatabase(connection.id, connection);
+        markConnectionUsed(connection.id);
         if (cancelled) {
           return;
         }

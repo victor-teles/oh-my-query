@@ -1,25 +1,19 @@
 import type { ViewUpdate } from "@codemirror/view";
 
-import { Loader2, Play } from "lucide-react";
+import { Loader2 } from "lucide-react";
+import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { useCallback, useEffect, useState } from "react";
 
 import type { DatabaseConnection, DatabaseType } from "@/lib/connections";
 import type { QueryTab } from "@/lib/query-types";
 import type { ExecuteResult, SchemaInfo } from "@/lib/tauri";
 
-import {
-  Empty,
-  EmptyDescription,
-  EmptyHeader,
-  EmptyMedia,
-  EmptyTitle,
-} from "@/components/ui/empty";
+import { Kbd, KbdGroup } from "@/components/ui/kbd";
 import {
   ResizableHandle,
   ResizablePanel,
   ResizablePanelGroup,
 } from "@/components/ui/resizable";
-import { Skeleton } from "@/components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useEditorInsert } from "@/contexts/editor-insert-context";
 import { useQueryExecution } from "@/contexts/query-execution-context";
@@ -33,6 +27,7 @@ import { useSyntaxTree } from "@/hooks/use-syntax-tree";
 import { useWorkspaceHotkeys } from "@/hooks/use-workspace-hotkeys";
 import { isSqlDatabase } from "@/lib/connections";
 import { downloadCsv, tabularResultToCsv } from "@/lib/csv";
+import { formatDuration } from "@/lib/format-metrics";
 import { formatSql } from "@/lib/format-sql";
 
 import { CommandEditor } from "./command-editor";
@@ -70,6 +65,7 @@ interface WorkspaceContentProps {
   isConnected: boolean;
   isConnecting: boolean;
   connectionError: string | null;
+  onReconnect: () => void;
   schema: SchemaInfo | null;
   selectedDatabase: string | null;
 }
@@ -79,6 +75,7 @@ export const WorkspaceContent = ({
   isConnected: _isConnected,
   isConnecting,
   connectionError,
+  onReconnect,
   schema,
   selectedDatabase,
 }: WorkspaceContentProps) => {
@@ -98,8 +95,8 @@ export const WorkspaceContent = ({
 
   if (connectionError) {
     return (
-      <div className="flex h-full items-center justify-center bg-background">
-        <QueryErrorDisplay error={connectionError} />
+      <div className="h-full overflow-auto bg-background">
+        <QueryErrorDisplay error={connectionError} onReconnect={onReconnect} />
       </div>
     );
   }
@@ -108,8 +105,8 @@ export const WorkspaceContent = ({
     <QueryTabsProvider value={queryTabs}>
       <ConnectedWorkspace
         connection={connection}
-        schema={schema}
         isSql={isSql}
+        schema={schema}
       />
     </QueryTabsProvider>
   );
@@ -178,9 +175,11 @@ const getResultsPanelProps = (
   isSql: boolean
 ): ResultsPanelProps => ({
   error: activeTab?.error ?? null,
+  errorCode: activeTab?.errorCode ?? null,
   executedSql: activeTab?.executedSql ?? null,
   isSql,
   result: activeTab?.result ?? null,
+  runningSql: activeTab?.pendingExecution?.sql ?? null,
   status: activeTab?.status,
 });
 
@@ -438,13 +437,83 @@ const EditorToolbar = ({
   </div>
 );
 
-const LOADING_SKELETON_IDS = ["s1", "s2", "s3", "s4", "s5"];
+const useElapsedMs = (isRunning: boolean): number => {
+  const [elapsed, setElapsed] = useState(0);
+  useEffect(() => {
+    if (!isRunning) {
+      setElapsed(0);
+      return;
+    }
+    const startedAt = Date.now();
+    setElapsed(0);
+    const id = window.setInterval(() => {
+      setElapsed(Date.now() - startedAt);
+    }, 100);
+    return () => window.clearInterval(id);
+  }, [isRunning]);
+  return elapsed;
+};
+
+const SPRING_TRANSITION = {
+  damping: 30,
+  stiffness: 400,
+  type: "spring",
+} as const;
+const REDUCED_MOTION_TRANSITION = { duration: 0 } as const;
+
+const RunningSqlPreview = ({ sql }: { sql: string }) => (
+  <pre
+    aria-hidden="true"
+    className="max-h-48 max-w-2xl overflow-hidden whitespace-pre-wrap break-words text-center font-mono text-muted-foreground/60 text-xs leading-relaxed"
+    style={{
+      WebkitMaskImage:
+        "linear-gradient(to bottom, black 55%, transparent 100%)",
+      maskImage: "linear-gradient(to bottom, black 55%, transparent 100%)",
+    }}
+  >
+    {sql.trim()}
+  </pre>
+);
+
+interface RunningStatusBarProps {
+  onCancel?: () => void;
+}
+
+const RunningStatusBar = ({ onCancel }: RunningStatusBarProps) => {
+  const elapsed = useElapsedMs(true);
+  return (
+    <div
+      aria-live="polite"
+      className="relative flex items-center gap-2 overflow-hidden border-t bg-muted/30 px-3 py-1.5 text-xs text-muted-foreground"
+      role="status"
+    >
+      <span
+        aria-hidden="true"
+        className="-translate-x-full pointer-events-none absolute inset-y-0 left-0 w-1/3 bg-gradient-to-r from-transparent via-primary/20 to-transparent motion-safe:animate-[query-shimmer_1.8s_ease-in-out_infinite] motion-reduce:hidden"
+      />
+      <span className="relative inline-flex size-1.5 rounded-full bg-primary motion-safe:animate-pulse" />
+      <span className="relative font-medium text-foreground">Running…</span>
+      <span className="relative tabular-nums">{formatDuration(elapsed)}</span>
+      {onCancel && (
+        <button
+          className="relative ml-auto rounded px-2 py-0.5 text-xs text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+          onClick={onCancel}
+          type="button"
+        >
+          Cancel
+        </button>
+      )}
+    </div>
+  );
+};
 
 interface ResultsPanelProps {
   status: string | undefined;
   result: ExecuteResult | null;
   executedSql: string | null;
+  runningSql: string | null;
   error: string | null;
+  errorCode: string | null;
   isSql: boolean;
 }
 
@@ -452,10 +521,14 @@ const ResultsPanel = ({
   status,
   result,
   executedSql,
+  runningSql,
   error,
+  errorCode,
   isSql,
 }: ResultsPanelProps) => {
   const { settings: exportSettings } = useExportSettings();
+  const { jumpTo } = useEditorInsert();
+  const { activeTabId, cancelTab, executeTab } = useQueryTabsContext();
 
   const handleDownloadCsv = useCallback(() => {
     if (result?.resultType === "tabular") {
@@ -469,63 +542,158 @@ const ResultsPanel = ({
     }
   }, [result, exportSettings]);
 
+  const handleRetry = useCallback(() => {
+    if (executedSql) {
+      executeTab(activeTabId, executedSql);
+    }
+  }, [activeTabId, executeTab, executedSql]);
+
+  const handleCancel = useCallback(() => {
+    cancelTab(activeTabId);
+  }, [activeTabId, cancelTab]);
+
+  const reducedMotion = useReducedMotion();
+  const spring = reducedMotion ? REDUCED_MOTION_TRANSITION : SPRING_TRANSITION;
+
+  const { stateKey, content } = renderResultsState({
+    error,
+    errorCode,
+    executedSql,
+    handleCancel,
+    handleDownloadCsv,
+    handleRetry,
+    isSql,
+    jumpTo,
+    result,
+    runningSql,
+    status,
+  });
+
+  return (
+    <AnimatePresence initial={false} mode="wait">
+      <motion.div
+        animate={{ opacity: 1, y: 0 }}
+        className="h-full"
+        exit={{ opacity: 0, y: -2 }}
+        initial={{ opacity: 0, y: 2 }}
+        key={stateKey}
+        transition={spring}
+      >
+        {content}
+      </motion.div>
+    </AnimatePresence>
+  );
+};
+
+interface RenderResultsStateArgs {
+  error: string | null;
+  errorCode: string | null;
+  executedSql: string | null;
+  handleCancel: () => void;
+  handleDownloadCsv: () => void;
+  handleRetry: () => void;
+  isSql: boolean;
+  jumpTo: ReturnType<typeof useEditorInsert>["jumpTo"];
+  result: ExecuteResult | null;
+  runningSql: string | null;
+  status: string | undefined;
+}
+
+const renderResultsState = ({
+  error,
+  errorCode,
+  executedSql,
+  handleCancel,
+  handleDownloadCsv,
+  handleRetry,
+  isSql,
+  jumpTo,
+  result,
+  runningSql,
+  status,
+}: RenderResultsStateArgs): { stateKey: string; content: React.ReactNode } => {
   if (status === "running") {
-    return (
-      <div className="flex h-full flex-col gap-2 p-4">
-        {LOADING_SKELETON_IDS.map((id) => (
-          <Skeleton key={id} className="h-8 w-full" />
-        ))}
-      </div>
-    );
+    return {
+      content: (
+        <div className="flex h-full flex-col">
+          <div className="flex flex-1 items-center justify-center overflow-hidden p-6">
+            {runningSql && <RunningSqlPreview sql={runningSql} />}
+          </div>
+          <RunningStatusBar onCancel={handleCancel} />
+        </div>
+      ),
+      stateKey: "running",
+    };
   }
 
   if (status === "error" && error) {
-    return (
-      <div className="flex h-full items-center justify-center overflow-auto">
-        <QueryErrorDisplay error={error} />
-      </div>
-    );
+    return {
+      content: (
+        <div className="h-full overflow-auto">
+          <QueryErrorDisplay
+            error={error}
+            errorCode={errorCode}
+            onJumpToLine={jumpTo}
+            onRetry={executedSql ? handleRetry : undefined}
+            sql={executedSql}
+          />
+        </div>
+      ),
+      stateKey: "error",
+    };
   }
 
   if (status === "success" && result) {
     if (result.resultType === "documents") {
-      return (
-        <div className="flex h-full flex-col">
-          <div className="flex-1 overflow-auto">
-            <DocumentViewer result={result} />
+      return {
+        content: (
+          <div className="flex h-full flex-col">
+            <div className="flex-1 overflow-auto">
+              <DocumentViewer result={result} />
+            </div>
+            <QueryStatusBar executedSql={executedSql} result={result} />
           </div>
-          <QueryStatusBar result={result} />
-        </div>
-      );
+        ),
+        stateKey: "success-documents",
+      };
     }
 
-    return (
-      <div className="flex h-full flex-col">
-        <div className="flex-1 overflow-auto">
-          <ResultsTable result={result} executedSql={executedSql} />
+    return {
+      content: (
+        <div className="flex h-full flex-col">
+          <div className="flex-1 overflow-auto">
+            <ResultsTable executedSql={executedSql} result={result} />
+          </div>
+          <QueryStatusBar
+            executedSql={executedSql}
+            onDownloadCsv={handleDownloadCsv}
+            result={result}
+          />
         </div>
-        <QueryStatusBar result={result} onDownloadCsv={handleDownloadCsv} />
-      </div>
-    );
+      ),
+      stateKey: "success-tabular",
+    };
   }
 
-  const emptyMessage = isSql
-    ? "Write SQL above and press Run or Cmd+Enter"
-    : "Write a command above and press Run or Cmd+Enter";
-
-  return (
-    <div className="flex h-full items-center justify-center">
-      <Empty>
-        <EmptyHeader>
-          <EmptyMedia variant="icon">
-            <Play />
-          </EmptyMedia>
-          <EmptyTitle>Run a query</EmptyTitle>
-          <EmptyDescription>{emptyMessage}</EmptyDescription>
-        </EmptyHeader>
-      </Empty>
-    </div>
-  );
+  return {
+    content: (
+      <div className="flex h-full items-center justify-center p-8">
+        <div className="flex flex-col items-center gap-4">
+          <p className="text-muted-foreground text-sm">
+            {isSql ? "Write a query above" : "Write a command above"}
+          </p>
+          <div className="flex items-center gap-2 text-muted-foreground/75 text-xs">
+            <span>Run with</span>
+            <KbdGroup>
+              <Kbd>⌘</Kbd>
+              <Kbd>↵</Kbd>
+            </KbdGroup>
+          </div>
+        </div>
+      </div>
+    ),
+    stateKey: "empty",
+  };
 };
 
 interface BottomPanelProps extends ResultsPanelProps {

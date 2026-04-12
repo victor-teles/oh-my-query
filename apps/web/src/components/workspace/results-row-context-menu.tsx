@@ -33,6 +33,7 @@ interface ResultsRowContextMenuProps {
   selectedRowIndices: number[];
   exportSettings: ExportSettings;
   isSelected: boolean;
+  isActive: boolean;
   onRowClick: (event: MouseEvent, rowIndex: number) => void;
   children: ReactNode;
 }
@@ -62,6 +63,7 @@ export const ResultsRowContextMenu = ({
   selectedRowIndices,
   exportSettings,
   isSelected,
+  isActive,
   onRowClick,
   children,
 }: ResultsRowContextMenuProps) => {
@@ -115,8 +117,10 @@ export const ResultsRowContextMenu = ({
       <ContextMenuTrigger
         render={
           <TableRow
+            data-active={isActive ? "" : undefined}
+            data-row-index={rowIndex}
             data-state={isSelected ? "selected" : undefined}
-            className="cursor-default"
+            className="cursor-default data-[active]:shadow-[inset_2px_0_0_0_var(--ring)]"
             onClick={handleClick}
           />
         }

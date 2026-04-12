@@ -3,6 +3,7 @@ import { createFileRoute, redirect } from "@tanstack/react-router";
 import { WorkspaceLayout } from "@/components/workspace/workspace-layout";
 import { EditorInsertProvider } from "@/contexts/editor-insert-context";
 import { QueryExecutionProvider } from "@/contexts/query-execution-context";
+import { SafeModeProvider } from "@/contexts/safe-mode-context";
 import { useConnectionLifecycle } from "@/hooks/use-connection-lifecycle";
 import { getConnections } from "@/lib/connections";
 
@@ -18,19 +19,21 @@ const WorkspacePage = () => {
   } = useConnectionLifecycle(connection);
 
   return (
-    <QueryExecutionProvider>
-      <EditorInsertProvider>
-        <WorkspaceLayout
-          connection={connection}
-          isConnected={isConnected}
-          isConnecting={isConnecting}
-          isReconnecting={isReconnecting}
-          connectionError={error}
-          serverVersion={serverVersion}
-          onReconnect={reconnect}
-        />
-      </EditorInsertProvider>
-    </QueryExecutionProvider>
+    <SafeModeProvider>
+      <QueryExecutionProvider>
+        <EditorInsertProvider>
+          <WorkspaceLayout
+            connection={connection}
+            connectionError={error}
+            isConnected={isConnected}
+            isConnecting={isConnecting}
+            isReconnecting={isReconnecting}
+            onReconnect={reconnect}
+            serverVersion={serverVersion}
+          />
+        </EditorInsertProvider>
+      </QueryExecutionProvider>
+    </SafeModeProvider>
   );
 };
 

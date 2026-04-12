@@ -1,57 +1,78 @@
-import { createFileRoute, redirect, useNavigate } from "@tanstack/react-router";
-import { Plus, Settings } from "lucide-react";
-import { useCallback, useState } from "react";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { AnimatePresence } from "motion/react";
+import { useCallback, useEffect, useState } from "react";
 
 import type { DatabaseConnection } from "@/lib/connections";
 
 import { Titlebar } from "@/components/titlebar/titlebar";
-import { Button } from "@/components/ui/button";
 import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
-import { deleteConnection, getConnections } from "@/lib/connections";
+  isFirstConnectionSeen,
+  markFirstConnectionSeen,
+} from "@/lib/first-connection";
 
 import { AddConnectionDialog } from "./-components/add-connection-dialog";
-import { ConnectionList } from "./-components/connection-list";
-import { DeleteConnectionDialog } from "./-components/delete-connection-dialog";
+import { ConnectionsBoard } from "./-components/connections-board";
+import { ConnectionsEmptyState } from "./-components/connections-empty-state";
 import { EditConnectionDialog } from "./-components/edit-connection-dialog";
+import { HomeTitlebarActions } from "./-components/home-titlebar-actions";
+import { useConnectionSelection } from "./-hooks/use-connection-selection";
+import { useConnections } from "./-hooks/use-connections";
+import { useHomeHotkeys } from "./-hooks/use-home-hotkeys";
+import { useHomeIslandSync } from "./-hooks/use-home-island-sync";
+
+const WELCOME_DURATION_MS = 3000;
+const GLOW_DURATION_MS = 900;
 
 const HomeComponent = () => {
   const navigate = useNavigate();
-  const [connections, setConnections] = useState(getConnections);
-  const [deleteTarget, setDeleteTarget] = useState<DatabaseConnection | null>(
-    null
-  );
+  const {
+    connections,
+    pinned,
+    unpinned,
+    flatList,
+    refresh,
+    remove,
+    togglePin,
+  } = useConnections();
+  const { listboxRef, selectedConnection, selectedId, setSelectedId } =
+    useConnectionSelection(flatList);
+
   const [editTarget, setEditTarget] = useState<DatabaseConnection | null>(null);
   const [addOpen, setAddOpen] = useState(false);
+  const [launchingConnection, setLaunchingConnection] =
+    useState<DatabaseConnection | null>(null);
+  const [welcomeActive, setWelcomeActive] = useState(false);
+  const [firstConnectionId, setFirstConnectionId] = useState<string | null>(
+    null
+  );
 
-  const handleDeleteRequest = useCallback((connection: DatabaseConnection) => {
-    setDeleteTarget(connection);
-  }, []);
+  useHomeIslandSync({
+    launchingConnection,
+    selectedConnection,
+    welcomeActive,
+  });
 
-  const handleDeleteConfirm = useCallback(() => {
-    if (!deleteTarget) {
+  useEffect(() => {
+    if (!welcomeActive) {
       return;
     }
+    const timer = setTimeout(
+      () => setWelcomeActive(false),
+      WELCOME_DURATION_MS
+    );
+    return () => clearTimeout(timer);
+  }, [welcomeActive]);
 
-    deleteConnection(deleteTarget.id);
-    setDeleteTarget(null);
-
-    const remaining = getConnections();
-    if (remaining.length === 0) {
-      navigate({ to: "/onboarding" });
-    } else {
-      setConnections(remaining);
+  useEffect(() => {
+    if (!firstConnectionId) {
+      return;
     }
-  }, [deleteTarget, navigate]);
-
-  const handleDeleteOpenChange = useCallback((open: boolean) => {
-    if (!open) {
-      setDeleteTarget(null);
-    }
-  }, []);
+    const timer = setTimeout(
+      () => setFirstConnectionId(null),
+      GLOW_DURATION_MS
+    );
+    return () => clearTimeout(timer);
+  }, [firstConnectionId]);
 
   const handleEditRequest = useCallback((connection: DatabaseConnection) => {
     setEditTarget(connection);
@@ -59,8 +80,8 @@ const HomeComponent = () => {
 
   const handleEditSuccess = useCallback(() => {
     setEditTarget(null);
-    setConnections(getConnections());
-  }, []);
+    refresh();
+  }, [refresh]);
 
   const handleEditOpenChange = useCallback((open: boolean) => {
     if (!open) {
@@ -76,100 +97,110 @@ const HomeComponent = () => {
     setAddOpen(true);
   }, []);
 
-  const handleAddSuccess = useCallback(
+  const launchConnection = useCallback(
     (connection: DatabaseConnection) => {
-      setAddOpen(false);
+      setSelectedId(connection.id);
+      setLaunchingConnection(connection);
       navigate({
         params: { connectionId: connection.id },
         to: "/workspace/$connectionId",
       });
     },
-    [navigate]
+    [navigate, setSelectedId]
   );
+
+  const prepareLaunch = useCallback(
+    (connection: DatabaseConnection) => {
+      setSelectedId(connection.id);
+      setLaunchingConnection(connection);
+    },
+    [setSelectedId]
+  );
+
+  const handleConnectSuccess = useCallback(
+    (connection: DatabaseConnection) => {
+      setAddOpen(false);
+      if (isFirstConnectionSeen()) {
+        setLaunchingConnection(connection);
+        navigate({
+          params: { connectionId: connection.id },
+          to: "/workspace/$connectionId",
+        });
+        return;
+      }
+      markFirstConnectionSeen();
+      refresh();
+      setSelectedId(connection.id);
+      setFirstConnectionId(connection.id);
+      setWelcomeActive(true);
+    },
+    [navigate, refresh, setSelectedId]
+  );
+
+  const isDialogOpen = addOpen || editTarget !== null;
+
+  useHomeHotkeys({
+    enabled: !isDialogOpen,
+    flatList,
+    onDelete: remove,
+    onLaunch: launchConnection,
+    onOpenAdd: handleAddOpen,
+    selectedId,
+    setSelectedId,
+  });
+
+  const isEmpty = connections.length === 0;
 
   return (
     <>
       <Titlebar>
-        <Tooltip>
-          <TooltipTrigger
-            render={
-              <Button
-                variant="ghost"
-                size="icon-xs"
-                aria-label="Settings"
-                onClick={handleSettings}
-              />
-            }
-          >
-            <Settings className="size-3.5" />
-          </TooltipTrigger>
-          <TooltipContent>Settings</TooltipContent>
-        </Tooltip>
-        <Tooltip>
-          <TooltipTrigger
-            render={
-              <Button
-                variant="ghost"
-                size="icon-xs"
-                aria-label="New connection"
-                onClick={handleAddOpen}
-              />
-            }
-          >
-            <Plus className="size-3.5" />
-          </TooltipTrigger>
-          <TooltipContent>New connection</TooltipContent>
-        </Tooltip>
+        <HomeTitlebarActions
+          onAdd={handleAddOpen}
+          onSettings={handleSettings}
+          showAdd={!isEmpty}
+        />
       </Titlebar>
 
-      <div className="flex flex-1 flex-col items-center justify-center px-6">
-        <div className="w-full max-w-sm">
-          <div className="mb-2 flex items-center justify-between px-1">
-            <h1 className="text-[0.625rem] font-medium uppercase tracking-wider text-muted-foreground">
-              Connections
-            </h1>
-            <span className="text-[0.625rem] text-muted-foreground">
-              {connections.length}
-            </span>
-          </div>
-
-          <ConnectionList
-            connections={connections}
-            onEditRequest={handleEditRequest}
-            onDeleteRequest={handleDeleteRequest}
-          />
-        </div>
+      <div className="flex flex-1 flex-col items-center justify-center px-6 py-10">
+        <AnimatePresence initial={false} mode="wait">
+          {isEmpty ? (
+            <ConnectionsEmptyState
+              key="empty"
+              onSuccess={handleConnectSuccess}
+            />
+          ) : (
+            <ConnectionsBoard
+              glowingId={firstConnectionId}
+              key="populated"
+              listboxRef={listboxRef}
+              onDeleteRequest={remove}
+              onEditRequest={handleEditRequest}
+              onLaunch={prepareLaunch}
+              onTogglePin={togglePin}
+              pinned={pinned}
+              selectedId={selectedId}
+              unpinned={unpinned}
+            />
+          )}
+        </AnimatePresence>
       </div>
 
       <AddConnectionDialog
-        open={addOpen}
         onOpenChange={setAddOpen}
-        onSuccess={handleAddSuccess}
+        onSuccess={handleConnectSuccess}
+        open={addOpen}
       />
 
       <EditConnectionDialog
         connection={editTarget}
-        open={editTarget !== null}
         onOpenChange={handleEditOpenChange}
         onSuccess={handleEditSuccess}
-      />
-
-      <DeleteConnectionDialog
-        connection={deleteTarget}
-        open={deleteTarget !== null}
-        onOpenChange={handleDeleteOpenChange}
-        onConfirm={handleDeleteConfirm}
+        open={editTarget !== null}
       />
     </>
   );
 };
 
 export const Route = createFileRoute("/_default/")({
-  beforeLoad: () => {
-    const connections = getConnections();
-    if (connections.length === 0) {
-      throw redirect({ to: "/onboarding" });
-    }
-  },
   component: HomeComponent,
 });

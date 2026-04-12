@@ -1,11 +1,14 @@
-import type { EditorView } from "@codemirror/view";
 import type { ReactNode } from "react";
 
+import { EditorView } from "@codemirror/view";
 import { createContext, use, useCallback, useRef } from "react";
+
+import type { ErrorLocation } from "@/lib/error-location";
 
 interface EditorInsertContextValue {
   getSelectedText: () => string | null;
   insertAtCursor: (text: string) => void;
+  jumpTo: (location: ErrorLocation) => void;
   openQuery: (sql: string) => void;
   queryTable: (tableName: string) => void;
   registerEditor: (view: EditorView | null) => void;
@@ -66,6 +69,33 @@ export const EditorInsertProvider = ({ children }: { children: ReactNode }) => {
     view.focus();
   }, []);
 
+  const jumpTo = useCallback((location: ErrorLocation) => {
+    const view = editorRef.current;
+    if (!view) {
+      return;
+    }
+
+    const { doc } = view.state;
+    let pos: number;
+
+    if (location.position !== undefined) {
+      pos = Math.max(0, Math.min(location.position, doc.length));
+    } else if (location.line !== undefined) {
+      const lineNumber = Math.max(1, Math.min(location.line, doc.lines));
+      const line = doc.line(lineNumber);
+      const col = Math.max(1, location.column ?? 1);
+      pos = Math.min(line.from + col - 1, line.to);
+    } else {
+      return;
+    }
+
+    view.dispatch({
+      effects: EditorView.scrollIntoView(pos, { y: "center" }),
+      selection: { anchor: pos },
+    });
+    view.focus();
+  }, []);
+
   const queryTable = useCallback((tableName: string) => {
     queryTableRef.current?.(tableName);
   }, []);
@@ -79,6 +109,7 @@ export const EditorInsertProvider = ({ children }: { children: ReactNode }) => {
       value={{
         getSelectedText,
         insertAtCursor,
+        jumpTo,
         openQuery,
         queryTable,
         registerEditor,

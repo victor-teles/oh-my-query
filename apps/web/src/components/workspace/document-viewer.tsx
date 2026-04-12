@@ -1,7 +1,16 @@
-import { ChevronDown, ChevronRight, SearchX } from "lucide-react";
+import { ChevronDown, ChevronLeft, ChevronRight } from "lucide-react";
 import { useCallback, useState } from "react";
 
 import type { DocumentResult } from "@/lib/tauri";
+
+import { Button } from "@/components/ui/button";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+
+import { NoResultsState } from "./no-results-state";
 
 interface DocumentViewerProps {
   result: DocumentResult;
@@ -14,10 +23,8 @@ export const DocumentViewer = ({ result }: DocumentViewerProps) => {
 
   if (result.documents.length === 0) {
     return (
-      <div className="flex h-full flex-col items-center justify-center gap-1 text-muted-foreground">
-        <SearchX className="size-5" />
-        <span className="text-sm">No results</span>
-        <span className="text-xs">Your query returned no documents</span>
+      <div className="flex h-full flex-col">
+        <NoResultsState label="documents" />
       </div>
     );
   }
@@ -77,26 +84,44 @@ const DocumentPagination = ({
   }, [onPageChange, page]);
 
   return (
-    <div className="flex items-center justify-center gap-2 border-t px-3 py-2 text-xs text-muted-foreground">
-      <button
-        type="button"
-        disabled={page === 0}
-        onClick={handlePrev}
-        className="rounded px-2 py-1 hover:bg-accent disabled:opacity-50"
-      >
-        Previous
-      </button>
+    <div className="flex items-center justify-between border-t px-3 py-1.5 text-muted-foreground text-xs">
       <span>
         Page {page + 1} of {totalPages}
       </span>
-      <button
-        type="button"
-        disabled={page >= totalPages - 1}
-        onClick={handleNext}
-        className="rounded px-2 py-1 hover:bg-accent disabled:opacity-50"
-      >
-        Next
-      </button>
+      <div className="flex items-center gap-1">
+        <Tooltip>
+          <TooltipTrigger
+            render={
+              <Button
+                aria-label="Previous page"
+                disabled={page === 0}
+                onClick={handlePrev}
+                size="icon-xs"
+                variant="ghost"
+              />
+            }
+          >
+            <ChevronLeft className="size-3.5" />
+          </TooltipTrigger>
+          <TooltipContent>Previous page</TooltipContent>
+        </Tooltip>
+        <Tooltip>
+          <TooltipTrigger
+            render={
+              <Button
+                aria-label="Next page"
+                disabled={page >= totalPages - 1}
+                onClick={handleNext}
+                size="icon-xs"
+                variant="ghost"
+              />
+            }
+          >
+            <ChevronRight className="size-3.5" />
+          </TooltipTrigger>
+          <TooltipContent>Next page</TooltipContent>
+        </Tooltip>
+      </div>
     </div>
   );
 };
@@ -123,7 +148,7 @@ const JsonNode = ({
   if (typeof value === "boolean") {
     return (
       <JsonPrimitive keyName={keyName}>
-        <span className="text-orange-400">{String(value)}</span>
+        <span className="text-json-boolean">{String(value)}</span>
       </JsonPrimitive>
     );
   }
@@ -131,7 +156,7 @@ const JsonNode = ({
   if (typeof value === "number") {
     return (
       <JsonPrimitive keyName={keyName}>
-        <span className="text-blue-400">{String(value)}</span>
+        <span className="text-json-number">{String(value)}</span>
       </JsonPrimitive>
     );
   }
@@ -139,7 +164,7 @@ const JsonNode = ({
   if (typeof value === "string") {
     return (
       <JsonPrimitive keyName={keyName}>
-        <span className="text-emerald-400">&quot;{value}&quot;</span>
+        <span className="text-json-string">&quot;{value}&quot;</span>
       </JsonPrimitive>
     );
   }
@@ -254,5 +279,5 @@ const JsonCollapsible = ({
 };
 
 const KeyLabel = ({ name }: { name: string }) => (
-  <span className="text-purple-400">{name}: </span>
+  <span className="text-json-key">{name}: </span>
 );

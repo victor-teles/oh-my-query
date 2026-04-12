@@ -16,6 +16,8 @@ export interface DatabaseConnection {
   username: string;
   password: string;
   createdAt: string;
+  pinned: boolean;
+  lastConnectedAt: string | null;
 }
 
 export const DEFAULT_PORTS: Record<DatabaseType, number> = {
@@ -35,28 +37,56 @@ export const isSqlDatabase = (type: DatabaseType): boolean =>
 
 const STORAGE_KEY = "oh-my-query-connections";
 
+const normalizeConnection = (
+  raw: Partial<DatabaseConnection> & Pick<DatabaseConnection, "id">
+): DatabaseConnection =>
+  ({
+    ...raw,
+    lastConnectedAt: raw.lastConnectedAt ?? null,
+    pinned: raw.pinned ?? false,
+  }) as DatabaseConnection;
+
+const writeConnections = (connections: DatabaseConnection[]): void => {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(connections));
+};
+
 export const getConnections = (): DatabaseConnection[] => {
   const raw = localStorage.getItem(STORAGE_KEY);
   if (!raw) {
     return [];
   }
-  return JSON.parse(raw) as DatabaseConnection[];
+  const parsed = JSON.parse(raw) as DatabaseConnection[];
+  return parsed.map(normalizeConnection);
 };
 
 export const saveConnection = (connection: DatabaseConnection): void => {
   const connections = getConnections();
-  connections.push(connection);
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(connections));
+  connections.push(normalizeConnection(connection));
+  writeConnections(connections);
 };
 
 export const updateConnection = (updated: DatabaseConnection): void => {
   const connections = getConnections().map((c) =>
-    c.id === updated.id ? updated : c
+    c.id === updated.id ? normalizeConnection(updated) : c
   );
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(connections));
+  writeConnections(connections);
 };
 
 export const deleteConnection = (id: string): void => {
   const connections = getConnections().filter((c) => c.id !== id);
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(connections));
+  writeConnections(connections);
+};
+
+export const togglePinConnection = (id: string): void => {
+  const connections = getConnections().map((c) =>
+    c.id === id ? { ...c, pinned: !c.pinned } : c
+  );
+  writeConnections(connections);
+};
+
+export const markConnectionUsed = (id: string): void => {
+  const connections = getConnections().map((c) =>
+    c.id === id ? { ...c, lastConnectedAt: new Date().toISOString() } : c
+  );
+  writeConnections(connections);
 };

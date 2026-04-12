@@ -2,6 +2,7 @@ use std::time::Instant;
 
 use tauri::State;
 
+use crate::cancellation::CancellationRegistry;
 use crate::db::driver::get_driver;
 use crate::db::error::DbError;
 use crate::db::execute::execute_for_pool;
@@ -71,6 +72,7 @@ pub async fn get_schema(
 pub async fn execute_query(
     params: QueryParams,
     state: State<'_, ConnectionPoolManager>,
+    cancellation: State<'_, CancellationRegistry>,
 ) -> Result<ExecuteResult, DbError> {
     let pool = state.get_pool(&params.connection_id).await?;
     let max_rows = params.max_rows.unwrap_or(DEFAULT_MAX_ROWS) as usize;
@@ -84,16 +86,37 @@ pub async fn execute_query(
         None => params.sql.clone(),
     };
 
+    let cancel_rx = params
+        .query_id
+        .as_ref()
+        .map(|id| cancellation.register(id.clone()));
+
     let start = Instant::now();
 
-    let result = tokio::time::timeout(
+    let query_future = tokio::time::timeout(
         std::time::Duration::from_secs(timeout_secs),
         execute_for_pool(&pool, &sql, max_rows, params.schema.as_deref()),
-    )
-    .await
-    .map_err(DbError::from)?;
+    );
 
-    let mut execute_result = result?;
+    let result = match cancel_rx {
+        Some(rx) => tokio::select! {
+            biased;
+            _ = rx => {
+                if let Some(query_id) = params.query_id.as_deref() {
+                    cancellation.remove(query_id);
+                }
+                return Err(DbError::cancelled());
+            }
+            res = query_future => res,
+        },
+        None => query_future.await,
+    };
+
+    if let Some(query_id) = params.query_id.as_deref() {
+        cancellation.remove(query_id);
+    }
+
+    let mut execute_result = result.map_err(DbError::from)??;
     let execution_time_ms = start.elapsed().as_millis() as u64;
 
     match &mut execute_result {
@@ -108,6 +131,14 @@ pub async fn execute_query(
     }
 
     Ok(execute_result)
+}
+
+#[tauri::command]
+pub async fn cancel_query(
+    query_id: String,
+    cancellation: State<'_, CancellationRegistry>,
+) -> Result<bool, DbError> {
+    Ok(cancellation.cancel(&query_id))
 }
 
 #[tauri::command]

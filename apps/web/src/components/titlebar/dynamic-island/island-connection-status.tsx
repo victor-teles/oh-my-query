@@ -11,6 +11,7 @@ const BUTTON_SPRING = { damping: 20, stiffness: 400, type: "spring" } as const;
 
 export const ConnectingStatus = ({ connectionName }: ConnectingStatusProps) => (
   <motion.div
+    aria-hidden="true"
     className="flex items-center gap-1.5"
     initial={{ filter: "blur(4px)", opacity: 0 }}
     animate={{ filter: "blur(0px)", opacity: 1 }}
@@ -31,7 +32,7 @@ export const ConnectingStatus = ({ connectionName }: ConnectingStatusProps) => (
         />
       ))}
     </div>
-    <span className="text-[0.625rem] text-muted-foreground">
+    <span className="text-chrome max-w-[240px] truncate text-muted-foreground">
       {connectionName}
     </span>
   </motion.div>
@@ -41,6 +42,7 @@ export const ReconnectingStatus = ({
   connectionName,
 }: ConnectingStatusProps) => (
   <motion.div
+    aria-hidden="true"
     className="flex items-center gap-1.5"
     initial={{ filter: "blur(4px)", opacity: 0 }}
     animate={{ filter: "blur(0px)", opacity: 1 }}
@@ -61,7 +63,7 @@ export const ReconnectingStatus = ({
         />
       ))}
     </div>
-    <span className="text-[0.625rem] text-amber-500">
+    <span className="text-chrome max-w-[260px] truncate text-amber-500">
       Reconnecting to {connectionName}…
     </span>
   </motion.div>
@@ -79,6 +81,7 @@ export const ConnectedIdleStatus = ({
   database,
 }: ConnectedIdleStatusProps) => (
   <motion.div
+    aria-hidden="true"
     className="flex cursor-default items-center gap-1.5"
     initial={{ filter: "blur(4px)", opacity: 0 }}
     animate={{ filter: "blur(0px)", opacity: 1 }}
@@ -91,12 +94,12 @@ export const ConnectedIdleStatus = ({
       <span className="relative inline-flex size-2 rounded-full bg-emerald-500" />
     </span>
     {serverVersion && (
-      <span className="text-[0.625rem] text-muted-foreground">
+      <span className="text-data text-[11px] text-muted-foreground">
         {serverVersion}
       </span>
     )}
-    <span className="text-[0.625rem] text-muted-foreground/40">|</span>
-    <span className="text-[0.625rem] text-muted-foreground">
+    <span className="text-[11px] text-muted-foreground/30">·</span>
+    <span className="text-data text-[11px] text-muted-foreground">
       {username}@{database}
     </span>
   </motion.div>
@@ -112,24 +115,64 @@ export const ConnectionErrorStatus = ({
   onReconnect,
 }: ConnectionErrorStatusProps) => (
   <motion.div
+    role="alert"
     className="flex items-center gap-1.5"
     initial={{ filter: "blur(4px)", opacity: 0 }}
     animate={{ filter: "blur(0px)", opacity: 1 }}
     exit={{ filter: "blur(4px)", opacity: 0 }}
   >
-    <AlertCircle className="size-3 shrink-0 text-destructive" />
-    <span className="max-w-[280px] truncate text-[0.625rem] text-destructive">
+    <AlertCircle
+      aria-hidden="true"
+      className="size-3 shrink-0 text-destructive"
+    />
+    <span className="text-chrome max-w-[280px] truncate text-destructive">
       {error}
     </span>
     <motion.button
       type="button"
       onClick={onReconnect}
-      className="cursor-pointer text-[0.625rem] text-destructive underline underline-offset-2"
+      className="text-chrome cursor-pointer text-destructive underline underline-offset-2"
       whileHover={{ scale: 1.05 }}
       whileTap={{ scale: 0.92 }}
       transition={BUTTON_SPRING}
     >
       Retry
     </motion.button>
+  </motion.div>
+);
+
+interface AmbientStatusProps {
+  connectionName: string;
+}
+
+export const AmbientStatus = ({ connectionName }: AmbientStatusProps) => (
+  <motion.div
+    aria-hidden="true"
+    className="flex items-center gap-1.5"
+    initial={{ filter: "blur(4px)", opacity: 0 }}
+    animate={{ filter: "blur(0px)", opacity: 1 }}
+    exit={{ filter: "blur(4px)", opacity: 0 }}
+  >
+    <span className="size-1 shrink-0 rounded-full bg-muted-foreground/40" />
+    <span className="text-chrome max-w-[240px] truncate text-muted-foreground">
+      {connectionName}
+    </span>
+  </motion.div>
+);
+
+export const WelcomeStatus = () => (
+  <motion.div
+    aria-live="polite"
+    className="flex items-center gap-1.5"
+    initial={{ filter: "blur(4px)", opacity: 0 }}
+    animate={{ filter: "blur(0px)", opacity: 1 }}
+    exit={{ filter: "blur(4px)", opacity: 0 }}
+    role="status"
+  >
+    <span
+      aria-hidden="true"
+      className="size-1.5 shrink-0 rounded-full bg-primary"
+    />
+    <span className="text-chrome text-muted-foreground">Welcome</span>
   </motion.div>
 );

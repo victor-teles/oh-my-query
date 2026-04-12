@@ -1,37 +1,42 @@
+import { useCallback } from "react";
+
+import { useEditorSettings } from "@/hooks/use-editor-settings";
 import { THEME_ENTRIES } from "@/lib/codemirror-themes";
 
+import { useSettingsFeedback } from "./settings-feedback-context";
 import { ThemePreviewCard } from "./theme-preview-card";
 
-interface SyntaxThemeSectionProps {
-  value: string;
-  fontFamily: string;
-  fontSize: number;
-  onChange: (themeKey: string) => void;
-}
+export const SyntaxThemeSection = () => {
+  const { settings, updateSettings } = useEditorSettings();
+  const { notifySaved } = useSettingsFeedback();
 
-export const SyntaxThemeSection = ({
-  value,
-  fontFamily,
-  fontSize,
-  onChange,
-}: SyntaxThemeSectionProps) => (
-  <section>
-    <h2 className="mb-1 text-sm font-medium">Syntax Theme</h2>
-    <p className="mb-4 text-xs text-muted-foreground">
-      Choose a color scheme for the SQL editor.
-    </p>
-    <div className="grid grid-cols-3 gap-3">
-      {THEME_ENTRIES.map((entry) => (
-        <ThemePreviewCard
-          key={entry.key}
-          themeKey={entry.key}
-          label={entry.label}
-          isSelected={value === entry.key}
-          fontFamily={fontFamily}
-          fontSize={fontSize}
-          onSelect={onChange}
-        />
-      ))}
-    </div>
-  </section>
-);
+  const handleThemeChange = useCallback(
+    (syntaxTheme: string) => {
+      updateSettings({ syntaxTheme });
+      notifySaved();
+    },
+    [updateSettings, notifySaved]
+  );
+
+  return (
+    <section>
+      <h2 className="text-xl font-semibold tracking-tight">Syntax Theme</h2>
+      <p className="mt-1.5 mb-6 text-sm text-muted-foreground">
+        Pick the palette your SQL reads in.
+      </p>
+      <div className="grid grid-cols-3 gap-3">
+        {THEME_ENTRIES.map((entry) => (
+          <ThemePreviewCard
+            fontFamily={settings.fontFamily}
+            fontSize={settings.fontSize}
+            isSelected={settings.syntaxTheme === entry.key}
+            key={entry.key}
+            label={entry.label}
+            onSelect={handleThemeChange}
+            themeKey={entry.key}
+          />
+        ))}
+      </div>
+    </section>
+  );
+};

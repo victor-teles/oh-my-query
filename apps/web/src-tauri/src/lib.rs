@@ -1,8 +1,10 @@
+mod cancellation;
 mod commands;
 mod config;
 mod db;
 mod persistence;
 
+use cancellation::CancellationRegistry;
 use db::pool::ConnectionPoolManager;
 use tauri::menu::{MenuBuilder, MenuItemBuilder, PredefinedMenuItem, SubmenuBuilder};
 use tauri::Emitter;
@@ -16,6 +18,7 @@ pub fn run() {
                 .build(),
         )
         .manage(ConnectionPoolManager::new())
+        .manage(CancellationRegistry::new())
         .setup(|app| {
             let app_submenu = SubmenuBuilder::new(app, "oh-my-query")
                 .about(None)
@@ -78,6 +81,7 @@ pub fn run() {
             commands::disconnect_from_database,
             commands::get_server_version,
             commands::execute_query,
+            commands::cancel_query,
             commands::list_connection_databases,
             commands::get_schema,
             commands::format_sql,

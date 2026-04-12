@@ -1,3 +1,4 @@
+import type { PendingExecution } from "@/lib/persistence";
 import type { ExecuteResult } from "@/lib/tauri";
 
 export type TabStatus = "idle" | "running" | "success" | "error";
@@ -9,6 +10,9 @@ export interface QueryTab {
   executedSql: string | null;
   result: ExecuteResult | null;
   error: string | null;
+  errorCode: string | null;
   status: TabStatus;
   sourceDialect: string | null;
+  pendingExecution: PendingExecution | null;
+  runningQueryId: string | null;
 }

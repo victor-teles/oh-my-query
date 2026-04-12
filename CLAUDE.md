@@ -65,6 +65,18 @@ Workspace packages are prefixed `@oh-my-query/` and use `workspace:*` protocol. 
 
 Defined in `packages/env/src/web.ts` using Zod schemas. Web-specific env vars must be prefixed with `VITE_`.
 
+## Skills
+
+When working with React/TypeScript frontend code, activate these skills:
+
+- `vercel-composition-patterns`
+- `vercel-react-best-practices`
+- `web-design-guidelines`
+
+When working with Rust code (`src-tauri/`), activate this skill:
+
+- `rust-best-practices`
+
 ## Key Conventions
 
 - **Package manager**: bun (v1.3.9)
@@ -74,5 +86,68 @@ Defined in `packages/env/src/web.ts` using Zod schemas. Web-specific env vars mu
 - **React 19**: Use ref as a prop directly, no `forwardRef`
 - **TypeScript**: Strict mode with `noUncheckedIndexedAccess`, `verbatimModuleSyntax`
 - Do not add comments to the code unless necessary for clarity
-- Try always to break down complex components into smaller ones, even if they are only used once. This promotes reusability and readability.
-- Create files new components: When a primitive or reusable create in src/components/ui, when is too specific for the screen create in the same folder as the screen.
+
+## Component & Route Composition
+
+Keep route files thin. A route's job is to orchestrate — wire hooks, render layout slots, route between panels — not to implement. If a route file is growing past ~100 lines, extract.
+
+**File placement**
+
+- Reusable primitives (buttons, inputs, popovers, etc.): `apps/web/src/components/ui/`
+- Cross-screen feature components: `apps/web/src/components/<feature>/`
+- Screen-specific components: `<route>/-components/` (TanStack Router ignores `-`-prefixed dirs)
+- Screen-specific hooks: `<route>/-hooks/`
+- App-wide hooks: `apps/web/src/hooks/`
+
+**Extraction patterns**
+
+- Prefer many small, single-purpose components over one large one — even if a piece is used only once. Readability wins.
+- Each extracted panel/tab/section should own the hooks and handlers it needs (e.g., a tab that edits editor settings calls `useEditorSettings` itself instead of receiving props from the page). Don't thread state through the route when the child can own it.
+- Group related state + effects into purpose-named hooks (`useConnections`, `useConnectionSelection`, `useHomeIslandSync`, `useHomeHotkeys`) rather than piling `useState`/`useEffect` into the route component.
+- Extract titlebar actions, empty states, and populated states as separate components. Routes switch between them via `AnimatePresence` — they don't inline the JSX.
+- Hotkey wiring belongs in a dedicated `useXxxHotkeys` hook, not inline in the route.
+
+**What stays in the route**
+
+- `useState` for cross-cutting flow that spans multiple extracted pieces (e.g., welcome/glow timers coordinating with the island + dialog state).
+- Dialog mounts (`<AddConnectionDialog>`, `<EditConnectionDialog>`) — they're siblings of the main view, so the route owns their open state.
+- The top-level layout scaffold: `<Titlebar>`, scroll container, `AnimatePresence` switcher.
+
+**Don't over-engineer**
+
+- Don't create a primitive in `components/ui/` for something used once. Keep it local until a second caller appears.
+- Don't split a 30-line component just to hit a line count. Split when there are distinct responsibilities (data, layout, interaction) worth naming.
+
+## Design Context
+
+### Users
+
+Backend and full-stack developers who live in terminals and IDEs and treat oh-my-query as a daily driver alongside their editor. Keyboard-first, long sessions debugging and exploring data, running on macOS as a native Tauri app alongside a code editor. Connecting to PostgreSQL, MySQL, SQLite, MongoDB, Redis, or ClickHouse.
+
+**Job to be done**: "Give me a fast, beautiful, trustworthy place to talk to my databases — with an AI that helps without getting in the way."
+
+### Brand Personality
+
+- **Three words**: _warm · craft · trustworthy_
+- **Voice**: Quiet confidence. No marketing language, no hype, no "✨ AI-powered." Talks to the user like a senior colleague who respects their time.
+- **Emotional goal**: A tool you're genuinely happy to sit inside for a 3-hour debugging session — the kind of care you feel in Things 3, Postico, or Linear.
+
+### Aesthetic Direction
+
+- **Lineage**: Refined & native-calm. Positive references: **TablePlus, Postico, Things 3, Linear, Arc**.
+- **Anti-references**:
+  - **DBeaver / phpMyAdmin / pgAdmin** — bureaucratic grey panels, icon-heavy toolbars, zero personality.
+  - **Generic AI-app UI** — purple/cyan gradients, neon accents on dark, sparkle icons, chatbot drawer bolted onto an admin UI.
+- **Theme**: Dark-first with warm amber accent, to be refined rather than replaced. Light mode exists but dark is the hero. Current palette (`oklch` warm neutrals, amber primary ~`0.92 0.052 66°`) is the starting point, not a placeholder.
+- **Typography**: The `-apple-system` stack is a placeholder — the biggest gap to fill. Pair a distinctive display/UI face with a refined mono for SQL and data. Avoid Inter, IBM Plex, Space Grotesk, Fraunces, Instrument Sans.
+- **Motion**: iOS-like springs, purposeful, never decorative. Must degrade cleanly under `prefers-reduced-motion`.
+- **Signature moment**: The **Dynamic Island-style connection indicator** in the titlebar is the "wait, what was that?" — invest here first.
+
+### Design Principles
+
+1. **Warmth is structural, not decorative.** Amber and vibrancy exist because they make long sessions feel cared-for, not because dark mode needs "pop."
+2. **Native-calm, not native-cosplay.** Inherit macOS discipline (keyboard-first, quiet chrome, real vibrancy, deliberate motion) — don't imitate macOS widgets.
+3. **The AI disappears into the editor.** No chatbot drawer aesthetic, no sparkle iconography. AI output lands in the editor like a colleague pasted it, not like a product feature.
+4. **Density with breathing room.** Resolve pro-user density and calm space through typographic rhythm and varied spacing — not cards on cards or hidden disclosure.
+5. **Keyboard + AT are non-negotiable.** Focus rings always visible. WCAG AA contrast everywhere, including results tables and the Dynamic Island. `prefers-reduced-motion` fully respected.
+6. **Make the Dynamic Island the signature.** When something wants to be distinctive, put the effort here first.

@@ -15,6 +15,7 @@ interface QueryTabsContextValue {
   updateTabDialect: (tabId: string, dialect: string | null) => void;
   updateTabSql: (tabId: string, sql: string) => void;
   executeTab: (tabId: string, sqlOverride?: string) => void;
+  cancelTab: (tabId: string) => void;
 }
 
 const QueryTabsContext = createContext<QueryTabsContextValue | null>(null);

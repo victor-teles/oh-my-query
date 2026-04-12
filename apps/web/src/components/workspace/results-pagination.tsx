@@ -19,7 +19,7 @@ export const ResultsPagination = ({ table }: ResultsPaginationProps) => {
   const handleNext = useCallback(() => table.nextPage(), [table]);
 
   return (
-    <div className="flex items-center justify-between border-t px-3 py-1.5 text-xs text-muted-foreground">
+    <div className="flex items-center justify-between border-t px-3 py-1.5 pb-3 text-xs text-muted-foreground">
       <span>
         Page {table.getState().pagination.pageIndex + 1} of{" "}
         {table.getPageCount()}

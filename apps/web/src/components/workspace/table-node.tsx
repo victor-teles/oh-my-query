@@ -94,7 +94,7 @@ export const TableNode = ({
         </div>
         <CollapsibleContent>
           <div className="ml-3 border-l border-sidebar-border pl-2">
-            <div className="mb-0.5 mt-1 px-2 text-[10px] font-medium uppercase tracking-wider text-muted-foreground">
+            <div className="mb-0.5 mt-1 px-2 text-section-label">
               Columns ({table.columns.length})
             </div>
             {table.columns.map((col) => (
@@ -103,7 +103,7 @@ export const TableNode = ({
 
             {hasIndexes && (
               <>
-                <div className="mb-0.5 mt-2 px-2 text-[10px] font-medium uppercase tracking-wider text-muted-foreground">
+                <div className="mb-0.5 mt-2 px-2 text-section-label">
                   Indexes ({table.indexes.length})
                 </div>
                 {table.indexes.map((idx) => (
@@ -125,7 +125,7 @@ export const TableNode = ({
 
             {hasForeignKeys && (
               <>
-                <div className="mb-0.5 mt-2 px-2 text-[10px] font-medium uppercase tracking-wider text-muted-foreground">
+                <div className="mb-0.5 mt-2 px-2 text-section-label">
                   Foreign Keys ({table.foreignKeys.length})
                 </div>
                 {table.foreignKeys.map((fk) => (

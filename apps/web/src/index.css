@@ -2,8 +2,18 @@
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 @import "streamdown/styles.css";
+@import "@fontsource-variable/jetbrains-mono";
 
-:root {
+@font-face {
+  font-family: "Switzer";
+  src: url("/fonts/switzer-variable.woff2") format("woff2-variations");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root,
+.light {
   --background: oklch(0.9821 0 0);
   --foreground: oklch(0.2435 0 0);
   --card: oklch(0.9911 0 0);
@@ -30,16 +40,24 @@
   --chart-5: oklch(0.4338 0.0437 41.6746);
   --sidebar: oklch(0.985 0.001 106.423);
   --sidebar-foreground: oklch(0.147 0.004 49.25);
-  --sidebar-primary: oklch(0.216 0.006 56.043);
-  --sidebar-primary-foreground: oklch(0.985 0.001 106.423);
+  --sidebar-primary: var(--primary);
+  --sidebar-primary-foreground: var(--primary-foreground);
   --sidebar-accent: oklch(0.97 0.001 106.424);
   --sidebar-accent-foreground: oklch(0.216 0.006 56.043);
   --sidebar-border: oklch(0.923 0.003 48.717);
   --sidebar-ring: oklch(0.709 0.01 56.259);
   --radius: 0.45rem;
   --font-sans:
-    -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, Roboto,
-    "Helvetica Neue", Arial, sans-serif;
+    "Switzer", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui,
+    sans-serif;
+  --font-mono:
+    "JetBrains Mono Variable", ui-monospace, SFMono-Regular, "SF Mono", Menlo,
+    Consolas, monospace;
+  --tracking-normal: -0.003em;
+  --json-key: oklch(0.5 0.08 60);
+  --json-string: oklch(0.5 0.09 135);
+  --json-number: oklch(0.55 0.14 40);
+  --json-boolean: oklch(0.55 0.14 70);
 }
 
 .dark {
@@ -69,16 +87,24 @@
   --chart-5: oklch(0.9245 0.0533 67.0855);
   --sidebar: oklch(0.216 0.006 56.043);
   --sidebar-foreground: oklch(0.985 0.001 106.423);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0.001 106.423);
+  --sidebar-primary: var(--primary);
+  --sidebar-primary-foreground: var(--primary-foreground);
   --sidebar-accent: oklch(0.268 0.007 34.298);
   --sidebar-accent-foreground: oklch(0.985 0.001 106.423);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.553 0.013 58.071);
   --radius: 0.45rem;
   --font-sans:
-    -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, Roboto,
-    "Helvetica Neue", Arial, sans-serif;
+    "Switzer", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui,
+    sans-serif;
+  --font-mono:
+    "JetBrains Mono Variable", ui-monospace, SFMono-Regular, "SF Mono", Menlo,
+    Consolas, monospace;
+  --tracking-normal: -0.003em;
+  --json-key: oklch(0.78 0.1 60);
+  --json-string: oklch(0.78 0.09 135);
+  --json-number: oklch(0.8 0.13 40);
+  --json-boolean: oklch(0.84 0.14 70);
 }
 
 @theme inline {
@@ -106,6 +132,10 @@
   --color-chart-3: var(--chart-3);
   --color-chart-4: var(--chart-4);
   --color-chart-5: var(--chart-5);
+  --color-json-key: var(--json-key);
+  --color-json-string: var(--json-string);
+  --color-json-number: var(--json-number);
+  --color-json-boolean: var(--json-boolean);
   --color-sidebar: var(--sidebar);
   --color-sidebar-foreground: var(--sidebar-foreground);
   --color-sidebar-primary: var(--sidebar-primary);
@@ -117,7 +147,6 @@
 
   --font-sans: var(--font-sans);
   --font-mono: var(--font-mono);
-  --font-serif: var(--font-serif);
 
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
@@ -145,15 +174,47 @@
   * {
     @apply border-border outline-ring/50;
   }
+  html {
+    @apply font-sans;
+    overflow: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    font-feature-settings: "ss01", "ss03", "cv11", "calt", "kern";
+  }
   body {
     @apply font-sans bg-transparent text-foreground;
     letter-spacing: var(--tracking-normal);
   }
-  html {
-    @apply font-sans;
-    overflow: hidden;
+  .font-mono,
+  code,
+  kbd,
+  pre,
+  samp,
+  .cm-editor {
+    font-feature-settings:
+      "calt",
+      "liga" 0,
+      "zero",
+      "ss02";
+  }
+}
+
+@layer components {
+  .text-section-label {
+    @apply text-[10px] font-medium uppercase tracking-wider text-muted-foreground;
   }
 
+  .text-chrome {
+    @apply text-[11px] font-medium tracking-tight;
+  }
+
+  .text-data {
+    @apply font-mono tabular-nums tracking-tight;
+  }
+}
+
+@layer base {
   [data-variant="segment"]
     > [data-slot="tabs-trigger"]
     + [data-slot="tabs-trigger"]::before {
@@ -195,5 +256,14 @@
     font-weight: 700;
     font-size: 100%;
     color: oklch(0.65 0.12 25);
+  }
+
+  @keyframes query-shimmer {
+    0% {
+      transform: translateX(-100%);
+    }
+    100% {
+      transform: translateX(400%);
+    }
   }
 }

@@ -3,9 +3,12 @@ import type { QueryTab } from "@/lib/query-types";
 
 const toQueryTab = (persisted: PersistedTab): QueryTab => ({
   error: null,
+  errorCode: null,
   executedSql: null,
   id: persisted.id,
+  pendingExecution: persisted.pendingExecution ?? null,
   result: null,
+  runningQueryId: null,
   sourceDialect: persisted.sourceDialect,
   sql: persisted.sql,
   status: "idle",
@@ -17,9 +20,12 @@ export const createNewQueryTab = (
   createId: () => string = () => crypto.randomUUID()
 ): QueryTab => ({
   error: null,
+  errorCode: null,
   executedSql: null,
   id: createId(),
+  pendingExecution: null,
   result: null,
+  runningQueryId: null,
   sourceDialect: null,
   sql: "",
   status: "idle",

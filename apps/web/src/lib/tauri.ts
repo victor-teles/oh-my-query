@@ -9,7 +9,10 @@ interface TestConnectionResult {
 export const isTauri = (): boolean => "__TAURI_INTERNALS__" in window;
 
 export const testConnection = async (
-  connection: Omit<DatabaseConnection, "id" | "name" | "createdAt">
+  connection: Omit<
+    DatabaseConnection,
+    "id" | "name" | "createdAt" | "pinned" | "lastConnectedAt"
+  >
 ): Promise<TestConnectionResult> => {
   if (!isTauri()) {
     return {
@@ -42,6 +45,7 @@ export interface QueryParams {
   timeoutSecs?: number;
   schema?: string;
   sourceDialect?: string;
+  queryId?: string;
 }
 
 export interface ColumnInfo {
@@ -185,6 +189,14 @@ export const executeQuery = async (
   const { invoke } = await import("@tauri-apps/api/core");
 
   return invoke<ExecuteResult>("execute_query", { params });
+};
+
+export const cancelQuery = async (queryId: string): Promise<boolean> => {
+  if (!isTauri()) {
+    return false;
+  }
+  const { invoke } = await import("@tauri-apps/api/core");
+  return invoke<boolean>("cancel_query", { queryId });
 };
 
 const MOCK_SCHEMA: SchemaInfo = {
