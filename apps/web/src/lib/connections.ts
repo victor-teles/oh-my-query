@@ -1,3 +1,5 @@
+import { safeGetJson, safeSetJson } from "@/lib/safe-storage";
+
 export type DatabaseType =
   | "postgresql"
   | "mysql"
@@ -46,16 +48,19 @@ const normalizeConnection = (
     pinned: raw.pinned ?? false,
   }) as DatabaseConnection;
 
+const isConnectionArray = (value: unknown): value is DatabaseConnection[] =>
+  Array.isArray(value);
+
 const writeConnections = (connections: DatabaseConnection[]): void => {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(connections));
+  safeSetJson(STORAGE_KEY, connections);
 };
 
 export const getConnections = (): DatabaseConnection[] => {
-  const raw = localStorage.getItem(STORAGE_KEY);
-  if (!raw) {
-    return [];
-  }
-  const parsed = JSON.parse(raw) as DatabaseConnection[];
+  const parsed = safeGetJson<DatabaseConnection[]>(
+    STORAGE_KEY,
+    [],
+    isConnectionArray
+  );
   return parsed.map(normalizeConnection);
 };
 

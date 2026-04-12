@@ -11,5 +11,9 @@ export const markFirstConnectionSeen = (): void => {
   if (typeof window === "undefined") {
     return;
   }
-  window.localStorage.setItem(STORAGE_KEY, "true");
+  try {
+    window.localStorage.setItem(STORAGE_KEY, "true");
+  } catch {
+    // Quota exceeded — non-critical flag, safe to skip
+  }
 };

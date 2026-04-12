@@ -1,3 +1,5 @@
+import { safeGetJson, safeSetJson } from "@/lib/safe-storage";
+
 export interface EditorSettings {
   syntaxTheme: string;
   fontFamily: string;
@@ -25,21 +27,11 @@ export const FONT_FAMILIES = [
 export const FONT_SIZE_MIN = 12;
 export const FONT_SIZE_MAX = 24;
 
-export const getEditorSettings = (): EditorSettings => {
-  const raw = localStorage.getItem(STORAGE_KEY);
-  if (!raw) {
-    return DEFAULT_SETTINGS;
-  }
-  try {
-    return {
-      ...DEFAULT_SETTINGS,
-      ...(JSON.parse(raw) as Partial<EditorSettings>),
-    };
-  } catch {
-    return DEFAULT_SETTINGS;
-  }
-};
+export const getEditorSettings = (): EditorSettings => ({
+  ...DEFAULT_SETTINGS,
+  ...safeGetJson<Partial<EditorSettings>>(STORAGE_KEY, {}),
+});
 
 export const saveEditorSettings = (settings: EditorSettings): void => {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(settings));
+  safeSetJson(STORAGE_KEY, settings);
 };

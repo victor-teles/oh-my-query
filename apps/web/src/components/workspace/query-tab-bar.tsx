@@ -14,6 +14,7 @@ import {
 interface QueryTabBarProps {
   tabs: QueryTab[];
   activeTabId: string;
+  dirtyTabIds?: Set<string>;
   onSelectTab: (tabId: string) => void;
   onCloseTab: (tabId: string) => void;
   onAddTab: () => void;
@@ -50,6 +51,7 @@ const TabCloseButton = ({ tabTitle, tabId, onClose }: TabCloseButtonProps) => {
 export const QueryTabBar = ({
   tabs,
   activeTabId,
+  dirtyTabIds,
   onSelectTab,
   onCloseTab,
   onAddTab,
@@ -71,6 +73,12 @@ export const QueryTabBar = ({
         <TabsList variant="segment" className="flex-1">
           {tabs.map((tab) => (
             <TabsTrigger key={tab.id} value={tab.id} className="group/tab">
+              {dirtyTabIds?.has(tab.id) && (
+                <span
+                  aria-label="Unsaved changes"
+                  className="size-1.5 shrink-0 rounded-full bg-amber-400"
+                />
+              )}
               <span className="max-w-[120px] truncate">{tab.title}</span>
               <TabCloseButton
                 tabTitle={tab.title}

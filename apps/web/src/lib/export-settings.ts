@@ -1,3 +1,5 @@
+import { safeGetJson, safeSetJson } from "@/lib/safe-storage";
+
 export type CsvDelimiter = "," | ";" | "\t" | "|";
 
 export interface ExportSettings {
@@ -29,21 +31,11 @@ export const NULL_DISPLAY_PRESETS = [
   { label: "null (lowercase)", value: "null" },
 ] as const;
 
-export const getExportSettings = (): ExportSettings => {
-  const raw = localStorage.getItem(STORAGE_KEY);
-  if (!raw) {
-    return DEFAULT_SETTINGS;
-  }
-  try {
-    return {
-      ...DEFAULT_SETTINGS,
-      ...(JSON.parse(raw) as Partial<ExportSettings>),
-    };
-  } catch {
-    return DEFAULT_SETTINGS;
-  }
-};
+export const getExportSettings = (): ExportSettings => ({
+  ...DEFAULT_SETTINGS,
+  ...safeGetJson<Partial<ExportSettings>>(STORAGE_KEY, {}),
+});
 
 export const saveExportSettings = (settings: ExportSettings): void => {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(settings));
+  safeSetJson(STORAGE_KEY, settings);
 };

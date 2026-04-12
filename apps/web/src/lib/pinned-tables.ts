@@ -1,23 +1,20 @@
+import { safeGetJson, safeSetJson } from "@/lib/safe-storage";
+
 const STORAGE_KEY_PREFIX = "oh-my-query-pinned-tables-";
 
-export const getPinnedTables = (connectionId: string): string[] => {
-  const raw = localStorage.getItem(`${STORAGE_KEY_PREFIX}${connectionId}`);
-  if (!raw) {
-    return [];
-  }
-  try {
-    return JSON.parse(raw) as string[];
-  } catch {
-    return [];
-  }
-};
+const isStringArray = (value: unknown): value is string[] =>
+  Array.isArray(value) && value.every((v) => typeof v === "string");
+
+export const getPinnedTables = (connectionId: string): string[] =>
+  safeGetJson<string[]>(
+    `${STORAGE_KEY_PREFIX}${connectionId}`,
+    [],
+    isStringArray
+  );
 
 export const savePinnedTables = (
   connectionId: string,
   tables: string[]
 ): void => {
-  localStorage.setItem(
-    `${STORAGE_KEY_PREFIX}${connectionId}`,
-    JSON.stringify(tables)
-  );
+  safeSetJson(`${STORAGE_KEY_PREFIX}${connectionId}`, tables);
 };

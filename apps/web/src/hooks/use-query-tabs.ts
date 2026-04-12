@@ -1,10 +1,10 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
 
 import type { PersistedTab, TabState } from "@/lib/persistence";
 import type { QueryTab } from "@/lib/query-types";
 
-import { getTabs, saveTabs } from "@/lib/persistence";
+import { StorageQuotaError, getTabs, saveTabs } from "@/lib/persistence";
 import { createNewQueryTab, restoreQueryTabState } from "@/lib/query-tab-state";
 import { isTauri } from "@/lib/tauri";
 
@@ -45,26 +45,46 @@ export const useQueryTabs = (
   const connectionIdRef = useRef(connectionId);
   connectionIdRef.current = connectionId;
 
+  const lastPersistedSqlRef = useRef<Map<string, string>>(new Map());
+
+  const buildState = (): TabState => ({
+    activeTabId: activeTabIdRef.current,
+    counter: counterRef.current,
+    tabs: tabsRef.current.map(toPersistedTab),
+  });
+
+  const markPersisted = (state: TabState) => {
+    const map = new Map<string, string>();
+    for (const tab of state.tabs) {
+      map.set(tab.id, tab.sql);
+    }
+    lastPersistedSqlRef.current = map;
+  };
+
   const runSave = useCallback(async () => {
     if (saveTimeoutRef.current) {
       clearTimeout(saveTimeoutRef.current);
       saveTimeoutRef.current = null;
     }
-    const state: TabState = {
-      activeTabId: activeTabIdRef.current,
-      counter: counterRef.current,
-      tabs: tabsRef.current.map(toPersistedTab),
-    };
+    const state = buildState();
     try {
       await saveTabs(connectionIdRef.current, state);
-    } catch {
+      markPersisted(state);
+    } catch (error) {
       const now = Date.now();
       if (now - lastSaveErrorToastRef.current > SAVE_ERROR_TOAST_THROTTLE_MS) {
         lastSaveErrorToastRef.current = now;
-        toast.error("Couldn't save your tabs", {
-          description:
-            "Your recent edits may not survive a restart. Check disk space and permissions.",
-        });
+        if (error instanceof StorageQuotaError) {
+          toast.error("Storage is full", {
+            description:
+              "Your recent edits may not be saved. Try clearing query history.",
+          });
+        } else {
+          toast.error("Couldn't save your tabs", {
+            description:
+              "Your recent edits may not survive a restart. Check disk space and permissions.",
+          });
+        }
       }
     }
   }, []);
@@ -92,8 +112,23 @@ export const useQueryTabs = (
         counterRef.current = restored.counter;
         setTabs(restored.tabs);
         setActiveTabId(restored.activeTabId);
+
+        const initialMap = new Map<string, string>();
+        for (const tab of restored.tabs) {
+          initialMap.set(tab.id, tab.sql);
+        }
+        lastPersistedSqlRef.current = initialMap;
+
+        const restoredWithContent = restored.tabs.filter(
+          (t) => t.sql.trim().length > 0
+        );
+        if (restoredWithContent.length > 0) {
+          toast.info(
+            `Restored ${restoredWithContent.length} tab${restoredWithContent.length === 1 ? "" : "s"}`
+          );
+        }
       } catch {
-        // Fall back to default tab on restore failure
+        toast.warning("Couldn't restore your tabs — starting fresh");
       } finally {
         setIsRestored(true);
       }
@@ -160,7 +195,15 @@ export const useQueryTabs = (
         });
         continue;
       }
-      toast.info("Resuming interrupted query", { description: tab.title });
+      const elapsed = pending.startedAt
+        ? Math.round(
+            (Date.now() - new Date(pending.startedAt).getTime()) / 60_000
+          )
+        : 0;
+      const elapsedLabel = elapsed >= 1 ? ` (interrupted ${elapsed}m ago)` : "";
+      toast.info("Resuming interrupted query", {
+        description: `${tab.title}${elapsedLabel}`,
+      });
       execute(tab.id, pending.sql, pending.sourceDialect);
     }
   }, [isRestored, selectedDatabase, execute]);
@@ -171,6 +214,16 @@ export const useQueryTabs = (
     }
 
     const handleFlush = () => {
+      if (!isTauri()) {
+        const state = buildState();
+        const key = `oh-my-query-tabs-${connectionIdRef.current}`;
+        try {
+          localStorage.setItem(key, JSON.stringify(state));
+          markPersisted(state);
+        } catch {
+          // Best-effort synchronous flush
+        }
+      }
       runSave();
     };
     const handleVisibility = () => {
@@ -290,6 +343,17 @@ export const useQueryTabs = (
     [cancel]
   );
 
+  const dirtyTabIds = useMemo(() => {
+    const ids = new Set<string>();
+    for (const tab of tabs) {
+      const persisted = lastPersistedSqlRef.current.get(tab.id);
+      if (persisted !== undefined && persisted !== tab.sql) {
+        ids.add(tab.id);
+      }
+    }
+    return ids;
+  }, [tabs]);
+
   return {
     activeTab,
     activeTabId,
@@ -297,6 +361,7 @@ export const useQueryTabs = (
     addTabWithSql,
     cancelTab,
     closeTab,
+    dirtyTabIds,
     executeTab,
     isRestored,
     setActiveTabId,

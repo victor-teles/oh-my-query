@@ -195,6 +195,7 @@ const ConnectedWorkspace = ({
     addTab,
     addTabWithSql,
     closeTab,
+    dirtyTabIds,
     setActiveTabId,
     updateTabDialect,
     updateTabSql,
@@ -318,6 +319,7 @@ const ConnectedWorkspace = ({
       <QueryTabBar
         tabs={tabs}
         activeTabId={activeTabId}
+        dirtyTabIds={dirtyTabIds}
         onSelectTab={setActiveTabId}
         onCloseTab={closeTab}
         onAddTab={addTab}
