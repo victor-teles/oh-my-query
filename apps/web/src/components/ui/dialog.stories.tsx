@@ -27,7 +27,7 @@ export const Default: Story = {
   play: async ({ canvasElement }) => {
     const body = within(canvasElement.ownerDocument.body);
     const trigger = canvasElement.querySelector(
-      "[data-slot='button']"
+      "[data-slot='dialog-trigger']"
     ) as HTMLElement;
     await userEvent.click(trigger);
     await expect(await body.findByText("New Connection")).toBeInTheDocument();
@@ -37,9 +37,7 @@ export const Default: Story = {
   },
   render: () => (
     <Dialog>
-      <DialogTrigger asChild>
-        <Button variant="outline">Open Dialog</Button>
-      </DialogTrigger>
+      <DialogTrigger render={<Button variant="outline">Open Dialog</Button>} />
       <DialogContent>
         <DialogHeader>
           <DialogTitle>New Connection</DialogTitle>
@@ -68,9 +66,9 @@ export const Default: Story = {
 export const WithFooterClose: Story = {
   render: () => (
     <Dialog>
-      <DialogTrigger asChild>
-        <Button variant="outline">Confirm Action</Button>
-      </DialogTrigger>
+      <DialogTrigger
+        render={<Button variant="outline">Confirm Action</Button>}
+      />
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Are you sure?</DialogTitle>
@@ -90,9 +88,9 @@ export const WithFooterClose: Story = {
 export const WithoutCloseButton: Story = {
   render: () => (
     <Dialog>
-      <DialogTrigger asChild>
-        <Button variant="outline">Minimal Dialog</Button>
-      </DialogTrigger>
+      <DialogTrigger
+        render={<Button variant="outline">Minimal Dialog</Button>}
+      />
       <DialogContent showCloseButton={false}>
         <DialogHeader>
           <DialogTitle>Notice</DialogTitle>

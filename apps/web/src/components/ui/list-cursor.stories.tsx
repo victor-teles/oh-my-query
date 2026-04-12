@@ -8,10 +8,10 @@ import { cn } from "@/lib/utils";
 
 import { ListCursor } from "./list-cursor";
 
-const meta = {
+const meta: Meta<typeof ListCursor> = {
   component: ListCursor,
   title: "UI/ListCursor",
-} satisfies Meta<typeof ListCursor>;
+};
 
 export default meta;
 type Story = StoryObj<typeof meta>;

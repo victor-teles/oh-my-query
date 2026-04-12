@@ -23,16 +23,16 @@ export const Horizontal: Story = {
   },
   render: () => (
     <ResizablePanelGroup
-      direction="horizontal"
+      orientation="horizontal"
       className="min-h-48 max-w-lg rounded-lg border"
     >
-      <ResizablePanel defaultSizePercentage={30} minSizePercentage={20}>
+      <ResizablePanel defaultSize={30} minSize={20}>
         <div className="flex h-full items-center justify-center p-4">
           <span className="text-xs text-muted-foreground">Sidebar</span>
         </div>
       </ResizablePanel>
       <ResizableHandle />
-      <ResizablePanel defaultSizePercentage={70}>
+      <ResizablePanel defaultSize={70}>
         <div className="flex h-full items-center justify-center p-4">
           <span className="text-xs text-muted-foreground">Content</span>
         </div>
@@ -44,16 +44,16 @@ export const Horizontal: Story = {
 export const Vertical: Story = {
   render: () => (
     <ResizablePanelGroup
-      direction="vertical"
+      orientation="vertical"
       className="min-h-64 max-w-lg rounded-lg border"
     >
-      <ResizablePanel defaultSizePercentage={60}>
+      <ResizablePanel defaultSize={60}>
         <div className="flex h-full items-center justify-center p-4">
           <span className="text-xs text-muted-foreground">Editor</span>
         </div>
       </ResizablePanel>
       <ResizableHandle />
-      <ResizablePanel defaultSizePercentage={40}>
+      <ResizablePanel defaultSize={40}>
         <div className="flex h-full items-center justify-center p-4">
           <span className="text-xs text-muted-foreground">Results</span>
         </div>
@@ -65,16 +65,16 @@ export const Vertical: Story = {
 export const WithHandle: Story = {
   render: () => (
     <ResizablePanelGroup
-      direction="horizontal"
+      orientation="horizontal"
       className="min-h-48 max-w-lg rounded-lg border"
     >
-      <ResizablePanel defaultSizePercentage={30}>
+      <ResizablePanel defaultSize={30}>
         <div className="flex h-full items-center justify-center p-4">
           <span className="text-xs text-muted-foreground">Left</span>
         </div>
       </ResizablePanel>
       <ResizableHandle withHandle />
-      <ResizablePanel defaultSizePercentage={70}>
+      <ResizablePanel defaultSize={70}>
         <div className="flex h-full items-center justify-center p-4">
           <span className="text-xs text-muted-foreground">Right</span>
         </div>
@@ -86,22 +86,22 @@ export const WithHandle: Story = {
 export const ThreePanels: Story = {
   render: () => (
     <ResizablePanelGroup
-      direction="horizontal"
+      orientation="horizontal"
       className="min-h-48 max-w-lg rounded-lg border"
     >
-      <ResizablePanel defaultSizePercentage={25} minSizePercentage={15}>
+      <ResizablePanel defaultSize={25} minSize={15}>
         <div className="flex h-full items-center justify-center p-4">
           <span className="text-xs text-muted-foreground">Tables</span>
         </div>
       </ResizablePanel>
       <ResizableHandle />
-      <ResizablePanel defaultSizePercentage={50}>
+      <ResizablePanel defaultSize={50}>
         <div className="flex h-full items-center justify-center p-4">
           <span className="text-xs text-muted-foreground">Query</span>
         </div>
       </ResizablePanel>
       <ResizableHandle />
-      <ResizablePanel defaultSizePercentage={25} minSizePercentage={15}>
+      <ResizablePanel defaultSize={25} minSize={15}>
         <div className="flex h-full items-center justify-center p-4">
           <span className="text-xs text-muted-foreground">AI</span>
         </div>

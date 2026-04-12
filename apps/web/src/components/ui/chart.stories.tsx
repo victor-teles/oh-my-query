@@ -21,10 +21,10 @@ import {
   ChartTooltipContent,
 } from "./chart";
 
-const meta = {
+const meta: Meta<typeof ChartContainer> = {
   component: ChartContainer,
   title: "UI/Chart",
-} satisfies Meta<typeof ChartContainer>;
+};
 
 export default meta;
 type Story = StoryObj<typeof meta>;

@@ -33,11 +33,13 @@ export const Default: Story = {
     <Collapsible className="w-72 space-y-2">
       <div className="flex items-center justify-between">
         <span className="text-sm font-medium">Tables</span>
-        <CollapsibleTrigger asChild>
-          <Button variant="ghost" size="icon-sm" aria-label="Toggle">
-            <ChevronsUpDownIcon />
-          </Button>
-        </CollapsibleTrigger>
+        <CollapsibleTrigger
+          render={
+            <Button variant="ghost" size="icon-sm" aria-label="Toggle">
+              <ChevronsUpDownIcon />
+            </Button>
+          }
+        />
       </div>
       <div className="rounded-md border px-3 py-2 text-xs">users</div>
       <CollapsibleContent className="space-y-2">
@@ -57,11 +59,13 @@ export const DefaultOpen: Story = {
     <Collapsible defaultOpen className="w-72 space-y-2">
       <div className="flex items-center justify-between">
         <span className="text-sm font-medium">Columns</span>
-        <CollapsibleTrigger asChild>
-          <Button variant="ghost" size="icon-sm" aria-label="Toggle columns">
-            <ChevronsUpDownIcon />
-          </Button>
-        </CollapsibleTrigger>
+        <CollapsibleTrigger
+          render={
+            <Button variant="ghost" size="icon-sm" aria-label="Toggle columns">
+              <ChevronsUpDownIcon />
+            </Button>
+          }
+        />
       </div>
       <div className="rounded-md border px-3 py-2 text-xs">id</div>
       <CollapsibleContent className="space-y-2">
