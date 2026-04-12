@@ -49,6 +49,14 @@ export default defineConfig({
             instances: [
               {
                 browser: "chromium",
+                launch: {
+                  args: [
+                    "--font-render-hinting=none",
+                    "--disable-skia-runtime-opts",
+                    "--disable-font-subpixel-positioning",
+                    "--disable-lcd-text",
+                  ],
+                },
               },
             ],
             provider: "playwright",
