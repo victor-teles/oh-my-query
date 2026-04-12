@@ -1,6 +1,17 @@
 import type { PersistedTab, TabState } from "@/lib/persistence";
 import type { QueryTab } from "@/lib/query-types";
 
+export const isTabDirty = (tab: QueryTab): boolean => {
+  const trimmed = tab.sql.trim();
+  if (!trimmed) {
+    return false;
+  }
+  if (tab.executedSql === null) {
+    return true;
+  }
+  return tab.sql !== tab.executedSql;
+};
+
 const toQueryTab = (persisted: PersistedTab): QueryTab => ({
   error: null,
   errorCode: null,

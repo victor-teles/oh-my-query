@@ -15,6 +15,7 @@ import {
   ResizablePanelGroup,
 } from "@/components/ui/resizable";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { CloseConfirmDialog } from "@/components/workspace/close-confirm-dialog";
 import { useEditorInsert } from "@/contexts/editor-insert-context";
 import { useQueryExecution } from "@/contexts/query-execution-context";
 import {
@@ -29,6 +30,7 @@ import { isSqlDatabase } from "@/lib/connections";
 import { downloadCsv, tabularResultToCsv } from "@/lib/csv";
 import { formatDuration } from "@/lib/format-metrics";
 import { formatSql } from "@/lib/format-sql";
+import { isTabDirty } from "@/lib/query-tab-state";
 
 import { CommandEditor } from "./command-editor";
 import { DialectSelector } from "./dialect-selector";
@@ -101,12 +103,22 @@ export const WorkspaceContent = ({
     );
   }
 
+  const dirtyCount = queryTabs.tabs.filter(isTabDirty).length;
+  const handleCancelClose = queryTabs.onCancelClose;
+  const handleConfirmClose = queryTabs.onConfirmClose;
+
   return (
     <QueryTabsProvider value={queryTabs}>
       <ConnectedWorkspace
         connection={connection}
         isSql={isSql}
         schema={schema}
+      />
+      <CloseConfirmDialog
+        dirtyCount={dirtyCount}
+        onCancel={handleCancelClose}
+        onConfirm={handleConfirmClose}
+        open={queryTabs.closeRequested}
       />
     </QueryTabsProvider>
   );

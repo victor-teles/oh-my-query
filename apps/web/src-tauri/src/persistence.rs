@@ -33,7 +33,35 @@ pub struct HistoryEntry {
     pub execution_time_ms: u64,
 }
 
+#[derive(Debug, Serialize, Deserialize, Clone)]
+#[serde(rename_all = "camelCase")]
+pub struct DatabaseConnection {
+    pub id: String,
+    pub name: String,
+    #[serde(rename = "type")]
+    pub db_type: String,
+    pub host: String,
+    pub port: u16,
+    pub database: String,
+    pub username: String,
+    pub password: String,
+    pub created_at: String,
+    pub pinned: bool,
+    pub last_connected_at: Option<String>,
+}
+
 const MAX_HISTORY_ENTRIES: usize = 10_000;
+
+fn connections_path() -> Result<PathBuf, ConfigError> {
+    let home = dirs::home_dir().ok_or_else(|| ConfigError {
+        code: "HOME_NOT_FOUND".to_string(),
+        message: "Could not determine home directory".to_string(),
+    })?;
+    Ok(home
+        .join(".config")
+        .join("oh-my-query")
+        .join("connections.json"))
+}
 
 fn tabs_path(connection_id: &str) -> Result<PathBuf, ConfigError> {
     let home = dirs::home_dir().ok_or_else(|| ConfigError {
@@ -142,4 +170,24 @@ pub async fn get_history(
     let limit = limit.unwrap_or(100) as usize;
 
     Ok(entries.into_iter().skip(offset).take(limit).collect())
+}
+
+#[tauri::command]
+pub async fn get_connections() -> Result<Vec<DatabaseConnection>, ConfigError> {
+    let path = connections_path()?;
+    if !path.exists() {
+        return Ok(vec![]);
+    }
+    let content = tokio::fs::read_to_string(&path).await?;
+    let connections: Vec<DatabaseConnection> = serde_json::from_str(&content)?;
+    Ok(connections)
+}
+
+#[tauri::command]
+pub async fn save_connections(connections: Vec<DatabaseConnection>) -> Result<(), ConfigError> {
+    let path = connections_path()?;
+    ensure_parent_dir(&path).await?;
+    let content = serde_json::to_string_pretty(&connections)?;
+    tokio::fs::write(&path, content).await?;
+    Ok(())
 }

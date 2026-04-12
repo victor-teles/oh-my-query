@@ -242,7 +242,7 @@ export const ConnectionForm = ({
   }, [form]);
 
   const handleSubmit = useCallback(
-    (e: React.FormEvent) => {
+    async (e: React.FormEvent) => {
       e.preventDefault();
       const error = validate(form);
       if (error) {
@@ -258,12 +258,12 @@ export const ConnectionForm = ({
           lastConnectedAt: connection.lastConnectedAt,
           pinned: connection.pinned,
         };
-        updateConnection(updated);
+        await updateConnection(updated);
         toast.success(`Connection "${updated.name}" updated`);
         onSuccess?.(updated);
       } else {
         const newConn = buildConnection(form);
-        saveConnection(newConn);
+        await saveConnection(newConn);
         toast.success(`Connection "${newConn.name}" saved`);
         onSuccess?.(newConn);
       }
