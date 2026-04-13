@@ -94,10 +94,15 @@ export const useAiChat = ({ schema, databaseType }: UseAiChatOptions) => {
           abortSignal: abortRef.current.signal,
           messages: allMessages,
           model,
+          onError: ({ error: streamError }) => {
+            console.error("[ai-chat] streamText onError:", streamError);
+          },
           system,
         });
 
+        let chunkCount = 0;
         for await (const chunk of result.textStream) {
+          chunkCount += 1;
           setState((prev) => {
             const messages = [...prev.messages];
             const last = messages.at(-1);
@@ -111,8 +116,11 @@ export const useAiChat = ({ schema, databaseType }: UseAiChatOptions) => {
           });
         }
 
+        console.log("[ai-chat] stream complete, chunks:", chunkCount);
         setState((prev) => ({ ...prev, isStreaming: false }));
       } catch (error) {
+        console.error("[ai-chat] error:", error);
+
         if (error instanceof Error && error.name === "AbortError") {
           setState((prev) => ({ ...prev, isStreaming: false }));
           return;

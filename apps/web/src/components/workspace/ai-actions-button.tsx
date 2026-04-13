@@ -60,18 +60,15 @@ export const AIActionsButton = ({
         <TooltipContent>AI Actions</TooltipContent>
       </Tooltip>
       <DropdownMenuContent align="end">
-        <DropdownMenuItem onSelect={handleGenerate}>
+        <DropdownMenuItem onClick={handleGenerate}>
           <PencilLine className="size-4" />
           Generate SQL
         </DropdownMenuItem>
-        <DropdownMenuItem onSelect={handleExplain} disabled={!hasQuery}>
+        <DropdownMenuItem onClick={handleExplain} disabled={!hasQuery}>
           <Lightbulb className="size-4" />
           Explain Query
         </DropdownMenuItem>
-        <DropdownMenuItem
-          onSelect={handleFix}
-          disabled={!hasQuery && !hasError}
-        >
+        <DropdownMenuItem onClick={handleFix} disabled={!hasQuery && !hasError}>
           <Wrench className="size-4" />
           Fix Query
         </DropdownMenuItem>
