@@ -61,6 +61,9 @@ jobs:
       - name: Install dependencies
         run: bun install --frozen-lockfile
 
+      - name: Build workspace packages
+        run: bun run build
+
       - uses: dtolnay/rust-toolchain@stable
         with:
           targets: aarch64-apple-darwin,x86_64-apple-darwin
@@ -106,6 +109,9 @@ jobs:
 
       - name: Install dependencies
         run: bun install --frozen-lockfile
+
+      - name: Build workspace packages
+        run: bun run build
 
       - uses: dtolnay/rust-toolchain@stable
         with:
