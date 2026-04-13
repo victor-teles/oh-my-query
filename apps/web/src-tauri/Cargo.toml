@@ -1,6 +1,6 @@
 [package]
 name = "oh-my-query"
-version = "0.0.7"
+version = "0.0.8"
 description = "A query UI tool"
 authors = ["victor"]
 license = ""
