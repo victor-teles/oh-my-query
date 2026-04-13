@@ -11,7 +11,7 @@ import {
   RotateCw,
   SearchX,
   ShieldAlert,
-  Sparkles,
+  Terminal,
   TriangleAlert,
 } from "lucide-react";
 import { useCallback, useMemo, useState } from "react";
@@ -155,7 +155,7 @@ export const QueryErrorDisplay = ({
               title="Fix with AI"
               variant="outline"
             >
-              <Sparkles />
+              <Terminal />
               Fix with AI
             </Button>
           )}

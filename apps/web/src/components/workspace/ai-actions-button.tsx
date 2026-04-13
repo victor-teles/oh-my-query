@@ -1,4 +1,4 @@
-import { Lightbulb, Sparkles, WandSparkles, Wrench } from "lucide-react";
+import { Lightbulb, PencilLine, Terminal, Wrench } from "lucide-react";
 import { useCallback } from "react";
 
 import type { AIActionType } from "@/lib/ai-actions";
@@ -53,7 +53,7 @@ export const AIActionsButton = ({
                 />
               }
             >
-              <Sparkles className="size-3.5" />
+              <Terminal className="size-3.5" />
             </DropdownMenuTrigger>
           }
         />
@@ -61,7 +61,7 @@ export const AIActionsButton = ({
       </Tooltip>
       <DropdownMenuContent align="end">
         <DropdownMenuItem onSelect={handleGenerate}>
-          <WandSparkles className="size-4" />
+          <PencilLine className="size-4" />
           Generate SQL
         </DropdownMenuItem>
         <DropdownMenuItem onSelect={handleExplain} disabled={!hasQuery}>

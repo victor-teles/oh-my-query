@@ -19,7 +19,7 @@ interface ChatInputProps {
   onStop?: () => void;
   onOpenSettings?: () => void;
   isStreaming: boolean;
-  isConfigured: boolean;
+  isConfigured: boolean | null;
 }
 
 export const ChatInput = ({
@@ -50,11 +50,12 @@ export const ChatInput = ({
     [onSend]
   );
 
-  const submitDisabled = !isConfigured || (!value.trim() && !isStreaming);
+  const submitDisabled =
+    isConfigured !== true || (!value.trim() && !isStreaming);
 
   return (
     <div className="border-t p-3">
-      {!isConfigured && (
+      {isConfigured === false && (
         <div className="mb-2 flex items-center justify-between gap-2 rounded-md border border-border bg-muted/30 px-3 py-2 text-xs text-muted-foreground">
           <span>Connect an AI provider to start chatting.</span>
           <Button onClick={onOpenSettings} size="sm" variant="outline">
@@ -67,7 +68,7 @@ export const ChatInput = ({
         <PromptInputBody>
           <PromptInputTextarea
             className="min-h-11"
-            disabled={!isConfigured}
+            disabled={isConfigured !== true}
             onChange={handleChange}
             placeholder="Ask about your database..."
             value={value}

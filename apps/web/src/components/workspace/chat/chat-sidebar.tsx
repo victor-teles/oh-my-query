@@ -1,4 +1,4 @@
-import { MessageSquare, X } from "lucide-react";
+import { MessageSquare, RotateCw, X } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 
 import type { AIAction } from "@/lib/ai-actions";
@@ -46,6 +46,7 @@ export const ChatSidebar = ({
     stopStreaming,
     retry,
     clearError,
+    clearMessages,
   } = useAiChat({
     databaseType: connection.type,
     schema,
@@ -58,7 +59,7 @@ export const ChatSidebar = ({
     hasSelection: checkHasSelection,
   } = useEditorInsert();
   const [settingsOpen, setSettingsOpen] = useState(false);
-  const [isConfigured, setIsConfigured] = useState(false);
+  const [isConfigured, setIsConfigured] = useState<boolean | null>(null);
 
   useEffect(() => {
     const checkSettings = async () => {
@@ -109,16 +110,29 @@ export const ChatSidebar = ({
       <div className="flex items-center justify-between border-b px-3 py-1.5">
         <div className="flex items-center gap-2">
           <MessageSquare className="size-3.5 text-muted-foreground" />
-          <span className="text-xs font-medium">AI Chat</span>
+          <span className="text-xs font-medium">{connection.name}</span>
         </div>
-        <Button
-          variant="ghost"
-          size="icon-xs"
-          onClick={onClose}
-          aria-label="Close AI Chat"
-        >
-          <X className="size-3.5" />
-        </Button>
+        <div className="flex items-center gap-0.5">
+          {messages.length > 0 && (
+            <Button
+              variant="ghost"
+              size="icon-xs"
+              onClick={clearMessages}
+              aria-label="New conversation"
+              title="New conversation"
+            >
+              <RotateCw className="size-3" />
+            </Button>
+          )}
+          <Button
+            variant="ghost"
+            size="icon-xs"
+            onClick={onClose}
+            aria-label="Close AI Chat"
+          >
+            <X className="size-3.5" />
+          </Button>
+        </div>
       </div>
       <ChatMessageList
         messages={messages}

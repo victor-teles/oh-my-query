@@ -1,5 +1,3 @@
-import { MessageSquare } from "lucide-react";
-
 import type { ChatMessage as ChatMessageType } from "@/hooks/use-ai-chat";
 
 import {
@@ -32,9 +30,8 @@ export const ChatMessageList = ({
     <ConversationContent>
       {messages.length === 0 ? (
         <ConversationEmptyState
-          icon={<MessageSquare className="size-6" />}
-          title="Ask a question about your data"
-          description={`Describe what you need in plain English and get SQL queries for ${connectionName}`}
+          title={`Query assistant for ${connectionName}`}
+          description="Generate SQL, explain queries, or fix errors"
         />
       ) : (
         messages.map((msg) => (

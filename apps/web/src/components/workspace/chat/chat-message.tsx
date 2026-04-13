@@ -20,7 +20,14 @@ interface ChatMessageProps {
 }
 
 const LoadingIndicator = () => (
-  <span className="inline-block size-2 animate-pulse rounded-full bg-muted-foreground/50" />
+  <span
+    className="inline-flex items-center gap-1"
+    aria-label="Generating response"
+  >
+    <span className="size-1.5 animate-pulse rounded-full bg-muted-foreground/60" />
+    <span className="size-1.5 animate-pulse rounded-full bg-muted-foreground/60 [animation-delay:150ms]" />
+    <span className="size-1.5 animate-pulse rounded-full bg-muted-foreground/60 [animation-delay:300ms]" />
+  </span>
 );
 
 const AssistantContent = ({

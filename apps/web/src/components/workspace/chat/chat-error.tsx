@@ -1,5 +1,4 @@
 import { AlertCircle, RefreshCw, Settings, X } from "lucide-react";
-import { useCallback } from "react";
 
 import type { AIError } from "@/lib/ai-errors";
 
@@ -21,10 +20,6 @@ export const ChatError = ({
   const showSettings =
     error.type === "auth" || error.type === "model_not_found";
 
-  const handleRetry = useCallback(() => {
-    onRetry();
-  }, [onRetry]);
-
   return (
     <div className="mx-3 mb-2 rounded-lg border border-destructive/30 bg-destructive/5 p-3">
       <div className="flex items-start gap-2">
@@ -44,7 +39,7 @@ export const ChatError = ({
       </div>
       <div className="mt-2 flex items-center gap-2">
         {error.retryable && (
-          <Button variant="outline" size="sm" onClick={handleRetry}>
+          <Button variant="outline" size="sm" onClick={onRetry}>
             <RefreshCw className="size-3" />
             Retry
           </Button>

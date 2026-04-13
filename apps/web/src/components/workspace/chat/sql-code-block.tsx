@@ -24,7 +24,8 @@ export const SqlCodeBlock = ({
   hasSelection = false,
 }: SqlCodeBlockProps) => {
   const [copied, setCopied] = useState(false);
-  const [inserted, setInserted] = useState(false);
+  const [insertConfirmed, setInsertConfirmed] = useState(false);
+  const [replaceConfirmed, setReplaceConfirmed] = useState(false);
 
   const handleCopy = useCallback(async () => {
     await navigator.clipboard.writeText(code);
@@ -34,14 +35,14 @@ export const SqlCodeBlock = ({
 
   const handleInsert = useCallback(() => {
     onInsert?.(code);
-    setInserted(true);
-    setTimeout(() => setInserted(false), 2000);
+    setInsertConfirmed(true);
+    setTimeout(() => setInsertConfirmed(false), 2000);
   }, [code, onInsert]);
 
   const handleReplace = useCallback(() => {
     onReplace?.(code);
-    setInserted(true);
-    setTimeout(() => setInserted(false), 2000);
+    setReplaceConfirmed(true);
+    setTimeout(() => setReplaceConfirmed(false), 2000);
   }, [code, onReplace]);
 
   const handleRun = useCallback(() => {
@@ -80,18 +81,20 @@ export const SqlCodeBlock = ({
                     variant="ghost"
                     size="icon-xs"
                     onClick={handleReplace}
-                    aria-label={inserted ? "Replaced" : "Replace selection"}
+                    aria-label={
+                      replaceConfirmed ? "Replaced" : "Replace selection"
+                    }
                   />
                 }
               >
-                {inserted ? (
+                {replaceConfirmed ? (
                   <Check className="size-3" />
                 ) : (
                   <Replace className="size-3" />
                 )}
               </TooltipTrigger>
               <TooltipContent>
-                {inserted ? "Replaced!" : "Replace selection"}
+                {replaceConfirmed ? "Replaced!" : "Replace selection"}
               </TooltipContent>
             </Tooltip>
           )}
@@ -103,18 +106,20 @@ export const SqlCodeBlock = ({
                     variant="ghost"
                     size="icon-xs"
                     onClick={handleInsert}
-                    aria-label={inserted ? "Inserted" : "Insert to editor"}
+                    aria-label={
+                      insertConfirmed ? "Inserted" : "Insert to editor"
+                    }
                   />
                 }
               >
-                {inserted ? (
+                {insertConfirmed ? (
                   <Check className="size-3" />
                 ) : (
                   <SquarePen className="size-3" />
                 )}
               </TooltipTrigger>
               <TooltipContent>
-                {inserted ? "Inserted!" : "Insert to editor"}
+                {insertConfirmed ? "Inserted!" : "Insert to editor"}
               </TooltipContent>
             </Tooltip>
           )}
