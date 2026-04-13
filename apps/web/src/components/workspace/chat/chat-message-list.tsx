@@ -15,14 +15,18 @@ interface ChatMessageListProps {
   messages: ChatMessageType[];
   connectionName: string;
   onInsertSql?: (sql: string) => void;
+  onReplaceSql?: (sql: string) => void;
   onRunSql?: (sql: string) => void;
+  hasSelection?: boolean;
 }
 
 export const ChatMessageList = ({
   messages,
   connectionName,
   onInsertSql,
+  onReplaceSql,
   onRunSql,
+  hasSelection = false,
 }: ChatMessageListProps) => (
   <Conversation className="flex-1">
     <ConversationContent>
@@ -38,7 +42,9 @@ export const ChatMessageList = ({
             key={msg.id}
             message={msg}
             onInsertSql={onInsertSql}
+            onReplaceSql={onReplaceSql}
             onRunSql={onRunSql}
+            hasSelection={hasSelection}
           />
         ))
       )}

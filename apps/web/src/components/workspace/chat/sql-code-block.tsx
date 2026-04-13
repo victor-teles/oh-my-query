@@ -1,4 +1,4 @@
-import { Check, Copy, Play, SquarePen } from "lucide-react";
+import { Check, Copy, Play, Replace, SquarePen } from "lucide-react";
 import { useCallback, useState } from "react";
 
 import { Button } from "@/components/ui/button";
@@ -11,11 +11,20 @@ import {
 interface SqlCodeBlockProps {
   code: string;
   onInsert?: (sql: string) => void;
+  onReplace?: (sql: string) => void;
   onRun?: (sql: string) => void;
+  hasSelection?: boolean;
 }
 
-export const SqlCodeBlock = ({ code, onInsert, onRun }: SqlCodeBlockProps) => {
+export const SqlCodeBlock = ({
+  code,
+  onInsert,
+  onReplace,
+  onRun,
+  hasSelection = false,
+}: SqlCodeBlockProps) => {
   const [copied, setCopied] = useState(false);
+  const [inserted, setInserted] = useState(false);
 
   const handleCopy = useCallback(async () => {
     await navigator.clipboard.writeText(code);
@@ -25,7 +34,15 @@ export const SqlCodeBlock = ({ code, onInsert, onRun }: SqlCodeBlockProps) => {
 
   const handleInsert = useCallback(() => {
     onInsert?.(code);
+    setInserted(true);
+    setTimeout(() => setInserted(false), 2000);
   }, [code, onInsert]);
+
+  const handleReplace = useCallback(() => {
+    onReplace?.(code);
+    setInserted(true);
+    setTimeout(() => setInserted(false), 2000);
+  }, [code, onReplace]);
 
   const handleRun = useCallback(() => {
     onRun?.(code);
@@ -55,6 +72,29 @@ export const SqlCodeBlock = ({ code, onInsert, onRun }: SqlCodeBlockProps) => {
             </TooltipTrigger>
             <TooltipContent>{copied ? "Copied!" : "Copy"}</TooltipContent>
           </Tooltip>
+          {hasSelection && onReplace && (
+            <Tooltip>
+              <TooltipTrigger
+                render={
+                  <Button
+                    variant="ghost"
+                    size="icon-xs"
+                    onClick={handleReplace}
+                    aria-label={inserted ? "Replaced" : "Replace selection"}
+                  />
+                }
+              >
+                {inserted ? (
+                  <Check className="size-3" />
+                ) : (
+                  <Replace className="size-3" />
+                )}
+              </TooltipTrigger>
+              <TooltipContent>
+                {inserted ? "Replaced!" : "Replace selection"}
+              </TooltipContent>
+            </Tooltip>
+          )}
           {onInsert && (
             <Tooltip>
               <TooltipTrigger
@@ -63,13 +103,19 @@ export const SqlCodeBlock = ({ code, onInsert, onRun }: SqlCodeBlockProps) => {
                     variant="ghost"
                     size="icon-xs"
                     onClick={handleInsert}
-                    aria-label="Insert to editor"
+                    aria-label={inserted ? "Inserted" : "Insert to editor"}
                   />
                 }
               >
-                <SquarePen className="size-3" />
+                {inserted ? (
+                  <Check className="size-3" />
+                ) : (
+                  <SquarePen className="size-3" />
+                )}
               </TooltipTrigger>
-              <TooltipContent>Insert to editor</TooltipContent>
+              <TooltipContent>
+                {inserted ? "Inserted!" : "Insert to editor"}
+              </TooltipContent>
             </Tooltip>
           )}
           {onRun && (

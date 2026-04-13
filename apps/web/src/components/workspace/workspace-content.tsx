@@ -4,6 +4,7 @@ import { Loader2 } from "lucide-react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { useCallback, useEffect, useState } from "react";
 
+import type { AIActionType } from "@/lib/ai-actions";
 import type { DatabaseConnection, DatabaseType } from "@/lib/connections";
 import type { QueryTab } from "@/lib/query-types";
 import type { ExecuteResult, SchemaInfo } from "@/lib/tauri";
@@ -32,6 +33,7 @@ import { formatDuration } from "@/lib/format-metrics";
 import { formatSql } from "@/lib/format-sql";
 import { isTabDirty } from "@/lib/query-tab-state";
 
+import { AIActionsButton } from "./ai-actions-button";
 import { CommandEditor } from "./command-editor";
 import { DialectSelector } from "./dialect-selector";
 import { DocumentViewer } from "./document-viewer";
@@ -68,6 +70,10 @@ interface WorkspaceContentProps {
   isConnecting: boolean;
   connectionError: string | null;
   onReconnect: () => void;
+  onAiAction?: (
+    action: AIActionType,
+    context?: { sql?: string; error?: string }
+  ) => void;
   schema: SchemaInfo | null;
   selectedDatabase: string | null;
 }
@@ -78,6 +84,7 @@ export const WorkspaceContent = ({
   isConnecting,
   connectionError,
   onReconnect,
+  onAiAction,
   schema,
   selectedDatabase,
 }: WorkspaceContentProps) => {
@@ -112,6 +119,7 @@ export const WorkspaceContent = ({
       <ConnectedWorkspace
         connection={connection}
         isSql={isSql}
+        onAiAction={onAiAction}
         schema={schema}
       />
       <CloseConfirmDialog
@@ -180,6 +188,10 @@ interface ConnectedWorkspaceProps {
   connection: DatabaseConnection;
   schema: SchemaInfo | null;
   isSql: boolean;
+  onAiAction?: (
+    action: AIActionType,
+    context?: { sql?: string; error?: string }
+  ) => void;
 }
 
 const getResultsPanelProps = (
@@ -199,6 +211,7 @@ const ConnectedWorkspace = ({
   connection,
   schema,
   isSql,
+  onAiAction,
 }: ConnectedWorkspaceProps) => {
   const {
     tabs,
@@ -317,6 +330,21 @@ const ConnectedWorkspace = ({
     [activeTab, connection.type, updateTabDialect]
   );
 
+  const handleAiAction = useCallback(
+    (action: AIActionType) => {
+      const sql = getSelectedText() || activeTab?.sql || "";
+      const error = activeTab?.error ?? undefined;
+      onAiAction?.(action, { error, sql });
+    },
+    [activeTab, getSelectedText, onAiAction]
+  );
+
+  const handleAiExplainError = useCallback(() => {
+    const sql = activeTab?.executedSql ?? activeTab?.sql ?? "";
+    const error = activeTab?.error ?? undefined;
+    onAiAction?.("fix", { error, sql });
+  }, [activeTab, onAiAction]);
+
   useWorkspaceHotkeys({
     activeTab,
     addTab,
@@ -375,10 +403,14 @@ const ConnectedWorkspace = ({
             isExecuteDisabled={!activeTab?.sql.trim()}
             hasSelection={hasSelection}
             onExecute={handleExecute}
+            onAiAction={onAiAction ? handleAiAction : undefined}
+            hasQuery={Boolean(activeTab?.sql.trim())}
+            hasError={activeTab?.status === "error"}
           />
           <BottomPanel
             isSyntaxTreeOpen={syntaxTreeEnabled}
             treeData={treeData}
+            onAiFix={onAiAction ? handleAiExplainError : undefined}
             {...getResultsPanelProps(activeTab, isSql)}
           />
         </ResizablePanel>
@@ -401,6 +433,9 @@ interface EditorToolbarProps {
   isExecuteDisabled: boolean;
   hasSelection: boolean;
   onExecute: () => void;
+  onAiAction?: (action: AIActionType) => void;
+  hasQuery?: boolean;
+  hasError?: boolean;
 }
 
 const EditorToolbar = ({
@@ -417,6 +452,9 @@ const EditorToolbar = ({
   isExecuteDisabled,
   hasSelection,
   onExecute,
+  onAiAction,
+  hasQuery = false,
+  hasError = false,
 }: EditorToolbarProps) => (
   <div className="flex items-center justify-between border-b px-2 py-1">
     <div className="flex items-center gap-2">
@@ -447,6 +485,13 @@ const EditorToolbar = ({
         hasSelection={hasSelection}
         onClick={onExecute}
       />
+      {onAiAction && (
+        <AIActionsButton
+          onAction={onAiAction}
+          hasQuery={hasQuery}
+          hasError={hasError}
+        />
+      )}
     </div>
   </div>
 );
@@ -529,6 +574,7 @@ interface ResultsPanelProps {
   error: string | null;
   errorCode: string | null;
   isSql: boolean;
+  onAiFix?: () => void;
 }
 
 const ResultsPanel = ({
@@ -539,6 +585,7 @@ const ResultsPanel = ({
   error,
   errorCode,
   isSql,
+  onAiFix,
 }: ResultsPanelProps) => {
   const { settings: exportSettings } = useExportSettings();
   const { jumpTo } = useEditorInsert();
@@ -578,6 +625,7 @@ const ResultsPanel = ({
     handleRetry,
     isSql,
     jumpTo,
+    onAiFix,
     result,
     runningSql,
     status,
@@ -608,6 +656,7 @@ interface RenderResultsStateArgs {
   handleRetry: () => void;
   isSql: boolean;
   jumpTo: ReturnType<typeof useEditorInsert>["jumpTo"];
+  onAiFix?: () => void;
   result: ExecuteResult | null;
   runningSql: string | null;
   status: string | undefined;
@@ -622,6 +671,7 @@ const renderResultsState = ({
   handleRetry,
   isSql,
   jumpTo,
+  onAiFix,
   result,
   runningSql,
   status,
@@ -647,6 +697,7 @@ const renderResultsState = ({
           <QueryErrorDisplay
             error={error}
             errorCode={errorCode}
+            onAiFix={onAiFix}
             onJumpToLine={jumpTo}
             onRetry={executedSql ? handleRetry : undefined}
             sql={executedSql}

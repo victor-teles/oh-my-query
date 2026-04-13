@@ -4,6 +4,7 @@ import { useHotkey } from "@tanstack/react-hotkeys";
 import { useCallback, useRef, useState } from "react";
 import { usePanelRef } from "react-resizable-panels";
 
+import type { AIAction, AIActionType } from "@/lib/ai-actions";
 import type { DatabaseConnection } from "@/lib/connections";
 
 import { ConnectionToolbar } from "@/components/titlebar/connection-toolbar";
@@ -15,6 +16,7 @@ import {
 } from "@/components/ui/resizable";
 import { useSchema } from "@/hooks/use-schema";
 import { useWorkspaceIslandSync } from "@/hooks/use-workspace-island-sync";
+import { composeActionMessage } from "@/lib/ai-actions";
 
 import { ChatSidebar } from "./chat/chat-sidebar";
 import { KeyboardShortcutsOverlay } from "./keyboard-shortcuts-overlay";
@@ -44,6 +46,7 @@ export const WorkspaceLayout = ({
   const chatPanelRef = usePanelRef();
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [shortcutsOpen, setShortcutsOpen] = useState(false);
+  const [pendingAction, setPendingAction] = useState<AIAction | null>(null);
   const hasBeenOpenedRef = useRef(false);
 
   useWorkspaceIslandSync({
@@ -123,6 +126,45 @@ export const WorkspaceLayout = ({
     setShortcutsOpen(true);
   }, []);
 
+  const openChatPanel = useCallback(() => {
+    const panel = chatPanelRef.current;
+    if (!panel) {
+      return;
+    }
+    if (panel.isCollapsed()) {
+      if (!hasBeenOpenedRef.current) {
+        panel.resize("30%");
+        hasBeenOpenedRef.current = true;
+      } else {
+        panel.expand();
+      }
+      setIsChatOpen(true);
+    }
+  }, [chatPanelRef]);
+
+  const handleAiAction = useCallback(
+    (action: AIActionType, context?: { sql?: string; error?: string }) => {
+      const aiAction: AIAction = {
+        error: context?.error,
+        sql: context?.sql,
+        type: action,
+      };
+
+      const message = composeActionMessage(aiAction);
+      if (message) {
+        setPendingAction(aiAction);
+      } else {
+        setPendingAction(null);
+      }
+      openChatPanel();
+    },
+    [openChatPanel]
+  );
+
+  const handlePendingActionConsumed = useCallback(() => {
+    setPendingAction(null);
+  }, []);
+
   return (
     <div className="flex h-svh flex-col bg-background">
       <Titlebar>
@@ -162,6 +204,7 @@ export const WorkspaceLayout = ({
             connectionError={connectionError}
             isConnected={isConnected}
             isConnecting={isConnecting}
+            onAiAction={handleAiAction}
             onReconnect={onReconnect}
             schema={schema}
             selectedDatabase={selectedDatabase}
@@ -182,6 +225,8 @@ export const WorkspaceLayout = ({
           <ChatSidebar
             connection={connection}
             onClose={handleChatClose}
+            pendingAction={pendingAction}
+            onPendingActionConsumed={handlePendingActionConsumed}
             schema={schema}
           />
         </ResizablePanel>

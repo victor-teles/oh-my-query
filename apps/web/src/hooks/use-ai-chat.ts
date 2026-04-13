@@ -1,8 +1,10 @@
 import { streamText } from "ai";
 import { useCallback, useRef, useState } from "react";
 
+import type { AIError } from "@/lib/ai-errors";
 import type { SchemaInfo } from "@/lib/tauri";
 
+import { classifyAIError } from "@/lib/ai-errors";
 import { createAIModel } from "@/lib/ai-provider";
 import { buildSystemPrompt } from "@/lib/ai-schema-formatter";
 import { getAISettings } from "@/lib/ai-settings";
@@ -16,13 +18,20 @@ export interface ChatMessage {
 interface AiChatState {
   messages: ChatMessage[];
   isStreaming: boolean;
-  error: string | null;
+  error: AIError | null;
 }
 
 interface UseAiChatOptions {
   schema: SchemaInfo | null;
   databaseType: string;
 }
+
+const NOT_CONFIGURED_ERROR: AIError = {
+  message: "AI is not configured.",
+  retryable: false,
+  suggestion: "Set up your API key in AI settings to start chatting.",
+  type: "auth",
+};
 
 export const useAiChat = ({ schema, databaseType }: UseAiChatOptions) => {
   const [state, setState] = useState<AiChatState>({
@@ -31,6 +40,7 @@ export const useAiChat = ({ schema, databaseType }: UseAiChatOptions) => {
     messages: [],
   });
   const abortRef = useRef<AbortController | null>(null);
+  const lastUserMessageRef = useRef<string | null>(null);
 
   const sendMessage = useCallback(
     async (content: string) => {
@@ -38,11 +48,12 @@ export const useAiChat = ({ schema, databaseType }: UseAiChatOptions) => {
       if (!settings) {
         setState((prev) => ({
           ...prev,
-          error:
-            "AI is not configured. Please set up your API key in settings.",
+          error: NOT_CONFIGURED_ERROR,
         }));
         return;
       }
+
+      lastUserMessageRef.current = content;
 
       const userMessage: ChatMessage = {
         content,
@@ -107,14 +118,12 @@ export const useAiChat = ({ schema, databaseType }: UseAiChatOptions) => {
           return;
         }
 
-        const message =
-          error instanceof Error
-            ? error.message
-            : "An unexpected error occurred";
+        const aiError = classifyAIError(error);
         setState((prev) => ({
           ...prev,
-          error: message,
+          error: aiError,
           isStreaming: false,
+          messages: prev.messages.slice(0, -2),
         }));
       } finally {
         abortRef.current = null;
@@ -123,8 +132,19 @@ export const useAiChat = ({ schema, databaseType }: UseAiChatOptions) => {
     [schema, databaseType, state.messages]
   );
 
+  const retry = useCallback(() => {
+    const lastMessage = lastUserMessageRef.current;
+    if (lastMessage) {
+      sendMessage(lastMessage);
+    }
+  }, [sendMessage]);
+
   const stopStreaming = useCallback(() => {
     abortRef.current?.abort();
+  }, []);
+
+  const clearError = useCallback(() => {
+    setState((prev) => ({ ...prev, error: null }));
   }, []);
 
   const clearMessages = useCallback(() => {
@@ -132,10 +152,12 @@ export const useAiChat = ({ schema, databaseType }: UseAiChatOptions) => {
   }, []);
 
   return {
+    clearError,
     clearMessages,
     error: state.error,
     isStreaming: state.isStreaming,
     messages: state.messages,
+    retry,
     sendMessage,
     stopStreaming,
   };

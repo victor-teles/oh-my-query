@@ -18,10 +18,10 @@ export interface AppConfig {
 }
 
 const DEFAULT_MODELS: Record<AIProvider, string> = {
-  anthropic: "claude-sonnet-4-5-20250929",
+  anthropic: "claude-sonnet-4-20250514",
   local: "llama3",
-  openai: "gpt-4o",
-  openrouter: "anthropic/claude-sonnet-4-5",
+  openai: "gpt-4.1",
+  openrouter: "anthropic/claude-sonnet-4",
 };
 
 export const getDefaultModel = (provider: AIProvider): string =>

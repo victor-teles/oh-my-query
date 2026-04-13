@@ -1,6 +1,7 @@
 import { MessageSquare, X } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 
+import type { AIAction } from "@/lib/ai-actions";
 import type { DatabaseConnection } from "@/lib/connections";
 import type { SchemaInfo } from "@/lib/tauri";
 
@@ -9,8 +10,10 @@ import { Button } from "@/components/ui/button";
 import { AISettingsDialog } from "@/components/workspace/ai-settings-dialog";
 import { useEditorInsert } from "@/contexts/editor-insert-context";
 import { useAiChat } from "@/hooks/use-ai-chat";
+import { composeActionMessage } from "@/lib/ai-actions";
 import { hasAISettings } from "@/lib/ai-settings";
 
+import { ChatError } from "./chat-error";
 import { ChatInput } from "./chat-input";
 import { ChatMessageList } from "./chat-message-list";
 
@@ -24,19 +27,36 @@ interface ChatSidebarProps {
   connection: DatabaseConnection;
   schema: SchemaInfo | null;
   onClose: () => void;
+  pendingAction?: AIAction | null;
+  onPendingActionConsumed?: () => void;
 }
 
 export const ChatSidebar = ({
   connection,
   schema,
   onClose,
+  pendingAction,
+  onPendingActionConsumed,
 }: ChatSidebarProps) => {
-  const { messages, isStreaming, sendMessage, stopStreaming } = useAiChat({
+  const {
+    messages,
+    isStreaming,
+    error,
+    sendMessage,
+    stopStreaming,
+    retry,
+    clearError,
+  } = useAiChat({
     databaseType: connection.type,
     schema,
   });
 
-  const { insertAtCursor, openQuery } = useEditorInsert();
+  const {
+    insertAtCursor,
+    openQuery,
+    replaceSelection,
+    hasSelection: checkHasSelection,
+  } = useEditorInsert();
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [isConfigured, setIsConfigured] = useState(false);
 
@@ -48,11 +68,29 @@ export const ChatSidebar = ({
     checkSettings();
   }, [settingsOpen]);
 
+  useEffect(() => {
+    if (!pendingAction) {
+      return;
+    }
+    const message = composeActionMessage(pendingAction);
+    if (message) {
+      sendMessage(message);
+    }
+    onPendingActionConsumed?.();
+  }, [pendingAction, sendMessage, onPendingActionConsumed]);
+
   const handleInsertSql = useCallback(
     (sql: string) => {
       insertAtCursor(sql);
     },
     [insertAtCursor]
+  );
+
+  const handleReplaceSql = useCallback(
+    (sql: string) => {
+      replaceSelection(sql);
+    },
+    [replaceSelection]
   );
 
   const handleRunSql = useCallback(
@@ -86,7 +124,9 @@ export const ChatSidebar = ({
         messages={messages}
         connectionName={connection.name}
         onInsertSql={handleInsertSql}
+        onReplaceSql={handleReplaceSql}
         onRunSql={handleRunSql}
+        hasSelection={checkHasSelection()}
       />
       {messages.length === 0 && (
         <Suggestions className="flex-wrap justify-center px-3 pb-2">
@@ -94,6 +134,14 @@ export const ChatSidebar = ({
             <Suggestion key={s} suggestion={s} onClick={sendMessage} />
           ))}
         </Suggestions>
+      )}
+      {error && (
+        <ChatError
+          error={error}
+          onRetry={retry}
+          onOpenSettings={handleOpenSettings}
+          onDismiss={clearError}
+        />
       )}
       <ChatInput
         onSend={sendMessage}

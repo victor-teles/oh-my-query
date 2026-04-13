@@ -11,6 +11,7 @@ import {
   RotateCw,
   SearchX,
   ShieldAlert,
+  Sparkles,
   TriangleAlert,
 } from "lucide-react";
 import { useCallback, useMemo, useState } from "react";
@@ -27,6 +28,7 @@ interface QueryErrorDisplayProps {
   error: string;
   errorCode?: string | null;
   sql?: string | null;
+  onAiFix?: () => void;
   onJumpToLine?: (location: ErrorLocation) => void;
   onReconnect?: () => void;
   onRetry?: () => void;
@@ -49,6 +51,7 @@ export const QueryErrorDisplay = ({
   error,
   errorCode,
   sql,
+  onAiFix,
   onJumpToLine,
   onReconnect,
   onRetry,
@@ -142,6 +145,18 @@ export const QueryErrorDisplay = ({
             >
               <RotateCw />
               Retry
+            </Button>
+          )}
+          {onAiFix && (
+            <Button
+              aria-label="Fix with AI"
+              onClick={onAiFix}
+              size="sm"
+              title="Fix with AI"
+              variant="outline"
+            >
+              <Sparkles />
+              Fix with AI
             </Button>
           )}
           <Button

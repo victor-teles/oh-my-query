@@ -14,7 +14,9 @@ import { UIRenderBlock } from "./ui-render-block";
 interface ChatMessageProps {
   message: ChatMessageType;
   onInsertSql?: (sql: string) => void;
+  onReplaceSql?: (sql: string) => void;
   onRunSql?: (sql: string) => void;
+  hasSelection?: boolean;
 }
 
 const LoadingIndicator = () => (
@@ -24,11 +26,15 @@ const LoadingIndicator = () => (
 const AssistantContent = ({
   content,
   onInsertSql,
+  onReplaceSql,
   onRunSql,
+  hasSelection = false,
 }: {
   content: string;
   onInsertSql?: (sql: string) => void;
+  onReplaceSql?: (sql: string) => void;
   onRunSql?: (sql: string) => void;
+  hasSelection?: boolean;
 }) => {
   const renderCode = useCallback(
     (props: React.ComponentProps<"code">) => {
@@ -39,7 +45,13 @@ const AssistantContent = ({
 
       if (lang === "sql") {
         return (
-          <SqlCodeBlock code={code} onInsert={onInsertSql} onRun={onRunSql} />
+          <SqlCodeBlock
+            code={code}
+            onInsert={onInsertSql}
+            onReplace={onReplaceSql}
+            onRun={onRunSql}
+            hasSelection={hasSelection}
+          />
         );
       }
 
@@ -49,7 +61,7 @@ const AssistantContent = ({
 
       return <code className={className}>{children}</code>;
     },
-    [onInsertSql, onRunSql]
+    [onInsertSql, onReplaceSql, onRunSql, hasSelection]
   );
 
   const components = useMemo(
@@ -70,7 +82,9 @@ const AssistantContent = ({
 const ChatMessageInner = ({
   message,
   onInsertSql,
+  onReplaceSql,
   onRunSql,
+  hasSelection = false,
 }: ChatMessageProps) => (
   <Message from={message.role}>
     <MessageContent>
@@ -80,7 +94,9 @@ const ChatMessageInner = ({
         <AssistantContent
           content={message.content}
           onInsertSql={onInsertSql}
+          onReplaceSql={onReplaceSql}
           onRunSql={onRunSql}
+          hasSelection={hasSelection}
         />
       )}
     </MessageContent>
