@@ -7,6 +7,7 @@ import type { ErrorLocation } from "@/lib/error-location";
 
 interface EditorInsertContextValue {
   getSelectedText: () => string | null;
+  hasSelection: () => boolean;
   insertAtCursor: (text: string) => void;
   jumpTo: (location: ErrorLocation) => void;
   openQuery: (sql: string) => void;
@@ -14,6 +15,7 @@ interface EditorInsertContextValue {
   registerEditor: (view: EditorView | null) => void;
   registerOpenQuery: (handler: ((sql: string) => void) | null) => void;
   registerQueryTable: (handler: ((tableName: string) => void) | null) => void;
+  replaceSelection: (text: string) => void;
 }
 
 const EditorInsertContext = createContext<EditorInsertContextValue | null>(
@@ -53,6 +55,29 @@ export const EditorInsertProvider = ({ children }: { children: ReactNode }) => {
       return null;
     }
     return view.state.sliceDoc(from, to);
+  }, []);
+
+  const hasSelection = useCallback((): boolean => {
+    const view = editorRef.current;
+    if (!view) {
+      return false;
+    }
+    const { from, to } = view.state.selection.main;
+    return from !== to;
+  }, []);
+
+  const replaceSelection = useCallback((text: string) => {
+    const view = editorRef.current;
+    if (!view) {
+      return;
+    }
+
+    const { from, to } = view.state.selection.main;
+    view.dispatch({
+      changes: { from, insert: text, to },
+      selection: { anchor: from + text.length },
+    });
+    view.focus();
   }, []);
 
   const insertAtCursor = useCallback((text: string) => {
@@ -108,6 +133,7 @@ export const EditorInsertProvider = ({ children }: { children: ReactNode }) => {
     <EditorInsertContext
       value={{
         getSelectedText,
+        hasSelection,
         insertAtCursor,
         jumpTo,
         openQuery,
@@ -115,6 +141,7 @@ export const EditorInsertProvider = ({ children }: { children: ReactNode }) => {
         registerEditor,
         registerOpenQuery,
         registerQueryTable,
+        replaceSelection,
       }}
     >
       {children}

@@ -36,11 +36,41 @@ interface AISettingsDialogProps {
   onOpenChange: (open: boolean) => void;
 }
 
-const PROVIDERS: { value: AIProvider; label: string }[] = [
-  { label: "OpenAI", value: "openai" },
-  { label: "Anthropic", value: "anthropic" },
-  { label: "OpenRouter", value: "openrouter" },
-  { label: "Local (OpenAI-compatible)", value: "local" },
+interface ProviderInfo {
+  value: AIProvider;
+  label: string;
+  description: string;
+  keyUrl?: string;
+  keyUrlLabel?: string;
+}
+
+const PROVIDERS: ProviderInfo[] = [
+  {
+    description: "GPT-4.1 and other OpenAI models",
+    keyUrl: "https://platform.openai.com/api-keys",
+    keyUrlLabel: "platform.openai.com",
+    label: "OpenAI",
+    value: "openai",
+  },
+  {
+    description: "Claude models from Anthropic",
+    keyUrl: "https://console.anthropic.com/settings/keys",
+    keyUrlLabel: "console.anthropic.com",
+    label: "Anthropic",
+    value: "anthropic",
+  },
+  {
+    description: "Access multiple providers through one API",
+    keyUrl: "https://openrouter.ai/keys",
+    keyUrlLabel: "openrouter.ai",
+    label: "OpenRouter",
+    value: "openrouter",
+  },
+  {
+    description: "Ollama and OpenAI-compatible local servers",
+    label: "Local",
+    value: "local",
+  },
 ];
 
 export const AISettingsDialog = ({
@@ -70,6 +100,8 @@ export const AISettingsDialog = ({
 
     load();
   }, [open]);
+
+  const currentProvider = PROVIDERS.find((p) => p.value === provider);
 
   const handleProviderChange = useCallback(
     (value: string | null) => {
@@ -151,6 +183,11 @@ export const AISettingsDialog = ({
                 ))}
               </SelectContent>
             </Select>
+            {currentProvider && (
+              <p className="text-xs text-muted-foreground">
+                {currentProvider.description}
+              </p>
+            )}
           </div>
 
           <div className="grid gap-2">
@@ -166,6 +203,19 @@ export const AISettingsDialog = ({
                   : "Enter your API key"
               }
             />
+            {currentProvider?.keyUrl && (
+              <p className="text-xs text-muted-foreground">
+                Get your key at{" "}
+                <a
+                  href={currentProvider.keyUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-primary underline underline-offset-2"
+                >
+                  {currentProvider.keyUrlLabel}
+                </a>
+              </p>
+            )}
           </div>
 
           <div className="grid gap-2">

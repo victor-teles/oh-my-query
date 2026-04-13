@@ -18,7 +18,7 @@ describe("ai settings draft normalization", () => {
     ).toStrictEqual({
       apiKey: "sk-key",
       baseUrl: undefined,
-      model: "gpt-4o",
+      model: "gpt-4.1",
       provider: "openai",
     });
   });
