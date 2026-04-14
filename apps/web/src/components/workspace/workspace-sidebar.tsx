@@ -129,6 +129,7 @@ interface SchemaTabContentProps {
   onRetry: () => void;
   pinnedTables: string[];
   onTogglePin: (tableName: string) => void;
+  databaseType: DatabaseConnection["type"];
 }
 
 const SchemaTabContent = ({
@@ -140,6 +141,7 @@ const SchemaTabContent = ({
   onRetry,
   pinnedTables,
   onTogglePin,
+  databaseType,
 }: SchemaTabContentProps) => {
   const first = schema?.schemas[0];
   const itemCount = first ? first.tables.length + first.views.length : 0;
@@ -157,7 +159,9 @@ const SchemaTabContent = ({
             </InputGroupAddon>
             <InputGroupInput
               onChange={onFilterChange}
-              placeholder="Filter tables..."
+              placeholder={
+                databaseType === "redis" ? "Filter keys..." : "Filter tables..."
+              }
               value={filter}
             />
           </InputGroup>
@@ -169,6 +173,7 @@ const SchemaTabContent = ({
         {error && <SchemaErrorState error={error} onRetry={onRetry} />}
         {schema && (
           <SchemaTree
+            databaseType={databaseType}
             filter={filter}
             onTogglePin={onTogglePin}
             pinnedTables={pinnedTables}
@@ -250,6 +255,7 @@ export const WorkspaceSidebar = ({
 
         <TabsContent value="schema" className="flex min-h-0 flex-1 flex-col">
           <SchemaTabContent
+            databaseType={connection.type}
             schema={schema}
             isLoading={isLoading}
             error={error}

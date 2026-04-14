@@ -1,5 +1,6 @@
 import { useMemo } from "react";
 
+import type { DatabaseType } from "@/lib/connections";
 import type { SchemaInfo, SchemaItem } from "@/lib/tauri";
 
 import { TableNode } from "./table-node";
@@ -11,6 +12,7 @@ interface SchemaTreeProps {
   filter: string;
   pinnedTables: string[];
   onTogglePin: (tableName: string) => void;
+  databaseType?: DatabaseType;
 }
 
 const filterSchema = (schema: SchemaItem, query: string): SchemaItem => {
@@ -27,7 +29,11 @@ export const SchemaTree = ({
   filter,
   pinnedTables,
   onTogglePin,
+  databaseType,
 }: SchemaTreeProps) => {
+  const tableLabel = databaseType === "redis" ? "Keys" : "Tables";
+  const emptyLabel =
+    databaseType === "redis" ? "No keys found" : "No tables or views found";
   const filtered = useMemo(() => {
     const [first] = schema.schemas;
     if (!first) {
@@ -59,7 +65,7 @@ export const SchemaTree = ({
   ) {
     return (
       <div className="px-3 py-4 text-center text-xs text-muted-foreground">
-        No tables or views found
+        {emptyLabel}
       </div>
     );
   }
@@ -78,11 +84,12 @@ export const SchemaTree = ({
         <>
           {showTablesLabel && (
             <div className="mb-0.5 px-2 text-section-label">
-              Tables ({sortedTables.length})
+              {tableLabel} ({sortedTables.length})
             </div>
           )}
           {sortedTables.map((table) => (
             <TableNode
+              databaseType={databaseType}
               isPinned={pinnedTables.includes(table.name)}
               key={table.name}
               onTogglePin={onTogglePin}

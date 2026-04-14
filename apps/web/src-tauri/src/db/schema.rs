@@ -16,7 +16,7 @@ pub async fn list_databases(pool: &DatabasePool) -> Result<Vec<String>, DbError>
             let names = client.list_database_names().await.map_err(DbError::from)?;
             Ok(names)
         }
-        DatabasePool::Redis(_) => Ok(vec!["db0".to_string()]),
+        DatabasePool::Redis(conn) => list_databases_redis(conn).await,
         DatabasePool::ClickHouse(conn) => list_databases_clickhouse(conn).await,
     }
 }
@@ -27,13 +27,7 @@ pub async fn fetch_schema(pool: &DatabasePool, database_name: &str) -> Result<Sc
         DatabasePool::MySql(pool) => fetch_schema_mysql(pool, database_name).await,
         DatabasePool::Sqlite(pool) => fetch_schema_sqlite(pool).await,
         DatabasePool::MongoDB(client) => fetch_schema_mongodb(client, database_name).await,
-        DatabasePool::Redis(_) => Ok(SchemaInfo {
-            schemas: vec![SchemaItem {
-                name: "db0".to_string(),
-                tables: vec![],
-                views: vec![],
-            }],
-        }),
+        DatabasePool::Redis(conn) => fetch_schema_redis(conn, database_name).await,
         DatabasePool::ClickHouse(conn) => fetch_schema_clickhouse(conn, database_name).await,
     }
 }
@@ -895,4 +889,195 @@ async fn fetch_indexes_clickhouse(
             }
         })
         .collect())
+}
+
+// Redis introspection
+
+const REDIS_MAX_KEYS: usize = 500;
+const REDIS_SCAN_COUNT: usize = 200;
+
+async fn list_databases_redis(
+    conn: &redis::aio::MultiplexedConnection,
+) -> Result<Vec<String>, DbError> {
+    let mut c = conn.clone();
+    let info: String = redis::cmd("INFO")
+        .arg("keyspace")
+        .query_async(&mut c)
+        .await
+        .map_err(DbError::from)?;
+
+    let mut counts: std::collections::BTreeMap<u8, u64> = std::collections::BTreeMap::new();
+    for line in info.lines() {
+        let trimmed = line.trim();
+        if let Some(rest) = trimmed.strip_prefix("db") {
+            if let Some(idx_end) = rest.find(':') {
+                if let Ok(idx) = rest[..idx_end].parse::<u8>() {
+                    let payload = &rest[idx_end + 1..];
+                    let mut keys = 0u64;
+                    for field in payload.split(',') {
+                        let mut kv = field.split('=');
+                        if let (Some(k), Some(v)) = (kv.next(), kv.next()) {
+                            if k == "keys" {
+                                keys = v.parse().unwrap_or(0);
+                            }
+                        }
+                    }
+                    counts.insert(idx, keys);
+                }
+            }
+        }
+    }
+
+    let mut out = Vec::with_capacity(16);
+    for i in 0u8..16 {
+        let count = counts.get(&i).copied().unwrap_or(0);
+        out.push(format!("db{i} ({count} keys)"));
+    }
+    Ok(out)
+}
+
+fn strip_db_label(name: &str) -> u8 {
+    let trimmed = name.trim();
+    let trimmed = trimmed.strip_prefix("db").unwrap_or(trimmed);
+    let digits: String = trimmed.chars().take_while(|c| c.is_ascii_digit()).collect();
+    digits.parse().unwrap_or(0)
+}
+
+async fn fetch_schema_redis(
+    conn: &redis::aio::MultiplexedConnection,
+    database_name: &str,
+) -> Result<SchemaInfo, DbError> {
+    let db_idx = strip_db_label(database_name);
+    let schema_name = format!("db{db_idx}");
+
+    let mut c = conn.clone();
+    let _: redis::Value = redis::cmd("SELECT")
+        .arg(db_idx)
+        .query_async(&mut c)
+        .await
+        .map_err(DbError::from)?;
+    let mut cursor: u64 = 0;
+    let mut keys: Vec<String> = Vec::new();
+
+    loop {
+        let (next_cursor, batch): (u64, Vec<String>) = redis::cmd("SCAN")
+            .arg(cursor)
+            .arg("COUNT")
+            .arg(REDIS_SCAN_COUNT)
+            .query_async(&mut c)
+            .await
+            .map_err(DbError::from)?;
+
+        for k in batch {
+            if keys.len() >= REDIS_MAX_KEYS {
+                break;
+            }
+            keys.push(k);
+        }
+
+        if next_cursor == 0 || keys.len() >= REDIS_MAX_KEYS {
+            break;
+        }
+        cursor = next_cursor;
+    }
+
+    keys.sort();
+
+    let mut tables = Vec::with_capacity(keys.len());
+    for key in &keys {
+        let (ttl, key_type): (i64, String) = {
+            let mut pipe = redis::pipe();
+            pipe.cmd("TYPE").arg(key).cmd("TTL").arg(key);
+            let (t, ttl_val): (String, i64) =
+                pipe.query_async(&mut c).await.map_err(DbError::from)?;
+            (ttl_val, t)
+        };
+
+        let size: Option<u64> = match key_type.as_str() {
+            "string" => redis::cmd("STRLEN").arg(key).query_async::<u64>(&mut c).await.ok(),
+            "list" => redis::cmd("LLEN").arg(key).query_async::<u64>(&mut c).await.ok(),
+            "set" => redis::cmd("SCARD").arg(key).query_async::<u64>(&mut c).await.ok(),
+            "zset" => redis::cmd("ZCARD").arg(key).query_async::<u64>(&mut c).await.ok(),
+            "hash" => redis::cmd("HLEN").arg(key).query_async::<u64>(&mut c).await.ok(),
+            "stream" => redis::cmd("XLEN").arg(key).query_async::<u64>(&mut c).await.ok(),
+            _ => None,
+        };
+
+        let ttl_descriptor = match ttl {
+            -2 => "expired".to_string(),
+            -1 => "no expiry".to_string(),
+            secs => format!("TTL {}s", secs),
+        };
+
+        let size_descriptor = match (key_type.as_str(), size) {
+            ("string", Some(n)) => format!("{} bytes", n),
+            ("list", Some(n)) => format!("{} items", n),
+            ("set", Some(n)) => format!("{} members", n),
+            ("zset", Some(n)) => format!("{} members", n),
+            ("hash", Some(n)) => format!("{} fields", n),
+            ("stream", Some(n)) => format!("{} entries", n),
+            _ => String::new(),
+        };
+
+        let default_parts: Vec<String> = [ttl_descriptor, size_descriptor]
+            .into_iter()
+            .filter(|s| !s.is_empty())
+            .collect();
+        let default_value = if default_parts.is_empty() {
+            None
+        } else {
+            Some(default_parts.join(" · "))
+        };
+
+        let kind_display = match key_type.as_str() {
+            "string" => "STRING",
+            "list" => "LIST",
+            "set" => "SET",
+            "zset" => "ZSET",
+            "hash" => "HASH",
+            "stream" => "STREAM",
+            other => other,
+        };
+
+        tables.push(TableItem {
+            name: key.clone(),
+            columns: vec![ColumnDetail {
+                name: "value".to_string(),
+                data_type: kind_display.to_string(),
+                is_nullable: ttl >= 0,
+                is_primary_key: false,
+                default_value,
+            }],
+            indexes: vec![],
+            foreign_keys: vec![],
+        });
+    }
+
+    Ok(SchemaInfo {
+        schemas: vec![SchemaItem {
+            name: schema_name,
+            tables,
+            views: vec![],
+        }],
+    })
+}
+
+#[cfg(test)]
+mod redis_tests {
+    use super::*;
+
+    #[test]
+    fn strip_db_label_plain() {
+        assert_eq!(strip_db_label("db3"), 3);
+    }
+
+    #[test]
+    fn strip_db_label_with_suffix() {
+        assert_eq!(strip_db_label("db10 (42 keys)"), 10);
+    }
+
+    #[test]
+    fn strip_db_label_fallback() {
+        assert_eq!(strip_db_label("garbage"), 0);
+    }
 }

@@ -1,8 +1,9 @@
 import type { ReactNode } from "react";
 
-import { Clipboard, Copy, Pin, Play, Trash2 } from "lucide-react";
+import { Clipboard, Clock, Copy, Pin, Play, Trash2 } from "lucide-react";
 import { useCallback } from "react";
 
+import type { DatabaseType } from "@/lib/connections";
 import type { TableItem, ViewItem } from "@/lib/tauri";
 
 import {
@@ -21,6 +22,10 @@ import {
   generateDropTable,
   generateSelectTop100,
   generateTruncateTable,
+  redisDeleteCommand,
+  redisInspectCommand,
+  redisTtlCommand,
+  redisTypeCommand,
 } from "@/lib/sql-templates";
 
 interface TableContextMenuProps {
@@ -29,6 +34,7 @@ interface TableContextMenuProps {
   isPinned: boolean;
   onTogglePin: (tableName: string) => void;
   children: ReactNode;
+  databaseType?: DatabaseType;
 }
 
 export const TableContextMenu = ({
@@ -37,12 +43,19 @@ export const TableContextMenu = ({
   isPinned,
   onTogglePin,
   children,
+  databaseType,
 }: TableContextMenuProps) => {
   const { openQuery } = useEditorInsert();
+  const isRedis = databaseType === "redis";
+  const redisKind = table.columns[0]?.dataType ?? "STRING";
 
-  const handleSelectTop100 = useCallback(() => {
-    openQuery(generateSelectTop100(table.name));
-  }, [openQuery, table.name]);
+  const handleInspect = useCallback(() => {
+    if (isRedis) {
+      openQuery(redisInspectCommand(table.name, redisKind));
+    } else {
+      openQuery(generateSelectTop100(table.name));
+    }
+  }, [isRedis, openQuery, redisKind, table.name]);
 
   const handleCopyName = useCallback(() => {
     navigator.clipboard.writeText(table.name);
@@ -53,57 +66,94 @@ export const TableContextMenu = ({
   }, [onTogglePin, table.name]);
 
   const handleDrop = useCallback(() => {
-    openQuery(generateDropTable(table.name, isView));
-  }, [openQuery, table.name, isView]);
+    if (isRedis) {
+      openQuery(redisDeleteCommand(table.name));
+    } else {
+      openQuery(generateDropTable(table.name, isView));
+    }
+  }, [isRedis, isView, openQuery, table.name]);
 
   const handleCopyCreate = useCallback(() => {
     navigator.clipboard.writeText(generateCreateTable(table, isView));
   }, [table, isView]);
 
   const handleCopyDrop = useCallback(() => {
-    navigator.clipboard.writeText(generateDropTable(table.name, isView));
-  }, [table.name, isView]);
+    navigator.clipboard.writeText(
+      isRedis
+        ? redisDeleteCommand(table.name)
+        : generateDropTable(table.name, isView)
+    );
+  }, [isRedis, table.name, isView]);
 
   const handleCopyTruncate = useCallback(() => {
     navigator.clipboard.writeText(generateTruncateTable(table.name));
   }, [table.name]);
 
+  const handleRedisCheckTtl = useCallback(() => {
+    openQuery(redisTtlCommand(table.name));
+  }, [openQuery, table.name]);
+
+  const handleRedisCheckType = useCallback(() => {
+    openQuery(redisTypeCommand(table.name));
+  }, [openQuery, table.name]);
+
+  const inspectLabel = isRedis ? `Inspect (${redisKind})` : "Select top 100";
+  const dropLabel = isRedis ? "Delete key (DEL)" : "Drop";
+
   return (
     <ContextMenu>
       <ContextMenuTrigger className="block">{children}</ContextMenuTrigger>
       <ContextMenuContent>
-        <ContextMenuItem onClick={handleSelectTop100}>
+        <ContextMenuItem onClick={handleInspect}>
           <Play />
-          Select top 100
+          {inspectLabel}
         </ContextMenuItem>
+        {isRedis && (
+          <>
+            <ContextMenuItem onClick={handleRedisCheckTtl}>
+              <Clock />
+              Check TTL
+            </ContextMenuItem>
+            <ContextMenuItem onClick={handleRedisCheckType}>
+              <Copy />
+              TYPE
+            </ContextMenuItem>
+          </>
+        )}
         <ContextMenuItem onClick={handleCopyName}>
           <Clipboard />
-          Copy name
+          {isRedis ? "Copy key" : "Copy name"}
         </ContextMenuItem>
         <ContextMenuItem onClick={handlePin}>
           <Pin />
           {isPinned ? "Unpin" : "Pin"}
         </ContextMenuItem>
-        <ContextMenuSeparator />
-        <ContextMenuSub>
-          <ContextMenuSubTrigger>
-            <Copy />
-            Copy as
-          </ContextMenuSubTrigger>
-          <ContextMenuSubContent>
-            <ContextMenuItem onClick={handleCopyCreate}>Create</ContextMenuItem>
-            <ContextMenuItem onClick={handleCopyDrop}>Drop</ContextMenuItem>
-            {!isView && (
-              <ContextMenuItem onClick={handleCopyTruncate}>
-                Truncate
-              </ContextMenuItem>
-            )}
-          </ContextMenuSubContent>
-        </ContextMenuSub>
+        {!isRedis && (
+          <>
+            <ContextMenuSeparator />
+            <ContextMenuSub>
+              <ContextMenuSubTrigger>
+                <Copy />
+                Copy as
+              </ContextMenuSubTrigger>
+              <ContextMenuSubContent>
+                <ContextMenuItem onClick={handleCopyCreate}>
+                  Create
+                </ContextMenuItem>
+                <ContextMenuItem onClick={handleCopyDrop}>Drop</ContextMenuItem>
+                {!isView && (
+                  <ContextMenuItem onClick={handleCopyTruncate}>
+                    Truncate
+                  </ContextMenuItem>
+                )}
+              </ContextMenuSubContent>
+            </ContextMenuSub>
+          </>
+        )}
         <ContextMenuSeparator />
         <ContextMenuItem onClick={handleDrop} variant="destructive">
           <Trash2 />
-          Drop
+          {dropLabel}
         </ContextMenuItem>
       </ContextMenuContent>
     </ContextMenu>

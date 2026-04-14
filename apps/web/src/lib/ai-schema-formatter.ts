@@ -32,10 +32,72 @@ const formatColumn = (
   return `  ${col.name} (${parts.join(", ")})${suffix}`;
 };
 
+const formatRedisSchemaForPrompt = (schema: SchemaInfo): string => {
+  const lines: string[] = ["Database type: Redis", ""];
+
+  for (const s of schema.schemas) {
+    lines.push(`Database: ${s.name}`);
+    if (s.tables.length === 0) {
+      lines.push("  (no keys found — the DB may be empty)");
+      lines.push("");
+      continue;
+    }
+
+    const byType = new Map<string, typeof s.tables>();
+    for (const key of s.tables) {
+      const kind = key.columns[0]?.dataType ?? "UNKNOWN";
+      const bucket = byType.get(kind);
+      if (bucket) {
+        bucket.push(key);
+      } else {
+        byType.set(kind, [key]);
+      }
+    }
+
+    const kindOrder = ["STRING", "HASH", "LIST", "SET", "ZSET", "STREAM"];
+    const sorted = [...byType.keys()].toSorted((a, b) => {
+      const ai = kindOrder.indexOf(a);
+      const bi = kindOrder.indexOf(b);
+      if (ai !== -1 && bi !== -1) {
+        return ai - bi;
+      }
+      if (ai !== -1) {
+        return -1;
+      }
+      if (bi !== -1) {
+        return 1;
+      }
+      return a.localeCompare(b);
+    });
+
+    for (const kind of sorted) {
+      const keys = byType.get(kind) ?? [];
+      lines.push(
+        `  ${kind} (${keys.length} key${keys.length === 1 ? "" : "s"}):`
+      );
+      const shown = keys.slice(0, 20);
+      for (const key of shown) {
+        const meta = key.columns[0]?.defaultValue;
+        lines.push(meta ? `    ${key.name} — ${meta}` : `    ${key.name}`);
+      }
+      if (keys.length > shown.length) {
+        lines.push(`    … and ${keys.length - shown.length} more`);
+      }
+    }
+    lines.push("");
+  }
+
+  return lines.join("\n").trim();
+};
+
 export const formatSchemaForPrompt = (
   schema: SchemaInfo,
   dbType: string
 ): string => {
+  if (dbType === "redis") {
+    return formatRedisSchemaForPrompt(schema);
+  }
+
   const label = DB_TYPE_LABELS[dbType] ?? dbType;
   const lines: string[] = [`Database type: ${label}`, ""];
 
@@ -183,6 +245,27 @@ export const buildSystemPrompt = (
 ): string => {
   const label = DB_TYPE_LABELS[dbType] ?? dbType;
   const formattedSchema = formatSchemaForPrompt(schema, dbType);
+
+  if (dbType === "redis") {
+    return `You are a Redis assistant. You help users inspect Redis keyspaces, write Redis commands, diagnose errors, and create visual UIs to display data.
+
+Redis uses commands, not SQL. When the user asks how to read or modify data, respond with a Redis command, not a SELECT statement.
+
+When generating Redis commands:
+- Use real Redis command syntax (GET, SET, HGETALL, HSET, HSCAN, LRANGE, ZRANGE WITHSCORES, XRANGE, SCAN MATCH, TYPE, TTL, etc.)
+- Pick the command whose shape matches the value type — HGETALL for a HASH, LRANGE for a LIST, SMEMBERS for a SET, ZRANGE … WITHSCORES for a ZSET, XRANGE for a STREAM
+- Prefer SCAN MATCH <pattern> over KEYS in production databases
+- Reference only the keys listed in the keyspace below
+- One command per code block; wrap in \`\`\`redis code blocks (or \`\`\`sh if redis is unsupported)
+- When users paste a stringified JSON value, suggest inspecting it with GET + client-side parsing; don't invent JSON.GET/ReJSON unless the user has confirmed the module
+- Be concise; mention destructive commands (FLUSHDB, DEL on critical keys) only when clearly asked, and warn before running
+
+Keep explanations short — users are running these interactively.
+${UI_GENERATION_PROMPT}
+
+Redis Keyspace:
+${formattedSchema}`;
+  }
 
   return `You are a database assistant for a ${label} database. You help users write queries, explain SQL, diagnose errors, suggest optimizations, and create visual UIs to display data.
 
