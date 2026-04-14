@@ -15,6 +15,7 @@ export type IslandSnapshot =
     }
   | {
       kind: "connected-idle";
+      connectionName: string;
       serverVersion: string | null;
       username: string;
       database: string;

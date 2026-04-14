@@ -1,5 +1,14 @@
 import { AlertCircle } from "lucide-react";
-import { motion } from "motion/react";
+import { motion, useReducedMotion } from "motion/react";
+
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "@/components/ui/hover-card";
+
+import { IslandErrorMessage } from "./island-error-message";
+import { ISLAND_ITEM_TRANSITION, ISLAND_ITEM_VARIANTS } from "./island-motion";
 
 interface ConnectingStatusProps {
   connectionName: string;
@@ -7,103 +16,175 @@ interface ConnectingStatusProps {
 
 const DOT_IDS = ["d1", "d2", "d3"] as const;
 
-const BUTTON_SPRING = { damping: 20, stiffness: 400, type: "spring" } as const;
+export const ConnectingStatus = ({ connectionName }: ConnectingStatusProps) => {
+  const shouldReduceMotion = useReducedMotion();
 
-export const ConnectingStatus = ({ connectionName }: ConnectingStatusProps) => (
-  <motion.div
-    aria-hidden="true"
-    className="flex items-center gap-1.5"
-    initial={{ filter: "blur(4px)", opacity: 0 }}
-    animate={{ filter: "blur(0px)", opacity: 1 }}
-    exit={{ filter: "blur(4px)", opacity: 0 }}
-  >
-    <div className="flex items-center gap-0.5">
-      {DOT_IDS.map((id, i) => (
-        <motion.span
-          key={id}
-          className="size-1 rounded-full bg-muted-foreground"
-          animate={{ opacity: [0.3, 1, 0.3] }}
-          transition={{
-            delay: i * 0.2,
-            duration: 1.2,
-            ease: "easeInOut",
-            repeat: Infinity,
-          }}
-        />
-      ))}
-    </div>
-    <span className="text-chrome max-w-[240px] truncate text-muted-foreground">
-      {connectionName}
-    </span>
-  </motion.div>
-);
+  return (
+    <>
+      <motion.div
+        aria-hidden="true"
+        className="flex items-center gap-0.5"
+        transition={ISLAND_ITEM_TRANSITION}
+        variants={ISLAND_ITEM_VARIANTS}
+      >
+        {DOT_IDS.map((id, i) => (
+          <motion.span
+            animate={
+              shouldReduceMotion ? undefined : { opacity: [0.3, 1, 0.3] }
+            }
+            className="size-1 rounded-full bg-muted-foreground"
+            key={id}
+            transition={{
+              delay: i * 0.2,
+              duration: 1.2,
+              ease: "easeInOut",
+              repeat: Infinity,
+            }}
+          />
+        ))}
+      </motion.div>
+      <span className="sr-only">Connecting to </span>
+      <motion.span
+        className="text-chrome max-w-60 truncate text-muted-foreground"
+        transition={ISLAND_ITEM_TRANSITION}
+        variants={ISLAND_ITEM_VARIANTS}
+      >
+        {connectionName}
+      </motion.span>
+    </>
+  );
+};
 
 export const ReconnectingStatus = ({
   connectionName,
-}: ConnectingStatusProps) => (
-  <motion.div
-    aria-hidden="true"
-    className="flex items-center gap-1.5"
-    initial={{ filter: "blur(4px)", opacity: 0 }}
-    animate={{ filter: "blur(0px)", opacity: 1 }}
-    exit={{ filter: "blur(4px)", opacity: 0 }}
-  >
-    <div className="flex items-center gap-0.5">
-      {DOT_IDS.map((id, i) => (
-        <motion.span
-          key={id}
-          className="size-1 rounded-full bg-amber-400"
-          animate={{ opacity: [0.3, 1, 0.3] }}
-          transition={{
-            delay: i * 0.15,
-            duration: 1,
-            ease: "easeInOut",
-            repeat: Infinity,
-          }}
-        />
-      ))}
-    </div>
-    <span className="text-chrome max-w-[260px] truncate text-amber-500">
-      Reconnecting to {connectionName}…
-    </span>
-  </motion.div>
-);
+}: ConnectingStatusProps) => {
+  const shouldReduceMotion = useReducedMotion();
+
+  return (
+    <>
+      <motion.div
+        aria-hidden="true"
+        className="flex items-center gap-0.5"
+        transition={ISLAND_ITEM_TRANSITION}
+        variants={ISLAND_ITEM_VARIANTS}
+      >
+        {DOT_IDS.map((id, i) => (
+          <motion.span
+            animate={
+              shouldReduceMotion ? undefined : { opacity: [0.3, 1, 0.3] }
+            }
+            className="size-1 rounded-full bg-warning"
+            key={id}
+            transition={{
+              delay: i * 0.15,
+              duration: 1,
+              ease: "easeInOut",
+              repeat: Infinity,
+            }}
+          />
+        ))}
+      </motion.div>
+      <motion.span
+        className="text-chrome max-w-65 truncate text-warning"
+        transition={ISLAND_ITEM_TRANSITION}
+        variants={ISLAND_ITEM_VARIANTS}
+      >
+        Reconnecting to {connectionName}
+      </motion.span>
+    </>
+  );
+};
 
 interface ConnectedIdleStatusProps {
+  connectionName: string;
   serverVersion: string | null;
   username: string;
   database: string;
 }
 
 export const ConnectedIdleStatus = ({
+  connectionName,
   serverVersion,
   username,
   database,
-}: ConnectedIdleStatusProps) => (
-  <motion.div
-    aria-hidden="true"
-    className="flex cursor-default items-center gap-1.5"
-    initial={{ filter: "blur(4px)", opacity: 0 }}
-    animate={{ filter: "blur(0px)", opacity: 1 }}
-    exit={{ filter: "blur(4px)", opacity: 0 }}
-    whileHover={{ opacity: 0.75 }}
-    transition={BUTTON_SPRING}
-  >
-    <span className="relative flex size-2 shrink-0">
-      <span className="absolute inline-flex size-full animate-ping rounded-full bg-emerald-400 opacity-50" />
-      <span className="relative inline-flex size-2 rounded-full bg-emerald-500" />
-    </span>
-    {serverVersion && (
-      <span className="text-data text-[11px] text-muted-foreground">
-        {serverVersion}
-      </span>
-    )}
-    <span className="text-[11px] text-muted-foreground/30">·</span>
-    <span className="text-data text-[11px] text-muted-foreground">
-      {username}@{database}
-    </span>
-  </motion.div>
-);
+}: ConnectedIdleStatusProps) => {
+  const shouldReduceMotion = useReducedMotion();
+  const srLabel = `Connected to ${connectionName} — ${username}@${database}${
+    serverVersion ? ` on ${serverVersion}` : ""
+  }. Open connection details.`;
+
+  return (
+    <HoverCard>
+      <HoverCardTrigger
+        render={
+          <motion.button
+            aria-label={srLabel}
+            className="flex items-center gap-1.5 rounded-full focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+            transition={ISLAND_ITEM_TRANSITION}
+            type="button"
+            variants={ISLAND_ITEM_VARIANTS}
+            whileHover={{ opacity: 0.75 }}
+          >
+            <span aria-hidden="true" className="relative flex size-2 shrink-0">
+              {!shouldReduceMotion && (
+                <motion.span
+                  animate={{ opacity: 0, scale: 2.2 }}
+                  className="absolute inline-flex size-full rounded-full bg-success"
+                  initial={{ opacity: 0.5, scale: 1 }}
+                  transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+                />
+              )}
+              <span className="relative inline-flex size-2 rounded-full bg-success" />
+            </span>
+            {serverVersion && (
+              <span
+                aria-hidden="true"
+                className="text-data text-[11px] text-muted-foreground"
+              >
+                {serverVersion}
+              </span>
+            )}
+            <span
+              aria-hidden="true"
+              className="text-[11px] text-muted-foreground/30"
+            >
+              ·
+            </span>
+            <span
+              aria-hidden="true"
+              className="text-data text-[11px] text-muted-foreground"
+            >
+              {username}@{database}
+            </span>
+          </motion.button>
+        }
+      />
+      <HoverCardContent align="center" className="w-64">
+        <div className="flex flex-col gap-3">
+          <div className="flex items-center gap-2">
+            <span
+              aria-hidden="true"
+              className="size-1.5 rounded-full bg-success"
+            />
+            <span className="text-section-label">Connected</span>
+          </div>
+          <dl className="grid grid-cols-[auto_1fr] gap-x-3 gap-y-1.5 text-xs">
+            <dt className="text-muted-foreground">Database</dt>
+            <dd className="text-data text-foreground">{database}</dd>
+            <dt className="text-muted-foreground">User</dt>
+            <dd className="text-data text-foreground">{username}</dd>
+            {serverVersion && (
+              <>
+                <dt className="text-muted-foreground">Version</dt>
+                <dd className="text-data text-foreground">{serverVersion}</dd>
+              </>
+            )}
+          </dl>
+        </div>
+      </HoverCardContent>
+    </HoverCard>
+  );
+};
 
 interface ConnectionErrorStatusProps {
   error: string;
@@ -114,31 +195,28 @@ export const ConnectionErrorStatus = ({
   error,
   onReconnect,
 }: ConnectionErrorStatusProps) => (
-  <motion.div
-    role="alert"
-    className="flex items-center gap-1.5"
-    initial={{ filter: "blur(4px)", opacity: 0 }}
-    animate={{ filter: "blur(0px)", opacity: 1 }}
-    exit={{ filter: "blur(4px)", opacity: 0 }}
-  >
-    <AlertCircle
+  <>
+    <motion.span
       aria-hidden="true"
-      className="size-3 shrink-0 text-destructive"
-    />
-    <span className="text-chrome max-w-[280px] truncate text-destructive">
-      {error}
-    </span>
+      transition={ISLAND_ITEM_TRANSITION}
+      variants={ISLAND_ITEM_VARIANTS}
+    >
+      <AlertCircle className="size-3 shrink-0 text-destructive" />
+    </motion.span>
+    <IslandErrorMessage error={error} maxWidthClass="max-w-[280px]" />
     <motion.button
-      type="button"
+      aria-label="Retry connection"
+      className="text-chrome cursor-pointer rounded-sm text-destructive underline underline-offset-2 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
       onClick={onReconnect}
-      className="text-chrome cursor-pointer text-destructive underline underline-offset-2"
-      whileHover={{ scale: 1.05 }}
-      whileTap={{ scale: 0.92 }}
-      transition={BUTTON_SPRING}
+      transition={ISLAND_ITEM_TRANSITION}
+      type="button"
+      variants={ISLAND_ITEM_VARIANTS}
+      whileHover={{ opacity: 0.7 }}
+      whileTap={{ opacity: 0.5 }}
     >
       Retry
     </motion.button>
-  </motion.div>
+  </>
 );
 
 interface AmbientStatusProps {
@@ -146,33 +224,38 @@ interface AmbientStatusProps {
 }
 
 export const AmbientStatus = ({ connectionName }: AmbientStatusProps) => (
-  <motion.div
-    aria-hidden="true"
-    className="flex items-center gap-1.5"
-    initial={{ filter: "blur(4px)", opacity: 0 }}
-    animate={{ filter: "blur(0px)", opacity: 1 }}
-    exit={{ filter: "blur(4px)", opacity: 0 }}
-  >
-    <span className="size-1 shrink-0 rounded-full bg-muted-foreground/40" />
-    <span className="text-chrome max-w-[240px] truncate text-muted-foreground">
+  <>
+    <motion.span
+      aria-hidden="true"
+      className="size-1 shrink-0 rounded-full bg-muted-foreground/40"
+      transition={ISLAND_ITEM_TRANSITION}
+      variants={ISLAND_ITEM_VARIANTS}
+    />
+    <span className="sr-only">Database: </span>
+    <motion.span
+      className="text-chrome max-w-60 truncate text-muted-foreground"
+      transition={ISLAND_ITEM_TRANSITION}
+      variants={ISLAND_ITEM_VARIANTS}
+    >
       {connectionName}
-    </span>
-  </motion.div>
+    </motion.span>
+  </>
 );
 
 export const WelcomeStatus = () => (
-  <motion.div
-    aria-live="polite"
-    className="flex items-center gap-1.5"
-    initial={{ filter: "blur(4px)", opacity: 0 }}
-    animate={{ filter: "blur(0px)", opacity: 1 }}
-    exit={{ filter: "blur(4px)", opacity: 0 }}
-    role="status"
-  >
-    <span
+  <>
+    <motion.span
       aria-hidden="true"
       className="size-1.5 shrink-0 rounded-full bg-primary"
+      transition={ISLAND_ITEM_TRANSITION}
+      variants={ISLAND_ITEM_VARIANTS}
     />
-    <span className="text-chrome text-muted-foreground">Welcome</span>
-  </motion.div>
+    <motion.span
+      className="text-chrome text-muted-foreground"
+      transition={ISLAND_ITEM_TRANSITION}
+      variants={ISLAND_ITEM_VARIANTS}
+    >
+      Welcome
+    </motion.span>
+  </>
 );

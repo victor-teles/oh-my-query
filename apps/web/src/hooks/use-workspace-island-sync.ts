@@ -116,6 +116,7 @@ const resolveSnapshot = ({
   }
   if (!isConnected) {
     return {
+      connectionName: connection.name,
       database: connection.database,
       kind: "connected-idle",
       serverVersion,
@@ -140,6 +141,7 @@ const resolveSnapshot = ({
     };
   }
   return {
+    connectionName: connection.name,
     database: connection.database,
     kind: "connected-idle",
     serverVersion,
