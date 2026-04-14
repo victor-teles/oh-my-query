@@ -138,7 +138,7 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           $version = "${{ github.ref_name }}".TrimStart("v")
-          $exe = Get-ChildItem -Path "apps/web/src-tauri/target/${{ matrix.target }}/release/oh_my_query.exe" -ErrorAction Stop
+          $exe = Get-ChildItem -Path "apps/web/src-tauri/target/${{ matrix.target }}/release/oh-my-query.exe" -ErrorAction Stop
           $label = "${{ matrix.label }}"
           $dest = "oh_my_query_${version}_${label}_portable.exe"
           Copy-Item $exe.FullName $dest
