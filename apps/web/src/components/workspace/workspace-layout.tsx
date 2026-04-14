@@ -143,9 +143,19 @@ export const WorkspaceLayout = ({
   }, [chatPanelRef]);
 
   const handleAiAction = useCallback(
-    (action: AIActionType, context?: { sql?: string; error?: string }) => {
+    (
+      action: AIActionType,
+      context?: {
+        sql?: string;
+        error?: string;
+        errorCode?: string | null;
+        isSelection?: boolean;
+      }
+    ) => {
       const aiAction: AIAction = {
         error: context?.error,
+        errorCode: context?.errorCode ?? null,
+        isSelection: context?.isSelection,
         sql: context?.sql,
         type: action,
       };

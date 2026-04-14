@@ -1,9 +1,11 @@
 import { streamText } from "ai";
 import { useCallback, useRef, useState } from "react";
 
+import type { ActiveQuerySnapshot } from "@/contexts/active-query-context";
 import type { AIError } from "@/lib/ai-errors";
 import type { SchemaInfo } from "@/lib/tauri";
 
+import { formatActiveQueryContext } from "@/lib/ai-context";
 import { classifyAIError } from "@/lib/ai-errors";
 import { createAIModel } from "@/lib/ai-provider";
 import { buildSystemPrompt } from "@/lib/ai-schema-formatter";
@@ -24,6 +26,7 @@ interface AiChatState {
 interface UseAiChatOptions {
   schema: SchemaInfo | null;
   databaseType: string;
+  getSnapshot?: () => ActiveQuerySnapshot;
 }
 
 const NOT_CONFIGURED_ERROR: AIError = {
@@ -33,7 +36,11 @@ const NOT_CONFIGURED_ERROR: AIError = {
   type: "auth",
 };
 
-export const useAiChat = ({ schema, databaseType }: UseAiChatOptions) => {
+export const useAiChat = ({
+  schema,
+  databaseType,
+  getSnapshot,
+}: UseAiChatOptions) => {
   const [state, setState] = useState<AiChatState>({
     error: null,
     isStreaming: false,
@@ -76,9 +83,16 @@ export const useAiChat = ({ schema, databaseType }: UseAiChatOptions) => {
 
       try {
         const model = createAIModel(settings);
-        const system = schema
+        const baseSystem = schema
           ? buildSystemPrompt(schema, databaseType)
           : `You are a SQL assistant for a ${databaseType} database. Help users write queries, explain SQL, diagnose errors, and suggest optimizations. Wrap SQL in \`\`\`sql code blocks.`;
+
+        const contextBlock = getSnapshot
+          ? formatActiveQueryContext(getSnapshot())
+          : null;
+        const system = contextBlock
+          ? `${baseSystem}\n\n${contextBlock}`
+          : baseSystem;
 
         const allMessages = [
           ...state.messages.map((m) => ({
@@ -137,7 +151,7 @@ export const useAiChat = ({ schema, databaseType }: UseAiChatOptions) => {
         abortRef.current = null;
       }
     },
-    [schema, databaseType, state.messages]
+    [schema, databaseType, state.messages, getSnapshot]
   );
 
   const retry = useCallback(() => {
