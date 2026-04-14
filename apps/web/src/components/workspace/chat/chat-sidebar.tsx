@@ -1,5 +1,5 @@
 import { MessageSquare, RotateCw, X } from "lucide-react";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 import type { AIAction } from "@/lib/ai-actions";
 import type { DatabaseConnection } from "@/lib/connections";
@@ -8,6 +8,7 @@ import type { SchemaInfo } from "@/lib/tauri";
 import { Suggestion, Suggestions } from "@/components/ai-elements/suggestion";
 import { Button } from "@/components/ui/button";
 import { AISettingsDialog } from "@/components/workspace/ai-settings-dialog";
+import { useOptionalActiveQuery } from "@/contexts/active-query-context";
 import { useEditorInsert } from "@/contexts/editor-insert-context";
 import { useAiChat } from "@/hooks/use-ai-chat";
 import { composeActionMessage } from "@/lib/ai-actions";
@@ -17,11 +18,52 @@ import { ChatError } from "./chat-error";
 import { ChatInput } from "./chat-input";
 import { ChatMessageList } from "./chat-message-list";
 
-const SQL_SUGGESTIONS = [
+const DEFAULT_SUGGESTIONS = [
   "Show all tables",
   "Count rows in each table",
   "Describe the schema",
 ];
+
+interface SuggestionContext {
+  hasError: boolean;
+  hasResult: boolean;
+  hasSelection: boolean;
+  hasSql: boolean;
+  isRunning: boolean;
+}
+
+const buildSuggestions = (ctx: SuggestionContext | null): string[] => {
+  if (!ctx) {
+    return DEFAULT_SUGGESTIONS;
+  }
+
+  const suggestions: string[] = [];
+
+  if (ctx.hasError) {
+    suggestions.push("Explain this error", "Fix the failing query");
+  }
+  if (ctx.hasSelection) {
+    suggestions.push("Explain the selected SQL");
+  }
+  if (ctx.hasSql && !ctx.hasSelection) {
+    suggestions.push("Explain my current query");
+  }
+  if (ctx.hasResult && !ctx.hasError) {
+    suggestions.push("Summarize these results", "Suggest a follow-up query");
+  }
+  if (ctx.isRunning) {
+    suggestions.push("What is this query doing?");
+  }
+  if (ctx.hasSql && !ctx.hasError) {
+    suggestions.push("Optimize this query");
+  }
+
+  if (suggestions.length === 0) {
+    return DEFAULT_SUGGESTIONS;
+  }
+
+  return suggestions.slice(0, 4);
+};
 
 interface ChatSidebarProps {
   connection: DatabaseConnection;
@@ -38,6 +80,7 @@ export const ChatSidebar = ({
   pendingAction,
   onPendingActionConsumed,
 }: ChatSidebarProps) => {
+  const activeQuery = useOptionalActiveQuery();
   const {
     messages,
     isStreaming,
@@ -49,8 +92,25 @@ export const ChatSidebar = ({
     clearMessages,
   } = useAiChat({
     databaseType: connection.type,
+    getSnapshot: activeQuery?.getSnapshot,
     schema,
   });
+
+  const suggestions = useMemo(
+    () =>
+      buildSuggestions(
+        activeQuery
+          ? {
+              hasError: activeQuery.meta.hasError,
+              hasResult: activeQuery.meta.hasResult,
+              hasSelection: activeQuery.meta.hasSelection,
+              hasSql: activeQuery.meta.hasSql,
+              isRunning: activeQuery.meta.isRunning,
+            }
+          : null
+      ),
+    [activeQuery]
+  );
 
   const {
     insertAtCursor,
@@ -144,7 +204,7 @@ export const ChatSidebar = ({
       />
       {messages.length === 0 && (
         <Suggestions className="flex-wrap justify-center px-3 pb-2">
-          {SQL_SUGGESTIONS.map((s) => (
+          {suggestions.map((s) => (
             <Suggestion key={s} suggestion={s} onClick={sendMessage} />
           ))}
         </Suggestions>

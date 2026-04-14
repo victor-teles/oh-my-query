@@ -17,12 +17,13 @@ import {
 } from "@/components/ui/resizable";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { CloseConfirmDialog } from "@/components/workspace/close-confirm-dialog";
+import { useActiveQuery } from "@/contexts/active-query-context";
 import { useEditorInsert } from "@/contexts/editor-insert-context";
-import { useQueryExecution } from "@/contexts/query-execution-context";
 import {
   QueryTabsProvider,
   useQueryTabsContext,
 } from "@/contexts/query-tabs-context";
+import { useActiveQuerySync } from "@/hooks/use-active-query-sync";
 import { useExportSettings } from "@/hooks/use-export-settings";
 import { useQueryTabs } from "@/hooks/use-query-tabs";
 import { useSyntaxTree } from "@/hooks/use-syntax-tree";
@@ -72,7 +73,12 @@ interface WorkspaceContentProps {
   onReconnect: () => void;
   onAiAction?: (
     action: AIActionType,
-    context?: { sql?: string; error?: string }
+    context?: {
+      sql?: string;
+      error?: string;
+      errorCode?: string | null;
+      isSelection?: boolean;
+    }
   ) => void;
   schema: SchemaInfo | null;
   selectedDatabase: string | null;
@@ -190,7 +196,12 @@ interface ConnectedWorkspaceProps {
   isSql: boolean;
   onAiAction?: (
     action: AIActionType,
-    context?: { sql?: string; error?: string }
+    context?: {
+      sql?: string;
+      error?: string;
+      errorCode?: string | null;
+      isSelection?: boolean;
+    }
   ) => void;
 }
 
@@ -227,9 +238,11 @@ const ConnectedWorkspace = ({
     executeTab,
   } = useQueryTabsContext();
 
-  const { setExecutionState } = useQueryExecution();
+  const { setSelectedSql: setActiveSelectedSql } = useActiveQuery();
   const { getSelectedText, registerQueryTable, registerOpenQuery } =
     useEditorInsert();
+
+  useActiveQuerySync(activeTab);
 
   const [isSyntaxTreeOpen, setIsSyntaxTreeOpen] = useState(false);
   const [hasSelection, setHasSelection] = useState(false);
@@ -240,21 +253,6 @@ const ConnectedWorkspace = ({
   const toggleSyntaxTree = useCallback(() => {
     setIsSyntaxTreeOpen((prev) => !prev);
   }, []);
-
-  useEffect(() => {
-    if (activeTab?.status) {
-      setExecutionState({
-        error: activeTab.error ?? null,
-        result: activeTab.result ?? null,
-        status: activeTab.status,
-      });
-    }
-  }, [
-    activeTab?.status,
-    activeTab?.result,
-    activeTab?.error,
-    setExecutionState,
-  ]);
 
   const handleQueryTable = useCallback(
     (tableName: string) => {
@@ -285,12 +283,16 @@ const ConnectedWorkspace = ({
       if (syntaxTreeEnabled) {
         handleSyntaxTreeUpdate(update);
       }
-      if (update.selectionSet) {
+      if (update.selectionSet || update.docChanged) {
         const { from, to } = update.state.selection.main;
-        setHasSelection(from !== to);
+        const isSelecting = from !== to;
+        setHasSelection(isSelecting);
+        setActiveSelectedSql(
+          isSelecting ? update.state.sliceDoc(from, to) : null
+        );
       }
     },
-    [syntaxTreeEnabled, handleSyntaxTreeUpdate]
+    [syntaxTreeEnabled, handleSyntaxTreeUpdate, setActiveSelectedSql]
   );
 
   const editorDialect = resolveEditorDialect(
@@ -332,9 +334,16 @@ const ConnectedWorkspace = ({
 
   const handleAiAction = useCallback(
     (action: AIActionType) => {
-      const sql = getSelectedText() || activeTab?.sql || "";
+      const selected = getSelectedText();
+      const sql = selected || activeTab?.sql || "";
       const error = activeTab?.error ?? undefined;
-      onAiAction?.(action, { error, sql });
+      const errorCode = activeTab?.errorCode ?? null;
+      onAiAction?.(action, {
+        error,
+        errorCode,
+        isSelection: Boolean(selected),
+        sql,
+      });
     },
     [activeTab, getSelectedText, onAiAction]
   );
@@ -342,7 +351,8 @@ const ConnectedWorkspace = ({
   const handleAiExplainError = useCallback(() => {
     const sql = activeTab?.executedSql ?? activeTab?.sql ?? "";
     const error = activeTab?.error ?? undefined;
-    onAiAction?.("fix", { error, sql });
+    const errorCode = activeTab?.errorCode ?? null;
+    onAiAction?.("fix", { error, errorCode, sql });
   }, [activeTab, onAiAction]);
 
   useWorkspaceHotkeys({
