@@ -1,6 +1,6 @@
 import { useHotkey } from "@tanstack/react-hotkeys";
 import { AlertCircle, Database, RefreshCw, Search } from "lucide-react";
-import { useCallback, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 
 import type { DatabaseConnection } from "@/lib/connections";
 import type { SchemaInfo } from "@/lib/tauri";
@@ -33,6 +33,7 @@ import { isTauri } from "@/lib/tauri";
 import { cn } from "@/lib/utils";
 
 import { QueryHistoryList } from "./query-history-list";
+import { KeysPanel } from "./redis/keys-panel";
 import { SchemaTree } from "./schema-tree";
 
 interface WorkspaceSidebarProps {
@@ -129,7 +130,6 @@ interface SchemaTabContentProps {
   onRetry: () => void;
   pinnedTables: string[];
   onTogglePin: (tableName: string) => void;
-  databaseType: DatabaseConnection["type"];
 }
 
 const SchemaTabContent = ({
@@ -141,7 +141,6 @@ const SchemaTabContent = ({
   onRetry,
   pinnedTables,
   onTogglePin,
-  databaseType,
 }: SchemaTabContentProps) => {
   const first = schema?.schemas[0];
   const itemCount = first ? first.tables.length + first.views.length : 0;
@@ -159,9 +158,7 @@ const SchemaTabContent = ({
             </InputGroupAddon>
             <InputGroupInput
               onChange={onFilterChange}
-              placeholder={
-                databaseType === "redis" ? "Filter keys..." : "Filter tables..."
-              }
+              placeholder="Filter tables..."
               value={filter}
             />
           </InputGroup>
@@ -173,7 +170,6 @@ const SchemaTabContent = ({
         {error && <SchemaErrorState error={error} onRetry={onRetry} />}
         {schema && (
           <SchemaTree
-            databaseType={databaseType}
             filter={filter}
             onTogglePin={onTogglePin}
             pinnedTables={pinnedTables}
@@ -183,6 +179,14 @@ const SchemaTabContent = ({
       </ScrollArea>
     </>
   );
+};
+
+const parseDbIndex = (name: string | null): number => {
+  if (!name) {
+    return 0;
+  }
+  const match = name.match(/^db(\d+)/);
+  return match ? Number.parseInt(match[1] ?? "0", 10) : 0;
 };
 
 export const WorkspaceSidebar = ({
@@ -196,7 +200,14 @@ export const WorkspaceSidebar = ({
   setSelectedDatabase,
 }: WorkspaceSidebarProps) => {
   const [filter, setFilter] = useState("");
+  const [activeTab, setActiveTab] = useState<"schema" | "history">("schema");
   const { pinnedTables, togglePin } = usePinnedTables(connection.id);
+
+  const isRedis = connection.type === "redis";
+  const dbIndex = useMemo(
+    () => (isRedis ? parseDbIndex(selectedDatabase) : 0),
+    [isRedis, selectedDatabase]
+  );
 
   const handleFilterChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -205,12 +216,25 @@ export const WorkspaceSidebar = ({
     []
   );
 
+  const handleSelectDbIndex = useCallback(
+    (idx: number) => {
+      setSelectedDatabase(`db${idx}`);
+    },
+    [setSelectedDatabase]
+  );
+
+  const handleTabChange = useCallback((value: string) => {
+    setActiveTab(value === "history" ? "history" : "schema");
+  }, []);
+
   useHotkey("F5", () => {
     refresh();
   });
 
   const showDatabaseSelector =
-    databases && databases.length > 1 && selectedDatabase;
+    !isRedis && databases && databases.length > 1 && selectedDatabase;
+
+  const primaryTabLabel = isRedis ? "Keys" : "Schema";
 
   return (
     <div
@@ -221,7 +245,7 @@ export const WorkspaceSidebar = ({
     >
       <div className="flex items-center justify-between px-3 py-2">
         <span className="truncate text-sm font-medium">{connection.name}</span>
-        {schema && (
+        {!isRedis && schema && (
           <Tooltip>
             <TooltipTrigger
               render={
@@ -245,26 +269,38 @@ export const WorkspaceSidebar = ({
 
       <Separator className="bg-sidebar-border" />
 
-      <Tabs defaultValue="schema" className="flex min-h-0 flex-1 flex-col">
+      <Tabs
+        value={activeTab}
+        onValueChange={handleTabChange}
+        className="flex min-h-0 flex-1 flex-col"
+      >
         <div className="px-2 pt-2">
           <TabsList className="w-full bg-transparent">
-            <TabsTrigger value="schema">Schema</TabsTrigger>
+            <TabsTrigger value="schema">{primaryTabLabel}</TabsTrigger>
             <TabsTrigger value="history">History</TabsTrigger>
           </TabsList>
         </div>
 
         <TabsContent value="schema" className="flex min-h-0 flex-1 flex-col">
-          <SchemaTabContent
-            databaseType={connection.type}
-            schema={schema}
-            isLoading={isLoading}
-            error={error}
-            filter={filter}
-            onFilterChange={handleFilterChange}
-            onRetry={refresh}
-            pinnedTables={pinnedTables}
-            onTogglePin={togglePin}
-          />
+          {isRedis ? (
+            <KeysPanel
+              connection={connection}
+              dbIndex={dbIndex}
+              isActiveTab={activeTab === "schema"}
+              onSelectDb={handleSelectDbIndex}
+            />
+          ) : (
+            <SchemaTabContent
+              schema={schema}
+              isLoading={isLoading}
+              error={error}
+              filter={filter}
+              onFilterChange={handleFilterChange}
+              onRetry={refresh}
+              pinnedTables={pinnedTables}
+              onTogglePin={togglePin}
+            />
+          )}
         </TabsContent>
 
         <TabsContent value="history" className="min-h-0 flex-1">

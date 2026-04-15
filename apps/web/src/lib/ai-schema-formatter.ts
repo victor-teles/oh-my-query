@@ -1,4 +1,4 @@
-import type { SchemaInfo } from "@/lib/tauri";
+import type { RedisKey, RedisKeyKind, SchemaInfo } from "@/lib/tauri";
 
 const MAX_TABLES = 50;
 
@@ -32,70 +32,144 @@ const formatColumn = (
   return `  ${col.name} (${parts.join(", ")})${suffix}`;
 };
 
-const formatRedisSchemaForPrompt = (schema: SchemaInfo): string => {
-  const lines: string[] = ["Database type: Redis", ""];
+const REDIS_KIND_ORDER: RedisKeyKind[] = [
+  "STRING",
+  "HASH",
+  "LIST",
+  "SET",
+  "ZSET",
+  "STREAM",
+  "UNKNOWN",
+];
 
-  for (const s of schema.schemas) {
-    lines.push(`Database: ${s.name}`);
-    if (s.tables.length === 0) {
-      lines.push("  (no keys found — the DB may be empty)");
-      lines.push("");
-      continue;
+const formatTtlForPrompt = (ttlSecs: number | null): string => {
+  if (ttlSecs === null) {
+    return "no expiry";
+  }
+  if (ttlSecs < 60) {
+    return `TTL ${ttlSecs}s`;
+  }
+  if (ttlSecs < 3600) {
+    return `TTL ${Math.round(ttlSecs / 60)}m`;
+  }
+  if (ttlSecs < 86_400) {
+    return `TTL ${Math.round(ttlSecs / 3600)}h`;
+  }
+  return `TTL ${Math.round(ttlSecs / 86_400)}d`;
+};
+
+const formatRedisSizeForPrompt = (key: RedisKey): string => {
+  if (key.size === null) {
+    return "";
+  }
+  if (key.sizeUnit === "") {
+    return "";
+  }
+  if (key.sizeUnit === "bytes") {
+    return `${key.size} bytes`;
+  }
+  return `${key.size} ${key.sizeUnit}`;
+};
+
+const formatRedisKeysForPrompt = (
+  redisKeys: RedisKey[] | null,
+  dbName: string
+): string => {
+  const lines: string[] = ["Database type: Redis", "", `Database: ${dbName}`];
+
+  if (!redisKeys || redisKeys.length === 0) {
+    lines.push("  (no keys sampled — the DB may be empty or gated)");
+    return lines.join("\n").trim();
+  }
+
+  const byKind = new Map<RedisKeyKind, RedisKey[]>();
+  for (const key of redisKeys) {
+    const bucket = byKind.get(key.kind);
+    if (bucket) {
+      bucket.push(key);
+    } else {
+      byKind.set(key.kind, [key]);
     }
+  }
 
-    const byType = new Map<string, typeof s.tables>();
-    for (const key of s.tables) {
-      const kind = key.columns[0]?.dataType ?? "UNKNOWN";
-      const bucket = byType.get(kind);
-      if (bucket) {
-        bucket.push(key);
-      } else {
-        byType.set(kind, [key]);
-      }
+  const sortedKinds = [...byKind.keys()].toSorted((a, b) => {
+    const ai = REDIS_KIND_ORDER.indexOf(a);
+    const bi = REDIS_KIND_ORDER.indexOf(b);
+    return ai - bi;
+  });
+
+  for (const kind of sortedKinds) {
+    const bucket = byKind.get(kind) ?? [];
+    lines.push(
+      `  ${kind} (${bucket.length} key${bucket.length === 1 ? "" : "s"}):`
+    );
+    const shown = bucket.slice(0, 20);
+    for (const key of shown) {
+      const meta = [
+        formatTtlForPrompt(key.ttlSecs),
+        formatRedisSizeForPrompt(key),
+      ]
+        .filter((s) => s.length > 0)
+        .join(" · ");
+      lines.push(meta ? `    ${key.name} — ${meta}` : `    ${key.name}`);
     }
-
-    const kindOrder = ["STRING", "HASH", "LIST", "SET", "ZSET", "STREAM"];
-    const sorted = [...byType.keys()].toSorted((a, b) => {
-      const ai = kindOrder.indexOf(a);
-      const bi = kindOrder.indexOf(b);
-      if (ai !== -1 && bi !== -1) {
-        return ai - bi;
-      }
-      if (ai !== -1) {
-        return -1;
-      }
-      if (bi !== -1) {
-        return 1;
-      }
-      return a.localeCompare(b);
-    });
-
-    for (const kind of sorted) {
-      const keys = byType.get(kind) ?? [];
-      lines.push(
-        `  ${kind} (${keys.length} key${keys.length === 1 ? "" : "s"}):`
-      );
-      const shown = keys.slice(0, 20);
-      for (const key of shown) {
-        const meta = key.columns[0]?.defaultValue;
-        lines.push(meta ? `    ${key.name} — ${meta}` : `    ${key.name}`);
-      }
-      if (keys.length > shown.length) {
-        lines.push(`    … and ${keys.length - shown.length} more`);
-      }
+    if (bucket.length > shown.length) {
+      lines.push(`    … and ${bucket.length - shown.length} more`);
     }
-    lines.push("");
   }
 
   return lines.join("\n").trim();
 };
 
+type TableShape = SchemaInfo["schemas"][number]["tables"][number];
+
+const buildFkMap = (fks: TableShape["foreignKeys"]): Map<string, string> => {
+  const map = new Map<string, string>();
+  for (const fk of fks) {
+    for (let i = 0; i < fk.columns.length; i += 1) {
+      const col = fk.columns[i];
+      const ref = fk.referencedColumns[i];
+      if (col && ref) {
+        map.set(col, `${fk.referencedTable}.${ref}`);
+      }
+    }
+  }
+  return map;
+};
+
+const renderTableBlock = (
+  lines: string[],
+  schemaName: string,
+  table: TableShape
+) => {
+  const fkMap = buildFkMap(table.foreignKeys);
+  const prefix = schemaName !== "public" ? `${schemaName}.` : "";
+  lines.push(`Table: ${prefix}${table.name}`);
+  for (const col of table.columns) {
+    lines.push(formatColumn(col, fkMap.get(col.name)));
+  }
+
+  const nonPkIndexes = table.indexes.filter(
+    (idx) =>
+      !idx.columns.every((c) =>
+        table.columns.some((col) => col.name === c && col.isPrimaryKey)
+      )
+  );
+  for (const idx of nonPkIndexes) {
+    const unique = idx.isUnique ? ", unique" : "";
+    lines.push(`  Index: ${idx.name} (${idx.columns.join(", ")}${unique})`);
+  }
+  lines.push("");
+};
+
 export const formatSchemaForPrompt = (
   schema: SchemaInfo,
-  dbType: string
+  dbType: string,
+  redisKeys?: RedisKey[] | null
 ): string => {
   if (dbType === "redis") {
-    return formatRedisSchemaForPrompt(schema);
+    const dbName = schema.schemas[0]?.name ?? "db0";
+    return formatRedisKeysForPrompt(redisKeys ?? null, dbName);
   }
 
   const label = DB_TYPE_LABELS[dbType] ?? dbType;
@@ -112,44 +186,13 @@ export const formatSchemaForPrompt = (
         break;
       }
       tableCount += 1;
-
-      const fkMap = new Map<string, string>();
-      for (const fk of table.foreignKeys) {
-        for (let i = 0; i < fk.columns.length; i += 1) {
-          const col = fk.columns[i];
-          const ref = fk.referencedColumns[i];
-          if (col && ref) {
-            fkMap.set(col, `${fk.referencedTable}.${ref}`);
-          }
-        }
-      }
-
-      lines.push(
-        `Table: ${s.name !== "public" ? `${s.name}.` : ""}${table.name}`
-      );
-      for (const col of table.columns) {
-        lines.push(formatColumn(col, fkMap.get(col.name)));
-      }
-
-      const nonPkIndexes = table.indexes.filter(
-        (idx) =>
-          !idx.columns.every((c) =>
-            table.columns.some((col) => col.name === c && col.isPrimaryKey)
-          )
-      );
-      for (const idx of nonPkIndexes) {
-        const unique = idx.isUnique ? ", unique" : "";
-        lines.push(`  Index: ${idx.name} (${idx.columns.join(", ")}${unique})`);
-      }
-
-      lines.push("");
+      renderTableBlock(lines, s.name, table);
     }
 
     for (const view of s.views) {
       const colNames = view.columns.map((c) => c.name).join(", ");
-      lines.push(
-        `View: ${s.name !== "public" ? `${s.name}.` : ""}${view.name} (${colNames})`
-      );
+      const prefix = s.name !== "public" ? `${s.name}.` : "";
+      lines.push(`View: ${prefix}${view.name} (${colNames})`);
     }
 
     if (s.views.length > 0) {
@@ -241,10 +284,11 @@ Collapsible: { title: string, defaultOpen?: boolean }
 
 export const buildSystemPrompt = (
   schema: SchemaInfo,
-  dbType: string
+  dbType: string,
+  redisKeys?: RedisKey[] | null
 ): string => {
   const label = DB_TYPE_LABELS[dbType] ?? dbType;
-  const formattedSchema = formatSchemaForPrompt(schema, dbType);
+  const formattedSchema = formatSchemaForPrompt(schema, dbType, redisKeys);
 
   if (dbType === "redis") {
     return `You are a Redis assistant. You help users inspect Redis keyspaces, write Redis commands, diagnose errors, and create visual UIs to display data.

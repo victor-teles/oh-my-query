@@ -230,6 +230,7 @@ const ConnectedWorkspace = ({
     activeTabId,
     addTab,
     addTabWithSql,
+    addTabWithSqlAndRun,
     closeTab,
     reopenTab,
     setActiveTabId,
@@ -239,8 +240,12 @@ const ConnectedWorkspace = ({
   } = useQueryTabsContext();
 
   const { setSelectedSql: setActiveSelectedSql } = useActiveQuery();
-  const { getSelectedText, registerQueryTable, registerOpenQuery } =
-    useEditorInsert();
+  const {
+    getSelectedText,
+    registerQueryTable,
+    registerOpenQuery,
+    registerOpenQueryAndRun,
+  } = useEditorInsert();
 
   useActiveQuerySync(activeTab);
 
@@ -270,6 +275,11 @@ const ConnectedWorkspace = ({
     registerOpenQuery(addTabWithSql);
     return () => registerOpenQuery(null);
   }, [registerOpenQuery, addTabWithSql]);
+
+  useEffect(() => {
+    registerOpenQueryAndRun(addTabWithSqlAndRun);
+    return () => registerOpenQueryAndRun(null);
+  }, [registerOpenQueryAndRun, addTabWithSqlAndRun]);
 
   const handleExecute = useCallback(() => {
     if (activeTab) {

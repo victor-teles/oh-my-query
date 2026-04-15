@@ -5,7 +5,7 @@ import {
   redisInspectCommand,
   redisTtlCommand,
   redisTypeCommand,
-} from "@/lib/sql-templates";
+} from "@/lib/redis-templates";
 
 describe("redis templates", () => {
   it("picks GET for string keys", () => {

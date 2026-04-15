@@ -451,3 +451,145 @@ export const getSchema = async (
   const { invoke } = await import("@tauri-apps/api/core");
   return invoke<SchemaInfo>("get_schema", { connectionId, databaseName });
 };
+
+export type RedisKeyKind =
+  | "STRING"
+  | "HASH"
+  | "LIST"
+  | "SET"
+  | "ZSET"
+  | "STREAM"
+  | "UNKNOWN";
+
+export type RedisSizeUnit =
+  | "bytes"
+  | "fields"
+  | "items"
+  | "members"
+  | "entries"
+  | "";
+
+export interface RedisKey {
+  name: string;
+  kind: RedisKeyKind;
+  ttlSecs: number | null;
+  size: number | null;
+  sizeUnit: RedisSizeUnit;
+}
+
+export interface RedisScanPage {
+  keys: RedisKey[];
+  nextCursor: string;
+  sampled: number;
+}
+
+export interface RedisDbInfo {
+  totalKeys: number;
+  memoryBytes: number | null;
+}
+
+const MOCK_REDIS_KEYS: RedisKey[] = [
+  {
+    kind: "STRING",
+    name: "hello",
+    size: 11,
+    sizeUnit: "bytes",
+    ttlSecs: null,
+  },
+  {
+    kind: "HASH",
+    name: "user:1",
+    size: 5,
+    sizeUnit: "fields",
+    ttlSecs: 300,
+  },
+  {
+    kind: "HASH",
+    name: "user:2",
+    size: 4,
+    sizeUnit: "fields",
+    ttlSecs: null,
+  },
+  {
+    kind: "ZSET",
+    name: "leaderboard",
+    size: 100,
+    sizeUnit: "members",
+    ttlSecs: null,
+  },
+  {
+    kind: "LIST",
+    name: "queue:emails",
+    size: 23,
+    sizeUnit: "items",
+    ttlSecs: null,
+  },
+  {
+    kind: "SET",
+    name: "session:abc",
+    size: 8,
+    sizeUnit: "members",
+    ttlSecs: 45,
+  },
+  {
+    kind: "STREAM",
+    name: "events:audit",
+    size: 1234,
+    sizeUnit: "entries",
+    ttlSecs: null,
+  },
+];
+
+export const redisDbInfo = async (
+  connectionId: string,
+  dbIndex: number
+): Promise<RedisDbInfo> => {
+  if (!isTauri()) {
+    return { memoryBytes: 1_234_567, totalKeys: MOCK_REDIS_KEYS.length };
+  }
+
+  const { invoke } = await import("@tauri-apps/api/core");
+  return invoke<RedisDbInfo>("redis_db_info", { connectionId, dbIndex });
+};
+
+export const scanRedisKeys = async (params: {
+  connectionId: string;
+  dbIndex: number;
+  pattern?: string | null;
+  cursor?: string | null;
+  count?: number | null;
+}): Promise<RedisScanPage> => {
+  if (!isTauri()) {
+    return {
+      keys: MOCK_REDIS_KEYS,
+      nextCursor: "0",
+      sampled: MOCK_REDIS_KEYS.length,
+    };
+  }
+
+  const { invoke } = await import("@tauri-apps/api/core");
+  return invoke<RedisScanPage>("scan_redis_keys", {
+    connectionId: params.connectionId,
+    count: params.count ?? null,
+    cursor: params.cursor ?? null,
+    dbIndex: params.dbIndex,
+    pattern: params.pattern ?? null,
+  });
+};
+
+export const deleteRedisKey = async (params: {
+  connectionId: string;
+  dbIndex: number;
+  name: string;
+}): Promise<number> => {
+  if (!isTauri()) {
+    return 1;
+  }
+
+  const { invoke } = await import("@tauri-apps/api/core");
+  return invoke<number>("delete_redis_key", {
+    connectionId: params.connectionId,
+    dbIndex: params.dbIndex,
+    name: params.name,
+  });
+};

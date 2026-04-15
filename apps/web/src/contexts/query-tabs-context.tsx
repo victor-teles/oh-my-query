@@ -10,6 +10,7 @@ interface QueryTabsContextValue {
   activeTabId: string;
   addTab: () => void;
   addTabWithSql: (sql: string) => void;
+  addTabWithSqlAndRun: (sql: string) => void;
   closeTab: (tabId: string) => void;
   reopenTab: () => void;
   setActiveTabId: (id: string) => void;

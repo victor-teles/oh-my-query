@@ -6,11 +6,16 @@ use crate::cancellation::CancellationRegistry;
 use crate::db::driver::get_driver;
 use crate::db::error::DbError;
 use crate::db::execute::execute_for_pool;
-use crate::db::pool::ConnectionPoolManager;
+use crate::db::pool::{ConnectionPoolManager, DatabasePool};
+use crate::db::redis_keys::{
+    delete_redis_key as do_delete_redis_key, redis_db_info as do_redis_db_info,
+    scan_redis_keys as do_scan_redis_keys,
+};
 use crate::db::schema::{fetch_schema, list_databases};
 use crate::db::transpile::{format_sql as do_format_sql, pool_dialect, transpile_sql};
 use crate::db::types::{
-    ConnectionParams, ExecuteResult, QueryParams, SchemaInfo, TestConnectionResult,
+    ConnectionParams, ExecuteResult, QueryParams, RedisDbInfo, RedisScanPage, SchemaInfo,
+    TestConnectionResult,
 };
 use crate::db::version::fetch_version;
 
@@ -144,4 +149,52 @@ pub async fn cancel_query(
 #[tauri::command]
 pub async fn format_sql(sql: String, dialect: String) -> Result<String, DbError> {
     do_format_sql(&sql, &dialect)
+}
+
+fn require_redis(pool: &DatabasePool) -> Result<&redis::aio::MultiplexedConnection, DbError> {
+    match pool {
+        DatabasePool::Redis(conn) => Ok(conn),
+        _ => Err(DbError {
+            code: "WRONG_DRIVER".to_string(),
+            message: "This command is only available for Redis connections".to_string(),
+        }),
+    }
+}
+
+#[tauri::command]
+pub async fn redis_db_info(
+    connection_id: String,
+    db_index: u8,
+    state: State<'_, ConnectionPoolManager>,
+) -> Result<RedisDbInfo, DbError> {
+    let pool = state.get_pool(&connection_id).await?;
+    let conn = require_redis(&pool)?;
+    do_redis_db_info(conn, db_index).await
+}
+
+#[tauri::command]
+pub async fn scan_redis_keys(
+    connection_id: String,
+    db_index: u8,
+    pattern: Option<String>,
+    cursor: Option<String>,
+    count: Option<u32>,
+    state: State<'_, ConnectionPoolManager>,
+) -> Result<RedisScanPage, DbError> {
+    let pool = state.get_pool(&connection_id).await?;
+    let conn = require_redis(&pool)?;
+    let cursor_ref = cursor.as_deref().unwrap_or("0");
+    do_scan_redis_keys(conn, db_index, pattern.as_deref(), cursor_ref, count).await
+}
+
+#[tauri::command]
+pub async fn delete_redis_key(
+    connection_id: String,
+    db_index: u8,
+    name: String,
+    state: State<'_, ConnectionPoolManager>,
+) -> Result<u64, DbError> {
+    let pool = state.get_pool(&connection_id).await?;
+    let conn = require_redis(&pool)?;
+    do_delete_redis_key(conn, db_index, &name).await
 }

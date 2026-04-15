@@ -9,7 +9,6 @@ import {
 } from "lucide-react";
 import { useCallback } from "react";
 
-import type { DatabaseType } from "@/lib/connections";
 import type { TableItem, ViewItem } from "@/lib/tauri";
 
 import {
@@ -23,7 +22,6 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { useEditorInsert } from "@/contexts/editor-insert-context";
-import { redisInspectCommand } from "@/lib/sql-templates";
 
 import { ColumnNode } from "./column-node";
 import { TableContextMenu } from "./table-context-menu";
@@ -33,7 +31,6 @@ interface TableNodeProps {
   isView?: boolean;
   isPinned?: boolean;
   onTogglePin?: (tableName: string) => void;
-  databaseType?: DatabaseType;
 }
 
 const isTableItem = (item: TableItem | ViewItem): item is TableItem =>
@@ -44,20 +41,14 @@ export const TableNode = ({
   isView = false,
   isPinned = false,
   onTogglePin,
-  databaseType,
 }: TableNodeProps) => {
-  const { queryTable, openQuery } = useEditorInsert();
+  const { queryTable } = useEditorInsert();
   const hasIndexes = isTableItem(table) && table.indexes.length > 0;
   const hasForeignKeys = isTableItem(table) && table.foreignKeys.length > 0;
 
   const handleQueryTable = useCallback(() => {
-    if (databaseType === "redis") {
-      const kind = table.columns[0]?.dataType ?? "STRING";
-      openQuery(redisInspectCommand(table.name, kind));
-      return;
-    }
     queryTable(table.name);
-  }, [databaseType, openQuery, queryTable, table.columns, table.name]);
+  }, [queryTable, table.name]);
 
   const handleTogglePin = useCallback(
     (name: string) => {
@@ -68,7 +59,6 @@ export const TableNode = ({
 
   return (
     <TableContextMenu
-      databaseType={databaseType}
       table={table}
       isView={isView}
       isPinned={isPinned}
