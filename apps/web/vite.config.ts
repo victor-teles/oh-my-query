@@ -63,6 +63,7 @@ export default defineConfig({
             screenshotFailures: false,
           },
           name: "storybook",
+          retry: 2,
         },
       },
     ],

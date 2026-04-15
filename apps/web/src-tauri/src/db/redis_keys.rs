@@ -93,7 +93,7 @@ pub async fn scan_redis_keys(
     let mut c = conn.clone();
     select_db(&mut c, db_index).await?;
 
-    let count = count.unwrap_or(DEFAULT_COUNT).min(MAX_COUNT).max(10);
+    let count = count.unwrap_or(DEFAULT_COUNT).clamp(10, MAX_COUNT);
     let mut names: Vec<String> = Vec::new();
     let mut current_cursor = cursor.to_string();
 

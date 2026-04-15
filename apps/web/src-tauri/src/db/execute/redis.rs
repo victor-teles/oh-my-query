@@ -73,7 +73,8 @@ fn friendly_redis_error(err: &redis::RedisError, cmd_name: &str) -> DbError {
     } else if upper.contains("READONLY") {
         (
             "REDIS_READONLY",
-            " — server is in read-only mode (replica). Connect to the primary to write.".to_string(),
+            " — server is in read-only mode (replica). Connect to the primary to write."
+                .to_string(),
         )
     } else if upper.contains("LOADING") {
         (
@@ -164,9 +165,7 @@ impl RedisResultShape {
             "LRANGE" | "LPOP" | "RPOP" | "LPUSH" | "RPUSH" => Self::IndexedValue,
             "ZRANGE" | "ZREVRANGE" | "ZRANGEBYSCORE" | "ZREVRANGEBYSCORE" | "ZPOPMIN"
             | "ZPOPMAX" => {
-                if args
-                    .iter()
-                    .any(|a| a.eq_ignore_ascii_case("WITHSCORES"))
+                if args.iter().any(|a| a.eq_ignore_ascii_case("WITHSCORES"))
                     || matches!(cmd, "ZPOPMIN" | "ZPOPMAX")
                 {
                     Self::MemberScore
@@ -178,10 +177,7 @@ impl RedisResultShape {
             "INFO" => Self::InfoLines,
             "SCAN" => Self::Scan,
             "CLIENT" => {
-                if args
-                    .iter()
-                    .any(|a| a.eq_ignore_ascii_case("LIST"))
-                {
+                if args.iter().any(|a| a.eq_ignore_ascii_case("LIST")) {
                     Self::ClientList
                 } else {
                     Self::Auto
@@ -248,8 +244,10 @@ fn render_auto(value: &redis::Value, cmd_name: &str) -> ExecuteResult {
                     is_truncated: false,
                 };
             }
-            let rows: Vec<Vec<serde_json::Value>> =
-                items.iter().map(|item| vec![redis_value_to_json(item)]).collect();
+            let rows: Vec<Vec<serde_json::Value>> = items
+                .iter()
+                .map(|item| vec![redis_value_to_json(item)])
+                .collect();
             let row_count = rows.len() as u64;
             ExecuteResult::Tabular {
                 columns: vec![ColumnInfo {
@@ -262,10 +260,7 @@ fn render_auto(value: &redis::Value, cmd_name: &str) -> ExecuteResult {
                 is_truncated: false,
             }
         }
-        _ => single_value_result(
-            serde_json::Value::String(format!("{value:?}")),
-            "UNKNOWN",
-        ),
+        _ => single_value_result(serde_json::Value::String(format!("{value:?}")), "UNKNOWN"),
     }
 }
 
@@ -579,7 +574,8 @@ fn render_client_list(value: &redis::Value) -> ExecuteResult {
         if trimmed.is_empty() {
             continue;
         }
-        let mut row_map: std::collections::BTreeMap<String, String> = std::collections::BTreeMap::new();
+        let mut row_map: std::collections::BTreeMap<String, String> =
+            std::collections::BTreeMap::new();
         for kv in trimmed.split_whitespace() {
             if let Some(idx) = kv.find('=') {
                 let k = kv[..idx].to_string();
@@ -652,9 +648,9 @@ fn redis_value_to_json(value: &redis::Value) -> serde_json::Value {
         }
         redis::Value::SimpleString(s) => serde_json::Value::String(s.clone()),
         redis::Value::Okay => serde_json::Value::String("OK".to_string()),
-        redis::Value::Array(items) => serde_json::Value::Array(
-            items.iter().map(redis_value_to_json).collect(),
-        ),
+        redis::Value::Array(items) => {
+            serde_json::Value::Array(items.iter().map(redis_value_to_json).collect())
+        }
         _ => serde_json::Value::String(format!("{value:?}")),
     }
 }
@@ -697,7 +693,12 @@ mod tests {
         ]);
         let result = render_redis_value(&value, "HGETALL", &["HGETALL", "user:1"]);
         match result {
-            ExecuteResult::Tabular { columns, rows, row_count, .. } => {
+            ExecuteResult::Tabular {
+                columns,
+                rows,
+                row_count,
+                ..
+            } => {
                 assert_eq!(columns.len(), 2);
                 assert_eq!(columns[0].name, "field");
                 assert_eq!(columns[1].name, "value");
@@ -717,7 +718,8 @@ mod tests {
             redis::Value::BulkString(b"bob".to_vec()),
             redis::Value::BulkString(b"20.5".to_vec()),
         ]);
-        let result = render_redis_value(&value, "ZRANGE", &["ZRANGE", "lb", "0", "-1", "WITHSCORES"]);
+        let result =
+            render_redis_value(&value, "ZRANGE", &["ZRANGE", "lb", "0", "-1", "WITHSCORES"]);
         match result {
             ExecuteResult::Tabular { columns, rows, .. } => {
                 assert_eq!(columns.len(), 2);
