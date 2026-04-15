@@ -55,6 +55,13 @@ const formatCell = (value: unknown): string => {
   if (typeof value === "boolean") {
     return value ? "true" : "false";
   }
+  if (typeof value === "object") {
+    try {
+      return JSON.stringify(value);
+    } catch {
+      return String(value);
+    }
+  }
   return String(value);
 };
 

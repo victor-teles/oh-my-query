@@ -8,8 +8,18 @@ use crate::db::types::{ConnectionParams, TestConnectionResult};
 
 pub struct RedisDriver;
 
+pub fn parse_redis_db_index(raw: &str) -> u8 {
+    let trimmed = raw.trim();
+    if trimmed.is_empty() {
+        return 0;
+    }
+    let rest = trimmed.strip_prefix("db").unwrap_or(trimmed);
+    let digits: String = rest.chars().take_while(|c| c.is_ascii_digit()).collect();
+    digits.parse::<u8>().unwrap_or(0).min(15)
+}
+
 pub fn build_redis_url(params: &ConnectionParams) -> String {
-    let db_index = params.database.parse::<u8>().unwrap_or(0);
+    let db_index = parse_redis_db_index(&params.database);
     if params.password.is_empty() {
         format!("redis://{}:{}/{}", params.host, params.port, db_index)
     } else {
@@ -20,6 +30,36 @@ pub fn build_redis_url(params: &ConnectionParams) -> String {
             params.port,
             db_index,
         )
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn parse_plain_digits() {
+        assert_eq!(parse_redis_db_index("3"), 3);
+    }
+
+    #[test]
+    fn parse_db_prefixed() {
+        assert_eq!(parse_redis_db_index("db5"), 5);
+    }
+
+    #[test]
+    fn parse_suffixed_label() {
+        assert_eq!(parse_redis_db_index("db10 (42 keys)"), 10);
+    }
+
+    #[test]
+    fn parse_empty_defaults_to_zero() {
+        assert_eq!(parse_redis_db_index(""), 0);
+    }
+
+    #[test]
+    fn parse_clamps_to_15() {
+        assert_eq!(parse_redis_db_index("99"), 15);
     }
 }
 

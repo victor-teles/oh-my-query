@@ -11,9 +11,11 @@ interface EditorInsertContextValue {
   insertAtCursor: (text: string) => void;
   jumpTo: (location: ErrorLocation) => void;
   openQuery: (sql: string) => void;
+  openQueryAndRun: (sql: string) => void;
   queryTable: (tableName: string) => void;
   registerEditor: (view: EditorView | null) => void;
   registerOpenQuery: (handler: ((sql: string) => void) | null) => void;
+  registerOpenQueryAndRun: (handler: ((sql: string) => void) | null) => void;
   registerQueryTable: (handler: ((tableName: string) => void) | null) => void;
   replaceSelection: (text: string) => void;
 }
@@ -26,6 +28,7 @@ export const EditorInsertProvider = ({ children }: { children: ReactNode }) => {
   const editorRef = useRef<EditorView | null>(null);
   const queryTableRef = useRef<((tableName: string) => void) | null>(null);
   const openQueryRef = useRef<((sql: string) => void) | null>(null);
+  const openQueryAndRunRef = useRef<((sql: string) => void) | null>(null);
 
   const registerEditor = useCallback((view: EditorView | null) => {
     editorRef.current = view;
@@ -41,6 +44,13 @@ export const EditorInsertProvider = ({ children }: { children: ReactNode }) => {
   const registerOpenQuery = useCallback(
     (handler: ((sql: string) => void) | null) => {
       openQueryRef.current = handler;
+    },
+    []
+  );
+
+  const registerOpenQueryAndRun = useCallback(
+    (handler: ((sql: string) => void) | null) => {
+      openQueryAndRunRef.current = handler;
     },
     []
   );
@@ -129,6 +139,11 @@ export const EditorInsertProvider = ({ children }: { children: ReactNode }) => {
     openQueryRef.current?.(sql);
   }, []);
 
+  const openQueryAndRun = useCallback((sql: string) => {
+    const handler = openQueryAndRunRef.current ?? openQueryRef.current;
+    handler?.(sql);
+  }, []);
+
   return (
     <EditorInsertContext
       value={{
@@ -137,9 +152,11 @@ export const EditorInsertProvider = ({ children }: { children: ReactNode }) => {
         insertAtCursor,
         jumpTo,
         openQuery,
+        openQueryAndRun,
         queryTable,
         registerEditor,
         registerOpenQuery,
+        registerOpenQueryAndRun,
         registerQueryTable,
         replaceSelection,
       }}

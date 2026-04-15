@@ -5,7 +5,14 @@ import type { DatabaseType } from "@/lib/connections";
 
 const PLACEHOLDERS: Partial<Record<DatabaseType, string>> = {
   mongodb: 'db.collection.find({"field": "value"})',
-  redis: "GET mykey",
+  redis: [
+    "# Try any Redis command — ⌘+Enter to run",
+    "GET mykey",
+    "HGETALL user:1",
+    "ZRANGE leaderboard 0 9 WITHSCORES",
+    "SCAN 0 MATCH user:* COUNT 100",
+    "INFO keyspace",
+  ].join("\n"),
 };
 
 interface CommandEditorProps {

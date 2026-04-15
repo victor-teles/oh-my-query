@@ -16,7 +16,7 @@ pub async fn list_databases(pool: &DatabasePool) -> Result<Vec<String>, DbError>
             let names = client.list_database_names().await.map_err(DbError::from)?;
             Ok(names)
         }
-        DatabasePool::Redis(_) => Ok(vec!["db0".to_string()]),
+        DatabasePool::Redis(_) => Ok((0u8..16).map(|i| format!("db{i}")).collect()),
         DatabasePool::ClickHouse(conn) => list_databases_clickhouse(conn).await,
     }
 }
@@ -29,7 +29,7 @@ pub async fn fetch_schema(pool: &DatabasePool, database_name: &str) -> Result<Sc
         DatabasePool::MongoDB(client) => fetch_schema_mongodb(client, database_name).await,
         DatabasePool::Redis(_) => Ok(SchemaInfo {
             schemas: vec![SchemaItem {
-                name: "db0".to_string(),
+                name: database_name.to_string(),
                 tables: vec![],
                 views: vec![],
             }],

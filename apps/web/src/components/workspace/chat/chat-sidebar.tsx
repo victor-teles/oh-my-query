@@ -3,7 +3,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 
 import type { AIAction } from "@/lib/ai-actions";
 import type { DatabaseConnection } from "@/lib/connections";
-import type { SchemaInfo } from "@/lib/tauri";
+import type { RedisKey, SchemaInfo } from "@/lib/tauri";
 
 import { Suggestion, Suggestions } from "@/components/ai-elements/suggestion";
 import { Button } from "@/components/ui/button";
@@ -13,6 +13,7 @@ import { useEditorInsert } from "@/contexts/editor-insert-context";
 import { useAiChat } from "@/hooks/use-ai-chat";
 import { composeActionMessage } from "@/lib/ai-actions";
 import { hasAISettings } from "@/lib/ai-settings";
+import { scanRedisKeys } from "@/lib/tauri";
 
 import { ChatError } from "./chat-error";
 import { ChatInput } from "./chat-input";
@@ -81,6 +82,38 @@ export const ChatSidebar = ({
   onPendingActionConsumed,
 }: ChatSidebarProps) => {
   const activeQuery = useOptionalActiveQuery();
+  const [redisKeys, setRedisKeys] = useState<RedisKey[] | null>(null);
+
+  useEffect(() => {
+    if (connection.type !== "redis") {
+      setRedisKeys(null);
+      return;
+    }
+    let cancelled = false;
+    const load = async () => {
+      try {
+        const page = await scanRedisKeys({
+          connectionId: connection.id,
+          count: 100,
+          cursor: "0",
+          dbIndex: 0,
+          pattern: null,
+        });
+        if (!cancelled) {
+          setRedisKeys(page.keys);
+        }
+      } catch {
+        if (!cancelled) {
+          setRedisKeys([]);
+        }
+      }
+    };
+    load();
+    return () => {
+      cancelled = true;
+    };
+  }, [connection.id, connection.type]);
+
   const {
     messages,
     isStreaming,
@@ -93,6 +126,7 @@ export const ChatSidebar = ({
   } = useAiChat({
     databaseType: connection.type,
     getSnapshot: activeQuery?.getSnapshot,
+    redisKeys,
     schema,
   });
 

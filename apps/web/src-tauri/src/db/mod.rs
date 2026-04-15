@@ -7,6 +7,7 @@ pub mod mysql;
 pub mod pool;
 pub mod postgres;
 pub mod redis_driver;
+pub mod redis_keys;
 pub mod schema;
 pub mod sqlite;
 pub mod transpile;

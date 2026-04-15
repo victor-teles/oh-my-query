@@ -91,9 +91,16 @@ const getDatabaseLabel = (type: DatabaseType): string => {
     return "File path";
   }
   if (type === "redis") {
-    return "Database index (0-15)";
+    return "Database index";
   }
   return "Database";
+};
+
+const getDatabaseHint = (type: DatabaseType): string | null => {
+  if (type === "redis") {
+    return "Redis DBs are numbered 0–15. You can switch DBs inside the workspace after connecting.";
+  }
+  return null;
 };
 
 const getUsernamePlaceholder = (type: DatabaseType): string => {
@@ -368,6 +375,11 @@ export const ConnectionForm = ({
             max={form.type === "redis" ? 15 : undefined}
             required={form.type !== "redis"}
           />
+          {getDatabaseHint(form.type) && (
+            <p className="text-xs text-muted-foreground">
+              {getDatabaseHint(form.type)}
+            </p>
+          )}
         </div>
       )}
 

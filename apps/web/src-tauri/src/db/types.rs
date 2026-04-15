@@ -126,6 +126,43 @@ pub enum ExecuteResult {
     },
 }
 
+#[derive(Debug, Clone, Serialize)]
+#[serde(rename_all = "SCREAMING_SNAKE_CASE")]
+pub enum RedisKeyKind {
+    String,
+    Hash,
+    List,
+    Set,
+    Zset,
+    Stream,
+    Unknown,
+}
+
+#[derive(Debug, Clone, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct RedisKey {
+    pub name: String,
+    pub kind: RedisKeyKind,
+    pub ttl_secs: Option<i64>,
+    pub size: Option<u64>,
+    pub size_unit: &'static str,
+}
+
+#[derive(Debug, Clone, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct RedisScanPage {
+    pub keys: Vec<RedisKey>,
+    pub next_cursor: String,
+    pub sampled: u64,
+}
+
+#[derive(Debug, Clone, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct RedisDbInfo {
+    pub total_keys: u64,
+    pub memory_bytes: Option<u64>,
+}
+
 impl From<QueryResult> for ExecuteResult {
     fn from(r: QueryResult) -> Self {
         ExecuteResult::Tabular {

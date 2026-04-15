@@ -249,6 +249,31 @@ export const useQueryTabs = (
     setActiveTabId(tab.id);
   }, []);
 
+  const addTabWithSqlAndRun = useCallback(
+    (sql: string) => {
+      const activeId = activeTabIdRef.current;
+      const active = tabsRef.current.find((t) => t.id === activeId);
+
+      if (active && active.sql.trim().length === 0) {
+        const replaced: QueryTab = { ...active, sql };
+        setTabs((prev) => prev.map((t) => (t.id === active.id ? replaced : t)));
+        tabsRef.current = tabsRef.current.map((t) =>
+          t.id === active.id ? replaced : t
+        );
+        execute(active.id, sql, active.sourceDialect);
+        return;
+      }
+
+      counterRef.current += 1;
+      const tab: QueryTab = { ...createNewQueryTab(counterRef.current), sql };
+      setTabs((prev) => [...prev, tab]);
+      tabsRef.current = [...tabsRef.current, tab];
+      setActiveTabId(tab.id);
+      execute(tab.id, sql, tab.sourceDialect);
+    },
+    [execute]
+  );
+
   const closeTab = useCallback(
     (tabId: string) => {
       setTabs((prev) => {
@@ -360,6 +385,7 @@ export const useQueryTabs = (
     activeTabId,
     addTab,
     addTabWithSql,
+    addTabWithSqlAndRun,
     cancelTab,
     closeRequested,
     closeTab,

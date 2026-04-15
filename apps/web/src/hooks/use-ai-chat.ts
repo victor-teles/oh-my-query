@@ -3,7 +3,7 @@ import { useCallback, useRef, useState } from "react";
 
 import type { ActiveQuerySnapshot } from "@/contexts/active-query-context";
 import type { AIError } from "@/lib/ai-errors";
-import type { SchemaInfo } from "@/lib/tauri";
+import type { RedisKey, SchemaInfo } from "@/lib/tauri";
 
 import { formatActiveQueryContext } from "@/lib/ai-context";
 import { classifyAIError } from "@/lib/ai-errors";
@@ -27,6 +27,7 @@ interface UseAiChatOptions {
   schema: SchemaInfo | null;
   databaseType: string;
   getSnapshot?: () => ActiveQuerySnapshot;
+  redisKeys?: RedisKey[] | null;
 }
 
 const NOT_CONFIGURED_ERROR: AIError = {
@@ -40,6 +41,7 @@ export const useAiChat = ({
   schema,
   databaseType,
   getSnapshot,
+  redisKeys,
 }: UseAiChatOptions) => {
   const [state, setState] = useState<AiChatState>({
     error: null,
@@ -84,7 +86,7 @@ export const useAiChat = ({
       try {
         const model = createAIModel(settings);
         const baseSystem = schema
-          ? buildSystemPrompt(schema, databaseType)
+          ? buildSystemPrompt(schema, databaseType, redisKeys ?? null)
           : `You are a SQL assistant for a ${databaseType} database. Help users write queries, explain SQL, diagnose errors, and suggest optimizations. Wrap SQL in \`\`\`sql code blocks.`;
 
         const contextBlock = getSnapshot
@@ -151,7 +153,7 @@ export const useAiChat = ({
         abortRef.current = null;
       }
     },
-    [schema, databaseType, state.messages, getSnapshot]
+    [schema, databaseType, state.messages, getSnapshot, redisKeys]
   );
 
   const retry = useCallback(() => {
