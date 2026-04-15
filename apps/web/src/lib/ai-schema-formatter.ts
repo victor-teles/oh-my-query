@@ -1,5 +1,7 @@
 import type { RedisKey, RedisKeyKind, SchemaInfo } from "@/lib/tauri";
 
+import { promptComponents } from "@/lib/json-render";
+
 const MAX_TABLES = 50;
 
 const DB_TYPE_LABELS: Record<string, string> = {
@@ -208,7 +210,12 @@ export const formatSchemaForPrompt = (
   return lines.join("\n").trim();
 };
 
-const UI_GENERATION_PROMPT = `
+const formatComponentDocs = (): string =>
+  promptComponents
+    .map((c) => `${c.name}: ${c.signature}\n  ${c.summary}`)
+    .join("\n\n");
+
+export const buildUiGenerationPrompt = (): string => `
 You can also generate dynamic UIs when the user asks for visualizations, dashboards, summaries, or any visual representation of data. Use the json-render spec format wrapped in \`\`\`jsonrender code blocks.
 
 When to generate UI vs SQL:
@@ -234,53 +241,13 @@ Rules:
 - Every element key in "children" MUST exist in "elements"
 - "root" MUST reference an existing element key
 - Use descriptive element keys (e.g., "main-card", "stats-heading")
+- Only use the components listed below — anything else will fail to render
 
 Available Components:
 
-Card: { title?: string, description?: string }
-  Container with optional title/description. Use as top-level wrapper.
+${formatComponentDocs()}`;
 
-Stack: { direction?: "horizontal" | "vertical", gap?: number, align?: "start" | "center" | "end", justify?: "start" | "center" | "end" | "between" }
-  Flex layout container.
-
-Grid: { columns?: number, gap?: number }
-  Grid layout container.
-
-Heading: { text: string, level?: 1 | 2 | 3 | 4 | 5 | 6 }
-  Text heading.
-
-Text: { text: string, variant?: "default" | "muted" | "destructive" }
-  Paragraph text.
-
-Badge: { text: string, variant?: "default" | "secondary" | "destructive" | "outline" }
-  Small label/tag.
-
-Avatar: { src?: string, name: string, size?: "sm" | "md" | "lg" }
-  User avatar with initials fallback.
-
-Image: { src?: string, alt: string, width?: number, height?: number }
-  Image display.
-
-Table: { columns: string[], rows: string[][], caption?: string }
-  Data table.
-
-Alert: { title: string, message?: string, type?: "default" | "destructive" }
-  Alert/notice box.
-
-Progress: { value: number, max?: number, label?: string }
-  Progress bar.
-
-Separator: { orientation?: "horizontal" | "vertical" }
-  Visual divider.
-
-Tabs: { tabs: { label: string, value: string }[], defaultValue?: string }
-  Tabbed container. Children are rendered in tab panels.
-
-Accordion: { items: { title: string, content: string }[] }
-  Collapsible sections.
-
-Collapsible: { title: string, defaultOpen?: boolean }
-  Single collapsible section with children.`;
+const UI_GENERATION_PROMPT = buildUiGenerationPrompt();
 
 export const buildSystemPrompt = (
   schema: SchemaInfo,
