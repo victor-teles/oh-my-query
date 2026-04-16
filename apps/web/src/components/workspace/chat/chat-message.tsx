@@ -22,9 +22,6 @@ const SQL_FENCE = /```sql\b/;
 const JSONRENDER_FENCE = /```jsonrender\b/;
 const RESULT_BINDING = /"\$bindState"\s*:\s*"\/result\b/;
 
-// When the assistant response mixes a SQL block with a chart that binds to
-// the result, auto-run the SQL on mount so the chart can populate without an
-// extra click.
 const shouldAutoRunContext = (content: string): boolean =>
   SQL_FENCE.test(content) &&
   JSONRENDER_FENCE.test(content) &&

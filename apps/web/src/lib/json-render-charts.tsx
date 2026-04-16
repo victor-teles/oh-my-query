@@ -100,9 +100,6 @@ type ChartLineProps = z.output<typeof chartLineProps>;
 type ChartPieProps = z.output<typeof chartPieProps>;
 type ChartKpiProps = z.output<typeof chartKpiProps>;
 
-// Even-stride sampling that always preserves the first and last points.
-// Cheaper than LTTB and good enough for keeping the overall shape of a
-// series (e.g. a sine wave) when we exceed the render cap.
 const sampleSeries = <T,>(
   points: readonly T[],
   max: number

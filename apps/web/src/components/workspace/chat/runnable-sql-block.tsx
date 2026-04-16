@@ -23,10 +23,6 @@ const READ_ONLY_STATEMENT =
 export const isReadOnlySql = (sql: string): boolean =>
   READ_ONLY_STATEMENT.test(sql.trim());
 
-// Module-scoped so a RunnableSqlBlock that unmounts and remounts during chat
-// streaming (markdown re-parses) doesn't auto-run the same statement twice.
-// We key on `${connectionId}|${schema ?? ""}|${code}` and keep the entry for
-// the lifetime of the session — a click-Run bypasses this dedupe entirely.
 const autoRunSignatures = new Set<string>();
 
 const buildAutoRunSignature = (
@@ -48,8 +44,6 @@ export const RunnableSqlBlock = ({
 
   const messageResult = useOptionalMessageResult();
 
-  // Publish the result to the message-scoped context so sibling chart blocks
-  // in the same assistant message can bind to it via $bindState: /result/rows.
   useEffect(() => {
     if (!messageResult) {
       return;
@@ -61,10 +55,6 @@ export const RunnableSqlBlock = ({
     }
   }, [messageResult, result, status]);
 
-  // Auto-run read-only SQL once (across remounts) when the message also
-  // contains a chart that binds to the result, so the user doesn't have to
-  // click Run. Guarded to SELECT-shaped statements only — anything that could
-  // mutate data still requires a click.
   useEffect(() => {
     if (!autoRun) {
       return;
@@ -84,7 +74,7 @@ export const RunnableSqlBlock = ({
       try {
         await run(code);
       } catch {
-        // errors surface through useTransientQuery's state — nothing extra to do.
+        /* handled by useTransientQuery */
       }
     };
     execute();

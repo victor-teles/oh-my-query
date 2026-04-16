@@ -190,8 +190,6 @@ const buildResultState = (
   return {
     key: `${result.rowCount}:${result.executionTimeMs}`,
     state: {
-      // Exposed at two paths so $bindState: "/result/rows" and
-      // $bindState: "/rows" both resolve — less fragile to AI path drift.
       columns: result.columns,
       result: resultPayload,
       rowCount: result.rowCount,
@@ -204,10 +202,6 @@ const useResultInitialState = (): {
   state: Record<string, unknown>;
   key: string;
 } => {
-  // Prefer the message-scoped result (from the sibling RunnableSqlBlock in the
-  // same assistant message) over the workspace-level ActiveQueryContext. The
-  // chat inline run never writes to ActiveQueryContext, so without this
-  // preference, $bindState would read stale data from the editor tab.
   const messageResult = useOptionalMessageResult();
   const active = useOptionalActiveQuery();
   const meta = active?.meta;
