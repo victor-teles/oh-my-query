@@ -15,6 +15,7 @@ import {
 import { Component, useCallback, useMemo, useRef, useState } from "react";
 
 import type { SpecParseResult } from "@/lib/json-render-validate";
+import type { ExecuteResult } from "@/lib/tauri";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -36,6 +37,8 @@ import {
   parseAndValidateSpec,
 } from "@/lib/json-render-validate";
 import { cn } from "@/lib/utils";
+
+import { useOptionalMessageResult } from "./message-result-context";
 
 interface UIRenderBlockProps {
   code: string;
@@ -161,46 +164,76 @@ const ErrorPanel = ({ title, detail, rawCode, issues }: ErrorPanelProps) => {
   );
 };
 
+const buildResultState = (
+  result: ExecuteResult
+): { state: Record<string, unknown>; key: string } | null => {
+  if (result.resultType !== "tabular") {
+    return null;
+  }
+  const columnNames = result.columns.map((c) => c.name);
+  const rows = result.rows.map((row) => {
+    const record: Record<string, unknown> = {};
+    for (let i = 0; i < columnNames.length; i += 1) {
+      const key = columnNames[i];
+      if (key !== undefined) {
+        record[key] = row[i];
+      }
+    }
+    return record;
+  });
+  const resultPayload = {
+    columns: result.columns,
+    rowCount: result.rowCount,
+    rows,
+    rowsArray: result.rows,
+  };
+  return {
+    key: `${result.rowCount}:${result.executionTimeMs}`,
+    state: {
+      // Exposed at two paths so $bindState: "/result/rows" and
+      // $bindState: "/rows" both resolve — less fragile to AI path drift.
+      columns: result.columns,
+      result: resultPayload,
+      rowCount: result.rowCount,
+      rows,
+    },
+  };
+};
+
 const useResultInitialState = (): {
   state: Record<string, unknown>;
   key: string;
 } => {
+  // Prefer the message-scoped result (from the sibling RunnableSqlBlock in the
+  // same assistant message) over the workspace-level ActiveQueryContext. The
+  // chat inline run never writes to ActiveQueryContext, so without this
+  // preference, $bindState would read stale data from the editor tab.
+  const messageResult = useOptionalMessageResult();
   const active = useOptionalActiveQuery();
-  // `meta` is the reactive handle that flips when status/hasResult change;
-  // we only read it here so the memo re-runs, then pull fresh rows below.
   const meta = active?.meta;
+
   return useMemo(() => {
+    const scoped = messageResult?.result;
+    if (scoped) {
+      const built = buildResultState(scoped);
+      if (built) {
+        return { key: `msg:${built.key}`, state: built.state };
+      }
+    }
     if (!active || !meta) {
       return { key: "no-context", state: {} };
     }
     const snapshot = active.getSnapshot();
     const { result } = snapshot;
-    if (!result || result.resultType !== "tabular") {
+    if (!result) {
       return { key: `${meta.status}:no-result`, state: {} };
     }
-    const columnNames = result.columns.map((c) => c.name);
-    const rows = result.rows.map((row) => {
-      const record: Record<string, unknown> = {};
-      for (let i = 0; i < columnNames.length; i += 1) {
-        const key = columnNames[i];
-        if (key !== undefined) {
-          record[key] = row[i];
-        }
-      }
-      return record;
-    });
-    return {
-      key: `${meta.status}:${result.rowCount}:${result.executionTimeMs}`,
-      state: {
-        result: {
-          columns: result.columns,
-          rowCount: result.rowCount,
-          rows,
-          rowsArray: result.rows,
-        },
-      },
-    };
-  }, [active, meta]);
+    const built = buildResultState(result);
+    if (!built) {
+      return { key: `${meta.status}:non-tabular`, state: {} };
+    }
+    return { key: `active:${meta.status}:${built.key}`, state: built.state };
+  }, [active, meta, messageResult?.result]);
 };
 
 const RenderedSpec = ({ spec }: { spec: Spec }) => {

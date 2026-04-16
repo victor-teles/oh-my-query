@@ -49,7 +49,12 @@ describe("json-render catalog", () => {
     expect(prompt).toContain('"$bindState": "/result/rows"');
     expect(prompt).toContain("Never invent numeric values");
     expect(prompt).toContain("500 points");
-    expect(prompt).toContain('"run the query above" placeholder');
+  });
+
+  it("teaches auto-run behavior and the no-Card-wrap rule for charts", () => {
+    const prompt = buildUiGenerationPrompt();
+    expect(prompt).toContain("auto-runs it on arrival");
+    expect(prompt).toContain("Do NOT wrap a chart in a `Card`");
   });
 
   it("teaches the combined SQL + jsonrender response pattern", () => {
