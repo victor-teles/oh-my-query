@@ -71,9 +71,11 @@ const partiallyStreamedSpec = '{"root": "main", "elem';
 export const ValidCard: Story = {
   args: { code: validCardSpec },
   play: async ({ canvas }) => {
-    await expect(canvas.getByText("UI · Card")).toBeVisible();
     await expect(canvas.getByText("Status")).toBeVisible();
     await expect(canvas.getByText("Database is healthy.")).toBeVisible();
+    await expect(
+      canvas.getByRole("button", { name: "Show source" })
+    ).toBeInTheDocument();
   },
 };
 
@@ -81,14 +83,13 @@ export const InlineBadge: Story = {
   args: { code: inlineBadgeSpec },
   play: async ({ canvas }) => {
     await expect(canvas.getByText("12 rows")).toBeVisible();
-    await expect(canvas.queryByText(/UI · Badge/)).toBeNull();
   },
 };
 
 export const ToggleViewSpec: Story = {
   args: { code: validCardSpec },
   play: async ({ canvas }) => {
-    const toggle = canvas.getByRole("button", { name: "View raw spec" });
+    const toggle = canvas.getByRole("button", { name: "Show source" });
     await userEvent.click(toggle);
     await expect(canvas.getByText(/"root": "root"/)).toBeVisible();
   },
@@ -97,10 +98,8 @@ export const ToggleViewSpec: Story = {
 export const MissingChild: Story = {
   args: { code: missingChildSpec },
   play: async ({ canvas }) => {
-    await expect(
-      canvas.getByText("UI spec has structural errors")
-    ).toBeVisible();
-    const reveal = canvas.getByRole("button", { name: "View raw spec" });
+    await expect(canvas.getByText("Couldn't render this UI")).toBeVisible();
+    const reveal = canvas.getByRole("button", { name: "Show source" });
     await userEvent.click(reveal);
     await expect(canvas.getByText(/Broken card/)).toBeVisible();
   },
@@ -109,9 +108,7 @@ export const MissingChild: Story = {
 export const UnknownComponent: Story = {
   args: { code: unknownComponentSpec },
   play: async ({ canvas }) => {
-    await expect(
-      canvas.getByText("UI spec has structural errors")
-    ).toBeVisible();
+    await expect(canvas.getByText("Couldn't render this UI")).toBeVisible();
     await expect(canvas.getByText(/Unknown component "Button"/)).toBeVisible();
   },
 };
@@ -120,5 +117,23 @@ export const PartialStream: Story = {
   args: { code: partiallyStreamedSpec },
   play: async ({ canvas }) => {
     await expect(canvas.queryByText(/error/i)).toBeNull();
+  },
+};
+
+export const KeyboardActions: Story = {
+  args: { code: validCardSpec },
+  play: async ({ canvas, step }) => {
+    const sourceButton = canvas.getByRole("button", { name: "Show source" });
+    await step("focus the card via keyboard", () => {
+      sourceButton.focus();
+    });
+    await step("press s to toggle to source view", async () => {
+      await userEvent.keyboard("s");
+      await expect(canvas.getByText(/"root": "root"/)).toBeVisible();
+    });
+    await step("press s again to return to preview", async () => {
+      await userEvent.keyboard("s");
+      await expect(canvas.getByText("Database is healthy.")).toBeVisible();
+    });
   },
 };

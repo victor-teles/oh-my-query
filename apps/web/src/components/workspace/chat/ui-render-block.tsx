@@ -1,6 +1,7 @@
 import type { Spec, SpecIssue } from "@json-render/core";
 import type { ErrorInfo, ReactNode } from "react";
 
+import { useHotkey } from "@tanstack/react-hotkeys";
 import {
   AlertCircle,
   Check,
@@ -9,12 +10,20 @@ import {
   Code2,
   Copy,
   Eye,
+  MoreHorizontal,
 } from "lucide-react";
-import { Component, useCallback, useMemo, useState } from "react";
+import { Component, useCallback, useMemo, useRef, useState } from "react";
 
 import type { SpecParseResult } from "@/lib/json-render-validate";
 
 import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Kbd } from "@/components/ui/kbd";
 import {
   Tooltip,
   TooltipContent,
@@ -47,11 +56,6 @@ const isInlineSpec = (spec: Spec): boolean => {
   }
   const childCount = root.children?.length ?? 0;
   return childCount === 0;
-};
-
-const formatRootLabel = (spec: Spec): string => {
-  const root = spec.elements[spec.root];
-  return root ? `UI · ${root.type}` : "UI";
 };
 
 interface RendererErrorBoundaryProps {
@@ -139,7 +143,7 @@ const ErrorPanel = ({ title, detail, rawCode, issues }: ErrorPanelProps) => {
           onClick={toggleSpec}
           className="flex w-full items-center justify-between px-3 py-1.5 text-xs text-destructive/80 hover:bg-destructive/10"
         >
-          <span>{showSpec ? "Hide spec" : "View raw spec"}</span>
+          <span>{showSpec ? "Hide source" : "Show source"}</span>
           {showSpec ? (
             <ChevronUp className="size-3" />
           ) : (
@@ -165,7 +169,7 @@ const RenderedSpec = ({ spec }: { spec: Spec }) => (
 const renderInlineErrorFallback = (err: Error): ReactNode => (
   <span className="inline-flex items-center gap-1 rounded-md border border-destructive/30 bg-destructive/5 px-2 py-0.5 text-xs text-destructive">
     <AlertCircle className="size-3" />
-    {err.message || "Render error"}
+    {err.message || "Couldn't render"}
   </span>
 );
 
@@ -186,7 +190,7 @@ const InlineSpec = ({ spec, rawCode }: { spec: Spec; rawCode: string }) => {
         <TooltipTrigger
           render={
             <Button
-              aria-label={copied ? "Copied" : "Copy JSON"}
+              aria-label={copied ? "Copied" : "Copy"}
               onClick={handleCopy}
               size="icon-xs"
               variant="ghost"
@@ -199,7 +203,7 @@ const InlineSpec = ({ spec, rawCode }: { spec: Spec; rawCode: string }) => {
             <Copy className="size-3 opacity-60" />
           )}
         </TooltipTrigger>
-        <TooltipContent>{copied ? "Copied!" : "Copy spec"}</TooltipContent>
+        <TooltipContent>{copied ? "Copied" : "Copy"}</TooltipContent>
       </Tooltip>
     </span>
   );
@@ -216,6 +220,7 @@ const CardSpec = ({ spec, rawCode, warnings, appliedFixes }: CardSpecProps) => {
   const [copied, setCopied] = useState(false);
   const [collapsed, setCollapsed] = useState(false);
   const [view, setView] = useState<"rendered" | "spec">("rendered");
+  const cardRef = useRef<HTMLDivElement>(null);
 
   const handleCopy = useCallback(async () => {
     await navigator.clipboard.writeText(rawCode);
@@ -231,25 +236,46 @@ const CardSpec = ({ spec, rawCode, warnings, appliedFixes }: CardSpecProps) => {
     setCollapsed((p) => !p);
   }, []);
 
+  const collapseIfOpen = useCallback(() => {
+    if (!collapsed) {
+      setCollapsed(true);
+    }
+  }, [collapsed]);
+
+  useHotkey("C", handleCopy, { target: cardRef });
+  useHotkey("S", toggleView, { target: cardRef });
+  useHotkey("Escape", collapseIfOpen, {
+    enabled: !collapsed,
+    target: cardRef,
+  });
+
   const renderCardErrorFallback = useCallback(
     (err: Error): ReactNode => (
       <ErrorPanel
         detail={err.message}
         rawCode={rawCode}
-        title="The component crashed while rendering."
+        title="This UI crashed while rendering."
       />
     ),
     [rawCode]
   );
 
-  const label = formatRootLabel(spec);
+  const hasRepairPill = appliedFixes.length > 0;
 
   return (
-    <div className="my-2 overflow-hidden rounded-lg border bg-secondary/30">
-      <div className="flex items-center justify-between border-b px-3 py-1.5">
+    <div
+      className="group/card my-2 overflow-hidden rounded-lg border bg-secondary/30 outline-none focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/30"
+      ref={cardRef}
+      tabIndex={0}
+    >
+      <div
+        className={cn(
+          "flex items-center justify-between gap-2 px-3 py-1",
+          hasRepairPill && "border-b"
+        )}
+      >
         <div className="flex items-center gap-2 text-xs text-muted-foreground">
-          <span className="font-medium">{label}</span>
-          {appliedFixes.length > 0 ? (
+          {hasRepairPill ? (
             <span
               className="rounded bg-amber-500/15 px-1.5 py-0.5 text-[10px] font-medium text-amber-600 dark:text-amber-400"
               title={appliedFixes.join("\n")}
@@ -257,70 +283,58 @@ const CardSpec = ({ spec, rawCode, warnings, appliedFixes }: CardSpecProps) => {
               auto-repaired
             </span>
           ) : null}
+          <span
+            aria-hidden
+            className="inline-flex items-center gap-1 opacity-0 transition-opacity duration-150 group-focus-within/card:opacity-100"
+          >
+            <Kbd>C</Kbd>
+            <span>copy</span>
+            <span className="text-muted-foreground/40">·</span>
+            <Kbd>S</Kbd>
+            <span>source</span>
+            <span className="text-muted-foreground/40">·</span>
+            <Kbd>Esc</Kbd>
+            <span>collapse</span>
+          </span>
         </div>
-        <div className="flex items-center gap-0.5">
-          <Tooltip>
-            <TooltipTrigger
+        <div className="flex items-center gap-1 opacity-30 transition-opacity duration-150 group-hover/card:opacity-100 group-focus-within/card:opacity-100">
+          <Button
+            aria-keyshortcuts="S"
+            aria-label={view === "rendered" ? "Show source" : "Show preview"}
+            aria-pressed={view === "spec"}
+            onClick={toggleView}
+            size="xs"
+            variant={view === "spec" ? "secondary" : "ghost"}
+          >
+            {view === "rendered" ? <Code2 /> : <Eye />}
+            {view === "rendered" ? "Source" : "Preview"}
+          </Button>
+          <DropdownMenu>
+            <DropdownMenuTrigger
               render={
                 <Button
-                  aria-label={
-                    view === "rendered" ? "View raw spec" : "View rendered UI"
-                  }
-                  aria-pressed={view === "spec"}
-                  onClick={toggleView}
-                  size="icon-xs"
-                  variant={view === "spec" ? "secondary" : "ghost"}
-                />
-              }
-            >
-              {view === "rendered" ? (
-                <Code2 className="size-3" />
-              ) : (
-                <Eye className="size-3" />
-              )}
-            </TooltipTrigger>
-            <TooltipContent>
-              {view === "rendered" ? "View spec" : "View rendered"}
-            </TooltipContent>
-          </Tooltip>
-          <Tooltip>
-            <TooltipTrigger
-              render={
-                <Button
-                  aria-label={copied ? "Copied" : "Copy JSON"}
-                  onClick={handleCopy}
+                  aria-label="More actions"
                   size="icon-xs"
                   variant="ghost"
                 />
               }
             >
-              {copied ? (
-                <Check className="size-3" />
-              ) : (
-                <Copy className="size-3" />
-              )}
-            </TooltipTrigger>
-            <TooltipContent>{copied ? "Copied!" : "Copy spec"}</TooltipContent>
-          </Tooltip>
-          <Tooltip>
-            <TooltipTrigger
-              render={
-                <Button
-                  aria-label={collapsed ? "Expand" : "Collapse"}
-                  onClick={toggleCollapsed}
-                  size="icon-xs"
-                  variant="ghost"
-                />
-              }
-            >
-              {collapsed ? (
-                <ChevronDown className="size-3" />
-              ) : (
-                <ChevronUp className="size-3" />
-              )}
-            </TooltipTrigger>
-            <TooltipContent>{collapsed ? "Expand" : "Collapse"}</TooltipContent>
-          </Tooltip>
+              <MoreHorizontal className="size-3" />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem aria-keyshortcuts="C" onClick={handleCopy}>
+                {copied ? <Check /> : <Copy />}
+                {copied ? "Copied" : "Copy"}
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                aria-keyshortcuts={collapsed ? undefined : "Escape"}
+                onClick={toggleCollapsed}
+              >
+                {collapsed ? <ChevronDown /> : <ChevronUp />}
+                {collapsed ? "Expand" : "Collapse"}
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </div>
       {collapsed ? null : (
@@ -368,7 +382,7 @@ export const UIRenderBlock = ({ code }: UIRenderBlockProps) => {
       <ErrorPanel
         detail={result.message}
         rawCode={code}
-        title="Invalid UI spec"
+        title="Couldn't read this UI"
       />
     );
   }
@@ -379,10 +393,10 @@ export const UIRenderBlock = ({ code }: UIRenderBlockProps) => {
   if (hasBlockingIssues(result.issues)) {
     return (
       <ErrorPanel
-        detail="The model produced a spec that can't render safely."
+        detail="The assistant generated something we don't know how to draw."
         issues={errors}
         rawCode={code}
-        title="UI spec has structural errors"
+        title="Couldn't render this UI"
       />
     );
   }

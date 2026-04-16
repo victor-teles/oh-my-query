@@ -29,7 +29,12 @@ bun run check        # Check for lint/format issues
 bun run fix          # Auto-fix lint/format issues
 ```
 
-Always run `bun run fix` before committing.
+## Development Guidelines
+
+- Always run type-check, lint, and tests after multi-file changes before declaring work complete.
+- Do not stop mid-implementation. If a plan has multiple tasks, execute all of them sequentially and only pause for explicit user questions.
+- When fixing CI failures, address the root cause — never loosen thresholds or disable checks to make them pass.
+- Before implementing a GitHub issue, verify the current git branch and create a feature branch if on main.
 
 ## Monorepo Structure
 

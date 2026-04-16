@@ -1,7 +1,5 @@
-import type { PanelSize } from "react-resizable-panels";
-
 import { useHotkey } from "@tanstack/react-hotkeys";
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useState } from "react";
 import { usePanelRef } from "react-resizable-panels";
 
 import type { AIAction, AIActionType } from "@/lib/ai-actions";
@@ -16,6 +14,7 @@ import {
 } from "@/components/ui/resizable";
 import { useSchema } from "@/hooks/use-schema";
 import { useWorkspaceIslandSync } from "@/hooks/use-workspace-island-sync";
+import { useWorkspaceMode } from "@/hooks/use-workspace-mode";
 import { composeActionMessage } from "@/lib/ai-actions";
 
 import { ChatSidebar } from "./chat/chat-sidebar";
@@ -43,11 +42,9 @@ export const WorkspaceLayout = ({
   onReconnect,
 }: WorkspaceLayoutProps) => {
   const sidebarRef = usePanelRef();
-  const chatPanelRef = usePanelRef();
-  const [isChatOpen, setIsChatOpen] = useState(false);
   const [shortcutsOpen, setShortcutsOpen] = useState(false);
   const [pendingAction, setPendingAction] = useState<AIAction | null>(null);
-  const hasBeenOpenedRef = useRef(false);
+  const { mode, setMode } = useWorkspaceMode(connection.id);
 
   useWorkspaceIslandSync({
     connection,
@@ -69,35 +66,6 @@ export const WorkspaceLayout = ({
     setSelectedDatabase,
   } = useSchema(connection.id, isConnected);
 
-  const handleChatResize = useCallback((size: PanelSize) => {
-    setIsChatOpen(size.asPercentage > 0);
-  }, []);
-
-  const handleChatToggle = useCallback(() => {
-    const panel = chatPanelRef.current;
-    if (!panel) {
-      return;
-    }
-
-    if (panel.isCollapsed()) {
-      if (!hasBeenOpenedRef.current) {
-        panel.resize("30%");
-        hasBeenOpenedRef.current = true;
-      } else {
-        panel.expand();
-      }
-      setIsChatOpen(true);
-    } else {
-      panel.collapse();
-      setIsChatOpen(false);
-    }
-  }, [chatPanelRef]);
-
-  const handleChatClose = useCallback(() => {
-    chatPanelRef.current?.collapse();
-    setIsChatOpen(false);
-  }, [chatPanelRef]);
-
   const handleSidebarToggle = useCallback(() => {
     const panel = sidebarRef.current;
     if (!panel) {
@@ -115,7 +83,7 @@ export const WorkspaceLayout = ({
   });
 
   useHotkey("Mod+Shift+C", () => {
-    handleChatToggle();
+    setMode(mode === "chat" ? "split" : "chat");
   });
 
   useHotkey("Mod+/", () => {
@@ -125,22 +93,6 @@ export const WorkspaceLayout = ({
   const handleShowShortcuts = useCallback(() => {
     setShortcutsOpen(true);
   }, []);
-
-  const openChatPanel = useCallback(() => {
-    const panel = chatPanelRef.current;
-    if (!panel) {
-      return;
-    }
-    if (panel.isCollapsed()) {
-      if (!hasBeenOpenedRef.current) {
-        panel.resize("30%");
-        hasBeenOpenedRef.current = true;
-      } else {
-        panel.expand();
-      }
-      setIsChatOpen(true);
-    }
-  }, [chatPanelRef]);
 
   const handleAiAction = useCallback(
     (
@@ -166,80 +118,95 @@ export const WorkspaceLayout = ({
       } else {
         setPendingAction(null);
       }
-      openChatPanel();
+      if (mode === "editor") {
+        setMode("split");
+      }
     },
-    [openChatPanel]
+    [mode, setMode]
   );
 
   const handlePendingActionConsumed = useCallback(() => {
     setPendingAction(null);
   }, []);
 
+  const handleChatClose = useCallback(() => {
+    setMode("editor");
+  }, [setMode]);
+
+  const showEditor = mode !== "chat";
+  const showChat = mode !== "editor";
+
   return (
     <div className="flex h-svh flex-col bg-background">
       <Titlebar>
         <ConnectionToolbar
           connection={connection}
-          isChatOpen={isChatOpen}
-          onChatToggle={handleChatToggle}
           onShowShortcuts={handleShowShortcuts}
+          onWorkspaceModeChange={setMode}
+          workspaceMode={mode}
         />
       </Titlebar>
-      <ResizablePanelGroup className="flex-1" orientation="horizontal">
+      <ResizablePanelGroup
+        className="flex-1"
+        key={mode}
+        orientation="horizontal"
+      >
         <ResizablePanel
-          panelRef={sidebarRef}
-          defaultSize="25%"
-          minSize="15%"
-          maxSize="40%"
-          collapsible
           collapsedSize="0%"
+          collapsible
+          defaultSize={mode === "chat" ? "20%" : "25%"}
+          maxSize="40%"
+          minSize="15%"
+          panelRef={sidebarRef}
         >
           <WorkspaceSidebar
             connection={connection}
-            schema={schema}
-            isLoading={schemaLoading}
-            error={schemaError}
-            refresh={refreshSchema}
             databases={databases}
+            error={schemaError}
+            isLoading={schemaLoading}
+            refresh={refreshSchema}
+            schema={schema}
             selectedDatabase={selectedDatabase}
             setSelectedDatabase={setSelectedDatabase}
           />
         </ResizablePanel>
-
         <ResizableHandle />
 
-        <ResizablePanel defaultSize="75%" minSize="30%">
-          <WorkspaceContent
-            connection={connection}
-            connectionError={connectionError}
-            isConnected={isConnected}
-            isConnecting={isConnecting}
-            onAiAction={handleAiAction}
-            onReconnect={onReconnect}
-            schema={schema}
-            selectedDatabase={selectedDatabase}
-          />
-        </ResizablePanel>
+        {showEditor ? (
+          <ResizablePanel
+            defaultSize={mode === "split" ? "50%" : "75%"}
+            minSize="30%"
+          >
+            <WorkspaceContent
+              connection={connection}
+              connectionError={connectionError}
+              isConnected={isConnected}
+              isConnecting={isConnecting}
+              onAiAction={handleAiAction}
+              onReconnect={onReconnect}
+              schema={schema}
+              selectedDatabase={selectedDatabase}
+            />
+          </ResizablePanel>
+        ) : null}
 
-        <ResizableHandle />
+        {showEditor && showChat ? <ResizableHandle /> : null}
 
-        <ResizablePanel
-          collapsedSize="0%"
-          collapsible
-          defaultSize="0%"
-          maxSize="50%"
-          minSize="20%"
-          onResize={handleChatResize}
-          panelRef={chatPanelRef}
-        >
-          <ChatSidebar
-            connection={connection}
-            onClose={handleChatClose}
-            pendingAction={pendingAction}
-            onPendingActionConsumed={handlePendingActionConsumed}
-            schema={schema}
-          />
-        </ResizablePanel>
+        {showChat ? (
+          <ResizablePanel
+            defaultSize={mode === "chat" ? "80%" : "25%"}
+            minSize="20%"
+          >
+            <ChatSidebar
+              connection={connection}
+              mode={mode}
+              onClose={handleChatClose}
+              onPendingActionConsumed={handlePendingActionConsumed}
+              pendingAction={pendingAction}
+              schema={schema}
+            />
+          </ResizablePanel>
+        ) : null}
       </ResizablePanelGroup>
 
       <KeyboardShortcutsOverlay

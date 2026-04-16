@@ -8,8 +8,35 @@ import {
   MessageResponse,
 } from "@/components/ai-elements/message";
 
+import { RunnableSqlBlock } from "./runnable-sql-block";
 import { SqlCodeBlock } from "./sql-code-block";
 import { UIRenderBlock } from "./ui-render-block";
+
+export interface InlineRunContext {
+  connectionId: string;
+  schema?: string;
+}
+
+const looksLikeRenderSpec = (code: string): boolean => {
+  const trimmed = code.trim();
+  if (!trimmed.startsWith("{")) {
+    return false;
+  }
+  try {
+    const parsed = JSON.parse(trimmed) as unknown;
+    if (typeof parsed !== "object" || parsed === null) {
+      return false;
+    }
+    const candidate = parsed as Record<string, unknown>;
+    return (
+      typeof candidate.root === "string" &&
+      typeof candidate.elements === "object" &&
+      candidate.elements !== null
+    );
+  } catch {
+    return false;
+  }
+};
 
 interface ChatMessageProps {
   message: ChatMessageType;
@@ -17,6 +44,7 @@ interface ChatMessageProps {
   onReplaceSql?: (sql: string) => void;
   onRunSql?: (sql: string) => void;
   hasSelection?: boolean;
+  inlineRun?: InlineRunContext;
 }
 
 const LoadingIndicator = () => (
@@ -36,12 +64,14 @@ const AssistantContent = ({
   onReplaceSql,
   onRunSql,
   hasSelection = false,
+  inlineRun,
 }: {
   content: string;
   onInsertSql?: (sql: string) => void;
   onReplaceSql?: (sql: string) => void;
   onRunSql?: (sql: string) => void;
   hasSelection?: boolean;
+  inlineRun?: InlineRunContext;
 }) => {
   const renderCode = useCallback(
     (props: React.ComponentProps<"code">) => {
@@ -51,13 +81,22 @@ const AssistantContent = ({
       const code = String(children).replace(/\n$/, "");
 
       if (lang === "sql") {
+        if (inlineRun) {
+          return (
+            <RunnableSqlBlock
+              code={code}
+              connectionId={inlineRun.connectionId}
+              schema={inlineRun.schema}
+            />
+          );
+        }
         return (
           <SqlCodeBlock
             code={code}
+            hasSelection={hasSelection}
             onInsert={onInsertSql}
             onReplace={onReplaceSql}
             onRun={onRunSql}
-            hasSelection={hasSelection}
           />
         );
       }
@@ -66,9 +105,13 @@ const AssistantContent = ({
         return <UIRenderBlock code={code} />;
       }
 
+      if ((lang === "json" || !lang) && looksLikeRenderSpec(code)) {
+        return <UIRenderBlock code={code} />;
+      }
+
       return <code className={className}>{children}</code>;
     },
-    [onInsertSql, onReplaceSql, onRunSql, hasSelection]
+    [onInsertSql, onReplaceSql, onRunSql, hasSelection, inlineRun]
   );
 
   const components = useMemo(
@@ -92,6 +135,7 @@ const ChatMessageInner = ({
   onReplaceSql,
   onRunSql,
   hasSelection = false,
+  inlineRun,
 }: ChatMessageProps) => (
   <Message from={message.role}>
     <MessageContent>
@@ -100,10 +144,11 @@ const ChatMessageInner = ({
       ) : (
         <AssistantContent
           content={message.content}
+          hasSelection={hasSelection}
+          inlineRun={inlineRun}
           onInsertSql={onInsertSql}
           onReplaceSql={onReplaceSql}
           onRunSql={onRunSql}
-          hasSelection={hasSelection}
         />
       )}
     </MessageContent>

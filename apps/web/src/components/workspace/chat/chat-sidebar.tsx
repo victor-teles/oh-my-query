@@ -4,6 +4,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import type { AIAction } from "@/lib/ai-actions";
 import type { DatabaseConnection } from "@/lib/connections";
 import type { RedisKey, SchemaInfo } from "@/lib/tauri";
+import type { WorkspaceMode } from "@/lib/workspace-mode";
 
 import { Suggestion, Suggestions } from "@/components/ai-elements/suggestion";
 import { Button } from "@/components/ui/button";
@@ -69,6 +70,7 @@ const buildSuggestions = (ctx: SuggestionContext | null): string[] => {
 interface ChatSidebarProps {
   connection: DatabaseConnection;
   schema: SchemaInfo | null;
+  mode: WorkspaceMode;
   onClose: () => void;
   pendingAction?: AIAction | null;
   onPendingActionConsumed?: () => void;
@@ -77,6 +79,7 @@ interface ChatSidebarProps {
 export const ChatSidebar = ({
   connection,
   schema,
+  mode,
   onClose,
   pendingAction,
   onPendingActionConsumed,
@@ -124,6 +127,7 @@ export const ChatSidebar = ({
     clearError,
     clearMessages,
   } = useAiChat({
+    connectionId: connection.id,
     databaseType: connection.type,
     getSnapshot: activeQuery?.getSnapshot,
     redisKeys,
@@ -229,12 +233,15 @@ export const ChatSidebar = ({
         </div>
       </div>
       <ChatMessageList
-        messages={messages}
         connectionName={connection.name}
-        onInsertSql={handleInsertSql}
-        onReplaceSql={handleReplaceSql}
-        onRunSql={handleRunSql}
         hasSelection={checkHasSelection()}
+        inlineRun={
+          mode === "chat" ? { connectionId: connection.id } : undefined
+        }
+        messages={messages}
+        onInsertSql={mode === "chat" ? undefined : handleInsertSql}
+        onReplaceSql={mode === "chat" ? undefined : handleReplaceSql}
+        onRunSql={mode === "chat" ? undefined : handleRunSql}
       />
       {messages.length === 0 && (
         <Suggestions className="flex-wrap justify-center px-3 pb-2">

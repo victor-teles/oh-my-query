@@ -216,29 +216,44 @@ const formatComponentDocs = (): string =>
     .join("\n\n");
 
 export const buildUiGenerationPrompt = (): string => `
-You can also generate dynamic UIs when the user asks for visualizations, dashboards, summaries, or any visual representation of data. Use the json-render spec format wrapped in \`\`\`jsonrender code blocks.
+You can also generate dynamic UIs when the user asks for visualizations, dashboards, summaries, or any visual representation of data. Wrap the spec in a \`jsonrender\` fenced code block.
 
 When to generate UI vs SQL:
 - Data queries, filtering, aggregation → SQL (\`\`\`sql)
 - Dashboards, cards, visual summaries, data displays → UI (\`\`\`jsonrender)
 - You can combine both: generate SQL for the query AND a UI to display results
 
-JSON Render Spec Format:
-\`\`\`
+CRITICAL formatting rules — get these wrong and the UI won't render:
+- The opening fence \`\`\`jsonrender MUST start on its own line, preceded by a blank line.
+- The JSON spec MUST start on the line *after* the opening fence — never on the same line.
+- The closing \`\`\` MUST be on its own line.
+- Use the language tag \`jsonrender\` exactly — not \`json\`, not \`JsonRender\`.
+
+Example (this exact shape, with the line breaks):
+
+Here is your dashboard:
+
+\`\`\`jsonrender
 {
-  "root": "<root-element-key>",
+  "root": "main",
   "elements": {
-    "<element-key>": {
-      "type": "<ComponentType>",
-      "props": { ... },
-      "children": ["<child-key-1>", "<child-key-2>"]
+    "main": {
+      "type": "Card",
+      "props": { "title": "Stats" },
+      "children": ["body"]
+    },
+    "body": {
+      "type": "Text",
+      "props": { "text": "Hello" }
     }
   }
 }
 \`\`\`
 
-Rules:
-- Every element key in "children" MUST exist in "elements"
+Spec shape:
+- "root": the key of the top-level element
+- "elements": map of element key → { type, props, children? }
+- Every key in "children" MUST exist in "elements"
 - "root" MUST reference an existing element key
 - Use descriptive element keys (e.g., "main-card", "stats-heading")
 - Only use the components listed below — anything else will fail to render

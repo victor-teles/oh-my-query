@@ -7,6 +7,8 @@ import {
   ConversationScrollButton,
 } from "@/components/ai-elements/conversation";
 
+import type { InlineRunContext } from "./chat-message";
+
 import { ChatMessage } from "./chat-message";
 
 interface ChatMessageListProps {
@@ -16,6 +18,7 @@ interface ChatMessageListProps {
   onReplaceSql?: (sql: string) => void;
   onRunSql?: (sql: string) => void;
   hasSelection?: boolean;
+  inlineRun?: InlineRunContext;
 }
 
 export const ChatMessageList = ({
@@ -25,23 +28,25 @@ export const ChatMessageList = ({
   onReplaceSql,
   onRunSql,
   hasSelection = false,
+  inlineRun,
 }: ChatMessageListProps) => (
   <Conversation className="flex-1">
     <ConversationContent>
       {messages.length === 0 ? (
         <ConversationEmptyState
-          title={`Query assistant for ${connectionName}`}
           description="Generate SQL, explain queries, or fix errors"
+          title={`Query assistant for ${connectionName}`}
         />
       ) : (
         messages.map((msg) => (
           <ChatMessage
+            hasSelection={hasSelection}
+            inlineRun={inlineRun}
             key={msg.id}
             message={msg}
             onInsertSql={onInsertSql}
             onReplaceSql={onReplaceSql}
             onRunSql={onRunSql}
-            hasSelection={hasSelection}
           />
         ))
       )}
