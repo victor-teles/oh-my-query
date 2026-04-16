@@ -1,5 +1,5 @@
 import { streamText } from "ai";
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 import type { ActiveQuerySnapshot } from "@/contexts/active-query-context";
 import type { AIError } from "@/lib/ai-errors";
@@ -10,6 +10,11 @@ import { classifyAIError } from "@/lib/ai-errors";
 import { createAIModel } from "@/lib/ai-provider";
 import { buildSystemPrompt } from "@/lib/ai-schema-formatter";
 import { getAISettings } from "@/lib/ai-settings";
+import {
+  clearChatHistory,
+  getChatHistory,
+  saveChatHistory,
+} from "@/lib/chat-history";
 
 export interface ChatMessage {
   id: string;
@@ -26,6 +31,7 @@ interface AiChatState {
 interface UseAiChatOptions {
   schema: SchemaInfo | null;
   databaseType: string;
+  connectionId: string;
   getSnapshot?: () => ActiveQuerySnapshot;
   redisKeys?: RedisKey[] | null;
 }
@@ -40,6 +46,7 @@ const NOT_CONFIGURED_ERROR: AIError = {
 export const useAiChat = ({
   schema,
   databaseType,
+  connectionId,
   getSnapshot,
   redisKeys,
 }: UseAiChatOptions) => {
@@ -50,6 +57,18 @@ export const useAiChat = ({
   });
   const abortRef = useRef<AbortController | null>(null);
   const lastUserMessageRef = useRef<string | null>(null);
+
+  useEffect(() => {
+    const restored = getChatHistory(connectionId);
+    setState({ error: null, isStreaming: false, messages: restored });
+  }, [connectionId]);
+
+  useEffect(() => {
+    if (state.isStreaming) {
+      return;
+    }
+    saveChatHistory(connectionId, state.messages);
+  }, [connectionId, state.messages, state.isStreaming]);
 
   const sendMessage = useCallback(
     async (content: string) => {
@@ -172,8 +191,9 @@ export const useAiChat = ({
   }, []);
 
   const clearMessages = useCallback(() => {
+    clearChatHistory(connectionId);
     setState({ error: null, isStreaming: false, messages: [] });
-  }, []);
+  }, [connectionId]);
 
   return {
     clearError,

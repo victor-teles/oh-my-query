@@ -3,6 +3,7 @@ import { Keyboard, ShieldCheck, ShieldOff, Unplug } from "lucide-react";
 import { useCallback } from "react";
 
 import type { DatabaseConnection } from "@/lib/connections";
+import type { WorkspaceMode } from "@/lib/workspace-mode";
 
 import { Button } from "@/components/ui/button";
 import { Kbd, KbdGroup } from "@/components/ui/kbd";
@@ -11,20 +12,20 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { ChatPanelToggle } from "@/components/workspace/chat-panel-toggle";
+import { WorkspaceModeToggle } from "@/components/workspace/workspace-mode-toggle";
 import { useSafeMode } from "@/contexts/safe-mode-context";
 
 interface ConnectionToolbarProps {
   connection: DatabaseConnection;
-  isChatOpen: boolean;
-  onChatToggle: () => void;
+  workspaceMode: WorkspaceMode;
+  onWorkspaceModeChange: (next: WorkspaceMode) => void;
   onShowShortcuts: () => void;
 }
 
 export const ConnectionToolbar = ({
   connection,
-  isChatOpen,
-  onChatToggle,
+  workspaceMode,
+  onWorkspaceModeChange,
   onShowShortcuts,
 }: ConnectionToolbarProps) => {
   const navigate = useNavigate();
@@ -36,7 +37,10 @@ export const ConnectionToolbar = ({
 
   return (
     <div className="flex items-center space-x-2">
-      <ChatPanelToggle isOpen={isChatOpen} onToggle={onChatToggle} />
+      <WorkspaceModeToggle
+        mode={workspaceMode}
+        onChange={onWorkspaceModeChange}
+      />
 
       <Tooltip>
         <TooltipTrigger

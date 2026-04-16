@@ -44,18 +44,15 @@ export const parseAndValidateSpec = (code: string): SpecParseResult => {
     };
   }
 
+  const missingLayoutMessage =
+    "This UI is missing its layout — `root` and `elements` are required.";
+
   if (!looksLikeSpec(parsed)) {
-    return {
-      message: "Spec must be a JSON object with `root` and `elements` fields.",
-      status: "invalid-shape",
-    };
+    return { message: missingLayoutMessage, status: "invalid-shape" };
   }
 
   if (!("root" in parsed) || !("elements" in parsed)) {
-    return {
-      message: "Spec is missing required fields: `root` and `elements`.",
-      status: "invalid-shape",
-    };
+    return { message: missingLayoutMessage, status: "invalid-shape" };
   }
 
   const candidate = parsed as unknown as Spec;
