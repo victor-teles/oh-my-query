@@ -29,6 +29,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { useOptionalActiveQuery } from "@/contexts/active-query-context";
 import { JSONUIProvider, Renderer, registry } from "@/lib/json-render";
 import {
   hasBlockingIssues,
@@ -160,11 +161,50 @@ const ErrorPanel = ({ title, detail, rawCode, issues }: ErrorPanelProps) => {
   );
 };
 
-const RenderedSpec = ({ spec }: { spec: Spec }) => (
-  <JSONUIProvider registry={registry}>
-    <Renderer registry={registry} spec={spec} />
-  </JSONUIProvider>
-);
+const useResultInitialState = (): Record<string, unknown> => {
+  const active = useOptionalActiveQuery();
+  return useMemo(() => {
+    if (!active) {
+      return {};
+    }
+    const snapshot = active.getSnapshot();
+    const { result } = snapshot;
+    if (!result || result.resultType !== "tabular") {
+      return {};
+    }
+    const columnNames = result.columns.map((c) => c.name);
+    const rows = result.rows.map((row) => {
+      const record: Record<string, unknown> = {};
+      for (let i = 0; i < columnNames.length; i += 1) {
+        const key = columnNames[i];
+        if (key !== undefined) {
+          record[key] = row[i];
+        }
+      }
+      return record;
+    });
+    return {
+      result: {
+        columns: result.columns,
+        rowCount: result.rowCount,
+        rows,
+        rowsArray: result.rows,
+      },
+    };
+    // `active` is the same ref across renders; we read once per mount to avoid
+    // stale-capture issues with streamed chart specs.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+};
+
+const RenderedSpec = ({ spec }: { spec: Spec }) => {
+  const initialState = useResultInitialState();
+  return (
+    <JSONUIProvider initialState={initialState} registry={registry}>
+      <Renderer registry={registry} spec={spec} />
+    </JSONUIProvider>
+  );
+};
 
 const renderInlineErrorFallback = (err: Error): ReactNode => (
   <span className="inline-flex items-center gap-1 rounded-md border border-destructive/30 bg-destructive/5 px-2 py-0.5 text-xs text-destructive">

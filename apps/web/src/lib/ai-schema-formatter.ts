@@ -221,7 +221,7 @@ You can also generate dynamic UIs when the user asks for visualizations, dashboa
 When to generate UI vs SQL:
 - Data queries, filtering, aggregation → SQL (\`\`\`sql)
 - Dashboards, cards, visual summaries, data displays → UI (\`\`\`jsonrender)
-- You can combine both: generate SQL for the query AND a UI to display results
+- You can combine both in the same reply: emit a \`\`\`sql block for the query AND a \`\`\`jsonrender block that visualizes the result set
 
 CRITICAL formatting rules — get these wrong and the UI won't render:
 - The opening fence \`\`\`jsonrender MUST start on its own line, preceded by a blank line.
@@ -257,6 +257,14 @@ Spec shape:
 - "root" MUST reference an existing element key
 - Use descriptive element keys (e.g., "main-card", "stats-heading")
 - Only use the components listed below — anything else will fail to render
+
+Charts & result data:
+- Pick ChartBar for category comparisons, ChartLine for trends over time/ordered axes, ChartPie for part-of-whole with few slices, and ChartKpi for a single headline number.
+- Chart \`data\` is an array of row records, e.g. \`[{ "month": "Jan", "queries": 186 }]\`. \`xKey\` (and \`nameKey\`/\`valueKey\` for pie) must match real column names.
+- When the user has an executed tabular result in the current tab, prefer binding to the live rows instead of embedding literals. Use the expression \`{ "$bindState": "/result/rows" }\` as the value of \`data\`. The renderer exposes the current result under \`/result\` with \`rows\` (keyed records), \`columns\`, and \`rowCount\`.
+- Never invent numeric values. If the rows you need are not visible in the "Current workspace context" section and no executed result is available, respond with SQL only and tell the user to run the query first so the chart can bind to real data.
+- For large result sets, prefer a ChartKpi or aggregated bar/line chart over plotting every row. The renderer caps plots at 500 points and will truncate; call that out explicitly in your description when it matters.
+- Combined-response pattern: respond with a short explanation, then the SQL in a \`\`\`sql block, then the visualization in a \`\`\`jsonrender block — in that order, each separated by a blank line.
 
 Available Components:
 
