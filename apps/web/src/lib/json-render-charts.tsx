@@ -82,6 +82,7 @@ const chartPieProps = z.object({
 const chartKpiProps = z.object({
   currency: z.string().nullish(),
   delta: z.number().nullish(),
+  deltaFormat: z.enum(["number", "currency", "percent"]).nullish(),
   deltaLabel: z.string().nullish(),
   description: z.string().nullish(),
   format: z.enum(["number", "currency", "percent"]).nullish(),
@@ -99,18 +100,27 @@ type ChartLineProps = z.output<typeof chartLineProps>;
 type ChartPieProps = z.output<typeof chartPieProps>;
 type ChartKpiProps = z.output<typeof chartKpiProps>;
 
-const clampData = <T,>(
-  data: readonly T[]
-): { points: T[]; truncated: boolean; total: number } => {
-  const total = data.length;
-  if (total <= MAX_CHART_POINTS) {
-    return { points: [...data], total, truncated: false };
+// Even-stride sampling that always preserves the first and last points.
+// Cheaper than LTTB and good enough for keeping the overall shape of a
+// series (e.g. a sine wave) when we exceed the render cap.
+const sampleSeries = <T,>(
+  points: readonly T[],
+  max: number
+): { sampled: T[]; downsampled: boolean } => {
+  const n = points.length;
+  if (n <= max) {
+    return { downsampled: false, sampled: [...points] };
   }
-  return {
-    points: data.slice(0, MAX_CHART_POINTS),
-    total,
-    truncated: true,
-  };
+  const sampled: T[] = [];
+  const stride = (n - 1) / (max - 1);
+  for (let i = 0; i < max; i += 1) {
+    const idx = Math.min(n - 1, Math.round(i * stride));
+    const point = points[idx];
+    if (point !== undefined) {
+      sampled.push(point);
+    }
+  }
+  return { downsampled: true, sampled };
 };
 
 const coerceNumber = (value: unknown): number | null => {
@@ -181,9 +191,25 @@ const ChartFrame = ({
   </figure>
 );
 
-const ChartEmpty = ({ message }: { message: string }) => (
-  <div className="flex h-48 items-center justify-center rounded-md border border-dashed border-border bg-background/40 text-xs text-muted-foreground">
-    {message}
+type EmptyStateReason =
+  | "no-data"
+  | "no-numeric-series"
+  | "no-numeric-values"
+  | "missing-config";
+
+const EMPTY_STATE_COPY: Record<EmptyStateReason, string> = {
+  "missing-config":
+    "Add a data array, an xKey, and at least one series to render this chart.",
+  "no-data": "Nothing to chart yet — the query returned zero rows.",
+  "no-numeric-series":
+    "None of the selected columns are numeric. Try count, avg, or a cast.",
+  "no-numeric-values":
+    "None of the rows had a numeric value to slice. Try aggregating first.",
+};
+
+const ChartEmptyState = ({ reason }: { reason: EmptyStateReason }) => (
+  <div className="flex h-48 items-center justify-center rounded-md border border-dashed border-border bg-background/40 px-4 text-center text-xs text-muted-foreground">
+    {EMPTY_STATE_COPY[reason]}
   </div>
 );
 
@@ -220,11 +246,15 @@ const coerceRows = (
 
 const buildTruncationNote = (
   total: number,
+  kept: number,
+  downsampled: boolean,
   dropped: string[]
 ): string | null => {
   const parts: string[] = [];
-  if (total > MAX_CHART_POINTS) {
-    parts.push(`Showing first ${MAX_CHART_POINTS} of ${total} points.`);
+  if (downsampled) {
+    parts.push(
+      `Downsampled to ${kept} of ${total} points to keep the shape readable.`
+    );
   }
   if (dropped.length > 0) {
     parts.push(`Skipped non-numeric series: ${dropped.join(", ")}.`);
@@ -232,12 +262,46 @@ const buildTruncationNote = (
   return parts.length > 0 ? parts.join(" ") : null;
 };
 
+const formatNumeric = (
+  value: number,
+  format: ChartKpiProps["format"] | ChartKpiProps["deltaFormat"],
+  currency: string | null | undefined
+): string => {
+  if (!Number.isFinite(value)) {
+    return "—";
+  }
+  if (format === "currency") {
+    try {
+      return new Intl.NumberFormat(undefined, {
+        currency: currency || "USD",
+        style: "currency",
+      }).format(value);
+    } catch {
+      return value.toLocaleString();
+    }
+  }
+  if (format === "percent") {
+    return `${(value * 100).toFixed(1)}%`;
+  }
+  return value.toLocaleString();
+};
+
+const formatKpiValue = (
+  value: string | number,
+  format: ChartKpiProps["format"],
+  currency: string | null | undefined
+): string => {
+  if (typeof value === "string") {
+    return value;
+  }
+  return formatNumeric(value, format, currency);
+};
+
 const ChartBarRenderer = ({ props }: BaseComponentProps<ChartBarProps>) => {
   const { data, xKey, series, title, description, layout, stacked } = props;
 
   if (
     !Array.isArray(data) ||
-    data.length === 0 ||
     !Array.isArray(series) ||
     series.length === 0 ||
     typeof xKey !== "string" ||
@@ -245,18 +309,26 @@ const ChartBarRenderer = ({ props }: BaseComponentProps<ChartBarProps>) => {
   ) {
     return (
       <ChartFrame description={description} title={title}>
-        <ChartEmpty message="No data to visualize" />
+        <ChartEmptyState reason="missing-config" />
       </ChartFrame>
     );
   }
 
-  const { points, total } = clampData(data);
+  if (data.length === 0) {
+    return (
+      <ChartFrame description={description} title={title}>
+        <ChartEmptyState reason="no-data" />
+      </ChartFrame>
+    );
+  }
+
+  const { sampled: points, downsampled } = sampleSeries(data, MAX_CHART_POINTS);
   const { usable, dropped } = normalizeSeries(series, points);
 
   if (usable.length === 0) {
     return (
       <ChartFrame description={description} title={title}>
-        <ChartEmpty message="No numeric series found in data" />
+        <ChartEmptyState reason="no-numeric-series" />
       </ChartFrame>
     );
   }
@@ -267,7 +339,12 @@ const ChartBarRenderer = ({ props }: BaseComponentProps<ChartBarProps>) => {
   );
   const config = buildConfig(usable);
   const isVertical = layout === "vertical";
-  const note = buildTruncationNote(total, dropped);
+  const note = buildTruncationNote(
+    data.length,
+    points.length,
+    downsampled,
+    dropped
+  );
 
   return (
     <ChartFrame description={description} footnote={note} title={title}>
@@ -281,18 +358,36 @@ const ChartBarRenderer = ({ props }: BaseComponentProps<ChartBarProps>) => {
           <CartesianGrid horizontal={!isVertical} vertical={isVertical} />
           {isVertical ? (
             <>
-              <XAxis axisLine={false} tickLine={false} type="number" />
+              <XAxis
+                axisLine={false}
+                tickLine={false}
+                tickMargin={8}
+                type="number"
+              />
               <YAxis
                 axisLine={false}
                 dataKey={xKey}
                 tickLine={false}
+                tickMargin={8}
                 type="category"
+                width={72}
               />
             </>
           ) : (
             <>
-              <XAxis axisLine={false} dataKey={xKey} tickLine={false} />
-              <YAxis axisLine={false} tickLine={false} />
+              <XAxis
+                axisLine={false}
+                dataKey={xKey}
+                interval="preserveStartEnd"
+                tickLine={false}
+                tickMargin={8}
+              />
+              <YAxis
+                axisLine={false}
+                tickLine={false}
+                tickMargin={8}
+                width={36}
+              />
             </>
           )}
           <ChartTooltip content={<ChartTooltipContent />} />
@@ -319,7 +414,6 @@ const ChartLineRenderer = ({ props }: BaseComponentProps<ChartLineProps>) => {
 
   if (
     !Array.isArray(data) ||
-    data.length === 0 ||
     !Array.isArray(series) ||
     series.length === 0 ||
     typeof xKey !== "string" ||
@@ -327,18 +421,26 @@ const ChartLineRenderer = ({ props }: BaseComponentProps<ChartLineProps>) => {
   ) {
     return (
       <ChartFrame description={description} title={title}>
-        <ChartEmpty message="No data to visualize" />
+        <ChartEmptyState reason="missing-config" />
       </ChartFrame>
     );
   }
 
-  const { points, total } = clampData(data);
+  if (data.length === 0) {
+    return (
+      <ChartFrame description={description} title={title}>
+        <ChartEmptyState reason="no-data" />
+      </ChartFrame>
+    );
+  }
+
+  const { sampled: points, downsampled } = sampleSeries(data, MAX_CHART_POINTS);
   const { usable, dropped } = normalizeSeries(series, points);
 
   if (usable.length === 0) {
     return (
       <ChartFrame description={description} title={title}>
-        <ChartEmpty message="No numeric series found in data" />
+        <ChartEmptyState reason="no-numeric-series" />
       </ChartFrame>
     );
   }
@@ -348,7 +450,12 @@ const ChartLineRenderer = ({ props }: BaseComponentProps<ChartLineProps>) => {
     usable.map((s) => s.key)
   );
   const config = buildConfig(usable);
-  const note = buildTruncationNote(total, dropped);
+  const note = buildTruncationNote(
+    data.length,
+    points.length,
+    downsampled,
+    dropped
+  );
 
   return (
     <ChartFrame description={description} footnote={note} title={title}>
@@ -359,8 +466,22 @@ const ChartLineRenderer = ({ props }: BaseComponentProps<ChartLineProps>) => {
           margin={{ bottom: 8, left: 8, right: 8, top: 8 }}
         >
           <CartesianGrid vertical={false} />
-          <XAxis axisLine={false} dataKey={xKey} tickLine={false} />
-          <YAxis axisLine={false} tickLine={false} />
+          <XAxis
+            axisLine={false}
+            dataKey={xKey}
+            interval="preserveStartEnd"
+            minTickGap={24}
+            tickLine={false}
+            tickMargin={8}
+            type="category"
+          />
+          <YAxis
+            axisLine={false}
+            domain={["auto", "auto"]}
+            tickLine={false}
+            tickMargin={8}
+            width={36}
+          />
           <ChartTooltip content={<ChartTooltipContent />} />
           {usable.length > 1 ? (
             <ChartLegend content={<ChartLegendContent />} />
@@ -381,25 +502,32 @@ const ChartLineRenderer = ({ props }: BaseComponentProps<ChartLineProps>) => {
   );
 };
 
+const PIE_MAX_SLICES = 12;
+
 const ChartPieRenderer = ({ props }: BaseComponentProps<ChartPieProps>) => {
   const { data, nameKey, valueKey, title, description, donut } = props;
 
   if (
     !Array.isArray(data) ||
-    data.length === 0 ||
     typeof nameKey !== "string" ||
     typeof valueKey !== "string"
   ) {
     return (
       <ChartFrame description={description} title={title}>
-        <ChartEmpty message="No data to visualize" />
+        <ChartEmptyState reason="missing-config" />
       </ChartFrame>
     );
   }
 
-  const { points, total } = clampData(data);
+  if (data.length === 0) {
+    return (
+      <ChartFrame description={description} title={title}>
+        <ChartEmptyState reason="no-data" />
+      </ChartFrame>
+    );
+  }
 
-  const cleaned = points.flatMap((row) => {
+  const cleaned = data.flatMap((row) => {
     const value = coerceNumber(row[valueKey]);
     const name = row[nameKey];
     if (value === null || name === null || name === undefined) {
@@ -411,14 +539,19 @@ const ChartPieRenderer = ({ props }: BaseComponentProps<ChartPieProps>) => {
   if (cleaned.length === 0) {
     return (
       <ChartFrame description={description} title={title}>
-        <ChartEmpty message="No numeric values to plot" />
+        <ChartEmptyState reason="no-numeric-values" />
       </ChartFrame>
     );
   }
 
+  const displaySlices = cleaned.slice(0, PIE_MAX_SLICES);
+  const truncated = cleaned.length > PIE_MAX_SLICES;
+  const isDonut = donut !== false;
+  const total = cleaned.reduce((sum, slice) => sum + slice.value, 0);
+
   const config: ChartConfig = {};
-  for (let i = 0; i < cleaned.length; i += 1) {
-    const slice = cleaned[i];
+  for (let i = 0; i < displaySlices.length; i += 1) {
+    const slice = displaySlices[i];
     if (!slice) {
       continue;
     }
@@ -428,96 +561,93 @@ const ChartPieRenderer = ({ props }: BaseComponentProps<ChartPieProps>) => {
     };
   }
 
-  const note =
-    total > MAX_CHART_POINTS
-      ? `Showing first ${MAX_CHART_POINTS} of ${total} slices.`
-      : null;
+  const note = truncated
+    ? `Showing top ${PIE_MAX_SLICES} of ${cleaned.length} slices — the rest are collapsed.`
+    : null;
 
   return (
     <ChartFrame description={description} footnote={note} title={title}>
-      <ChartContainer className="h-64 w-full" config={config}>
-        <PieChart>
-          <ChartTooltip content={<ChartTooltipContent hideLabel />} />
-          <Pie
-            data={cleaned}
-            dataKey="value"
-            innerRadius={donut ? 60 : 0}
-            nameKey="name"
-            outerRadius={90}
-            strokeWidth={1}
+      <div className="relative">
+        <ChartContainer className="h-64 w-full" config={config}>
+          <PieChart>
+            <ChartTooltip content={<ChartTooltipContent nameKey="name" />} />
+            <Pie
+              data={displaySlices}
+              dataKey="value"
+              innerRadius={isDonut ? "55%" : 0}
+              nameKey="name"
+              outerRadius="80%"
+              strokeWidth={1}
+            >
+              {displaySlices.map((slice) => (
+                <Cell fill={`var(--color-${slice.name})`} key={slice.name} />
+              ))}
+            </Pie>
+            <ChartLegend content={<ChartLegendContent nameKey="name" />} />
+          </PieChart>
+        </ChartContainer>
+        {isDonut ? (
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center pb-8"
           >
-            {cleaned.map((slice) => (
-              <Cell fill={`var(--color-${slice.name})`} key={slice.name} />
-            ))}
-          </Pie>
-          <ChartLegend content={<ChartLegendContent nameKey="name" />} />
-        </PieChart>
-      </ChartContainer>
+            <span className="text-[10px] uppercase tracking-wide text-muted-foreground">
+              Total
+            </span>
+            <span className="text-data text-lg font-semibold text-foreground">
+              {total.toLocaleString()}
+            </span>
+          </div>
+        ) : null}
+      </div>
     </ChartFrame>
   );
 };
 
-const formatKpiValue = (
-  value: string | number,
-  format: ChartKpiProps["format"],
-  currency: string | null | undefined
-): string => {
-  if (typeof value === "string") {
-    return value;
-  }
-  if (!Number.isFinite(value)) {
-    return "—";
-  }
-  if (format === "currency") {
-    try {
-      return new Intl.NumberFormat(undefined, {
-        currency: currency || "USD",
-        style: "currency",
-      }).format(value);
-    } catch {
-      return value.toLocaleString();
-    }
-  }
-  if (format === "percent") {
-    return `${(value * 100).toFixed(1)}%`;
-  }
-  return value.toLocaleString();
-};
-
 const ChartKpiRenderer = ({ props }: BaseComponentProps<ChartKpiProps>) => {
-  const { label, value, description, format, delta, deltaLabel, currency } =
-    props;
+  const {
+    label,
+    value,
+    description,
+    format,
+    delta,
+    deltaFormat,
+    deltaLabel,
+    currency,
+  } = props;
 
   const displayValue = formatKpiValue(value, format, currency);
   const deltaSign = typeof delta === "number" && delta !== 0 ? delta > 0 : null;
   let deltaClass = "text-muted-foreground";
   if (deltaSign === true) {
-    deltaClass = "text-emerald-500";
+    deltaClass = "text-(--color-success)";
   } else if (deltaSign === false) {
-    deltaClass = "text-destructive";
+    deltaClass = "text-(--color-destructive)";
   }
 
   return (
-    <figure className="flex flex-col gap-1 rounded-lg border bg-card/40 p-4">
-      <span className="text-xs uppercase tracking-wide text-muted-foreground">
-        {label}
-      </span>
-      <span className="text-data text-3xl font-semibold text-foreground">
-        {displayValue}
-      </span>
-      {typeof delta === "number" ? (
-        <span className={cn("text-xs font-medium", deltaClass)}>
-          {delta > 0 ? "+" : ""}
-          {formatKpiValue(delta, format, currency)}
-          {deltaLabel ? (
-            <span className="ml-1 text-muted-foreground">{deltaLabel}</span>
-          ) : null}
+    <ChartFrame>
+      <div className="flex flex-col gap-1">
+        <span className="text-xs uppercase tracking-wide text-muted-foreground">
+          {label}
         </span>
-      ) : null}
-      {description ? (
-        <span className="text-xs text-muted-foreground">{description}</span>
-      ) : null}
-    </figure>
+        <span className="text-data text-3xl font-semibold text-foreground">
+          {displayValue}
+        </span>
+        {typeof delta === "number" ? (
+          <span className={cn("text-xs font-medium", deltaClass)}>
+            {delta > 0 ? "+" : ""}
+            {formatNumeric(delta, deltaFormat ?? format, currency)}
+            {deltaLabel ? (
+              <span className="ml-1 text-muted-foreground">{deltaLabel}</span>
+            ) : null}
+          </span>
+        ) : null}
+        {description ? (
+          <span className="text-xs text-muted-foreground">{description}</span>
+        ) : null}
+      </div>
+    </ChartFrame>
   );
 };
 

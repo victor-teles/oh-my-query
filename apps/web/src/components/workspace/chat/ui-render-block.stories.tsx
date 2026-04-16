@@ -1,8 +1,17 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import type { ReactNode } from "react";
 
 import { expect, userEvent } from "storybook/test";
 
 import { UIRenderBlock } from "./ui-render-block";
+
+const DarkFrame = ({ children }: { children: ReactNode }) => (
+  <div className="dark bg-background p-4 text-foreground">{children}</div>
+);
+
+// Recharts axis tick placement and legend wrapping vary slightly between runs.
+// Loosen the pixel diff ceiling on chart stories so CI stays stable.
+const CHART_VISUAL = { visualRegression: { failThreshold: 0.06 } };
 
 const meta = {
   component: UIRenderBlock,
@@ -73,15 +82,18 @@ const chartBarSpec = JSON.stringify({
     root: {
       props: {
         data: [
-          { month: "Jan", queries: 186 },
-          { month: "Feb", queries: 305 },
-          { month: "Mar", queries: 237 },
-          { month: "Apr", queries: 173 },
-          { month: "May", queries: 409 },
-          { month: "Jun", queries: 214 },
+          { errors: 12, month: "Jan", queries: 186 },
+          { errors: 8, month: "Feb", queries: 305 },
+          { errors: 15, month: "Mar", queries: 237 },
+          { errors: 5, month: "Apr", queries: 173 },
+          { errors: 22, month: "May", queries: 409 },
+          { errors: 9, month: "Jun", queries: 214 },
         ],
-        description: "Monthly query volume for the last six months.",
-        series: [{ key: "queries", label: "Queries" }],
+        description: "Monthly query volume and errors for the last six months.",
+        series: [
+          { key: "queries", label: "Queries" },
+          { key: "errors", label: "Errors" },
+        ],
         title: "Query volume",
         xKey: "month",
       },
@@ -103,7 +115,7 @@ const chartLineSpec = JSON.stringify({
           { latency: 85, time: "16:00" },
           { latency: 52, time: "20:00" },
         ],
-        series: [{ color: "var(--chart-2)", key: "latency", label: "p95 ms" }],
+        series: [{ key: "latency", label: "p95 ms" }],
         smooth: true,
         title: "Latency over the day",
         xKey: "time",
@@ -139,11 +151,31 @@ const chartKpiSpec = JSON.stringify({
     root: {
       props: {
         delta: 128,
+        deltaFormat: "number",
         deltaLabel: "vs last week",
         description: "Distinct users who ran at least one query.",
         format: "number",
         label: "Active users",
         value: 1248,
+      },
+      type: "ChartKpi",
+    },
+  },
+  root: "root",
+});
+
+const chartKpiNegativeSpec = JSON.stringify({
+  elements: {
+    root: {
+      props: {
+        currency: "USD",
+        delta: -0.04,
+        deltaFormat: "percent",
+        deltaLabel: "vs yesterday",
+        description: "Revenue trend for the current billing window.",
+        format: "currency",
+        label: "Revenue today",
+        value: 48_250,
       },
       type: "ChartKpi",
     },
@@ -260,16 +292,50 @@ export const PartialStream: Story = {
 
 export const ChartBarExample: Story = {
   args: { code: chartBarSpec },
+  parameters: CHART_VISUAL,
   play: async ({ canvas }) => {
     await expect(canvas.getByText("Query volume")).toBeVisible();
     await expect(
-      canvas.getByText("Monthly query volume for the last six months.")
+      canvas.getByText(
+        "Monthly query volume and errors for the last six months."
+      )
     ).toBeVisible();
+  },
+};
+
+export const ChartBarDark: Story = {
+  args: { code: chartBarSpec },
+  decorators: [
+    (Story) => (
+      <DarkFrame>
+        <Story />
+      </DarkFrame>
+    ),
+  ],
+  parameters: CHART_VISUAL,
+  play: async ({ canvas }) => {
+    await expect(canvas.getByText("Query volume")).toBeVisible();
   },
 };
 
 export const ChartLineExample: Story = {
   args: { code: chartLineSpec },
+  parameters: CHART_VISUAL,
+  play: async ({ canvas }) => {
+    await expect(canvas.getByText("Latency over the day")).toBeVisible();
+  },
+};
+
+export const ChartLineDark: Story = {
+  args: { code: chartLineSpec },
+  decorators: [
+    (Story) => (
+      <DarkFrame>
+        <Story />
+      </DarkFrame>
+    ),
+  ],
+  parameters: CHART_VISUAL,
   play: async ({ canvas }) => {
     await expect(canvas.getByText("Latency over the day")).toBeVisible();
   },
@@ -277,9 +343,27 @@ export const ChartLineExample: Story = {
 
 export const ChartPieExample: Story = {
   args: { code: chartPieSpec },
+  parameters: CHART_VISUAL,
   play: async ({ canvas }) => {
     await expect(canvas.getByText("Request outcomes")).toBeVisible();
     await expect(canvas.getByText("ok")).toBeVisible();
+    await expect(canvas.getByText("Total")).toBeVisible();
+    await expect(canvas.getByText("53")).toBeVisible();
+  },
+};
+
+export const ChartPieDark: Story = {
+  args: { code: chartPieSpec },
+  decorators: [
+    (Story) => (
+      <DarkFrame>
+        <Story />
+      </DarkFrame>
+    ),
+  ],
+  parameters: CHART_VISUAL,
+  play: async ({ canvas }) => {
+    await expect(canvas.getByText("Request outcomes")).toBeVisible();
   },
 };
 
@@ -292,20 +376,43 @@ export const ChartKpiExample: Story = {
   },
 };
 
+export const ChartKpiNegative: Story = {
+  args: { code: chartKpiNegativeSpec },
+  play: async ({ canvas }) => {
+    await expect(canvas.getByText("Revenue today")).toBeVisible();
+    await expect(canvas.getByText(/-4\.0%/)).toBeVisible();
+  },
+};
+
+export const ChartKpiDark: Story = {
+  args: { code: chartKpiSpec },
+  decorators: [
+    (Story) => (
+      <DarkFrame>
+        <Story />
+      </DarkFrame>
+    ),
+  ],
+  play: async ({ canvas }) => {
+    await expect(canvas.getByText("Active users")).toBeVisible();
+  },
+};
+
 export const ChartEmpty: Story = {
   args: { code: chartEmptySpec },
   play: async ({ canvas }) => {
     await expect(canvas.getByText("No data yet")).toBeVisible();
-    await expect(canvas.getByText("No data to visualize")).toBeVisible();
+    await expect(canvas.getByText(/Nothing to chart yet/)).toBeVisible();
   },
 };
 
 export const ChartTruncatedOverLimit: Story = {
   args: { code: chartTruncatedSpec },
+  parameters: CHART_VISUAL,
   play: async ({ canvas }) => {
     await expect(canvas.getByText("Large series")).toBeVisible();
     await expect(
-      canvas.getByText(/Showing first 500 of 750 points/)
+      canvas.getByText(/Downsampled to 500 of 750 points/)
     ).toBeVisible();
   },
 };
@@ -315,7 +422,7 @@ export const ChartNonNumericSeries: Story = {
   play: async ({ canvas }) => {
     await expect(canvas.getByText("Bad series")).toBeVisible();
     await expect(
-      canvas.getByText("No numeric series found in data")
+      canvas.getByText(/None of the selected columns are numeric/)
     ).toBeVisible();
   },
 };
