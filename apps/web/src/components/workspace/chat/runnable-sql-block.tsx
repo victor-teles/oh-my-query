@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 
 import { useTransientQuery } from "@/hooks/use-transient-query";
 
@@ -22,6 +22,18 @@ const READ_ONLY_STATEMENT =
 
 export const isReadOnlySql = (sql: string): boolean =>
   READ_ONLY_STATEMENT.test(sql.trim());
+
+// Module-scoped so a RunnableSqlBlock that unmounts and remounts during chat
+// streaming (markdown re-parses) doesn't auto-run the same statement twice.
+// We key on `${connectionId}|${schema ?? ""}|${code}` and keep the entry for
+// the lifetime of the session — a click-Run bypasses this dedupe entirely.
+const autoRunSignatures = new Set<string>();
+
+const buildAutoRunSignature = (
+  connectionId: string,
+  schema: string | undefined,
+  code: string
+): string => `${connectionId}|${schema ?? ""}|${code}`;
 
 export const RunnableSqlBlock = ({
   code,
@@ -49,21 +61,25 @@ export const RunnableSqlBlock = ({
     }
   }, [messageResult, result, status]);
 
-  // Auto-run read-only SQL once when the block mounts, so the user doesn't have
-  // to click Run before a sibling chart can populate. Guarded to SELECT-shaped
-  // statements only — anything that could mutate data still requires a click.
-  const hasAutoRunRef = useRef(false);
+  // Auto-run read-only SQL once (across remounts) when the message also
+  // contains a chart that binds to the result, so the user doesn't have to
+  // click Run. Guarded to SELECT-shaped statements only — anything that could
+  // mutate data still requires a click.
   useEffect(() => {
-    if (!autoRun || hasAutoRunRef.current) {
-      return;
-    }
-    if (status !== "idle") {
+    if (!autoRun) {
       return;
     }
     if (!isReadOnlySql(code)) {
       return;
     }
-    hasAutoRunRef.current = true;
+    const signature = buildAutoRunSignature(connectionId, schema, code);
+    if (autoRunSignatures.has(signature)) {
+      return;
+    }
+    if (status !== "idle") {
+      return;
+    }
+    autoRunSignatures.add(signature);
     const execute = async () => {
       try {
         await run(code);
@@ -72,7 +88,7 @@ export const RunnableSqlBlock = ({
       }
     };
     execute();
-  }, [autoRun, code, run, status]);
+  }, [autoRun, code, connectionId, run, schema, status]);
 
   return (
     <div>
