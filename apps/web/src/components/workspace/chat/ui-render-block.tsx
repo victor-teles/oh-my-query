@@ -161,16 +161,22 @@ const ErrorPanel = ({ title, detail, rawCode, issues }: ErrorPanelProps) => {
   );
 };
 
-const useResultInitialState = (): Record<string, unknown> => {
+const useResultInitialState = (): {
+  state: Record<string, unknown>;
+  key: string;
+} => {
   const active = useOptionalActiveQuery();
+  // `meta` is the reactive handle that flips when status/hasResult change;
+  // we only read it here so the memo re-runs, then pull fresh rows below.
+  const meta = active?.meta;
   return useMemo(() => {
-    if (!active) {
-      return {};
+    if (!active || !meta) {
+      return { key: "no-context", state: {} };
     }
     const snapshot = active.getSnapshot();
     const { result } = snapshot;
     if (!result || result.resultType !== "tabular") {
-      return {};
+      return { key: `${meta.status}:no-result`, state: {} };
     }
     const columnNames = result.columns.map((c) => c.name);
     const rows = result.rows.map((row) => {
@@ -184,23 +190,23 @@ const useResultInitialState = (): Record<string, unknown> => {
       return record;
     });
     return {
-      result: {
-        columns: result.columns,
-        rowCount: result.rowCount,
-        rows,
-        rowsArray: result.rows,
+      key: `${meta.status}:${result.rowCount}:${result.executionTimeMs}`,
+      state: {
+        result: {
+          columns: result.columns,
+          rowCount: result.rowCount,
+          rows,
+          rowsArray: result.rows,
+        },
       },
     };
-    // `active` is the same ref across renders; we read once per mount to avoid
-    // stale-capture issues with streamed chart specs.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [active, meta]);
 };
 
 const RenderedSpec = ({ spec }: { spec: Spec }) => {
-  const initialState = useResultInitialState();
+  const { state: initialState, key } = useResultInitialState();
   return (
-    <JSONUIProvider initialState={initialState} registry={registry}>
+    <JSONUIProvider initialState={initialState} key={key} registry={registry}>
       <Renderer registry={registry} spec={spec} />
     </JSONUIProvider>
   );

@@ -200,7 +200,8 @@ type EmptyStateReason =
 const EMPTY_STATE_COPY: Record<EmptyStateReason, string> = {
   "missing-config":
     "Add a data array, an xKey, and at least one series to render this chart.",
-  "no-data": "Nothing to chart yet — the query returned zero rows.",
+  "no-data":
+    "No rows to chart yet — run the query above, or pass a literal data array.",
   "no-numeric-series":
     "None of the selected columns are numeric. Try count, avg, or a cast.",
   "no-numeric-values":
@@ -301,7 +302,6 @@ const ChartBarRenderer = ({ props }: BaseComponentProps<ChartBarProps>) => {
   const { data, xKey, series, title, description, layout, stacked } = props;
 
   if (
-    !Array.isArray(data) ||
     !Array.isArray(series) ||
     series.length === 0 ||
     typeof xKey !== "string" ||
@@ -314,7 +314,7 @@ const ChartBarRenderer = ({ props }: BaseComponentProps<ChartBarProps>) => {
     );
   }
 
-  if (data.length === 0) {
+  if (!Array.isArray(data) || data.length === 0) {
     return (
       <ChartFrame description={description} title={title}>
         <ChartEmptyState reason="no-data" />
@@ -413,7 +413,6 @@ const ChartLineRenderer = ({ props }: BaseComponentProps<ChartLineProps>) => {
   const { data, xKey, series, title, description, smooth } = props;
 
   if (
-    !Array.isArray(data) ||
     !Array.isArray(series) ||
     series.length === 0 ||
     typeof xKey !== "string" ||
@@ -426,7 +425,7 @@ const ChartLineRenderer = ({ props }: BaseComponentProps<ChartLineProps>) => {
     );
   }
 
-  if (data.length === 0) {
+  if (!Array.isArray(data) || data.length === 0) {
     return (
       <ChartFrame description={description} title={title}>
         <ChartEmptyState reason="no-data" />
@@ -508,9 +507,10 @@ const ChartPieRenderer = ({ props }: BaseComponentProps<ChartPieProps>) => {
   const { data, nameKey, valueKey, title, description, donut } = props;
 
   if (
-    !Array.isArray(data) ||
     typeof nameKey !== "string" ||
-    typeof valueKey !== "string"
+    nameKey.length === 0 ||
+    typeof valueKey !== "string" ||
+    valueKey.length === 0
   ) {
     return (
       <ChartFrame description={description} title={title}>
@@ -519,7 +519,7 @@ const ChartPieRenderer = ({ props }: BaseComponentProps<ChartPieProps>) => {
     );
   }
 
-  if (data.length === 0) {
+  if (!Array.isArray(data) || data.length === 0) {
     return (
       <ChartFrame description={description} title={title}>
         <ChartEmptyState reason="no-data" />

@@ -49,6 +49,7 @@ describe("json-render catalog", () => {
     expect(prompt).toContain('"$bindState": "/result/rows"');
     expect(prompt).toContain("Never invent numeric values");
     expect(prompt).toContain("500 points");
+    expect(prompt).toContain('"run the query above" placeholder');
   });
 
   it("teaches the combined SQL + jsonrender response pattern", () => {

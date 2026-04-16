@@ -402,7 +402,7 @@ export const ChartEmpty: Story = {
   args: { code: chartEmptySpec },
   play: async ({ canvas }) => {
     await expect(canvas.getByText("No data yet")).toBeVisible();
-    await expect(canvas.getByText(/Nothing to chart yet/)).toBeVisible();
+    await expect(canvas.getByText(/run the query above/)).toBeVisible();
   },
 };
 
