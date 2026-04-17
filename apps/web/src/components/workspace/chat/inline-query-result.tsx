@@ -127,10 +127,12 @@ export const InlineQueryResult = ({ result }: { result: ExecuteResult }) => {
   return <DocumentsPreview result={result} />;
 };
 
-export const InlineRunningIndicator = () => (
+export const InlineRunningIndicator = ({
+  label = "Running…",
+}: { label?: string } = {}) => (
   <div className="my-2 inline-flex items-center gap-2 rounded-lg border bg-secondary/30 px-3 py-1.5 text-xs text-muted-foreground">
     <Loader2 className="size-3 animate-spin" />
-    <span>Running…</span>
+    <span>{label}</span>
   </div>
 );
 

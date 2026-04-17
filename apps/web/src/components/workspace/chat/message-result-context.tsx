@@ -1,12 +1,21 @@
 import type { ReactNode } from "react";
 
-import { createContext, use, useMemo, useState } from "react";
+import { createContext, use, useCallback, useMemo, useState } from "react";
 
 import type { ExecuteResult } from "@/lib/tauri";
 
+export type ResultSource = "manual" | "auto";
+
+export interface MessageResultRecord {
+  result: ExecuteResult;
+  source: ResultSource;
+}
+
 interface MessageResultContextValue {
+  record: MessageResultRecord | null;
   result: ExecuteResult | null;
-  setResult: (result: ExecuteResult | null) => void;
+  publish: (result: ExecuteResult, source: ResultSource) => void;
+  clear: () => void;
 }
 
 const MessageResultContext = createContext<MessageResultContextValue | null>(
@@ -18,8 +27,26 @@ export const MessageResultProvider = ({
 }: {
   children: ReactNode;
 }) => {
-  const [result, setResult] = useState<ExecuteResult | null>(null);
-  const value = useMemo(() => ({ result, setResult }), [result]);
+  const [record, setRecord] = useState<MessageResultRecord | null>(null);
+
+  const publish = useCallback((result: ExecuteResult, source: ResultSource) => {
+    setRecord({ result, source });
+  }, []);
+
+  const clear = useCallback(() => {
+    setRecord(null);
+  }, []);
+
+  const value = useMemo<MessageResultContextValue>(
+    () => ({
+      clear,
+      publish,
+      record,
+      result: record?.result ?? null,
+    }),
+    [clear, publish, record]
+  );
+
   return <MessageResultContext value={value}>{children}</MessageResultContext>;
 };
 

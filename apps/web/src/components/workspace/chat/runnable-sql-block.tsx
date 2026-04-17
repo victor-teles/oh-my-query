@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useCallback, useEffect, useRef } from "react";
 
 import { useTransientQuery } from "@/hooks/use-transient-query";
 
@@ -17,13 +17,46 @@ interface RunnableSqlBlockProps {
   autoRun?: boolean;
 }
 
-const READ_ONLY_STATEMENT =
+const READ_ONLY_LEADING =
   /^\s*(?:with\b|select\b|show\b|explain\b|describe\b|desc\b)/i;
+const MUTATION_KEYWORDS =
+  /\b(?:insert|update|delete|drop|alter|truncate|create|grant|revoke|merge|replace|call|execute|vacuum|analyze|reindex|copy|lock)\b/i;
 
-export const isReadOnlySql = (sql: string): boolean =>
-  READ_ONLY_STATEMENT.test(sql.trim());
+const stripStringsAndComments = (sql: string): string =>
+  sql
+    .replaceAll(/--[^\n]*/g, "")
+    .replaceAll(/\/\*[\s\S]*?\*\//g, "")
+    .replaceAll(/'(?:[^'\\]|\\.|'')*'/g, "")
+    .replaceAll(/"(?:[^"\\]|\\.|"")*"/g, "")
+    .replaceAll(/`(?:[^`\\]|\\.|``)*`/g, "");
 
+export const isReadOnlySql = (sql: string): boolean => {
+  const trimmed = sql.trim();
+  if (!READ_ONLY_LEADING.test(trimmed)) {
+    return false;
+  }
+  const scrubbed = stripStringsAndComments(trimmed);
+  if (MUTATION_KEYWORDS.test(scrubbed)) {
+    return false;
+  }
+  if (/;\s*\S/.test(scrubbed.replace(/;\s*$/, ""))) {
+    return false;
+  }
+  return true;
+};
+
+const AUTO_RUN_CACHE_LIMIT = 200;
 const autoRunSignatures = new Set<string>();
+
+const rememberAutoRun = (signature: string) => {
+  if (autoRunSignatures.size >= AUTO_RUN_CACHE_LIMIT) {
+    const oldest = autoRunSignatures.values().next().value;
+    if (oldest !== undefined) {
+      autoRunSignatures.delete(oldest);
+    }
+  }
+  autoRunSignatures.add(signature);
+};
 
 const buildAutoRunSignature = (
   connectionId: string,
@@ -43,15 +76,24 @@ export const RunnableSqlBlock = ({
   });
 
   const messageResult = useOptionalMessageResult();
+  const pendingSourceRef = useRef<"manual" | "auto">("manual");
+
+  const runManual = useCallback(
+    async (sql: string) => {
+      pendingSourceRef.current = "manual";
+      await run(sql);
+    },
+    [run]
+  );
 
   useEffect(() => {
     if (!messageResult) {
       return;
     }
     if (status === "success" && result) {
-      messageResult.setResult(result);
+      messageResult.publish(result, pendingSourceRef.current);
     } else if (status === "idle") {
-      messageResult.setResult(null);
+      messageResult.clear();
     }
   }, [messageResult, result, status]);
 
@@ -69,9 +111,10 @@ export const RunnableSqlBlock = ({
     if (status !== "idle") {
       return;
     }
-    autoRunSignatures.add(signature);
+    rememberAutoRun(signature);
     const execute = async () => {
       try {
+        pendingSourceRef.current = "auto";
         await run(code);
       } catch {
         /* handled by useTransientQuery */
@@ -80,10 +123,17 @@ export const RunnableSqlBlock = ({
     execute();
   }, [autoRun, code, connectionId, run, schema, status]);
 
+  const runningLabel =
+    pendingSourceRef.current === "auto"
+      ? "Auto-running read-only query…"
+      : "Running…";
+
   return (
     <div>
-      <SqlCodeBlock code={code} onRun={run} />
-      {status === "running" ? <InlineRunningIndicator /> : null}
+      <SqlCodeBlock code={code} onRun={runManual} />
+      {status === "running" ? (
+        <InlineRunningIndicator label={runningLabel} />
+      ) : null}
       {status === "success" && result ? (
         <InlineQueryResult result={result} />
       ) : null}

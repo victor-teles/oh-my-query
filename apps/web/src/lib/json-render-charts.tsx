@@ -5,6 +5,7 @@ import {
   BarChart,
   CartesianGrid,
   Cell,
+  Label,
   Line,
   LineChart,
   Pie,
@@ -165,12 +166,7 @@ const ChartFrame = ({
   className?: string;
   children: React.ReactNode;
 }) => (
-  <figure
-    className={cn(
-      "space-y-2 rounded-lg border bg-card/40 p-3 text-card-foreground",
-      className
-    )}
-  >
+  <figure className={cn("space-y-2 tabular-nums", className)}>
     {(title || description) && (
       <figcaption className="space-y-0.5">
         {title ? (
@@ -395,6 +391,7 @@ const ChartBarRenderer = ({ props }: BaseComponentProps<ChartBarProps>) => {
             <Bar
               dataKey={s.key}
               fill={`var(--color-${s.key})`}
+              isAnimationActive={false}
               key={s.key}
               radius={4}
               stackId={stacked ? "stack" : undefined}
@@ -469,7 +466,6 @@ const ChartLineRenderer = ({ props }: BaseComponentProps<ChartLineProps>) => {
             minTickGap={24}
             tickLine={false}
             tickMargin={8}
-            type="category"
           />
           <YAxis
             axisLine={false}
@@ -484,8 +480,10 @@ const ChartLineRenderer = ({ props }: BaseComponentProps<ChartLineProps>) => {
           ) : null}
           {usable.map((s) => (
             <Line
+              activeDot={{ r: 3 }}
               dataKey={s.key}
               dot={false}
+              isAnimationActive={false}
               key={s.key}
               stroke={`var(--color-${s.key})`}
               strokeWidth={2}
@@ -498,7 +496,7 @@ const ChartLineRenderer = ({ props }: BaseComponentProps<ChartLineProps>) => {
   );
 };
 
-const PIE_MAX_SLICES = 12;
+const PIE_MAX_SLICES = 8;
 
 const ChartPieRenderer = ({ props }: BaseComponentProps<ChartPieProps>) => {
   const { data, nameKey, valueKey, title, description, donut } = props;
@@ -564,40 +562,69 @@ const ChartPieRenderer = ({ props }: BaseComponentProps<ChartPieProps>) => {
 
   return (
     <ChartFrame description={description} footnote={note} title={title}>
-      <div className="relative">
-        <ChartContainer className="h-64 w-full" config={config}>
-          <PieChart>
-            <ChartTooltip content={<ChartTooltipContent nameKey="name" />} />
-            <Pie
-              data={displaySlices}
-              dataKey="value"
-              innerRadius={isDonut ? "55%" : 0}
-              nameKey="name"
-              outerRadius="80%"
-              strokeWidth={1}
-            >
-              {displaySlices.map((slice) => (
-                <Cell fill={`var(--color-${slice.name})`} key={slice.name} />
-              ))}
-            </Pie>
-            <ChartLegend content={<ChartLegendContent nameKey="name" />} />
-          </PieChart>
-        </ChartContainer>
-        {isDonut ? (
-          <div
-            aria-hidden
-            className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center pb-8"
+      <ChartContainer className="h-64 w-full" config={config}>
+        <PieChart>
+          <ChartTooltip content={<ChartTooltipContent nameKey="name" />} />
+          <Pie
+            data={displaySlices}
+            dataKey="value"
+            innerRadius={isDonut ? "55%" : 0}
+            isAnimationActive={false}
+            nameKey="name"
+            outerRadius="80%"
+            stroke="var(--background)"
+            strokeWidth={2}
           >
-            <span className="text-[10px] uppercase tracking-wide text-muted-foreground">
-              Total
-            </span>
-            <span className="text-data text-lg font-semibold text-foreground">
-              {total.toLocaleString()}
-            </span>
-          </div>
-        ) : null}
-      </div>
+            {displaySlices.map((slice) => (
+              <Cell
+                aria-label={`${slice.name}: ${slice.value}`}
+                fill={`var(--color-${slice.name})`}
+                key={slice.name}
+              />
+            ))}
+            {isDonut ? (
+              <Label
+                content={<PieCenterLabel total={total} />}
+                position="center"
+              />
+            ) : null}
+          </Pie>
+          <ChartLegend content={<ChartLegendContent nameKey="name" />} />
+        </PieChart>
+      </ChartContainer>
     </ChartFrame>
+  );
+};
+
+interface PieCenterLabelRenderProps {
+  total: number;
+  viewBox?: { cx?: number; cy?: number } | unknown;
+}
+
+const PieCenterLabel = ({ total, viewBox }: PieCenterLabelRenderProps) => {
+  const vb = viewBox as { cx?: number; cy?: number } | undefined;
+  const cx = vb?.cx;
+  const cy = vb?.cy;
+  if (cx === undefined || cy === undefined) {
+    return null;
+  }
+  return (
+    <text dominantBaseline="middle" textAnchor="middle" x={cx} y={cy}>
+      <tspan
+        className="fill-muted-foreground text-[10px] uppercase tracking-wide"
+        x={cx}
+        y={cy - 8}
+      >
+        Total
+      </tspan>
+      <tspan
+        className="fill-foreground text-lg font-semibold"
+        x={cx}
+        y={cy + 10}
+      >
+        {total.toLocaleString()}
+      </tspan>
+    </text>
   );
 };
 
@@ -622,21 +649,50 @@ const ChartKpiRenderer = ({ props }: BaseComponentProps<ChartKpiProps>) => {
     deltaClass = "text-(--color-destructive)";
   }
 
+  let deltaDirection: "increased" | "decreased" | null = null;
+  if (deltaSign === true) {
+    deltaDirection = "increased";
+  } else if (deltaSign === false) {
+    deltaDirection = "decreased";
+  }
+  const formattedDelta =
+    typeof delta === "number"
+      ? formatNumeric(delta, deltaFormat ?? format, currency)
+      : null;
+  const deltaAriaLabel =
+    deltaDirection && formattedDelta
+      ? `${deltaDirection} by ${formattedDelta}${deltaLabel ? ` ${deltaLabel}` : ""}`
+      : undefined;
+  let deltaArrow = "";
+  if (deltaSign === true) {
+    deltaArrow = "▲ ";
+  } else if (deltaSign === false) {
+    deltaArrow = "▼ ";
+  }
+
   return (
     <ChartFrame>
-      <div className="flex flex-col gap-1">
+      <div className="flex flex-col gap-1 tabular-nums">
         <span className="text-xs uppercase tracking-wide text-muted-foreground">
           {label}
         </span>
-        <span className="text-data text-3xl font-semibold text-foreground">
+        <span className="text-data font-semibold text-3xl text-foreground">
           {displayValue}
         </span>
-        {typeof delta === "number" ? (
-          <span className={cn("text-xs font-medium", deltaClass)}>
-            {delta > 0 ? "+" : ""}
-            {formatNumeric(delta, deltaFormat ?? format, currency)}
+        {formattedDelta ? (
+          <span
+            aria-label={deltaAriaLabel}
+            className={cn("font-medium text-xs", deltaClass)}
+          >
+            <span aria-hidden>
+              {deltaArrow}
+              {delta && delta > 0 ? "+" : ""}
+              {formattedDelta}
+            </span>
             {deltaLabel ? (
-              <span className="ml-1 text-muted-foreground">{deltaLabel}</span>
+              <span aria-hidden className="ml-1 text-muted-foreground">
+                {deltaLabel}
+              </span>
             ) : null}
           </span>
         ) : null}

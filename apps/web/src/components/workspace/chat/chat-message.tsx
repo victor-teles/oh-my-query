@@ -20,7 +20,7 @@ export interface InlineRunContext {
 
 const SQL_FENCE = /```sql\b/;
 const JSONRENDER_FENCE = /```jsonrender\b/;
-const RESULT_BINDING = /"\$bindState"\s*:\s*"\/result\b/;
+const RESULT_BINDING = /"\$bindState"\s*:\s*"\/(?:result(?:\/|")|rows(?:\/|"))/;
 
 const shouldAutoRunContext = (content: string): boolean =>
   SQL_FENCE.test(content) &&

@@ -45,7 +45,18 @@ interface UIRenderBlockProps {
 }
 
 const INLINE_ROOT_TYPES = new Set(["Badge", "Text", "Alert", "Heading"]);
+const CHART_ROOT_TYPES = new Set([
+  "ChartBar",
+  "ChartLine",
+  "ChartPie",
+  "ChartKpi",
+]);
 const COPY_RESET_MS = 2000;
+
+const isChartSpec = (spec: Spec): boolean => {
+  const root = spec.elements[spec.root];
+  return root ? CHART_ROOT_TYPES.has(root.type) : false;
+};
 
 const issueKey = (issue: SpecIssue): string =>
   `${issue.code}-${issue.elementKey ?? "_"}-${issue.message}`;
@@ -282,14 +293,123 @@ const InlineSpec = ({ spec, rawCode }: { spec: Spec; rawCode: string }) => {
   );
 };
 
+const bodyPaddingClass = (
+  view: "rendered" | "spec",
+  isBare: boolean
+): string => {
+  if (view === "spec") {
+    return "p-0";
+  }
+  return isBare ? "pt-0" : "p-3";
+};
+
+interface CardSpecHeaderProps {
+  view: "rendered" | "spec";
+  collapsed: boolean;
+  copied: boolean;
+  hasRepairPill: boolean;
+  appliedFixes: readonly string[];
+  isBare: boolean;
+  onToggleView: () => void;
+  onToggleCollapsed: () => void;
+  onCopy: () => void;
+}
+
+const CardSpecHeader = ({
+  view,
+  collapsed,
+  copied,
+  hasRepairPill,
+  appliedFixes,
+  isBare,
+  onToggleView,
+  onToggleCollapsed,
+  onCopy,
+}: CardSpecHeaderProps) => (
+  <div
+    className={cn(
+      "flex items-center justify-between gap-2 px-3 py-1",
+      !isBare && hasRepairPill && "border-b",
+      isBare &&
+        "absolute right-1 top-1 z-10 rounded-md bg-background/60 px-1 py-0.5 opacity-0 backdrop-blur-sm transition-opacity duration-150 group-hover/card:opacity-100 group-focus-within/card:opacity-100"
+    )}
+  >
+    <div className="flex items-center gap-2 text-xs text-muted-foreground">
+      {hasRepairPill ? (
+        <span
+          className="rounded bg-amber-500/15 px-1.5 py-0.5 text-[10px] font-medium text-amber-600 dark:text-amber-400"
+          title={appliedFixes.join("\n")}
+        >
+          auto-repaired
+        </span>
+      ) : null}
+      <span
+        aria-hidden
+        className="inline-flex items-center gap-1 opacity-0 transition-opacity duration-150 group-focus-within/card:opacity-100"
+      >
+        <Kbd>C</Kbd>
+        <span>copy</span>
+        <span className="text-muted-foreground/40">·</span>
+        <Kbd>S</Kbd>
+        <span>source</span>
+        <span className="text-muted-foreground/40">·</span>
+        <Kbd>Esc</Kbd>
+        <span>collapse</span>
+      </span>
+    </div>
+    <div className="flex items-center gap-1 opacity-30 transition-opacity duration-150 group-hover/card:opacity-100 group-focus-within/card:opacity-100">
+      <Button
+        aria-keyshortcuts="S"
+        aria-label={view === "rendered" ? "Show source" : "Show preview"}
+        aria-pressed={view === "spec"}
+        onClick={onToggleView}
+        size="xs"
+        variant={view === "spec" ? "secondary" : "ghost"}
+      >
+        {view === "rendered" ? <Code2 /> : <Eye />}
+        {view === "rendered" ? "Source" : "Preview"}
+      </Button>
+      <DropdownMenu>
+        <DropdownMenuTrigger
+          render={
+            <Button aria-label="More actions" size="icon-xs" variant="ghost" />
+          }
+        >
+          <MoreHorizontal className="size-3" />
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end">
+          <DropdownMenuItem aria-keyshortcuts="C" onClick={onCopy}>
+            {copied ? <Check /> : <Copy />}
+            {copied ? "Copied" : "Copy"}
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            aria-keyshortcuts={collapsed ? undefined : "Escape"}
+            onClick={onToggleCollapsed}
+          >
+            {collapsed ? <ChevronDown /> : <ChevronUp />}
+            {collapsed ? "Expand" : "Collapse"}
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    </div>
+  </div>
+);
+
 interface CardSpecProps {
   spec: Spec;
   rawCode: string;
   warnings: readonly SpecIssue[];
   appliedFixes: readonly string[];
+  chrome?: "card" | "bare";
 }
 
-const CardSpec = ({ spec, rawCode, warnings, appliedFixes }: CardSpecProps) => {
+const CardSpec = ({
+  spec,
+  rawCode,
+  warnings,
+  appliedFixes,
+  chrome = "card",
+}: CardSpecProps) => {
   const [copied, setCopied] = useState(false);
   const [collapsed, setCollapsed] = useState(false);
   const [view, setView] = useState<"rendered" | "spec">("rendered");
@@ -334,87 +454,47 @@ const CardSpec = ({ spec, rawCode, warnings, appliedFixes }: CardSpecProps) => {
   );
 
   const hasRepairPill = appliedFixes.length > 0;
+  const isBare = chrome === "bare";
+  const messageResult = useOptionalMessageResult();
+  const trustStamp =
+    isBare &&
+    messageResult?.record?.source === "auto" &&
+    messageResult.record.result.resultType === "tabular"
+      ? `Auto-read · ${Math.round(messageResult.record.result.executionTimeMs)}ms`
+      : null;
 
   return (
     <div
-      className="group/card my-2 overflow-hidden rounded-lg border bg-secondary/30 outline-none focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/30"
+      className={cn(
+        "group/card relative my-2 rounded-lg outline-none focus-visible:ring-2 focus-visible:ring-ring/30",
+        isBare
+          ? "focus-visible:ring-offset-2"
+          : "overflow-hidden border bg-secondary/30 focus-visible:border-ring"
+      )}
       ref={cardRef}
       tabIndex={0}
     >
-      <div
-        className={cn(
-          "flex items-center justify-between gap-2 px-3 py-1",
-          hasRepairPill && "border-b"
-        )}
-      >
-        <div className="flex items-center gap-2 text-xs text-muted-foreground">
-          {hasRepairPill ? (
-            <span
-              className="rounded bg-amber-500/15 px-1.5 py-0.5 text-[10px] font-medium text-amber-600 dark:text-amber-400"
-              title={appliedFixes.join("\n")}
-            >
-              auto-repaired
-            </span>
-          ) : null}
-          <span
-            aria-hidden
-            className="inline-flex items-center gap-1 opacity-0 transition-opacity duration-150 group-focus-within/card:opacity-100"
-          >
-            <Kbd>C</Kbd>
-            <span>copy</span>
-            <span className="text-muted-foreground/40">·</span>
-            <Kbd>S</Kbd>
-            <span>source</span>
-            <span className="text-muted-foreground/40">·</span>
-            <Kbd>Esc</Kbd>
-            <span>collapse</span>
-          </span>
-        </div>
-        <div className="flex items-center gap-1 opacity-30 transition-opacity duration-150 group-hover/card:opacity-100 group-focus-within/card:opacity-100">
-          <Button
-            aria-keyshortcuts="S"
-            aria-label={view === "rendered" ? "Show source" : "Show preview"}
-            aria-pressed={view === "spec"}
-            onClick={toggleView}
-            size="xs"
-            variant={view === "spec" ? "secondary" : "ghost"}
-          >
-            {view === "rendered" ? <Code2 /> : <Eye />}
-            {view === "rendered" ? "Source" : "Preview"}
-          </Button>
-          <DropdownMenu>
-            <DropdownMenuTrigger
-              render={
-                <Button
-                  aria-label="More actions"
-                  size="icon-xs"
-                  variant="ghost"
-                />
-              }
-            >
-              <MoreHorizontal className="size-3" />
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuItem aria-keyshortcuts="C" onClick={handleCopy}>
-                {copied ? <Check /> : <Copy />}
-                {copied ? "Copied" : "Copy"}
-              </DropdownMenuItem>
-              <DropdownMenuItem
-                aria-keyshortcuts={collapsed ? undefined : "Escape"}
-                onClick={toggleCollapsed}
-              >
-                {collapsed ? <ChevronDown /> : <ChevronUp />}
-                {collapsed ? "Expand" : "Collapse"}
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
-      </div>
+      <CardSpecHeader
+        appliedFixes={appliedFixes}
+        collapsed={collapsed}
+        copied={copied}
+        hasRepairPill={hasRepairPill}
+        isBare={isBare}
+        onCopy={handleCopy}
+        onToggleCollapsed={toggleCollapsed}
+        onToggleView={toggleView}
+        view={view}
+      />
       {collapsed ? null : (
-        <div className={cn(view === "spec" ? "p-0" : "p-3")}>
+        <div className={cn(bodyPaddingClass(view, isBare))}>
           {view === "rendered" ? (
             <RendererErrorBoundary fallback={renderCardErrorFallback}>
               <RenderedSpec spec={spec} />
+              {trustStamp ? (
+                <p className="mt-1 text-[10px] tracking-wide text-muted-foreground">
+                  {trustStamp}
+                </p>
+              ) : null}
               {warnings.length > 0 ? (
                 <ul className="mt-3 space-y-1 border-t pt-2 text-xs text-muted-foreground">
                   {warnings.map((w) => (
@@ -480,6 +560,7 @@ export const UIRenderBlock = ({ code }: UIRenderBlockProps) => {
 
   return (
     <CardSpec
+      chrome={isChartSpec(result.spec) ? "bare" : "card"}
       appliedFixes={result.appliedFixes}
       rawCode={code}
       spec={result.spec}
