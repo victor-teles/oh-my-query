@@ -15,6 +15,7 @@ import {
 import { useSchema } from "@/hooks/use-schema";
 import { useWorkspaceIslandSync } from "@/hooks/use-workspace-island-sync";
 import { useWorkspaceMode } from "@/hooks/use-workspace-mode";
+import { useWorkspaceModeHotkeys } from "@/hooks/use-workspace-mode-hotkeys";
 import { composeActionMessage } from "@/lib/ai-actions";
 
 import { ChatSidebar } from "./chat/chat-sidebar";
@@ -77,6 +78,8 @@ export const WorkspaceLayout = ({
       panel.collapse();
     }
   }, [sidebarRef]);
+
+  useWorkspaceModeHotkeys({ setMode });
 
   useHotkey("Mod+B", () => {
     handleSidebarToggle();

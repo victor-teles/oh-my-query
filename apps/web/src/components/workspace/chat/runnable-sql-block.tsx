@@ -45,25 +45,6 @@ export const isReadOnlySql = (sql: string): boolean => {
   return true;
 };
 
-const AUTO_RUN_CACHE_LIMIT = 200;
-const autoRunSignatures = new Set<string>();
-
-const rememberAutoRun = (signature: string) => {
-  if (autoRunSignatures.size >= AUTO_RUN_CACHE_LIMIT) {
-    const oldest = autoRunSignatures.values().next().value;
-    if (oldest !== undefined) {
-      autoRunSignatures.delete(oldest);
-    }
-  }
-  autoRunSignatures.add(signature);
-};
-
-const buildAutoRunSignature = (
-  connectionId: string,
-  schema: string | undefined,
-  code: string
-): string => `${connectionId}|${schema ?? ""}|${code}`;
-
 export const RunnableSqlBlock = ({
   code,
   connectionId,
@@ -92,10 +73,10 @@ export const RunnableSqlBlock = ({
     }
     if (status === "success" && result) {
       messageResult.publish(result, pendingSourceRef.current);
-    } else if (status === "idle") {
-      messageResult.clear();
     }
   }, [messageResult, result, status]);
+
+  const hasPublishedResult = Boolean(messageResult?.result);
 
   useEffect(() => {
     if (!autoRun) {
@@ -104,14 +85,12 @@ export const RunnableSqlBlock = ({
     if (!isReadOnlySql(code)) {
       return;
     }
-    const signature = buildAutoRunSignature(connectionId, schema, code);
-    if (autoRunSignatures.has(signature)) {
-      return;
-    }
     if (status !== "idle") {
       return;
     }
-    rememberAutoRun(signature);
+    if (hasPublishedResult) {
+      return;
+    }
     const execute = async () => {
       try {
         pendingSourceRef.current = "auto";
@@ -121,7 +100,7 @@ export const RunnableSqlBlock = ({
       }
     };
     execute();
-  }, [autoRun, code, connectionId, run, schema, status]);
+  }, [autoRun, code, hasPublishedResult, run, status]);
 
   const runningLabel =
     pendingSourceRef.current === "auto"
@@ -134,7 +113,7 @@ export const RunnableSqlBlock = ({
       {status === "running" ? (
         <InlineRunningIndicator label={runningLabel} />
       ) : null}
-      {status === "success" && result ? (
+      {status === "success" && result && !autoRun ? (
         <InlineQueryResult result={result} />
       ) : null}
       {status === "error" && error ? <InlineRunError error={error} /> : null}

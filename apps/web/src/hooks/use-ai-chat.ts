@@ -1,32 +1,12 @@
-import { streamText } from "ai";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef } from "react";
 
 import type { ActiveQuerySnapshot } from "@/contexts/active-query-context";
-import type { AIError } from "@/lib/ai-errors";
 import type { RedisKey, SchemaInfo } from "@/lib/tauri";
+import type { ChatContext } from "@/stores/ai-chat-store";
 
-import { formatActiveQueryContext } from "@/lib/ai-context";
-import { classifyAIError } from "@/lib/ai-errors";
-import { createAIModel } from "@/lib/ai-provider";
-import { buildSystemPrompt } from "@/lib/ai-schema-formatter";
-import { getAISettings } from "@/lib/ai-settings";
-import {
-  clearChatHistory,
-  getChatHistory,
-  saveChatHistory,
-} from "@/lib/chat-history";
+import { selectConnectionState, useAiChatStore } from "@/stores/ai-chat-store";
 
-export interface ChatMessage {
-  id: string;
-  role: "user" | "assistant";
-  content: string;
-}
-
-interface AiChatState {
-  messages: ChatMessage[];
-  isStreaming: boolean;
-  error: AIError | null;
-}
+export type { ChatMessage } from "@/stores/ai-chat-store";
 
 interface UseAiChatOptions {
   schema: SchemaInfo | null;
@@ -36,13 +16,6 @@ interface UseAiChatOptions {
   redisKeys?: RedisKey[] | null;
 }
 
-const NOT_CONFIGURED_ERROR: AIError = {
-  message: "AI is not configured.",
-  retryable: false,
-  suggestion: "Set up your API key in AI settings to start chatting.",
-  type: "auth",
-};
-
 export const useAiChat = ({
   schema,
   databaseType,
@@ -50,150 +23,52 @@ export const useAiChat = ({
   getSnapshot,
   redisKeys,
 }: UseAiChatOptions) => {
-  const [state, setState] = useState<AiChatState>({
-    error: null,
-    isStreaming: false,
-    messages: [],
+  const ensureConnection = useAiChatStore((s) => s.ensureConnection);
+  const sendMessageAction = useAiChatStore((s) => s.sendMessage);
+  const stopStreamingAction = useAiChatStore((s) => s.stopStreaming);
+  const clearErrorAction = useAiChatStore((s) => s.clearError);
+  const clearMessagesAction = useAiChatStore((s) => s.clearMessages);
+  const retryAction = useAiChatStore((s) => s.retry);
+
+  const state = useAiChatStore(selectConnectionState(connectionId));
+
+  useEffect(() => {
+    ensureConnection(connectionId);
+  }, [connectionId, ensureConnection]);
+
+  const contextRef = useRef<ChatContext>({
+    databaseType,
+    getSnapshot,
+    redisKeys,
+    schema,
   });
-  const abortRef = useRef<AbortController | null>(null);
-  const lastUserMessageRef = useRef<string | null>(null);
-
-  useEffect(() => {
-    const restored = getChatHistory(connectionId);
-    setState({ error: null, isStreaming: false, messages: restored });
-  }, [connectionId]);
-
-  useEffect(() => {
-    if (state.isStreaming) {
-      return;
-    }
-    saveChatHistory(connectionId, state.messages);
-  }, [connectionId, state.messages, state.isStreaming]);
+  contextRef.current = { databaseType, getSnapshot, redisKeys, schema };
 
   const sendMessage = useCallback(
-    async (content: string) => {
-      const settings = await getAISettings();
-      if (!settings) {
-        setState((prev) => ({
-          ...prev,
-          error: NOT_CONFIGURED_ERROR,
-        }));
-        return;
-      }
-
-      lastUserMessageRef.current = content;
-
-      const userMessage: ChatMessage = {
-        content,
-        id: crypto.randomUUID(),
-        role: "user",
-      };
-
-      const assistantMessage: ChatMessage = {
-        content: "",
-        id: crypto.randomUUID(),
-        role: "assistant",
-      };
-
-      setState((prev) => ({
-        ...prev,
-        error: null,
-        isStreaming: true,
-        messages: [...prev.messages, userMessage, assistantMessage],
-      }));
-
-      try {
-        const model = createAIModel(settings);
-        const baseSystem = schema
-          ? buildSystemPrompt(schema, databaseType, redisKeys ?? null)
-          : `You are a SQL assistant for a ${databaseType} database. Help users write queries, explain SQL, diagnose errors, and suggest optimizations. Wrap SQL in \`\`\`sql code blocks.`;
-
-        const contextBlock = getSnapshot
-          ? formatActiveQueryContext(getSnapshot())
-          : null;
-        const system = contextBlock
-          ? `${baseSystem}\n\n${contextBlock}`
-          : baseSystem;
-
-        const allMessages = [
-          ...state.messages.map((m) => ({
-            content: m.content,
-            role: m.role as "user" | "assistant",
-          })),
-          { content, role: "user" as const },
-        ];
-
-        abortRef.current = new AbortController();
-
-        const result = streamText({
-          abortSignal: abortRef.current.signal,
-          messages: allMessages,
-          model,
-          onError: ({ error: streamError }) => {
-            console.error("[ai-chat] streamText onError:", streamError);
-          },
-          system,
-        });
-
-        let chunkCount = 0;
-        for await (const chunk of result.textStream) {
-          chunkCount += 1;
-          setState((prev) => {
-            const messages = [...prev.messages];
-            const last = messages.at(-1);
-            if (last?.role === "assistant") {
-              messages[messages.length - 1] = {
-                ...last,
-                content: last.content + chunk,
-              };
-            }
-            return { ...prev, messages };
-          });
-        }
-
-        console.log("[ai-chat] stream complete, chunks:", chunkCount);
-        setState((prev) => ({ ...prev, isStreaming: false }));
-      } catch (error) {
-        console.error("[ai-chat] error:", error);
-
-        if (error instanceof Error && error.name === "AbortError") {
-          setState((prev) => ({ ...prev, isStreaming: false }));
-          return;
-        }
-
-        const aiError = classifyAIError(error);
-        setState((prev) => ({
-          ...prev,
-          error: aiError,
-          isStreaming: false,
-          messages: prev.messages.slice(0, -2),
-        }));
-      } finally {
-        abortRef.current = null;
-      }
-    },
-    [schema, databaseType, state.messages, getSnapshot, redisKeys]
+    (content: string) =>
+      sendMessageAction(connectionId, content, contextRef.current),
+    [connectionId, sendMessageAction]
   );
 
-  const retry = useCallback(() => {
-    const lastMessage = lastUserMessageRef.current;
-    if (lastMessage) {
-      sendMessage(lastMessage);
-    }
-  }, [sendMessage]);
+  const stopStreaming = useCallback(
+    () => stopStreamingAction(connectionId),
+    [connectionId, stopStreamingAction]
+  );
 
-  const stopStreaming = useCallback(() => {
-    abortRef.current?.abort();
-  }, []);
+  const clearError = useCallback(
+    () => clearErrorAction(connectionId),
+    [connectionId, clearErrorAction]
+  );
 
-  const clearError = useCallback(() => {
-    setState((prev) => ({ ...prev, error: null }));
-  }, []);
+  const clearMessages = useCallback(
+    () => clearMessagesAction(connectionId),
+    [connectionId, clearMessagesAction]
+  );
 
-  const clearMessages = useCallback(() => {
-    clearChatHistory(connectionId);
-    setState({ error: null, isStreaming: false, messages: [] });
-  }, [connectionId]);
+  const retry = useCallback(
+    () => retryAction(connectionId, contextRef.current),
+    [connectionId, retryAction]
+  );
 
   return {
     clearError,

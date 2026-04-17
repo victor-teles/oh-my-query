@@ -395,7 +395,16 @@ const ChartBarRenderer = ({ props }: BaseComponentProps<ChartBarProps>) => {
               key={s.key}
               radius={4}
               stackId={stacked ? "stack" : undefined}
-            />
+            >
+              {usable.length === 1
+                ? coerced.map((row, idx) => (
+                    <Cell
+                      fill={pickColor(idx)}
+                      key={`${s.key}-${String(row[xKey])}`}
+                    />
+                  ))
+                : null}
+            </Bar>
           ))}
         </BarChart>
       </ChartContainer>

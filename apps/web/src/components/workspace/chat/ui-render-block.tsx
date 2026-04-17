@@ -4,6 +4,7 @@ import type { ErrorInfo, ReactNode } from "react";
 import { useHotkey } from "@tanstack/react-hotkeys";
 import {
   AlertCircle,
+  BarChart3,
   Check,
   ChevronDown,
   ChevronUp,
@@ -11,6 +12,7 @@ import {
   Copy,
   Eye,
   MoreHorizontal,
+  Table2,
 } from "lucide-react";
 import { Component, useCallback, useMemo, useRef, useState } from "react";
 
@@ -18,6 +20,7 @@ import type { SpecParseResult } from "@/lib/json-render-validate";
 import type { ExecuteResult } from "@/lib/tauri";
 
 import { Button } from "@/components/ui/button";
+import { ButtonGroup } from "@/components/ui/button-group";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -38,6 +41,7 @@ import {
 } from "@/lib/json-render-validate";
 import { cn } from "@/lib/utils";
 
+import { InlineQueryResult } from "./inline-query-result";
 import { useOptionalMessageResult } from "./message-result-context";
 
 interface UIRenderBlockProps {
@@ -293,10 +297,9 @@ const InlineSpec = ({ spec, rawCode }: { spec: Spec; rawCode: string }) => {
   );
 };
 
-const bodyPaddingClass = (
-  view: "rendered" | "spec",
-  isBare: boolean
-): string => {
+type CardSpecView = "rendered" | "spec" | "data";
+
+const bodyPaddingClass = (view: CardSpecView, isBare: boolean): string => {
   if (view === "spec") {
     return "p-0";
   }
@@ -304,16 +307,149 @@ const bodyPaddingClass = (
 };
 
 interface CardSpecHeaderProps {
-  view: "rendered" | "spec";
+  view: CardSpecView;
   collapsed: boolean;
   copied: boolean;
   hasRepairPill: boolean;
   appliedFixes: readonly string[];
   isBare: boolean;
-  onToggleView: () => void;
+  hasDataToggle: boolean;
+  onSetView: (next: CardSpecView) => void;
+  onToggleSource: () => void;
   onToggleCollapsed: () => void;
   onCopy: () => void;
 }
+
+const ChartDataToggle = ({
+  view,
+  onSetView,
+}: {
+  view: CardSpecView;
+  onSetView: (next: CardSpecView) => void;
+}) => {
+  const showChart = useCallback(() => onSetView("rendered"), [onSetView]);
+  const showData = useCallback(() => onSetView("data"), [onSetView]);
+
+  return (
+    <ButtonGroup>
+      <Button
+        aria-label="Show chart"
+        aria-pressed={view === "rendered"}
+        onClick={showChart}
+        size="xs"
+        variant={view === "rendered" ? "secondary" : "ghost"}
+      >
+        <BarChart3 />
+        Chart
+      </Button>
+      <Button
+        aria-keyshortcuts="D"
+        aria-label="Show data"
+        aria-pressed={view === "data"}
+        onClick={showData}
+        size="xs"
+        variant={view === "data" ? "secondary" : "ghost"}
+      >
+        <Table2 />
+        Data
+      </Button>
+    </ButtonGroup>
+  );
+};
+
+const SourceToggleButton = ({
+  view,
+  onToggleSource,
+}: {
+  view: CardSpecView;
+  onToggleSource: () => void;
+}) => (
+  <Button
+    aria-keyshortcuts="S"
+    aria-label={view === "rendered" ? "Show source" : "Show preview"}
+    aria-pressed={view === "spec"}
+    onClick={onToggleSource}
+    size="xs"
+    variant={view === "spec" ? "secondary" : "ghost"}
+  >
+    {view === "rendered" ? <Code2 /> : <Eye />}
+    {view === "rendered" ? "Source" : "Preview"}
+  </Button>
+);
+
+const HeaderOverflowMenu = ({
+  view,
+  copied,
+  collapsed,
+  hasDataToggle,
+  onCopy,
+  onToggleSource,
+  onToggleCollapsed,
+}: {
+  view: CardSpecView;
+  copied: boolean;
+  collapsed: boolean;
+  hasDataToggle: boolean;
+  onCopy: () => void;
+  onToggleSource: () => void;
+  onToggleCollapsed: () => void;
+}) => (
+  <DropdownMenu>
+    <DropdownMenuTrigger
+      render={
+        <Button aria-label="More actions" size="icon-xs" variant="ghost" />
+      }
+    >
+      <MoreHorizontal className="size-3" />
+    </DropdownMenuTrigger>
+    <DropdownMenuContent align="end">
+      <DropdownMenuItem aria-keyshortcuts="C" onClick={onCopy}>
+        {copied ? <Check /> : <Copy />}
+        {copied ? "Copied" : "Copy"}
+      </DropdownMenuItem>
+      {hasDataToggle ? (
+        <DropdownMenuItem
+          aria-keyshortcuts="S"
+          aria-pressed={view === "spec"}
+          onClick={onToggleSource}
+        >
+          {view === "spec" ? <Eye /> : <Code2 />}
+          {view === "spec" ? "Preview" : "Source"}
+        </DropdownMenuItem>
+      ) : null}
+      <DropdownMenuItem
+        aria-keyshortcuts={collapsed ? undefined : "Escape"}
+        onClick={onToggleCollapsed}
+      >
+        {collapsed ? <ChevronDown /> : <ChevronUp />}
+        {collapsed ? "Expand" : "Collapse"}
+      </DropdownMenuItem>
+    </DropdownMenuContent>
+  </DropdownMenu>
+);
+
+const HeaderKbdHints = ({ hasDataToggle }: { hasDataToggle: boolean }) => (
+  <span
+    aria-hidden
+    className="inline-flex items-center gap-1 opacity-0 transition-opacity duration-150 group-focus-within/card:opacity-100"
+  >
+    <Kbd>C</Kbd>
+    <span>copy</span>
+    <span className="text-muted-foreground/40">·</span>
+    <Kbd>S</Kbd>
+    <span>source</span>
+    {hasDataToggle ? (
+      <>
+        <span className="text-muted-foreground/40">·</span>
+        <Kbd>D</Kbd>
+        <span>data</span>
+      </>
+    ) : null}
+    <span className="text-muted-foreground/40">·</span>
+    <Kbd>Esc</Kbd>
+    <span>collapse</span>
+  </span>
+);
 
 const CardSpecHeader = ({
   view,
@@ -322,7 +458,9 @@ const CardSpecHeader = ({
   hasRepairPill,
   appliedFixes,
   isBare,
-  onToggleView,
+  hasDataToggle,
+  onSetView,
+  onToggleSource,
   onToggleCollapsed,
   onCopy,
 }: CardSpecHeaderProps) => (
@@ -331,7 +469,8 @@ const CardSpecHeader = ({
       "flex items-center justify-between gap-2 px-3 py-1",
       !isBare && hasRepairPill && "border-b",
       isBare &&
-        "absolute right-1 top-1 z-10 rounded-md bg-background/60 px-1 py-0.5 opacity-0 backdrop-blur-sm transition-opacity duration-150 group-hover/card:opacity-100 group-focus-within/card:opacity-100"
+        "absolute right-1 top-1 z-10 rounded-md bg-background/60 px-1 py-0.5 backdrop-blur-sm transition-opacity duration-150 group-hover/card:opacity-100 group-focus-within/card:opacity-100",
+      isBare && (hasDataToggle ? "opacity-60" : "opacity-0")
     )}
   >
     <div className="flex items-center gap-2 text-xs text-muted-foreground">
@@ -343,54 +482,23 @@ const CardSpecHeader = ({
           auto-repaired
         </span>
       ) : null}
-      <span
-        aria-hidden
-        className="inline-flex items-center gap-1 opacity-0 transition-opacity duration-150 group-focus-within/card:opacity-100"
-      >
-        <Kbd>C</Kbd>
-        <span>copy</span>
-        <span className="text-muted-foreground/40">·</span>
-        <Kbd>S</Kbd>
-        <span>source</span>
-        <span className="text-muted-foreground/40">·</span>
-        <Kbd>Esc</Kbd>
-        <span>collapse</span>
-      </span>
+      <HeaderKbdHints hasDataToggle={hasDataToggle} />
     </div>
-    <div className="flex items-center gap-1 opacity-30 transition-opacity duration-150 group-hover/card:opacity-100 group-focus-within/card:opacity-100">
-      <Button
-        aria-keyshortcuts="S"
-        aria-label={view === "rendered" ? "Show source" : "Show preview"}
-        aria-pressed={view === "spec"}
-        onClick={onToggleView}
-        size="xs"
-        variant={view === "spec" ? "secondary" : "ghost"}
-      >
-        {view === "rendered" ? <Code2 /> : <Eye />}
-        {view === "rendered" ? "Source" : "Preview"}
-      </Button>
-      <DropdownMenu>
-        <DropdownMenuTrigger
-          render={
-            <Button aria-label="More actions" size="icon-xs" variant="ghost" />
-          }
-        >
-          <MoreHorizontal className="size-3" />
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end">
-          <DropdownMenuItem aria-keyshortcuts="C" onClick={onCopy}>
-            {copied ? <Check /> : <Copy />}
-            {copied ? "Copied" : "Copy"}
-          </DropdownMenuItem>
-          <DropdownMenuItem
-            aria-keyshortcuts={collapsed ? undefined : "Escape"}
-            onClick={onToggleCollapsed}
-          >
-            {collapsed ? <ChevronDown /> : <ChevronUp />}
-            {collapsed ? "Expand" : "Collapse"}
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
+    <div className="flex items-center gap-1">
+      {hasDataToggle ? (
+        <ChartDataToggle onSetView={onSetView} view={view} />
+      ) : (
+        <SourceToggleButton onToggleSource={onToggleSource} view={view} />
+      )}
+      <HeaderOverflowMenu
+        collapsed={collapsed}
+        copied={copied}
+        hasDataToggle={hasDataToggle}
+        onCopy={onCopy}
+        onToggleCollapsed={onToggleCollapsed}
+        onToggleSource={onToggleSource}
+        view={view}
+      />
     </div>
   </div>
 );
@@ -401,6 +509,7 @@ interface CardSpecProps {
   warnings: readonly SpecIssue[];
   appliedFixes: readonly string[];
   chrome?: "card" | "bare";
+  isChart?: boolean;
 }
 
 const CardSpec = ({
@@ -409,11 +518,18 @@ const CardSpec = ({
   warnings,
   appliedFixes,
   chrome = "card",
+  isChart = false,
 }: CardSpecProps) => {
   const [copied, setCopied] = useState(false);
   const [collapsed, setCollapsed] = useState(false);
-  const [view, setView] = useState<"rendered" | "spec">("rendered");
+  const [view, setView] = useState<CardSpecView>("rendered");
   const cardRef = useRef<HTMLDivElement>(null);
+  const messageResult = useOptionalMessageResult();
+  const tabularResult =
+    messageResult?.record?.result.resultType === "tabular"
+      ? messageResult.record.result
+      : null;
+  const hasDataToggle = isChart && tabularResult !== null;
 
   const handleCopy = useCallback(async () => {
     await navigator.clipboard.writeText(rawCode);
@@ -421,8 +537,16 @@ const CardSpec = ({
     setTimeout(() => setCopied(false), COPY_RESET_MS);
   }, [rawCode]);
 
-  const toggleView = useCallback(() => {
-    setView((v) => (v === "rendered" ? "spec" : "rendered"));
+  const toggleSource = useCallback(() => {
+    setView((v) => (v === "spec" ? "rendered" : "spec"));
+  }, []);
+
+  const setSpecificView = useCallback((next: CardSpecView) => {
+    setView(next);
+  }, []);
+
+  const toggleData = useCallback(() => {
+    setView((v) => (v === "data" ? "rendered" : "data"));
   }, []);
 
   const toggleCollapsed = useCallback(() => {
@@ -436,7 +560,11 @@ const CardSpec = ({
   }, [collapsed]);
 
   useHotkey("C", handleCopy, { target: cardRef });
-  useHotkey("S", toggleView, { target: cardRef });
+  useHotkey("S", toggleSource, { target: cardRef });
+  useHotkey("D", toggleData, {
+    enabled: hasDataToggle,
+    target: cardRef,
+  });
   useHotkey("Escape", collapseIfOpen, {
     enabled: !collapsed,
     target: cardRef,
@@ -455,12 +583,9 @@ const CardSpec = ({
 
   const hasRepairPill = appliedFixes.length > 0;
   const isBare = chrome === "bare";
-  const messageResult = useOptionalMessageResult();
   const trustStamp =
-    isBare &&
-    messageResult?.record?.source === "auto" &&
-    messageResult.record.result.resultType === "tabular"
-      ? `Auto-read · ${Math.round(messageResult.record.result.executionTimeMs)}ms`
+    isBare && messageResult?.record?.source === "auto" && tabularResult
+      ? `Auto-read · ${Math.round(tabularResult.executionTimeMs)}ms`
       : null;
 
   return (
@@ -478,11 +603,13 @@ const CardSpec = ({
         appliedFixes={appliedFixes}
         collapsed={collapsed}
         copied={copied}
+        hasDataToggle={hasDataToggle}
         hasRepairPill={hasRepairPill}
         isBare={isBare}
         onCopy={handleCopy}
+        onSetView={setSpecificView}
         onToggleCollapsed={toggleCollapsed}
-        onToggleView={toggleView}
+        onToggleSource={toggleSource}
         view={view}
       />
       {collapsed ? null : (
@@ -509,11 +636,15 @@ const CardSpec = ({
                 </ul>
               ) : null}
             </RendererErrorBoundary>
-          ) : (
+          ) : null}
+          {view === "data" && tabularResult ? (
+            <InlineQueryResult result={tabularResult} />
+          ) : null}
+          {view === "spec" ? (
             <pre className="max-h-96 overflow-auto bg-background/40 p-3 text-xs">
               <code>{rawCode}</code>
             </pre>
-          )}
+          ) : null}
         </div>
       )}
     </div>
@@ -558,10 +689,13 @@ export const UIRenderBlock = ({ code }: UIRenderBlockProps) => {
     return <InlineSpec rawCode={code} spec={result.spec} />;
   }
 
+  const chart = isChartSpec(result.spec);
+
   return (
     <CardSpec
-      chrome={isChartSpec(result.spec) ? "bare" : "card"}
       appliedFixes={result.appliedFixes}
+      chrome={chart ? "bare" : "card"}
+      isChart={chart}
       rawCode={code}
       spec={result.spec}
       warnings={warnings}

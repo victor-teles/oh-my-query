@@ -30,7 +30,11 @@ export const MessageResultProvider = ({
   const [record, setRecord] = useState<MessageResultRecord | null>(null);
 
   const publish = useCallback((result: ExecuteResult, source: ResultSource) => {
-    setRecord({ result, source });
+    setRecord((prev) =>
+      prev && prev.result === result && prev.source === source
+        ? prev
+        : { result, source }
+    );
   }, []);
 
   const clear = useCallback(() => {

@@ -8,6 +8,8 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 
+import { HighlightedSql } from "./highlighted-sql";
+
 interface SqlCodeBlockProps {
   code: string;
   onInsert?: (sql: string) => void;
@@ -142,9 +144,7 @@ export const SqlCodeBlock = ({
           )}
         </div>
       </div>
-      <pre className="overflow-x-auto p-3 text-sm">
-        <code>{code}</code>
-      </pre>
+      <HighlightedSql code={code} />
     </div>
   );
 };

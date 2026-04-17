@@ -1,7 +1,8 @@
-import { useCallback } from "react";
+import { useCallback, useMemo } from "react";
 
+import { useTheme } from "@/components/theme-provider";
 import { useEditorSettings } from "@/hooks/use-editor-settings";
-import { THEME_ENTRIES } from "@/lib/codemirror-themes";
+import { resolveSyntaxTheme, THEME_ENTRIES } from "@/lib/codemirror-themes";
 
 import { useSettingsFeedback } from "./settings-feedback-context";
 import { ThemePreviewCard } from "./theme-preview-card";
@@ -9,6 +10,15 @@ import { ThemePreviewCard } from "./theme-preview-card";
 export const SyntaxThemeSection = () => {
   const { settings, updateSettings } = useEditorSettings();
   const { notifySaved } = useSettingsFeedback();
+  const { resolvedTheme } = useTheme();
+  const isDark = resolvedTheme !== "light";
+
+  const visibleThemes = useMemo(
+    () => THEME_ENTRIES.filter((entry) => entry.isDark === isDark),
+    [isDark]
+  );
+
+  const effectiveTheme = resolveSyntaxTheme(settings.syntaxTheme, isDark);
 
   const handleThemeChange = useCallback(
     (syntaxTheme: string) => {
@@ -25,11 +35,11 @@ export const SyntaxThemeSection = () => {
         Pick the palette your SQL reads in.
       </p>
       <div className="grid grid-cols-3 gap-3">
-        {THEME_ENTRIES.map((entry) => (
+        {visibleThemes.map((entry) => (
           <ThemePreviewCard
             fontFamily={settings.fontFamily}
             fontSize={settings.fontSize}
-            isSelected={settings.syntaxTheme === entry.key}
+            isSelected={effectiveTheme === entry.key}
             key={entry.key}
             label={entry.label}
             onSelect={handleThemeChange}

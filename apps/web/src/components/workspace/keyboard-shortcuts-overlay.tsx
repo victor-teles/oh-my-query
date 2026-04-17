@@ -43,6 +43,9 @@ const SECTIONS: ShortcutSection[] = [
     entries: [
       { keys: ["⌘", "B"], label: "Toggle schema sidebar" },
       { keys: ["⇧", "⌘", "C"], label: "Toggle AI chat" },
+      { keys: ["⇧", "⌘", "1"], label: "Editor mode" },
+      { keys: ["⇧", "⌘", "2"], label: "Split mode" },
+      { keys: ["⇧", "⌘", "3"], label: "Chat mode" },
     ],
     heading: "Layout",
   },
