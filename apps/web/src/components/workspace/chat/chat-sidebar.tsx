@@ -155,6 +155,7 @@ export const ChatSidebar = ({
     openQuery,
     replaceSelection,
     hasSelection: checkHasSelection,
+    registerQueryTable,
   } = useEditorInsert();
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [isConfigured, setIsConfigured] = useState<boolean | null>(null);
@@ -177,6 +178,19 @@ export const ChatSidebar = ({
     }
     onPendingActionConsumed?.();
   }, [pendingAction, sendMessage, onPendingActionConsumed]);
+
+  useEffect(() => {
+    if (mode !== "chat") {
+      return;
+    }
+    const handler = (tableName: string) => {
+      sendMessage(
+        `Show me the contents of the \`${tableName}\` table. Return the first 100 rows.`
+      );
+    };
+    registerQueryTable(handler);
+    return () => registerQueryTable(null);
+  }, [mode, registerQueryTable, sendMessage]);
 
   const handleInsertSql = useCallback(
     (sql: string) => {
@@ -202,6 +216,11 @@ export const ChatSidebar = ({
   const handleOpenSettings = useCallback(() => {
     setSettingsOpen(true);
   }, []);
+
+  const inlineRun = useMemo(
+    () => (mode === "chat" ? { connectionId: connection.id } : undefined),
+    [mode, connection.id]
+  );
 
   return (
     <div className="flex h-full flex-col bg-background">
@@ -235,9 +254,7 @@ export const ChatSidebar = ({
       <ChatMessageList
         connectionName={connection.name}
         hasSelection={checkHasSelection()}
-        inlineRun={
-          mode === "chat" ? { connectionId: connection.id } : undefined
-        }
+        inlineRun={inlineRun}
         messages={messages}
         onInsertSql={mode === "chat" ? undefined : handleInsertSql}
         onReplaceSql={mode === "chat" ? undefined : handleReplaceSql}

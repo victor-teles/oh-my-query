@@ -29,12 +29,39 @@ describe("json-render catalog", () => {
     }
   });
 
+  it("includes the chart components", () => {
+    for (const name of ["ChartBar", "ChartLine", "ChartPie", "ChartKpi"]) {
+      expect(knownComponentNames.has(name)).toBeTruthy();
+    }
+  });
+
   it("emits each catalog component into the UI generation prompt", () => {
     const prompt = buildUiGenerationPrompt();
     for (const c of promptComponents) {
       expect(prompt).toContain(`${c.name}: ${c.signature}`);
       expect(prompt).toContain(c.summary);
     }
+  });
+
+  it("teaches the model the chart data-binding contract", () => {
+    const prompt = buildUiGenerationPrompt();
+    expect(prompt).toContain("Charts & result data");
+    expect(prompt).toContain('"$bindState": "/result/rows"');
+    expect(prompt).toContain("Never invent numeric values");
+    expect(prompt).toContain("500 points");
+  });
+
+  it("teaches auto-run behavior and the no-Card-wrap rule for charts", () => {
+    const prompt = buildUiGenerationPrompt();
+    expect(prompt).toContain("auto-runs it on arrival");
+    expect(prompt).toContain("Do NOT wrap a chart in a `Card`");
+  });
+
+  it("teaches the combined SQL + jsonrender response pattern", () => {
+    const prompt = buildUiGenerationPrompt();
+    expect(prompt).toContain(
+      "```sql block for the query AND a ```jsonrender block"
+    );
   });
 
   it("does not advertise components that aren't in the registry", () => {

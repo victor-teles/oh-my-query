@@ -10,6 +10,11 @@ import {
 import { shadcnComponents } from "@json-render/shadcn";
 import { shadcnComponentDefinitions } from "@json-render/shadcn/catalog";
 
+import {
+  chartComponentDefinitions,
+  chartComponents,
+} from "@/lib/json-render-charts";
+
 export interface PromptComponentDoc {
   name: string;
   signature: string;
@@ -98,6 +103,33 @@ const PRODUCTION_COMPONENTS = [
     signature: "{ title: string, defaultOpen?: boolean }",
     summary: "Single collapsible section with children.",
   },
+  {
+    name: "ChartBar",
+    signature:
+      '{ data: Array<Record<string, unknown>>, xKey: string, series: { key: string, label?: string, color?: string }[], title?: string, description?: string, layout?: "horizontal" | "vertical", stacked?: boolean }',
+    summary:
+      "Bar chart for categorical comparisons. `series[i].key` must match a column in each data row.",
+  },
+  {
+    name: "ChartLine",
+    signature:
+      "{ data: Array<Record<string, unknown>>, xKey: string, series: { key: string, label?: string, color?: string }[], title?: string, description?: string, smooth?: boolean }",
+    summary:
+      "Line chart for ordered/time-series data. Use smooth for monotone curves.",
+  },
+  {
+    name: "ChartPie",
+    signature:
+      "{ data: Array<Record<string, unknown>>, nameKey: string, valueKey: string, title?: string, description?: string, donut?: boolean }",
+    summary: "Pie/donut chart for part-of-whole. Best with 2–7 slices.",
+  },
+  {
+    name: "ChartKpi",
+    signature:
+      '{ label: string, value: string | number, description?: string, format?: "number" | "currency" | "percent", delta?: number, deltaLabel?: string, currency?: string }',
+    summary:
+      "Single-metric summary card for headline numbers and trend deltas.",
+  },
 ] as const satisfies readonly PromptComponentDoc[];
 
 export const promptComponents: readonly PromptComponentDoc[] =
@@ -109,26 +141,32 @@ export const knownComponentNames: ReadonlySet<string> = new Set(componentNames);
 
 type ProductionName = (typeof PRODUCTION_COMPONENTS)[number]["name"];
 
-const pickDefinitions = <T extends Record<string, unknown>>(
-  source: T,
-  names: readonly ProductionName[]
-): Pick<T, ProductionName & keyof T> => {
-  const result = {} as Pick<T, ProductionName & keyof T>;
+const collectFromSources = (
+  names: readonly ProductionName[],
+  sources: readonly Record<string, unknown>[]
+): Record<string, unknown> => {
+  const result: Record<string, unknown> = {};
   for (const name of names) {
-    if (!(name in source)) {
+    const found = sources.find((s) => name in s);
+    if (!found) {
       throw new Error(
-        `json-render registry is missing the "${name}" component — the production catalog drifted from the upstream package.`
+        `json-render registry is missing the "${name}" component — the production catalog drifted from the upstream packages.`
       );
     }
-    (result as Record<string, unknown>)[name] = source[name as keyof T];
+    result[name] = found[name];
   }
   return result;
 };
 
-const displayComponents = pickDefinitions(
-  shadcnComponentDefinitions,
-  componentNames as readonly ProductionName[]
-);
+type DisplayComponents = Pick<
+  typeof shadcnComponentDefinitions & typeof chartComponentDefinitions,
+  ProductionName
+>;
+
+const displayComponents = collectFromSources(
+  componentNames as readonly ProductionName[],
+  [shadcnComponentDefinitions, chartComponentDefinitions]
+) as DisplayComponents;
 
 export const catalog = defineCatalog(schema, {
   actions: {},
@@ -137,9 +175,9 @@ export const catalog = defineCatalog(schema, {
 
 type AppCatalog = typeof catalog;
 
-const renderImplementations = pickDefinitions(
-  shadcnComponents,
-  componentNames as readonly ProductionName[]
+const renderImplementations = collectFromSources(
+  componentNames as readonly ProductionName[],
+  [shadcnComponents, chartComponents]
 );
 
 const { registry } = defineRegistry(catalog, {

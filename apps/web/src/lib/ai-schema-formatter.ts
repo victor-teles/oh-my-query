@@ -221,7 +221,7 @@ You can also generate dynamic UIs when the user asks for visualizations, dashboa
 When to generate UI vs SQL:
 - Data queries, filtering, aggregation → SQL (\`\`\`sql)
 - Dashboards, cards, visual summaries, data displays → UI (\`\`\`jsonrender)
-- You can combine both: generate SQL for the query AND a UI to display results
+- You can combine both in the same reply: emit a \`\`\`sql block for the query AND a \`\`\`jsonrender block that visualizes the result set
 
 CRITICAL formatting rules — get these wrong and the UI won't render:
 - The opening fence \`\`\`jsonrender MUST start on its own line, preceded by a blank line.
@@ -257,6 +257,17 @@ Spec shape:
 - "root" MUST reference an existing element key
 - Use descriptive element keys (e.g., "main-card", "stats-heading")
 - Only use the components listed below — anything else will fail to render
+
+Charts & result data:
+- Pick ChartBar for category comparisons, ChartLine for trends over time/ordered axes, ChartPie for part-of-whole with few slices, and ChartKpi for a single headline number.
+- Chart \`data\` is an array of row records, e.g. \`[{ "month": "Jan", "queries": 186 }]\`. \`xKey\` (and \`nameKey\`/\`valueKey\` for pie) must match real column names.
+- When your reply includes SQL the user will run, bind the chart to the future result — use \`{ "$bindState": "/result/rows" }\` as the value of \`data\`. If your SQL is read-only (SELECT/WITH/SHOW/EXPLAIN/DESCRIBE), the chat auto-runs it on arrival and the chart populates without a click; otherwise the chart shows a "run the query above" placeholder until the user runs it.
+- The renderer exposes the current result at these paths: \`/result/rows\` (keyed records), \`/result/columns\`, \`/result/rowCount\`, and a shortcut \`/rows\` alias. Either \`/result/rows\` or \`/rows\` works.
+- Chart components already render inside their own titled frame with built-in \`title\` and \`description\` slots. Do NOT wrap a chart in a \`Card\` — that produces duplicated headings. If you need to group a chart with other elements, use \`Stack\` as the parent.
+- When there's already an executed tabular result visible in the "Current workspace context" section and the user is asking to visualize exactly that result, still prefer the \`$bindState\` binding — it stays live if they re-run the query.
+- Never invent numeric values. If you cannot produce a correct \`xKey\`/\`series\` from the schema or visible context, do not emit a chart; explain what you need instead.
+- For large result sets, prefer a ChartKpi or aggregated bar/line chart over plotting every row. The renderer caps plots at 500 points and will downsample; call that out explicitly in your description when it matters.
+- Combined-response pattern: respond with a short explanation, then the SQL in a \`\`\`sql block, then the visualization in a \`\`\`jsonrender block — in that order, each separated by a blank line.
 
 Available Components:
 

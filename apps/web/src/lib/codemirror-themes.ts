@@ -60,6 +60,17 @@ export const getThemeExtension = async (key: string): Promise<Extension> => {
   return theme;
 };
 
+export const getDefaultThemeForMode = (isDark: boolean): string =>
+  isDark ? "githubDark" : "githubLight";
+
+export const resolveSyntaxTheme = (key: string, isDark: boolean): string => {
+  const entry = THEME_ENTRIES.find((t) => t.key === key);
+  if (entry && entry.isDark === isDark) {
+    return key;
+  }
+  return getDefaultThemeForMode(isDark);
+};
+
 export const createFontExtension = (
   fontFamily: string,
   fontSize: number

@@ -8,6 +8,7 @@ import {
   MessageResponse,
 } from "@/components/ai-elements/message";
 
+import { MessageResultProvider } from "./message-result-context";
 import { RunnableSqlBlock } from "./runnable-sql-block";
 import { SqlCodeBlock } from "./sql-code-block";
 import { UIRenderBlock } from "./ui-render-block";
@@ -16,6 +17,15 @@ export interface InlineRunContext {
   connectionId: string;
   schema?: string;
 }
+
+const SQL_FENCE = /```sql\b/;
+const JSONRENDER_FENCE = /```jsonrender\b/;
+const RESULT_BINDING = /"\$bindState"\s*:\s*"\/(?:result(?:\/|")|rows(?:\/|"))/;
+
+const shouldAutoRunContext = (content: string): boolean =>
+  SQL_FENCE.test(content) &&
+  JSONRENDER_FENCE.test(content) &&
+  RESULT_BINDING.test(content);
 
 const looksLikeRenderSpec = (code: string): boolean => {
   const trimmed = code.trim();
@@ -73,6 +83,8 @@ const AssistantContent = ({
   hasSelection?: boolean;
   inlineRun?: InlineRunContext;
 }) => {
+  const autoRunSql = useMemo(() => shouldAutoRunContext(content), [content]);
+
   const renderCode = useCallback(
     (props: React.ComponentProps<"code">) => {
       const { children, className } = props;
@@ -84,6 +96,7 @@ const AssistantContent = ({
         if (inlineRun) {
           return (
             <RunnableSqlBlock
+              autoRun={autoRunSql}
               code={code}
               connectionId={inlineRun.connectionId}
               schema={inlineRun.schema}
@@ -111,7 +124,7 @@ const AssistantContent = ({
 
       return <code className={className}>{children}</code>;
     },
-    [onInsertSql, onReplaceSql, onRunSql, hasSelection, inlineRun]
+    [autoRunSql, onInsertSql, onReplaceSql, onRunSql, hasSelection, inlineRun]
   );
 
   const components = useMemo(
@@ -126,7 +139,11 @@ const AssistantContent = ({
     return <LoadingIndicator />;
   }
 
-  return <MessageResponse components={components}>{content}</MessageResponse>;
+  return (
+    <MessageResultProvider>
+      <MessageResponse components={components}>{content}</MessageResponse>
+    </MessageResultProvider>
+  );
 };
 
 const ChatMessageInner = ({

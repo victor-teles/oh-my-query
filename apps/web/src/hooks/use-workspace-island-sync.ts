@@ -3,31 +3,23 @@ import { useEffect, useRef, useState } from "react";
 import type { IslandSnapshot } from "@/contexts/island-context";
 import type { DatabaseConnection } from "@/lib/connections";
 
+import { useConnection } from "@/contexts/connection-context";
 import { useIsland } from "@/contexts/island-context";
 import { useQueryExecution } from "@/contexts/query-execution-context";
-
-interface WorkspaceIslandSyncInput {
-  connection: DatabaseConnection;
-  isConnected: boolean;
-  isConnecting: boolean;
-  isReconnecting: boolean;
-  connectionError: string | null;
-  serverVersion: string | null;
-  onReconnect: () => void;
-}
 
 const DISMISS_DELAY_SUCCESS = 3000;
 const DISMISS_DELAY_ERROR = 4000;
 
-export const useWorkspaceIslandSync = ({
-  connection,
-  isConnected,
-  isConnecting,
-  isReconnecting,
-  connectionError,
-  serverVersion,
-  onReconnect,
-}: WorkspaceIslandSyncInput) => {
+export const useWorkspaceIslandSync = () => {
+  const {
+    connection,
+    isConnected,
+    isConnecting,
+    isReconnecting,
+    error: connectionError,
+    serverVersion,
+    reconnect,
+  } = useConnection();
   const { setSnapshot } = useIsland();
   const { state: execState } = useQueryExecution();
   const [dismissed, setDismissed] = useState(false);
@@ -52,7 +44,7 @@ export const useWorkspaceIslandSync = ({
       isConnected,
       isConnecting,
       isReconnecting,
-      onReconnect,
+      onReconnect: reconnect,
       serverVersion,
     });
     setSnapshot(snapshot);
@@ -83,15 +75,22 @@ export const useWorkspaceIslandSync = ({
     isConnected,
     isConnecting,
     isReconnecting,
-    onReconnect,
+    reconnect,
     serverVersion,
     setSnapshot,
   ]);
 };
 
-interface ResolveInput extends WorkspaceIslandSyncInput {
+interface ResolveInput {
+  connection: DatabaseConnection;
+  connectionError: string | null;
   dismissed: boolean;
   execState: ReturnType<typeof useQueryExecution>["state"];
+  isConnected: boolean;
+  isConnecting: boolean;
+  isReconnecting: boolean;
+  onReconnect: () => void;
+  serverVersion: string | null;
 }
 
 const resolveSnapshot = ({

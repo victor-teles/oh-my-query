@@ -11,11 +11,13 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 
 import type { SchemaInfo } from "@/lib/tauri";
 
+import { useTheme } from "@/components/theme-provider";
 import { useEditorInsert } from "@/contexts/editor-insert-context";
 import { useEditorSettings } from "@/hooks/use-editor-settings";
 import {
   createFontExtension,
   getThemeExtension,
+  resolveSyntaxTheme,
 } from "@/lib/codemirror-themes";
 import {
   createColumnCompletionSource,
@@ -57,12 +59,15 @@ export const SqlEditor = ({
 }: SqlEditorProps) => {
   const { registerEditor } = useEditorInsert();
   const { settings } = useEditorSettings();
+  const { resolvedTheme } = useTheme();
+  const isDark = resolvedTheme !== "light";
+  const effectiveThemeKey = resolveSyntaxTheme(settings.syntaxTheme, isDark);
   const [themeExtension, setThemeExtension] = useState<Extension>(githubDark);
 
   useEffect(() => {
     let cancelled = false;
     const load = async () => {
-      const ext = await getThemeExtension(settings.syntaxTheme);
+      const ext = await getThemeExtension(effectiveThemeKey);
       if (!cancelled) {
         setThemeExtension(ext);
       }
@@ -71,7 +76,7 @@ export const SqlEditor = ({
     return () => {
       cancelled = true;
     };
-  }, [settings.syntaxTheme]);
+  }, [effectiveThemeKey]);
 
   const fontExtension = useMemo(
     () => createFontExtension(settings.fontFamily, settings.fontSize),

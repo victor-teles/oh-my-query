@@ -1,9 +1,16 @@
-import { Code2, Columns2, MessageSquare } from "lucide-react";
 import { useCallback } from "react";
 
 import type { WorkspaceMode } from "@/lib/workspace-mode";
 
+import { TITLEBAR_CONTROL_HEIGHT } from "@/components/titlebar/titlebar";
+import { Kbd, KbdGroup } from "@/components/ui/kbd";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { cn } from "@/lib/utils";
 
 interface WorkspaceModeToggleProps {
   mode: WorkspaceMode;
@@ -28,27 +35,61 @@ export const WorkspaceModeToggle = ({
 
   return (
     <Tabs onValueChange={handleChange} value={mode}>
-      <TabsList className="h-6">
-        <TabsTrigger
-          aria-label="Editor mode"
-          className="gap-1 px-2"
-          value="editor"
-        >
-          <Code2 />
-          <span>Editor</span>
-        </TabsTrigger>
-        <TabsTrigger
-          aria-label="Split mode (editor and chat side by side)"
-          className="gap-1 px-2"
-          value="split"
-        >
-          <Columns2 />
-          <span>Split</span>
-        </TabsTrigger>
-        <TabsTrigger aria-label="Chat mode" className="gap-1 px-2" value="chat">
-          <MessageSquare />
-          <span>Chat</span>
-        </TabsTrigger>
+      <TabsList
+        aria-label="Workspace mode"
+        className={cn(TITLEBAR_CONTROL_HEIGHT, "bg-background/85")}
+      >
+        <Tooltip>
+          <TooltipTrigger
+            render={
+              <TabsTrigger className="px-2" value="editor">
+                Editor
+              </TabsTrigger>
+            }
+          />
+          <TooltipContent className="flex items-center gap-2">
+            Editor only querying
+            <KbdGroup>
+              <Kbd>⇧</Kbd>
+              <Kbd>⌘</Kbd>
+              <Kbd>1</Kbd>
+            </KbdGroup>
+          </TooltipContent>
+        </Tooltip>
+        <Tooltip>
+          <TooltipTrigger
+            render={
+              <TabsTrigger className="px-2" value="split">
+                Split
+              </TabsTrigger>
+            }
+          />
+          <TooltipContent className="flex items-center gap-2">
+            Editor and chat side by side
+            <KbdGroup>
+              <Kbd>⇧</Kbd>
+              <Kbd>⌘</Kbd>
+              <Kbd>2</Kbd>
+            </KbdGroup>
+          </TooltipContent>
+        </Tooltip>
+        <Tooltip>
+          <TooltipTrigger
+            render={
+              <TabsTrigger className="px-2" value="chat">
+                Chat
+              </TabsTrigger>
+            }
+          />
+          <TooltipContent className="flex items-center gap-2">
+            Chat only querying
+            <KbdGroup>
+              <Kbd>⇧</Kbd>
+              <Kbd>⌘</Kbd>
+              <Kbd>3</Kbd>
+            </KbdGroup>
+          </TooltipContent>
+        </Tooltip>
       </TabsList>
     </Tabs>
   );

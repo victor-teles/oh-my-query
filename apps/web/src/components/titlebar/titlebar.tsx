@@ -12,6 +12,7 @@ interface TitlebarProps {
 }
 
 export const TRAFFIC_LIGHT_INSET = "78px";
+export const TITLEBAR_CONTROL_HEIGHT = "h-6";
 
 export const Titlebar = ({
   children,
