@@ -5,7 +5,7 @@ import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { useCallback, useEffect, useState } from "react";
 
 import type { AIActionType } from "@/lib/ai-actions";
-import type { DatabaseConnection, DatabaseType } from "@/lib/connections";
+import type { DatabaseType } from "@/lib/connections";
 import type { QueryTab } from "@/lib/query-types";
 import type { ExecuteResult, SchemaInfo } from "@/lib/tauri";
 
@@ -18,6 +18,7 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { CloseConfirmDialog } from "@/components/workspace/close-confirm-dialog";
 import { useActiveQuery } from "@/contexts/active-query-context";
+import { useConnection } from "@/contexts/connection-context";
 import { useEditorInsert } from "@/contexts/editor-insert-context";
 import {
   QueryTabsProvider,
@@ -66,11 +67,6 @@ const resolveEditorDialect = (
     : (connectionType as SqlDialect);
 
 interface WorkspaceContentProps {
-  connection: DatabaseConnection;
-  isConnected: boolean;
-  isConnecting: boolean;
-  connectionError: string | null;
-  onReconnect: () => void;
   onAiAction?: (
     action: AIActionType,
     context?: {
@@ -85,15 +81,16 @@ interface WorkspaceContentProps {
 }
 
 export const WorkspaceContent = ({
-  connection,
-  isConnected: _isConnected,
-  isConnecting,
-  connectionError,
-  onReconnect,
   onAiAction,
   schema,
   selectedDatabase,
 }: WorkspaceContentProps) => {
+  const {
+    connection,
+    isConnecting,
+    error: connectionError,
+    reconnect,
+  } = useConnection();
   const queryTabs = useQueryTabs(connection.id, selectedDatabase);
   const isSql = isSqlDatabase(connection.type);
 
@@ -111,7 +108,7 @@ export const WorkspaceContent = ({
   if (connectionError) {
     return (
       <div className="h-full overflow-auto bg-background">
-        <QueryErrorDisplay error={connectionError} onReconnect={onReconnect} />
+        <QueryErrorDisplay error={connectionError} onReconnect={reconnect} />
       </div>
     );
   }
@@ -123,7 +120,6 @@ export const WorkspaceContent = ({
   return (
     <QueryTabsProvider value={queryTabs}>
       <ConnectedWorkspace
-        connection={connection}
         isSql={isSql}
         onAiAction={onAiAction}
         schema={schema}
@@ -191,7 +187,6 @@ const EditorPanel = ({
 };
 
 interface ConnectedWorkspaceProps {
-  connection: DatabaseConnection;
   schema: SchemaInfo | null;
   isSql: boolean;
   onAiAction?: (
@@ -219,11 +214,11 @@ const getResultsPanelProps = (
 });
 
 const ConnectedWorkspace = ({
-  connection,
   schema,
   isSql,
   onAiAction,
 }: ConnectedWorkspaceProps) => {
+  const { connection } = useConnection();
   const {
     tabs,
     activeTab,

@@ -3,7 +3,6 @@ import { useCallback, useState } from "react";
 import { usePanelRef } from "react-resizable-panels";
 
 import type { AIAction, AIActionType } from "@/lib/ai-actions";
-import type { DatabaseConnection } from "@/lib/connections";
 
 import { ConnectionToolbar } from "@/components/titlebar/connection-toolbar";
 import { Titlebar } from "@/components/titlebar/titlebar";
@@ -12,6 +11,7 @@ import {
   ResizablePanel,
   ResizablePanelGroup,
 } from "@/components/ui/resizable";
+import { useConnection } from "@/contexts/connection-context";
 import { useSchema } from "@/hooks/use-schema";
 import { useWorkspaceIslandSync } from "@/hooks/use-workspace-island-sync";
 import { useWorkspaceMode } from "@/hooks/use-workspace-mode";
@@ -23,39 +23,14 @@ import { KeyboardShortcutsOverlay } from "./keyboard-shortcuts-overlay";
 import { WorkspaceContent } from "./workspace-content";
 import { WorkspaceSidebar } from "./workspace-sidebar";
 
-interface WorkspaceLayoutProps {
-  connection: DatabaseConnection;
-  isConnected: boolean;
-  isConnecting: boolean;
-  isReconnecting: boolean;
-  connectionError: string | null;
-  serverVersion: string | null;
-  onReconnect: () => void;
-}
-
-export const WorkspaceLayout = ({
-  connection,
-  isConnected,
-  isConnecting,
-  isReconnecting,
-  connectionError,
-  serverVersion,
-  onReconnect,
-}: WorkspaceLayoutProps) => {
+export const WorkspaceLayout = () => {
+  const { connection, isConnected } = useConnection();
   const sidebarRef = usePanelRef();
   const [shortcutsOpen, setShortcutsOpen] = useState(false);
   const [pendingAction, setPendingAction] = useState<AIAction | null>(null);
   const { mode, setMode } = useWorkspaceMode(connection.id);
 
-  useWorkspaceIslandSync({
-    connection,
-    connectionError,
-    isConnected,
-    isConnecting,
-    isReconnecting,
-    onReconnect,
-    serverVersion,
-  });
+  useWorkspaceIslandSync();
 
   const {
     schema,
@@ -181,12 +156,7 @@ export const WorkspaceLayout = ({
             minSize="30%"
           >
             <WorkspaceContent
-              connection={connection}
-              connectionError={connectionError}
-              isConnected={isConnected}
-              isConnecting={isConnecting}
               onAiAction={handleAiAction}
-              onReconnect={onReconnect}
               schema={schema}
               selectedDatabase={selectedDatabase}
             />

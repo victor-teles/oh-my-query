@@ -1,15 +1,12 @@
-import { HotkeysProvider } from "@tanstack/react-hotkeys";
 import {
   HeadContent,
   Outlet,
   createRootRouteWithContext,
 } from "@tanstack/react-router";
 
-import { ThemeProvider } from "@/components/theme-provider";
+import { AppProviders } from "@/components/app-providers";
 import { AppIsland } from "@/components/titlebar/dynamic-island/dynamic-island";
 import { Toaster } from "@/components/ui/sonner";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import { IslandProvider } from "@/contexts/island-context";
 import { useMenuNavigation } from "@/hooks/use-menu-navigation";
 import "@/index.css";
 
@@ -44,22 +41,11 @@ function RootComponent() {
   return (
     <>
       <HeadContent />
-      <ThemeProvider
-        attribute="class"
-        defaultTheme="dark"
-        disableTransitionOnChange
-        storageKey="vite-ui-theme"
-      >
-        <HotkeysProvider>
-          <TooltipProvider>
-            <IslandProvider>
-              <Outlet />
-              <AppIsland />
-            </IslandProvider>
-            <Toaster richColors />
-          </TooltipProvider>
-        </HotkeysProvider>
-      </ThemeProvider>
+      <AppProviders>
+        <Outlet />
+        <AppIsland />
+        <Toaster richColors />
+      </AppProviders>
     </>
   );
 }
