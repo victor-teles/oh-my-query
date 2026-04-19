@@ -53,7 +53,12 @@ export const useTabExecution = ({
   const { requestConfirmation } = useSafeMode();
 
   const execute = useCallback(
-    async (tabId: string, sql: string, sourceDialect?: string | null) => {
+    async (
+      tabId: string,
+      sql: string,
+      sourceDialect?: string | null,
+      maxRows?: number
+    ) => {
       const confirmed = await requestConfirmation(sql);
       if (!confirmed) {
         return;
@@ -94,6 +99,7 @@ export const useTabExecution = ({
       try {
         const result = await executeQuery({
           connectionId,
+          maxRows,
           queryId,
           schema: selectedDatabase ?? undefined,
           sourceDialect: sourceDialect ?? undefined,
