@@ -36,6 +36,9 @@ export default defineConfig({
       },
       {
         extends: true,
+        optimizeDeps: {
+          entries: ["src/**/*.stories.@(ts|tsx)", ".storybook/preview.ts"],
+        },
         plugins: [
           storybookTest({
             configDir: path.join(dirname, ".storybook"),
