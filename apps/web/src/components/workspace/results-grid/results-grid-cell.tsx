@@ -1,8 +1,8 @@
 import type { MouseEvent } from "react";
 
-import { memo, useCallback, useMemo, useState } from "react";
+import { memo, useCallback, useMemo, useRef, useState } from "react";
 
-import { Popover, PopoverTrigger } from "@/components/ui/popover";
+import { Popover } from "@/components/ui/popover";
 import { formatCell, isNull, isNumber } from "@/lib/format-cell";
 
 import { buildPinStyle } from "./-hooks/use-column-pin-style";
@@ -46,6 +46,7 @@ const ResultsGridCellBase = ({
   onExpand,
 }: ResultsGridCellProps) => {
   const [open, setOpen] = useState(false);
+  const anchorRef = useRef<HTMLDivElement>(null);
 
   const formatted = useMemo(
     () => (isNull(value) ? "NULL" : formatCell(value)),
@@ -66,13 +67,11 @@ const ResultsGridCellBase = ({
 
   const style = useMemo(() => ({ ...pin.style, width }), [pin.style, width]);
 
-  const handleCellClick = useCallback(
+  const handleDoubleClick = useCallback(
     (event: MouseEvent) => {
       event.stopPropagation();
+      event.preventDefault();
       onActivate(event, rowIndex, columnIndex);
-      if (event.shiftKey || event.metaKey || event.ctrlKey) {
-        return;
-      }
       if (!isNull(value) && formatted.length > LARGE_VALUE_THRESHOLD) {
         onExpand({ column: columnName, value: formatted });
         return;
@@ -90,27 +89,25 @@ const ResultsGridCellBase = ({
   return (
     <div
       aria-colindex={columnIndex + 1}
-      className={`text-data relative flex shrink-0 items-center overflow-hidden bg-background px-2 data-[last-left-pin]:shadow-[inset_-1px_0_0_0_var(--color-border)] data-[first-right-pin]:shadow-[inset_1px_0_0_0_var(--color-border)] data-[pinned]:z-10 group-data-[scrolled-x]/grid:data-[last-left-pin]:shadow-[4px_0_6px_-2px_rgb(0_0_0/0.25),inset_-1px_0_0_0_var(--color-border)] data-[active-cell]:shadow-[inset_0_0_0_1px_var(--color-ring)] data-[active-cell]:z-[15] ${rightAlign ? "justify-end" : ""}`}
+      className={`text-data relative flex shrink-0 items-center overflow-hidden bg-background px-2 transition-colors group-hover/row:bg-muted/50 group-data-[state=selected]/row:bg-primary/15 data-[last-left-pin]:shadow-[inset_-1px_0_0_0_var(--color-border)] data-[first-right-pin]:shadow-[inset_1px_0_0_0_var(--color-border)] data-[pinned]:z-10 group-data-[scrolled-x]/grid:data-[last-left-pin]:shadow-[4px_0_6px_-2px_rgb(0_0_0/0.25),inset_-1px_0_0_0_var(--color-border)] data-[active-cell]:shadow-[inset_0_0_0_1px_var(--color-ring)] data-[active-cell]:z-[15] ${rightAlign ? "justify-end" : ""}`}
       data-active-cell={isActive ? "" : undefined}
+      onDoubleClick={handleDoubleClick}
+      ref={anchorRef}
       role="gridcell"
       style={style}
       {...pin.dataAttrs}
     >
+      <div className="w-full truncate">
+        {isNull(value) ? (
+          <span className="italic text-muted-foreground">NULL</span>
+        ) : (
+          formatted
+        )}
+      </div>
       <Popover onOpenChange={setOpen} open={open}>
-        <PopoverTrigger
-          aria-label={`View ${columnName} value`}
-          className="block w-full truncate rounded text-left transition-colors hover:bg-accent/50 focus-visible:bg-accent/50 focus-visible:outline-none"
-          onClick={handleCellClick}
-          type="button"
-        >
-          {isNull(value) ? (
-            <span className="italic text-muted-foreground">NULL</span>
-          ) : (
-            formatted
-          )}
-        </PopoverTrigger>
         {open ? (
           <CellDetailPopover
+            anchor={anchorRef}
             columnName={columnName}
             columnType={columnType}
             onOpenFullDetail={handleOpenFullDetail}

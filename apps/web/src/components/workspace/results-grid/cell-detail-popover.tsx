@@ -1,3 +1,5 @@
+import type { RefObject } from "react";
+
 import { Copy, Expand } from "lucide-react";
 import { useCallback } from "react";
 import { toast } from "sonner";
@@ -11,6 +13,7 @@ interface CellDetailPopoverProps {
   columnType: string;
   value: unknown;
   onOpenFullDetail: () => void;
+  anchor?: RefObject<HTMLElement | null>;
 }
 
 const prettyFormat = (value: unknown): string => {
@@ -32,6 +35,7 @@ export const CellDetailPopover = ({
   columnType,
   value,
   onOpenFullDetail,
+  anchor,
 }: CellDetailPopoverProps) => {
   const formatted = prettyFormat(value);
 
@@ -41,7 +45,12 @@ export const CellDetailPopover = ({
   }, [formatted]);
 
   return (
-    <PopoverContent align="start" className="w-96" side="bottom">
+    <PopoverContent
+      align="start"
+      anchor={anchor}
+      className="w-96"
+      side="bottom"
+    >
       <div className="flex items-baseline justify-between gap-2 border-border/40 border-b pb-2">
         <span className="truncate font-medium font-mono text-xs text-foreground">
           {columnName}

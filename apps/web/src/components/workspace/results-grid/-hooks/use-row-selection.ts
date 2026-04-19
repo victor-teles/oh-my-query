@@ -73,10 +73,8 @@ export const useRowSelection = ({
     (event: MouseEvent, rowIndex: number, columnIndex?: number) => {
       containerRef.current?.focus();
       setActiveIndex(rowIndex);
-      if (columnIndex !== undefined) {
-        setActiveColumnIndex(columnIndex);
-      }
       if (event.shiftKey && lastSelectedIndex !== null) {
+        setActiveColumnIndex(null);
         const start = Math.min(lastSelectedIndex, rowIndex);
         const end = Math.max(lastSelectedIndex, rowIndex);
         const next: RowSelectionState = {};
@@ -87,6 +85,7 @@ export const useRowSelection = ({
         return;
       }
       if (event.metaKey || event.ctrlKey) {
+        setActiveColumnIndex(null);
         setRowSelection((prev) => {
           if (prev[rowIndex]) {
             const { [rowIndex]: _removed, ...rest } = prev;
@@ -97,6 +96,7 @@ export const useRowSelection = ({
         setLastSelectedIndex(rowIndex);
         return;
       }
+      setActiveColumnIndex(columnIndex ?? null);
       setRowSelection({ [rowIndex]: true });
       setLastSelectedIndex(rowIndex);
     },
