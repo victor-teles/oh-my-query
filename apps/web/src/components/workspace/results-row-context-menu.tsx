@@ -1,4 +1,4 @@
-import type { MouseEvent, ReactNode } from "react";
+import type { CSSProperties, MouseEvent, ReactNode } from "react";
 
 import { Braces, Copy, FileCode, Hash, LetterText, Sheet } from "lucide-react";
 import { useCallback } from "react";
@@ -9,13 +9,15 @@ import type { TabularResult } from "@/lib/tauri";
 import {
   ContextMenu,
   ContextMenuContent,
+  ContextMenuGroup,
   ContextMenuItem,
+  ContextMenuLabel,
+  ContextMenuSeparator,
   ContextMenuSub,
   ContextMenuSubContent,
   ContextMenuSubTrigger,
   ContextMenuTrigger,
 } from "@/components/ui/context-menu";
-import { TableRow } from "@/components/ui/table";
 import {
   extractTableName,
   rowsToCsv,
@@ -30,11 +32,13 @@ interface ResultsRowContextMenuProps {
   result: TabularResult;
   executedSql: string | null;
   rowIndex: number;
+  sortedIndex: number;
   selectedRowIndices: number[];
   exportSettings: ExportSettings;
   isSelected: boolean;
   isActive: boolean;
   onRowClick: (event: MouseEvent, rowIndex: number) => void;
+  style?: CSSProperties;
   children: ReactNode;
 }
 
@@ -60,11 +64,13 @@ export const ResultsRowContextMenu = ({
   result,
   executedSql,
   rowIndex,
+  sortedIndex,
   selectedRowIndices,
   exportSettings,
   isSelected,
   isActive,
   onRowClick,
+  style,
   children,
 }: ResultsRowContextMenuProps) => {
   const handleCopyCsv = useCallback(() => {
@@ -116,12 +122,17 @@ export const ResultsRowContextMenu = ({
     <ContextMenu>
       <ContextMenuTrigger
         render={
-          <TableRow
+          // oxlint-disable-next-line eslint-plugin-jsx-a11y(click-events-have-key-events)
+          <div
+            aria-rowindex={sortedIndex + 2}
+            aria-selected={isSelected}
+            className="flex cursor-default border-border/40 border-b transition-colors hover:bg-muted/50 data-[active]:shadow-[inset_2px_0_0_0_var(--ring)] data-[state=selected]:bg-muted"
             data-active={isActive ? "" : undefined}
             data-row-index={rowIndex}
             data-state={isSelected ? "selected" : undefined}
-            className="cursor-default data-[active]:shadow-[inset_2px_0_0_0_var(--ring)]"
             onClick={handleClick}
+            role="row"
+            style={style}
           />
         }
       >
@@ -134,30 +145,41 @@ export const ResultsRowContextMenu = ({
             Copy as
           </ContextMenuSubTrigger>
           <ContextMenuSubContent>
-            <ContextMenuItem onClick={handleCopyCsv}>
-              <Sheet />
-              CSV
-            </ContextMenuItem>
-            <ContextMenuItem onClick={handleCopyTsv}>
-              <Hash />
-              TSV
-            </ContextMenuItem>
-            <ContextMenuItem onClick={handleCopyJson}>
-              <Braces />
-              JSON
-            </ContextMenuItem>
-            <ContextMenuItem onClick={handleCopyInsert}>
-              <FileCode />
-              INSERT
-            </ContextMenuItem>
-            <ContextMenuItem onClick={handleCopyMultiRowInsert}>
-              <FileCode />
-              INSERT (multi-row)
-            </ContextMenuItem>
-            <ContextMenuItem onClick={handleCopyMarkdown}>
-              <LetterText />
-              Markdown
-            </ContextMenuItem>
+            <ContextMenuGroup>
+              <ContextMenuLabel>Tabular</ContextMenuLabel>
+              <ContextMenuItem onClick={handleCopyCsv}>
+                <Sheet />
+                CSV
+              </ContextMenuItem>
+              <ContextMenuItem onClick={handleCopyTsv}>
+                <Hash />
+                TSV
+              </ContextMenuItem>
+              <ContextMenuItem onClick={handleCopyMarkdown}>
+                <LetterText />
+                Markdown
+              </ContextMenuItem>
+            </ContextMenuGroup>
+            <ContextMenuSeparator />
+            <ContextMenuGroup>
+              <ContextMenuLabel>SQL</ContextMenuLabel>
+              <ContextMenuItem onClick={handleCopyInsert}>
+                <FileCode />
+                INSERT
+              </ContextMenuItem>
+              <ContextMenuItem onClick={handleCopyMultiRowInsert}>
+                <FileCode />
+                INSERT (multi-row)
+              </ContextMenuItem>
+            </ContextMenuGroup>
+            <ContextMenuSeparator />
+            <ContextMenuGroup>
+              <ContextMenuLabel>JSON</ContextMenuLabel>
+              <ContextMenuItem onClick={handleCopyJson}>
+                <Braces />
+                JSON
+              </ContextMenuItem>
+            </ContextMenuGroup>
           </ContextMenuSubContent>
         </ContextMenuSub>
       </ContextMenuContent>

@@ -341,13 +341,13 @@ export const useQueryTabs = (
   );
 
   const executeTab = useCallback(
-    (tabId: string, sqlOverride?: string) => {
+    (tabId: string, sqlOverride?: string, maxRows?: number) => {
       const tab = tabsRef.current.find((t) => t.id === tabId);
       const sqlToExecute = sqlOverride ?? tab?.sql;
       if (!sqlToExecute?.trim()) {
         return;
       }
-      execute(tabId, sqlToExecute, tab?.sourceDialect);
+      execute(tabId, sqlToExecute, tab?.sourceDialect, maxRows);
     },
     [execute]
   );

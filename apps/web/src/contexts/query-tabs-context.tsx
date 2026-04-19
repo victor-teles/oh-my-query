@@ -16,7 +16,7 @@ interface QueryTabsContextValue {
   setActiveTabId: (id: string) => void;
   updateTabDialect: (tabId: string, dialect: string | null) => void;
   updateTabSql: (tabId: string, sql: string) => void;
-  executeTab: (tabId: string, sqlOverride?: string) => void;
+  executeTab: (tabId: string, sqlOverride?: string, maxRows?: number) => void;
   cancelTab: (tabId: string) => void;
   closeRequested: boolean;
   onConfirmClose: () => void;

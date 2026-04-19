@@ -44,7 +44,7 @@ import { FormatButton } from "./format-button";
 import { QueryErrorDisplay } from "./query-error-display";
 import { QueryStatusBar } from "./query-status-bar";
 import { QueryTabBar } from "./query-tab-bar";
-import { ResultsTable } from "./results-table";
+import { ResultsGrid } from "./results-grid/results-grid";
 import { SqlEditor } from "./sql-editor";
 import { SyntaxTreePanel } from "./syntax-tree-panel";
 import { SyntaxTreeToggle } from "./syntax-tree-toggle";
@@ -624,6 +624,15 @@ const ResultsPanel = ({
     }
   }, [activeTabId, executeTab, executedSql]);
 
+  const handleLoadMore = useCallback(
+    (nextMaxRows: number) => {
+      if (executedSql) {
+        executeTab(activeTabId, executedSql, nextMaxRows);
+      }
+    },
+    [activeTabId, executeTab, executedSql]
+  );
+
   const handleCancel = useCallback(() => {
     cancelTab(activeTabId);
   }, [activeTabId, cancelTab]);
@@ -637,6 +646,7 @@ const ResultsPanel = ({
     executedSql,
     handleCancel,
     handleDownloadCsv,
+    handleLoadMore,
     handleRetry,
     isSql,
     jumpTo,
@@ -668,6 +678,7 @@ interface RenderResultsStateArgs {
   executedSql: string | null;
   handleCancel: () => void;
   handleDownloadCsv: () => void;
+  handleLoadMore: (nextMaxRows: number) => void;
   handleRetry: () => void;
   isSql: boolean;
   jumpTo: ReturnType<typeof useEditorInsert>["jumpTo"];
@@ -683,6 +694,7 @@ const renderResultsState = ({
   executedSql,
   handleCancel,
   handleDownloadCsv,
+  handleLoadMore,
   handleRetry,
   isSql,
   jumpTo,
@@ -742,7 +754,11 @@ const renderResultsState = ({
       content: (
         <div className="flex h-full flex-col">
           <div className="flex-1 overflow-auto">
-            <ResultsTable executedSql={executedSql} result={result} />
+            <ResultsGrid
+              executedSql={executedSql}
+              onLoadMore={handleLoadMore}
+              result={result}
+            />
           </div>
           <QueryStatusBar
             executedSql={executedSql}
