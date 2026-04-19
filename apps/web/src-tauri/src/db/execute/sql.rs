@@ -68,9 +68,7 @@ macro_rules! fetch_rows_native {
                         .unwrap_or(serde_json::Value::Null),
 
                     "TIMESTAMPTZ" => row
-                        .try_get::<sqlx::types::chrono::DateTime<sqlx::types::chrono::Utc>, _>(
-                            idx,
-                        )
+                        .try_get::<sqlx::types::chrono::DateTime<sqlx::types::chrono::Utc>, _>(idx)
                         .map(|v| serde_json::Value::String(v.to_rfc3339()))
                         .unwrap_or(serde_json::Value::Null),
 
@@ -79,10 +77,10 @@ macro_rules! fetch_rows_native {
                         .map(|v| serde_json::Value::String(v.to_string()))
                         .or_else(|_| {
                             row.try_get::<
-                                sqlx::types::chrono::DateTime<sqlx::types::chrono::Utc>,
-                                _,
-                            >(idx)
-                            .map(|v| serde_json::Value::String(v.to_rfc3339()))
+                                    sqlx::types::chrono::DateTime<sqlx::types::chrono::Utc>,
+                                    _,
+                                >(idx)
+                                .map(|v| serde_json::Value::String(v.to_rfc3339()))
                         })
                         .unwrap_or(serde_json::Value::Null),
 
