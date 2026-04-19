@@ -62,6 +62,59 @@ macro_rules! fetch_rows_native {
                         })
                         .unwrap_or(serde_json::Value::Null),
 
+                    "UUID" => row
+                        .try_get::<sqlx::types::Uuid, _>(idx)
+                        .map(|v| serde_json::Value::String(v.to_string()))
+                        .unwrap_or(serde_json::Value::Null),
+
+                    "TIMESTAMPTZ" => row
+                        .try_get::<sqlx::types::chrono::DateTime<sqlx::types::chrono::Utc>, _>(
+                            idx,
+                        )
+                        .map(|v| serde_json::Value::String(v.to_rfc3339()))
+                        .unwrap_or(serde_json::Value::Null),
+
+                    "TIMESTAMP" | "DATETIME" => row
+                        .try_get::<sqlx::types::chrono::NaiveDateTime, _>(idx)
+                        .map(|v| serde_json::Value::String(v.to_string()))
+                        .or_else(|_| {
+                            row.try_get::<
+                                sqlx::types::chrono::DateTime<sqlx::types::chrono::Utc>,
+                                _,
+                            >(idx)
+                            .map(|v| serde_json::Value::String(v.to_rfc3339()))
+                        })
+                        .unwrap_or(serde_json::Value::Null),
+
+                    "DATE" => row
+                        .try_get::<sqlx::types::chrono::NaiveDate, _>(idx)
+                        .map(|v| serde_json::Value::String(v.to_string()))
+                        .unwrap_or(serde_json::Value::Null),
+
+                    "TIME" | "TIMETZ" => row
+                        .try_get::<sqlx::types::chrono::NaiveTime, _>(idx)
+                        .map(|v| serde_json::Value::String(v.to_string()))
+                        .unwrap_or(serde_json::Value::Null),
+
+                    "JSON" | "JSONB" => row
+                        .try_get::<sqlx::types::Json<serde_json::Value>, _>(idx)
+                        .map(|v| v.0)
+                        .unwrap_or(serde_json::Value::Null),
+
+                    "BYTEA" | "BLOB" | "TINYBLOB" | "MEDIUMBLOB" | "LONGBLOB" | "BINARY"
+                    | "VARBINARY" => row
+                        .try_get::<Vec<u8>, _>(idx)
+                        .map(|bytes| {
+                            use std::fmt::Write as _;
+                            let mut s = String::with_capacity(bytes.len() * 2 + 2);
+                            s.push_str("\\x");
+                            for b in &bytes {
+                                let _ = write!(&mut s, "{:02x}", b);
+                            }
+                            serde_json::Value::String(s)
+                        })
+                        .unwrap_or(serde_json::Value::Null),
+
                     _ => row
                         .try_get::<String, _>(idx)
                         .map(serde_json::Value::String)
