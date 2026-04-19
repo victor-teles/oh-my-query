@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 
-import { Clipboard, Copy, Pin, Play, Trash2 } from "lucide-react";
+import { Clipboard, Copy, Play, Star, Trash2 } from "lucide-react";
 import { useCallback } from "react";
 
 import type { TableItem, ViewItem } from "@/lib/tauri";
@@ -16,6 +16,7 @@ import {
   ContextMenuTrigger,
 } from "@/components/ui/context-menu";
 import { useEditorInsert } from "@/contexts/editor-insert-context";
+import { useRecentTablesContext } from "@/contexts/recent-tables-context";
 import {
   generateCreateTable,
   generateDropTable,
@@ -26,31 +27,33 @@ import {
 interface TableContextMenuProps {
   table: TableItem | ViewItem;
   isView: boolean;
-  isPinned: boolean;
-  onTogglePin: (tableName: string) => void;
+  isFavorite: boolean;
+  onToggleFavorite: (tableName: string) => void;
   children: ReactNode;
 }
 
 export const TableContextMenu = ({
   table,
   isView,
-  isPinned,
-  onTogglePin,
+  isFavorite,
+  onToggleFavorite,
   children,
 }: TableContextMenuProps) => {
   const { openQuery } = useEditorInsert();
+  const { markUsed } = useRecentTablesContext();
 
   const handleSelectTop100 = useCallback(() => {
     openQuery(generateSelectTop100(table.name));
-  }, [openQuery, table.name]);
+    markUsed(table.name);
+  }, [openQuery, markUsed, table.name]);
 
   const handleCopyName = useCallback(() => {
     navigator.clipboard.writeText(table.name);
   }, [table.name]);
 
-  const handlePin = useCallback(() => {
-    onTogglePin(table.name);
-  }, [onTogglePin, table.name]);
+  const handleToggleFavorite = useCallback(() => {
+    onToggleFavorite(table.name);
+  }, [onToggleFavorite, table.name]);
 
   const handleDrop = useCallback(() => {
     openQuery(generateDropTable(table.name, isView));
@@ -80,9 +83,9 @@ export const TableContextMenu = ({
           <Clipboard />
           Copy name
         </ContextMenuItem>
-        <ContextMenuItem onClick={handlePin}>
-          <Pin />
-          {isPinned ? "Unpin" : "Pin"}
+        <ContextMenuItem onClick={handleToggleFavorite}>
+          <Star />
+          {isFavorite ? "Remove from Favorites" : "Add to Favorites"}
         </ContextMenuItem>
         <ContextMenuSeparator />
         <ContextMenuSub>

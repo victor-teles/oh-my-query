@@ -21,6 +21,7 @@ pub struct TableItem {
     pub columns: Vec<ColumnDetail>,
     pub indexes: Vec<IndexItem>,
     pub foreign_keys: Vec<ForeignKeyItem>,
+    pub row_estimate: Option<u64>,
 }
 
 #[derive(Debug, Clone, Serialize)]

@@ -84,6 +84,8 @@ async fn fetch_tables_postgres(
     .await
     .map_err(DbError::from)?;
 
+    let row_estimates = fetch_row_estimates_postgres(pool, schema_name).await?;
+
     let mut tables = Vec::with_capacity(table_rows.len());
 
     for table_row in &table_rows {
@@ -92,16 +94,45 @@ async fn fetch_tables_postgres(
         let columns = fetch_columns_postgres(pool, schema_name, &table_name).await?;
         let indexes = fetch_indexes_postgres(pool, schema_name, &table_name).await?;
         let foreign_keys = fetch_fks_postgres(pool, schema_name, &table_name).await?;
+        let row_estimate = row_estimates.get(&table_name).copied();
 
         tables.push(TableItem {
             name: table_name,
             columns,
             indexes,
             foreign_keys,
+            row_estimate,
         });
     }
 
     Ok(tables)
+}
+
+async fn fetch_row_estimates_postgres(
+    pool: &sqlx::PgPool,
+    schema_name: &str,
+) -> Result<std::collections::HashMap<String, u64>, DbError> {
+    let rows = sqlx::query(
+        "SELECT c.relname AS table_name, c.reltuples::bigint AS row_estimate \
+         FROM pg_class c \
+         JOIN pg_namespace n ON n.oid = c.relnamespace \
+         WHERE n.nspname = $1 AND c.relkind = 'r'",
+    )
+    .bind(schema_name)
+    .fetch_all(pool)
+    .await
+    .map_err(DbError::from)?;
+
+    let mut map = std::collections::HashMap::with_capacity(rows.len());
+    for row in &rows {
+        let name: String = row.try_get("table_name").unwrap_or_default();
+        let est: i64 = row.try_get("row_estimate").unwrap_or(0);
+        if est >= 0 {
+            map.insert(name, est as u64);
+        }
+    }
+
+    Ok(map)
 }
 
 async fn fetch_views_postgres(
@@ -306,7 +337,7 @@ async fn fetch_tables_mysql(
     schema_name: &str,
 ) -> Result<Vec<TableItem>, DbError> {
     let table_rows = sqlx::query(
-        "SELECT TABLE_NAME FROM information_schema.TABLES \
+        "SELECT TABLE_NAME, TABLE_ROWS FROM information_schema.TABLES \
          WHERE TABLE_SCHEMA = ? AND TABLE_TYPE = 'BASE TABLE' \
          ORDER BY TABLE_NAME",
     )
@@ -319,6 +350,12 @@ async fn fetch_tables_mysql(
 
     for table_row in &table_rows {
         let table_name: String = table_row.try_get("TABLE_NAME").unwrap_or_default();
+        let row_estimate: Option<u64> = table_row
+            .try_get::<Option<i64>, _>("TABLE_ROWS")
+            .ok()
+            .flatten()
+            .filter(|v| *v >= 0)
+            .map(|v| v as u64);
 
         let columns = fetch_columns_mysql(pool, schema_name, &table_name).await?;
         let indexes = fetch_indexes_mysql(pool, schema_name, &table_name).await?;
@@ -329,6 +366,7 @@ async fn fetch_tables_mysql(
             columns,
             indexes,
             foreign_keys,
+            row_estimate,
         });
     }
 
@@ -526,6 +564,7 @@ async fn fetch_tables_sqlite(pool: &sqlx::SqlitePool) -> Result<Vec<TableItem>, 
             columns,
             indexes,
             foreign_keys,
+            row_estimate: None,
         });
     }
 
@@ -670,15 +709,22 @@ async fn fetch_schema_mongodb(
     let db = client.database(database_name);
     let collection_names = db.list_collection_names().await.map_err(DbError::from)?;
 
-    let tables: Vec<TableItem> = collection_names
-        .into_iter()
-        .map(|name| TableItem {
+    let mut tables: Vec<TableItem> = Vec::with_capacity(collection_names.len());
+    for name in collection_names {
+        let row_estimate = db
+            .collection::<mongodb::bson::Document>(&name)
+            .estimated_document_count()
+            .await
+            .ok();
+
+        tables.push(TableItem {
             name,
             columns: vec![],
             indexes: vec![],
             foreign_keys: vec![],
-        })
-        .collect();
+            row_estimate,
+        });
+    }
 
     Ok(SchemaInfo {
         schemas: vec![SchemaItem {
@@ -736,7 +782,7 @@ async fn fetch_tables_clickhouse(
     let (_, table_rows, _, _) = conn
         .query(
             &format!(
-                "SELECT name FROM system.tables \
+                "SELECT name, total_rows FROM system.tables \
                  WHERE database = '{database_name}' \
                  AND engine NOT IN ('View', 'MaterializedView') \
                  ORDER BY name"
@@ -753,6 +799,7 @@ async fn fetch_tables_clickhouse(
             .first()
             .and_then(|v| v.as_str())
             .unwrap_or_default();
+        let row_estimate = table_row.get(1).and_then(|v| v.as_u64());
 
         let columns = fetch_columns_clickhouse(conn, database_name, table_name).await?;
         let indexes = fetch_indexes_clickhouse(conn, database_name, table_name).await?;
@@ -762,6 +809,7 @@ async fn fetch_tables_clickhouse(
             columns,
             indexes,
             foreign_keys: vec![],
+            row_estimate,
         });
     }
 

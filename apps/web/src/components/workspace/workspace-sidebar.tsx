@@ -28,7 +28,8 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { usePinnedTables } from "@/hooks/use-pinned-tables";
+import { useRecentTablesContext } from "@/contexts/recent-tables-context";
+import { useFavoriteTables } from "@/hooks/use-favorite-tables";
 import { isTauri } from "@/lib/tauri";
 import { cn } from "@/lib/utils";
 
@@ -128,8 +129,9 @@ interface SchemaTabContentProps {
   filter: string;
   onFilterChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onRetry: () => void;
-  pinnedTables: string[];
-  onTogglePin: (tableName: string) => void;
+  favoriteTables: string[];
+  recentTables: string[];
+  onToggleFavorite: (tableName: string) => void;
 }
 
 const SchemaTabContent = ({
@@ -139,8 +141,9 @@ const SchemaTabContent = ({
   filter,
   onFilterChange,
   onRetry,
-  pinnedTables,
-  onTogglePin,
+  favoriteTables,
+  recentTables,
+  onToggleFavorite,
 }: SchemaTabContentProps) => {
   const first = schema?.schemas[0];
   const itemCount = first ? first.tables.length + first.views.length : 0;
@@ -158,7 +161,7 @@ const SchemaTabContent = ({
             </InputGroupAddon>
             <InputGroupInput
               onChange={onFilterChange}
-              placeholder="Filter tables..."
+              placeholder="Find tables..."
               value={filter}
             />
           </InputGroup>
@@ -170,9 +173,10 @@ const SchemaTabContent = ({
         {error && <SchemaErrorState error={error} onRetry={onRetry} />}
         {schema && (
           <SchemaTree
+            favoriteTables={favoriteTables}
             filter={filter}
-            onTogglePin={onTogglePin}
-            pinnedTables={pinnedTables}
+            onToggleFavorite={onToggleFavorite}
+            recentTables={recentTables}
             schema={schema}
           />
         )}
@@ -201,7 +205,8 @@ export const WorkspaceSidebar = ({
 }: WorkspaceSidebarProps) => {
   const [filter, setFilter] = useState("");
   const [activeTab, setActiveTab] = useState<"schema" | "history">("schema");
-  const { pinnedTables, togglePin } = usePinnedTables(connection.id);
+  const { favoriteTables, toggleFavorite } = useFavoriteTables(connection.id);
+  const { recentTables } = useRecentTablesContext();
 
   const isRedis = connection.type === "redis";
   const dbIndex = useMemo(
@@ -291,14 +296,15 @@ export const WorkspaceSidebar = ({
             />
           ) : (
             <SchemaTabContent
-              schema={schema}
-              isLoading={isLoading}
               error={error}
+              favoriteTables={favoriteTables}
               filter={filter}
+              isLoading={isLoading}
               onFilterChange={handleFilterChange}
               onRetry={refresh}
-              pinnedTables={pinnedTables}
-              onTogglePin={togglePin}
+              onToggleFavorite={toggleFavorite}
+              recentTables={recentTables}
+              schema={schema}
             />
           )}
         </TabsContent>

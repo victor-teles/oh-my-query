@@ -1,61 +1,127 @@
+import { Clock, Star } from "lucide-react";
 import { useMemo } from "react";
 
-import type { SchemaInfo, SchemaItem } from "@/lib/tauri";
+import type { SchemaInfo, SchemaItem, TableItem, ViewItem } from "@/lib/tauri";
+
+import { fuzzyMatch } from "@/lib/fuzzy-match";
 
 import { TableNode } from "./table-node";
-
-const LABEL_MIN_ITEMS = 6;
 
 interface SchemaTreeProps {
   schema: SchemaInfo;
   filter: string;
-  pinnedTables: string[];
-  onTogglePin: (tableName: string) => void;
+  favoriteTables: string[];
+  recentTables: string[];
+  onToggleFavorite: (tableName: string) => void;
 }
 
-const filterSchema = (schema: SchemaItem, query: string): SchemaItem => {
-  const lower = query.toLowerCase();
-  return {
-    ...schema,
-    tables: schema.tables.filter((t) => t.name.toLowerCase().includes(lower)),
-    views: schema.views.filter((v) => v.name.toLowerCase().includes(lower)),
-  };
+interface ScoredTable {
+  item: TableItem | ViewItem;
+  isView: boolean;
+  matches: number[];
+  score: number;
+}
+
+const scoreItems = (schema: SchemaItem, query: string): ScoredTable[] => {
+  const all: { item: TableItem | ViewItem; isView: boolean }[] = [
+    ...schema.tables.map((t) => ({ isView: false, item: t })),
+    ...schema.views.map((v) => ({ isView: true, item: v })),
+  ];
+
+  return all
+    .map(({ item, isView }) => {
+      const result = fuzzyMatch(item.name, query);
+      if (!result) {
+        return null;
+      }
+      return {
+        isView,
+        item,
+        matches: result.matches,
+        score: result.score,
+      };
+    })
+    .filter((v): v is ScoredTable => v !== null)
+    .toSorted((a, b) => b.score - a.score);
 };
 
 export const SchemaTree = ({
   schema,
   filter,
-  pinnedTables,
-  onTogglePin,
+  favoriteTables,
+  recentTables,
+  onToggleFavorite,
 }: SchemaTreeProps) => {
-  const filtered = useMemo(() => {
-    const [first] = schema.schemas;
-    if (!first) {
-      return null;
-    }
-    return filter ? filterSchema(first, filter) : first;
-  }, [schema, filter]);
+  const [first] = schema.schemas;
+  const trimmedFilter = filter.trim();
+  const isSearching = trimmedFilter.length > 0;
 
-  const sortedTables = useMemo(() => {
-    if (!filtered) {
+  const searchResults = useMemo(() => {
+    if (!(first && isSearching)) {
       return [];
     }
-    return [...filtered.tables].toSorted((a, b) => {
-      const aPinned = pinnedTables.includes(a.name);
-      const bPinned = pinnedTables.includes(b.name);
-      if (aPinned && !bPinned) {
-        return -1;
-      }
-      if (!aPinned && bPinned) {
-        return 1;
-      }
-      return 0;
-    });
-  }, [filtered, pinnedTables]);
+    return scoreItems(first, trimmedFilter);
+  }, [first, isSearching, trimmedFilter]);
+
+  const favoriteSet = useMemo(() => new Set(favoriteTables), [favoriteTables]);
+  const recentSet = useMemo(() => new Set(recentTables), [recentTables]);
+
+  const favoriteItems = useMemo(() => {
+    if (!first || isSearching) {
+      return [];
+    }
+    const byName = new Map<string, TableItem>();
+    for (const t of first.tables) {
+      byName.set(t.name, t);
+    }
+    return favoriteTables
+      .map((name) => byName.get(name))
+      .filter((t): t is TableItem => t !== undefined);
+  }, [first, favoriteTables, isSearching]);
+
+  const recentItems = useMemo(() => {
+    if (!first || isSearching) {
+      return [];
+    }
+    const byName = new Map<string, TableItem>();
+    for (const t of first.tables) {
+      byName.set(t.name, t);
+    }
+    return recentTables
+      .map((name) => byName.get(name))
+      .filter((t): t is TableItem => t !== undefined)
+      .filter((t) => !favoriteSet.has(t.name));
+  }, [first, recentTables, favoriteSet, isSearching]);
+
+  const tableItems = useMemo(() => {
+    if (!first || isSearching) {
+      return [];
+    }
+    return first.tables.filter(
+      (t) => !(favoriteSet.has(t.name) || recentSet.has(t.name))
+    );
+  }, [first, favoriteSet, recentSet, isSearching]);
+
+  const viewItems = first && !isSearching ? first.views : [];
+
+  if (!first) {
+    return null;
+  }
+
+  if (isSearching && searchResults.length === 0) {
+    return (
+      <div className="px-3 py-4 text-center text-xs text-muted-foreground">
+        No matches for &ldquo;{trimmedFilter}&rdquo;
+      </div>
+    );
+  }
 
   if (
-    !filtered ||
-    (filtered.tables.length === 0 && filtered.views.length === 0)
+    !isSearching &&
+    favoriteItems.length === 0 &&
+    recentItems.length === 0 &&
+    tableItems.length === 0 &&
+    viewItems.length === 0
   ) {
     return (
       <div className="px-3 py-4 text-center text-xs text-muted-foreground">
@@ -64,43 +130,86 @@ export const SchemaTree = ({
     );
   }
 
-  const hasTables = sortedTables.length > 0;
-  const hasViews = filtered.views.length > 0;
-  const showBothLabels = hasTables && hasViews;
-  const showTablesLabel =
-    showBothLabels || sortedTables.length >= LABEL_MIN_ITEMS;
-  const showViewsLabel =
-    showBothLabels || filtered.views.length >= LABEL_MIN_ITEMS;
+  if (isSearching) {
+    return (
+      <div className="px-1 py-1">
+        {searchResults.map(({ item, isView, matches }) => (
+          <TableNode
+            highlightMatches={matches}
+            isFavorite={favoriteSet.has(item.name)}
+            isView={isView}
+            key={`${isView ? "v" : "t"}:${item.name}`}
+            onToggleFavorite={onToggleFavorite}
+            table={item}
+          />
+        ))}
+      </div>
+    );
+  }
 
   return (
     <div className="px-1 py-1">
-      {hasTables && (
+      {favoriteItems.length > 0 && (
         <>
-          {showTablesLabel && (
-            <div className="mb-0.5 px-2 text-section-label">
-              Tables ({sortedTables.length})
-            </div>
-          )}
-          {sortedTables.map((table) => (
+          <div className="mb-0.5 flex items-center gap-1 px-2 text-section-label">
+            <Star className="size-2.5" />
+            Favorites ({favoriteItems.length})
+          </div>
+          {favoriteItems.map((table) => (
             <TableNode
-              isPinned={pinnedTables.includes(table.name)}
-              key={table.name}
-              onTogglePin={onTogglePin}
+              isFavorite
+              key={`fav:${table.name}`}
+              onToggleFavorite={onToggleFavorite}
               table={table}
             />
           ))}
         </>
       )}
 
-      {hasViews && (
+      {recentItems.length > 0 && (
         <>
-          {showViewsLabel && (
+          <div className="mb-0.5 mt-3 flex items-center gap-1 px-2 text-section-label">
+            <Clock className="size-2.5" />
+            Recent ({recentItems.length})
+          </div>
+          {recentItems.map((table) => (
+            <TableNode
+              isFavorite={false}
+              key={`rec:${table.name}`}
+              onToggleFavorite={onToggleFavorite}
+              table={table}
+            />
+          ))}
+        </>
+      )}
+
+      {tableItems.length > 0 && (
+        <>
+          {(favoriteItems.length > 0 ||
+            recentItems.length > 0 ||
+            viewItems.length > 0) && (
             <div className="mb-0.5 mt-3 px-2 text-section-label">
-              Views ({filtered.views.length})
+              Tables ({tableItems.length})
             </div>
           )}
-          {filtered.views.map((view) => (
-            <TableNode isView key={view.name} table={view} />
+          {tableItems.map((table) => (
+            <TableNode
+              isFavorite={false}
+              key={`tbl:${table.name}`}
+              onToggleFavorite={onToggleFavorite}
+              table={table}
+            />
+          ))}
+        </>
+      )}
+
+      {viewItems.length > 0 && (
+        <>
+          <div className="mb-0.5 mt-3 px-2 text-section-label">
+            Views ({viewItems.length})
+          </div>
+          {viewItems.map((view) => (
+            <TableNode isView key={`view:${view.name}`} table={view} />
           ))}
         </>
       )}
