@@ -18,7 +18,6 @@ import {
 import { ListCursor } from "@/components/ui/list-cursor";
 import {
   getConnectionColorClasses,
-  getConnectionDisplayName,
   getEnvironmentStyle,
 } from "@/lib/connection-appearance";
 import { cn } from "@/lib/utils";
@@ -87,7 +86,6 @@ const ConnectionListItem = ({
   const shouldReduceMotion = useReducedMotion();
   const colorClasses = getConnectionColorClasses(connection.color);
   const envStyle = getEnvironmentStyle(connection.environment);
-  const displayName = getConnectionDisplayName(connection);
 
   const handleEdit = useCallback(() => {
     onEditRequest(connection);
@@ -156,7 +154,7 @@ const ConnectionListItem = ({
           <div className="flex items-baseline justify-between gap-3">
             <div className="flex min-w-0 items-center gap-2">
               <span className="truncate text-sm font-medium tracking-tight text-foreground">
-                {displayName}
+                {connection.name}
               </span>
               {envStyle && (
                 <Badge

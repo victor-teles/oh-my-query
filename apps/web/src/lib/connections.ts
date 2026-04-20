@@ -33,7 +33,6 @@ export interface DatabaseConnection {
   lastConnectedAt: string | null;
   color?: ConnectionColor;
   emoji?: string;
-  nickname?: string;
   environment?: ConnectionEnvironment;
 }
 

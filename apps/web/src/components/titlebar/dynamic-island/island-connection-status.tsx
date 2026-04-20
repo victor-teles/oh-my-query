@@ -105,7 +105,6 @@ export const ReconnectingStatus = ({
 
 interface ConnectedIdleStatusProps {
   connectionName: string;
-  displayName: string;
   serverVersion: string | null;
   username: string;
   database: string;
@@ -116,7 +115,6 @@ interface ConnectedIdleStatusProps {
 
 export const ConnectedIdleStatus = ({
   connectionName,
-  displayName,
   serverVersion,
   username,
   database,
@@ -182,7 +180,7 @@ export const ConnectedIdleStatus = ({
               aria-hidden="true"
               className="text-chrome max-w-40 truncate text-muted-foreground"
             >
-              {displayName}
+              {connectionName}
             </span>
             {serverVersion && (
               <span
@@ -230,7 +228,7 @@ export const ConnectedIdleStatus = ({
             <dt className="text-muted-foreground">Connection</dt>
             <dd className="truncate text-foreground">
               {emoji ? `${emoji} ` : ""}
-              {displayName}
+              {connectionName}
             </dd>
             <dt className="text-muted-foreground">Database</dt>
             <dd className="text-data text-foreground">{database}</dd>

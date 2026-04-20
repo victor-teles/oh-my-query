@@ -1,8 +1,4 @@
-import type {
-  ConnectionColor,
-  ConnectionEnvironment,
-  DatabaseConnection,
-} from "@/lib/connections";
+import type { ConnectionColor, ConnectionEnvironment } from "@/lib/connections";
 
 interface ColorClasses {
   dot: string;
@@ -85,10 +81,6 @@ const PALETTE: Record<ConnectionColor, ColorClasses> = {
 export const getConnectionColorClasses = (
   color: ConnectionColor | undefined
 ): ColorClasses | null => (color ? PALETTE[color] : null);
-
-export const getConnectionDisplayName = (
-  connection: Pick<DatabaseConnection, "name" | "nickname">
-): string => connection.nickname?.trim() || connection.name;
 
 interface EnvironmentStyle {
   label: string;

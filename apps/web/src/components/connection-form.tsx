@@ -319,11 +319,9 @@ const ServerFields = ({
 interface AppearanceSectionProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  nickname: string;
   emoji: string;
   color: ConnectionColor | "";
   defaultEmoji: string;
-  onNicknameChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onEmojiSelect: (emoji: string) => void;
   onColorSelect: (color: ConnectionColor | "") => void;
 }
@@ -331,11 +329,9 @@ interface AppearanceSectionProps {
 const AppearanceSection = ({
   open,
   onOpenChange,
-  nickname,
   emoji,
   color,
   defaultEmoji,
-  onNicknameChange,
   onEmojiSelect,
   onColorSelect,
 }: AppearanceSectionProps) => (
@@ -353,46 +349,31 @@ const AppearanceSection = ({
         </button>
       }
     />
-    <CollapsibleContent className="grid gap-4 pt-3">
+    <CollapsibleContent className="grid grid-cols-[auto_1fr] items-start gap-4 pt-3">
       <div className="grid gap-1.5">
-        <Label htmlFor="conn-nickname">Nickname</Label>
-        <Input
-          id="conn-nickname"
-          onChange={onNicknameChange}
-          placeholder="analytics-prod"
-          value={nickname}
+        <Label>Emoji</Label>
+        <EmojiPicker
+          defaultEmoji={defaultEmoji}
+          onSelect={onEmojiSelect}
+          value={emoji}
         />
-        <p className="text-xs text-muted-foreground">
-          Shown in place of the connection name in lists.
-        </p>
       </div>
-
-      <div className="grid grid-cols-[auto_1fr] items-start gap-4">
-        <div className="grid gap-1.5">
-          <Label>Emoji</Label>
-          <EmojiPicker
-            defaultEmoji={defaultEmoji}
-            onSelect={onEmojiSelect}
-            value={emoji}
+      <div className="grid gap-1.5">
+        <Label>Color</Label>
+        <div className="flex h-9 items-center gap-2">
+          <ColorSwatch
+            color=""
+            isSelected={color === ""}
+            onSelect={onColorSelect}
           />
-        </div>
-        <div className="grid gap-1.5">
-          <Label>Color</Label>
-          <div className="flex h-9 items-center gap-2">
+          {CONNECTION_COLORS.map((c) => (
             <ColorSwatch
-              color=""
-              isSelected={color === ""}
+              color={c}
+              isSelected={color === c}
+              key={c}
               onSelect={onColorSelect}
             />
-            {CONNECTION_COLORS.map((c) => (
-              <ColorSwatch
-                color={c}
-                isSelected={color === c}
-                key={c}
-                onSelect={onColorSelect}
-              />
-            ))}
-          </div>
+          ))}
         </div>
       </div>
     </CollapsibleContent>
@@ -414,7 +395,6 @@ interface FormState {
   password: string;
   authSource: string;
   emoji: string;
-  nickname: string;
   color: ConnectionColor | "";
   environment: ConnectionEnvironment | "";
 }
@@ -433,7 +413,6 @@ const INITIAL_STATE: FormState = {
   environment: "",
   host: "localhost",
   name: "",
-  nickname: "",
   password: "",
   port: String(DEFAULT_PORTS.postgresql),
   type: "postgresql",
@@ -448,7 +427,6 @@ const connectionToFormState = (conn: DatabaseConnection): FormState => ({
   environment: conn.environment ?? "",
   host: conn.host,
   name: conn.name,
-  nickname: conn.nickname ?? "",
   password: conn.password,
   port: String(conn.port),
   type: conn.type,
@@ -519,7 +497,6 @@ const buildConnection = (form: FormState): DatabaseConnection => {
   const hasHost = NEEDS_HOST.has(form.type);
   const hasUsername = NEEDS_USERNAME.has(form.type);
   const emoji = form.emoji.trim();
-  const nickname = form.nickname.trim();
   return {
     authSource:
       form.type === "mongodb" && form.authSource.trim()
@@ -534,7 +511,6 @@ const buildConnection = (form: FormState): DatabaseConnection => {
     id: crypto.randomUUID(),
     lastConnectedAt: null,
     name: form.name.trim(),
-    nickname: nickname || undefined,
     password: hasHost ? form.password : "",
     pinned: false,
     port: hasHost ? Number(form.port) : 0,
@@ -608,7 +584,7 @@ export const ConnectionForm = ({
   );
   const [testStatus, setTestStatus] = useState<TestStatus>({ state: "idle" });
   const [appearanceOpen, setAppearanceOpen] = useState(
-    Boolean(connection?.emoji || connection?.nickname || connection?.color)
+    Boolean(connection?.emoji || connection?.color)
   );
   const hasHost = NEEDS_HOST.has(form.type);
   const hasUsername = NEEDS_USERNAME.has(form.type);
@@ -798,10 +774,8 @@ export const ConnectionForm = ({
         color={form.color}
         defaultEmoji={EMOJI_BY_TYPE[form.type]}
         emoji={form.emoji}
-        nickname={form.nickname}
         onColorSelect={handleColorSelect}
         onEmojiSelect={handleEmojiSelect}
-        onNicknameChange={updateField("nickname")}
         onOpenChange={setAppearanceOpen}
         open={appearanceOpen}
       />

@@ -77,7 +77,6 @@ export const DynamicIslandContent = ({
             color={snapshot.color}
             connectionName={snapshot.connectionName}
             database={snapshot.database}
-            displayName={snapshot.displayName}
             emoji={snapshot.emoji}
             environment={snapshot.environment}
             serverVersion={snapshot.serverVersion}

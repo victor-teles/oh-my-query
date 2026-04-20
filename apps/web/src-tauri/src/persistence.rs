@@ -53,8 +53,6 @@ pub struct DatabaseConnection {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub emoji: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub nickname: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     pub environment: Option<String>,
 }
 
