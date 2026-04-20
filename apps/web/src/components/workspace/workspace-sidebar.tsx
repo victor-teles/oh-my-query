@@ -119,8 +119,6 @@ const DatabaseSelector = ({
   );
 };
 
-const FILTER_MIN_ITEMS = 6;
-
 interface SchemaTabContentProps {
   schema: SchemaInfo | null;
   isLoading: boolean;
@@ -141,45 +139,39 @@ const SchemaTabContent = ({
   onRetry,
   favoriteTables,
   onToggleFavorite,
-}: SchemaTabContentProps) => {
-  const first = schema?.schemas[0];
-  const itemCount = first ? first.tables.length + first.views.length : 0;
-  const showFilter = schema !== null && itemCount >= FILTER_MIN_ITEMS;
-
-  return (
-    <>
-      {showFilter && (
-        <div className="px-2 py-2">
-          <InputGroup>
-            <InputGroupAddon>
-              <InputGroupText>
-                <Search />
-              </InputGroupText>
-            </InputGroupAddon>
-            <InputGroupInput
-              onChange={onFilterChange}
-              placeholder="Find tables..."
-              value={filter}
-            />
-          </InputGroup>
-        </div>
-      )}
-
-      <ScrollArea className="min-h-0 flex-1">
-        {isLoading && !schema && <SchemaLoadingState />}
-        {error && <SchemaErrorState error={error} onRetry={onRetry} />}
-        {schema && (
-          <SchemaTree
-            favoriteTables={favoriteTables}
-            filter={filter}
-            onToggleFavorite={onToggleFavorite}
-            schema={schema}
+}: SchemaTabContentProps) => (
+  <>
+    {schema && (
+      <div className="px-2 py-2">
+        <InputGroup>
+          <InputGroupAddon>
+            <InputGroupText>
+              <Search />
+            </InputGroupText>
+          </InputGroupAddon>
+          <InputGroupInput
+            onChange={onFilterChange}
+            placeholder="Find tables..."
+            value={filter}
           />
-        )}
-      </ScrollArea>
-    </>
-  );
-};
+        </InputGroup>
+      </div>
+    )}
+
+    <ScrollArea className="min-h-0 flex-1">
+      {isLoading && !schema && <SchemaLoadingState />}
+      {error && <SchemaErrorState error={error} onRetry={onRetry} />}
+      {schema && (
+        <SchemaTree
+          favoriteTables={favoriteTables}
+          filter={filter}
+          onToggleFavorite={onToggleFavorite}
+          schema={schema}
+        />
+      )}
+    </ScrollArea>
+  </>
+);
 
 const parseDbIndex = (name: string | null): number => {
   if (!name) {
