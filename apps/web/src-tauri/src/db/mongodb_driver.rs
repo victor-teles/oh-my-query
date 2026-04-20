@@ -11,13 +11,19 @@ pub struct MongoDbDriver;
 pub fn build_mongodb_uri(params: &ConnectionParams) -> String {
     let has_auth = !params.username.is_empty();
     if has_auth {
+        let auth_source = params
+            .auth_source
+            .as_deref()
+            .filter(|s| !s.is_empty())
+            .unwrap_or("admin");
         format!(
-            "mongodb://{}:{}@{}:{}/{}",
+            "mongodb://{}:{}@{}:{}/{}?authSource={}",
             urlencoding::encode(&params.username),
             urlencoding::encode(&params.password),
             params.host,
             params.port,
             urlencoding::encode(&params.database),
+            auth_source,
         )
     } else {
         format!(

@@ -68,6 +68,8 @@ pub struct ConnectionParams {
     pub database: String,
     pub username: String,
     pub password: String,
+    #[serde(default)]
+    pub auth_source: Option<String>,
 }
 
 #[derive(Debug, Clone, Serialize)]

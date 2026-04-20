@@ -35,6 +35,7 @@ interface FormState {
   database: string;
   username: string;
   password: string;
+  authSource: string;
 }
 
 type TestStatus =
@@ -44,6 +45,7 @@ type TestStatus =
   | { state: "error"; message: string };
 
 const INITIAL_STATE: FormState = {
+  authSource: "",
   database: "",
   host: "localhost",
   name: "",
@@ -54,6 +56,7 @@ const INITIAL_STATE: FormState = {
 };
 
 const connectionToFormState = (conn: DatabaseConnection): FormState => ({
+  authSource: conn.authSource ?? "",
   database: conn.database,
   host: conn.host,
   name: conn.name,
@@ -127,6 +130,10 @@ const buildConnection = (form: FormState): DatabaseConnection => {
   const hasHost = NEEDS_HOST.has(form.type);
   const hasUsername = NEEDS_USERNAME.has(form.type);
   return {
+    authSource:
+      form.type === "mongodb" && form.authSource.trim()
+        ? form.authSource.trim()
+        : undefined,
     createdAt: new Date().toISOString(),
     database: form.database.trim(),
     host: hasHost ? form.host.trim() : "",
@@ -145,6 +152,10 @@ const buildConnectionParams = (form: FormState) => {
   const hasHost = NEEDS_HOST.has(form.type);
   const hasUsername = NEEDS_USERNAME.has(form.type);
   return {
+    authSource:
+      form.type === "mongodb" && form.authSource.trim()
+        ? form.authSource.trim()
+        : undefined,
     database: form.database.trim(),
     host: hasHost ? form.host.trim() : "",
     password: hasHost ? form.password : "",
@@ -346,6 +357,21 @@ export const ConnectionForm = ({
             value={form.username}
             onChange={updateField("username")}
           />
+        </div>
+      )}
+
+      {form.type === "mongodb" && hasUsername && (
+        <div className="grid gap-1.5">
+          <Label htmlFor="conn-auth-source">Auth source</Label>
+          <Input
+            id="conn-auth-source"
+            placeholder="admin"
+            value={form.authSource}
+            onChange={updateField("authSource")}
+          />
+          <p className="text-xs text-muted-foreground">
+            Database where the user was created. Defaults to admin.
+          </p>
         </div>
       )}
 

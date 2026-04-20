@@ -26,6 +26,7 @@ export const testConnection = async (
 
   const result = await invoke<TestConnectionResult>("test_connection", {
     params: {
+      authSource: connection.authSource,
       database: connection.database,
       host: connection.host,
       password: connection.password,
@@ -131,6 +132,7 @@ export const connectToDatabase = async (
   await invoke("connect_to_database", {
     connectionId,
     params: {
+      authSource: connection.authSource,
       database: connection.database,
       host: connection.host,
       password: connection.password,
