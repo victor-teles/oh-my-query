@@ -6,20 +6,7 @@ import { ActiveQueryProvider } from "@/contexts/active-query-context";
 import { ConnectionProvider } from "@/contexts/connection-context";
 import { EditorInsertProvider } from "@/contexts/editor-insert-context";
 import { QueryExecutionProvider } from "@/contexts/query-execution-context";
-import {
-  RecentTablesProvider,
-  useRecentTablesContext,
-} from "@/contexts/recent-tables-context";
 import { SafeModeProvider } from "@/contexts/safe-mode-context";
-
-const EditorInsertWithRecent = ({ children }: { children: ReactNode }) => {
-  const { markUsed } = useRecentTablesContext();
-  return (
-    <EditorInsertProvider onTableUsed={markUsed}>
-      {children}
-    </EditorInsertProvider>
-  );
-};
 
 export const WorkspaceProviders = ({
   connection,
@@ -32,9 +19,7 @@ export const WorkspaceProviders = ({
     <SafeModeProvider>
       <QueryExecutionProvider>
         <ActiveQueryProvider>
-          <RecentTablesProvider connectionId={connection.id}>
-            <EditorInsertWithRecent>{children}</EditorInsertWithRecent>
-          </RecentTablesProvider>
+          <EditorInsertProvider>{children}</EditorInsertProvider>
         </ActiveQueryProvider>
       </QueryExecutionProvider>
     </SafeModeProvider>

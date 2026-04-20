@@ -12,15 +12,14 @@ import { useEditorInsert } from "@/contexts/editor-insert-context";
 
 interface ColumnNodeProps {
   column: ColumnDetail;
-  tableName?: string;
 }
 
-export const ColumnNode = ({ column, tableName }: ColumnNodeProps) => {
+export const ColumnNode = ({ column }: ColumnNodeProps) => {
   const { insertAtCursor } = useEditorInsert();
 
   const handleClick = useCallback(() => {
-    insertAtCursor(column.name, tableName);
-  }, [insertAtCursor, column.name, tableName]);
+    insertAtCursor(column.name);
+  }, [insertAtCursor, column.name]);
 
   return (
     <Tooltip>

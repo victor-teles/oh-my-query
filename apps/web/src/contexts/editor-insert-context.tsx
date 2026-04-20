@@ -8,7 +8,7 @@ import type { ErrorLocation } from "@/lib/error-location";
 interface EditorInsertContextValue {
   getSelectedText: () => string | null;
   hasSelection: () => boolean;
-  insertAtCursor: (text: string, tableName?: string) => void;
+  insertAtCursor: (text: string) => void;
   jumpTo: (location: ErrorLocation) => void;
   openQuery: (sql: string) => void;
   openQueryAndRun: (sql: string) => void;
@@ -24,23 +24,11 @@ const EditorInsertContext = createContext<EditorInsertContextValue | null>(
   null
 );
 
-interface EditorInsertProviderProps {
-  children: ReactNode;
-  onTableUsed?: (tableName: string) => void;
-}
-
-export const EditorInsertProvider = ({
-  children,
-  onTableUsed,
-}: EditorInsertProviderProps) => {
+export const EditorInsertProvider = ({ children }: { children: ReactNode }) => {
   const editorRef = useRef<EditorView | null>(null);
   const queryTableRef = useRef<((tableName: string) => void) | null>(null);
   const openQueryRef = useRef<((sql: string) => void) | null>(null);
   const openQueryAndRunRef = useRef<((sql: string) => void) | null>(null);
-  const onTableUsedRef = useRef<((tableName: string) => void) | undefined>(
-    onTableUsed
-  );
-  onTableUsedRef.current = onTableUsed;
 
   const registerEditor = useCallback((view: EditorView | null) => {
     editorRef.current = view;
@@ -102,7 +90,7 @@ export const EditorInsertProvider = ({
     view.focus();
   }, []);
 
-  const insertAtCursor = useCallback((text: string, tableName?: string) => {
+  const insertAtCursor = useCallback((text: string) => {
     const view = editorRef.current;
     if (!view) {
       return;
@@ -114,10 +102,6 @@ export const EditorInsertProvider = ({
       selection: { anchor: from + text.length },
     });
     view.focus();
-
-    if (tableName) {
-      onTableUsedRef.current?.(tableName);
-    }
   }, []);
 
   const jumpTo = useCallback((location: ErrorLocation) => {
@@ -149,7 +133,6 @@ export const EditorInsertProvider = ({
 
   const queryTable = useCallback((tableName: string) => {
     queryTableRef.current?.(tableName);
-    onTableUsedRef.current?.(tableName);
   }, []);
 
   const openQuery = useCallback((sql: string) => {

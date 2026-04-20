@@ -1,4 +1,4 @@
-import { Clock, Star } from "lucide-react";
+import { Star } from "lucide-react";
 import { useMemo } from "react";
 
 import type { SchemaInfo, SchemaItem, TableItem, ViewItem } from "@/lib/tauri";
@@ -11,7 +11,6 @@ interface SchemaTreeProps {
   schema: SchemaInfo;
   filter: string;
   favoriteTables: string[];
-  recentTables: string[];
   onToggleFavorite: (tableName: string) => void;
 }
 
@@ -49,7 +48,6 @@ export const SchemaTree = ({
   schema,
   filter,
   favoriteTables,
-  recentTables,
   onToggleFavorite,
 }: SchemaTreeProps) => {
   const [first] = schema.schemas;
@@ -64,7 +62,6 @@ export const SchemaTree = ({
   }, [first, isSearching, trimmedFilter]);
 
   const favoriteSet = useMemo(() => new Set(favoriteTables), [favoriteTables]);
-  const recentSet = useMemo(() => new Set(recentTables), [recentTables]);
 
   const favoriteItems = useMemo(() => {
     if (!first || isSearching) {
@@ -79,28 +76,12 @@ export const SchemaTree = ({
       .filter((t): t is TableItem => t !== undefined);
   }, [first, favoriteTables, isSearching]);
 
-  const recentItems = useMemo(() => {
-    if (!first || isSearching) {
-      return [];
-    }
-    const byName = new Map<string, TableItem>();
-    for (const t of first.tables) {
-      byName.set(t.name, t);
-    }
-    return recentTables
-      .map((name) => byName.get(name))
-      .filter((t): t is TableItem => t !== undefined)
-      .filter((t) => !favoriteSet.has(t.name));
-  }, [first, recentTables, favoriteSet, isSearching]);
-
   const tableItems = useMemo(() => {
     if (!first || isSearching) {
       return [];
     }
-    return first.tables.filter(
-      (t) => !(favoriteSet.has(t.name) || recentSet.has(t.name))
-    );
-  }, [first, favoriteSet, recentSet, isSearching]);
+    return first.tables.filter((t) => !favoriteSet.has(t.name));
+  }, [first, favoriteSet, isSearching]);
 
   const viewItems = first && !isSearching ? first.views : [];
 
@@ -119,7 +100,6 @@ export const SchemaTree = ({
   if (
     !isSearching &&
     favoriteItems.length === 0 &&
-    recentItems.length === 0 &&
     tableItems.length === 0 &&
     viewItems.length === 0
   ) {
@@ -166,28 +146,9 @@ export const SchemaTree = ({
         </>
       )}
 
-      {recentItems.length > 0 && (
-        <>
-          <div className="mb-0.5 mt-3 flex items-center gap-1 px-2 text-section-label">
-            <Clock className="size-2.5" />
-            Recent ({recentItems.length})
-          </div>
-          {recentItems.map((table) => (
-            <TableNode
-              isFavorite={false}
-              key={`rec:${table.name}`}
-              onToggleFavorite={onToggleFavorite}
-              table={table}
-            />
-          ))}
-        </>
-      )}
-
       {tableItems.length > 0 && (
         <>
-          {(favoriteItems.length > 0 ||
-            recentItems.length > 0 ||
-            viewItems.length > 0) && (
+          {(favoriteItems.length > 0 || viewItems.length > 0) && (
             <div className="mb-0.5 mt-3 px-2 text-section-label">
               Tables ({tableItems.length})
             </div>

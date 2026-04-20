@@ -28,7 +28,6 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { useRecentTablesContext } from "@/contexts/recent-tables-context";
 import { useFavoriteTables } from "@/hooks/use-favorite-tables";
 import { isTauri } from "@/lib/tauri";
 import { cn } from "@/lib/utils";
@@ -130,7 +129,6 @@ interface SchemaTabContentProps {
   onFilterChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onRetry: () => void;
   favoriteTables: string[];
-  recentTables: string[];
   onToggleFavorite: (tableName: string) => void;
 }
 
@@ -142,7 +140,6 @@ const SchemaTabContent = ({
   onFilterChange,
   onRetry,
   favoriteTables,
-  recentTables,
   onToggleFavorite,
 }: SchemaTabContentProps) => {
   const first = schema?.schemas[0];
@@ -176,7 +173,6 @@ const SchemaTabContent = ({
             favoriteTables={favoriteTables}
             filter={filter}
             onToggleFavorite={onToggleFavorite}
-            recentTables={recentTables}
             schema={schema}
           />
         )}
@@ -206,7 +202,6 @@ export const WorkspaceSidebar = ({
   const [filter, setFilter] = useState("");
   const [activeTab, setActiveTab] = useState<"schema" | "history">("schema");
   const { favoriteTables, toggleFavorite } = useFavoriteTables(connection.id);
-  const { recentTables } = useRecentTablesContext();
 
   const isRedis = connection.type === "redis";
   const dbIndex = useMemo(
@@ -303,7 +298,6 @@ export const WorkspaceSidebar = ({
               onFilterChange={handleFilterChange}
               onRetry={refresh}
               onToggleFavorite={toggleFavorite}
-              recentTables={recentTables}
               schema={schema}
             />
           )}

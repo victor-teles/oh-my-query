@@ -16,7 +16,6 @@ import {
   ContextMenuTrigger,
 } from "@/components/ui/context-menu";
 import { useEditorInsert } from "@/contexts/editor-insert-context";
-import { useRecentTablesContext } from "@/contexts/recent-tables-context";
 import {
   generateCreateTable,
   generateDropTable,
@@ -40,12 +39,10 @@ export const TableContextMenu = ({
   children,
 }: TableContextMenuProps) => {
   const { openQuery } = useEditorInsert();
-  const { markUsed } = useRecentTablesContext();
 
   const handleSelectTop100 = useCallback(() => {
     openQuery(generateSelectTop100(table.name));
-    markUsed(table.name);
-  }, [openQuery, markUsed, table.name]);
+  }, [openQuery, table.name]);
 
   const handleCopyName = useCallback(() => {
     navigator.clipboard.writeText(table.name);

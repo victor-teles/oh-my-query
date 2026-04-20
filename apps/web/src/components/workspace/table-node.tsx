@@ -220,7 +220,7 @@ export const TableNode = ({
               Columns ({table.columns.length})
             </div>
             {table.columns.map((col) => (
-              <ColumnNode column={col} key={col.name} tableName={table.name} />
+              <ColumnNode column={col} key={col.name} />
             ))}
 
             {hasIndexes && tableData && (
