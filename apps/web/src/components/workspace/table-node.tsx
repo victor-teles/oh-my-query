@@ -100,11 +100,12 @@ const HighlightedText = ({
 
 const numberFormatter = new Intl.NumberFormat();
 
-const formatRowEstimate = (n: number | null): string => {
-  if (n === null || n === undefined) {
-    return "—";
+const formatRowEstimate = (n: number | null = 0): string => {
+  const value = n ?? 0;
+  if (value === 0) {
+    return "0 rows";
   }
-  return `~ ${numberFormatter.format(n)} rows`;
+  return `~ ${numberFormatter.format(value)} rows`;
 };
 
 const QuickPeek = ({ table }: { table: TableItem }) => {
