@@ -2,6 +2,8 @@ import type { ReactNode } from "react";
 
 import { createContext, use, useCallback, useMemo, useState } from "react";
 
+import type { ConnectionColor, ConnectionEnvironment } from "@/lib/connections";
+
 export type IslandSnapshot =
   | { kind: "hidden" }
   | { kind: "ambient"; connectionName: string }
@@ -16,9 +18,13 @@ export type IslandSnapshot =
   | {
       kind: "connected-idle";
       connectionName: string;
+      displayName: string;
       serverVersion: string | null;
       username: string;
       database: string;
+      color: ConnectionColor | undefined;
+      emoji: string | undefined;
+      environment: ConnectionEnvironment | undefined;
     }
   | { kind: "query-running" }
   | {

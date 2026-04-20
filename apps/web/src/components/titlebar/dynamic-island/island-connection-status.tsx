@@ -1,11 +1,19 @@
 import { AlertCircle } from "lucide-react";
 import { motion, useReducedMotion } from "motion/react";
 
+import type { ConnectionColor, ConnectionEnvironment } from "@/lib/connections";
+
+import { Badge } from "@/components/ui/badge";
 import {
   HoverCard,
   HoverCardContent,
   HoverCardTrigger,
 } from "@/components/ui/hover-card";
+import {
+  getConnectionColorClasses,
+  getEnvironmentStyle,
+} from "@/lib/connection-appearance";
+import { cn } from "@/lib/utils";
 
 import { IslandErrorMessage } from "./island-error-message";
 import { ISLAND_ITEM_TRANSITION, ISLAND_ITEM_VARIANTS } from "./island-motion";
@@ -97,19 +105,32 @@ export const ReconnectingStatus = ({
 
 interface ConnectedIdleStatusProps {
   connectionName: string;
+  displayName: string;
   serverVersion: string | null;
   username: string;
   database: string;
+  color: ConnectionColor | undefined;
+  emoji: string | undefined;
+  environment: ConnectionEnvironment | undefined;
 }
 
 export const ConnectedIdleStatus = ({
   connectionName,
+  displayName,
   serverVersion,
   username,
   database,
+  color,
+  emoji,
+  environment,
 }: ConnectedIdleStatusProps) => {
   const shouldReduceMotion = useReducedMotion();
-  const srLabel = `Connected to ${connectionName} — ${username}@${database}${
+  const colorClasses = getConnectionColorClasses(color);
+  const envStyle = getEnvironmentStyle(environment);
+  const dotClass = colorClasses?.dot ?? "bg-success";
+  const srLabel = `Connected to ${connectionName}${
+    environment ? ` (${environment})` : ""
+  } — ${username}@${database}${
     serverVersion ? ` on ${serverVersion}` : ""
   }. Open connection details.`;
 
@@ -129,12 +150,39 @@ export const ConnectedIdleStatus = ({
               {!shouldReduceMotion && (
                 <motion.span
                   animate={{ opacity: 0, scale: 2.2 }}
-                  className="absolute inline-flex size-full rounded-full bg-success"
+                  className={cn(
+                    "absolute inline-flex size-full rounded-full",
+                    dotClass
+                  )}
                   initial={{ opacity: 0.5, scale: 1 }}
                   transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
                 />
               )}
-              <span className="relative inline-flex size-2 rounded-full bg-success" />
+              <span
+                className={cn(
+                  "relative inline-flex size-2 rounded-full",
+                  dotClass
+                )}
+              />
+            </span>
+            {envStyle && (
+              <Badge
+                className={cn("h-4 px-1.5 text-[10px]", envStyle.badgeClass)}
+                variant="outline"
+              >
+                {envStyle.label}
+              </Badge>
+            )}
+            {emoji && (
+              <span aria-hidden="true" className="text-[11px] leading-none">
+                {emoji}
+              </span>
+            )}
+            <span
+              aria-hidden="true"
+              className="text-chrome max-w-40 truncate text-muted-foreground"
+            >
+              {displayName}
             </span>
             {serverVersion && (
               <span
@@ -161,14 +209,29 @@ export const ConnectedIdleStatus = ({
       />
       <HoverCardContent align="center" className="w-64">
         <div className="flex flex-col gap-3">
-          <div className="flex items-center gap-2">
-            <span
-              aria-hidden="true"
-              className="size-1.5 rounded-full bg-success"
-            />
-            <span className="text-section-label">Connected</span>
+          <div className="flex items-center justify-between gap-2">
+            <div className="flex items-center gap-2">
+              <span
+                aria-hidden="true"
+                className={cn("size-1.5 rounded-full", dotClass)}
+              />
+              <span className="text-section-label">Connected</span>
+            </div>
+            {envStyle && (
+              <Badge
+                className={cn("h-4 px-1.5 text-[10px]", envStyle.badgeClass)}
+                variant="outline"
+              >
+                {envStyle.label}
+              </Badge>
+            )}
           </div>
           <dl className="grid grid-cols-[auto_1fr] gap-x-3 gap-y-1.5 text-xs">
+            <dt className="text-muted-foreground">Connection</dt>
+            <dd className="truncate text-foreground">
+              {emoji ? `${emoji} ` : ""}
+              {displayName}
+            </dd>
             <dt className="text-muted-foreground">Database</dt>
             <dd className="text-data text-foreground">{database}</dd>
             <dt className="text-muted-foreground">User</dt>

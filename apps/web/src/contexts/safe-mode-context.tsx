@@ -2,21 +2,32 @@ import type { ReactNode } from "react";
 
 import { createContext, use, useCallback, useMemo, useState } from "react";
 
+import type { ConnectionEnvironment } from "@/lib/connections";
 import type { DestructiveClassification } from "@/lib/safe-mode";
 
 import { SafeModeConfirmDialog } from "@/components/workspace/safe-mode-confirm-dialog";
 import { classifyDestructiveSql } from "@/lib/safe-mode";
 
+interface ConfirmationContext {
+  environment?: ConnectionEnvironment;
+  connectionName?: string;
+}
+
 interface PendingConfirmation {
   sql: string;
   classification: DestructiveClassification;
+  environment: ConnectionEnvironment | null;
+  connectionName: string | null;
   resolve: (confirmed: boolean) => void;
 }
 
 interface SafeModeContextValue {
   enabled: boolean;
   toggle: () => void;
-  requestConfirmation: (sql: string) => Promise<boolean>;
+  requestConfirmation: (
+    sql: string,
+    context?: ConfirmationContext
+  ) => Promise<boolean>;
 }
 
 const SafeModeContext = createContext<SafeModeContextValue | null>(null);
@@ -30,7 +41,7 @@ export const SafeModeProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   const requestConfirmation = useCallback(
-    (sql: string): Promise<boolean> => {
+    (sql: string, context?: ConfirmationContext): Promise<boolean> => {
       if (!enabled) {
         return Promise.resolve(true);
       }
@@ -39,7 +50,13 @@ export const SafeModeProvider = ({ children }: { children: ReactNode }) => {
         return Promise.resolve(true);
       }
       const { promise, resolve } = Promise.withResolvers<boolean>();
-      setPending({ classification, resolve, sql });
+      setPending({
+        classification,
+        connectionName: context?.connectionName ?? null,
+        environment: context?.environment ?? null,
+        resolve,
+        sql,
+      });
       return promise;
     },
     [enabled]
@@ -73,6 +90,8 @@ export const SafeModeProvider = ({ children }: { children: ReactNode }) => {
       {children}
       <SafeModeConfirmDialog
         classification={pending?.classification ?? null}
+        connectionName={pending?.connectionName ?? null}
+        environment={pending?.environment ?? null}
         onCancel={handleCancel}
         onConfirm={handleConfirm}
         sql={pending?.sql ?? null}

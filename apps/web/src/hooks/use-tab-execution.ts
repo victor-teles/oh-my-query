@@ -3,6 +3,7 @@ import { toast } from "sonner";
 
 import type { QueryTab } from "@/lib/query-types";
 
+import { useConnection } from "@/contexts/connection-context";
 import { useSafeMode } from "@/contexts/safe-mode-context";
 import { appendHistory, HISTORY_UPDATED_EVENT } from "@/lib/persistence";
 import { cancelQuery, executeQuery } from "@/lib/tauri";
@@ -51,6 +52,7 @@ export const useTabExecution = ({
 }: UseTabExecutionParams) => {
   const lastHistoryErrorToastRef = useRef(0);
   const { requestConfirmation } = useSafeMode();
+  const { connection } = useConnection();
 
   const execute = useCallback(
     async (
@@ -59,7 +61,10 @@ export const useTabExecution = ({
       sourceDialect?: string | null,
       maxRows?: number
     ) => {
-      const confirmed = await requestConfirmation(sql);
+      const confirmed = await requestConfirmation(sql, {
+        connectionName: connection.name,
+        environment: connection.environment,
+      });
       if (!confirmed) {
         return;
       }
@@ -174,7 +179,15 @@ export const useTabExecution = ({
         }
       }
     },
-    [connectionId, selectedDatabase, setTabs, flushSave, requestConfirmation]
+    [
+      connection.environment,
+      connection.name,
+      connectionId,
+      selectedDatabase,
+      setTabs,
+      flushSave,
+      requestConfirmation,
+    ]
   );
 
   const cancel = useCallback(async (queryId: string) => {
