@@ -21,6 +21,7 @@ pub struct TableItem {
     pub columns: Vec<ColumnDetail>,
     pub indexes: Vec<IndexItem>,
     pub foreign_keys: Vec<ForeignKeyItem>,
+    pub row_estimate: Option<u64>,
 }
 
 #[derive(Debug, Clone, Serialize)]
@@ -67,6 +68,8 @@ pub struct ConnectionParams {
     pub database: String,
     pub username: String,
     pub password: String,
+    #[serde(default)]
+    pub auth_source: Option<String>,
 }
 
 #[derive(Debug, Clone, Serialize)]

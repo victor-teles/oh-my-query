@@ -26,6 +26,7 @@ export const testConnection = async (
 
   const result = await invoke<TestConnectionResult>("test_connection", {
     params: {
+      authSource: connection.authSource,
       database: connection.database,
       host: connection.host,
       password: connection.password,
@@ -89,6 +90,7 @@ export interface TableItem {
   columns: ColumnDetail[];
   indexes: IndexItem[];
   foreignKeys: ForeignKeyItem[];
+  rowEstimate: number | null;
 }
 
 export interface ViewItem {
@@ -130,6 +132,7 @@ export const connectToDatabase = async (
   await invoke("connect_to_database", {
     connectionId,
     params: {
+      authSource: connection.authSource,
       database: connection.database,
       host: connection.host,
       password: connection.password,
@@ -248,6 +251,7 @@ const MOCK_SCHEMA: SchemaInfo = {
             { columns: ["email"], isUnique: true, name: "users_email_idx" },
           ],
           name: "users",
+          rowEstimate: 12_400,
         },
         {
           columns: [
@@ -304,6 +308,7 @@ const MOCK_SCHEMA: SchemaInfo = {
             },
           ],
           name: "orders",
+          rowEstimate: 84_120,
         },
         {
           columns: [
@@ -346,6 +351,7 @@ const MOCK_SCHEMA: SchemaInfo = {
           ],
           indexes: [{ columns: ["id"], isUnique: true, name: "products_pkey" }],
           name: "products",
+          rowEstimate: 1240,
         },
         {
           columns: [
@@ -369,6 +375,7 @@ const MOCK_SCHEMA: SchemaInfo = {
             { columns: ["id"], isUnique: true, name: "categories_pkey" },
           ],
           name: "categories",
+          rowEstimate: 42,
         },
       ],
       views: [

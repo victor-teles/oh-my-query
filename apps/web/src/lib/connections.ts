@@ -17,6 +17,7 @@ export interface DatabaseConnection {
   database: string;
   username: string;
   password: string;
+  authSource?: string;
   createdAt: string;
   pinned: boolean;
   lastConnectedAt: string | null;

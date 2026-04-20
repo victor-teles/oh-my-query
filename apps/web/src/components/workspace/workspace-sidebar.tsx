@@ -28,7 +28,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { usePinnedTables } from "@/hooks/use-pinned-tables";
+import { useFavoriteTables } from "@/hooks/use-favorite-tables";
 import { isTauri } from "@/lib/tauri";
 import { cn } from "@/lib/utils";
 
@@ -119,8 +119,6 @@ const DatabaseSelector = ({
   );
 };
 
-const FILTER_MIN_ITEMS = 6;
-
 interface SchemaTabContentProps {
   schema: SchemaInfo | null;
   isLoading: boolean;
@@ -128,8 +126,8 @@ interface SchemaTabContentProps {
   filter: string;
   onFilterChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onRetry: () => void;
-  pinnedTables: string[];
-  onTogglePin: (tableName: string) => void;
+  favoriteTables: string[];
+  onToggleFavorite: (tableName: string) => void;
 }
 
 const SchemaTabContent = ({
@@ -139,47 +137,41 @@ const SchemaTabContent = ({
   filter,
   onFilterChange,
   onRetry,
-  pinnedTables,
-  onTogglePin,
-}: SchemaTabContentProps) => {
-  const first = schema?.schemas[0];
-  const itemCount = first ? first.tables.length + first.views.length : 0;
-  const showFilter = schema !== null && itemCount >= FILTER_MIN_ITEMS;
-
-  return (
-    <>
-      {showFilter && (
-        <div className="px-2 py-2">
-          <InputGroup>
-            <InputGroupAddon>
-              <InputGroupText>
-                <Search />
-              </InputGroupText>
-            </InputGroupAddon>
-            <InputGroupInput
-              onChange={onFilterChange}
-              placeholder="Filter tables..."
-              value={filter}
-            />
-          </InputGroup>
-        </div>
-      )}
-
-      <ScrollArea className="min-h-0 flex-1">
-        {isLoading && !schema && <SchemaLoadingState />}
-        {error && <SchemaErrorState error={error} onRetry={onRetry} />}
-        {schema && (
-          <SchemaTree
-            filter={filter}
-            onTogglePin={onTogglePin}
-            pinnedTables={pinnedTables}
-            schema={schema}
+  favoriteTables,
+  onToggleFavorite,
+}: SchemaTabContentProps) => (
+  <>
+    {schema && (
+      <div className="px-2 py-2">
+        <InputGroup>
+          <InputGroupAddon>
+            <InputGroupText>
+              <Search />
+            </InputGroupText>
+          </InputGroupAddon>
+          <InputGroupInput
+            onChange={onFilterChange}
+            placeholder="Find tables..."
+            value={filter}
           />
-        )}
-      </ScrollArea>
-    </>
-  );
-};
+        </InputGroup>
+      </div>
+    )}
+
+    <ScrollArea className="min-h-0 flex-1">
+      {isLoading && !schema && <SchemaLoadingState />}
+      {error && <SchemaErrorState error={error} onRetry={onRetry} />}
+      {schema && (
+        <SchemaTree
+          favoriteTables={favoriteTables}
+          filter={filter}
+          onToggleFavorite={onToggleFavorite}
+          schema={schema}
+        />
+      )}
+    </ScrollArea>
+  </>
+);
 
 const parseDbIndex = (name: string | null): number => {
   if (!name) {
@@ -201,7 +193,7 @@ export const WorkspaceSidebar = ({
 }: WorkspaceSidebarProps) => {
   const [filter, setFilter] = useState("");
   const [activeTab, setActiveTab] = useState<"schema" | "history">("schema");
-  const { pinnedTables, togglePin } = usePinnedTables(connection.id);
+  const { favoriteTables, toggleFavorite } = useFavoriteTables(connection.id);
 
   const isRedis = connection.type === "redis";
   const dbIndex = useMemo(
@@ -291,14 +283,14 @@ export const WorkspaceSidebar = ({
             />
           ) : (
             <SchemaTabContent
-              schema={schema}
-              isLoading={isLoading}
               error={error}
+              favoriteTables={favoriteTables}
               filter={filter}
+              isLoading={isLoading}
               onFilterChange={handleFilterChange}
               onRetry={refresh}
-              pinnedTables={pinnedTables}
-              onTogglePin={togglePin}
+              onToggleFavorite={toggleFavorite}
+              schema={schema}
             />
           )}
         </TabsContent>
