@@ -8,6 +8,16 @@ export type DatabaseType =
   | "redis"
   | "clickhouse";
 
+export type ConnectionEnvironment = "dev" | "staging" | "prod";
+
+export type ConnectionColor =
+  | "honey"
+  | "denim"
+  | "moss"
+  | "plum"
+  | "clay"
+  | "stone";
+
 export interface DatabaseConnection {
   id: string;
   name: string;
@@ -21,6 +31,9 @@ export interface DatabaseConnection {
   createdAt: string;
   pinned: boolean;
   lastConnectedAt: string | null;
+  color?: ConnectionColor;
+  emoji?: string;
+  environment?: ConnectionEnvironment;
 }
 
 export const DEFAULT_PORTS: Record<DatabaseType, number> = {

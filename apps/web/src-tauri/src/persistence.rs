@@ -48,6 +48,12 @@ pub struct DatabaseConnection {
     pub created_at: String,
     pub pinned: bool,
     pub last_connected_at: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub color: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub emoji: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub environment: Option<String>,
 }
 
 const MAX_HISTORY_ENTRIES: usize = 10_000;

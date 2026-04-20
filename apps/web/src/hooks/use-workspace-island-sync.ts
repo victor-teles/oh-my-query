@@ -115,8 +115,11 @@ const resolveSnapshot = ({
   }
   if (!isConnected) {
     return {
+      color: connection.color,
       connectionName: connection.name,
       database: connection.database,
+      emoji: connection.emoji,
+      environment: connection.environment,
       kind: "connected-idle",
       serverVersion,
       username: connection.username,
@@ -140,8 +143,11 @@ const resolveSnapshot = ({
     };
   }
   return {
+    color: connection.color,
     connectionName: connection.name,
     database: connection.database,
+    emoji: connection.emoji,
+    environment: connection.environment,
     kind: "connected-idle",
     serverVersion,
     username: connection.username,

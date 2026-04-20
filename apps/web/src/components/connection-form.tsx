@@ -1,13 +1,34 @@
-import { CheckCircle2, Loader2, XCircle } from "lucide-react";
+import {
+  Check,
+  CheckCircle2,
+  ChevronDown,
+  Loader2,
+  XCircle,
+} from "lucide-react";
 import { useCallback, useState } from "react";
 import { toast } from "sonner";
 
-import type { DatabaseConnection, DatabaseType } from "@/lib/connections";
+import type {
+  ConnectionColor,
+  ConnectionEnvironment,
+  DatabaseConnection,
+  DatabaseType,
+} from "@/lib/connections";
 
 import { DATABASE_ICON_MAP } from "@/components/icons/database-icons";
 import { Button } from "@/components/ui/button";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import {
   Select,
   SelectContent,
@@ -16,11 +37,348 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import {
+  CONNECTION_COLORS,
+  getConnectionColorClasses,
+} from "@/lib/connection-appearance";
+import {
   DEFAULT_PORTS,
   saveConnection,
   updateConnection,
 } from "@/lib/connections";
 import { testConnection } from "@/lib/tauri";
+import { cn } from "@/lib/utils";
+
+const EMOJI_CATALOG = [
+  "🐘",
+  "🐬",
+  "🍃",
+  "⚡️",
+  "💾",
+  "🗃",
+  "📊",
+  "📈",
+  "🔑",
+  "🔒",
+  "🧪",
+  "🚀",
+  "🔥",
+  "🌐",
+  "🌲",
+  "🌊",
+  "⭐️",
+  "🌱",
+  "🍂",
+  "🌙",
+  "🧩",
+  "⚙️",
+  "📦",
+  "🎯",
+] as const;
+
+const EMOJI_BY_TYPE: Record<DatabaseType, string> = {
+  clickhouse: "📊",
+  mongodb: "🍃",
+  mysql: "🐬",
+  postgresql: "🐘",
+  redis: "⚡️",
+  sqlite: "💾",
+};
+
+interface EmojiPickerProps {
+  value: string;
+  defaultEmoji: string;
+  onSelect: (emoji: string) => void;
+}
+
+const EmojiPicker = ({ value, defaultEmoji, onSelect }: EmojiPickerProps) => {
+  const [open, setOpen] = useState(false);
+
+  const handleSelect = useCallback(
+    (emoji: string) => {
+      onSelect(emoji);
+      setOpen(false);
+    },
+    [onSelect]
+  );
+
+  const handleClear = useCallback(() => {
+    onSelect("");
+    setOpen(false);
+  }, [onSelect]);
+
+  return (
+    <Popover onOpenChange={setOpen} open={open}>
+      <PopoverTrigger
+        render={
+          <button
+            aria-label="Choose emoji"
+            className="flex size-9 items-center justify-center rounded-md border border-input bg-background text-lg transition-colors hover:border-foreground/40"
+            type="button"
+          >
+            {value || <span className="opacity-40">{defaultEmoji}</span>}
+          </button>
+        }
+      />
+      <PopoverContent align="start" className="w-auto p-2">
+        <div className="grid grid-cols-6 gap-1">
+          {EMOJI_CATALOG.map((e) => (
+            <EmojiButton
+              emoji={e}
+              isSelected={value === e}
+              key={e}
+              onSelect={handleSelect}
+            />
+          ))}
+        </div>
+        <div className="mt-2 flex justify-end">
+          <Button onClick={handleClear} size="sm" type="button" variant="ghost">
+            Clear
+          </Button>
+        </div>
+      </PopoverContent>
+    </Popover>
+  );
+};
+
+interface EmojiButtonProps {
+  emoji: string;
+  isSelected: boolean;
+  onSelect: (emoji: string) => void;
+}
+
+const EmojiButton = ({ emoji, isSelected, onSelect }: EmojiButtonProps) => {
+  const handleClick = useCallback(() => {
+    onSelect(emoji);
+  }, [emoji, onSelect]);
+
+  return (
+    <button
+      aria-label={`Select ${emoji}`}
+      aria-pressed={isSelected}
+      className={cn(
+        "flex size-8 items-center justify-center rounded-md text-base transition-colors hover:bg-muted",
+        isSelected && "bg-accent"
+      )}
+      onClick={handleClick}
+      type="button"
+    >
+      {emoji}
+    </button>
+  );
+};
+
+interface ColorSwatchProps {
+  color: ConnectionColor | "";
+  isSelected: boolean;
+  onSelect: (color: ConnectionColor | "") => void;
+}
+
+const ColorSwatch = ({ color, isSelected, onSelect }: ColorSwatchProps) => {
+  const classes = color ? getConnectionColorClasses(color) : null;
+  const handleClick = useCallback(() => {
+    onSelect(color);
+  }, [color, onSelect]);
+
+  if (color === "") {
+    return (
+      <button
+        aria-label="No color"
+        aria-pressed={isSelected}
+        className={cn(
+          "flex size-6 items-center justify-center rounded-full border border-dashed border-border text-muted-foreground transition-colors hover:border-foreground/40",
+          isSelected && "ring-2 ring-ring ring-offset-2 ring-offset-background"
+        )}
+        onClick={handleClick}
+        type="button"
+      >
+        <span className="sr-only">None</span>
+        <span aria-hidden="true" className="text-[10px]">
+          ∅
+        </span>
+      </button>
+    );
+  }
+
+  if (!classes) {
+    return null;
+  }
+
+  return (
+    <button
+      aria-label={color}
+      aria-pressed={isSelected}
+      className={cn(
+        "flex size-6 items-center justify-center rounded-full transition-transform hover:scale-110",
+        classes.swatch,
+        isSelected && "ring-2 ring-ring ring-offset-2 ring-offset-background"
+      )}
+      onClick={handleClick}
+      type="button"
+    >
+      {isSelected && (
+        <Check aria-hidden="true" className="size-3.5 text-white" />
+      )}
+    </button>
+  );
+};
+
+interface ServerFieldsProps {
+  type: DatabaseType;
+  host: string;
+  port: string;
+  username: string;
+  password: string;
+  authSource: string;
+  hasHost: boolean;
+  hasUsername: boolean;
+  updateField: (
+    key: keyof FormState
+  ) => (e: React.ChangeEvent<HTMLInputElement>) => void;
+}
+
+const ServerFields = ({
+  type,
+  host,
+  port,
+  username,
+  password,
+  authSource,
+  hasHost,
+  hasUsername,
+  updateField,
+}: ServerFieldsProps) => (
+  <>
+    {hasHost && (
+      <div className="grid grid-cols-[1fr_100px] gap-3">
+        <div className="grid gap-1.5">
+          <Label htmlFor="conn-host">Host</Label>
+          <Input
+            id="conn-host"
+            onChange={updateField("host")}
+            placeholder="localhost"
+            required
+            value={host}
+          />
+        </div>
+        <div className="grid gap-1.5">
+          <Label htmlFor="conn-port">Port</Label>
+          <Input
+            id="conn-port"
+            onChange={updateField("port")}
+            placeholder={String(DEFAULT_PORTS[type])}
+            required
+            type="number"
+            value={port}
+          />
+        </div>
+      </div>
+    )}
+
+    {hasUsername && (
+      <div className="grid gap-1.5">
+        <Label htmlFor="conn-username">Username</Label>
+        <Input
+          id="conn-username"
+          onChange={updateField("username")}
+          placeholder={getUsernamePlaceholder(type)}
+          value={username}
+        />
+      </div>
+    )}
+
+    {type === "mongodb" && hasUsername && (
+      <div className="grid gap-1.5">
+        <Label htmlFor="conn-auth-source">Auth source</Label>
+        <Input
+          id="conn-auth-source"
+          onChange={updateField("authSource")}
+          placeholder="admin"
+          value={authSource}
+        />
+        <p className="text-xs text-muted-foreground">
+          Database where the user was created. Defaults to admin.
+        </p>
+      </div>
+    )}
+
+    {hasHost && (
+      <div className="grid gap-1.5">
+        <Label htmlFor="conn-password">Password</Label>
+        <Input
+          id="conn-password"
+          onChange={updateField("password")}
+          placeholder="••••••••"
+          type="password"
+          value={password}
+        />
+      </div>
+    )}
+  </>
+);
+
+interface AppearanceSectionProps {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  emoji: string;
+  color: ConnectionColor | "";
+  defaultEmoji: string;
+  onEmojiSelect: (emoji: string) => void;
+  onColorSelect: (color: ConnectionColor | "") => void;
+}
+
+const AppearanceSection = ({
+  open,
+  onOpenChange,
+  emoji,
+  color,
+  defaultEmoji,
+  onEmojiSelect,
+  onColorSelect,
+}: AppearanceSectionProps) => (
+  <Collapsible onOpenChange={onOpenChange} open={open}>
+    <CollapsibleTrigger
+      render={
+        <button
+          className="flex w-full items-center gap-1.5 text-section-label hover:text-foreground"
+          type="button"
+        >
+          <ChevronDown
+            className={cn("size-3 transition-transform", open && "rotate-180")}
+          />
+          Appearance
+        </button>
+      }
+    />
+    <CollapsibleContent className="grid grid-cols-[auto_1fr] items-start gap-4 pt-3">
+      <div className="grid gap-1.5">
+        <Label>Emoji</Label>
+        <EmojiPicker
+          defaultEmoji={defaultEmoji}
+          onSelect={onEmojiSelect}
+          value={emoji}
+        />
+      </div>
+      <div className="grid gap-1.5">
+        <Label>Color</Label>
+        <div className="flex h-9 items-center gap-2">
+          <ColorSwatch
+            color=""
+            isSelected={color === ""}
+            onSelect={onColorSelect}
+          />
+          {CONNECTION_COLORS.map((c) => (
+            <ColorSwatch
+              color={c}
+              isSelected={color === c}
+              key={c}
+              onSelect={onColorSelect}
+            />
+          ))}
+        </div>
+      </div>
+    </CollapsibleContent>
+  </Collapsible>
+);
 
 interface ConnectionFormProps {
   connection?: DatabaseConnection;
@@ -36,6 +394,9 @@ interface FormState {
   username: string;
   password: string;
   authSource: string;
+  emoji: string;
+  color: ConnectionColor | "";
+  environment: ConnectionEnvironment | "";
 }
 
 type TestStatus =
@@ -46,7 +407,10 @@ type TestStatus =
 
 const INITIAL_STATE: FormState = {
   authSource: "",
+  color: "",
   database: "",
+  emoji: "",
+  environment: "",
   host: "localhost",
   name: "",
   password: "",
@@ -57,7 +421,10 @@ const INITIAL_STATE: FormState = {
 
 const connectionToFormState = (conn: DatabaseConnection): FormState => ({
   authSource: conn.authSource ?? "",
+  color: conn.color ?? "",
   database: conn.database,
+  emoji: conn.emoji ?? "",
+  environment: conn.environment ?? "",
   host: conn.host,
   name: conn.name,
   password: conn.password,
@@ -129,13 +496,17 @@ const getDatabasePlaceholder = (type: DatabaseType): string => {
 const buildConnection = (form: FormState): DatabaseConnection => {
   const hasHost = NEEDS_HOST.has(form.type);
   const hasUsername = NEEDS_USERNAME.has(form.type);
+  const emoji = form.emoji.trim();
   return {
     authSource:
       form.type === "mongodb" && form.authSource.trim()
         ? form.authSource.trim()
         : undefined,
+    color: form.color || undefined,
     createdAt: new Date().toISOString(),
     database: form.database.trim(),
+    emoji: emoji || undefined,
+    environment: form.environment || undefined,
     host: hasHost ? form.host.trim() : "",
     id: crypto.randomUUID(),
     lastConnectedAt: null,
@@ -212,9 +583,11 @@ export const ConnectionForm = ({
     connection ? connectionToFormState(connection) : INITIAL_STATE
   );
   const [testStatus, setTestStatus] = useState<TestStatus>({ state: "idle" });
+  const [appearanceOpen, setAppearanceOpen] = useState(
+    Boolean(connection?.emoji || connection?.color)
+  );
   const hasHost = NEEDS_HOST.has(form.type);
   const hasUsername = NEEDS_USERNAME.has(form.type);
-  const showDatabase = form.type !== "redis" || true;
 
   const updateField = useCallback(
     <K extends keyof FormState>(key: K) =>
@@ -239,6 +612,24 @@ export const ConnectionForm = ({
       username: NEEDS_USERNAME.has(value) ? prev.username : "",
     }));
     setTestStatus({ state: "idle" });
+  }, []);
+
+  const handleColorSelect = useCallback((color: ConnectionColor | "") => {
+    setForm((prev) => ({ ...prev, color }));
+  }, []);
+
+  const handleEmojiSelect = useCallback((emoji: string) => {
+    setForm((prev) => ({ ...prev, emoji }));
+  }, []);
+
+  const handleEnvChange = useCallback((value: string | null) => {
+    if (!value) {
+      return;
+    }
+    setForm((prev) => ({
+      ...prev,
+      environment: value === "none" ? "" : (value as ConnectionEnvironment),
+    }));
   }, []);
 
   const handleTestConnection = useCallback(async () => {
@@ -290,131 +681,111 @@ export const ConnectionForm = ({
   );
 
   return (
-    <form onSubmit={handleSubmit} className="grid gap-4">
+    <form className="grid gap-4" onSubmit={handleSubmit}>
       <div className="grid gap-1.5">
         <Label htmlFor="conn-name">Connection name</Label>
         <Input
           id="conn-name"
-          placeholder="My Database"
-          value={form.name}
           onChange={updateField("name")}
+          placeholder="My Database"
           required
+          value={form.name}
         />
       </div>
 
-      <div className="grid gap-1.5">
-        <Label htmlFor="conn-type">Database type</Label>
-        <Select value={form.type} onValueChange={handleTypeChange}>
-          <SelectTrigger id="conn-type" className="w-full">
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent>
-            {DATABASE_OPTIONS.map((opt) => {
-              const Icon = DATABASE_ICON_MAP[opt.value];
-              return (
-                <SelectItem key={opt.value} value={opt.value}>
-                  <Icon className="size-4 shrink-0" />
-                  {opt.label}
-                </SelectItem>
-              );
-            })}
-          </SelectContent>
-        </Select>
+      <div className="grid grid-cols-[1fr_1fr] gap-3">
+        <div className="grid gap-1.5">
+          <Label htmlFor="conn-type">Database type</Label>
+          <Select onValueChange={handleTypeChange} value={form.type}>
+            <SelectTrigger className="w-full" id="conn-type">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              {DATABASE_OPTIONS.map((opt) => {
+                const Icon = DATABASE_ICON_MAP[opt.value];
+                return (
+                  <SelectItem key={opt.value} value={opt.value}>
+                    <Icon className="size-4 shrink-0" />
+                    {opt.label}
+                  </SelectItem>
+                );
+              })}
+            </SelectContent>
+          </Select>
+        </div>
+        <div className="grid gap-1.5">
+          <Label htmlFor="conn-env">Environment</Label>
+          <Select
+            onValueChange={handleEnvChange}
+            value={form.environment || "none"}
+          >
+            <SelectTrigger className="w-full" id="conn-env">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="none">None</SelectItem>
+              <SelectItem value="dev">Dev</SelectItem>
+              <SelectItem value="staging">Staging</SelectItem>
+              <SelectItem value="prod">Prod</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
       </div>
 
-      {hasHost && (
-        <div className="grid grid-cols-[1fr_100px] gap-3">
-          <div className="grid gap-1.5">
-            <Label htmlFor="conn-host">Host</Label>
-            <Input
-              id="conn-host"
-              placeholder="localhost"
-              value={form.host}
-              onChange={updateField("host")}
-              required
-            />
-          </div>
-          <div className="grid gap-1.5">
-            <Label htmlFor="conn-port">Port</Label>
-            <Input
-              id="conn-port"
-              type="number"
-              placeholder={String(DEFAULT_PORTS[form.type])}
-              value={form.port}
-              onChange={updateField("port")}
-              required
-            />
-          </div>
-        </div>
+      {form.environment === "prod" && (
+        <p className="-mt-2 text-xs text-destructive">
+          Destructive queries will require typing the connection name to
+          confirm.
+        </p>
       )}
 
-      {hasUsername && (
-        <div className="grid gap-1.5">
-          <Label htmlFor="conn-username">Username</Label>
-          <Input
-            id="conn-username"
-            placeholder={getUsernamePlaceholder(form.type)}
-            value={form.username}
-            onChange={updateField("username")}
-          />
-        </div>
-      )}
+      <ServerFields
+        authSource={form.authSource}
+        hasHost={hasHost}
+        hasUsername={hasUsername}
+        host={form.host}
+        password={form.password}
+        port={form.port}
+        type={form.type}
+        updateField={updateField}
+        username={form.username}
+      />
 
-      {form.type === "mongodb" && hasUsername && (
-        <div className="grid gap-1.5">
-          <Label htmlFor="conn-auth-source">Auth source</Label>
-          <Input
-            id="conn-auth-source"
-            placeholder="admin"
-            value={form.authSource}
-            onChange={updateField("authSource")}
-          />
+      <div className="grid gap-1.5">
+        <Label htmlFor="conn-database">{getDatabaseLabel(form.type)}</Label>
+        <Input
+          id="conn-database"
+          max={form.type === "redis" ? 15 : undefined}
+          min={form.type === "redis" ? 0 : undefined}
+          onChange={updateField("database")}
+          placeholder={getDatabasePlaceholder(form.type)}
+          required={form.type !== "redis"}
+          type={form.type === "redis" ? "number" : "text"}
+          value={form.database}
+        />
+        {getDatabaseHint(form.type) && (
           <p className="text-xs text-muted-foreground">
-            Database where the user was created. Defaults to admin.
+            {getDatabaseHint(form.type)}
           </p>
-        </div>
-      )}
+        )}
+      </div>
 
-      {hasHost && (
-        <div className="grid gap-1.5">
-          <Label htmlFor="conn-password">Password</Label>
-          <Input
-            id="conn-password"
-            type="password"
-            placeholder="••••••••"
-            value={form.password}
-            onChange={updateField("password")}
-          />
-        </div>
-      )}
-
-      {showDatabase && (
-        <div className="grid gap-1.5">
-          <Label htmlFor="conn-database">{getDatabaseLabel(form.type)}</Label>
-          <Input
-            id="conn-database"
-            placeholder={getDatabasePlaceholder(form.type)}
-            value={form.database}
-            onChange={updateField("database")}
-            type={form.type === "redis" ? "number" : "text"}
-            min={form.type === "redis" ? 0 : undefined}
-            max={form.type === "redis" ? 15 : undefined}
-            required={form.type !== "redis"}
-          />
-          {getDatabaseHint(form.type) && (
-            <p className="text-xs text-muted-foreground">
-              {getDatabaseHint(form.type)}
-            </p>
-          )}
-        </div>
-      )}
+      <AppearanceSection
+        color={form.color}
+        defaultEmoji={EMOJI_BY_TYPE[form.type]}
+        emoji={form.emoji}
+        onColorSelect={handleColorSelect}
+        onEmojiSelect={handleEmojiSelect}
+        onOpenChange={setAppearanceOpen}
+        open={appearanceOpen}
+      />
 
       <div className="flex items-center gap-2">
         <Button
+          disabled={testStatus.state === "testing"}
+          onClick={handleTestConnection}
           type="button"
           variant="outline"
-          onClick={handleTestConnection}
-          disabled={testStatus.state === "testing"}
         >
           {testStatus.state === "testing" ? (
             <>
@@ -434,7 +805,7 @@ export const ConnectionForm = ({
         )}
 
         {testStatus.state === "error" && (
-          <span className="text-destructive flex items-center gap-1 text-xs">
+          <span className="flex items-center gap-1 text-xs text-destructive">
             <XCircle className="size-3.5" />
             {testStatus.message}
           </span>

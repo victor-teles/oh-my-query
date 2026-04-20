@@ -6,6 +6,7 @@ import { useCallback } from "react";
 import type { DatabaseConnection } from "@/lib/connections";
 
 import { DATABASE_ICON_MAP } from "@/components/icons/database-icons";
+import { Badge } from "@/components/ui/badge";
 import {
   ContextMenu,
   ContextMenuContent,
@@ -15,6 +16,10 @@ import {
   ContextMenuTrigger,
 } from "@/components/ui/context-menu";
 import { ListCursor } from "@/components/ui/list-cursor";
+import {
+  getConnectionColorClasses,
+  getEnvironmentStyle,
+} from "@/lib/connection-appearance";
 import { cn } from "@/lib/utils";
 
 const MINUTE = 60_000;
@@ -79,6 +84,8 @@ const ConnectionListItem = ({
   const relativeTime = formatRelativeTime(connection.lastConnectedAt);
   const Icon = DATABASE_ICON_MAP[connection.type];
   const shouldReduceMotion = useReducedMotion();
+  const colorClasses = getConnectionColorClasses(connection.color);
+  const envStyle = getEnvironmentStyle(connection.environment);
 
   const handleEdit = useCallback(() => {
     onEditRequest(connection);
@@ -129,12 +136,35 @@ const ConnectionListItem = ({
             transition={{ duration: 0.6, ease: "easeOut" }}
           />
         )}
-        <Icon className="size-4 shrink-0 text-muted-foreground" />
+        <div
+          className={cn(
+            "flex size-6 shrink-0 items-center justify-center rounded-md",
+            colorClasses?.tint ?? "bg-muted/40"
+          )}
+        >
+          {connection.emoji ? (
+            <span className="text-sm leading-none" aria-hidden="true">
+              {connection.emoji}
+            </span>
+          ) : (
+            <Icon className="size-3.5 text-muted-foreground" />
+          )}
+        </div>
         <div className="flex min-w-0 flex-1 flex-col gap-0.5">
           <div className="flex items-baseline justify-between gap-3">
-            <span className="truncate text-sm font-medium tracking-tight text-foreground">
-              {connection.name}
-            </span>
+            <div className="flex min-w-0 items-center gap-2">
+              <span className="truncate text-sm font-medium tracking-tight text-foreground">
+                {connection.name}
+              </span>
+              {envStyle && (
+                <Badge
+                  className={cn("h-4 px-1.5 text-[10px]", envStyle.badgeClass)}
+                  variant="outline"
+                >
+                  {envStyle.label}
+                </Badge>
+              )}
+            </div>
             <div className="relative shrink-0">
               <span
                 className={cn(
