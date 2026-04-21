@@ -90,7 +90,9 @@ export const useConnectionLifecycle = (
 
     return () => {
       cancelled = true;
-      disconnectFromDatabase(connection.id);
+      disconnectFromDatabase(connection.id).catch(() => {
+        // teardown is best-effort — ignore errors
+      });
     };
   }, [connection, reconnectCount]);
 

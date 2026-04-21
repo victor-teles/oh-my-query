@@ -4,6 +4,7 @@ import { usePanelRef } from "react-resizable-panels";
 
 import type { AIAction, AIActionType } from "@/lib/ai-actions";
 
+import { WorkspaceLayoutActions } from "@/components/command-palette/actions/workspace-actions";
 import { ConnectionToolbar } from "@/components/titlebar/connection-toolbar";
 import { Titlebar } from "@/components/titlebar/titlebar";
 import {
@@ -24,7 +25,7 @@ import { WorkspaceContent } from "./workspace-content";
 import { WorkspaceSidebar } from "./workspace-sidebar";
 
 export const WorkspaceLayout = () => {
-  const { connection, isConnected } = useConnection();
+  const { connection, isConnected, reconnect } = useConnection();
   const sidebarRef = usePanelRef();
   const [shortcutsOpen, setShortcutsOpen] = useState(false);
   const [pendingAction, setPendingAction] = useState<AIAction | null>(null);
@@ -116,6 +117,14 @@ export const WorkspaceLayout = () => {
 
   return (
     <div className="flex h-svh flex-col bg-background">
+      <WorkspaceLayoutActions
+        connectionName={connection.name}
+        mode={mode}
+        onReconnect={reconnect}
+        onShowShortcuts={handleShowShortcuts}
+        onToggleSidebar={handleSidebarToggle}
+        setMode={setMode}
+      />
       <Titlebar>
         <ConnectionToolbar
           connection={connection}

@@ -7,6 +7,7 @@ import type { RedisKey, SchemaInfo } from "@/lib/tauri";
 import type { WorkspaceMode } from "@/lib/workspace-mode";
 
 import { Suggestion, Suggestions } from "@/components/ai-elements/suggestion";
+import { AiActions } from "@/components/command-palette/actions/ai-actions";
 import { Button } from "@/components/ui/button";
 import { AISettingsDialog } from "@/components/workspace/ai-settings-dialog";
 import { useOptionalActiveQuery } from "@/contexts/active-query-context";
@@ -224,6 +225,17 @@ export const ChatSidebar = ({
 
   return (
     <div className="flex h-full flex-col bg-background">
+      <AiActions
+        hasError={!!error}
+        hasSelection={checkHasSelection}
+        isStreaming={isStreaming}
+        messages={messages}
+        onClear={clearMessages}
+        onInsert={handleInsertSql}
+        onReplaceSelection={handleReplaceSql}
+        onRetry={retry}
+        onStop={stopStreaming}
+      />
       <div className="flex items-center justify-between border-b px-3 py-1.5">
         <div className="flex items-center gap-2">
           <MessageSquare className="size-3.5 text-muted-foreground" />

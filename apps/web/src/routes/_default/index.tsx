@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 
 import type { DatabaseConnection } from "@/lib/connections";
 
+import { HomeActions } from "@/components/command-palette/actions/home-actions";
 import { Titlebar } from "@/components/titlebar/titlebar";
 import {
   isFirstConnectionSeen,
@@ -154,6 +155,7 @@ const HomeComponent = () => {
 
   return (
     <>
+      <HomeActions connections={connections} onOpenAdd={handleAddOpen} />
       <Titlebar>
         <HomeTitlebarActions
           onAdd={handleAddOpen}

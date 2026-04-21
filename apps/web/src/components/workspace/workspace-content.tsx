@@ -9,6 +9,7 @@ import type { DatabaseType } from "@/lib/connections";
 import type { QueryTab } from "@/lib/query-types";
 import type { ExecuteResult, SchemaInfo } from "@/lib/tauri";
 
+import { WorkspaceQueryActions } from "@/components/command-palette/actions/workspace-actions";
 import { Kbd, KbdGroup } from "@/components/ui/kbd";
 import {
   ResizableHandle,
@@ -226,6 +227,7 @@ const ConnectedWorkspace = ({
     addTab,
     addTabWithSql,
     addTabWithSqlAndRun,
+    cancelTab,
     closeTab,
     reopenTab,
     setActiveTabId,
@@ -370,8 +372,32 @@ const ConnectedWorkspace = ({
     tabs,
   });
 
+  const handleCancelActiveTab = useCallback(() => {
+    if (activeTab) {
+      cancelTab(activeTab.id);
+    }
+  }, [activeTab, cancelTab]);
+
+  const handleCloseActiveTab = useCallback(() => {
+    if (activeTab) {
+      closeTab(activeTab.id);
+    }
+  }, [activeTab, closeTab]);
+
   return (
     <div className="flex h-full flex-col bg-background">
+      <WorkspaceQueryActions
+        activeTab={activeTab}
+        isSql={isSql}
+        onCancel={handleCancelActiveTab}
+        onCloseTab={handleCloseActiveTab}
+        onFormat={handleFormat}
+        onNewTab={addTab}
+        onReopenTab={reopenTab}
+        onRun={handleExecute}
+        onSwitchTab={setActiveTabId}
+        tabs={tabs}
+      />
       <QueryTabBar
         tabs={tabs}
         activeTabId={activeTabId}

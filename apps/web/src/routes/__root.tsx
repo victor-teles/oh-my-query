@@ -5,6 +5,8 @@ import {
 } from "@tanstack/react-router";
 
 import { AppProviders } from "@/components/app-providers";
+import { GlobalCommandActions } from "@/components/command-palette/actions/global-actions";
+import { CommandPalette } from "@/components/command-palette/command-palette";
 import { AppIsland } from "@/components/titlebar/dynamic-island/dynamic-island";
 import { Toaster } from "@/components/ui/sonner";
 import { useMenuNavigation } from "@/hooks/use-menu-navigation";
@@ -42,8 +44,10 @@ function RootComponent() {
     <>
       <HeadContent />
       <AppProviders>
+        <GlobalCommandActions />
         <Outlet />
         <AppIsland />
+        <CommandPalette />
         <Toaster richColors />
       </AppProviders>
     </>
