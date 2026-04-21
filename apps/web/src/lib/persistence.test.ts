@@ -79,8 +79,8 @@ describe("history persistence (browser mode)", () => {
     for (let i = 0; i < 520; i += 1) {
       await appendHistory(entry({ sql: `q${i}` }));
     }
-    const raw = localStorage.getItem("oh-my-query-history-conn-1");
-    const stored = raw ? (JSON.parse(raw) as HistoryEntry[]) : [];
+    const raw = localStorage.getItem("oh-my-query-history-conn-1") as string;
+    const stored = JSON.parse(raw) as HistoryEntry[];
     expect(stored).toHaveLength(500);
     expect(stored[0]?.sql).toBe("q20");
     expect(stored[499]?.sql).toBe("q519");

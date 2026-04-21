@@ -1,5 +1,3 @@
-import type { ReactNode } from "react";
-
 import { renderHook, waitFor } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 
@@ -22,27 +20,30 @@ const fakeConnection: DatabaseConnection = {
   username: "postgres",
 };
 
-const autoConfirm = vi.fn(async () => true);
-const blockConfirm = vi.fn(async () => false);
-let currentConfirm = autoConfirm;
+const confirmMock = vi.fn(async (_sql: string) => {
+  await Promise.resolve();
+  return true;
+});
 
-vi.mock<typeof import("@/contexts/connection-context")>(
-  "@/contexts/connection-context",
-  () => ({
-    useConnection: () => ({ connection: fakeConnection }),
-  })
-);
+vi.mock(import("@/contexts/connection-context"), () => ({
+  useConnection: () => ({
+    connection: fakeConnection,
+    error: null,
+    isConnected: true,
+    isConnecting: false,
+    isReconnecting: false,
+    reconnect: vi.fn(),
+    serverVersion: null,
+  }),
+}));
 
-vi.mock<typeof import("@/contexts/safe-mode-context")>(
-  "@/contexts/safe-mode-context",
-  () => ({
-    useSafeMode: () => ({
-      enabled: true,
-      requestConfirmation: (sql: string) => currentConfirm(sql),
-      toggle: () => {},
-    }),
-  })
-);
+vi.mock(import("@/contexts/safe-mode-context"), () => ({
+  useSafeMode: () => ({
+    enabled: true,
+    requestConfirmation: confirmMock,
+    toggle: vi.fn(),
+  }),
+}));
 
 const { useTabExecution } = await import("@/hooks/use-tab-execution");
 
@@ -54,17 +55,32 @@ const makeTab = (overrides: Partial<QueryTab> = {}): QueryTab => ({
   pendingExecution: null,
   result: null,
   runningQueryId: null,
+  sourceDialect: null,
   sql: "SELECT 1",
   status: "idle",
   title: "Query 1",
   ...overrides,
 });
 
-const wrapper = ({ children }: { children: ReactNode }) => <>{children}</>;
+const applyUpdate = <T,>(prev: T[], update: T[] | ((p: T[]) => T[])): T[] =>
+  typeof update === "function" ? update(prev) : update;
+
+const makeSetTabs = (initial: QueryTab[]) => {
+  const state = { tabs: initial };
+  const setTabs = vi.fn(
+    (update: QueryTab[] | ((prev: QueryTab[]) => QueryTab[])) => {
+      state.tabs = applyUpdate(state.tabs, update);
+    }
+  );
+  return { setTabs, state };
+};
+
+const flushSave = vi.fn(async () => {
+  await Promise.resolve();
+});
 
 describe("useTabExecution", () => {
   it("runs a successful query and updates the tab result", async () => {
-    currentConfirm = autoConfirm;
     mockTauri({
       execute_query: () => ({
         columns: [{ name: "one", typeName: "INT4" }],
@@ -76,114 +92,95 @@ describe("useTabExecution", () => {
       }),
     });
 
-    let tabs: QueryTab[] = [makeTab()];
-    const setTabs = vi.fn((update) => {
-      tabs =
-        typeof update === "function"
-          ? (update as (prev: QueryTab[]) => QueryTab[])(tabs)
-          : update;
-    });
+    const { setTabs, state } = makeSetTabs([makeTab()]);
 
-    const { result } = renderHook(
-      () =>
-        useTabExecution({
-          connectionId: "conn-1",
-          flushSave: async () => {},
-          selectedDatabase: "public",
-          setTabs,
-        }),
-      { wrapper }
+    const { result } = renderHook(() =>
+      useTabExecution({
+        connectionId: "conn-1",
+        flushSave,
+        selectedDatabase: "public",
+        setTabs,
+      })
     );
 
     await result.current.execute("tab-1", "SELECT 1");
 
-    await waitFor(() => expect(tabs[0]?.status).toBe("success"));
-    expect(tabs[0]?.result?.rows).toStrictEqual([[1]]);
-    expect(tabs[0]?.runningQueryId).toBeNull();
+    await waitFor(() => expect(state.tabs[0]?.status).toBe("success"));
+    const tabResult = state.tabs[0]?.result as
+      | { resultType: "tabular"; rows: unknown[][] }
+      | undefined;
+    expect(tabResult?.resultType).toBe("tabular");
+    expect(tabResult?.rows).toStrictEqual([[1]]);
+    expect(state.tabs[0]?.runningQueryId).toBeNull();
   });
 
   it("reports errors from executeQuery", async () => {
-    currentConfirm = autoConfirm;
     mockTauri({
       execute_query: () => {
-        throw { code: "42601", message: "syntax error" };
+        throw Object.assign(new Error("syntax error"), { code: "42601" });
       },
     });
 
-    let tabs: QueryTab[] = [makeTab()];
-    const setTabs = vi.fn((update) => {
-      tabs =
-        typeof update === "function"
-          ? (update as (prev: QueryTab[]) => QueryTab[])(tabs)
-          : update;
-    });
+    const { setTabs, state } = makeSetTabs([makeTab()]);
 
-    const { result } = renderHook(
-      () =>
-        useTabExecution({
-          connectionId: "conn-1",
-          flushSave: async () => {},
-          selectedDatabase: "public",
-          setTabs,
-        }),
-      { wrapper }
+    const { result } = renderHook(() =>
+      useTabExecution({
+        connectionId: "conn-1",
+        flushSave,
+        selectedDatabase: "public",
+        setTabs,
+      })
     );
 
     await result.current.execute("tab-1", "SELCT 1");
 
-    await waitFor(() => expect(tabs[0]?.status).toBe("error"));
-    expect(tabs[0]?.error).toBe("syntax error");
-    expect(tabs[0]?.errorCode).toBe("42601");
+    await waitFor(() => expect(state.tabs[0]?.status).toBe("error"));
+    expect(state.tabs[0]?.error).toBe("syntax error");
+    expect(state.tabs[0]?.errorCode).toBe("42601");
   });
 
   it("treats QUERY_CANCELLED as idle, not an error", async () => {
-    currentConfirm = autoConfirm;
     mockTauri({
       execute_query: () => {
-        throw { code: "QUERY_CANCELLED", message: "cancelled" };
+        throw Object.assign(new Error("cancelled"), {
+          code: "QUERY_CANCELLED",
+        });
       },
     });
 
-    let tabs: QueryTab[] = [makeTab()];
-    const setTabs = vi.fn((update) => {
-      tabs =
-        typeof update === "function"
-          ? (update as (prev: QueryTab[]) => QueryTab[])(tabs)
-          : update;
-    });
+    const { setTabs, state } = makeSetTabs([makeTab()]);
 
-    const { result } = renderHook(
-      () =>
-        useTabExecution({
-          connectionId: "conn-1",
-          flushSave: async () => {},
-          selectedDatabase: "public",
-          setTabs,
-        }),
-      { wrapper }
+    const { result } = renderHook(() =>
+      useTabExecution({
+        connectionId: "conn-1",
+        flushSave,
+        selectedDatabase: "public",
+        setTabs,
+      })
     );
 
     await result.current.execute("tab-1", "SELECT 1");
 
-    await waitFor(() => expect(tabs[0]?.status).toBe("idle"));
-    expect(tabs[0]?.error).toBeNull();
+    await waitFor(() => expect(state.tabs[0]?.status).toBe("idle"));
+    expect(state.tabs[0]?.error).toBeNull();
   });
 
   it("skips execution when safe mode blocks it", async () => {
-    currentConfirm = blockConfirm;
+    confirmMock.mockImplementationOnce(async (_sql: string) => {
+      await Promise.resolve();
+      return false;
+    });
     const executeHandler = vi.fn();
     mockTauri({ execute_query: executeHandler });
 
     const setTabs = vi.fn();
-    const { result } = renderHook(
-      () =>
-        useTabExecution({
-          connectionId: "conn-1",
-          flushSave: async () => {},
-          selectedDatabase: "public",
-          setTabs,
-        }),
-      { wrapper }
+    const { result } = renderHook(() =>
+      useTabExecution({
+        connectionId: "conn-1",
+        flushSave,
+        selectedDatabase: "public",
+        setTabs,
+      })
     );
 
     await result.current.execute("tab-1", "DROP TABLE users");
@@ -193,19 +190,16 @@ describe("useTabExecution", () => {
   });
 
   it("forwards cancel() to cancel_query", async () => {
-    currentConfirm = autoConfirm;
     const cancelHandler = vi.fn();
     mockTauri({ cancel_query: cancelHandler });
 
-    const { result } = renderHook(
-      () =>
-        useTabExecution({
-          connectionId: "conn-1",
-          flushSave: async () => {},
-          selectedDatabase: "public",
-          setTabs: vi.fn(),
-        }),
-      { wrapper }
+    const { result } = renderHook(() =>
+      useTabExecution({
+        connectionId: "conn-1",
+        flushSave,
+        selectedDatabase: "public",
+        setTabs: vi.fn(),
+      })
     );
 
     await result.current.cancel("q-123");

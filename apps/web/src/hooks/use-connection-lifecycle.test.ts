@@ -6,6 +6,8 @@ import type { DatabaseConnection } from "@/lib/connections";
 import { useConnectionLifecycle } from "@/hooks/use-connection-lifecycle";
 import { mockTauri } from "@/test/tauri-mock";
 
+const noop = vi.fn();
+
 const makeConnection = (
   overrides: Partial<DatabaseConnection> = {}
 ): DatabaseConnection => ({
@@ -23,7 +25,7 @@ const makeConnection = (
   ...overrides,
 });
 
-describe(useConnectionLifecycle, () => {
+describe("useConnectionLifecycle", () => {
   it("connects, fetches version, and marks the connection as used", async () => {
     const calls: string[] = [];
     mockTauri({
@@ -60,7 +62,7 @@ describe(useConnectionLifecycle, () => {
       connect_to_database: () => {
         throw new Error("host unreachable");
       },
-      disconnect_from_database: () => {},
+      disconnect_from_database: noop,
       get_server_version: () => "ignored",
     });
 
@@ -74,13 +76,13 @@ describe(useConnectionLifecycle, () => {
 
   it("still reports connected when version fetch fails", async () => {
     mockTauri({
-      connect_to_database: () => {},
-      disconnect_from_database: () => {},
+      connect_to_database: noop,
+      disconnect_from_database: noop,
       get_connections: () => [],
       get_server_version: () => {
         throw new Error("no version RPC");
       },
-      save_connections: () => {},
+      save_connections: noop,
     });
 
     const connection = makeConnection();
@@ -94,10 +96,10 @@ describe(useConnectionLifecycle, () => {
     const connect = vi.fn();
     mockTauri({
       connect_to_database: connect,
-      disconnect_from_database: () => {},
+      disconnect_from_database: noop,
       get_connections: () => [],
       get_server_version: () => "PostgreSQL 17.0",
-      save_connections: () => {},
+      save_connections: noop,
     });
 
     const connection = makeConnection();
@@ -116,11 +118,11 @@ describe(useConnectionLifecycle, () => {
   it("disconnects on unmount", async () => {
     const disconnect = vi.fn();
     mockTauri({
-      connect_to_database: () => {},
+      connect_to_database: noop,
       disconnect_from_database: disconnect,
       get_connections: () => [],
       get_server_version: () => "PostgreSQL 17.0",
-      save_connections: () => {},
+      save_connections: noop,
     });
 
     const connection = makeConnection();

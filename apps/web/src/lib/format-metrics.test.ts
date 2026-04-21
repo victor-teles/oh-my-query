@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import { formatCount, formatDuration } from "@/lib/format-metrics";
 
-describe(formatCount, () => {
+describe("formatCount", () => {
   it("adds thousands separators", () => {
     expect(formatCount(0)).toBe("0");
     expect(formatCount(1000)).toBe("1,000");
@@ -10,7 +10,7 @@ describe(formatCount, () => {
   });
 });
 
-describe(formatDuration, () => {
+describe("formatDuration", () => {
   it("renders values under 1s in ms", () => {
     expect(formatDuration(0)).toBe("0 ms");
     expect(formatDuration(999)).toBe("999 ms");

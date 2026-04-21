@@ -1,5 +1,7 @@
 import { describe, expect, it } from "vitest";
 
+import type { FuzzyMatchResult } from "@/lib/fuzzy-match";
+
 import { fuzzyMatch } from "@/lib/fuzzy-match";
 
 describe("fuzzy matching", () => {
@@ -13,19 +15,19 @@ describe("fuzzy matching", () => {
   });
 
   it("rewards prefix matches more than mid-word matches", () => {
-    const prefix = fuzzyMatch("orders", "ord");
-    const mid = fuzzyMatch("word_orders", "ord");
+    const prefix = fuzzyMatch("orders", "ord") as FuzzyMatchResult;
+    const mid = fuzzyMatch("word_orders", "ord") as FuzzyMatchResult;
     expect(prefix).not.toBeNull();
     expect(mid).not.toBeNull();
-    expect(prefix?.score ?? 0).toBeGreaterThan(mid?.score ?? 0);
+    expect(prefix.score).toBeGreaterThan(mid.score);
   });
 
   it("rewards word-boundary matches after separators", () => {
-    const afterUnderscore = fuzzyMatch("user_orders", "or");
-    const midWord = fuzzyMatch("customorders", "or");
+    const afterUnderscore = fuzzyMatch("user_orders", "or") as FuzzyMatchResult;
+    const midWord = fuzzyMatch("customorders", "or") as FuzzyMatchResult;
     expect(afterUnderscore).not.toBeNull();
     expect(midWord).not.toBeNull();
-    expect(afterUnderscore?.score ?? 0).toBeGreaterThan(midWord?.score ?? 0);
+    expect(afterUnderscore.score).toBeGreaterThan(midWord.score);
   });
 
   it("records match positions in order", () => {
@@ -35,10 +37,10 @@ describe("fuzzy matching", () => {
   });
 
   it("is case insensitive but bonuses exact-case matches", () => {
-    const exact = fuzzyMatch("Orders", "Or");
-    const insensitive = fuzzyMatch("Orders", "or");
+    const exact = fuzzyMatch("Orders", "Or") as FuzzyMatchResult;
+    const insensitive = fuzzyMatch("Orders", "or") as FuzzyMatchResult;
     expect(exact).not.toBeNull();
     expect(insensitive).not.toBeNull();
-    expect(exact?.score ?? 0).toBeGreaterThan(insensitive?.score ?? 0);
+    expect(exact.score).toBeGreaterThan(insensitive.score);
   });
 });

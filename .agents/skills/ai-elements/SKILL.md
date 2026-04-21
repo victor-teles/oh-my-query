@@ -138,7 +138,6 @@ Check the file exists. If it does, make sure your `tsconfig.json` has a proper p
 ```json title="tsconfig.json"
 {
   "compilerOptions": {
-    "baseUrl": ".",
     "paths": {
       "@/*": ["./*"]
     }

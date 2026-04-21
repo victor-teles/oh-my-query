@@ -1,11 +1,11 @@
 export const CELL_CHAR_LIMIT = 120;
 
-export const isNull = (value: unknown): boolean =>
+export const isNull = (value?: unknown): boolean =>
   value === null || value === undefined;
 
 export const isNumber = (value: unknown): boolean => typeof value === "number";
 
-export const formatCell = (value: unknown): string => {
+export const formatCell = (value?: unknown): string => {
   if (isNull(value)) {
     return "NULL";
   }
