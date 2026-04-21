@@ -88,9 +88,17 @@ export const useConnectionLifecycle = (
 
     connect();
 
+    const teardown = async () => {
+      try {
+        await disconnectFromDatabase(connection.id);
+      } catch {
+        // teardown is best-effort — ignore errors
+      }
+    };
+
     return () => {
       cancelled = true;
-      disconnectFromDatabase(connection.id);
+      teardown();
     };
   }, [connection, reconnectCount]);
 

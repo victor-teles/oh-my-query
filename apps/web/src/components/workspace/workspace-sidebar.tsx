@@ -5,6 +5,7 @@ import { useCallback, useMemo, useState } from "react";
 import type { DatabaseConnection } from "@/lib/connections";
 import type { SchemaInfo } from "@/lib/tauri";
 
+import { SchemaActions } from "@/components/command-palette/actions/schema-actions";
 import { Button } from "@/components/ui/button";
 import {
   InputGroup,
@@ -28,6 +29,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { useEditorInsert } from "@/contexts/editor-insert-context";
 import { useFavoriteTables } from "@/hooks/use-favorite-tables";
 import { isTauri } from "@/lib/tauri";
 import { cn } from "@/lib/utils";
@@ -194,6 +196,7 @@ export const WorkspaceSidebar = ({
   const [filter, setFilter] = useState("");
   const [activeTab, setActiveTab] = useState<"schema" | "history">("schema");
   const { favoriteTables, toggleFavorite } = useFavoriteTables(connection.id);
+  const { queryTable } = useEditorInsert();
 
   const isRedis = connection.type === "redis";
   const dbIndex = useMemo(
@@ -235,6 +238,13 @@ export const WorkspaceSidebar = ({
         isTauri() ? "bg-sidebar/80" : "bg-sidebar"
       )}
     >
+      {!isRedis && (
+        <SchemaActions
+          onQueryTable={queryTable}
+          onRefresh={refresh}
+          schema={schema}
+        />
+      )}
       <div className="flex items-center justify-between px-3 py-2">
         <span className="truncate text-sm font-medium">{connection.name}</span>
         {!isRedis && schema && (

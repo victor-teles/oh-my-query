@@ -13,6 +13,6 @@
   },
   "devDependencies": {
     "@oh-my-query/config": "workspace:*",
-    "typescript": "catalog:"
+    "@typescript/native-preview": "catalog:"
   }
 }

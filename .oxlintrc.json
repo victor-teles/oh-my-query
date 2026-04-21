@@ -11,6 +11,7 @@
     "max-statements": "off",
     "no-negated-condition": "off",
     "no-nodejs-modules": "off",
-    "filename-case": "off"
+    "filename-case": "off",
+    "vitest/prefer-describe-function-title": "off"
   }
 }

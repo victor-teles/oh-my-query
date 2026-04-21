@@ -131,7 +131,7 @@ export const useRedisKeyboard = ({
   );
 
   useHotkey(
-    "Mod+K",
+    "/",
     (event) => {
       event.preventDefault();
       onFocusPattern();
