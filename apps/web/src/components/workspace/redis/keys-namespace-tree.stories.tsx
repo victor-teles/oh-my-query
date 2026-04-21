@@ -55,7 +55,7 @@ export const Default: Story = {
   play: async ({ canvas }) => {
     await expect(canvas.getByText("user")).toBeVisible();
     await expect(canvas.getByText("session")).toBeVisible();
-    await expect(canvas.getByText("cache:warmup")).toBeVisible();
+    await expect(canvas.getByTitle("cache:warmup")).toBeVisible();
   },
 };
 
@@ -72,7 +72,7 @@ export const AllCollapsed: Story = {
 
 export const KeyActivation: Story = {
   play: async ({ args, canvas }) => {
-    await userEvent.click(canvas.getByText("cache:warmup"));
+    await userEvent.click(canvas.getByTitle("cache:warmup"));
     await expect(args.onActivateKey).toHaveBeenCalledWith("cache:warmup");
   },
 };
@@ -82,6 +82,6 @@ export const HighlightsActiveRow: Story = {
     activeRowId: "cache:warmup",
   },
   play: async ({ canvas }) => {
-    await expect(canvas.getByText("cache:warmup")).toBeVisible();
+    await expect(canvas.getByTitle("cache:warmup")).toBeVisible();
   },
 };
