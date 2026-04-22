@@ -20,5 +20,10 @@
     "newlinesBetween": true,
     "order": "asc",
   },
-  "ignorePatterns": ["**/*.gen.ts", ".agents/**", ".claude/**"],
+  "ignorePatterns": [
+    "**/*.gen.ts",
+    ".agents/**",
+    ".claude/**",
+    "apps/web/docs/**",
+  ],
 }

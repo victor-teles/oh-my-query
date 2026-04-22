@@ -138,7 +138,7 @@ export const ConnectedIdleStatus = ({
         render={
           <motion.button
             aria-label={srLabel}
-            className="flex items-center gap-1.5 rounded-full focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+            className="flex items-center gap-1.5 rounded-full transition-all duration-150 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50"
             transition={ISLAND_ITEM_TRANSITION}
             type="button"
             variants={ISLAND_ITEM_VARIANTS}
@@ -267,7 +267,7 @@ export const ConnectionErrorStatus = ({
     <IslandErrorMessage error={error} maxWidthClass="max-w-[280px]" />
     <motion.button
       aria-label="Retry connection"
-      className="text-chrome cursor-pointer rounded-sm text-destructive underline underline-offset-2 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+      className="text-chrome cursor-pointer rounded-sm text-destructive underline underline-offset-2 transition-all duration-150 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50"
       onClick={onReconnect}
       transition={ISLAND_ITEM_TRANSITION}
       type="button"

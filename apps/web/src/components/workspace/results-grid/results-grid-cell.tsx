@@ -89,7 +89,7 @@ const ResultsGridCellBase = ({
   return (
     <div
       aria-colindex={columnIndex + 1}
-      className={`text-data relative flex shrink-0 items-center overflow-hidden bg-background px-2 transition-colors group-hover/row:bg-muted/50 group-data-[state=selected]/row:bg-primary/15 data-[last-left-pin]:shadow-[inset_-1px_0_0_0_var(--color-border)] data-[first-right-pin]:shadow-[inset_1px_0_0_0_var(--color-border)] data-[pinned]:z-10 group-data-[scrolled-x]/grid:data-[last-left-pin]:shadow-[4px_0_6px_-2px_rgb(0_0_0/0.25),inset_-1px_0_0_0_var(--color-border)] data-[active-cell]:shadow-[inset_0_0_0_1px_var(--color-ring)] data-[active-cell]:z-[15] ${rightAlign ? "justify-end" : ""}`}
+      className={`text-data relative flex shrink-0 items-center overflow-hidden bg-background px-2 transition-all duration-150 ease-out group-hover/row:bg-muted/50 group-data-[state=selected]/row:bg-primary/15 data-[last-left-pin]:shadow-[inset_-1px_0_0_0_var(--color-border)] data-[first-right-pin]:shadow-[inset_1px_0_0_0_var(--color-border)] data-[pinned]:z-10 group-data-[scrolled-x]/grid:data-[last-left-pin]:shadow-[4px_0_6px_-2px_rgb(0_0_0/0.25),inset_-1px_0_0_0_var(--color-border)] data-[active-cell]:ring-2 data-[active-cell]:ring-ring/50 data-[active-cell]:ring-inset data-[active-cell]:z-[15] ${rightAlign ? "justify-end" : ""}`}
       data-active-cell={isActive ? "" : undefined}
       onDoubleClick={handleDoubleClick}
       ref={anchorRef}

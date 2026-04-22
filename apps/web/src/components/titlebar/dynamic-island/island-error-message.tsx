@@ -39,7 +39,7 @@ export const IslandErrorMessage = ({
         render={
           <motion.button
             aria-label={`Show full error. Current error: ${error}`}
-            className={`text-chrome ${maxWidthClass} truncate rounded-sm text-left text-destructive cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring`}
+            className={`text-chrome ${maxWidthClass} truncate rounded-sm text-left text-destructive cursor-pointer transition-all duration-150 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50`}
             title={error}
             transition={ISLAND_ITEM_TRANSITION}
             type="button"
@@ -55,7 +55,7 @@ export const IslandErrorMessage = ({
         </p>
         <button
           aria-label={copied ? "Error copied to clipboard" : "Copy error"}
-          className="flex items-center gap-1.5 self-end rounded-sm px-2 py-1 text-muted-foreground text-xs hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+          className="flex items-center gap-1.5 self-end rounded-sm px-2 py-1 text-muted-foreground text-xs transition-all duration-150 ease-out hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50"
           onClick={handleCopy}
           type="button"
         >
