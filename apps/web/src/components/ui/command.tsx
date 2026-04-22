@@ -69,9 +69,9 @@ function CommandInput({
     <div data-slot="command-input-wrapper" className="p-1 pb-0">
       <InputGroup className="bg-input/20 dark:bg-input/30 h-8!">
         <CommandPrimitive.Input
-          data-slot="command-input"
+          data-slot="input-group-control"
           className={cn(
-            "w-full text-xs/relaxed outline-none focus-visible:ring-ring/50 focus-visible:ring-2 rounded-sm transition-all duration-150 ease-out disabled:cursor-not-allowed disabled:opacity-50",
+            "w-full text-xs/relaxed outline-none disabled:cursor-not-allowed disabled:opacity-50",
             className
           )}
           {...props}
