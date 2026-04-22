@@ -13,9 +13,10 @@ import {
 
 import { AddConnectionDialog } from "./-components/add-connection-dialog";
 import { ConnectionsBoard } from "./-components/connections-board";
-import { ConnectionsEmptyState } from "./-components/connections-empty-state";
+import { NoConnectionsState } from "./-components/connections-empty-state";
 import { EditConnectionDialog } from "./-components/edit-connection-dialog";
 import { HomeTitlebarActions } from "./-components/home-titlebar-actions";
+import { WelcomeState } from "./-components/welcome-state";
 import { useConnectionSelection } from "./-hooks/use-connection-selection";
 import { useConnections } from "./-hooks/use-connections";
 import { useHomeHotkeys } from "./-hooks/use-home-hotkeys";
@@ -153,6 +154,13 @@ const HomeComponent = () => {
 
   const isEmpty = !isLoading && connections.length === 0;
 
+  const renderEmpty = () => {
+    if (isFirstConnectionSeen()) {
+      return <NoConnectionsState key="empty-no-conn" onAdd={handleAddOpen} />;
+    }
+    return <WelcomeState key="empty-welcome" onAdd={handleAddOpen} />;
+  };
+
   return (
     <>
       <HomeActions connections={connections} onOpenAdd={handleAddOpen} />
@@ -167,10 +175,7 @@ const HomeComponent = () => {
       <div className="flex flex-1 flex-col items-center justify-center px-6 py-10">
         <AnimatePresence initial={false} mode="wait">
           {isEmpty ? (
-            <ConnectionsEmptyState
-              key="empty"
-              onSuccess={handleConnectSuccess}
-            />
+            renderEmpty()
           ) : (
             <ConnectionsBoard
               glowingId={firstConnectionId}

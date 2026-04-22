@@ -35,6 +35,7 @@ bun run fix          # Auto-fix lint/format issues
 - Do not stop mid-implementation. If a plan has multiple tasks, execute all of them sequentially and only pause for explicit user questions.
 - When fixing CI failures, address the root cause — never loosen thresholds or disable checks to make them pass.
 - Before implementing a GitHub issue, verify the current git branch and create a feature branch if on main.
+- **Always write tests for new implementations.** When you add a new component, hook, or module, colocate a `*.test.tsx` / `*.test.ts` file next to it (Vitest + `@testing-library/react`, jsdom). Cover rendering, primary interactions, and conditional branches — at minimum, the behavior a reviewer would otherwise manually re-verify. Run `bun run test` before declaring the task complete.
 
 ## Monorepo Structure
 

@@ -22,6 +22,7 @@ import {
 } from "@/components/ui/dialog";
 import { NoResultsState } from "@/components/workspace/no-results-state";
 import { RowDetailDialog } from "@/components/workspace/row-detail-dialog";
+import { useEditorInsert } from "@/contexts/editor-insert-context";
 import { useExportSettings } from "@/hooks/use-export-settings";
 
 import { useColumnAutoSize } from "./-hooks/use-column-auto-size";
@@ -45,6 +46,7 @@ export const ResultsGrid = ({
   onLoadMore,
 }: ResultsGridProps) => {
   const { settings: exportSettings } = useExportSettings();
+  const { focusEditor } = useEditorInsert();
   const scrollRef = useRef<HTMLDivElement>(null);
   const gridRef = useRef<HTMLDivElement>(null);
   const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
@@ -169,7 +171,7 @@ export const ResultsGrid = ({
         tabIndex={-1}
       >
         {isEmpty ? (
-          <NoResultsState label="rows" />
+          <NoResultsState label="rows" onEditQuery={focusEditor} />
         ) : (
           <div
             aria-colcount={result.columns.length}
