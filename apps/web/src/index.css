@@ -28,13 +28,13 @@
   --muted-foreground: oklch(0.5032 0 0);
   --accent: oklch(0.931 0 0);
   --accent-foreground: oklch(0.2435 0 0);
-  --destructive: oklch(0.6271 0.1936 33.339);
+  --destructive: oklch(0.55 0.21 33);
   --destructive-foreground: oklch(1 0 0);
-  --warning: oklch(0.58 0.14 70);
+  --warning: oklch(0.52 0.16 70);
   --warning-foreground: oklch(1 0 0);
   --success: oklch(0.55 0.15 145);
   --success-foreground: oklch(1 0 0);
-  --border: oklch(0.923 0.003 48.717);
+  --border: oklch(0.86 0.005 48.717);
   --input: oklch(0.8822 0 0);
   --ring: oklch(0.4341 0.0392 41.9938);
   --chart-1: oklch(0.58 0.13 65);
@@ -48,15 +48,11 @@
   --sidebar-primary-foreground: var(--primary-foreground);
   --sidebar-accent: oklch(0.97 0.001 106.424);
   --sidebar-accent-foreground: oklch(0.216 0.006 56.043);
-  --sidebar-border: oklch(0.923 0.003 48.717);
+  --sidebar-border: oklch(0.86 0.005 48.717);
   --sidebar-ring: oklch(0.709 0.01 56.259);
   --radius: 0.45rem;
-  --font-sans:
-    "Switzer", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui,
-    sans-serif;
-  --font-mono:
-    "JetBrains Mono Variable", ui-monospace, SFMono-Regular, "SF Mono", Menlo,
-    Consolas, monospace;
+  --font-sans: "Switzer", sans-serif;
+  --font-mono: "JetBrains Mono Variable", ui-monospace, monospace;
   --tracking-normal: -0.003em;
   --json-key: oklch(0.5 0.08 60);
   --json-string: oklch(0.5 0.09 135);
@@ -86,13 +82,13 @@
   --muted-foreground: oklch(0.7699 0 0);
   --accent: oklch(32.1% 0.0084 48.4deg);
   --accent-foreground: oklch(0.9491 0 0);
-  --destructive: oklch(0.6271 0.1936 33.339);
+  --destructive: oklch(0.55 0.21 33);
   --destructive-foreground: oklch(1 0 0);
   --warning: oklch(0.78 0.14 70);
   --warning-foreground: oklch(0.2 0.02 70);
   --success: oklch(0.72 0.15 145);
   --success-foreground: oklch(0.2 0.02 145);
-  --border: oklch(1 0 0 / 10%);
+  --border: oklch(1 0 0 / 14%);
   --input: oklch(0.4017 0 0);
   --ring: oklch(0.9247 0.0524 66.1732);
   --chart-1: oklch(0.82 0.12 70);
@@ -106,15 +102,11 @@
   --sidebar-primary-foreground: var(--primary-foreground);
   --sidebar-accent: oklch(0.268 0.007 34.298);
   --sidebar-accent-foreground: oklch(0.985 0.001 106.423);
-  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-border: oklch(1 0 0 / 14%);
   --sidebar-ring: oklch(0.553 0.013 58.071);
   --radius: 0.45rem;
-  --font-sans:
-    "Switzer", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui,
-    sans-serif;
-  --font-mono:
-    "JetBrains Mono Variable", ui-monospace, SFMono-Regular, "SF Mono", Menlo,
-    Consolas, monospace;
+  --font-sans: "Switzer", sans-serif;
+  --font-mono: "JetBrains Mono Variable", ui-monospace, monospace;
   --tracking-normal: -0.003em;
   --json-key: oklch(0.78 0.1 60);
   --json-string: oklch(0.78 0.09 135);
@@ -198,7 +190,7 @@
 
 @layer base {
   * {
-    @apply border-border outline-ring/50;
+    @apply border-border;
   }
   html {
     @apply font-sans;

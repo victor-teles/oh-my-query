@@ -4,7 +4,12 @@
     "./node_modules/ultracite/config/oxlint/core/.oxlintrc.json",
     "./node_modules/ultracite/config/oxlint/react/.oxlintrc.json"
   ],
-  "ignorePatterns": ["**/*.gen.ts", ".agents/**", ".claude/**"],
+  "ignorePatterns": [
+    "**/*.gen.ts",
+    ".agents/**",
+    ".claude/**",
+    "apps/web/scripts/**"
+  ],
   "rules": {
     "func-style": "off",
     "no-danger": "off",
