@@ -1,14 +1,21 @@
+import { Database, Plus } from "lucide-react";
 import { motion } from "motion/react";
 
-import type { DatabaseConnection } from "@/lib/connections";
+import { Button } from "@/components/ui/button";
+import {
+  Empty,
+  EmptyContent,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+} from "@/components/ui/empty";
 
-import { ConnectionForm } from "@/components/connection-form";
-
-interface ConnectionsEmptyStateProps {
-  onSuccess: (connection: DatabaseConnection) => void;
+interface NoConnectionsStateProps {
+  onAdd: () => void;
 }
 
-const ConnectionsEmptyState = ({ onSuccess }: ConnectionsEmptyStateProps) => (
+const NoConnectionsState = ({ onAdd }: NoConnectionsStateProps) => (
   <motion.div
     animate={{ opacity: 1 }}
     className="w-full max-w-md"
@@ -16,15 +23,26 @@ const ConnectionsEmptyState = ({ onSuccess }: ConnectionsEmptyStateProps) => (
     initial={{ opacity: 0 }}
     transition={{ duration: 0.2, ease: "easeOut" }}
   >
-    <h1 className="px-0.5 text-2xl font-medium leading-[1.1] tracking-tight text-foreground">
-      Connect your first database
-    </h1>
-    <p className="mb-8 mt-3 px-0.5 text-sm leading-relaxed text-muted-foreground">
-      Works with Postgres, MySQL, SQLite, MongoDB, Redis, and ClickHouse — with
-      an AI that knows your schema.
-    </p>
-    <ConnectionForm onSuccess={onSuccess} />
+    <Empty className="p-0">
+      <EmptyMedia variant="icon">
+        <Database />
+      </EmptyMedia>
+      <EmptyHeader>
+        <EmptyTitle as="h2" className="text-base">
+          No connections yet
+        </EmptyTitle>
+        <EmptyDescription>
+          Saved connections live here. You can add one anytime.
+        </EmptyDescription>
+      </EmptyHeader>
+      <EmptyContent>
+        <Button autoFocus onClick={onAdd} size="default">
+          <Plus />
+          Add connection
+        </Button>
+      </EmptyContent>
+    </Empty>
   </motion.div>
 );
 
-export { ConnectionsEmptyState };
+export { NoConnectionsState };

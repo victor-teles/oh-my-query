@@ -6,6 +6,7 @@ import { createContext, use, useCallback, useRef } from "react";
 import type { ErrorLocation } from "@/lib/error-location";
 
 interface EditorInsertContextValue {
+  focusEditor: () => boolean;
   getSelectedText: () => string | null;
   hasSelection: () => boolean;
   insertAtCursor: (text: string) => void;
@@ -131,6 +132,15 @@ export const EditorInsertProvider = ({ children }: { children: ReactNode }) => {
     view.focus();
   }, []);
 
+  const focusEditor = useCallback((): boolean => {
+    const view = editorRef.current;
+    if (!view) {
+      return false;
+    }
+    view.focus();
+    return true;
+  }, []);
+
   const queryTable = useCallback((tableName: string) => {
     queryTableRef.current?.(tableName);
   }, []);
@@ -147,6 +157,7 @@ export const EditorInsertProvider = ({ children }: { children: ReactNode }) => {
   return (
     <EditorInsertContext
       value={{
+        focusEditor,
         getSelectedText,
         hasSelection,
         insertAtCursor,

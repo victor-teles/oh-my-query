@@ -47,6 +47,37 @@ const CATEGORY_ICONS: Record<ErrorCategory, typeof AlertCircle> = {
   unknown: AlertCircle,
 };
 
+type PrimaryAction = "jump" | "reconnect" | "retry" | "none";
+
+const resolvePrimaryAction = ({
+  canJump,
+  category,
+  hasReconnect,
+  hasRetry,
+}: {
+  canJump: boolean;
+  category: ErrorCategory;
+  hasReconnect: boolean;
+  hasRetry: boolean;
+}): PrimaryAction => {
+  if (category === "syntax" && canJump) {
+    return "jump";
+  }
+  if (category === "connection" && hasReconnect) {
+    return "reconnect";
+  }
+  if (hasRetry) {
+    return "retry";
+  }
+  if (canJump) {
+    return "jump";
+  }
+  if (hasReconnect) {
+    return "reconnect";
+  }
+  return "none";
+};
+
 export const QueryErrorDisplay = ({
   error,
   errorCode,
@@ -65,6 +96,15 @@ export const QueryErrorDisplay = ({
   const jumpLabel = location ? `Jump to ${formatLocationLabel(location)}` : "";
 
   const CategoryIcon = CATEGORY_ICONS[classification.category];
+
+  const primaryAction = resolvePrimaryAction({
+    canJump,
+    category: classification.category,
+    hasReconnect: onReconnect !== undefined,
+    hasRetry: onRetry !== undefined,
+  });
+  const variantFor = (action: PrimaryAction) =>
+    action === primaryAction ? "default" : "ghost";
 
   const handleJump = useCallback(() => {
     if (location && onJumpToLine) {
@@ -117,6 +157,7 @@ export const QueryErrorDisplay = ({
               onClick={handleJump}
               size="sm"
               title={jumpLabel}
+              variant={variantFor("jump")}
             >
               <ArrowRight />
               Jump to line
@@ -128,6 +169,7 @@ export const QueryErrorDisplay = ({
               onClick={onReconnect}
               size="sm"
               title="Reconnect"
+              variant={variantFor("reconnect")}
             >
               <RefreshCw />
               Reconnect
@@ -139,9 +181,7 @@ export const QueryErrorDisplay = ({
               onClick={onRetry}
               size="sm"
               title="Retry"
-              variant={
-                classification.category === "connection" ? "outline" : "default"
-              }
+              variant={variantFor("retry")}
             >
               <RotateCw />
               Retry
@@ -153,7 +193,7 @@ export const QueryErrorDisplay = ({
               onClick={onAiFix}
               size="sm"
               title="Fix with AI"
-              variant="outline"
+              variant="ghost"
             >
               <Terminal />
               Fix with AI
