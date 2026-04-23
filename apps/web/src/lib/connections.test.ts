@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import type { DatabaseConnection } from "@/lib/connections";
+import type { DatabaseConnection, DatabaseType } from "@/lib/connections";
 
 import {
   DEFAULT_PORTS,
@@ -37,26 +37,37 @@ const seed = (connections: DatabaseConnection[]): void => {
 };
 
 describe("isSqlDatabase predicate", () => {
-  it("returns true for SQL databases", () => {
-    expect(isSqlDatabase("postgresql")).toBeTruthy();
-    expect(isSqlDatabase("mysql")).toBeTruthy();
-    expect(isSqlDatabase("sqlite")).toBeTruthy();
-    expect(isSqlDatabase("clickhouse")).toBeTruthy();
+  it.each<DatabaseType>([
+    "postgresql",
+    "mysql",
+    "sqlite",
+    "clickhouse",
+    "duckdb",
+    "mssql",
+  ])("returns true for %s", (type) => {
+    expect(isSqlDatabase(type)).toBeTruthy();
   });
 
-  it("returns false for non-SQL databases", () => {
-    expect(isSqlDatabase("mongodb")).toBeFalsy();
-    expect(isSqlDatabase("redis")).toBeFalsy();
-  });
+  it.each<DatabaseType>(["mongodb", "redis"])(
+    "returns false for %s",
+    (type) => {
+      expect(isSqlDatabase(type)).toBeFalsy();
+    }
+  );
 });
 
 describe("default ports", () => {
-  it("maps each database type to a port", () => {
-    expect(DEFAULT_PORTS.postgresql).toBe(5432);
-    expect(DEFAULT_PORTS.mysql).toBe(3306);
-    expect(DEFAULT_PORTS.redis).toBe(6379);
-    expect(DEFAULT_PORTS.mongodb).toBe(27_017);
-    expect(DEFAULT_PORTS.clickhouse).toBe(8123);
+  it.each<[DatabaseType, number]>([
+    ["postgresql", 5432],
+    ["mysql", 3306],
+    ["redis", 6379],
+    ["mongodb", 27_017],
+    ["clickhouse", 8123],
+    ["mssql", 1433],
+    ["duckdb", 0],
+    ["sqlite", 0],
+  ])("maps %s to port %i", (type, port) => {
+    expect(DEFAULT_PORTS[type]).toBe(port);
   });
 });
 

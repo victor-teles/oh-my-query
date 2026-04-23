@@ -17,6 +17,7 @@ import type {
 
 import { DATABASE_ICON_MAP } from "@/components/icons/database-icons";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Collapsible,
   CollapsibleContent,
@@ -77,7 +78,9 @@ const EMOJI_CATALOG = [
 
 const EMOJI_BY_TYPE: Record<DatabaseType, string> = {
   clickhouse: "📊",
+  duckdb: "🦆",
   mongodb: "🍃",
+  mssql: "🗄️",
   mysql: "🐬",
   postgresql: "🐘",
   redis: "⚡️",
@@ -394,6 +397,7 @@ interface FormState {
   username: string;
   password: string;
   authSource: string;
+  trustServerCertificate: boolean;
   emoji: string;
   color: ConnectionColor | "";
   environment: ConnectionEnvironment | "";
@@ -415,6 +419,7 @@ const INITIAL_STATE: FormState = {
   name: "",
   password: "",
   port: String(DEFAULT_PORTS.postgresql),
+  trustServerCertificate: true,
   type: "postgresql",
   username: "",
 };
@@ -429,6 +434,7 @@ const connectionToFormState = (conn: DatabaseConnection): FormState => ({
   name: conn.name,
   password: conn.password,
   port: String(conn.port),
+  trustServerCertificate: conn.trustServerCertificate ?? true,
   type: conn.type,
   username: conn.username,
 });
@@ -437,7 +443,9 @@ const DATABASE_OPTIONS: { value: DatabaseType; label: string }[] = [
   { label: "PostgreSQL", value: "postgresql" },
   { label: "MySQL", value: "mysql" },
   { label: "SQLite", value: "sqlite" },
+  { label: "Microsoft SQL Server", value: "mssql" },
   { label: "ClickHouse", value: "clickhouse" },
+  { label: "DuckDB", value: "duckdb" },
   { label: "MongoDB", value: "mongodb" },
   { label: "Redis", value: "redis" },
 ];
@@ -448,16 +456,18 @@ const NEEDS_HOST = new Set<DatabaseType>([
   "clickhouse",
   "mongodb",
   "redis",
+  "mssql",
 ]);
 const NEEDS_USERNAME = new Set<DatabaseType>([
   "postgresql",
   "mysql",
   "clickhouse",
   "mongodb",
+  "mssql",
 ]);
 
 const getDatabaseLabel = (type: DatabaseType): string => {
-  if (type === "sqlite") {
+  if (type === "sqlite" || type === "duckdb") {
     return "File path";
   }
   if (type === "redis") {
@@ -470,6 +480,9 @@ const getDatabaseHint = (type: DatabaseType): string | null => {
   if (type === "redis") {
     return "Redis DBs are numbered 0–15. You can switch DBs inside the workspace after connecting.";
   }
+  if (type === "duckdb") {
+    return "Use :memory: for an in-process database, or an absolute path to a .duckdb file.";
+  }
   return null;
 };
 
@@ -480,12 +493,18 @@ const getUsernamePlaceholder = (type: DatabaseType): string => {
   if (type === "clickhouse") {
     return "default";
   }
+  if (type === "mssql") {
+    return "sa";
+  }
   return "postgres";
 };
 
 const getDatabasePlaceholder = (type: DatabaseType): string => {
   if (type === "sqlite") {
     return "/path/to/database.db";
+  }
+  if (type === "duckdb") {
+    return ":memory: or /path/to/warehouse.duckdb";
   }
   if (type === "redis") {
     return "0";
@@ -514,6 +533,8 @@ const buildConnection = (form: FormState): DatabaseConnection => {
     password: hasHost ? form.password : "",
     pinned: false,
     port: hasHost ? Number(form.port) : 0,
+    trustServerCertificate:
+      form.type === "mssql" ? form.trustServerCertificate : undefined,
     type: form.type,
     username: hasUsername ? form.username.trim() : "",
   };
@@ -531,6 +552,8 @@ const buildConnectionParams = (form: FormState) => {
     host: hasHost ? form.host.trim() : "",
     password: hasHost ? form.password : "",
     port: hasHost ? Number(form.port) : 0,
+    trustServerCertificate:
+      form.type === "mssql" ? form.trustServerCertificate : undefined,
     type: form.type,
     username: hasUsername ? form.username.trim() : "",
   };
@@ -616,6 +639,11 @@ export const ConnectionForm = ({
 
   const handleColorSelect = useCallback((color: ConnectionColor | "") => {
     setForm((prev) => ({ ...prev, color }));
+  }, []);
+
+  const handleTrustCertChange = useCallback((checked: boolean) => {
+    setForm((prev) => ({ ...prev, trustServerCertificate: checked }));
+    setTestStatus({ state: "idle" });
   }, []);
 
   const handleEmojiSelect = useCallback((emoji: string) => {
@@ -750,6 +778,22 @@ export const ConnectionForm = ({
         updateField={updateField}
         username={form.username}
       />
+
+      {form.type === "mssql" && (
+        <div className="grid gap-1.5">
+          <Label className="flex items-center gap-2 font-normal">
+            <Checkbox
+              checked={form.trustServerCertificate}
+              onCheckedChange={handleTrustCertChange}
+            />
+            Trust server certificate
+          </Label>
+          <p className="pl-6 text-xs text-muted-foreground">
+            Skip TLS certificate verification. Disable for production servers
+            with a valid certificate.
+          </p>
+        </div>
+      )}
 
       <div className="grid gap-1.5">
         <Label htmlFor="conn-database">{getDatabaseLabel(form.type)}</Label>

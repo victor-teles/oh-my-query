@@ -40,12 +40,26 @@ const RedisIcon = (props: IconProps) => (
   </svg>
 );
 
+const DuckDbIcon = (props: IconProps) => (
+  <svg viewBox="0 0 24 24" fill="currentColor" {...props}>
+    <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm-1.408 6.62c2.962 0 5.363 2.401 5.363 5.363 0 2.963-2.401 5.364-5.363 5.364-2.962 0-5.363-2.401-5.363-5.364 0-2.962 2.401-5.363 5.363-5.363zm6.759 4.02h3.487a1.343 1.343 0 1 1 0 2.686h-3.487a1.343 1.343 0 1 1 0-2.686z" />
+  </svg>
+);
+
+const MssqlIcon = (props: IconProps) => (
+  <svg viewBox="0 0 24 24" fill="currentColor" {...props}>
+    <path d="M12 2C6.48 2 2 3.79 2 6v12c0 2.21 4.48 4 10 4s10-1.79 10-4V6c0-2.21-4.48-4-10-4zm0 2c4.97 0 8 1.35 8 2s-3.03 2-8 2-8-1.35-8-2 3.03-2 8-2zm0 4c3.48 0 6.27-.78 8-1.84V10c0 .65-3.03 2-8 2s-8-1.35-8-2V6.16C5.73 7.22 8.52 8 12 8zm0 4c3.48 0 6.27-.78 8-1.84V14c0 .65-3.03 2-8 2s-8-1.35-8-2v-3.84C5.73 11.22 8.52 12 12 12zm0 4c3.48 0 6.27-.78 8-1.84V18c0 .65-3.03 2-8 2s-8-1.35-8-2v-3.84C5.73 15.22 8.52 16 12 16z" />
+  </svg>
+);
+
 export const DATABASE_ICON_MAP: Record<
   DatabaseType,
   ComponentType<IconProps>
 > = {
   clickhouse: ClickHouseIcon,
+  duckdb: DuckDbIcon,
   mongodb: MongoDbIcon,
+  mssql: MssqlIcon,
   mysql: MySqlIcon,
   postgresql: PostgreSqlIcon,
   redis: RedisIcon,

@@ -1,8 +1,10 @@
 pub mod clickhouse;
 pub mod driver;
+pub mod duckdb;
 pub mod error;
 pub mod execute;
 pub mod mongodb_driver;
+pub mod mssql;
 pub mod mysql;
 pub mod pool;
 pub mod postgres;
