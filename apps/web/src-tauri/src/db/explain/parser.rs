@@ -90,7 +90,10 @@ fn parse_pg_node(node: &Value, id: &str) -> PlanNode {
     plan.rows.actual = node.get("Actual Rows").and_then(Value::as_f64);
 
     let actual_total = node.get("Actual Total Time").and_then(Value::as_f64);
-    let loops = node.get("Actual Loops").and_then(Value::as_f64).unwrap_or(1.0);
+    let loops = node
+        .get("Actual Loops")
+        .and_then(Value::as_f64)
+        .unwrap_or(1.0);
     if let Some(t) = actual_total {
         let total_ms = t * loops;
         plan.timing.actual_total_ms = Some(total_ms);
