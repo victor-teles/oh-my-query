@@ -962,9 +962,8 @@ async fn list_databases_duckdb(handle: &DuckDbHandle) -> Result<Vec<String>, DbE
         })?;
         let mut stmt = conn
             .prepare(
-                "SELECT DISTINCT table_schema FROM information_schema.tables \
-                 WHERE table_schema NOT IN ('information_schema', 'pg_catalog') \
-                 ORDER BY table_schema",
+                "SELECT schema_name FROM duckdb_schemas() \
+                 WHERE NOT internal ORDER BY schema_name",
             )
             .map_err(DbError::from)?;
         let names = stmt
@@ -997,39 +996,8 @@ async fn fetch_schema_duckdb(
             message: "DuckDB connection is busy".to_string(),
         })?;
 
-        let mut table_stmt = conn
-            .prepare(
-                "SELECT table_name, table_type, estimated_size FROM information_schema.tables \
-                 WHERE table_schema = ? ORDER BY table_name",
-            )
-            .map_err(DbError::from)?;
-        let rows = table_stmt
-            .query_map([schema.as_str()], |row| {
-                let name: String = row.get(0)?;
-                let kind: String = row.get(1)?;
-                let estimate: Option<i64> = row.get::<_, Option<i64>>(2).ok().flatten();
-                Ok((name, kind, estimate))
-            })
-            .map_err(DbError::from)?;
-
-        let mut tables: Vec<TableItem> = Vec::new();
-        let mut views: Vec<ViewItem> = Vec::new();
-
-        for row in rows {
-            let (name, kind, estimate) = row.map_err(DbError::from)?;
-            let columns = fetch_columns_duckdb(&conn, &schema, &name)?;
-            if kind.eq_ignore_ascii_case("VIEW") {
-                views.push(ViewItem { name, columns });
-            } else {
-                tables.push(TableItem {
-                    name,
-                    columns,
-                    indexes: vec![],
-                    foreign_keys: vec![],
-                    row_estimate: estimate.and_then(|v| u64::try_from(v).ok()),
-                });
-            }
-        }
+        let tables = fetch_tables_duckdb(&conn, &schema)?;
+        let views = fetch_views_duckdb(&conn, &schema)?;
 
         Ok(SchemaInfo {
             schemas: vec![SchemaItem {
@@ -1046,11 +1014,67 @@ async fn fetch_schema_duckdb(
     })?
 }
 
+fn fetch_tables_duckdb(conn: &duckdb::Connection, schema: &str) -> Result<Vec<TableItem>, DbError> {
+    let mut stmt = conn
+        .prepare(
+            "SELECT table_name, estimated_size FROM duckdb_tables() \
+             WHERE schema_name = ? AND NOT temporary AND NOT internal \
+             ORDER BY table_name",
+        )
+        .map_err(DbError::from)?;
+
+    let rows = stmt
+        .query_map([schema], |row| {
+            let name: String = row.get(0)?;
+            let estimate: Option<i64> = row.get::<_, Option<i64>>(1).ok().flatten();
+            Ok((name, estimate))
+        })
+        .map_err(DbError::from)?;
+
+    let mut tables = Vec::new();
+    for row in rows {
+        let (name, estimate) = row.map_err(DbError::from)?;
+        let columns = fetch_columns_duckdb(conn, schema, &name)?;
+        tables.push(TableItem {
+            name,
+            columns,
+            indexes: vec![],
+            foreign_keys: vec![],
+            row_estimate: estimate.and_then(|v| u64::try_from(v).ok()),
+        });
+    }
+    Ok(tables)
+}
+
+fn fetch_views_duckdb(conn: &duckdb::Connection, schema: &str) -> Result<Vec<ViewItem>, DbError> {
+    let mut stmt = conn
+        .prepare(
+            "SELECT view_name FROM duckdb_views() \
+             WHERE schema_name = ? AND NOT internal ORDER BY view_name",
+        )
+        .map_err(DbError::from)?;
+
+    let names = stmt
+        .query_map([schema], |row| row.get::<_, String>(0))
+        .map_err(DbError::from)?
+        .collect::<std::result::Result<Vec<_>, _>>()
+        .map_err(DbError::from)?;
+
+    let mut views = Vec::with_capacity(names.len());
+    for name in names {
+        let columns = fetch_columns_duckdb(conn, schema, &name)?;
+        views.push(ViewItem { name, columns });
+    }
+    Ok(views)
+}
+
 fn fetch_columns_duckdb(
     conn: &duckdb::Connection,
     schema: &str,
     table: &str,
 ) -> Result<Vec<ColumnDetail>, DbError> {
+    let pk_cols = fetch_primary_key_columns_duckdb(conn, schema, table)?;
+
     let mut stmt = conn
         .prepare(
             "SELECT column_name, data_type, is_nullable, column_default \
@@ -1061,21 +1085,44 @@ fn fetch_columns_duckdb(
 
     let rows = stmt
         .query_map([schema, table], |row| {
+            let name: String = row.get(0)?;
+            let data_type: String = row.get(1)?;
+            let nullable = row
+                .get::<_, String>(2)
+                .map(|s| s.eq_ignore_ascii_case("YES"))
+                .unwrap_or(true);
+            let default_value = row.get::<_, Option<String>>(3).ok().flatten();
             Ok(ColumnDetail {
-                name: row.get::<_, String>(0)?,
-                data_type: row.get::<_, String>(1)?,
-                is_nullable: row
-                    .get::<_, String>(2)
-                    .map(|s| s.eq_ignore_ascii_case("YES"))
-                    .unwrap_or(true),
-                is_primary_key: false,
-                default_value: row.get::<_, Option<String>>(3).ok().flatten(),
+                is_primary_key: pk_cols.iter().any(|c| c == &name),
+                name,
+                data_type,
+                is_nullable: nullable,
+                default_value,
             })
         })
         .map_err(DbError::from)?;
 
     rows.collect::<std::result::Result<Vec<_>, _>>()
         .map_err(DbError::from)
+}
+
+fn fetch_primary_key_columns_duckdb(
+    conn: &duckdb::Connection,
+    schema: &str,
+    table: &str,
+) -> Result<Vec<String>, DbError> {
+    let Ok(mut stmt) = conn.prepare(
+        "SELECT UNNEST(constraint_column_names) FROM duckdb_constraints() \
+         WHERE schema_name = ? AND table_name = ? AND constraint_type = 'PRIMARY KEY'",
+    ) else {
+        return Ok(Vec::new());
+    };
+
+    let Ok(rows) = stmt.query_map([schema, table], |row| row.get::<_, String>(0)) else {
+        return Ok(Vec::new());
+    };
+
+    Ok(rows.flatten().collect())
 }
 
 // MSSQL introspection
