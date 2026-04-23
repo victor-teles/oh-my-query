@@ -13,6 +13,7 @@ import {
 import { isTauri } from "@/lib/tauri";
 
 import { useTabExecution } from "./use-tab-execution";
+import { useTabExplain } from "./use-tab-explain";
 
 const SAVE_DEBOUNCE_MS = 150;
 const SAVE_ERROR_TOAST_THROTTLE_MS = 10_000;
@@ -86,6 +87,12 @@ export const useQueryTabs = (
   const { cancel, execute } = useTabExecution({
     connectionId,
     flushSave,
+    selectedDatabase,
+    setTabs,
+  });
+
+  const { cancel: cancelExplainQuery, explain } = useTabExplain({
+    connectionId,
     selectedDatabase,
     setTabs,
   });
@@ -363,6 +370,38 @@ export const useQueryTabs = (
     [cancel]
   );
 
+  const explainTab = useCallback(
+    (tabId: string, sqlOverride?: string) => {
+      const tab = tabsRef.current.find((t) => t.id === tabId);
+      if (!tab) {
+        return;
+      }
+      const sqlToExplain = sqlOverride ?? tab.sql;
+      if (!sqlToExplain.trim()) {
+        return;
+      }
+      explain(tabId, sqlToExplain, tab.sourceDialect, tab.explainAnalyze);
+    },
+    [explain]
+  );
+
+  const cancelExplain = useCallback(
+    (tabId: string) => {
+      const tab = tabsRef.current.find((t) => t.id === tabId);
+      if (!tab?.runningExplainId) {
+        return;
+      }
+      cancelExplainQuery(tab.runningExplainId);
+    },
+    [cancelExplainQuery]
+  );
+
+  const setExplainAnalyze = useCallback((tabId: string, analyze: boolean) => {
+    setTabs((prev) =>
+      prev.map((t) => (t.id === tabId ? { ...t, explainAnalyze: analyze } : t))
+    );
+  }, []);
+
   const onConfirmClose = useCallback(async () => {
     setCloseRequested(false);
     if (!isTauri()) {
@@ -386,15 +425,18 @@ export const useQueryTabs = (
     addTab,
     addTabWithSql,
     addTabWithSqlAndRun,
+    cancelExplain,
     cancelTab,
     closeRequested,
     closeTab,
     executeTab,
+    explainTab,
     isRestored,
     onCancelClose,
     onConfirmClose,
     reopenTab,
     setActiveTabId,
+    setExplainAnalyze,
     tabs,
     updateTabDialect,
     updateTabSql,

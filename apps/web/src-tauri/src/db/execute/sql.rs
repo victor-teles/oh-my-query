@@ -142,7 +142,7 @@ macro_rules! fetch_rows_native {
     }};
 }
 
-fn validate_schema_name(name: &str) -> Result<(), DbError> {
+pub fn validate_schema_name(name: &str) -> Result<(), DbError> {
     if name.is_empty()
         || !name
             .chars()
