@@ -27,18 +27,22 @@ fn run_query(handle: &DuckDbHandle, sql: &str, max_rows: usize) -> Result<Execut
     })?;
 
     let mut stmt = conn.prepare(sql).map_err(DbError::from)?;
-    let column_count = stmt.column_count();
-    let columns: Vec<ColumnInfo> = (0..column_count)
-        .map(|i| ColumnInfo {
-            name: stmt
-                .column_name(i)
-                .map(|s| s.to_string())
-                .unwrap_or_default(),
-            type_name: format!("{:?}", stmt.column_type(i)),
-        })
-        .collect();
-
     let mut rows_iter = stmt.query([]).map_err(DbError::from)?;
+
+    let (column_count, columns) = rows_iter
+        .as_ref()
+        .map(|s| {
+            let count = s.column_count();
+            let infos = (0..count)
+                .map(|i| ColumnInfo {
+                    name: s.column_name(i).map(|n| n.to_string()).unwrap_or_default(),
+                    type_name: format!("{:?}", s.column_type(i)),
+                })
+                .collect::<Vec<_>>();
+            (count, infos)
+        })
+        .unwrap_or((0, Vec::new()));
+
     let mut rows: Vec<Vec<serde_json::Value>> = Vec::new();
     let mut is_truncated = false;
 
