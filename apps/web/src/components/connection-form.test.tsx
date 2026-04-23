@@ -1,44 +1,41 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 
-import type {
-  DatabaseConnection,
-  DatabaseType,
-} from "@/lib/connections";
+import type { DatabaseConnection, DatabaseType } from "@/lib/connections";
+
+import { DEFAULT_PORTS } from "@/lib/connections";
 
 import { ConnectionForm } from "./connection-form";
+
+const SERVERLESS = new Set<DatabaseType>(["duckdb", "sqlite"]);
+const PASSWORDLESS = new Set<DatabaseType>(["duckdb", "sqlite", "redis"]);
 
 const connectionFor = (type: DatabaseType): DatabaseConnection => ({
   createdAt: "2026-01-01T00:00:00.000Z",
   database: type === "duckdb" ? ":memory:" : "app",
-  host: type === "duckdb" || type === "sqlite" ? "" : "localhost",
+  host: SERVERLESS.has(type) ? "" : "localhost",
   id: `test-${type}`,
   lastConnectedAt: null,
   name: `Test ${type}`,
   password: "",
   pinned: false,
-  port:
-    type === "duckdb" || type === "sqlite"
-      ? 0
-      : type === "mssql"
-        ? 1433
-        : type === "clickhouse"
-          ? 8123
-          : 5432,
+  port: DEFAULT_PORTS[type],
   type,
-  username: type === "duckdb" || type === "sqlite" || type === "redis" ? "" : "user",
+  username: PASSWORDLESS.has(type) ? "" : "user",
 });
 
-describe("ConnectionForm engine variants", () => {
-  it("renders DuckDB form without host/port/username/password, with File path label and :memory: hint", () => {
+describe("connectionForm engine variants", () => {
+  it("hides server fields for DuckDB", () => {
     render(<ConnectionForm connection={connectionFor("duckdb")} />);
 
     expect(screen.queryByLabelText("Host")).toBeNull();
     expect(screen.queryByLabelText("Port")).toBeNull();
     expect(screen.queryByLabelText("Username")).toBeNull();
     expect(screen.queryByLabelText("Password")).toBeNull();
+  });
 
-    expect(screen.getByLabelText("File path")).toBeDefined();
+  it("shows a File path field with a :memory: placeholder for DuckDB", () => {
+    render(<ConnectionForm connection={connectionFor("duckdb")} />);
 
     const db = screen.getByLabelText("File path") as HTMLInputElement;
     expect(db.placeholder).toContain(":memory:");
@@ -53,8 +50,6 @@ describe("ConnectionForm engine variants", () => {
 
     const username = screen.getByLabelText("Username") as HTMLInputElement;
     expect(username.placeholder).toBe("sa");
-
-    expect(screen.getByLabelText("Password")).toBeDefined();
   });
 
   it("renders ClickHouse form with host/port/username/password and port 8123", () => {

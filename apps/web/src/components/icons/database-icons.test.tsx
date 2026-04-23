@@ -16,7 +16,7 @@ const TYPES: DatabaseType[] = [
   "mssql",
 ];
 
-describe("DATABASE_ICON_MAP", () => {
+describe("dATABASE_ICON_MAP", () => {
   it.each(TYPES)("renders an svg for %s", (type) => {
     const Icon = DATABASE_ICON_MAP[type];
     const { container } = render(<Icon data-testid="icon" />);
