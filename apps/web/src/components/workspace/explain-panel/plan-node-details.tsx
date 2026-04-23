@@ -27,7 +27,7 @@ const formatRows = (rows: number | null): string => {
 };
 
 export const PlanNodeDetails = ({ node }: { node: PlanNode }) => (
-  <div className="flex max-h-[60vh] flex-col gap-3 overflow-y-auto">
+  <div className="flex flex-col gap-3">
     <div>
       <div className="font-semibold text-foreground text-xs tracking-wide">
         {node.label}
