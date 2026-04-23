@@ -6,7 +6,9 @@ export type DatabaseType =
   | "sqlite"
   | "mongodb"
   | "redis"
-  | "clickhouse";
+  | "clickhouse"
+  | "duckdb"
+  | "mssql";
 
 export type ConnectionEnvironment = "dev" | "staging" | "prod";
 
@@ -38,7 +40,9 @@ export interface DatabaseConnection {
 
 export const DEFAULT_PORTS: Record<DatabaseType, number> = {
   clickhouse: 8123,
+  duckdb: 0,
   mongodb: 27_017,
+  mssql: 1433,
   mysql: 3306,
   postgresql: 5432,
   redis: 6379,
@@ -49,7 +53,9 @@ export const isSqlDatabase = (type: DatabaseType): boolean =>
   type === "postgresql" ||
   type === "mysql" ||
   type === "sqlite" ||
-  type === "clickhouse";
+  type === "clickhouse" ||
+  type === "duckdb" ||
+  type === "mssql";
 
 const STORAGE_KEY = "oh-my-query-connections";
 

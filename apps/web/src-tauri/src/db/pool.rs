@@ -1,10 +1,13 @@
 use std::collections::HashMap;
+use std::sync::Arc;
 
 use tokio::sync::Mutex;
 
 use crate::db::clickhouse::ClickHouseConnection;
+use crate::db::duckdb::{open_duckdb, DuckDbHandle};
 use crate::db::error::DbError;
 use crate::db::mongodb_driver::build_mongodb_uri;
+use crate::db::mssql::{build_mssql_pool, MssqlPool};
 use crate::db::redis_driver::build_redis_url;
 use crate::db::types::ConnectionParams;
 
@@ -16,6 +19,8 @@ pub enum DatabasePool {
     MongoDB(mongodb::Client),
     Redis(redis::aio::MultiplexedConnection),
     ClickHouse(ClickHouseConnection),
+    DuckDB(DuckDbHandle),
+    Mssql(MssqlPool),
 }
 
 impl DatabasePool {
@@ -24,7 +29,11 @@ impl DatabasePool {
             DatabasePool::Postgres(pool) => pool.close().await,
             DatabasePool::MySql(pool) => pool.close().await,
             DatabasePool::Sqlite(pool) => pool.close().await,
-            DatabasePool::MongoDB(_) | DatabasePool::Redis(_) | DatabasePool::ClickHouse(_) => {}
+            DatabasePool::MongoDB(_)
+            | DatabasePool::Redis(_)
+            | DatabasePool::ClickHouse(_)
+            | DatabasePool::DuckDB(_)
+            | DatabasePool::Mssql(_) => {}
         }
     }
 }
@@ -125,6 +134,20 @@ async fn connect_native(params: &ConnectionParams) -> Result<DatabasePool, DbErr
             let conn = ClickHouseConnection::new(params)?;
             Ok(DatabasePool::ClickHouse(conn))
         }
+        "duckdb" => {
+            let params = params.clone();
+            let conn = tokio::task::spawn_blocking(move || open_duckdb(&params))
+                .await
+                .map_err(|e| DbError {
+                    code: "DUCKDB_JOIN_ERROR".to_string(),
+                    message: e.to_string(),
+                })??;
+            Ok(DatabasePool::DuckDB(Arc::new(Mutex::new(conn))))
+        }
+        "mssql" => {
+            let pool = build_mssql_pool(params).await?;
+            Ok(DatabasePool::Mssql(pool))
+        }
         other => Err(DbError {
             code: "UNSUPPORTED_DRIVER".to_string(),
             message: format!("Unsupported database type: {other}"),
@@ -167,6 +190,33 @@ async fn verify_connection(pool: &DatabasePool) -> Result<(), DbError> {
         }
         DatabasePool::ClickHouse(conn) => {
             conn.ping().await?;
+        }
+        DatabasePool::DuckDB(handle) => {
+            let handle = handle.clone();
+            tokio::task::spawn_blocking(move || -> Result<(), DbError> {
+                let conn = handle
+                    .try_lock()
+                    .map_err(|_| DbError {
+                        code: "DUCKDB_BUSY".to_string(),
+                        message: "DuckDB connection is busy".to_string(),
+                    })?;
+                conn.execute_batch("SELECT 1").map_err(DbError::from)
+            })
+            .await
+            .map_err(|e| DbError {
+                code: "DUCKDB_JOIN_ERROR".to_string(),
+                message: e.to_string(),
+            })??;
+        }
+        DatabasePool::Mssql(pool) => {
+            let mut client = pool.get().await.map_err(DbError::from)?;
+            client
+                .simple_query("SELECT 1")
+                .await
+                .map_err(DbError::from)?
+                .into_results()
+                .await
+                .map_err(DbError::from)?;
         }
     }
     Ok(())

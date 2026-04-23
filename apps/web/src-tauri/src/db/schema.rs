@@ -1,7 +1,9 @@
 use sqlx::Row;
 
 use crate::db::clickhouse::ClickHouseConnection;
+use crate::db::duckdb::DuckDbHandle;
 use crate::db::error::DbError;
+use crate::db::mssql::MssqlPool;
 use crate::db::pool::DatabasePool;
 use crate::db::types::{
     ColumnDetail, ForeignKeyItem, IndexItem, SchemaInfo, SchemaItem, TableItem, ViewItem,
@@ -18,6 +20,8 @@ pub async fn list_databases(pool: &DatabasePool) -> Result<Vec<String>, DbError>
         }
         DatabasePool::Redis(_) => Ok((0u8..16).map(|i| format!("db{i}")).collect()),
         DatabasePool::ClickHouse(conn) => list_databases_clickhouse(conn).await,
+        DatabasePool::DuckDB(handle) => list_databases_duckdb(handle).await,
+        DatabasePool::Mssql(pool) => list_databases_mssql(pool).await,
     }
 }
 
@@ -35,6 +39,8 @@ pub async fn fetch_schema(pool: &DatabasePool, database_name: &str) -> Result<Sc
             }],
         }),
         DatabasePool::ClickHouse(conn) => fetch_schema_clickhouse(conn, database_name).await,
+        DatabasePool::DuckDB(handle) => fetch_schema_duckdb(handle, database_name).await,
+        DatabasePool::Mssql(pool) => fetch_schema_mssql(pool, database_name).await,
     }
 }
 
@@ -943,4 +949,401 @@ async fn fetch_indexes_clickhouse(
             }
         })
         .collect())
+}
+
+// DuckDB introspection
+
+async fn list_databases_duckdb(handle: &DuckDbHandle) -> Result<Vec<String>, DbError> {
+    let handle = handle.clone();
+    tokio::task::spawn_blocking(move || -> Result<Vec<String>, DbError> {
+        let conn = handle.try_lock().map_err(|_| DbError {
+            code: "DUCKDB_BUSY".to_string(),
+            message: "DuckDB connection is busy".to_string(),
+        })?;
+        let mut stmt = conn
+            .prepare(
+                "SELECT DISTINCT table_schema FROM information_schema.tables \
+                 WHERE table_schema NOT IN ('information_schema', 'pg_catalog') \
+                 ORDER BY table_schema",
+            )
+            .map_err(DbError::from)?;
+        let names = stmt
+            .query_map([], |row| row.get::<_, String>(0))
+            .map_err(DbError::from)?
+            .filter_map(Result::ok)
+            .collect::<Vec<_>>();
+        if names.is_empty() {
+            Ok(vec!["main".to_string()])
+        } else {
+            Ok(names)
+        }
+    })
+    .await
+    .map_err(|e| DbError {
+        code: "DUCKDB_JOIN_ERROR".to_string(),
+        message: e.to_string(),
+    })?
+}
+
+async fn fetch_schema_duckdb(
+    handle: &DuckDbHandle,
+    schema_name: &str,
+) -> Result<SchemaInfo, DbError> {
+    let handle = handle.clone();
+    let schema = schema_name.to_string();
+    tokio::task::spawn_blocking(move || -> Result<SchemaInfo, DbError> {
+        let conn = handle.try_lock().map_err(|_| DbError {
+            code: "DUCKDB_BUSY".to_string(),
+            message: "DuckDB connection is busy".to_string(),
+        })?;
+
+        let mut table_stmt = conn
+            .prepare(
+                "SELECT table_name, table_type, estimated_size FROM information_schema.tables \
+                 WHERE table_schema = ? ORDER BY table_name",
+            )
+            .map_err(DbError::from)?;
+        let rows = table_stmt
+            .query_map([schema.as_str()], |row| {
+                let name: String = row.get(0)?;
+                let kind: String = row.get(1)?;
+                let estimate: Option<i64> = row.get::<_, Option<i64>>(2).ok().flatten();
+                Ok((name, kind, estimate))
+            })
+            .map_err(DbError::from)?;
+
+        let mut tables: Vec<TableItem> = Vec::new();
+        let mut views: Vec<ViewItem> = Vec::new();
+
+        for row in rows {
+            let (name, kind, estimate) = row.map_err(DbError::from)?;
+            let columns = fetch_columns_duckdb(&conn, &schema, &name)?;
+            if kind.eq_ignore_ascii_case("VIEW") {
+                views.push(ViewItem { name, columns });
+            } else {
+                tables.push(TableItem {
+                    name,
+                    columns,
+                    indexes: vec![],
+                    foreign_keys: vec![],
+                    row_estimate: estimate.and_then(|v| u64::try_from(v).ok()),
+                });
+            }
+        }
+
+        Ok(SchemaInfo {
+            schemas: vec![SchemaItem {
+                name: schema,
+                tables,
+                views,
+            }],
+        })
+    })
+    .await
+    .map_err(|e| DbError {
+        code: "DUCKDB_JOIN_ERROR".to_string(),
+        message: e.to_string(),
+    })?
+}
+
+fn fetch_columns_duckdb(
+    conn: &duckdb::Connection,
+    schema: &str,
+    table: &str,
+) -> Result<Vec<ColumnDetail>, DbError> {
+    let mut stmt = conn
+        .prepare(
+            "SELECT column_name, data_type, is_nullable, column_default \
+             FROM information_schema.columns \
+             WHERE table_schema = ? AND table_name = ? ORDER BY ordinal_position",
+        )
+        .map_err(DbError::from)?;
+
+    let rows = stmt
+        .query_map([schema, table], |row| {
+            Ok(ColumnDetail {
+                name: row.get::<_, String>(0)?,
+                data_type: row.get::<_, String>(1)?,
+                is_nullable: row
+                    .get::<_, String>(2)
+                    .map(|s| s.eq_ignore_ascii_case("YES"))
+                    .unwrap_or(true),
+                is_primary_key: false,
+                default_value: row.get::<_, Option<String>>(3).ok().flatten(),
+            })
+        })
+        .map_err(DbError::from)?;
+
+    rows.collect::<std::result::Result<Vec<_>, _>>()
+        .map_err(DbError::from)
+}
+
+// MSSQL introspection
+
+async fn list_databases_mssql(pool: &MssqlPool) -> Result<Vec<String>, DbError> {
+    let mut client = pool.get().await.map_err(DbError::from)?;
+    let results = client
+        .simple_query(
+            "SELECT name FROM sys.schemas \
+             WHERE name NOT IN ('sys','INFORMATION_SCHEMA','guest','db_owner',\
+             'db_accessadmin','db_securityadmin','db_ddladmin','db_backupoperator',\
+             'db_datareader','db_datawriter','db_denydatareader','db_denydatawriter') \
+             ORDER BY name",
+        )
+        .await
+        .map_err(DbError::from)?
+        .into_results()
+        .await
+        .map_err(DbError::from)?;
+
+    let names: Vec<String> = results
+        .into_iter()
+        .flatten()
+        .filter_map(|row| row.try_get::<&str, _>(0).ok().flatten().map(|s| s.to_string()))
+        .collect();
+    if names.is_empty() {
+        Ok(vec!["dbo".to_string()])
+    } else {
+        Ok(names)
+    }
+}
+
+async fn fetch_schema_mssql(pool: &MssqlPool, schema_name: &str) -> Result<SchemaInfo, DbError> {
+    let mut client = pool.get().await.map_err(DbError::from)?;
+
+    let tables = fetch_tables_mssql(&mut *client, schema_name).await?;
+    let views = fetch_views_mssql(&mut *client, schema_name).await?;
+
+    Ok(SchemaInfo {
+        schemas: vec![SchemaItem {
+            name: schema_name.to_string(),
+            tables,
+            views,
+        }],
+    })
+}
+
+async fn fetch_tables_mssql(
+    client: &mut bb8_tiberius::rt::Client,
+    schema_name: &str,
+) -> Result<Vec<TableItem>, DbError> {
+    let query = format!(
+        "SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES \
+         WHERE TABLE_SCHEMA = '{}' AND TABLE_TYPE = 'BASE TABLE' \
+         ORDER BY TABLE_NAME",
+        escape_mssql_literal(schema_name)
+    );
+    let results = client
+        .simple_query(query)
+        .await
+        .map_err(DbError::from)?
+        .into_results()
+        .await
+        .map_err(DbError::from)?;
+
+    let names: Vec<String> = results
+        .into_iter()
+        .flatten()
+        .filter_map(|row| row.try_get::<&str, _>(0).ok().flatten().map(|s| s.to_string()))
+        .collect();
+
+    let mut tables = Vec::with_capacity(names.len());
+    for name in names {
+        let columns = fetch_columns_mssql(client, schema_name, &name).await?;
+        let indexes = fetch_indexes_mssql(client, schema_name, &name).await?;
+        tables.push(TableItem {
+            name,
+            columns,
+            indexes,
+            foreign_keys: vec![],
+            row_estimate: None,
+        });
+    }
+    Ok(tables)
+}
+
+async fn fetch_views_mssql(
+    client: &mut bb8_tiberius::rt::Client,
+    schema_name: &str,
+) -> Result<Vec<ViewItem>, DbError> {
+    let query = format!(
+        "SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS \
+         WHERE TABLE_SCHEMA = '{}' ORDER BY TABLE_NAME",
+        escape_mssql_literal(schema_name)
+    );
+    let results = client
+        .simple_query(query)
+        .await
+        .map_err(DbError::from)?
+        .into_results()
+        .await
+        .map_err(DbError::from)?;
+
+    let names: Vec<String> = results
+        .into_iter()
+        .flatten()
+        .filter_map(|row| row.try_get::<&str, _>(0).ok().flatten().map(|s| s.to_string()))
+        .collect();
+
+    let mut views = Vec::with_capacity(names.len());
+    for name in names {
+        let columns = fetch_columns_mssql(client, schema_name, &name).await?;
+        views.push(ViewItem { name, columns });
+    }
+    Ok(views)
+}
+
+async fn fetch_columns_mssql(
+    client: &mut bb8_tiberius::rt::Client,
+    schema_name: &str,
+    table_name: &str,
+) -> Result<Vec<ColumnDetail>, DbError> {
+    let query = format!(
+        "SELECT COLUMN_NAME, DATA_TYPE, IS_NULLABLE, COLUMN_DEFAULT \
+         FROM INFORMATION_SCHEMA.COLUMNS \
+         WHERE TABLE_SCHEMA = '{}' AND TABLE_NAME = '{}' \
+         ORDER BY ORDINAL_POSITION",
+        escape_mssql_literal(schema_name),
+        escape_mssql_literal(table_name)
+    );
+    let results = client
+        .simple_query(query)
+        .await
+        .map_err(DbError::from)?
+        .into_results()
+        .await
+        .map_err(DbError::from)?;
+
+    let pk_cols = fetch_primary_key_columns_mssql(client, schema_name, table_name).await?;
+
+    let columns = results
+        .into_iter()
+        .flatten()
+        .map(|row| {
+            let name = row
+                .try_get::<&str, _>(0)
+                .ok()
+                .flatten()
+                .unwrap_or("")
+                .to_string();
+            let data_type = row
+                .try_get::<&str, _>(1)
+                .ok()
+                .flatten()
+                .unwrap_or("")
+                .to_string();
+            let nullable = row
+                .try_get::<&str, _>(2)
+                .ok()
+                .flatten()
+                .map(|s| s.eq_ignore_ascii_case("YES"))
+                .unwrap_or(true);
+            let default_value = row
+                .try_get::<&str, _>(3)
+                .ok()
+                .flatten()
+                .map(|s| s.to_string());
+            ColumnDetail {
+                is_primary_key: pk_cols.iter().any(|c| c == &name),
+                name,
+                data_type,
+                is_nullable: nullable,
+                default_value,
+            }
+        })
+        .collect();
+    Ok(columns)
+}
+
+async fn fetch_primary_key_columns_mssql(
+    client: &mut bb8_tiberius::rt::Client,
+    schema_name: &str,
+    table_name: &str,
+) -> Result<Vec<String>, DbError> {
+    let query = format!(
+        "SELECT kcu.COLUMN_NAME \
+         FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS tc \
+         JOIN INFORMATION_SCHEMA.KEY_COLUMN_USAGE kcu \
+         ON tc.CONSTRAINT_NAME = kcu.CONSTRAINT_NAME \
+         AND tc.CONSTRAINT_SCHEMA = kcu.CONSTRAINT_SCHEMA \
+         WHERE tc.TABLE_SCHEMA = '{}' AND tc.TABLE_NAME = '{}' \
+         AND tc.CONSTRAINT_TYPE = 'PRIMARY KEY' \
+         ORDER BY kcu.ORDINAL_POSITION",
+        escape_mssql_literal(schema_name),
+        escape_mssql_literal(table_name)
+    );
+    let results = client
+        .simple_query(query)
+        .await
+        .map_err(DbError::from)?
+        .into_results()
+        .await
+        .map_err(DbError::from)?;
+    Ok(results
+        .into_iter()
+        .flatten()
+        .filter_map(|row| row.try_get::<&str, _>(0).ok().flatten().map(|s| s.to_string()))
+        .collect())
+}
+
+async fn fetch_indexes_mssql(
+    client: &mut bb8_tiberius::rt::Client,
+    schema_name: &str,
+    table_name: &str,
+) -> Result<Vec<IndexItem>, DbError> {
+    let query = format!(
+        "SELECT i.name, i.is_unique, c.name \
+         FROM sys.indexes i \
+         JOIN sys.index_columns ic ON i.object_id = ic.object_id AND i.index_id = ic.index_id \
+         JOIN sys.columns c ON c.object_id = ic.object_id AND c.column_id = ic.column_id \
+         JOIN sys.tables t ON t.object_id = i.object_id \
+         JOIN sys.schemas s ON s.schema_id = t.schema_id \
+         WHERE s.name = '{}' AND t.name = '{}' AND i.is_hypothetical = 0 \
+         ORDER BY i.name, ic.key_ordinal",
+        escape_mssql_literal(schema_name),
+        escape_mssql_literal(table_name)
+    );
+    let results = client
+        .simple_query(query)
+        .await
+        .map_err(DbError::from)?
+        .into_results()
+        .await
+        .map_err(DbError::from)?;
+
+    let mut map: std::collections::HashMap<String, (bool, Vec<String>)> =
+        std::collections::HashMap::new();
+    for row in results.into_iter().flatten() {
+        let name = row
+            .try_get::<&str, _>(0)
+            .ok()
+            .flatten()
+            .unwrap_or("")
+            .to_string();
+        if name.is_empty() {
+            continue;
+        }
+        let is_unique = row.try_get::<bool, _>(1).ok().flatten().unwrap_or(false);
+        let col = row
+            .try_get::<&str, _>(2)
+            .ok()
+            .flatten()
+            .unwrap_or("")
+            .to_string();
+        let entry = map.entry(name).or_insert((is_unique, Vec::new()));
+        entry.1.push(col);
+    }
+
+    Ok(map
+        .into_iter()
+        .map(|(name, (is_unique, columns))| IndexItem {
+            name,
+            columns,
+            is_unique,
+        })
+        .collect())
+}
+
+fn escape_mssql_literal(input: &str) -> String {
+    input.replace('\'', "''")
 }

@@ -42,3 +42,14 @@ redis = { version = "0.27", features = ["tokio-comp", "aio"] }
 dirs = "6"
 polyglot-sql = "0.1"
 reqwest = { version = "0.12", features = ["json", "native-tls"] }
+duckdb = { version = "1", features = ["bundled"] }
+tiberius = { version = "0.12", default-features = false, features = [
+  "tds73",
+  "native-tls",
+  "chrono",
+] }
+bb8 = "0.8"
+bb8-tiberius = "0.15"
+tokio-util = { version = "0.7", features = ["compat"] }
+base64 = "0.22"
+chrono = { version = "0.4", features = ["serde"] }

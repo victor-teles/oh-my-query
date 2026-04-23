@@ -65,5 +65,44 @@ pub async fn fetch_version(pool: &DatabasePool) -> Result<String, DbError> {
                 .unwrap_or("unknown");
             Ok(format!("ClickHouse {ver}"))
         }
+        DatabasePool::DuckDB(handle) => {
+            let handle = handle.clone();
+            let ver = tokio::task::spawn_blocking(move || -> Result<String, DbError> {
+                let conn = handle
+                    .try_lock()
+                    .map_err(|_| DbError {
+                        code: "DUCKDB_BUSY".to_string(),
+                        message: "DuckDB connection is busy".to_string(),
+                    })?;
+                let v: String = conn
+                    .query_row("SELECT version()", [], |row| row.get(0))
+                    .map_err(DbError::from)?;
+                Ok(v)
+            })
+            .await
+            .map_err(|e| DbError {
+                code: "DUCKDB_JOIN_ERROR".to_string(),
+                message: e.to_string(),
+            })??;
+            Ok(format!("DuckDB {ver}"))
+        }
+        DatabasePool::Mssql(pool) => {
+            let mut client = pool.get().await.map_err(DbError::from)?;
+            let rows = client
+                .simple_query("SELECT @@VERSION")
+                .await
+                .map_err(DbError::from)?
+                .into_results()
+                .await
+                .map_err(DbError::from)?;
+            let ver = rows
+                .into_iter()
+                .flatten()
+                .next()
+                .and_then(|r| r.try_get::<&str, _>(0).ok().flatten().map(|s| s.to_string()))
+                .unwrap_or_else(|| "unknown".to_string());
+            let first_line = ver.lines().next().unwrap_or("unknown").trim().to_string();
+            Ok(first_line)
+        }
     }
 }

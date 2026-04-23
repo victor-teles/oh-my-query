@@ -42,6 +42,8 @@ describe("isSqlDatabase predicate", () => {
     expect(isSqlDatabase("mysql")).toBeTruthy();
     expect(isSqlDatabase("sqlite")).toBeTruthy();
     expect(isSqlDatabase("clickhouse")).toBeTruthy();
+    expect(isSqlDatabase("duckdb")).toBeTruthy();
+    expect(isSqlDatabase("mssql")).toBeTruthy();
   });
 
   it("returns false for non-SQL databases", () => {
@@ -57,6 +59,9 @@ describe("default ports", () => {
     expect(DEFAULT_PORTS.redis).toBe(6379);
     expect(DEFAULT_PORTS.mongodb).toBe(27_017);
     expect(DEFAULT_PORTS.clickhouse).toBe(8123);
+    expect(DEFAULT_PORTS.mssql).toBe(1433);
+    expect(DEFAULT_PORTS.duckdb).toBe(0);
+    expect(DEFAULT_PORTS.sqlite).toBe(0);
   });
 });
 

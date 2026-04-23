@@ -59,7 +59,7 @@ const formatRelativeTime = (iso: string | null): string => {
 };
 
 const getIdentifier = (connection: DatabaseConnection): string =>
-  connection.type === "sqlite"
+  connection.type === "sqlite" || connection.type === "duckdb"
     ? connection.database
     : `${connection.host}:${connection.port}/${connection.database}`;
 

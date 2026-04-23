@@ -77,7 +77,9 @@ const EMOJI_CATALOG = [
 
 const EMOJI_BY_TYPE: Record<DatabaseType, string> = {
   clickhouse: "📊",
+  duckdb: "🦆",
   mongodb: "🍃",
+  mssql: "🗄️",
   mysql: "🐬",
   postgresql: "🐘",
   redis: "⚡️",
@@ -437,7 +439,9 @@ const DATABASE_OPTIONS: { value: DatabaseType; label: string }[] = [
   { label: "PostgreSQL", value: "postgresql" },
   { label: "MySQL", value: "mysql" },
   { label: "SQLite", value: "sqlite" },
+  { label: "Microsoft SQL Server", value: "mssql" },
   { label: "ClickHouse", value: "clickhouse" },
+  { label: "DuckDB", value: "duckdb" },
   { label: "MongoDB", value: "mongodb" },
   { label: "Redis", value: "redis" },
 ];
@@ -448,16 +452,18 @@ const NEEDS_HOST = new Set<DatabaseType>([
   "clickhouse",
   "mongodb",
   "redis",
+  "mssql",
 ]);
 const NEEDS_USERNAME = new Set<DatabaseType>([
   "postgresql",
   "mysql",
   "clickhouse",
   "mongodb",
+  "mssql",
 ]);
 
 const getDatabaseLabel = (type: DatabaseType): string => {
-  if (type === "sqlite") {
+  if (type === "sqlite" || type === "duckdb") {
     return "File path";
   }
   if (type === "redis") {
@@ -470,6 +476,9 @@ const getDatabaseHint = (type: DatabaseType): string | null => {
   if (type === "redis") {
     return "Redis DBs are numbered 0–15. You can switch DBs inside the workspace after connecting.";
   }
+  if (type === "duckdb") {
+    return "Use :memory: for an in-process database, or an absolute path to a .duckdb file.";
+  }
   return null;
 };
 
@@ -480,12 +489,18 @@ const getUsernamePlaceholder = (type: DatabaseType): string => {
   if (type === "clickhouse") {
     return "default";
   }
+  if (type === "mssql") {
+    return "sa";
+  }
   return "postgres";
 };
 
 const getDatabasePlaceholder = (type: DatabaseType): string => {
   if (type === "sqlite") {
     return "/path/to/database.db";
+  }
+  if (type === "duckdb") {
+    return ":memory: or /path/to/warehouse.duckdb";
   }
   if (type === "redis") {
     return "0";

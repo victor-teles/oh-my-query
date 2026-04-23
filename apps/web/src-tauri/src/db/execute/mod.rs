@@ -1,5 +1,7 @@
 mod clickhouse;
+mod duckdb;
 mod mongodb;
+mod mssql;
 mod redis;
 mod sql;
 
@@ -30,5 +32,7 @@ pub async fn execute_for_pool(
         DatabasePool::ClickHouse(conn) => {
             clickhouse::execute_clickhouse(conn, command, max_rows, schema).await
         }
+        DatabasePool::DuckDB(handle) => duckdb::execute_duckdb(handle, command, max_rows).await,
+        DatabasePool::Mssql(pool) => mssql::execute_mssql(pool, command, max_rows).await,
     }
 }
