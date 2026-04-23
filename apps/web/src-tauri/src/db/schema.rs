@@ -1116,8 +1116,8 @@ async fn list_databases_mssql(pool: &MssqlPool) -> Result<Vec<String>, DbError> 
 async fn fetch_schema_mssql(pool: &MssqlPool, schema_name: &str) -> Result<SchemaInfo, DbError> {
     let mut client = pool.get().await.map_err(DbError::from)?;
 
-    let tables = fetch_tables_mssql(&mut *client, schema_name).await?;
-    let views = fetch_views_mssql(&mut *client, schema_name).await?;
+    let tables = fetch_tables_mssql(&mut client, schema_name).await?;
+    let views = fetch_views_mssql(&mut client, schema_name).await?;
 
     Ok(SchemaInfo {
         schemas: vec![SchemaItem {
