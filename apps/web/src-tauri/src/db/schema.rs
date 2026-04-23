@@ -1099,7 +1099,12 @@ async fn list_databases_mssql(pool: &MssqlPool) -> Result<Vec<String>, DbError> 
     let names: Vec<String> = results
         .into_iter()
         .flatten()
-        .filter_map(|row| row.try_get::<&str, _>(0).ok().flatten().map(|s| s.to_string()))
+        .filter_map(|row| {
+            row.try_get::<&str, _>(0)
+                .ok()
+                .flatten()
+                .map(|s| s.to_string())
+        })
         .collect();
     if names.is_empty() {
         Ok(vec!["dbo".to_string()])
@@ -1144,7 +1149,12 @@ async fn fetch_tables_mssql(
     let names: Vec<String> = results
         .into_iter()
         .flatten()
-        .filter_map(|row| row.try_get::<&str, _>(0).ok().flatten().map(|s| s.to_string()))
+        .filter_map(|row| {
+            row.try_get::<&str, _>(0)
+                .ok()
+                .flatten()
+                .map(|s| s.to_string())
+        })
         .collect();
 
     let mut tables = Vec::with_capacity(names.len());
@@ -1182,7 +1192,12 @@ async fn fetch_views_mssql(
     let names: Vec<String> = results
         .into_iter()
         .flatten()
-        .filter_map(|row| row.try_get::<&str, _>(0).ok().flatten().map(|s| s.to_string()))
+        .filter_map(|row| {
+            row.try_get::<&str, _>(0)
+                .ok()
+                .flatten()
+                .map(|s| s.to_string())
+        })
         .collect();
 
     let mut views = Vec::with_capacity(names.len());
@@ -1282,7 +1297,12 @@ async fn fetch_primary_key_columns_mssql(
     Ok(results
         .into_iter()
         .flatten()
-        .filter_map(|row| row.try_get::<&str, _>(0).ok().flatten().map(|s| s.to_string()))
+        .filter_map(|row| {
+            row.try_get::<&str, _>(0)
+                .ok()
+                .flatten()
+                .map(|s| s.to_string())
+        })
         .collect())
 }
 

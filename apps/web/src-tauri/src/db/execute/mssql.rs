@@ -13,7 +13,10 @@ pub async fn execute_mssql(
     max_rows: usize,
 ) -> Result<ExecuteResult, DbError> {
     let mut client = pool.get().await.map_err(DbError::from)?;
-    let mut stream = client.simple_query(sql.to_string()).await.map_err(DbError::from)?;
+    let mut stream = client
+        .simple_query(sql.to_string())
+        .await
+        .map_err(DbError::from)?;
 
     let mut columns: Vec<ColumnInfo> = Vec::new();
     let mut rows: Vec<Vec<serde_json::Value>> = Vec::new();
@@ -83,13 +86,12 @@ fn cell_to_json(
         ColumnData::Xml(Some(xml)) => serde_json::Value::String(xml.as_ref().to_string()),
         ColumnData::DateTime(Some(_))
         | ColumnData::SmallDateTime(Some(_))
-        | ColumnData::DateTime2(Some(_)) => {
-            row.try_get::<NaiveDateTime, _>(idx)
-                .ok()
-                .flatten()
-                .map(|dt| serde_json::Value::String(dt.format("%Y-%m-%dT%H:%M:%S%.f").to_string()))
-                .unwrap_or_else(|| fallback_debug(col, data))
-        }
+        | ColumnData::DateTime2(Some(_)) => row
+            .try_get::<NaiveDateTime, _>(idx)
+            .ok()
+            .flatten()
+            .map(|dt| serde_json::Value::String(dt.format("%Y-%m-%dT%H:%M:%S%.f").to_string()))
+            .unwrap_or_else(|| fallback_debug(col, data)),
         ColumnData::Date(Some(_)) => row
             .try_get::<NaiveDate, _>(idx)
             .ok()

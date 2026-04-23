@@ -194,12 +194,10 @@ async fn verify_connection(pool: &DatabasePool) -> Result<(), DbError> {
         DatabasePool::DuckDB(handle) => {
             let handle = handle.clone();
             tokio::task::spawn_blocking(move || -> Result<(), DbError> {
-                let conn = handle
-                    .try_lock()
-                    .map_err(|_| DbError {
-                        code: "DUCKDB_BUSY".to_string(),
-                        message: "DuckDB connection is busy".to_string(),
-                    })?;
+                let conn = handle.try_lock().map_err(|_| DbError {
+                    code: "DUCKDB_BUSY".to_string(),
+                    message: "DuckDB connection is busy".to_string(),
+                })?;
                 conn.execute_batch("SELECT 1").map_err(DbError::from)
             })
             .await

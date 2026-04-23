@@ -20,17 +20,11 @@ pub async fn execute_duckdb(
         })?
 }
 
-fn run_query(
-    handle: &DuckDbHandle,
-    sql: &str,
-    max_rows: usize,
-) -> Result<ExecuteResult, DbError> {
-    let conn = handle
-        .try_lock()
-        .map_err(|_| DbError {
-            code: "DUCKDB_BUSY".to_string(),
-            message: "Another query is currently running on this DuckDB connection".to_string(),
-        })?;
+fn run_query(handle: &DuckDbHandle, sql: &str, max_rows: usize) -> Result<ExecuteResult, DbError> {
+    let conn = handle.try_lock().map_err(|_| DbError {
+        code: "DUCKDB_BUSY".to_string(),
+        message: "Another query is currently running on this DuckDB connection".to_string(),
+    })?;
 
     let mut stmt = conn.prepare(sql).map_err(DbError::from)?;
     let column_count = stmt.column_count();
@@ -91,12 +85,8 @@ pub fn duckdb_value_to_json(value: DuckValue) -> serde_json::Value {
             serde_json::Value::String(base64::engine::general_purpose::STANDARD.encode(bytes))
         }
         DuckValue::Date32(days) => serde_json::Value::String(format_date_days(days)),
-        DuckValue::Time64(unit, v) => {
-            serde_json::Value::String(format_time_unit(unit, v))
-        }
-        DuckValue::Timestamp(unit, v) => {
-            serde_json::Value::String(format_timestamp_unit(unit, v))
-        }
+        DuckValue::Time64(unit, v) => serde_json::Value::String(format_time_unit(unit, v)),
+        DuckValue::Timestamp(unit, v) => serde_json::Value::String(format_timestamp_unit(unit, v)),
         DuckValue::Interval {
             months,
             days,
@@ -186,7 +176,10 @@ mod tests {
 
     #[test]
     fn primitives_map_to_json() {
-        assert_eq!(duckdb_value_to_json(DuckValue::Null), serde_json::Value::Null);
+        assert_eq!(
+            duckdb_value_to_json(DuckValue::Null),
+            serde_json::Value::Null
+        );
         assert_eq!(
             duckdb_value_to_json(DuckValue::Boolean(true)),
             serde_json::Value::Bool(true)
@@ -233,5 +226,4 @@ mod tests {
         assert_eq!(format_date_days(0), "1970-01-01");
         assert_eq!(format_date_days(365), "1971-01-01");
     }
-
 }
