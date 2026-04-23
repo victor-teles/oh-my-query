@@ -322,8 +322,12 @@ export const useQueryTabs = (
       error: null,
       errorCode: null,
       executedSql: null,
+      explainError: null,
+      explainResult: null,
+      explainStatus: "idle",
       pendingExecution: null,
       result: null,
+      runningExplainId: null,
       runningQueryId: null,
       status: "idle",
     };

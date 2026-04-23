@@ -64,6 +64,7 @@ Built with Tauri v2. macOS vibrancy effects, `prefers-reduced-motion` respected 
 | Shortcut          | Action                   |
 | ----------------- | ------------------------ |
 | `Cmd + Enter`     | Run query (or selection) |
+| `Cmd + Shift + E` | Explain query            |
 | `Cmd + Shift + F` | Format SQL               |
 | `F5`              | Refresh schema           |
 

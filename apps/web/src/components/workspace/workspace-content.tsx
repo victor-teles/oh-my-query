@@ -35,6 +35,7 @@ import { downloadCsv, tabularResultToCsv } from "@/lib/csv";
 import { formatDuration } from "@/lib/format-metrics";
 import { formatSql } from "@/lib/format-sql";
 import { isTabDirty } from "@/lib/query-tab-state";
+import { ENGINE_SUPPORTS_EXPLAIN } from "@/lib/tauri";
 
 import { AIActionsButton } from "./ai-actions-button";
 import { CommandEditor } from "./command-editor";
@@ -252,6 +253,15 @@ const ConnectedWorkspace = ({
   const [hasSelection, setHasSelection] = useState(false);
   const [bottomTab, setBottomTab] = useState<string>("results");
   const syntaxTreeEnabled = import.meta.env.DEV && isSyntaxTreeOpen;
+  const supportsExplain = Boolean(ENGINE_SUPPORTS_EXPLAIN[connection.type]);
+
+  useEffect(() => {
+    if (bottomTab === "explain" && !supportsExplain) {
+      setBottomTab("results");
+    } else if (bottomTab === "syntaxTree" && !syntaxTreeEnabled) {
+      setBottomTab("results");
+    }
+  }, [bottomTab, supportsExplain, syntaxTreeEnabled]);
   const { treeData, handleEditorUpdate: handleSyntaxTreeUpdate } =
     useSyntaxTree(syntaxTreeEnabled);
 
@@ -366,12 +376,13 @@ const ConnectedWorkspace = ({
   }, [activeTab, onAiAction]);
 
   const handleExplain = useCallback(() => {
-    if (activeTab) {
-      const selectedText = getSelectedText();
-      setBottomTab("explain");
-      explainTab(activeTab.id, selectedText ?? undefined);
+    if (!(activeTab && supportsExplain)) {
+      return;
     }
-  }, [activeTab, explainTab, getSelectedText]);
+    const selectedText = getSelectedText();
+    setBottomTab("explain");
+    explainTab(activeTab.id, selectedText ?? undefined);
+  }, [activeTab, explainTab, getSelectedText, supportsExplain]);
 
   useWorkspaceHotkeys({
     activeTab,
@@ -467,6 +478,7 @@ const ConnectedWorkspace = ({
             isSyntaxTreeOpen={syntaxTreeEnabled}
             onAiFix={onAiAction ? handleAiExplainError : undefined}
             onExplainTabChange={setBottomTab}
+            supportsExplain={supportsExplain}
             treeData={treeData}
             {...getResultsPanelProps(activeTab, isSql)}
           />
@@ -841,6 +853,7 @@ interface BottomPanelProps extends ResultsPanelProps {
   explainTabValue: string;
   onExplainTabChange: (value: string) => void;
   hasSelection: boolean;
+  supportsExplain: boolean;
 }
 
 const BottomPanel = ({
@@ -850,9 +863,10 @@ const BottomPanel = ({
   explainTabValue,
   onExplainTabChange,
   hasSelection,
+  supportsExplain,
   ...resultsPanelProps
 }: BottomPanelProps) => {
-  const showExplainTab = resultsPanelProps.isSql;
+  const showExplainTab = supportsExplain;
   if (!isSyntaxTreeOpen && !showExplainTab) {
     return <ResultsPanel {...resultsPanelProps} />;
   }

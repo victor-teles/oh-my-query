@@ -86,7 +86,7 @@ pub async fn execute_query(
 
     let sql = match params.source_dialect.as_deref() {
         Some(source) => {
-            let target = pool_dialect(&pool);
+            let target = pool_dialect(&pool)?;
             transpile_sql(&params.sql, source, target)?
         }
         None => params.sql.clone(),
@@ -150,7 +150,7 @@ pub async fn explain_query(
 
     let sql = match params.source_dialect.as_deref() {
         Some(source) => {
-            let target = pool_dialect(&pool);
+            let target = pool_dialect(&pool)?;
             transpile_sql(&params.sql, source, target)?
         }
         None => params.sql.clone(),

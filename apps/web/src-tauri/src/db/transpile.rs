@@ -4,13 +4,18 @@ use polyglot_sql::{parse, transpile, DialectType, Generator};
 use crate::db::error::DbError;
 use crate::db::pool::DatabasePool;
 
-pub fn pool_dialect(pool: &DatabasePool) -> DialectType {
+pub fn pool_dialect(pool: &DatabasePool) -> Result<DialectType, DbError> {
     match pool {
-        DatabasePool::Postgres(_) => DialectType::PostgreSQL,
-        DatabasePool::MySql(_) => DialectType::MySQL,
-        DatabasePool::Sqlite(_) => DialectType::SQLite,
-        DatabasePool::ClickHouse(_) => DialectType::ClickHouse,
-        _ => unreachable!("transpile only applies to SQL pools"),
+        DatabasePool::Postgres(_) => Ok(DialectType::PostgreSQL),
+        DatabasePool::MySql(_) => Ok(DialectType::MySQL),
+        DatabasePool::Sqlite(_) => Ok(DialectType::SQLite),
+        DatabasePool::ClickHouse(_) => Ok(DialectType::ClickHouse),
+        DatabasePool::DuckDB(_) => Ok(DialectType::DuckDB),
+        DatabasePool::Mssql(_) => Ok(DialectType::TSQL),
+        DatabasePool::MongoDB(_) | DatabasePool::Redis(_) => Err(DbError {
+            code: "UNSUPPORTED_TRANSPILE_TARGET".to_string(),
+            message: "SQL transpilation is not supported for this database type".to_string(),
+        }),
     }
 }
 
