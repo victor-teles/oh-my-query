@@ -35,12 +35,14 @@ import { downloadCsv, tabularResultToCsv } from "@/lib/csv";
 import { formatDuration } from "@/lib/format-metrics";
 import { formatSql } from "@/lib/format-sql";
 import { isTabDirty } from "@/lib/query-tab-state";
+import { ENGINE_SUPPORTS_EXPLAIN } from "@/lib/tauri";
 
 import { AIActionsButton } from "./ai-actions-button";
 import { CommandEditor } from "./command-editor";
 import { DialectSelector } from "./dialect-selector";
 import { DocumentViewer } from "./document-viewer";
 import { ExecuteButton } from "./execute-button";
+import { ExplainPanel } from "./explain-panel/explain-panel";
 import { FormatButton } from "./format-button";
 import { QueryErrorDisplay } from "./query-error-display";
 import { QueryStatusBar } from "./query-status-bar";
@@ -229,6 +231,7 @@ const ConnectedWorkspace = ({
     addTabWithSqlAndRun,
     cancelTab,
     closeTab,
+    explainTab,
     reopenTab,
     setActiveTabId,
     updateTabDialect,
@@ -248,7 +251,17 @@ const ConnectedWorkspace = ({
 
   const [isSyntaxTreeOpen, setIsSyntaxTreeOpen] = useState(false);
   const [hasSelection, setHasSelection] = useState(false);
+  const [bottomTab, setBottomTab] = useState<string>("results");
   const syntaxTreeEnabled = import.meta.env.DEV && isSyntaxTreeOpen;
+  const supportsExplain = Boolean(ENGINE_SUPPORTS_EXPLAIN[connection.type]);
+
+  useEffect(() => {
+    if (bottomTab === "explain" && !supportsExplain) {
+      setBottomTab("results");
+    } else if (bottomTab === "syntaxTree" && !syntaxTreeEnabled) {
+      setBottomTab("results");
+    }
+  }, [bottomTab, supportsExplain, syntaxTreeEnabled]);
   const { treeData, handleEditorUpdate: handleSyntaxTreeUpdate } =
     useSyntaxTree(syntaxTreeEnabled);
 
@@ -362,10 +375,20 @@ const ConnectedWorkspace = ({
     onAiAction?.("fix", { error, errorCode, sql });
   }, [activeTab, onAiAction]);
 
+  const handleExplain = useCallback(() => {
+    if (!(activeTab && supportsExplain)) {
+      return;
+    }
+    const selectedText = getSelectedText();
+    setBottomTab("explain");
+    explainTab(activeTab.id, selectedText ?? undefined);
+  }, [activeTab, explainTab, getSelectedText, supportsExplain]);
+
   useWorkspaceHotkeys({
     activeTab,
     addTab,
     closeTab,
+    handleExplain,
     handleFormat,
     reopenTab,
     setActiveTabId,
@@ -449,9 +472,14 @@ const ConnectedWorkspace = ({
             hasError={activeTab?.status === "error"}
           />
           <BottomPanel
+            activeTab={activeTab}
+            explainTabValue={bottomTab}
+            hasSelection={hasSelection}
             isSyntaxTreeOpen={syntaxTreeEnabled}
-            treeData={treeData}
             onAiFix={onAiAction ? handleAiExplainError : undefined}
+            onExplainTabChange={setBottomTab}
+            supportsExplain={supportsExplain}
+            treeData={treeData}
             {...getResultsPanelProps(activeTab, isSql)}
           />
         </ResizablePanel>
@@ -821,29 +849,54 @@ const renderResultsState = ({
 interface BottomPanelProps extends ResultsPanelProps {
   isSyntaxTreeOpen: boolean;
   treeData: ReturnType<typeof useSyntaxTree>["treeData"];
+  activeTab: QueryTab | undefined;
+  explainTabValue: string;
+  onExplainTabChange: (value: string) => void;
+  hasSelection: boolean;
+  supportsExplain: boolean;
 }
 
 const BottomPanel = ({
   isSyntaxTreeOpen,
   treeData,
+  activeTab,
+  explainTabValue,
+  onExplainTabChange,
+  hasSelection,
+  supportsExplain,
   ...resultsPanelProps
 }: BottomPanelProps) => {
-  if (!isSyntaxTreeOpen) {
+  const showExplainTab = supportsExplain;
+  if (!isSyntaxTreeOpen && !showExplainTab) {
     return <ResultsPanel {...resultsPanelProps} />;
   }
 
   return (
-    <Tabs defaultValue="syntaxTree" className="flex h-full flex-col gap-0">
+    <Tabs
+      className="flex h-full flex-col gap-0"
+      onValueChange={onExplainTabChange}
+      value={explainTabValue}
+    >
       <TabsList variant="segment" className="shrink-0">
         <TabsTrigger value="results">Results</TabsTrigger>
-        <TabsTrigger value="syntaxTree">Syntax Tree</TabsTrigger>
+        {showExplainTab && <TabsTrigger value="explain">EXPLAIN</TabsTrigger>}
+        {isSyntaxTreeOpen && (
+          <TabsTrigger value="syntaxTree">Syntax Tree</TabsTrigger>
+        )}
       </TabsList>
       <TabsContent value="results" className="min-h-0 flex-1">
         <ResultsPanel {...resultsPanelProps} />
       </TabsContent>
-      <TabsContent value="syntaxTree" className="min-h-0 flex-1">
-        <SyntaxTreePanel treeData={treeData} />
-      </TabsContent>
+      {showExplainTab && (
+        <TabsContent value="explain" className="min-h-0 flex-1">
+          <ExplainPanel hasSelection={hasSelection} tab={activeTab} />
+        </TabsContent>
+      )}
+      {isSyntaxTreeOpen && (
+        <TabsContent value="syntaxTree" className="min-h-0 flex-1">
+          <SyntaxTreePanel treeData={treeData} />
+        </TabsContent>
+      )}
     </Tabs>
   );
 };

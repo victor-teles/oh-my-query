@@ -10,6 +10,7 @@ interface WorkspaceHotkeysParams {
   reopenTab: () => void;
   setActiveTabId: (id: string) => void;
   handleFormat: () => void;
+  handleExplain: () => void;
 }
 
 export const useWorkspaceHotkeys = ({
@@ -20,9 +21,14 @@ export const useWorkspaceHotkeys = ({
   reopenTab,
   setActiveTabId,
   handleFormat,
+  handleExplain,
 }: WorkspaceHotkeysParams) => {
   useHotkey("Mod+Shift+F", () => {
     handleFormat();
+  });
+
+  useHotkey("Mod+Shift+E", () => {
+    handleExplain();
   });
 
   useHotkey("Mod+T", () => {

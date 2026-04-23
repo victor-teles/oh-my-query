@@ -18,6 +18,9 @@ interface QueryTabsContextValue {
   updateTabSql: (tabId: string, sql: string) => void;
   executeTab: (tabId: string, sqlOverride?: string, maxRows?: number) => void;
   cancelTab: (tabId: string) => void;
+  explainTab: (tabId: string, sqlOverride?: string) => void;
+  cancelExplain: (tabId: string) => void;
+  setExplainAnalyze: (tabId: string, analyze: boolean) => void;
   closeRequested: boolean;
   onConfirmClose: () => void;
   onCancelClose: () => void;

@@ -21,51 +21,95 @@ A modern database client for querying with AI.
 
 <br />
 
-oh-my-query is a native desktop database client with a built-in AI assistant. Connect to your databases, explore schemas, write queries with intelligent autocomplete, and let AI help you along the way — all wrapped in a macOS-native interface with vibrancy effects and a glassmorphism design.
+oh-my-query is a native desktop database client with a built-in AI assistant. Connect to eight different database engines, explore schemas, write queries with schema-aware autocomplete, and let AI help when you want it — all in a keyboard-first interface designed for long debugging sessions.
 
 <br />
 
 ## Features
 
-### Multi-database support
+### Multi-database engines, one client
 
-Connect to **PostgreSQL**, **MySQL**, **SQLite**, **MongoDB**, and **Redis** from a single app. Browse schemas, inspect tables and columns, and switch between databases on the fly.
+Connect to **PostgreSQL**, **MySQL**, **SQLite**, **Microsoft SQL Server**, **DuckDB**, **ClickHouse**, **MongoDB**, and **Redis** — all from the same app. Browse schemas, inspect tables and columns, run queries, and jump between connections without juggling tools.
 
-### AI assistant
+### Write any dialect, run anywhere
 
-Chat with an AI that understands your schema. It sees your tables, columns, types, and relationships — then generates SQL you can insert directly into the editor. Supports **OpenAI**, **Anthropic**, **OpenRouter**, and **local models** (Ollama).
+Powered by [polyglot-sql](https://github.com/polyglot-sql/polyglot-sql), queries are transpiled between dialects at execution time. Write PostgreSQL against a MySQL database if that's how your brain works. The built-in formatter is dialect-aware across 30+ SQL variants including BigQuery, Snowflake, DuckDB, ClickHouse, and Spark.
+
+### AI that knows your schema
+
+A chat assistant that sees your tables, columns, types, and relationships, then generates SQL you can drop straight into the editor. Works with **OpenAI**, **Anthropic**, **OpenRouter**, and **local models** via Ollama or any OpenAI-compatible endpoint.
 
 ### Smart editor
 
-CodeMirror-powered SQL editor with schema-aware autocomplete, syntax highlighting, and a syntax tree inspector. Work across multiple query tabs with full keyboard shortcut support.
+CodeMirror-powered SQL editor with schema-aware autocomplete, syntax highlighting, a syntax tree inspector, and multi-tab support with closed-tab restore. Every query tab is independent — run, format, and inspect results side by side.
 
-### SQL dialect engine
+### Results, not just rows
 
-Write SQL in any dialect and run it against any database. Powered by [polyglot-sql](https://github.com/polyglot-sql/polyglot-sql), queries are automatically transpiled between dialects at execution time. The built-in SQL formatter is also dialect-aware, supporting 30+ SQL dialects including PostgreSQL, MySQL, BigQuery, Snowflake, DuckDB, ClickHouse, Spark, and more.
+A virtualized results grid with keyboard navigation, multi-cell selection, row detail drawer, JSON document viewer, and CSV export. Built for pro users who live in the grid.
+
+### Signature connection indicator
+
+A Dynamic Island-style connection indicator lives in the titlebar, showing live connection status, query execution progress, and errors without stealing focus from your work.
 
 ### Native experience
 
-Built with Tauri v2 for a true macOS-native feel. Vibrancy effects, a Dynamic Island-style connection indicator in the titlebar, dark mode by default, and smooth spring animations throughout.
+Built with Tauri v2. macOS vibrancy effects, `prefers-reduced-motion` respected throughout, dark mode by default, and iOS-style spring animations that stay out of your way.
 
 <br />
 
 ## Keyboard Shortcuts
 
-| Shortcut          | Action            |
-| ----------------- | ----------------- |
-| `Cmd + Enter`     | Execute query     |
-| `Cmd + T`         | New query tab     |
-| `Cmd + W`         | Close current tab |
-| `Cmd + 1-9`       | Switch to tab     |
-| `Cmd + B`         | Toggle sidebar    |
-| `Cmd + Shift + F` | Beautify SQL      |
-| `Cmd + Shift + C` | Toggle AI chat    |
+### Query & editor
+
+| Shortcut          | Action                   |
+| ----------------- | ------------------------ |
+| `Cmd + Enter`     | Run query (or selection) |
+| `Cmd + Shift + E` | Explain query            |
+| `Cmd + Shift + F` | Format SQL               |
+| `F5`              | Refresh schema           |
+
+### Tabs
+
+| Shortcut          | Action                 |
+| ----------------- | ---------------------- |
+| `Cmd + T`         | New query tab          |
+| `Cmd + W`         | Close current tab      |
+| `Cmd + Shift + T` | Reopen last closed tab |
+| `Cmd + 1-9`       | Switch to tab          |
+
+### Layout
+
+| Shortcut          | Action                |
+| ----------------- | --------------------- |
+| `Cmd + B`         | Toggle schema sidebar |
+| `Cmd + Shift + C` | Toggle AI chat        |
+| `Cmd + Shift + 1` | Editor mode           |
+| `Cmd + Shift + 2` | Split mode            |
+| `Cmd + Shift + 3` | Chat mode             |
+
+### Results grid
+
+| Shortcut         | Action           |
+| ---------------- | ---------------- |
+| `Cmd + A`        | Select all       |
+| `Arrows`         | Navigate cells   |
+| `Shift + Arrows` | Extend selection |
+| `Enter`          | Open row detail  |
+| `Cmd + C`        | Copy selection   |
+
+### Home & global
+
+| Shortcut  | Action             |
+| --------- | ------------------ |
+| `Cmd + N` | New connection     |
+| `Cmd + ,` | Settings           |
+| `Cmd + /` | Show all shortcuts |
 
 <br />
 
 ## Installation
 
-### Homebrew (recommended)
+### Homebrew (macOS, recommended)
 
 ```bash
 brew install --cask victor-teles/tap/oh-my-query
@@ -73,9 +117,10 @@ brew install --cask victor-teles/tap/oh-my-query
 
 ### Manual download
 
-Download the latest `.dmg` from the [GitHub Releases](https://github.com/victor-teles/oh-my-query/releases) page. Open the DMG and drag **Oh my query** to your Applications folder.
+Grab the latest installer from the [GitHub Releases](https://github.com/victor-teles/oh-my-query/releases) page.
 
-> Available for macOS (Apple Silicon and Intel).
+- **macOS** — `.dmg` for Apple Silicon and Intel
+- **Windows** — `.msi` installer or portable `.exe`
 
 <br />
 
@@ -101,6 +146,16 @@ cd apps/web && bun run desktop:dev
 
 The web app runs at [localhost:3001](http://localhost:3001).
 
+### Other commands
+
+```bash
+bun run build          # Build all apps
+bun run check-types    # TypeScript across all workspaces
+bun run check          # Lint + format check (Ultracite)
+bun run fix            # Auto-fix lint/format
+bun run test           # Run Vitest suite
+```
+
 <br />
 
 ## Project Structure
@@ -108,17 +163,18 @@ The web app runs at [localhost:3001](http://localhost:3001).
 ```
 oh-my-query/
 ├── apps/
-│   └── web/                 # React frontend + Tauri desktop shell
+│   └── web/                       # React frontend + Tauri desktop shell
 │       ├── src/
-│       │   ├── routes/      # File-based routing (TanStack Router)
-│       │   ├── components/  # UI components
-│       │   ├── hooks/       # Custom React hooks
-│       │   ├── contexts/    # React contexts
-│       │   └── lib/         # Utilities, Tauri bridge, AI providers
-│       └── src-tauri/       # Rust backend (database drivers, commands)
+│       │   ├── routes/            # File-based routing (TanStack Router)
+│       │   ├── components/        # UI components
+│       │   ├── hooks/             # Shared React hooks
+│       │   ├── contexts/          # React contexts
+│       │   └── lib/               # Utilities, Tauri bridge, AI providers
+│       └── src-tauri/             # Rust backend (database drivers, commands)
 ├── packages/
-│   ├── config/              # Shared TypeScript config
-│   └── env/                 # Type-safe environment variables
+│   ├── config/                    # Shared TypeScript config
+│   ├── env/                       # Type-safe environment variables
+│   └── vitest-visual/             # Visual testing utilities
 ├── turbo.json
 └── package.json
 ```
@@ -127,11 +183,11 @@ oh-my-query/
 
 ## Tech Stack
 
-**Frontend** — React 19, TanStack Router, Tailwind CSS v4, shadcn/ui, CodeMirror, Framer Motion, Vercel AI SDK
+**Frontend** — React 19, TanStack Router, TanStack Form, TanStack Table/Virtual, Tailwind CSS v4, shadcn/ui, CodeMirror 6, Motion, Recharts, Vercel AI SDK
 
-**Desktop** — Tauri v2, Rust, sqlx (PostgreSQL/MySQL/SQLite), mongodb, redis, polyglot-sql (transpilation & formatting)
+**Desktop** — Tauri v2, Rust 2021, sqlx (PostgreSQL/MySQL/SQLite), tiberius (SQL Server), duckdb, clickhouse-http, mongodb, redis, polyglot-sql
 
-**Tooling** — Turborepo, Bun, TypeScript 5, Ultracite (Oxlint + Oxfmt)
+**Tooling** — Turborepo, Bun, TypeScript 5, Vitest, Ultracite (Oxlint + Oxfmt)
 
 <br />
 
@@ -142,7 +198,7 @@ Contributions are welcome. Here's how to get started:
 1. Fork the repository
 2. Create a feature branch (`git checkout -b my-feature`)
 3. Make your changes
-4. Run `bun run fix` to lint and format
+4. Run `bun run fix` to lint and format, then `bun run test`
 5. Commit and open a pull request
 
 <br />

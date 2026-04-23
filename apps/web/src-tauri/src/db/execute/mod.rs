@@ -5,6 +5,8 @@ mod mssql;
 mod redis;
 mod sql;
 
+pub use sql::validate_schema_name;
+
 use crate::db::error::DbError;
 use crate::db::pool::DatabasePool;
 use crate::db::types::ExecuteResult;

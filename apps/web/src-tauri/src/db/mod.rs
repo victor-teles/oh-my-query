@@ -3,6 +3,7 @@ pub mod driver;
 pub mod duckdb;
 pub mod error;
 pub mod execute;
+pub mod explain;
 pub mod mongodb_driver;
 pub mod mssql;
 pub mod mysql;

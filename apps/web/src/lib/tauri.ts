@@ -202,6 +202,146 @@ export const cancelQuery = async (queryId: string): Promise<boolean> => {
   return invoke<boolean>("cancel_query", { queryId });
 };
 
+export type ExplainEngine = "postgresql" | "mysql" | "clickhouse" | "duckdb";
+
+export interface PlanCost {
+  startup: number | null;
+  total: number | null;
+  actualTotalMs: number | null;
+  selfMs: number | null;
+}
+
+export interface PlanRows {
+  estimated: number | null;
+  actual: number | null;
+}
+
+export interface PlanTiming {
+  actualTotalMs: number | null;
+  loops: number | null;
+  startupMs: number | null;
+}
+
+export interface PlanNode {
+  id: string;
+  nodeType: string;
+  label: string;
+  cost: PlanCost;
+  rows: PlanRows;
+  timing: PlanTiming;
+  warnings: string[];
+  details: [string, string][];
+  children: PlanNode[];
+}
+
+export interface ExplainResult {
+  engine: ExplainEngine;
+  root: PlanNode;
+  raw: string;
+  analyzeRan: boolean;
+  supportsAnalyze: boolean;
+  executionTimeMs: number;
+}
+
+export interface ExplainParams {
+  connectionId: string;
+  sql: string;
+  analyze?: boolean;
+  schema?: string;
+  sourceDialect?: string;
+  queryId?: string;
+  timeoutSecs?: number;
+}
+
+const MOCK_EXPLAIN_RESULT: ExplainResult = {
+  analyzeRan: false,
+  engine: "postgresql",
+  executionTimeMs: 8,
+  raw: '[{"Plan": {"Node Type": "Hash Join", "Plans": [...] }}]',
+  root: {
+    children: [
+      {
+        children: [],
+        cost: {
+          actualTotalMs: 4.1,
+          selfMs: 4.1,
+          startup: 0,
+          total: 120.3,
+        },
+        details: [
+          ["Relation Name", "users"],
+          ["Alias", "u"],
+        ],
+        id: "p.0",
+        label: "Seq Scan on users (u)",
+        nodeType: "Seq Scan",
+        rows: { actual: 10_000, estimated: 10_000 },
+        timing: { actualTotalMs: 4.1, loops: 1, startupMs: 0 },
+        warnings: ["Sequential scan"],
+      },
+      {
+        children: [],
+        cost: {
+          actualTotalMs: 1.2,
+          selfMs: 1.2,
+          startup: 0,
+          total: 55.7,
+        },
+        details: [["Relation Name", "orders"]],
+        id: "p.1",
+        label: "Index Scan using orders_pkey on orders",
+        nodeType: "Index Scan",
+        rows: { actual: 1200, estimated: 1100 },
+        timing: { actualTotalMs: 1.2, loops: 1, startupMs: 0 },
+        warnings: [],
+      },
+    ],
+    cost: {
+      actualTotalMs: 6.2,
+      selfMs: 0.9,
+      startup: 10,
+      total: 180.5,
+    },
+    details: [],
+    id: "p",
+    label: "Hash Join",
+    nodeType: "Hash Join",
+    rows: { actual: 11_000, estimated: 11_000 },
+    timing: { actualTotalMs: 6.2, loops: 1, startupMs: 2 },
+    warnings: [],
+  },
+  supportsAnalyze: true,
+};
+
+export const ENGINE_SUPPORTS_EXPLAIN: Record<string, boolean> = {
+  clickhouse: true,
+  duckdb: true,
+  mongodb: false,
+  mssql: false,
+  mysql: true,
+  postgresql: true,
+  redis: false,
+  sqlite: false,
+};
+
+export const ENGINE_SUPPORTS_ANALYZE: Record<string, boolean> = {
+  clickhouse: false,
+  duckdb: true,
+  mysql: false,
+  postgresql: true,
+};
+
+export const explainQuery = async (
+  params: ExplainParams
+): Promise<ExplainResult> => {
+  if (!isTauri()) {
+    return MOCK_EXPLAIN_RESULT;
+  }
+
+  const { invoke } = await import("@tauri-apps/api/core");
+  return invoke<ExplainResult>("explain_query", { params });
+};
+
 const MOCK_SCHEMA: SchemaInfo = {
   schemas: [
     {

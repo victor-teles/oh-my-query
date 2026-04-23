@@ -6,6 +6,7 @@ use crate::cancellation::CancellationRegistry;
 use crate::db::driver::get_driver;
 use crate::db::error::DbError;
 use crate::db::execute::execute_for_pool;
+use crate::db::explain::{explain_for_pool, ExplainParams, ExplainResult};
 use crate::db::pool::{ConnectionPoolManager, DatabasePool};
 use crate::db::redis_keys::{
     delete_redis_key as do_delete_redis_key, redis_db_info as do_redis_db_info,
@@ -85,7 +86,7 @@ pub async fn execute_query(
 
     let sql = match params.source_dialect.as_deref() {
         Some(source) => {
-            let target = pool_dialect(&pool);
+            let target = pool_dialect(&pool)?;
             transpile_sql(&params.sql, source, target)?
         }
         None => params.sql.clone(),
@@ -136,6 +137,54 @@ pub async fn execute_query(
     }
 
     Ok(execute_result)
+}
+
+#[tauri::command]
+pub async fn explain_query(
+    params: ExplainParams,
+    state: State<'_, ConnectionPoolManager>,
+    cancellation: State<'_, CancellationRegistry>,
+) -> Result<ExplainResult, DbError> {
+    let pool = state.get_pool(&params.connection_id).await?;
+    let timeout_secs = params.timeout_secs.unwrap_or(DEFAULT_TIMEOUT_SECS);
+
+    let sql = match params.source_dialect.as_deref() {
+        Some(source) => {
+            let target = pool_dialect(&pool)?;
+            transpile_sql(&params.sql, source, target)?
+        }
+        None => params.sql.clone(),
+    };
+
+    let cancel_rx = params
+        .query_id
+        .as_ref()
+        .map(|id| cancellation.register(id.clone()));
+
+    let query_future = tokio::time::timeout(
+        std::time::Duration::from_secs(timeout_secs),
+        explain_for_pool(&pool, &sql, params.analyze, params.schema.as_deref()),
+    );
+
+    let result = match cancel_rx {
+        Some(rx) => tokio::select! {
+            biased;
+            _ = rx => {
+                if let Some(query_id) = params.query_id.as_deref() {
+                    cancellation.remove(query_id);
+                }
+                return Err(DbError::cancelled());
+            }
+            res = query_future => res,
+        },
+        None => query_future.await,
+    };
+
+    if let Some(query_id) = params.query_id.as_deref() {
+        cancellation.remove(query_id);
+    }
+
+    result.map_err(DbError::from)?
 }
 
 #[tauri::command]
