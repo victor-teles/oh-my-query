@@ -30,6 +30,7 @@ export interface DatabaseConnection {
   username: string;
   password: string;
   authSource?: string;
+  trustServerCertificate?: boolean;
   createdAt: string;
   pinned: boolean;
   lastConnectedAt: string | null;

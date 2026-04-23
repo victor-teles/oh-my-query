@@ -261,6 +261,8 @@ mod tests {
             database: "default".to_string(),
             username: "default".to_string(),
             password: String::new(),
+            auth_source: None,
+            trust_server_certificate: None,
         };
         let conn = ClickHouseConnection::new(&params).unwrap();
         assert_eq!(conn.base_url, "http://localhost:8123");
@@ -275,6 +277,8 @@ mod tests {
             database: "analytics".to_string(),
             username: "admin".to_string(),
             password: "secret".to_string(),
+            auth_source: None,
+            trust_server_certificate: None,
         };
         let conn = ClickHouseConnection::new(&params).unwrap();
         assert_eq!(conn.base_url, "https://ch.example.com:8443");

@@ -68,10 +68,7 @@ pub async fn fetch_version(pool: &DatabasePool) -> Result<String, DbError> {
         DatabasePool::DuckDB(handle) => {
             let handle = handle.clone();
             let ver = tokio::task::spawn_blocking(move || -> Result<String, DbError> {
-                let conn = handle.try_lock().map_err(|_| DbError {
-                    code: "DUCKDB_BUSY".to_string(),
-                    message: "DuckDB connection is busy".to_string(),
-                })?;
+                let conn = handle.blocking_lock();
                 let v: String = conn
                     .query_row("SELECT version()", [], |row| row.get(0))
                     .map_err(DbError::from)?;

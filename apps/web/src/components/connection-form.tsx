@@ -17,6 +17,7 @@ import type {
 
 import { DATABASE_ICON_MAP } from "@/components/icons/database-icons";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Collapsible,
   CollapsibleContent,
@@ -396,6 +397,7 @@ interface FormState {
   username: string;
   password: string;
   authSource: string;
+  trustServerCertificate: boolean;
   emoji: string;
   color: ConnectionColor | "";
   environment: ConnectionEnvironment | "";
@@ -417,6 +419,7 @@ const INITIAL_STATE: FormState = {
   name: "",
   password: "",
   port: String(DEFAULT_PORTS.postgresql),
+  trustServerCertificate: true,
   type: "postgresql",
   username: "",
 };
@@ -431,6 +434,7 @@ const connectionToFormState = (conn: DatabaseConnection): FormState => ({
   name: conn.name,
   password: conn.password,
   port: String(conn.port),
+  trustServerCertificate: conn.trustServerCertificate ?? true,
   type: conn.type,
   username: conn.username,
 });
@@ -529,6 +533,8 @@ const buildConnection = (form: FormState): DatabaseConnection => {
     password: hasHost ? form.password : "",
     pinned: false,
     port: hasHost ? Number(form.port) : 0,
+    trustServerCertificate:
+      form.type === "mssql" ? form.trustServerCertificate : undefined,
     type: form.type,
     username: hasUsername ? form.username.trim() : "",
   };
@@ -546,6 +552,8 @@ const buildConnectionParams = (form: FormState) => {
     host: hasHost ? form.host.trim() : "",
     password: hasHost ? form.password : "",
     port: hasHost ? Number(form.port) : 0,
+    trustServerCertificate:
+      form.type === "mssql" ? form.trustServerCertificate : undefined,
     type: form.type,
     username: hasUsername ? form.username.trim() : "",
   };
@@ -631,6 +639,11 @@ export const ConnectionForm = ({
 
   const handleColorSelect = useCallback((color: ConnectionColor | "") => {
     setForm((prev) => ({ ...prev, color }));
+  }, []);
+
+  const handleTrustCertChange = useCallback((checked: boolean) => {
+    setForm((prev) => ({ ...prev, trustServerCertificate: checked }));
+    setTestStatus({ state: "idle" });
   }, []);
 
   const handleEmojiSelect = useCallback((emoji: string) => {
@@ -765,6 +778,22 @@ export const ConnectionForm = ({
         updateField={updateField}
         username={form.username}
       />
+
+      {form.type === "mssql" && (
+        <div className="grid gap-1.5">
+          <Label className="flex items-center gap-2 font-normal">
+            <Checkbox
+              checked={form.trustServerCertificate}
+              onCheckedChange={handleTrustCertChange}
+            />
+            Trust server certificate
+          </Label>
+          <p className="pl-6 text-xs text-muted-foreground">
+            Skip TLS certificate verification. Disable for production servers
+            with a valid certificate.
+          </p>
+        </div>
+      )}
 
       <div className="grid gap-1.5">
         <Label htmlFor="conn-database">{getDatabaseLabel(form.type)}</Label>

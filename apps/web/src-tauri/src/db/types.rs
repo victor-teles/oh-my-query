@@ -70,6 +70,8 @@ pub struct ConnectionParams {
     pub password: String,
     #[serde(default)]
     pub auth_source: Option<String>,
+    #[serde(default)]
+    pub trust_server_certificate: Option<bool>,
 }
 
 #[derive(Debug, Clone, Serialize)]

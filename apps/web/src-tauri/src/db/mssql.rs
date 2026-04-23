@@ -22,7 +22,9 @@ pub fn build_mssql_config(params: &ConnectionParams) -> Config {
     }
     config.authentication(AuthMethod::sql_server(&params.username, &params.password));
     config.encryption(EncryptionLevel::Required);
-    config.trust_cert();
+    if params.trust_server_certificate.unwrap_or(true) {
+        config.trust_cert();
+    }
     config
 }
 
@@ -101,6 +103,7 @@ mod tests {
             username: "sa".to_string(),
             password: "Secret123".to_string(),
             auth_source: None,
+            trust_server_certificate: None,
         }
     }
 
@@ -133,6 +136,15 @@ mod tests {
     fn config_omits_database_when_empty() {
         let mut params = base_params();
         params.database = String::new();
+        let _cfg = build_mssql_config(&params);
+    }
+
+    #[test]
+    fn config_accepts_explicit_trust_setting() {
+        let mut params = base_params();
+        params.trust_server_certificate = Some(false);
+        let _cfg = build_mssql_config(&params);
+        params.trust_server_certificate = Some(true);
         let _cfg = build_mssql_config(&params);
     }
 }

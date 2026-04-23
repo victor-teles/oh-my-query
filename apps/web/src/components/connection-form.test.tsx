@@ -52,6 +52,32 @@ describe("connectionForm engine variants", () => {
     expect(username.placeholder).toBe("sa");
   });
 
+  it("renders trust-server-certificate checkbox defaulted on for MSSQL", () => {
+    render(<ConnectionForm connection={connectionFor("mssql")} />);
+    const checkbox = screen.getByLabelText(
+      "Trust server certificate"
+    ) as HTMLInputElement;
+    expect(checkbox).toBeDefined();
+    expect(checkbox.checked).toBeTruthy();
+  });
+
+  it("hides trust-server-certificate checkbox for non-MSSQL engines", () => {
+    render(<ConnectionForm connection={connectionFor("postgresql")} />);
+    expect(screen.queryByLabelText("Trust server certificate")).toBeNull();
+  });
+
+  it("preserves trust-server-certificate=false from a saved connection", () => {
+    const conn: DatabaseConnection = {
+      ...connectionFor("mssql"),
+      trustServerCertificate: false,
+    };
+    render(<ConnectionForm connection={conn} />);
+    const checkbox = screen.getByLabelText(
+      "Trust server certificate"
+    ) as HTMLInputElement;
+    expect(checkbox.checked).toBeFalsy();
+  });
+
   it("renders ClickHouse form with host/port/username/password and port 8123", () => {
     render(<ConnectionForm connection={connectionFor("clickhouse")} />);
 

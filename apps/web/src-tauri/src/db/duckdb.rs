@@ -89,6 +89,7 @@ mod tests {
             username: String::new(),
             password: String::new(),
             auth_source: None,
+            trust_server_certificate: None,
         }
     }
 

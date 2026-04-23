@@ -1,3 +1,5 @@
+use std::time::Instant;
+
 use base64::Engine as _;
 use chrono::{DateTime, FixedOffset, NaiveDate, NaiveDateTime, NaiveTime};
 use futures::TryStreamExt;
@@ -13,6 +15,7 @@ pub async fn execute_mssql(
     max_rows: usize,
 ) -> Result<ExecuteResult, DbError> {
     let mut client = pool.get().await.map_err(DbError::from)?;
+    let started = Instant::now();
     let mut stream = client
         .simple_query(sql.to_string())
         .await
@@ -38,6 +41,10 @@ pub async fn execute_mssql(
             }
             QueryItem::Row(row) => {
                 if rows.len() >= max_rows {
+                    // tiberius streams cannot be safely abandoned mid-result
+                    // (dropping leaves the bb8-pooled connection poisoned),
+                    // so drain the remaining rows server-side and surface
+                    // truncation via `is_truncated`.
                     is_truncated = true;
                     continue;
                 }
@@ -50,7 +57,7 @@ pub async fn execute_mssql(
         row_count: rows.len() as u64,
         columns,
         rows,
-        execution_time_ms: 0,
+        execution_time_ms: started.elapsed().as_millis() as u64,
         is_truncated,
     })
 }

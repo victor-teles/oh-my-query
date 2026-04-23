@@ -1,3 +1,5 @@
+use std::time::Instant;
+
 use base64::Engine as _;
 use duckdb::types::Value as DuckValue;
 
@@ -21,10 +23,8 @@ pub async fn execute_duckdb(
 }
 
 fn run_query(handle: &DuckDbHandle, sql: &str, max_rows: usize) -> Result<ExecuteResult, DbError> {
-    let conn = handle.try_lock().map_err(|_| DbError {
-        code: "DUCKDB_BUSY".to_string(),
-        message: "Another query is currently running on this DuckDB connection".to_string(),
-    })?;
+    let conn = handle.blocking_lock();
+    let started = Instant::now();
 
     let mut stmt = conn.prepare(sql).map_err(DbError::from)?;
     let mut rows_iter = stmt.query([]).map_err(DbError::from)?;
@@ -63,7 +63,7 @@ fn run_query(handle: &DuckDbHandle, sql: &str, max_rows: usize) -> Result<Execut
         row_count: rows.len() as u64,
         columns,
         rows,
-        execution_time_ms: 0,
+        execution_time_ms: started.elapsed().as_millis() as u64,
         is_truncated,
     })
 }
