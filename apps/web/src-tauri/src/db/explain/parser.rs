@@ -106,17 +106,18 @@ fn parse_pg_node(node: &Value, id: &str) -> PlanNode {
     copy_simple_fields(&mut plan.details, node);
 
     if let Some(Value::Array(plans)) = node.get("Plans") {
+        let mut children_total_ms = 0.0_f64;
         for (i, child) in plans.iter().enumerate() {
             let child_id = format!("{id}.{i}");
             let mut child_plan = parse_pg_node(child, &child_id);
-            if let (Some(parent_total), Some(child_total)) =
-                (plan.cost.actual_total_ms, child_plan.cost.actual_total_ms)
-            {
-                let self_ms = (parent_total - child_total).max(0.0);
-                plan.cost.self_ms = Some(self_ms);
+            if let Some(child_total) = child_plan.cost.actual_total_ms {
+                children_total_ms += child_total;
                 child_plan.cost.self_ms = child_plan.cost.self_ms.or(Some(child_total));
             }
             plan.children.push(child_plan);
+        }
+        if let Some(parent_total) = plan.cost.actual_total_ms {
+            plan.cost.self_ms = Some((parent_total - children_total_ms).max(0.0));
         }
     }
 
@@ -291,16 +292,17 @@ fn parse_duck_node(node: &Value, id: &str) -> PlanNode {
     copy_simple_fields(&mut plan.details, node);
 
     if let Some(Value::Array(children)) = node.get("children") {
+        let mut children_total_ms = 0.0_f64;
         for (i, child) in children.iter().enumerate() {
             let mut child_plan = parse_duck_node(child, &format!("{id}.{i}"));
-            if let (Some(parent_total), Some(child_total)) =
-                (plan.cost.actual_total_ms, child_plan.cost.actual_total_ms)
-            {
-                let self_ms = (parent_total - child_total).max(0.0);
-                plan.cost.self_ms = Some(self_ms);
+            if let Some(child_total) = child_plan.cost.actual_total_ms {
+                children_total_ms += child_total;
                 child_plan.cost.self_ms = child_plan.cost.self_ms.or(Some(child_total));
             }
             plan.children.push(child_plan);
+        }
+        if let Some(parent_total) = plan.cost.actual_total_ms {
+            plan.cost.self_ms = Some((parent_total - children_total_ms).max(0.0));
         }
     }
 
@@ -437,6 +439,48 @@ mod tests {
         assert_eq!(plan.children.len(), 2);
         assert_eq!(plan.children[0].node_type, "Seq Scan");
         assert!(plan.cost.self_ms.is_some());
+    }
+
+    #[test]
+    fn postgres_self_ms_sums_across_children() {
+        let input = serde_json::json!([
+            {
+                "Plan": {
+                    "Node Type": "Hash Join",
+                    "Actual Total Time": 10.0,
+                    "Actual Loops": 1,
+                    "Plans": [
+                        { "Node Type": "Seq Scan", "Relation Name": "a", "Actual Total Time": 6.0, "Actual Loops": 1 },
+                        { "Node Type": "Seq Scan", "Relation Name": "b", "Actual Total Time": 3.0, "Actual Loops": 1 }
+                    ]
+                }
+            }
+        ]);
+        let plan = parse_postgres(&input).unwrap();
+        assert!(plan.cost.self_ms.is_some());
+        let self_ms = plan.cost.self_ms.unwrap();
+        assert!(
+            (self_ms - 1.0).abs() < 1e-6,
+            "expected self_ms ≈ 1.0 (parent 10 − children 6+3), got {self_ms}"
+        );
+    }
+
+    #[test]
+    fn duckdb_self_ms_sums_across_children() {
+        let input = serde_json::json!({
+            "name": "HASH_JOIN",
+            "operator_timing": 0.010,
+            "children": [
+                { "name": "SEQ_SCAN", "extra_info": "a", "operator_timing": 0.006 },
+                { "name": "SEQ_SCAN", "extra_info": "b", "operator_timing": 0.003 }
+            ]
+        });
+        let plan = parse_duckdb(&input).unwrap();
+        let self_ms = plan.cost.self_ms.unwrap();
+        assert!(
+            (self_ms - 1.0).abs() < 1e-6,
+            "expected self_ms ≈ 1.0 (parent 10ms − children 6+3ms), got {self_ms}"
+        );
     }
 
     #[test]
