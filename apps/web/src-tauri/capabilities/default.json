@@ -9,7 +9,11 @@
     "core:window:allow-destroy",
     {
       "identifier": "opener:allow-open-url",
-      "allow": [{ "url": "https://*" }, { "url": "http://*" }]
+      "allow": [
+        { "url": "https://platform.openai.com/*" },
+        { "url": "https://console.anthropic.com/*" },
+        { "url": "https://openrouter.ai/*" }
+      ]
     }
   ]
 }

@@ -61,7 +61,6 @@ interface FilterTriggerProps {
   label: string;
   placeholder: string;
   selection: string[];
-  onClear?: () => void;
 }
 
 const FilterTrigger = ({
@@ -69,18 +68,8 @@ const FilterTrigger = ({
   label,
   placeholder,
   selection,
-  onClear,
 }: FilterTriggerProps) => {
   const active = selection.length > 0;
-
-  const handleClear = useCallback(
-    (e: React.MouseEvent<HTMLButtonElement>) => {
-      e.preventDefault();
-      e.stopPropagation();
-      onClear?.();
-    },
-    [onClear]
-  );
 
   return (
     <div
@@ -102,21 +91,26 @@ const FilterTrigger = ({
       >
         {active ? formatSelection(selection) : placeholder}
       </span>
-      {active && onClear ? (
-        <button
-          aria-label={`Clear ${label.toLowerCase()} filter`}
-          className="ml-0.5 shrink-0 rounded-sm p-0.5 text-muted-foreground/80 hover:bg-background/50 hover:text-foreground"
-          onClick={handleClear}
-          type="button"
-        >
-          <XIcon className="size-3" />
-        </button>
-      ) : (
-        <ChevronDownIcon className="ml-0.5 size-3 shrink-0 text-muted-foreground/60" />
-      )}
+      <ChevronDownIcon className="ml-0.5 size-3 shrink-0 text-muted-foreground/60" />
     </div>
   );
 };
+
+interface FilterClearButtonProps {
+  label: string;
+  onClick: () => void;
+}
+
+const FilterClearButton = ({ label, onClick }: FilterClearButtonProps) => (
+  <button
+    aria-label={`Clear ${label.toLowerCase()} filter`}
+    className="ml-0.5 shrink-0 rounded-sm p-0.5 text-muted-foreground/80 hover:bg-background/50 hover:text-foreground"
+    onClick={onClick}
+    type="button"
+  >
+    <XIcon className="size-3" />
+  </button>
+);
 
 interface ConnectionOptionProps {
   connection: DatabaseConnection;
@@ -273,77 +267,81 @@ export const HistoryFiltersPanel = ({
 
   return (
     <div className="flex flex-wrap items-center gap-2">
-      <Popover>
-        <PopoverTrigger
-          render={
-            <button
-              aria-label="Filter by connection"
-              className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50"
-              type="button"
-            >
-              <FilterTrigger
-                label="Connection"
-                onClear={
-                  selectedConnections.length > 0 ? clearConnections : undefined
-                }
-                placeholder="Any"
-                selection={selectedConnectionNames}
-              />
-            </button>
-          }
-        />
-        <PopoverContent align="start" className="w-64 p-1">
-          {connections.length === 0 ? (
-            <p className="px-2 py-3 text-center text-xs text-muted-foreground">
-              No saved connections.
-            </p>
-          ) : (
+      <div className="inline-flex min-w-0 items-center">
+        <Popover>
+          <PopoverTrigger
+            render={
+              <button
+                aria-label="Filter by connection"
+                className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50"
+                type="button"
+              >
+                <FilterTrigger
+                  label="Connection"
+                  placeholder="Any"
+                  selection={selectedConnectionNames}
+                />
+              </button>
+            }
+          />
+          <PopoverContent align="start" className="w-64 p-1">
+            {connections.length === 0 ? (
+              <p className="px-2 py-3 text-center text-xs text-muted-foreground">
+                No saved connections.
+              </p>
+            ) : (
+              <div className="max-h-64 overflow-auto">
+                {connections.map((c) => (
+                  <ConnectionOption
+                    checked={selectedConnections.includes(c.id)}
+                    connection={c}
+                    key={c.id}
+                    onToggle={toggleConnection}
+                  />
+                ))}
+              </div>
+            )}
+          </PopoverContent>
+        </Popover>
+        {selectedConnections.length > 0 && (
+          <FilterClearButton label="Connection" onClick={clearConnections} />
+        )}
+      </div>
+
+      <div className="inline-flex min-w-0 items-center">
+        <Popover>
+          <PopoverTrigger
+            render={
+              <button
+                aria-label="Filter by dialect"
+                className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50"
+                type="button"
+              >
+                <FilterTrigger
+                  label="Dialect"
+                  placeholder="Any"
+                  selection={selectedDialectLabels}
+                />
+              </button>
+            }
+          />
+          <PopoverContent align="start" className="w-56 p-1">
             <div className="max-h-64 overflow-auto">
-              {connections.map((c) => (
-                <ConnectionOption
-                  checked={selectedConnections.includes(c.id)}
-                  connection={c}
-                  key={c.id}
-                  onToggle={toggleConnection}
+              {KNOWN_DIALECTS.map((d) => (
+                <DialectOption
+                  checked={selectedDialects.includes(d)}
+                  dialect={d}
+                  key={d}
+                  onToggle={toggleDialect}
                 />
               ))}
             </div>
-          )}
-        </PopoverContent>
-      </Popover>
-
-      <Popover>
-        <PopoverTrigger
-          render={
-            <button
-              aria-label="Filter by dialect"
-              className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50"
-              type="button"
-            >
-              <FilterTrigger
-                label="Dialect"
-                onClear={
-                  selectedDialects.length > 0 ? clearDialects : undefined
-                }
-                placeholder="Any"
-                selection={selectedDialectLabels}
-              />
-            </button>
-          }
-        />
-        <PopoverContent align="start" className="w-56 p-1">
-          <div className="max-h-64 overflow-auto">
-            {KNOWN_DIALECTS.map((d) => (
-              <DialectOption
-                checked={selectedDialects.includes(d)}
-                dialect={d}
-                key={d}
-                onToggle={toggleDialect}
-              />
-            ))}
-          </div>
-        </PopoverContent>
-      </Popover>
+          </PopoverContent>
+        </Popover>
+        {selectedDialects.length > 0 && (
+          <FilterClearButton label="Dialect" onClick={clearDialects} />
+        )}
+      </div>
 
       <div className="flex items-center gap-1">
         <Label

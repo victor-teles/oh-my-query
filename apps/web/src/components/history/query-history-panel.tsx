@@ -114,7 +114,7 @@ export const QueryHistoryPanel = () => {
     return map;
   }, [connections]);
 
-  const rowEntries = useMemo(() => entries, [entries]);
+  const rowEntries = entries;
 
   const items = useMemo<FlatItem[]>(
     () => flattenWithGroups(rowEntries),
@@ -212,13 +212,22 @@ export const QueryHistoryPanel = () => {
         setOpen(false);
         return;
       }
-      if (e.key === "Enter" && focusedEntry) {
+
+      const target = e.target as HTMLElement | null;
+      const targetingEditable =
+        target !== null &&
+        target !== searchRef.current &&
+        (target.tagName === "INPUT" ||
+          target.tagName === "TEXTAREA" ||
+          target.isContentEditable);
+
+      if (e.key === "Enter" && focusedEntry && !targetingEditable) {
         e.preventDefault();
         handleOpenRow(focusedEntry);
         return;
       }
       if (e.key === "ArrowDown" || e.key === "ArrowUp") {
-        if (rowEntries.length === 0) {
+        if (targetingEditable || rowEntries.length === 0) {
           return;
         }
         e.preventDefault();
@@ -284,7 +293,6 @@ export const QueryHistoryPanel = () => {
           exit={reduceMotion ? { opacity: 0 } : { x: "100%" }}
           initial={reduceMotion ? { opacity: 0 } : { x: "100%" }}
           onKeyDown={handlePanelKeyDown}
-          role="dialog"
           transition={
             reduceMotion
               ? { duration: 0.12 }

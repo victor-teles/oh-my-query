@@ -1,5 +1,8 @@
+use log::warn;
 use serde::{Deserialize, Serialize};
-use std::collections::HashMap;
+use std::cmp::{Ordering, Reverse};
+use std::collections::{BinaryHeap, HashMap};
+use std::ffi::OsString;
 use std::path::{Path, PathBuf};
 use std::sync::{Arc, OnceLock};
 use tokio::io::AsyncWriteExt;
@@ -95,6 +98,7 @@ pub struct DatabaseConnection {
 }
 
 const MAX_HISTORY_ENTRIES: usize = 10_000;
+const DEFAULT_ALL_HISTORY_LIMIT: usize = 500;
 
 fn connections_path() -> Result<PathBuf, ConfigError> {
     let home = dirs::home_dir().ok_or_else(|| ConfigError {
@@ -138,23 +142,43 @@ async fn ensure_parent_dir(path: &Path) -> Result<(), ConfigError> {
     Ok(())
 }
 
-/// Decode a single history line. Lines written before the encryption rollout
-/// are raw JSON starting with `{`; lines written after are base64 AEAD blobs.
-/// Returns `(entry, was_plaintext)` so the caller can migrate the file.
-fn decode_line(line: &str) -> Option<(HistoryEntry, bool)> {
+fn tmp_sibling(path: &Path) -> PathBuf {
+    let mut ext = path.extension().map(OsString::from).unwrap_or_default();
+    if !ext.is_empty() {
+        ext.push(".tmp");
+    } else {
+        ext.push("tmp");
+    }
+    path.with_extension(ext)
+}
+
+async fn atomic_write(path: &Path, bytes: &[u8]) -> Result<(), ConfigError> {
+    let tmp = tmp_sibling(path);
+    tokio::fs::write(&tmp, bytes).await?;
+    tokio::fs::rename(&tmp, path).await?;
+    Ok(())
+}
+
+enum DecodedLine {
+    Empty,
+    Plaintext(HistoryEntry),
+    Encrypted(HistoryEntry),
+}
+
+fn decode_line(line: &str) -> Result<DecodedLine, ConfigError> {
     let trimmed = line.trim();
     if trimmed.is_empty() {
-        return None;
+        return Ok(DecodedLine::Empty);
     }
     if trimmed.starts_with('{') {
-        return serde_json::from_str::<HistoryEntry>(trimmed)
-            .ok()
-            .map(|entry| (entry, true));
+        return match serde_json::from_str::<HistoryEntry>(trimmed) {
+            Ok(entry) => Ok(DecodedLine::Plaintext(entry)),
+            Err(_) => Ok(DecodedLine::Empty),
+        };
     }
-    let decrypted = crypto::decrypt_line(trimmed).ok()?;
-    serde_json::from_str::<HistoryEntry>(&decrypted)
-        .ok()
-        .map(|entry| (entry, false))
+    let decrypted = crypto::decrypt_line(trimmed)?;
+    let entry: HistoryEntry = serde_json::from_str(&decrypted)?;
+    Ok(DecodedLine::Encrypted(entry))
 }
 
 async fn read_entries(path: &Path) -> Result<(Vec<HistoryEntry>, bool), ConfigError> {
@@ -162,11 +186,15 @@ async fn read_entries(path: &Path) -> Result<(Vec<HistoryEntry>, bool), ConfigEr
     let mut entries = Vec::new();
     let mut needs_migration = false;
     for line in content.lines() {
-        if let Some((entry, was_plaintext)) = decode_line(line) {
-            if was_plaintext {
+        match decode_line(line)? {
+            DecodedLine::Empty => {}
+            DecodedLine::Plaintext(entry) => {
                 needs_migration = true;
+                entries.push(entry);
             }
-            entries.push(entry);
+            DecodedLine::Encrypted(entry) => {
+                entries.push(entry);
+            }
         }
     }
     Ok((entries, needs_migration))
@@ -180,8 +208,7 @@ async fn rewrite_encrypted(path: &Path, entries: &[HistoryEntry]) -> Result<(), 
         out.push_str(&encrypted);
         out.push('\n');
     }
-    tokio::fs::write(path, out).await?;
-    Ok(())
+    atomic_write(path, out.as_bytes()).await
 }
 
 async fn enforce_history_limit(path: &Path) -> Result<(), ConfigError> {
@@ -193,8 +220,7 @@ async fn enforce_history_limit(path: &Path) -> Result<(), ConfigError> {
     let trimmed: String = lines[lines.len() - MAX_HISTORY_ENTRIES..].join("\n");
     let mut output = trimmed;
     output.push('\n');
-    tokio::fs::write(path, output).await?;
-    Ok(())
+    atomic_write(path, output.as_bytes()).await
 }
 
 fn matches_filters(entry: &HistoryEntry, filters: &HistoryFilters) -> bool {
@@ -231,6 +257,28 @@ fn matches_filters(entry: &HistoryEntry, filters: &HistoryFilters) -> bool {
         }
     }
     true
+}
+
+struct ByTimestamp(HistoryEntry);
+
+impl PartialEq for ByTimestamp {
+    fn eq(&self, other: &Self) -> bool {
+        self.0.timestamp == other.0.timestamp
+    }
+}
+
+impl Eq for ByTimestamp {}
+
+impl PartialOrd for ByTimestamp {
+    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
+        Some(self.cmp(other))
+    }
+}
+
+impl Ord for ByTimestamp {
+    fn cmp(&self, other: &Self) -> Ordering {
+        self.0.timestamp.cmp(&other.0.timestamp)
+    }
 }
 
 #[tauri::command]
@@ -294,9 +342,13 @@ pub async fn get_history(
         let _guard = lock.lock().await;
         let (entries, needs_migration) = read_entries(&path).await?;
         if needs_migration {
-            // Best-effort migration: if encryption is available we re-write encrypted.
-            // If it fails (e.g. keyring unavailable), just leave the file as-is.
-            let _ = rewrite_encrypted(&path, &entries).await;
+            if let Err(err) = rewrite_encrypted(&path, &entries).await {
+                warn!(
+                    "failed to migrate history file {} to encrypted: {}",
+                    path.display(),
+                    err.message
+                );
+            }
         }
         entries
     };
@@ -320,39 +372,73 @@ pub async fn get_all_history(
 
     let filters = filters.unwrap_or_default();
 
-    let mut read_dir = tokio::fs::read_dir(&dir).await?;
-    let mut all: Vec<HistoryEntry> = Vec::new();
+    let offset = filters.offset.unwrap_or(0) as usize;
+    let limit = filters
+        .limit
+        .map(|l| l as usize)
+        .unwrap_or(DEFAULT_ALL_HISTORY_LIMIT);
+    let capacity = offset.saturating_add(limit);
+    if capacity == 0 {
+        return Ok(vec![]);
+    }
 
-    while let Some(entry) = read_dir.next_entry().await? {
-        let path = entry.path();
+    let mut read_dir = tokio::fs::read_dir(&dir).await?;
+    let mut heap: BinaryHeap<Reverse<ByTimestamp>> = BinaryHeap::with_capacity(capacity);
+
+    while let Some(dir_entry) = read_dir.next_entry().await? {
+        let path = dir_entry.path();
         if path.extension().and_then(|s| s.to_str()) != Some("jsonl") {
             continue;
         }
         let lock = history_file_lock(&path).await;
-        let entries = {
+        let file_entries = {
             let _guard = lock.lock().await;
-            let (entries, needs_migration) = match read_entries(&path).await {
-                Ok(pair) => pair,
-                Err(_) => continue,
-            };
-            if needs_migration {
-                let _ = rewrite_encrypted(&path, &entries).await;
+            match read_entries(&path).await {
+                Ok((entries, needs_migration)) => {
+                    if needs_migration {
+                        if let Err(err) = rewrite_encrypted(&path, &entries).await {
+                            warn!(
+                                "failed to migrate history file {} to encrypted: {}",
+                                path.display(),
+                                err.message
+                            );
+                        }
+                    }
+                    entries
+                }
+                Err(err) => {
+                    warn!(
+                        "failed to read history file {}: {}",
+                        path.display(),
+                        err.message
+                    );
+                    continue;
+                }
             }
-            entries
         };
-        for e in entries {
-            if matches_filters(&e, &filters) {
-                all.push(e);
+
+        for entry in file_entries {
+            if !matches_filters(&entry, &filters) {
+                continue;
+            }
+            if heap.len() < capacity {
+                heap.push(Reverse(ByTimestamp(entry)));
+            } else if let Some(Reverse(min)) = heap.peek() {
+                if entry.timestamp > min.0.timestamp {
+                    heap.pop();
+                    heap.push(Reverse(ByTimestamp(entry)));
+                }
             }
         }
     }
 
-    all.sort_by(|a, b| b.timestamp.cmp(&a.timestamp));
+    let mut result: Vec<HistoryEntry> = heap
+        .into_iter()
+        .map(|Reverse(ByTimestamp(entry))| entry)
+        .collect();
+    result.sort_by(|a, b| b.timestamp.cmp(&a.timestamp));
 
-    let offset = filters.offset.unwrap_or(0) as usize;
-    let limit = filters.limit.unwrap_or(500) as usize;
-
-    Ok(all.into_iter().skip(offset).take(limit).collect())
+    Ok(result.into_iter().skip(offset).take(limit).collect())
 }
 
 fn looks_like_plaintext_json(s: &str) -> bool {
@@ -366,8 +452,7 @@ async fn write_encrypted_connections(
     ensure_parent_dir(path).await?;
     let json = serde_json::to_string(connections)?;
     let encrypted = crypto::encrypt_line(&json)?;
-    tokio::fs::write(path, encrypted).await?;
-    Ok(())
+    atomic_write(path, encrypted.as_bytes()).await
 }
 
 #[tauri::command]
@@ -382,12 +467,15 @@ pub async fn get_connections() -> Result<Vec<DatabaseConnection>, ConfigError> {
         return Ok(vec![]);
     }
 
-    // Migration path: pre-encryption installs wrote raw JSON. Decode, then
-    // re-save encrypted on a best-effort basis so the plaintext doesn't
-    // linger on disk.
     if looks_like_plaintext_json(trimmed) {
         let connections: Vec<DatabaseConnection> = serde_json::from_str(trimmed)?;
-        let _ = write_encrypted_connections(&path, &connections).await;
+        if let Err(err) = write_encrypted_connections(&path, &connections).await {
+            warn!(
+                "failed to migrate connections file {} to encrypted: {}",
+                path.display(),
+                err.message
+            );
+        }
         return Ok(connections);
     }
 
@@ -449,13 +537,39 @@ mod tests {
 
         let guard_a = lock_a.lock().await;
 
-        // Grabbing the second, different-path lock must succeed without waiting
-        // on `guard_a`. `try_lock` returning `Ok` proves the locks are independent.
         let guard_b = lock_b
             .try_lock()
             .expect("distinct paths must use distinct locks");
 
         drop(guard_b);
         drop(guard_a);
+    }
+
+    #[tokio::test]
+    async fn atomic_write_replaces_file_and_cleans_tmp() {
+        let dir = std::env::temp_dir().join("oh-my-query-atomic-write-test");
+        tokio::fs::create_dir_all(&dir).await.unwrap();
+        let path = dir.join("target.jsonl");
+        tokio::fs::write(&path, b"old contents").await.unwrap();
+
+        atomic_write(&path, b"fresh contents").await.unwrap();
+
+        let got = tokio::fs::read_to_string(&path).await.unwrap();
+        assert_eq!(got, "fresh contents");
+
+        let tmp = tmp_sibling(&path);
+        assert!(
+            !tmp.exists(),
+            "atomic_write should rename the tmp sibling into place",
+        );
+    }
+
+    #[test]
+    fn tmp_sibling_preserves_extension() {
+        let path = PathBuf::from("/tmp/foo/bar.jsonl");
+        assert_eq!(tmp_sibling(&path), PathBuf::from("/tmp/foo/bar.jsonl.tmp"));
+
+        let no_ext = PathBuf::from("/tmp/foo/bar");
+        assert_eq!(tmp_sibling(&no_ext), PathBuf::from("/tmp/foo/bar.tmp"));
     }
 }

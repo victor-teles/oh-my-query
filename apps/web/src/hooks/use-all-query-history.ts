@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import type { HistoryEntry, HistoryFilters } from "@/lib/persistence";
 
@@ -13,18 +13,31 @@ export const useAllQueryHistory = (filters: HistoryFilters) => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const stableFilters = useMemo(() => filters, [filtersKey]);
 
+  const requestIdRef = useRef(0);
+
   const refresh = useCallback(async () => {
+    requestIdRef.current += 1;
+    const id = requestIdRef.current;
+    setIsLoading(true);
     try {
       const result = await getAllHistory(stableFilters);
+      if (id !== requestIdRef.current) {
+        return;
+      }
       setEntries(result);
       setError(null);
     } catch (error) {
+      if (id !== requestIdRef.current) {
+        return;
+      }
       setEntries([]);
       setError(
         error instanceof Error ? error.message : "Failed to load query history"
       );
     } finally {
-      setIsLoading(false);
+      if (id === requestIdRef.current) {
+        setIsLoading(false);
+      }
     }
   }, [stableFilters]);
 

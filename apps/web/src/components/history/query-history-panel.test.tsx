@@ -169,7 +169,7 @@ describe("queryHistoryPanel", () => {
     );
 
     await expect(
-      screen.findByRole("dialog", { name: /query history/i })
+      screen.findByRole("complementary", { name: /query history/i })
     ).resolves.toBeTruthy();
     await expect(screen.findByText(/2 queries/i)).resolves.toBeTruthy();
     expect(screen.getByText(/select \* from users/i)).toBeTruthy();

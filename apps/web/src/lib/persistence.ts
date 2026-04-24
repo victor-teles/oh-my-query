@@ -24,7 +24,7 @@ export interface TabState {
 export interface HistoryEntry {
   sql: string;
   connectionId: string;
-  dialect: string | null;
+  dialect: string | null | undefined;
   database: string | null;
   timestamp: string;
   success: boolean;

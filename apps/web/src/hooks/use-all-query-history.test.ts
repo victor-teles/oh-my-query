@@ -2,7 +2,7 @@ import { renderHook, waitFor } from "@testing-library/react";
 import { act } from "react";
 import { describe, expect, it, vi } from "vitest";
 
-import type { HistoryEntry } from "@/lib/persistence";
+import type { HistoryEntry, HistoryFilters } from "@/lib/persistence";
 
 import { mockTauri } from "@/test/tauri-mock";
 
@@ -62,5 +62,60 @@ describe("useAllQueryHistory", () => {
     await waitFor(() => expect(result.current.isLoading).toBeFalsy());
     expect(result.current.error).toBe("boom");
     expect(result.current.entries).toStrictEqual([]);
+  });
+
+  it("flips isLoading back to true when filters change", async () => {
+    const entries = [makeEntry()];
+    const getAll = vi.fn(() => entries);
+    mockTauri({ get_all_history: getAll });
+
+    const { result, rerender } = renderHook(
+      ({ filters }: { filters: HistoryFilters }) => useAllQueryHistory(filters),
+      { initialProps: { filters: { erroredOnly: false } } }
+    );
+
+    await waitFor(() => expect(result.current.isLoading).toBeFalsy());
+
+    rerender({ filters: { erroredOnly: true } });
+
+    expect(result.current.isLoading).toBeTruthy();
+    await waitFor(() => expect(result.current.isLoading).toBeFalsy());
+    expect(getAll).toHaveBeenCalledTimes(2);
+  });
+
+  it("discards stale responses from earlier in-flight requests", async () => {
+    const slowEntries = [makeEntry({ sql: "slow" })];
+    const fastEntries = [makeEntry({ sql: "fast" })];
+
+    const { promise: slowPromise, resolve: slowResolve } =
+      Promise.withResolvers<void>();
+
+    const getAll = vi.fn();
+    getAll.mockImplementationOnce(async () => {
+      await slowPromise;
+      return slowEntries;
+    });
+    getAll.mockImplementation(() => fastEntries);
+
+    mockTauri({ get_all_history: getAll });
+
+    const { result, rerender } = renderHook(
+      ({ filters }: { filters: HistoryFilters }) => useAllQueryHistory(filters),
+      { initialProps: { filters: { erroredOnly: false } } }
+    );
+
+    rerender({ filters: { erroredOnly: true } });
+
+    await waitFor(() => {
+      expect(result.current.entries).toStrictEqual(fastEntries);
+    });
+
+    act(() => {
+      slowResolve();
+    });
+
+    await waitFor(() => expect(getAll).toHaveBeenCalledTimes(2));
+    expect(result.current.entries).toStrictEqual(fastEntries);
+    expect(result.current.isLoading).toBeFalsy();
   });
 });
