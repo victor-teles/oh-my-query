@@ -1,6 +1,7 @@
 mod cancellation;
 mod commands;
 mod config;
+mod crypto;
 mod db;
 mod persistence;
 
@@ -17,6 +18,7 @@ pub fn run() {
                 .level(log::LevelFilter::Info)
                 .build(),
         )
+        .plugin(tauri_plugin_opener::init())
         .manage(ConnectionPoolManager::new())
         .manage(CancellationRegistry::new())
         .setup(|app| {
@@ -95,6 +97,7 @@ pub fn run() {
             persistence::save_tabs,
             persistence::append_history,
             persistence::get_history,
+            persistence::get_all_history,
             persistence::get_connections,
             persistence::save_connections,
         ])

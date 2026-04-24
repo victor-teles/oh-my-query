@@ -1,9 +1,10 @@
-import { format, formatDistanceToNow, isToday, isYesterday } from "date-fns";
+import { formatDistanceToNow } from "date-fns";
 import {
   AlertTriangle,
   CheckCircle2,
   Clock,
   History,
+  ListFilter,
   RefreshCw,
   Search,
   XCircle,
@@ -12,6 +13,7 @@ import { memo, useCallback, useMemo, useRef, useState } from "react";
 
 import type { HistoryEntry } from "@/lib/persistence";
 
+import { DATABASE_ICON_MAP } from "@/components/icons/database-icons";
 import { Button } from "@/components/ui/button";
 import {
   Empty,
@@ -35,13 +37,16 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { useEditorInsert } from "@/contexts/editor-insert-context";
+import { useHistoryPanel } from "@/hooks/use-history-panel";
 import { useQueryHistory } from "@/hooks/use-query-history";
+import {
+  getDateLabel,
+  isKnownDialect,
+  normalizeSql,
+} from "@/lib/history-shared";
 import { cn } from "@/lib/utils";
 
 const FILTER_MIN_ITEMS = 6;
-
-const normalizeSql = (sql: string): string =>
-  sql.replaceAll(/\s+/g, " ").trim();
 
 const truncateSql = (sql: string, maxLength = 50): string => {
   const oneLine = normalizeSql(sql);
@@ -49,17 +54,6 @@ const truncateSql = (sql: string, maxLength = 50): string => {
     return oneLine;
   }
   return `${oneLine.slice(0, maxLength)}...`;
-};
-
-const getDateLabel = (timestamp: string): string => {
-  const date = new Date(timestamp);
-  if (isToday(date)) {
-    return "Today";
-  }
-  if (isYesterday(date)) {
-    return "Yesterday";
-  }
-  return format(date, "MMM d, yyyy");
 };
 
 interface DateGroup {
@@ -95,6 +89,11 @@ export const QueryHistoryList = ({ connectionId }: QueryHistoryListProps) => {
   const [showFailure, setShowFailure] = useState(true);
   const listRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const { setOpen: setHistoryPanelOpen } = useHistoryPanel();
+
+  const handleOpenAll = useCallback(() => {
+    setHistoryPanelOpen(true);
+  }, [setHistoryPanelOpen]);
 
   const handleFilterChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -342,6 +341,18 @@ export const QueryHistoryList = ({ connectionId }: QueryHistoryListProps) => {
           </div>
         )}
       </ScrollArea>
+
+      <div className="border-t border-sidebar-border px-2 py-1.5">
+        <Button
+          className="h-7 w-full justify-start text-xs text-muted-foreground"
+          onClick={handleOpenAll}
+          size="sm"
+          variant="ghost"
+        >
+          <ListFilter className="size-3" />
+          Search all connections…
+        </Button>
+      </div>
     </div>
   );
 };
@@ -356,6 +367,10 @@ const HistoryItem = memo(function HistoryItem({ entry }: HistoryItemProps) {
   const handleClick = useCallback(() => {
     openQuery(entry.sql);
   }, [openQuery, entry.sql]);
+
+  const DialectIcon = isKnownDialect(entry.dialect)
+    ? DATABASE_ICON_MAP[entry.dialect]
+    : null;
 
   return (
     <Tooltip>
@@ -381,6 +396,9 @@ const HistoryItem = memo(function HistoryItem({ entry }: HistoryItemProps) {
               <CheckCircle2 className="size-3 text-emerald-500" />
             ) : (
               <XCircle className="size-3 text-destructive" />
+            )}
+            {DialectIcon && (
+              <DialectIcon className="size-3 text-muted-foreground/80" />
             )}
             <span className="tabular-nums">{entry.executionTimeMs}ms</span>
           </div>

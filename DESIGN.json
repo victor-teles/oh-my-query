@@ -1,0 +1,413 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-04-23T00:00:00Z",
+  "title": "Design System: oh-my-query",
+  "extensions": {
+    "colorMeta": {
+      "amber-primary": {
+        "role": "primary",
+        "displayName": "Amber Heartbeat",
+        "canonical": "oklch(0.9247 0.0524 66.1732)",
+        "tonalRamp": [
+          "oklch(0.18 0.03 66)",
+          "oklch(0.28 0.04 66)",
+          "oklch(0.40 0.045 66)",
+          "oklch(0.52 0.05 66)",
+          "oklch(0.65 0.055 66)",
+          "oklch(0.77 0.054 66)",
+          "oklch(0.9247 0.0524 66.1732)",
+          "oklch(0.97 0.028 66)"
+        ]
+      },
+      "amber-primary-deep": {
+        "role": "primary",
+        "displayName": "Espresso",
+        "canonical": "oklch(0.4341 0.0392 41.9938)",
+        "tonalRamp": [
+          "oklch(0.15 0.025 42)",
+          "oklch(0.25 0.03 42)",
+          "oklch(0.35 0.035 42)",
+          "oklch(0.4341 0.0392 41.9938)",
+          "oklch(0.55 0.04 42)",
+          "oklch(0.70 0.035 42)",
+          "oklch(0.85 0.025 42)",
+          "oklch(0.95 0.015 42)"
+        ]
+      },
+      "warm-ink": {
+        "role": "neutral",
+        "displayName": "Warm Ink",
+        "canonical": "oklch(0.182 0.007 34.3)",
+        "tonalRamp": [
+          "oklch(0.12 0.006 34)",
+          "oklch(0.182 0.007 34.3)",
+          "oklch(0.25 0.007 34)",
+          "oklch(0.35 0.007 34)",
+          "oklch(0.50 0.006 34)",
+          "oklch(0.68 0.005 34)",
+          "oklch(0.85 0.004 34)",
+          "oklch(0.95 0.003 34)"
+        ]
+      },
+      "warm-raised": {
+        "role": "neutral",
+        "displayName": "Warm Raised",
+        "canonical": "oklch(0.28 0.007 48.5)",
+        "tonalRamp": [
+          "oklch(0.15 0.006 48)",
+          "oklch(0.22 0.007 48)",
+          "oklch(0.28 0.007 48.5)",
+          "oklch(0.36 0.007 48)",
+          "oklch(0.50 0.006 48)",
+          "oklch(0.68 0.005 48)",
+          "oklch(0.85 0.004 48)",
+          "oklch(0.95 0.003 48)"
+        ]
+      },
+      "warm-accent": {
+        "role": "neutral",
+        "displayName": "Warm Accent",
+        "canonical": "oklch(0.321 0.008 48.4)"
+      },
+      "warm-muted": {
+        "role": "neutral",
+        "displayName": "Warm Muted",
+        "canonical": "oklch(0.252 0 0)"
+      },
+      "warm-muted-text": {
+        "role": "neutral",
+        "displayName": "Warm Muted Text",
+        "canonical": "oklch(0.7699 0 0)"
+      },
+      "warm-cream": {
+        "role": "neutral",
+        "displayName": "Warm Cream",
+        "canonical": "oklch(0.9821 0 0)"
+      },
+      "warm-paper": {
+        "role": "neutral",
+        "displayName": "Warm Paper",
+        "canonical": "oklch(0.9911 0 0)"
+      },
+      "dark-border": {
+        "role": "neutral",
+        "displayName": "Dark Border",
+        "canonical": "oklch(1 0 0 / 0.14)"
+      },
+      "light-border": {
+        "role": "neutral",
+        "displayName": "Light Border",
+        "canonical": "oklch(0.86 0.005 48.717)"
+      },
+      "foreground-dark": {
+        "role": "neutral",
+        "displayName": "Foreground (Dark)",
+        "canonical": "oklch(0.9491 0 0)"
+      },
+      "foreground-light": {
+        "role": "neutral",
+        "displayName": "Foreground (Light)",
+        "canonical": "oklch(0.2435 0 0)"
+      },
+      "ring-focus": {
+        "role": "primary",
+        "displayName": "Focus Ring",
+        "canonical": "oklch(0.9247 0.0524 66.1732)"
+      },
+      "destructive-red": {
+        "role": "status",
+        "displayName": "Destructive Red",
+        "canonical": "oklch(0.55 0.21 33)"
+      },
+      "warning-ember": {
+        "role": "status",
+        "displayName": "Warning Ember",
+        "canonical": "oklch(0.78 0.14 70)"
+      },
+      "success-moss": {
+        "role": "status",
+        "displayName": "Success Moss",
+        "canonical": "oklch(0.72 0.15 145)"
+      },
+      "conn-honey": {
+        "role": "tertiary",
+        "displayName": "Connection · Honey",
+        "canonical": "oklch(0.78 0.11 75)"
+      },
+      "conn-denim": {
+        "role": "tertiary",
+        "displayName": "Connection · Denim",
+        "canonical": "oklch(0.65 0.09 235)"
+      },
+      "conn-moss": {
+        "role": "tertiary",
+        "displayName": "Connection · Moss",
+        "canonical": "oklch(0.68 0.07 145)"
+      },
+      "conn-plum": {
+        "role": "tertiary",
+        "displayName": "Connection · Plum",
+        "canonical": "oklch(0.62 0.09 310)"
+      },
+      "conn-clay": {
+        "role": "tertiary",
+        "displayName": "Connection · Clay",
+        "canonical": "oklch(0.7 0.12 35)"
+      },
+      "conn-stone": {
+        "role": "tertiary",
+        "displayName": "Connection · Stone",
+        "canonical": "oklch(0.6 0.02 80)"
+      },
+      "json-key": {
+        "role": "syntax",
+        "displayName": "JSON Key",
+        "canonical": "oklch(0.78 0.1 60)"
+      },
+      "json-string": {
+        "role": "syntax",
+        "displayName": "JSON String",
+        "canonical": "oklch(0.78 0.09 135)"
+      },
+      "json-number": {
+        "role": "syntax",
+        "displayName": "JSON Number",
+        "canonical": "oklch(0.8 0.13 40)"
+      },
+      "json-boolean": {
+        "role": "syntax",
+        "displayName": "JSON Boolean",
+        "canonical": "oklch(0.84 0.14 70)"
+      }
+    },
+    "typographyMeta": {
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Route-level page titles. Rare — used once per screen at most."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Card titles, dialog titles, section heads inside panels."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Workhorse text — form fields, descriptions, general UI copy. Cap prose at 65–75ch."
+      },
+      "chrome": {
+        "displayName": "Chrome",
+        "purpose": "Titlebar actions, toolbar labels, Dynamic Island content."
+      },
+      "section-label": {
+        "displayName": "Section Label",
+        "purpose": "Uppercase small-cap labels above grouped content in sidebars."
+      },
+      "mono": {
+        "displayName": "Mono",
+        "purpose": "SQL editor, result tables, code blocks, keyboard shortcuts. Ligatures off, slashed zero on."
+      }
+    },
+    "shadows": [
+      {
+        "name": "island",
+        "value": "0 1px 2px 0 oklch(0 0 0 / 0.10), 0 1px 3px 0 oklch(0 0 0 / 0.08)",
+        "purpose": "The Dynamic Island pill — the single floating surface in the app."
+      },
+      {
+        "name": "popover",
+        "value": "0 4px 6px -1px oklch(0 0 0 / 0.18), 0 2px 4px -2px oklch(0 0 0 / 0.12)",
+        "purpose": "Dropdown menus, context menus, popovers — transient UI separated from the warm parent surface."
+      }
+    ],
+    "motion": [
+      {
+        "name": "spring-signature",
+        "value": "type: spring, stiffness: 400, damping: 30",
+        "purpose": "iOS-like snap for morphing elements (Dynamic Island shape changes, tab indicator, drawer transitions)."
+      },
+      {
+        "name": "ease-out-quart",
+        "value": "cubic-bezier(0.22, 1, 0.36, 1)",
+        "purpose": "Default ease-out for state transitions and blur-in/blur-out content swaps. Duration 220ms."
+      },
+      {
+        "name": "ease-out-default",
+        "value": "cubic-bezier(0.0, 0.0, 0.2, 1)",
+        "purpose": "Tailwind ease-out for fast 150ms state changes on buttons, inputs, tabs."
+      },
+      {
+        "name": "duration-state",
+        "value": "150ms",
+        "purpose": "Standard state-change duration (hover, focus, active) on interactive controls."
+      }
+    ],
+    "breakpoints": [
+      { "name": "sm", "value": "640px" },
+      { "name": "md", "value": "768px" },
+      { "name": "lg", "value": "1024px" },
+      { "name": "xl", "value": "1280px" },
+      { "name": "2xl", "value": "1536px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "The single primary action per surface — amber heartbeat with warm-ink text.",
+      "html": "<button class=\"ds-btn-primary\" type=\"button\">Run query</button>",
+      "css": ".ds-btn-primary { display: inline-flex; align-items: center; justify-content: center; gap: 4px; height: 28px; padding: 0 8px; background: oklch(0.9247 0.0524 66.1732); color: oklch(0.182 0.007 34.3); border: 1px solid transparent; border-radius: 5.2px; font-family: 'Switzer', -apple-system, BlinkMacSystemFont, sans-serif; font-size: 12px; font-weight: 500; letter-spacing: -0.003em; line-height: 1.6; white-space: nowrap; cursor: pointer; transition: background 150ms cubic-bezier(0, 0, 0.2, 1), opacity 150ms cubic-bezier(0, 0, 0.2, 1); outline: none; user-select: none; } .ds-btn-primary:hover { background: oklch(0.9247 0.0524 66.1732 / 0.8); } .ds-btn-primary:focus-visible { box-shadow: 0 0 0 2px oklch(0.9247 0.0524 66.1732 / 0.5); border-color: oklch(0.9247 0.0524 66.1732); }"
+    },
+    {
+      "name": "Ghost Button",
+      "kind": "button",
+      "refersTo": "button-ghost",
+      "description": "The workhorse — transparent at rest, warm-muted fill on hover. Toolbars, row actions.",
+      "html": "<button class=\"ds-btn-ghost\" type=\"button\"><svg width=\"14\" height=\"14\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M12 5v14M5 12h14\"/></svg><span>New query</span></button>",
+      "css": ".ds-btn-ghost { display: inline-flex; align-items: center; justify-content: center; gap: 4px; height: 28px; padding: 0 8px; background: transparent; color: oklch(0.7699 0 0); border: 1px solid transparent; border-radius: 5.2px; font-family: 'Switzer', -apple-system, BlinkMacSystemFont, sans-serif; font-size: 12px; font-weight: 500; letter-spacing: -0.003em; line-height: 1.6; cursor: pointer; transition: background 150ms cubic-bezier(0, 0, 0.2, 1), color 150ms cubic-bezier(0, 0, 0.2, 1); outline: none; } .ds-btn-ghost svg { width: 14px; height: 14px; flex-shrink: 0; } .ds-btn-ghost:hover { background: oklch(0.252 0 0 / 0.5); color: oklch(0.9491 0 0); } .ds-btn-ghost:focus-visible { box-shadow: 0 0 0 2px oklch(0.9247 0.0524 66.1732 / 0.5); border-color: oklch(0.9247 0.0524 66.1732); }"
+    },
+    {
+      "name": "Outline Button",
+      "kind": "button",
+      "refersTo": "button-outline",
+      "description": "Secondary action with a hairline border — findable without demanding attention.",
+      "html": "<button class=\"ds-btn-outline\" type=\"button\">Cancel</button>",
+      "css": ".ds-btn-outline { display: inline-flex; align-items: center; justify-content: center; gap: 4px; height: 28px; padding: 0 8px; background: oklch(0.4017 0 0 / 0.3); color: oklch(0.9491 0 0); border: 1px solid oklch(1 0 0 / 0.14); border-radius: 5.2px; font-family: 'Switzer', -apple-system, BlinkMacSystemFont, sans-serif; font-size: 12px; font-weight: 500; letter-spacing: -0.003em; line-height: 1.6; cursor: pointer; transition: background 150ms cubic-bezier(0, 0, 0.2, 1); outline: none; } .ds-btn-outline:hover { background: oklch(0.4017 0 0 / 0.5); }"
+    },
+    {
+      "name": "Input",
+      "kind": "input",
+      "refersTo": "input-default",
+      "description": "Warm-raised fill with ghost border — amber ring on focus.",
+      "html": "<input class=\"ds-input\" type=\"text\" placeholder=\"SELECT * FROM users WHERE...\" />",
+      "css": ".ds-input { display: block; width: 100%; height: 28px; padding: 2px 8px; background: oklch(0.4017 0 0 / 0.3); color: oklch(0.9491 0 0); border: 1px solid oklch(0.4017 0 0); border-radius: 5.2px; font-family: 'Switzer', -apple-system, BlinkMacSystemFont, sans-serif; font-size: 12px; letter-spacing: -0.003em; line-height: 1.6; outline: none; transition: border-color 150ms cubic-bezier(0, 0, 0.2, 1), box-shadow 150ms cubic-bezier(0, 0, 0.2, 1); } .ds-input::placeholder { color: oklch(0.7699 0 0); } .ds-input:focus-visible { border-color: oklch(0.9247 0.0524 66.1732); box-shadow: 0 0 0 2px oklch(0.9247 0.0524 66.1732 / 0.5); }"
+    },
+    {
+      "name": "Card",
+      "kind": "card",
+      "refersTo": "card-default",
+      "description": "Warm-raised surface with a ghost border ring — no drop shadow, separation is tonal.",
+      "html": "<div class=\"ds-card\"><div class=\"ds-card-header\"><div class=\"ds-card-title\">Connection</div><div class=\"ds-card-desc\">Primary production database</div></div><div class=\"ds-card-body\"><div class=\"ds-card-row\"><span class=\"ds-card-label\">HOST</span><span class=\"ds-card-value\">db.internal.prod</span></div><div class=\"ds-card-row\"><span class=\"ds-card-label\">ENGINE</span><span class=\"ds-card-value\">PostgreSQL 16</span></div></div></div>",
+      "css": ".ds-card { display: flex; flex-direction: column; gap: 16px; padding: 16px 0; background: oklch(0.28 0.007 48.5); color: oklch(0.9491 0 0); border-radius: 7.2px; box-shadow: inset 0 0 0 1px oklch(0.9491 0 0 / 0.10); overflow: hidden; font-family: 'Switzer', -apple-system, BlinkMacSystemFont, sans-serif; font-size: 12px; letter-spacing: -0.003em; line-height: 1.65; } .ds-card-header, .ds-card-body { padding: 0 16px; } .ds-card-header { display: flex; flex-direction: column; gap: 4px; } .ds-card-title { font-size: 14px; font-weight: 500; line-height: 1.4; } .ds-card-desc { color: oklch(0.7699 0 0); font-size: 12px; } .ds-card-body { display: flex; flex-direction: column; gap: 8px; } .ds-card-row { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; } .ds-card-label { color: oklch(0.7699 0 0); font-size: 10px; font-weight: 500; letter-spacing: 0.022em; text-transform: uppercase; } .ds-card-value { font-family: 'JetBrains Mono Variable', ui-monospace, SFMono-Regular, monospace; font-size: 13px; font-variant-numeric: tabular-nums; }"
+    },
+    {
+      "name": "Connection Chip",
+      "kind": "chip",
+      "description": "Named-connection tag. One of six hue-distinct swatches that identifies a connection at a glance.",
+      "html": "<span class=\"ds-chip\"><span class=\"ds-chip-dot\"></span>prod-read-replica</span>",
+      "css": ".ds-chip { display: inline-flex; align-items: center; gap: 6px; height: 20px; padding: 0 8px; background: oklch(0.28 0.007 48.5); color: oklch(0.9491 0 0); border-radius: 3.2px; font-family: 'Switzer', -apple-system, BlinkMacSystemFont, sans-serif; font-size: 10px; font-weight: 500; letter-spacing: 0.022em; text-transform: uppercase; } .ds-chip-dot { width: 6px; height: 6px; border-radius: 9999px; background: oklch(0.65 0.09 235); flex-shrink: 0; }"
+    },
+    {
+      "name": "Tab Trigger (Segment, Active)",
+      "kind": "nav",
+      "refersTo": "tabs-trigger-active",
+      "description": "Segmented tab switcher — borderless at rest, warm-raised fill when active.",
+      "html": "<div class=\"ds-tabs-list\"><button class=\"ds-tab\" type=\"button\">Results</button><button class=\"ds-tab ds-tab-active\" type=\"button\">Explain</button><button class=\"ds-tab\" type=\"button\">Schema</button></div>",
+      "css": ".ds-tabs-list { display: inline-flex; align-items: center; background: oklch(0.252 0 0 / 0.3); border-radius: 5.2px; padding: 0; } .ds-tab { position: relative; display: inline-flex; align-items: center; justify-content: center; padding: 6px 12px; background: transparent; color: oklch(0.7699 0 0); border: 1px solid transparent; border-radius: 3.2px; font-family: 'Switzer', -apple-system, BlinkMacSystemFont, sans-serif; font-size: 12px; font-weight: 500; letter-spacing: -0.003em; cursor: pointer; transition: background 150ms cubic-bezier(0, 0, 0.2, 1), color 150ms cubic-bezier(0, 0, 0.2, 1); outline: none; } .ds-tab:not(:first-child)::before { content: \"\"; position: absolute; left: 0; top: 25%; height: 50%; width: 1px; background: oklch(1 0 0 / 0.14); opacity: 0.5; transition: opacity 150ms; } .ds-tab:hover { color: oklch(0.9491 0 0 / 0.8); } .ds-tab-active { background: oklch(0.182 0.007 34.3); color: oklch(0.9491 0 0); box-shadow: 0 1px 2px 0 oklch(0 0 0 / 0.10); } .ds-tab-active::before, .ds-tab-active + .ds-tab::before { opacity: 0; }"
+    },
+    {
+      "name": "Dynamic Island (Signature)",
+      "kind": "custom",
+      "refersTo": "dynamic-island",
+      "description": "The centered titlebar pill — connection health, query progress, and errors converge here. The one place blur and shadow earn their weight.",
+      "html": "<div class=\"ds-island\"><span class=\"ds-island-dot\"></span><span class=\"ds-island-label\">prod-db</span><span class=\"ds-island-sep\"></span><span class=\"ds-island-timer\">1.284s</span></div>",
+      "css": ".ds-island { display: inline-flex; align-items: center; gap: 8px; height: 24px; padding: 0 10px; background: oklch(0.182 0.007 34.3 / 0.85); color: oklch(0.9491 0 0); border: 1px solid oklch(1 0 0 / 0.14 / 0.6); border-radius: 9999px; box-shadow: 0 1px 2px 0 oklch(0 0 0 / 0.10), 0 1px 3px 0 oklch(0 0 0 / 0.08); backdrop-filter: blur(24px) saturate(200%); -webkit-backdrop-filter: blur(24px) saturate(200%); font-family: 'Switzer', -apple-system, BlinkMacSystemFont, sans-serif; font-size: 11px; font-weight: 500; letter-spacing: -0.028em; white-space: nowrap; user-select: none; } .ds-island-dot { width: 6px; height: 6px; border-radius: 9999px; background: oklch(0.72 0.15 145); box-shadow: 0 0 6px 0 oklch(0.72 0.15 145 / 0.6); flex-shrink: 0; } .ds-island-label { color: oklch(0.9491 0 0); } .ds-island-sep { width: 1px; height: 10px; background: oklch(1 0 0 / 0.14); } .ds-island-timer { font-family: 'JetBrains Mono Variable', ui-monospace, SFMono-Regular, monospace; font-size: 11px; font-variant-numeric: tabular-nums; color: oklch(0.7699 0 0); }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Amber Workshop",
+    "overview": "oh-my-query is a dark-first, keyboard-first database IDE built for developers who sit inside it for three-hour debugging sessions. The system feels like an evening workshop: warm amber under the task light, quiet neutrals everywhere else, tools that earn their place on the bench. Surfaces are flat and tonally layered — the kind of native-calm you feel in TablePlus, Postico, Things 3, Linear, and Arc. Vibrancy is real and physical, not decorative. Typography is tight and functional; density is the point, but every group breathes.\n\nThe amber accent is structural, not ornamental. It exists because long sessions need a single warm heartbeat to anchor trust — not because dark mode needs 'pop'. The Dynamic Island in the titlebar is the signature moment: a living status surface where connection health, query progress, and errors converge into one pill that users screenshot.\n\nThis system explicitly rejects: bureaucratic grey admin panels (DBeaver, phpMyAdmin, pgAdmin), the generic AI-tool aesthetic (purple/cyan gradients, neon on dark, sparkle icons, '✨ AI-powered' marketing voice), and the chatbot-drawer-bolted-onto-an-IDE pattern. It also rejects ambient typography choices that every other developer tool already made (Inter, IBM Plex, Space Grotesk, Fraunces, Instrument Sans).",
+    "keyCharacteristics": [
+      "Dark-first hero surface; light mode exists but is secondary",
+      "Warm neutrals throughout — every grey tints toward 34–48° hue",
+      "Amber primary used sparingly (focus rings, selected state, the Island at attention)",
+      "Pro-density type scale (10–14px) with generous vertical rhythm between groups",
+      "Real macOS vibrancy via backdrop-blur-xl backdrop-saturate-200, only where it earns its weight",
+      "Switzer (variable) for UI, JetBrains Mono (variable, ligatures off) for SQL and data",
+      "iOS-like springs for motion; prefers-reduced-motion respected fully"
+    ],
+    "rules": [
+      {
+        "name": "The Warm-Neutral Rule",
+        "body": "Every neutral carries 0.005–0.008 chroma in the 34–48° warm hue range. Pure grey is prohibited. #000 and #fff are prohibited. If a value is neutral, it tints warm.",
+        "section": "colors"
+      },
+      {
+        "name": "The Amber-at-Rest Rule",
+        "body": "The amber accent appears on ≤10% of any given screen. It belongs to the focus ring, the active selection, the primary button, and the Dynamic Island when it wants attention — nothing else. Scatter it and the heartbeat stops working.",
+        "section": "colors"
+      },
+      {
+        "name": "The Named-Accent Rule",
+        "body": "Connection swatches are for connections. Status colors are for status. Never cross the wires — a moss-colored row is not a success; a plum-tagged connection is not a warning.",
+        "section": "colors"
+      },
+      {
+        "name": "The Small-and-Tight Rule",
+        "body": "Default body is 12px with -0.003em tracking. Never scale the whole UI up to feel 'safer' — if a surface feels cramped, add vertical space between groups, don't inflate every element.",
+        "section": "typography"
+      },
+      {
+        "name": "The Ligatures-Off Rule",
+        "body": "Mono renders SQL. =>, !=, <=, -> are operators, not arrows. font-feature-settings: 'liga' 0, 'zero' is not optional.",
+        "section": "typography"
+      },
+      {
+        "name": "The No-Inter Rule",
+        "body": "Inter, IBM Plex, Space Grotesk, Fraunces, and Instrument Sans are forbidden. Switzer is the identity; the whole point is to not look like everyone else's developer tool.",
+        "section": "typography"
+      },
+      {
+        "name": "The Flat-With-Vibrancy Rule",
+        "body": "Surfaces are flat at rest. Depth comes from warm tonal layering and real macOS vibrancy. Shadows are reserved for the Island and transient popovers — nothing else.",
+        "section": "elevation"
+      },
+      {
+        "name": "The No-Dropshadow-On-Cards Rule",
+        "body": "Cards sit inside the warm parent surface and step up tonally. If a card reads as floating, add tonal contrast, not shadow.",
+        "section": "elevation"
+      },
+      {
+        "name": "The Compact-Control Rule",
+        "body": "Default interactive controls (buttons, inputs, tabs) are 28px tall. Don't inflate to 36/40px — the whole system's rhythm depends on this density.",
+        "section": "components"
+      },
+      {
+        "name": "The Ghost-Border Rule",
+        "body": "Cards use a 1px ring at foreground/10. Never use a visible 1px solid border on cards — hairlines announce themselves; ghost borders separate without shouting.",
+        "section": "components"
+      },
+      {
+        "name": "The Signature Rule",
+        "body": "The Dynamic Island is the one place backdrop-blur-xl and shadow-sm earn their keep. Don't scatter blur or shadow elsewhere 'to match'.",
+        "section": "components"
+      }
+    ],
+    "dos": [
+      "Do tint every neutral warm (0.005–0.008 chroma, 34–48° hue). There is no such thing as pure grey in this app.",
+      "Do reserve the Amber Heartbeat for focus rings, selected state, the primary button, and the Dynamic Island at attention.",
+      "Do build depth through tonal surface layering (Warm Ink → Warm Raised → Warm Accent).",
+      "Do use Switzer for UI and JetBrains Mono for SQL and data — with ligatures off on mono.",
+      "Do keep default controls at 28px (h-7) and body text at 12px. Density is the point.",
+      "Do use real macOS vibrancy via windowEffects: ['sidebar'] on the Tauri window, and backdrop-blur-xl backdrop-saturate-200 on the Dynamic Island.",
+      "Do put iOS-like springs (stiffness: 400, damping: 30) on morphing elements and exponential ease-outs on state transitions (150ms ease-out).",
+      "Do keep focus rings visible — 2px amber, always. Focus is a feature.",
+      "Do respect prefers-reduced-motion by dropping springs, blurs, and exit animations."
+    ],
+    "donts": [
+      "Don't use #000 or #fff anywhere. Ever.",
+      "Don't use purple or cyan gradients, neon accents on dark, or sparkle iconography. This is not a '✨ AI-powered' product.",
+      "Don't build a chatbot drawer bolted onto the IDE. AI output lands in the editor like a colleague pasted it — not like a product feature.",
+      "Don't imitate DBeaver / phpMyAdmin / pgAdmin chrome — bureaucratic grey panels, icon-heavy toolbars, zero personality. That's the anti-brand.",
+      "Don't use Inter, IBM Plex, Space Grotesk, Fraunces, or Instrument Sans. Switzer is the identity.",
+      "Don't scale controls up to 36/40px to feel 'safer'. The system's rhythm breaks.",
+      "Don't use border-left / border-right greater than 1px as a colored accent stripe on cards, list items, or callouts. Rewrite with full borders, tonal backgrounds, or leading icons.",
+      "Don't use background-clip: text with gradients. Emphasis is weight and size.",
+      "Don't use shadow-lg / xl / 2xl on anything. Heavy drop shadows belong to consumer products.",
+      "Don't drop shadows on cards. Cards step up tonally.",
+      "Don't use the connection palette for charts or status — connections only.",
+      "Don't use ligatures on SQL — => / != / <= / -> are operators, not glyphs.",
+      "Don't animate CSS layout properties. Animate transform, opacity, filter, or use Framer layout.",
+      "Don't imitate macOS widgets. Inherit the discipline — keyboard-first, quiet chrome, real vibrancy — not the skin."
+    ]
+  }
+}

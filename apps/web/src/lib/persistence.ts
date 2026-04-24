@@ -24,11 +24,23 @@ export interface TabState {
 export interface HistoryEntry {
   sql: string;
   connectionId: string;
+  dialect: string | null;
   database: string | null;
   timestamp: string;
   success: boolean;
   error: string | null;
   executionTimeMs: number;
+}
+
+export interface HistoryFilters {
+  connectionIds?: string[];
+  dialects?: string[];
+  minRuntimeMs?: number;
+  maxRuntimeMs?: number;
+  erroredOnly?: boolean;
+  query?: string;
+  limit?: number;
+  offset?: number;
 }
 
 export const HISTORY_UPDATED_EVENT = "oh-my-query:history-updated";
@@ -119,4 +131,69 @@ export const getHistory = async (
 
   const { invoke } = await import("@tauri-apps/api/core");
   return invoke<HistoryEntry[]>("get_history", { connectionId, limit, offset });
+};
+
+const matchesFilters = (
+  entry: HistoryEntry,
+  filters: HistoryFilters
+): boolean => {
+  if (
+    filters.connectionIds?.length &&
+    !filters.connectionIds.includes(entry.connectionId)
+  ) {
+    return false;
+  }
+  if (
+    filters.dialects?.length &&
+    (!entry.dialect || !filters.dialects.includes(entry.dialect))
+  ) {
+    return false;
+  }
+  if (
+    filters.minRuntimeMs !== undefined &&
+    entry.executionTimeMs < filters.minRuntimeMs
+  ) {
+    return false;
+  }
+  if (
+    filters.maxRuntimeMs !== undefined &&
+    entry.executionTimeMs > filters.maxRuntimeMs
+  ) {
+    return false;
+  }
+  if (filters.erroredOnly && entry.success) {
+    return false;
+  }
+  const needle = filters.query?.trim().toLowerCase();
+  if (needle && !entry.sql.toLowerCase().includes(needle)) {
+    return false;
+  }
+  return true;
+};
+
+export const getAllHistory = async (
+  filters: HistoryFilters = {}
+): Promise<HistoryEntry[]> => {
+  if (!isTauri()) {
+    const all: HistoryEntry[] = [];
+    for (let i = 0; i < localStorage.length; i += 1) {
+      const key = localStorage.key(i);
+      if (!key?.startsWith(HISTORY_STORAGE_PREFIX)) {
+        continue;
+      }
+      const raw = localStorage.getItem(key);
+      if (!raw) {
+        continue;
+      }
+      all.push(...safeParse<HistoryEntry[]>(raw, []));
+    }
+    const filtered = all
+      .filter((entry) => matchesFilters(entry, filters))
+      .toSorted((a, b) => b.timestamp.localeCompare(a.timestamp));
+    const start = filters.offset ?? 0;
+    return filtered.slice(start, start + (filters.limit ?? 500));
+  }
+
+  const { invoke } = await import("@tauri-apps/api/core");
+  return invoke<HistoryEntry[]>("get_all_history", { filters });
 };

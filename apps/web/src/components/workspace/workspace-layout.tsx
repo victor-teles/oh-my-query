@@ -5,6 +5,7 @@ import { usePanelRef } from "react-resizable-panels";
 import type { AIAction, AIActionType } from "@/lib/ai-actions";
 
 import { WorkspaceLayoutActions } from "@/components/command-palette/actions/workspace-actions";
+import { QueryHistoryPanel } from "@/components/history/query-history-panel";
 import { ConnectionToolbar } from "@/components/titlebar/connection-toolbar";
 import { Titlebar } from "@/components/titlebar/titlebar";
 import {
@@ -13,6 +14,7 @@ import {
   ResizablePanelGroup,
 } from "@/components/ui/resizable";
 import { useConnection } from "@/contexts/connection-context";
+import { useHistoryPanel } from "@/hooks/use-history-panel";
 import { useSchema } from "@/hooks/use-schema";
 import { useWorkspaceIslandSync } from "@/hooks/use-workspace-island-sync";
 import { useWorkspaceMode } from "@/hooks/use-workspace-mode";
@@ -57,12 +59,18 @@ export const WorkspaceLayout = () => {
 
   useWorkspaceModeHotkeys({ setMode });
 
+  const { toggle: toggleHistoryPanel } = useHistoryPanel();
+
   useHotkey("Mod+B", () => {
     handleSidebarToggle();
   });
 
   useHotkey("Mod+Shift+C", () => {
     setMode(mode === "chat" ? "split" : "chat");
+  });
+
+  useHotkey("Mod+Shift+H", () => {
+    toggleHistoryPanel();
   });
 
   useHotkey("Mod+/", () => {
@@ -133,63 +141,66 @@ export const WorkspaceLayout = () => {
           workspaceMode={mode}
         />
       </Titlebar>
-      <ResizablePanelGroup
-        className="flex-1"
-        key={mode}
-        orientation="horizontal"
-      >
-        <ResizablePanel
-          collapsedSize="0%"
-          collapsible
-          defaultSize={mode === "chat" ? "20%" : "25%"}
-          maxSize="40%"
-          minSize="15%"
-          panelRef={sidebarRef}
+      <div className="relative flex flex-1 min-h-0">
+        <ResizablePanelGroup
+          className="flex-1"
+          key={mode}
+          orientation="horizontal"
         >
-          <WorkspaceSidebar
-            connection={connection}
-            databases={databases}
-            error={schemaError}
-            isLoading={schemaLoading}
-            refresh={refreshSchema}
-            schema={schema}
-            selectedDatabase={selectedDatabase}
-            setSelectedDatabase={setSelectedDatabase}
-          />
-        </ResizablePanel>
-        <ResizableHandle />
-
-        {showEditor ? (
           <ResizablePanel
-            defaultSize={mode === "split" ? "50%" : "75%"}
-            minSize="30%"
+            collapsedSize="0%"
+            collapsible
+            defaultSize={mode === "chat" ? "20%" : "25%"}
+            maxSize="40%"
+            minSize="15%"
+            panelRef={sidebarRef}
           >
-            <WorkspaceContent
-              onAiAction={handleAiAction}
+            <WorkspaceSidebar
+              connection={connection}
+              databases={databases}
+              error={schemaError}
+              isLoading={schemaLoading}
+              refresh={refreshSchema}
               schema={schema}
               selectedDatabase={selectedDatabase}
+              setSelectedDatabase={setSelectedDatabase}
             />
           </ResizablePanel>
-        ) : null}
+          <ResizableHandle />
 
-        {showEditor && showChat ? <ResizableHandle /> : null}
+          {showEditor ? (
+            <ResizablePanel
+              defaultSize={mode === "split" ? "50%" : "75%"}
+              minSize="30%"
+            >
+              <WorkspaceContent
+                onAiAction={handleAiAction}
+                schema={schema}
+                selectedDatabase={selectedDatabase}
+              />
+            </ResizablePanel>
+          ) : null}
 
-        {showChat ? (
-          <ResizablePanel
-            defaultSize={mode === "chat" ? "80%" : "25%"}
-            minSize="20%"
-          >
-            <ChatSidebar
-              connection={connection}
-              mode={mode}
-              onClose={handleChatClose}
-              onPendingActionConsumed={handlePendingActionConsumed}
-              pendingAction={pendingAction}
-              schema={schema}
-            />
-          </ResizablePanel>
-        ) : null}
-      </ResizablePanelGroup>
+          {showEditor && showChat ? <ResizableHandle /> : null}
+
+          {showChat ? (
+            <ResizablePanel
+              defaultSize={mode === "chat" ? "80%" : "25%"}
+              minSize="20%"
+            >
+              <ChatSidebar
+                connection={connection}
+                mode={mode}
+                onClose={handleChatClose}
+                onPendingActionConsumed={handlePendingActionConsumed}
+                pendingAction={pendingAction}
+                schema={schema}
+              />
+            </ResizablePanel>
+          ) : null}
+        </ResizablePanelGroup>
+        <QueryHistoryPanel />
+      </div>
 
       <KeyboardShortcutsOverlay
         onOpenChange={setShortcutsOpen}

@@ -8,6 +8,13 @@ interface TestConnectionResult {
 
 export const isTauri = (): boolean => "__TAURI_INTERNALS__" in window;
 
+export const isMacOS = (): boolean => {
+  if (typeof navigator === "undefined") {
+    return false;
+  }
+  return /Mac|iPhone|iPad|iPod/i.test(navigator.userAgent);
+};
+
 export const testConnection = async (
   connection: Omit<
     DatabaseConnection,

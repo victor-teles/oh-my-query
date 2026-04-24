@@ -30,6 +30,7 @@ import {
   canSaveAISettingsDraft,
   normalizeAISettingsDraft,
 } from "@/lib/ai-settings-form";
+import { openExternal } from "@/lib/open-external";
 
 interface AISettingsDialogProps {
   open: boolean;
@@ -142,6 +143,12 @@ export const AISettingsDialog = ({
     onOpenChange(false);
   }, [onOpenChange]);
 
+  const handleOpenKeyUrl = useCallback(async () => {
+    if (currentProvider?.keyUrl) {
+      await openExternal(currentProvider.keyUrl);
+    }
+  }, [currentProvider?.keyUrl]);
+
   const handleSave = useCallback(async () => {
     setSaving(true);
     try {
@@ -206,14 +213,13 @@ export const AISettingsDialog = ({
             {currentProvider?.keyUrl && (
               <p className="text-xs text-muted-foreground">
                 Get your key at{" "}
-                <a
-                  href={currentProvider.keyUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-primary underline underline-offset-2"
+                <button
+                  type="button"
+                  onClick={handleOpenKeyUrl}
+                  className="text-primary underline underline-offset-2 cursor-default focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50 rounded-sm"
                 >
                   {currentProvider.keyUrlLabel}
-                </a>
+                </button>
               </p>
             )}
           </div>

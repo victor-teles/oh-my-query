@@ -22,6 +22,7 @@
         "titleBarStyle": "Overlay",
         "hiddenTitle": true,
         "transparent": true,
+        "dragDropEnabled": false,
         "windowEffects": {
           "effects": ["sidebar"],
           "state": "followsWindowActiveState"

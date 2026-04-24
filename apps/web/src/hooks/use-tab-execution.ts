@@ -159,6 +159,7 @@ export const useTabExecution = ({
         await appendHistory({
           connectionId,
           database: selectedDatabase,
+          dialect: connection.type,
           error: errorMessage,
           executionTimeMs,
           sql,
@@ -182,6 +183,7 @@ export const useTabExecution = ({
     [
       connection.environment,
       connection.name,
+      connection.type,
       connectionId,
       selectedDatabase,
       setTabs,
