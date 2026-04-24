@@ -1,9 +1,23 @@
 use serde::{Deserialize, Serialize};
+use std::collections::HashMap;
 use std::path::{Path, PathBuf};
+use std::sync::{Arc, OnceLock};
 use tokio::io::AsyncWriteExt;
+use tokio::sync::Mutex as AsyncMutex;
 
 use crate::config::ConfigError;
 use crate::crypto;
+
+static HISTORY_FILE_LOCKS: OnceLock<AsyncMutex<HashMap<PathBuf, Arc<AsyncMutex<()>>>>> =
+    OnceLock::new();
+
+async fn history_file_lock(path: &Path) -> Arc<AsyncMutex<()>> {
+    let registry = HISTORY_FILE_LOCKS.get_or_init(|| AsyncMutex::new(HashMap::new()));
+    let mut map = registry.lock().await;
+    map.entry(path.to_path_buf())
+        .or_insert_with(|| Arc::new(AsyncMutex::new(())))
+        .clone()
+}
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
 #[serde(rename_all = "camelCase")]
@@ -249,6 +263,9 @@ pub async fn append_history(entry: HistoryEntry) -> Result<(), ConfigError> {
     let mut line = encrypted;
     line.push('\n');
 
+    let lock = history_file_lock(&path).await;
+    let _guard = lock.lock().await;
+
     let mut file = tokio::fs::OpenOptions::new()
         .create(true)
         .append(true)
@@ -271,13 +288,18 @@ pub async fn get_history(
     if !path.exists() {
         return Ok(vec![]);
     }
-    let (mut entries, needs_migration) = read_entries(&path).await?;
 
-    if needs_migration {
-        // Best-effort migration: if encryption is available we re-write encrypted.
-        // If it fails (e.g. keyring unavailable), just leave the file as-is.
-        let _ = rewrite_encrypted(&path, &entries).await;
-    }
+    let lock = history_file_lock(&path).await;
+    let mut entries = {
+        let _guard = lock.lock().await;
+        let (entries, needs_migration) = read_entries(&path).await?;
+        if needs_migration {
+            // Best-effort migration: if encryption is available we re-write encrypted.
+            // If it fails (e.g. keyring unavailable), just leave the file as-is.
+            let _ = rewrite_encrypted(&path, &entries).await;
+        }
+        entries
+    };
 
     entries.reverse();
 
@@ -306,13 +328,18 @@ pub async fn get_all_history(
         if path.extension().and_then(|s| s.to_str()) != Some("jsonl") {
             continue;
         }
-        let (entries, needs_migration) = match read_entries(&path).await {
-            Ok(pair) => pair,
-            Err(_) => continue,
+        let lock = history_file_lock(&path).await;
+        let entries = {
+            let _guard = lock.lock().await;
+            let (entries, needs_migration) = match read_entries(&path).await {
+                Ok(pair) => pair,
+                Err(_) => continue,
+            };
+            if needs_migration {
+                let _ = rewrite_encrypted(&path, &entries).await;
+            }
+            entries
         };
-        if needs_migration {
-            let _ = rewrite_encrypted(&path, &entries).await;
-        }
         for e in entries {
             if matches_filters(&e, &filters) {
                 all.push(e);
@@ -373,4 +400,62 @@ pub async fn get_connections() -> Result<Vec<DatabaseConnection>, ConfigError> {
 pub async fn save_connections(connections: Vec<DatabaseConnection>) -> Result<(), ConfigError> {
     let path = connections_path()?;
     write_encrypted_connections(&path, &connections).await
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use std::sync::atomic::{AtomicUsize, Ordering};
+    use std::time::Duration;
+
+    #[tokio::test]
+    async fn same_path_serializes_critical_sections() {
+        let path = std::env::temp_dir().join("oh-my-query-history-lock-test-a.jsonl");
+        let in_flight = Arc::new(AtomicUsize::new(0));
+        let max_concurrent = Arc::new(AtomicUsize::new(0));
+
+        let mut handles = Vec::new();
+        for _ in 0..8 {
+            let path = path.clone();
+            let in_flight = Arc::clone(&in_flight);
+            let max_concurrent = Arc::clone(&max_concurrent);
+            handles.push(tokio::spawn(async move {
+                let lock = history_file_lock(&path).await;
+                let _guard = lock.lock().await;
+                let current = in_flight.fetch_add(1, Ordering::SeqCst) + 1;
+                max_concurrent.fetch_max(current, Ordering::SeqCst);
+                tokio::time::sleep(Duration::from_millis(5)).await;
+                in_flight.fetch_sub(1, Ordering::SeqCst);
+            }));
+        }
+        for h in handles {
+            h.await.unwrap();
+        }
+
+        assert_eq!(
+            max_concurrent.load(Ordering::SeqCst),
+            1,
+            "critical sections on the same path must not overlap",
+        );
+    }
+
+    #[tokio::test]
+    async fn distinct_paths_do_not_block_each_other() {
+        let path_a = std::env::temp_dir().join("oh-my-query-history-lock-test-b.jsonl");
+        let path_b = std::env::temp_dir().join("oh-my-query-history-lock-test-c.jsonl");
+
+        let lock_a = history_file_lock(&path_a).await;
+        let lock_b = history_file_lock(&path_b).await;
+
+        let guard_a = lock_a.lock().await;
+
+        // Grabbing the second, different-path lock must succeed without waiting
+        // on `guard_a`. `try_lock` returning `Ok` proves the locks are independent.
+        let guard_b = lock_b
+            .try_lock()
+            .expect("distinct paths must use distinct locks");
+
+        drop(guard_b);
+        drop(guard_a);
+    }
 }
