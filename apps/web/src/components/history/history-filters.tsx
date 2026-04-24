@@ -1,5 +1,5 @@
 import { ChevronDownIcon, FilterXIcon, XIcon } from "lucide-react";
-import { memo, useCallback } from "react";
+import { memo, useCallback, useMemo } from "react";
 
 import type { DatabaseConnection, DatabaseType } from "@/lib/connections";
 import type { HistoryFilters } from "@/lib/persistence";
@@ -193,7 +193,10 @@ export const HistoryFiltersPanel = ({
   const selectedConnections = filters.connectionIds ?? [];
   const selectedDialects = filters.dialects ?? [];
 
-  const connectionNameById = new Map(connections.map((c) => [c.id, c.name]));
+  const connectionNameById = useMemo(
+    () => new Map(connections.map((c) => [c.id, c.name])),
+    [connections]
+  );
   const selectedConnectionNames = selectedConnections.map(
     (id) => connectionNameById.get(id) ?? "Deleted"
   );

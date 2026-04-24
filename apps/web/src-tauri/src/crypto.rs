@@ -5,7 +5,7 @@ use base64::Engine;
 use keyring::Entry;
 use rand::RngCore;
 use std::fmt;
-use std::sync::OnceLock;
+use std::sync::{Mutex, OnceLock};
 
 use crate::config::ConfigError;
 
@@ -15,6 +15,7 @@ const KEY_LEN: usize = 32;
 const NONCE_LEN: usize = 12;
 
 static CACHED_KEY: OnceLock<[u8; KEY_LEN]> = OnceLock::new();
+static INIT_LOCK: Mutex<()> = Mutex::new(());
 
 #[derive(Debug)]
 pub enum CryptoError {
@@ -86,6 +87,12 @@ fn load_or_create_key() -> Result<[u8; KEY_LEN], CryptoError> {
 }
 
 pub fn get_key() -> Result<&'static [u8; KEY_LEN], CryptoError> {
+    if let Some(k) = CACHED_KEY.get() {
+        return Ok(k);
+    }
+    let _guard = INIT_LOCK
+        .lock()
+        .map_err(|_| CryptoError::Keyring("init lock poisoned".to_string()))?;
     if let Some(k) = CACHED_KEY.get() {
         return Ok(k);
     }

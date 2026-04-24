@@ -20,7 +20,17 @@ interface ConnectionLifecycleState {
 }
 
 const connectionIdentityKey = (c: DatabaseConnection): string =>
-  `${c.id}|${c.type}|${c.host}|${c.port}|${c.database}|${c.username}|${c.password}|${c.authSource ?? ""}|${c.trustServerCertificate ?? ""}`;
+  JSON.stringify([
+    c.id,
+    c.type,
+    c.host,
+    c.port,
+    c.database,
+    c.username,
+    c.password,
+    c.authSource ?? null,
+    c.trustServerCertificate ?? null,
+  ]);
 
 export const useConnectionLifecycle = (
   connection: DatabaseConnection

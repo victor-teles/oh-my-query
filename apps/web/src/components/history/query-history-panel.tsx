@@ -49,7 +49,6 @@ interface FlatItem {
   kind: "header" | "row";
   label?: string;
   entry?: HistoryEntry;
-  key: string;
 }
 
 const flattenWithGroups = (entries: HistoryEntry[]): FlatItem[] => {
@@ -59,13 +58,9 @@ const flattenWithGroups = (entries: HistoryEntry[]): FlatItem[] => {
     const label = getDateLabel(entry.timestamp);
     if (label !== currentLabel) {
       currentLabel = label;
-      items.push({ key: `header:${label}`, kind: "header", label });
+      items.push({ kind: "header", label });
     }
-    items.push({
-      entry,
-      key: `row:${entry.timestamp}:${entry.connectionId}`,
-      kind: "row",
-    });
+    items.push({ entry, kind: "row" });
   }
   return items;
 };
@@ -136,6 +131,17 @@ export const QueryHistoryPanel = () => {
     return map;
   }, [items]);
 
+  const entryIndexMap = useMemo(() => {
+    const m = new Map<HistoryEntry, number>();
+    for (let i = 0; i < rowEntries.length; i += 1) {
+      const e = rowEntries[i];
+      if (e) {
+        m.set(e, i);
+      }
+    }
+    return m;
+  }, [rowEntries]);
+
   const focusedEntry =
     focusedIndex !== null ? (rowEntries[focusedIndex] ?? null) : null;
 
@@ -164,12 +170,12 @@ export const QueryHistoryPanel = () => {
 
   const handleFocusRow = useCallback(
     (entry: HistoryEntry) => {
-      const idx = rowEntries.indexOf(entry);
+      const idx = entryIndexMap.get(entry) ?? -1;
       if (idx !== -1) {
         setFocusedIndex(idx);
       }
     },
-    [rowEntries]
+    [entryIndexMap]
   );
 
   const handleOpenRow = useCallback(
@@ -206,6 +212,11 @@ export const QueryHistoryPanel = () => {
         setOpen(false);
         return;
       }
+      if (e.key === "Enter" && focusedEntry) {
+        e.preventDefault();
+        handleOpenRow(focusedEntry);
+        return;
+      }
       if (e.key === "ArrowDown" || e.key === "ArrowUp") {
         if (rowEntries.length === 0) {
           return;
@@ -221,7 +232,7 @@ export const QueryHistoryPanel = () => {
         });
       }
     },
-    [rowEntries.length, searchInput, setOpen]
+    [focusedEntry, handleOpenRow, rowEntries.length, searchInput, setOpen]
   );
 
   useEffect(() => {
@@ -407,7 +418,7 @@ export const QueryHistoryPanel = () => {
                     if (!entry) {
                       return null;
                     }
-                    const entryRowIndex = rowEntries.indexOf(entry);
+                    const entryRowIndex = entryIndexMap.get(entry) ?? -1;
                     const isFocused = focusedIndex === entryRowIndex;
                     return (
                       <div
