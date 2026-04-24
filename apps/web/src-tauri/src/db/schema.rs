@@ -322,202 +322,226 @@ async fn list_databases_mysql(pool: &sqlx::MySqlPool) -> Result<Vec<String>, DbE
         .collect())
 }
 
+struct MysqlTableRow {
+    name: String,
+    table_type: String,
+    row_estimate: Option<u64>,
+}
+
+struct MysqlColumnRow {
+    table: String,
+    column: ColumnDetail,
+}
+
+struct MysqlIndexRow {
+    table: String,
+    index_name: String,
+    is_unique: bool,
+    column: String,
+}
+
+struct MysqlFkRow {
+    table: String,
+    constraint_name: String,
+    column: String,
+    referenced_table: String,
+    referenced_column: String,
+}
+
 async fn fetch_schema_mysql(
     pool: &sqlx::MySqlPool,
     schema_name: &str,
 ) -> Result<SchemaInfo, DbError> {
-    let tables = fetch_tables_mysql(pool, schema_name).await?;
-    let views = fetch_views_mysql(pool, schema_name).await?;
+    let table_rows = sqlx::query(
+        "SELECT TABLE_NAME, TABLE_TYPE, TABLE_ROWS FROM information_schema.TABLES \
+         WHERE TABLE_SCHEMA = ? AND TABLE_TYPE IN ('BASE TABLE', 'VIEW') \
+         ORDER BY TABLE_NAME",
+    )
+    .bind(schema_name)
+    .fetch_all(pool)
+    .await
+    .map_err(DbError::from)?;
 
-    Ok(SchemaInfo {
+    let column_rows = sqlx::query(
+        "SELECT TABLE_NAME, COLUMN_NAME, DATA_TYPE, IS_NULLABLE, COLUMN_DEFAULT, COLUMN_KEY \
+         FROM information_schema.COLUMNS \
+         WHERE TABLE_SCHEMA = ? \
+         ORDER BY TABLE_NAME, ORDINAL_POSITION",
+    )
+    .bind(schema_name)
+    .fetch_all(pool)
+    .await
+    .map_err(DbError::from)?;
+
+    let index_rows = sqlx::query(
+        "SELECT TABLE_NAME, INDEX_NAME, NON_UNIQUE, COLUMN_NAME \
+         FROM information_schema.STATISTICS \
+         WHERE TABLE_SCHEMA = ? \
+         ORDER BY TABLE_NAME, INDEX_NAME, SEQ_IN_INDEX",
+    )
+    .bind(schema_name)
+    .fetch_all(pool)
+    .await
+    .map_err(DbError::from)?;
+
+    let fk_rows = sqlx::query(
+        "SELECT TABLE_NAME, CONSTRAINT_NAME, COLUMN_NAME, \
+                REFERENCED_TABLE_NAME, REFERENCED_COLUMN_NAME \
+         FROM information_schema.KEY_COLUMN_USAGE \
+         WHERE TABLE_SCHEMA = ? AND REFERENCED_TABLE_NAME IS NOT NULL \
+         ORDER BY TABLE_NAME, CONSTRAINT_NAME, ORDINAL_POSITION",
+    )
+    .bind(schema_name)
+    .fetch_all(pool)
+    .await
+    .map_err(DbError::from)?;
+
+    let tables = table_rows
+        .iter()
+        .map(|row| MysqlTableRow {
+            name: row.try_get("TABLE_NAME").unwrap_or_default(),
+            table_type: row.try_get("TABLE_TYPE").unwrap_or_default(),
+            row_estimate: row
+                .try_get::<Option<i64>, _>("TABLE_ROWS")
+                .ok()
+                .flatten()
+                .filter(|v| *v >= 0)
+                .map(|v| v as u64),
+        })
+        .collect();
+
+    let columns = column_rows
+        .iter()
+        .map(|row| {
+            let nullable: String = row.try_get("IS_NULLABLE").unwrap_or_default();
+            let column_key: String = row.try_get("COLUMN_KEY").unwrap_or_default();
+            MysqlColumnRow {
+                table: row.try_get("TABLE_NAME").unwrap_or_default(),
+                column: ColumnDetail {
+                    name: row.try_get("COLUMN_NAME").unwrap_or_default(),
+                    data_type: row.try_get("DATA_TYPE").unwrap_or_default(),
+                    is_nullable: nullable == "YES",
+                    is_primary_key: column_key == "PRI",
+                    default_value: row.try_get("COLUMN_DEFAULT").ok(),
+                },
+            }
+        })
+        .collect();
+
+    let indexes = index_rows
+        .iter()
+        .map(|row| {
+            let non_unique: i64 = row.try_get("NON_UNIQUE").unwrap_or(1);
+            MysqlIndexRow {
+                table: row.try_get("TABLE_NAME").unwrap_or_default(),
+                index_name: row.try_get("INDEX_NAME").unwrap_or_default(),
+                is_unique: non_unique == 0,
+                column: row.try_get("COLUMN_NAME").unwrap_or_default(),
+            }
+        })
+        .collect();
+
+    let fks = fk_rows
+        .iter()
+        .map(|row| MysqlFkRow {
+            table: row.try_get("TABLE_NAME").unwrap_or_default(),
+            constraint_name: row.try_get("CONSTRAINT_NAME").unwrap_or_default(),
+            column: row.try_get("COLUMN_NAME").unwrap_or_default(),
+            referenced_table: row.try_get("REFERENCED_TABLE_NAME").unwrap_or_default(),
+            referenced_column: row.try_get("REFERENCED_COLUMN_NAME").unwrap_or_default(),
+        })
+        .collect();
+
+    Ok(build_mysql_schema(schema_name, tables, columns, indexes, fks))
+}
+
+fn build_mysql_schema(
+    schema_name: &str,
+    table_rows: Vec<MysqlTableRow>,
+    column_rows: Vec<MysqlColumnRow>,
+    index_rows: Vec<MysqlIndexRow>,
+    fk_rows: Vec<MysqlFkRow>,
+) -> SchemaInfo {
+    let mut columns_by_table: std::collections::HashMap<String, Vec<ColumnDetail>> =
+        std::collections::HashMap::new();
+    for row in column_rows {
+        columns_by_table
+            .entry(row.table)
+            .or_default()
+            .push(row.column);
+    }
+
+    let mut indexes_by_table: std::collections::HashMap<String, Vec<IndexItem>> =
+        std::collections::HashMap::new();
+    for row in index_rows {
+        let table_indexes = indexes_by_table.entry(row.table).or_default();
+        if let Some(existing) = table_indexes
+            .iter_mut()
+            .find(|i| i.name == row.index_name)
+        {
+            existing.columns.push(row.column);
+        } else {
+            table_indexes.push(IndexItem {
+                name: row.index_name,
+                columns: vec![row.column],
+                is_unique: row.is_unique,
+            });
+        }
+    }
+
+    let mut fks_by_table: std::collections::HashMap<String, Vec<ForeignKeyItem>> =
+        std::collections::HashMap::new();
+    for row in fk_rows {
+        let table_fks = fks_by_table.entry(row.table).or_default();
+        if let Some(existing) = table_fks
+            .iter_mut()
+            .find(|f| f.name == row.constraint_name)
+        {
+            existing.columns.push(row.column);
+            existing.referenced_columns.push(row.referenced_column);
+        } else {
+            table_fks.push(ForeignKeyItem {
+                name: row.constraint_name,
+                columns: vec![row.column],
+                referenced_table: row.referenced_table,
+                referenced_columns: vec![row.referenced_column],
+            });
+        }
+    }
+
+    let mut tables: Vec<TableItem> = Vec::new();
+    let mut views: Vec<ViewItem> = Vec::new();
+
+    for row in table_rows {
+        let columns = columns_by_table.remove(&row.name).unwrap_or_default();
+
+        if row.table_type == "VIEW" {
+            views.push(ViewItem {
+                name: row.name,
+                columns,
+            });
+            continue;
+        }
+
+        let indexes = indexes_by_table.remove(&row.name).unwrap_or_default();
+        let foreign_keys = fks_by_table.remove(&row.name).unwrap_or_default();
+
+        tables.push(TableItem {
+            name: row.name,
+            columns,
+            indexes,
+            foreign_keys,
+            row_estimate: row.row_estimate,
+        });
+    }
+
+    SchemaInfo {
         schemas: vec![SchemaItem {
             name: schema_name.to_string(),
             tables,
             views,
         }],
-    })
-}
-
-async fn fetch_tables_mysql(
-    pool: &sqlx::MySqlPool,
-    schema_name: &str,
-) -> Result<Vec<TableItem>, DbError> {
-    let table_rows = sqlx::query(
-        "SELECT TABLE_NAME, TABLE_ROWS FROM information_schema.TABLES \
-         WHERE TABLE_SCHEMA = ? AND TABLE_TYPE = 'BASE TABLE' \
-         ORDER BY TABLE_NAME",
-    )
-    .bind(schema_name)
-    .fetch_all(pool)
-    .await
-    .map_err(DbError::from)?;
-
-    let mut tables = Vec::with_capacity(table_rows.len());
-
-    for table_row in &table_rows {
-        let table_name: String = table_row.try_get("TABLE_NAME").unwrap_or_default();
-        let row_estimate: Option<u64> = table_row
-            .try_get::<Option<i64>, _>("TABLE_ROWS")
-            .ok()
-            .flatten()
-            .filter(|v| *v >= 0)
-            .map(|v| v as u64);
-
-        let columns = fetch_columns_mysql(pool, schema_name, &table_name).await?;
-        let indexes = fetch_indexes_mysql(pool, schema_name, &table_name).await?;
-        let foreign_keys = fetch_fks_mysql(pool, schema_name, &table_name).await?;
-
-        tables.push(TableItem {
-            name: table_name,
-            columns,
-            indexes,
-            foreign_keys,
-            row_estimate,
-        });
     }
-
-    Ok(tables)
-}
-
-async fn fetch_views_mysql(
-    pool: &sqlx::MySqlPool,
-    schema_name: &str,
-) -> Result<Vec<ViewItem>, DbError> {
-    let view_rows = sqlx::query(
-        "SELECT TABLE_NAME FROM information_schema.TABLES \
-         WHERE TABLE_SCHEMA = ? AND TABLE_TYPE = 'VIEW' \
-         ORDER BY TABLE_NAME",
-    )
-    .bind(schema_name)
-    .fetch_all(pool)
-    .await
-    .map_err(DbError::from)?;
-
-    let mut views = Vec::with_capacity(view_rows.len());
-
-    for view_row in &view_rows {
-        let view_name: String = view_row.try_get("TABLE_NAME").unwrap_or_default();
-        let columns = fetch_columns_mysql(pool, schema_name, &view_name).await?;
-
-        views.push(ViewItem {
-            name: view_name,
-            columns,
-        });
-    }
-
-    Ok(views)
-}
-
-async fn fetch_columns_mysql(
-    pool: &sqlx::MySqlPool,
-    schema_name: &str,
-    table_name: &str,
-) -> Result<Vec<ColumnDetail>, DbError> {
-    let rows = sqlx::query(
-        "SELECT COLUMN_NAME, DATA_TYPE, IS_NULLABLE, COLUMN_DEFAULT, COLUMN_KEY \
-         FROM information_schema.COLUMNS \
-         WHERE TABLE_SCHEMA = ? AND TABLE_NAME = ? \
-         ORDER BY ORDINAL_POSITION",
-    )
-    .bind(schema_name)
-    .bind(table_name)
-    .fetch_all(pool)
-    .await
-    .map_err(DbError::from)?;
-
-    Ok(rows
-        .iter()
-        .map(|row| {
-            let nullable: String = row.try_get("IS_NULLABLE").unwrap_or_default();
-            let column_key: String = row.try_get("COLUMN_KEY").unwrap_or_default();
-            ColumnDetail {
-                name: row.try_get("COLUMN_NAME").unwrap_or_default(),
-                data_type: row.try_get("DATA_TYPE").unwrap_or_default(),
-                is_nullable: nullable == "YES",
-                is_primary_key: column_key == "PRI",
-                default_value: row.try_get("COLUMN_DEFAULT").ok(),
-            }
-        })
-        .collect())
-}
-
-async fn fetch_indexes_mysql(
-    pool: &sqlx::MySqlPool,
-    schema_name: &str,
-    table_name: &str,
-) -> Result<Vec<IndexItem>, DbError> {
-    let rows = sqlx::query(
-        "SELECT INDEX_NAME, NON_UNIQUE, COLUMN_NAME \
-         FROM information_schema.STATISTICS \
-         WHERE TABLE_SCHEMA = ? AND TABLE_NAME = ? \
-         ORDER BY INDEX_NAME, SEQ_IN_INDEX",
-    )
-    .bind(schema_name)
-    .bind(table_name)
-    .fetch_all(pool)
-    .await
-    .map_err(DbError::from)?;
-
-    let mut index_map: std::collections::HashMap<String, IndexItem> =
-        std::collections::HashMap::new();
-
-    for row in &rows {
-        let name: String = row.try_get("INDEX_NAME").unwrap_or_default();
-        let non_unique: i64 = row.try_get("NON_UNIQUE").unwrap_or(1);
-        let column: String = row.try_get("COLUMN_NAME").unwrap_or_default();
-
-        let entry = index_map.entry(name.clone()).or_insert_with(|| IndexItem {
-            name,
-            columns: Vec::new(),
-            is_unique: non_unique == 0,
-        });
-        entry.columns.push(column);
-    }
-
-    Ok(index_map.into_values().collect())
-}
-
-async fn fetch_fks_mysql(
-    pool: &sqlx::MySqlPool,
-    schema_name: &str,
-    table_name: &str,
-) -> Result<Vec<ForeignKeyItem>, DbError> {
-    let rows = sqlx::query(
-        "SELECT CONSTRAINT_NAME, COLUMN_NAME, \
-                REFERENCED_TABLE_NAME, REFERENCED_COLUMN_NAME \
-         FROM information_schema.KEY_COLUMN_USAGE \
-         WHERE TABLE_SCHEMA = ? AND TABLE_NAME = ? \
-             AND REFERENCED_TABLE_NAME IS NOT NULL \
-         ORDER BY CONSTRAINT_NAME, ORDINAL_POSITION",
-    )
-    .bind(schema_name)
-    .bind(table_name)
-    .fetch_all(pool)
-    .await
-    .map_err(DbError::from)?;
-
-    let mut fk_map: std::collections::HashMap<String, ForeignKeyItem> =
-        std::collections::HashMap::new();
-
-    for row in &rows {
-        let name: String = row.try_get("CONSTRAINT_NAME").unwrap_or_default();
-        let column: String = row.try_get("COLUMN_NAME").unwrap_or_default();
-        let ref_table: String = row.try_get("REFERENCED_TABLE_NAME").unwrap_or_default();
-        let ref_column: String = row.try_get("REFERENCED_COLUMN_NAME").unwrap_or_default();
-
-        let entry = fk_map
-            .entry(name.clone())
-            .or_insert_with(|| ForeignKeyItem {
-                name,
-                columns: Vec::new(),
-                referenced_table: ref_table,
-                referenced_columns: Vec::new(),
-            });
-        entry.columns.push(column);
-        entry.referenced_columns.push(ref_column);
-    }
-
-    Ok(fk_map.into_values().collect())
 }
 
 // SQLite introspection
@@ -1413,4 +1437,202 @@ async fn fetch_indexes_mssql(
 
 fn escape_mssql_literal(input: &str) -> String {
     input.replace('\'', "''")
+}
+
+#[cfg(test)]
+mod mysql_build_tests {
+    use super::*;
+
+    fn column(name: &str, data_type: &str, is_pk: bool) -> ColumnDetail {
+        ColumnDetail {
+            name: name.to_string(),
+            data_type: data_type.to_string(),
+            is_nullable: false,
+            is_primary_key: is_pk,
+            default_value: None,
+        }
+    }
+
+    #[test]
+    fn groups_columns_indexes_and_fks_by_table() {
+        let tables = vec![
+            MysqlTableRow {
+                name: "users".to_string(),
+                table_type: "BASE TABLE".to_string(),
+                row_estimate: Some(42),
+            },
+            MysqlTableRow {
+                name: "orders".to_string(),
+                table_type: "BASE TABLE".to_string(),
+                row_estimate: None,
+            },
+            MysqlTableRow {
+                name: "active_users".to_string(),
+                table_type: "VIEW".to_string(),
+                row_estimate: None,
+            },
+        ];
+
+        let columns = vec![
+            MysqlColumnRow {
+                table: "users".to_string(),
+                column: column("id", "int", true),
+            },
+            MysqlColumnRow {
+                table: "users".to_string(),
+                column: column("email", "varchar", false),
+            },
+            MysqlColumnRow {
+                table: "orders".to_string(),
+                column: column("id", "int", true),
+            },
+            MysqlColumnRow {
+                table: "orders".to_string(),
+                column: column("user_id", "int", false),
+            },
+            MysqlColumnRow {
+                table: "active_users".to_string(),
+                column: column("id", "int", false),
+            },
+        ];
+
+        let indexes = vec![
+            MysqlIndexRow {
+                table: "users".to_string(),
+                index_name: "PRIMARY".to_string(),
+                is_unique: true,
+                column: "id".to_string(),
+            },
+            MysqlIndexRow {
+                table: "users".to_string(),
+                index_name: "users_email_idx".to_string(),
+                is_unique: false,
+                column: "email".to_string(),
+            },
+            MysqlIndexRow {
+                table: "orders".to_string(),
+                index_name: "orders_user_fk_idx".to_string(),
+                is_unique: false,
+                column: "user_id".to_string(),
+            },
+        ];
+
+        let fks = vec![
+            MysqlFkRow {
+                table: "orders".to_string(),
+                constraint_name: "orders_user_fk".to_string(),
+                column: "user_id".to_string(),
+                referenced_table: "users".to_string(),
+                referenced_column: "id".to_string(),
+            },
+        ];
+
+        let schema = build_mysql_schema("shop", tables, columns, indexes, fks);
+
+        assert_eq!(schema.schemas.len(), 1);
+        let s = &schema.schemas[0];
+        assert_eq!(s.name, "shop");
+        assert_eq!(s.tables.len(), 2);
+        assert_eq!(s.views.len(), 1);
+
+        let users = s.tables.iter().find(|t| t.name == "users").unwrap();
+        assert_eq!(users.row_estimate, Some(42));
+        assert_eq!(users.columns.len(), 2);
+        assert_eq!(users.indexes.len(), 2);
+        assert!(users.foreign_keys.is_empty());
+
+        let orders = s.tables.iter().find(|t| t.name == "orders").unwrap();
+        assert_eq!(orders.row_estimate, None);
+        assert_eq!(orders.foreign_keys.len(), 1);
+        let fk = &orders.foreign_keys[0];
+        assert_eq!(fk.columns, vec!["user_id"]);
+        assert_eq!(fk.referenced_table, "users");
+        assert_eq!(fk.referenced_columns, vec!["id"]);
+
+        let view = &s.views[0];
+        assert_eq!(view.name, "active_users");
+        assert_eq!(view.columns.len(), 1);
+    }
+
+    #[test]
+    fn composite_index_and_fk_columns_are_grouped_in_order() {
+        let tables = vec![MysqlTableRow {
+            name: "memberships".to_string(),
+            table_type: "BASE TABLE".to_string(),
+            row_estimate: Some(0),
+        }];
+
+        let columns = vec![
+            MysqlColumnRow {
+                table: "memberships".to_string(),
+                column: column("user_id", "int", true),
+            },
+            MysqlColumnRow {
+                table: "memberships".to_string(),
+                column: column("team_id", "int", true),
+            },
+        ];
+
+        let indexes = vec![
+            MysqlIndexRow {
+                table: "memberships".to_string(),
+                index_name: "PRIMARY".to_string(),
+                is_unique: true,
+                column: "user_id".to_string(),
+            },
+            MysqlIndexRow {
+                table: "memberships".to_string(),
+                index_name: "PRIMARY".to_string(),
+                is_unique: true,
+                column: "team_id".to_string(),
+            },
+        ];
+
+        let fks = vec![
+            MysqlFkRow {
+                table: "memberships".to_string(),
+                constraint_name: "memberships_user_team_fk".to_string(),
+                column: "user_id".to_string(),
+                referenced_table: "user_teams".to_string(),
+                referenced_column: "user_id".to_string(),
+            },
+            MysqlFkRow {
+                table: "memberships".to_string(),
+                constraint_name: "memberships_user_team_fk".to_string(),
+                column: "team_id".to_string(),
+                referenced_table: "user_teams".to_string(),
+                referenced_column: "team_id".to_string(),
+            },
+        ];
+
+        let schema = build_mysql_schema("saas", tables, columns, indexes, fks);
+
+        let t = &schema.schemas[0].tables[0];
+        assert_eq!(t.indexes.len(), 1);
+        assert_eq!(t.indexes[0].name, "PRIMARY");
+        assert_eq!(t.indexes[0].columns, vec!["user_id", "team_id"]);
+        assert!(t.indexes[0].is_unique);
+
+        assert_eq!(t.foreign_keys.len(), 1);
+        assert_eq!(t.foreign_keys[0].columns, vec!["user_id", "team_id"]);
+        assert_eq!(
+            t.foreign_keys[0].referenced_columns,
+            vec!["user_id", "team_id"]
+        );
+    }
+
+    #[test]
+    fn table_without_columns_or_indexes_is_preserved() {
+        let tables = vec![MysqlTableRow {
+            name: "empty".to_string(),
+            table_type: "BASE TABLE".to_string(),
+            row_estimate: None,
+        }];
+        let schema = build_mysql_schema("db", tables, vec![], vec![], vec![]);
+        let t = &schema.schemas[0].tables[0];
+        assert_eq!(t.name, "empty");
+        assert!(t.columns.is_empty());
+        assert!(t.indexes.is_empty());
+        assert!(t.foreign_keys.is_empty());
+    }
 }

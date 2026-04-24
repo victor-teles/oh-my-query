@@ -1,102 +1,49 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect } from "react";
+import { useShallow } from "zustand/react/shallow";
 
-import type { SchemaInfo } from "@/lib/tauri";
-
-import { getSchema, listDatabases } from "@/lib/tauri";
-
-interface SchemaState {
-  databases: string[] | null;
-  selectedDatabase: string | null;
-  schema: SchemaInfo | null;
-  isLoading: boolean;
-  error: string | null;
-}
+import { selectSchemaState, useSchemaStore } from "@/stores/schema-store";
 
 export const useSchema = (connectionId: string, isConnected: boolean) => {
-  const [state, setState] = useState<SchemaState>({
-    databases: null,
-    error: null,
-    isLoading: false,
-    schema: null,
-    selectedDatabase: null,
-  });
+  const { databases, selectedDatabase, schema, isLoading, error } =
+    useSchemaStore(useShallow(selectSchemaState(connectionId)));
 
-  const fetchDatabases = useCallback(async () => {
-    setState((prev) => ({ ...prev, error: null, isLoading: true }));
-
-    try {
-      const databases = await listDatabases(connectionId);
-      const selected =
-        databases.find((db) => db === "public") ?? databases[0] ?? null;
-
-      setState((prev) => ({
-        ...prev,
-        databases,
-        isLoading: false,
-        selectedDatabase: selected,
-      }));
-    } catch (error) {
-      const message =
-        error instanceof Error ? error.message : "Failed to list databases";
-      setState((prev) => ({ ...prev, error: message, isLoading: false }));
-    }
-  }, [connectionId]);
-
-  const fetchSchema = useCallback(
-    async (databaseName: string) => {
-      setState((prev) => ({ ...prev, error: null, isLoading: true }));
-
-      try {
-        const schema = await getSchema(connectionId, databaseName);
-        setState((prev) => ({
-          ...prev,
-          error: null,
-          isLoading: false,
-          schema,
-        }));
-      } catch (error) {
-        const message =
-          error instanceof Error ? error.message : "Failed to load schema";
-        setState((prev) => ({
-          ...prev,
-          error: message,
-          isLoading: false,
-          schema: null,
-        }));
-      }
-    },
-    [connectionId]
+  const loadDatabases = useSchemaStore((s) => s.loadDatabases);
+  const loadSchema = useSchemaStore((s) => s.loadSchema);
+  const setSelectedDatabaseAction = useSchemaStore(
+    (s) => s.setSelectedDatabase
   );
-
-  const setSelectedDatabase = useCallback((database: string) => {
-    setState((prev) => ({ ...prev, schema: null, selectedDatabase: database }));
-  }, []);
-
-  const refresh = useCallback(() => {
-    if (state.selectedDatabase) {
-      fetchSchema(state.selectedDatabase);
-    }
-  }, [state.selectedDatabase, fetchSchema]);
+  const refreshAction = useSchemaStore((s) => s.refresh);
 
   useEffect(() => {
     if (isConnected) {
-      fetchDatabases();
+      loadDatabases(connectionId);
     }
-  }, [isConnected, fetchDatabases]);
+  }, [isConnected, connectionId, loadDatabases]);
 
   useEffect(() => {
-    if (state.selectedDatabase) {
-      fetchSchema(state.selectedDatabase);
+    if (selectedDatabase) {
+      loadSchema(connectionId, selectedDatabase);
     }
-  }, [state.selectedDatabase, fetchSchema]);
+  }, [connectionId, selectedDatabase, loadSchema]);
+
+  const setSelectedDatabase = useCallback(
+    (database: string) => {
+      setSelectedDatabaseAction(connectionId, database);
+    },
+    [connectionId, setSelectedDatabaseAction]
+  );
+
+  const refresh = useCallback(() => {
+    refreshAction(connectionId);
+  }, [connectionId, refreshAction]);
 
   return {
-    databases: state.databases,
-    error: state.error,
-    isLoading: state.isLoading,
+    databases,
+    error,
+    isLoading,
     refresh,
-    schema: state.schema,
-    selectedDatabase: state.selectedDatabase,
+    schema,
+    selectedDatabase,
     setSelectedDatabase,
   };
 };

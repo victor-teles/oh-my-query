@@ -3,6 +3,7 @@ import { useCallback, useEffect, useState } from "react";
 import type { DatabaseConnection } from "@/lib/connections";
 
 import { markConnectionUsed } from "@/lib/connections";
+import { getErrorMessage } from "@/lib/error-message";
 import {
   connectToDatabase,
   disconnectFromDatabase,
@@ -74,8 +75,7 @@ export const useConnectionLifecycle = (
         }
       } catch (error) {
         if (!cancelled) {
-          const message =
-            error instanceof Error ? error.message : "Failed to connect";
+          const message = getErrorMessage(error, "Failed to connect");
           setState({
             error: message,
             isConnected: false,

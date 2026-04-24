@@ -1,5 +1,5 @@
 use async_trait::async_trait;
-use sqlx::mysql::MySqlPoolOptions;
+use sqlx::mysql::{MySqlConnectOptions, MySqlPoolOptions};
 use std::time::Instant;
 
 use crate::db::driver::DatabaseDriver;
@@ -23,11 +23,16 @@ impl DatabaseDriver for MysqlDriver {
             urlencoding::encode(&params.database),
         );
 
+        let connect_options: MySqlConnectOptions = url
+            .parse::<MySqlConnectOptions>()
+            .map_err(DbError::from)?
+            .statement_cache_capacity(0);
+
         let start = Instant::now();
         let pool = MySqlPoolOptions::new()
             .max_connections(1)
-            .acquire_timeout(std::time::Duration::from_secs(10))
-            .connect(&url)
+            .acquire_timeout(std::time::Duration::from_secs(30))
+            .connect_with(connect_options)
             .await
             .map_err(DbError::from)?;
 
