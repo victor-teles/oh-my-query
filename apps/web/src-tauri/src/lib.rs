@@ -1,8 +1,8 @@
 mod cancellation;
 mod commands;
 mod config;
-mod crypto;
-mod db;
+pub mod crypto;
+pub mod db;
 mod persistence;
 
 use cancellation::CancellationRegistry;

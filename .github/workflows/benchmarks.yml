@@ -1,0 +1,50 @@
+name: Benchmarks
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "apps/web/src-tauri/**"
+      - ".github/workflows/benchmarks.yml"
+  push:
+    branches: [main]
+    paths:
+      - "apps/web/src-tauri/**"
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  benchmarks:
+    name: Rust / CodSpeed
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install system dependencies
+        uses: awalsh128/cache-apt-pkgs-action@v1
+        with:
+          packages: libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf libssl-dev
+          version: 1.0
+
+      - uses: dtolnay/rust-toolchain@stable
+
+      - uses: swatinem/rust-cache@v2
+        with:
+          workspaces: "apps/web/src-tauri -> target"
+
+      - name: Install cargo-codspeed
+        uses: taiki-e/install-action@v2
+        with:
+          tool: cargo-codspeed
+
+      - name: Build benchmarks
+        run: cargo codspeed build --manifest-path apps/web/src-tauri/Cargo.toml
+
+      - name: Run benchmarks
+        uses: CodSpeedHQ/action@v3
+        with:
+          working-directory: apps/web/src-tauri
+          run: cargo codspeed run
+          token: ${{ secrets.CODSPEED_TOKEN }}

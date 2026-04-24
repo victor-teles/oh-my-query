@@ -1,7 +1,7 @@
 mod clickhouse;
 mod duckdb;
 mod mysql;
-mod parser;
+pub mod parser;
 mod postgres;
 
 use serde::{Deserialize, Serialize};

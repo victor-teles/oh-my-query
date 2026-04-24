@@ -65,3 +65,18 @@ keyring = { version = "3", features = ["windows-native"] }
 
 [target.'cfg(target_os = "linux")'.dependencies]
 keyring = { version = "3", features = ["sync-secret-service"] }
+
+[dev-dependencies]
+codspeed-criterion-compat = "2"
+
+[[bench]]
+name = "crypto_bench"
+harness = false
+
+[[bench]]
+name = "transpile_bench"
+harness = false
+
+[[bench]]
+name = "explain_parser_bench"
+harness = false

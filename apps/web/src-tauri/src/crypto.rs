@@ -97,8 +97,7 @@ fn cipher(key: &[u8; KEY_LEN]) -> Aes256Gcm {
     Aes256Gcm::new(Key::<Aes256Gcm>::from_slice(key))
 }
 
-pub fn encrypt_line(plaintext: &str) -> Result<String, CryptoError> {
-    let key = get_key()?;
+pub fn encrypt_with_key(key: &[u8; KEY_LEN], plaintext: &str) -> Result<String, CryptoError> {
     let mut nonce_bytes = [0u8; NONCE_LEN];
     rand::thread_rng().fill_bytes(&mut nonce_bytes);
     let nonce = Nonce::from_slice(&nonce_bytes);
@@ -113,8 +112,7 @@ pub fn encrypt_line(plaintext: &str) -> Result<String, CryptoError> {
     Ok(B64.encode(combined))
 }
 
-pub fn decrypt_line(encoded: &str) -> Result<String, CryptoError> {
-    let key = get_key()?;
+pub fn decrypt_with_key(key: &[u8; KEY_LEN], encoded: &str) -> Result<String, CryptoError> {
     let bytes = B64
         .decode(encoded.trim())
         .map_err(|_| CryptoError::Base64)?;
@@ -127,4 +125,12 @@ pub fn decrypt_line(encoded: &str) -> Result<String, CryptoError> {
         .decrypt(nonce, ciphertext)
         .map_err(|_| CryptoError::Decrypt)?;
     String::from_utf8(plaintext).map_err(|_| CryptoError::Decrypt)
+}
+
+pub fn encrypt_line(plaintext: &str) -> Result<String, CryptoError> {
+    encrypt_with_key(get_key()?, plaintext)
+}
+
+pub fn decrypt_line(encoded: &str) -> Result<String, CryptoError> {
+    decrypt_with_key(get_key()?, encoded)
 }
