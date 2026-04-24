@@ -452,7 +452,13 @@ async fn fetch_schema_mysql(
         })
         .collect();
 
-    Ok(build_mysql_schema(schema_name, tables, columns, indexes, fks))
+    Ok(build_mysql_schema(
+        schema_name,
+        tables,
+        columns,
+        indexes,
+        fks,
+    ))
 }
 
 fn build_mysql_schema(
@@ -475,10 +481,7 @@ fn build_mysql_schema(
         std::collections::HashMap::new();
     for row in index_rows {
         let table_indexes = indexes_by_table.entry(row.table).or_default();
-        if let Some(existing) = table_indexes
-            .iter_mut()
-            .find(|i| i.name == row.index_name)
-        {
+        if let Some(existing) = table_indexes.iter_mut().find(|i| i.name == row.index_name) {
             existing.columns.push(row.column);
         } else {
             table_indexes.push(IndexItem {
@@ -493,10 +496,7 @@ fn build_mysql_schema(
         std::collections::HashMap::new();
     for row in fk_rows {
         let table_fks = fks_by_table.entry(row.table).or_default();
-        if let Some(existing) = table_fks
-            .iter_mut()
-            .find(|f| f.name == row.constraint_name)
-        {
+        if let Some(existing) = table_fks.iter_mut().find(|f| f.name == row.constraint_name) {
             existing.columns.push(row.column);
             existing.referenced_columns.push(row.referenced_column);
         } else {
@@ -1517,15 +1517,13 @@ mod mysql_build_tests {
             },
         ];
 
-        let fks = vec![
-            MysqlFkRow {
-                table: "orders".to_string(),
-                constraint_name: "orders_user_fk".to_string(),
-                column: "user_id".to_string(),
-                referenced_table: "users".to_string(),
-                referenced_column: "id".to_string(),
-            },
-        ];
+        let fks = vec![MysqlFkRow {
+            table: "orders".to_string(),
+            constraint_name: "orders_user_fk".to_string(),
+            column: "user_id".to_string(),
+            referenced_table: "users".to_string(),
+            referenced_column: "id".to_string(),
+        }];
 
         let schema = build_mysql_schema("shop", tables, columns, indexes, fks);
 
