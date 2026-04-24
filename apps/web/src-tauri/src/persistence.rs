@@ -328,6 +328,21 @@ pub async fn get_all_history(
     Ok(all.into_iter().skip(offset).take(limit).collect())
 }
 
+fn looks_like_plaintext_json(s: &str) -> bool {
+    matches!(s.trim_start().chars().next(), Some('[' | '{'))
+}
+
+async fn write_encrypted_connections(
+    path: &Path,
+    connections: &[DatabaseConnection],
+) -> Result<(), ConfigError> {
+    ensure_parent_dir(path).await?;
+    let json = serde_json::to_string(connections)?;
+    let encrypted = crypto::encrypt_line(&json)?;
+    tokio::fs::write(path, encrypted).await?;
+    Ok(())
+}
+
 #[tauri::command]
 pub async fn get_connections() -> Result<Vec<DatabaseConnection>, ConfigError> {
     let path = connections_path()?;
@@ -335,15 +350,27 @@ pub async fn get_connections() -> Result<Vec<DatabaseConnection>, ConfigError> {
         return Ok(vec![]);
     }
     let content = tokio::fs::read_to_string(&path).await?;
-    let connections: Vec<DatabaseConnection> = serde_json::from_str(&content)?;
+    let trimmed = content.trim();
+    if trimmed.is_empty() {
+        return Ok(vec![]);
+    }
+
+    // Migration path: pre-encryption installs wrote raw JSON. Decode, then
+    // re-save encrypted on a best-effort basis so the plaintext doesn't
+    // linger on disk.
+    if looks_like_plaintext_json(trimmed) {
+        let connections: Vec<DatabaseConnection> = serde_json::from_str(trimmed)?;
+        let _ = write_encrypted_connections(&path, &connections).await;
+        return Ok(connections);
+    }
+
+    let plaintext = crypto::decrypt_line(trimmed)?;
+    let connections: Vec<DatabaseConnection> = serde_json::from_str(&plaintext)?;
     Ok(connections)
 }
 
 #[tauri::command]
 pub async fn save_connections(connections: Vec<DatabaseConnection>) -> Result<(), ConfigError> {
     let path = connections_path()?;
-    ensure_parent_dir(&path).await?;
-    let content = serde_json::to_string_pretty(&connections)?;
-    tokio::fs::write(&path, content).await?;
-    Ok(())
+    write_encrypted_connections(&path, &connections).await
 }
