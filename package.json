@@ -21,7 +21,8 @@
     "dev:web": "turbo -F web dev",
     "desktop:dev": "turbo -F web desktop:dev",
     "check": "ultracite check",
-    "fix": "ultracite fix"
+    "fix": "ultracite fix",
+    "prepare": "lefthook install"
   },
   "dependencies": {
     "@oh-my-query/env": "workspace:*",
@@ -31,6 +32,7 @@
   "devDependencies": {
     "@oh-my-query/config": "workspace:*",
     "@typescript/native-preview": "catalog:",
+    "lefthook": "^2.1.6",
     "oxfmt": "latest",
     "oxlint": "latest",
     "turbo": "^2.6.3",

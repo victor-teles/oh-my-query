@@ -93,10 +93,16 @@ async fn connect_native(params: &ConnectionParams) -> Result<DatabasePool, DbErr
         }
         "mysql" => {
             let url = build_sql_connection_url(params);
+            let connect_options: sqlx::mysql::MySqlConnectOptions = url
+                .parse::<sqlx::mysql::MySqlConnectOptions>()
+                .map_err(DbError::from)?
+                .statement_cache_capacity(0);
             let pool = sqlx::mysql::MySqlPoolOptions::new()
                 .max_connections(5)
-                .acquire_timeout(std::time::Duration::from_secs(10))
-                .connect(&url)
+                .acquire_timeout(std::time::Duration::from_secs(30))
+                .idle_timeout(Some(std::time::Duration::from_secs(600)))
+                .max_lifetime(Some(std::time::Duration::from_secs(1800)))
+                .connect_with(connect_options)
                 .await
                 .map_err(DbError::from)?;
             Ok(DatabasePool::MySql(pool))
