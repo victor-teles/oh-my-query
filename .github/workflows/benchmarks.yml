@@ -40,7 +40,8 @@ jobs:
           tool: cargo-codspeed
 
       - name: Build benchmarks
-        run: cargo codspeed build --manifest-path apps/web/src-tauri/Cargo.toml
+        working-directory: apps/web/src-tauri
+        run: cargo codspeed build
 
       - name: Run benchmarks
         uses: CodSpeedHQ/action@v3

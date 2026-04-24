@@ -57,6 +57,7 @@ export default defineConfig({
             "@tauri-apps/api/core",
             "@tauri-apps/api/event",
             "@tauri-apps/api/window",
+            "@tauri-apps/plugin-opener",
             "@uiw/codemirror-theme-github",
             "@uiw/codemirror-themes-all",
             "@uiw/react-codemirror",
@@ -66,6 +67,7 @@ export default defineConfig({
             "streamdown",
             "use-stick-to-bottom",
             "zustand",
+            "zustand/react/shallow",
           ],
         },
         plugins: [
