@@ -205,7 +205,7 @@
   }
   * {
     scrollbar-width: thin;
-    scrollbar-color: gray transparent;
+    scrollbar-color: var(--muted-foreground) transparent;
   }
   img,
   svg {
