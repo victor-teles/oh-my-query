@@ -202,6 +202,8 @@ jobs:
           restore-keys: |
             playwright-${{ runner.os }}-
 
+      # apps/web's `dev` script is `vite dev` (not `tauri dev`), so the
+      # Playwright webServer does not need libwebkit2gtk / GTK system deps.
       - name: Install Playwright browsers
         if: steps.playwright-cache.outputs.cache-hit != 'true'
         run: bunx playwright install --with-deps chromium
