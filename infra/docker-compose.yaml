@@ -46,9 +46,23 @@ services:
       - "127.0.0.1:${MARIADB_PORT:-3306}:3306"
     volumes:
       - mariadb-data:/var/lib/mysql
+  postgres:
+    image: "postgres:${PGVER:-16}"
+    container_name: postgres
+    hostname: postgres
+    environment:
+      POSTGRES_USER: "${POSTGRES_USER:-omq}"
+      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD:-omq}"
+      POSTGRES_DB: "${POSTGRES_DATABASE:-oh_my_query}"
+    ports:
+      - "127.0.0.1:${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ./fs/volumes/postgres/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
 
 # SQLite is file-based rather than service-based.
 # Use ./fs/volumes/sqlite/oh-my-query.sqlite as the database path in the app.
 volumes:
   mariadb-data:
   mongodb-data:
+  postgres-data:
