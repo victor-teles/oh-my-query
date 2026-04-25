@@ -15,6 +15,7 @@ import { SettingsFeedbackProvider } from "./-components/settings-feedback-contex
 import { SettingsSidebar } from "./-components/settings-sidebar";
 import { SettingsTitlebar } from "./-components/settings-titlebar";
 import { SyntaxThemeSection } from "./-components/syntax-theme-section";
+import { UpdateChannelSection } from "./-components/update-channel-section";
 import { useSettingsHotkeys } from "./-hooks/use-settings-hotkeys";
 
 const SectionPanel = ({ section }: { section: SettingsSectionId }) => {
@@ -26,6 +27,9 @@ const SectionPanel = ({ section }: { section: SettingsSectionId }) => {
   }
   if (section === "code-font") {
     return <EditorFontSection />;
+  }
+  if (section === "updates") {
+    return <UpdateChannelSection />;
   }
   return <ExportSettingsSection />;
 };

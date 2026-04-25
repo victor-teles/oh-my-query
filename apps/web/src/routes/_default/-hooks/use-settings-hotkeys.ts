@@ -14,6 +14,7 @@ const [
   SYNTAX_THEME_SECTION,
   CODE_FONT_SECTION,
   EXPORT_SECTION,
+  UPDATES_SECTION,
 ] = SETTINGS_SECTIONS;
 
 export const useSettingsHotkeys = ({
@@ -42,5 +43,9 @@ export const useSettingsHotkeys = ({
 
   useHotkey("Mod+4", () => {
     onSelectSection(EXPORT_SECTION.id);
+  });
+
+  useHotkey("Mod+5", () => {
+    onSelectSection(UPDATES_SECTION.id);
   });
 };

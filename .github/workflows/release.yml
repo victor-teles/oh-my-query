@@ -10,8 +10,39 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  resolve-channel:
+    name: Resolve release channel
+    runs-on: ubuntu-latest
+    outputs:
+      channel: ${{ steps.parse.outputs.channel }}
+      version: ${{ steps.parse.outputs.version }}
+      prerelease: ${{ steps.parse.outputs.prerelease }}
+      rolling-tag: ${{ steps.parse.outputs.rolling-tag }}
+    steps:
+      - name: Parse tag
+        id: parse
+        run: |
+          TAG="${GITHUB_REF_NAME}"
+          VERSION="${TAG#v}"
+          if [[ "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            CHANNEL="stable"
+            PRERELEASE="false"
+          elif [[ "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+-beta\.[0-9]+$ ]]; then
+            CHANNEL="beta"
+            PRERELEASE="true"
+          else
+            echo "::error::Tag ${TAG} does not match v<X>.<Y>.<Z> (stable) or v<X>.<Y>.<Z>-beta.<N> (beta)"
+            exit 1
+          fi
+          echo "channel=${CHANNEL}" >> "$GITHUB_OUTPUT"
+          echo "version=${VERSION}" >> "$GITHUB_OUTPUT"
+          echo "prerelease=${PRERELEASE}" >> "$GITHUB_OUTPUT"
+          echo "rolling-tag=updater-${CHANNEL}" >> "$GITHUB_OUTPUT"
+
   bump-version:
     name: Bump version from tag
+    needs: resolve-channel
+    if: needs.resolve-channel.outputs.channel == 'stable'
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -22,7 +53,7 @@ jobs:
 
       - name: Bump version in config files
         run: |
-          VERSION="${GITHUB_REF_NAME#v}"
+          VERSION="${{ needs.resolve-channel.outputs.version }}"
           jq --arg v "$VERSION" '.version = $v' apps/web/src-tauri/tauri.conf.json > tmp.json && mv tmp.json apps/web/src-tauri/tauri.conf.json
           sed -i "s/^version = \".*\"/version = \"$VERSION\"/" apps/web/src-tauri/Cargo.toml
 
@@ -32,12 +63,13 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add apps/web/src-tauri/tauri.conf.json apps/web/src-tauri/Cargo.toml
           git diff --staged --quiet && exit 0
-          git commit -m "chore: bump version to ${GITHUB_REF_NAME#v}"
+          git commit -m "chore: bump version to ${{ needs.resolve-channel.outputs.version }}"
           git push origin main
 
   build-macos:
-    name: Build macOS (${{ matrix.label }})
-    needs: bump-version
+    name: Build macOS (${{ matrix.label }}) [${{ needs.resolve-channel.outputs.channel }}]
+    needs: [resolve-channel, bump-version]
+    if: always() && needs.resolve-channel.result == 'success' && (needs.bump-version.result == 'success' || needs.bump-version.result == 'skipped')
     permissions:
       contents: write
     strategy:
@@ -52,7 +84,23 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: main
+          ref: ${{ needs.resolve-channel.outputs.channel == 'stable' && 'main' || github.ref }}
+
+      - name: Stamp beta version
+        if: needs.resolve-channel.outputs.channel == 'beta'
+        run: |
+          VERSION="${{ needs.resolve-channel.outputs.version }}"
+          jq --arg v "$VERSION" '.version = $v' apps/web/src-tauri/tauri.conf.json > tmp.json && mv tmp.json apps/web/src-tauri/tauri.conf.json
+          sed -i '' "s/^version = \".*\"/version = \"$VERSION\"/" apps/web/src-tauri/Cargo.toml
+
+      - name: Verify signing secret is set
+        env:
+          TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
+        run: |
+          if [ -z "$TAURI_SIGNING_PRIVATE_KEY" ]; then
+            echo "::error::TAURI_SIGNING_PRIVATE_KEY secret is not set. See RELEASING.md for one-time key setup."
+            exit 1
+          fi
 
       - uses: oven-sh/setup-bun@v2
         with:
@@ -75,18 +123,27 @@ jobs:
       - uses: tauri-apps/tauri-action@v0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
+          TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
+          APPLE_CERTIFICATE: ${{ secrets.APPLE_CERTIFICATE }}
+          APPLE_CERTIFICATE_PASSWORD: ${{ secrets.APPLE_CERTIFICATE_PASSWORD }}
+          APPLE_SIGNING_IDENTITY: ${{ secrets.APPLE_SIGNING_IDENTITY }}
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          APPLE_PASSWORD: ${{ secrets.APPLE_PASSWORD }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
         with:
           projectPath: apps/web
           tagName: ${{ github.ref_name }}
           releaseName: "oh_my_query ${{ github.ref_name }}"
           releaseBody: "See assets below to download.\n\n**macOS:** `brew install --cask victor-teles/tap/oh-my-query`"
           releaseDraft: false
-          prerelease: false
+          prerelease: ${{ needs.resolve-channel.outputs.prerelease }}
           args: --target ${{ matrix.target }}
 
   build-windows:
-    name: Build Windows (${{ matrix.label }})
-    needs: bump-version
+    name: Build Windows (${{ matrix.label }}) [${{ needs.resolve-channel.outputs.channel }}]
+    needs: [resolve-channel, bump-version]
+    if: always() && needs.resolve-channel.result == 'success' && (needs.bump-version.result == 'success' || needs.bump-version.result == 'skipped')
     permissions:
       contents: write
     strategy:
@@ -101,7 +158,27 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: main
+          ref: ${{ needs.resolve-channel.outputs.channel == 'stable' && 'main' || github.ref }}
+
+      - name: Stamp beta version
+        if: needs.resolve-channel.outputs.channel == 'beta'
+        shell: pwsh
+        run: |
+          $version = "${{ needs.resolve-channel.outputs.version }}"
+          $conf = Get-Content apps/web/src-tauri/tauri.conf.json -Raw | ConvertFrom-Json
+          $conf.version = $version
+          $conf | ConvertTo-Json -Depth 100 | Set-Content apps/web/src-tauri/tauri.conf.json
+          (Get-Content apps/web/src-tauri/Cargo.toml) -replace '^version = ".*"', "version = `"$version`"" | Set-Content apps/web/src-tauri/Cargo.toml
+
+      - name: Verify signing secret is set
+        shell: bash
+        env:
+          TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
+        run: |
+          if [ -z "$TAURI_SIGNING_PRIVATE_KEY" ]; then
+            echo "::error::TAURI_SIGNING_PRIVATE_KEY secret is not set. See RELEASING.md for one-time key setup."
+            exit 1
+          fi
 
       - uses: oven-sh/setup-bun@v2
         with:
@@ -124,34 +201,133 @@ jobs:
       - uses: tauri-apps/tauri-action@v0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
+          TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
         with:
           projectPath: apps/web
           tagName: ${{ github.ref_name }}
           releaseName: "oh_my_query ${{ github.ref_name }}"
           releaseDraft: false
-          prerelease: false
+          prerelease: ${{ needs.resolve-channel.outputs.prerelease }}
           args: --target ${{ matrix.target }}
+
+      - name: Sign Windows artifact
+        if: vars.WINDOWS_SIGNING_ENABLED == 'true'
+        shell: pwsh
+        env:
+          WINDOWS_CERTIFICATE: ${{ secrets.WINDOWS_CERTIFICATE }}
+          WINDOWS_CERTIFICATE_PASSWORD: ${{ secrets.WINDOWS_CERTIFICATE_PASSWORD }}
+        run: |
+          # TODO: implement signtool / Azure Trusted Signing flow.
+          # Tracked in RELEASING.md → "Windows code signing".
+          Write-Host "Windows signing enabled — implement signtool here."
+
+      - name: Note unsigned Windows build
+        if: vars.WINDOWS_SIGNING_ENABLED != 'true'
+        shell: bash
+        run: |
+          echo "::warning::Windows artifact is unsigned. Set repo variable WINDOWS_SIGNING_ENABLED=true and add WINDOWS_CERTIFICATE secrets to enable signing."
 
       - name: Upload portable exe
         shell: pwsh
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          $version = "${{ github.ref_name }}".TrimStart("v")
+          $version = "${{ needs.resolve-channel.outputs.version }}"
           $exe = Get-ChildItem -Path "apps/web/src-tauri/target/${{ matrix.target }}/release/oh-my-query.exe" -ErrorAction Stop
           $label = "${{ matrix.label }}"
           $dest = "oh_my_query_${version}_${label}_portable.exe"
           Copy-Item $exe.FullName $dest
           gh release upload "${{ github.ref_name }}" $dest --clobber
 
+  publish-appcast:
+    name: Publish appcast (${{ needs.resolve-channel.outputs.channel }})
+    needs: [resolve-channel, build-macos, build-windows]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build latest.json
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+          TAG: ${{ github.ref_name }}
+          VERSION: ${{ needs.resolve-channel.outputs.version }}
+        run: |
+          set -euo pipefail
+          mkdir -p out
+
+          # Pull release notes from the GitHub release body.
+          NOTES=$(gh release view "$TAG" --json body -q .body 2>/dev/null || echo "")
+          PUB_DATE=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+          BASE="https://github.com/${REPO}/releases/download/${TAG}"
+
+          fetch_sig () {
+            local asset="$1"
+            curl -sfL -o "out/${asset}.sig" "${BASE}/${asset}.sig" || return 1
+          }
+
+          declare -A PLATFORMS=(
+            [darwin-aarch64]="oh_my_query_${VERSION}_aarch64.app.tar.gz"
+            [darwin-x86_64]="oh_my_query_${VERSION}_x64.app.tar.gz"
+            [windows-x86_64]="oh_my_query_${VERSION}_x64-setup.nsis.zip"
+            [windows-aarch64]="oh_my_query_${VERSION}_arm64-setup.nsis.zip"
+          )
+
+          PLATFORMS_JSON="{}"
+          for key in "${!PLATFORMS[@]}"; do
+            asset="${PLATFORMS[$key]}"
+            if fetch_sig "$asset"; then
+              SIG=$(cat "out/${asset}.sig")
+              PLATFORMS_JSON=$(jq --arg k "$key" --arg sig "$SIG" --arg url "${BASE}/${asset}" \
+                '. + {($k): {signature: $sig, url: $url}}' <<<"$PLATFORMS_JSON")
+            else
+              echo "::warning::Missing .sig for $asset — platform $key omitted from appcast"
+            fi
+          done
+
+          jq -n \
+            --arg version "$VERSION" \
+            --arg notes "$NOTES" \
+            --arg pub_date "$PUB_DATE" \
+            --argjson platforms "$PLATFORMS_JSON" \
+            '{version: $version, notes: $notes, pub_date: $pub_date, platforms: $platforms}' \
+            > out/latest.json
+
+          cat out/latest.json
+
+      - name: Publish to rolling tag
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ROLLING_TAG: ${{ needs.resolve-channel.outputs.rolling-tag }}
+          CHANNEL: ${{ needs.resolve-channel.outputs.channel }}
+        run: |
+          set -euo pipefail
+          # Recreate the rolling tag at the current commit so the asset URL stays stable.
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git tag -f "$ROLLING_TAG"
+          git push -f origin "$ROLLING_TAG"
+
+          if gh release view "$ROLLING_TAG" >/dev/null 2>&1; then
+            gh release edit "$ROLLING_TAG" --target "$GITHUB_SHA" --prerelease=true --title "Updater feed (${CHANNEL})"
+          else
+            gh release create "$ROLLING_TAG" --target "$GITHUB_SHA" --prerelease --title "Updater feed (${CHANNEL})" --notes "Auto-published appcast for the ${CHANNEL} channel."
+          fi
+
+          gh release upload "$ROLLING_TAG" out/latest.json --clobber
+
   update-homebrew-tap:
     name: Update Homebrew tap
-    needs: build-macos
+    needs: [resolve-channel, build-macos]
+    if: needs.resolve-channel.outputs.channel == 'stable'
     runs-on: ubuntu-latest
     steps:
       - name: Get version
         id: version
-        run: echo "version=${GITHUB_REF_NAME#v}" >> $GITHUB_OUTPUT
+        run: echo "version=${{ needs.resolve-channel.outputs.version }}" >> $GITHUB_OUTPUT
 
       - name: Download DMGs and compute SHA256
         id: hashes
