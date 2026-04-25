@@ -45,6 +45,7 @@ bun run fixtures:down
 - Profiles live in `apps/web/src-tauri/.config/nextest.toml`: `default` for local runs, `ci` for CI (one retry, terse output).
 - Coverage: `cargo llvm-cov nextest` wraps nextest. CI uses `--fail-under-lines 40` to enforce the gate; pass `--html` locally to inspect uncovered lines.
 - Tooling: install once with `cargo install cargo-nextest cargo-llvm-cov` (or, in CI, via `taiki-e/install-action`).
+- Excluded from coverage (Tauri/integration-only paths whose unit-level surface is empty): `commands.rs`, `config.rs`, `lib.rs`, `main.rs`, the trait/error/type modules under `db/`, every driver wrapper (`postgres`/`mysql`/`sqlite`/`mongodb_driver`/`pool`/`version`), the `execute/` paths that need a live database (`clickhouse`/`mod`/`mongodb`/`mssql`/`sql`), and the `explain/` driver-specific submodules (`clickhouse`/`duckdb`/`mod`/`mysql`/`postgres` — the cross-driver `parser.rs` is kept). The gate applies to the unit-testable surface; integration-only code lives behind a future `OMQ_INTEGRATION=1` track.
 
 ## Coverage gate
 

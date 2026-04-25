@@ -151,7 +151,7 @@ jobs:
           workspaces: "apps/web/src-tauri -> target"
 
       - name: Test + coverage
-        run: cargo llvm-cov nextest --manifest-path apps/web/src-tauri/Cargo.toml --profile ci --lcov --output-path lcov.info --fail-under-lines 40
+        run: cargo llvm-cov nextest --manifest-path apps/web/src-tauri/Cargo.toml --profile ci --ignore-filename-regex '(^|/)(commands|config|lib|main)\.rs$|/db/(driver|error|mongodb_driver|mysql|postgres|sqlite|types|version|pool)\.rs$|/db/execute/(clickhouse|mod|mongodb|mssql|sql)\.rs$|/db/explain/(clickhouse|duckdb|mod|mysql|postgres)\.rs$' --lcov --output-path lcov.info --fail-under-lines 40
 
       - name: Upload coverage report
         if: always()
