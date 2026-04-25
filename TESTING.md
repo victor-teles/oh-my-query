@@ -1,6 +1,6 @@
 # Testing
 
-Every PR runs three test pipelines, each gated at 40% line coverage. The gate is intentionally low for Q1 — it ratchets to 60% by Q8 and 70% by Q12 (see `ROADMAP.md`).
+Every PR runs three test pipelines. The Frontend (Vitest) and Rust (nextest) jobs enforce a 40% line-coverage gate; the Playwright E2E job must pass all specs. The gate is intentionally low for Q1 — it ratchets to 60% by Q8 and 70% by Q12 (see `ROADMAP.md`).
 
 ## Quick reference
 
