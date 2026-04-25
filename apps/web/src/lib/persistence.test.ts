@@ -21,6 +21,7 @@ const tabState: TabState = {
 const entry = (overrides: Partial<HistoryEntry> = {}): HistoryEntry => ({
   connectionId: "conn-1",
   database: "public",
+  dialect: "postgresql",
   error: null,
   executionTimeMs: 5,
   sql: "SELECT 1",

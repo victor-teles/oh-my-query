@@ -6,6 +6,14 @@
   "permissions": [
     "core:default",
     "core:window:allow-start-dragging",
-    "core:window:allow-destroy"
+    "core:window:allow-destroy",
+    {
+      "identifier": "opener:allow-open-url",
+      "allow": [
+        { "url": "https://platform.openai.com/*" },
+        { "url": "https://console.anthropic.com/*" },
+        { "url": "https://openrouter.ai/*" }
+      ]
+    }
   ]
 }

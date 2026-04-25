@@ -199,10 +199,32 @@
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
     font-feature-settings: "ss01", "ss03", "cv11", "calt", "kern";
+    -webkit-user-drag: none;
+    -webkit-tap-highlight-color: transparent;
+    overscroll-behavior: none;
+  }
+  img,
+  svg {
+    -webkit-user-drag: none;
+    user-select: none;
+  }
+  input,
+  textarea,
+  [contenteditable="true"],
+  .cm-editor,
+  [data-allow-select] {
+    -webkit-user-select: text;
+    user-select: text;
   }
   body {
     @apply font-sans bg-transparent text-foreground;
     letter-spacing: var(--tracking-normal);
+  }
+  #app {
+    @apply min-h-screen bg-sidebar;
+  }
+  html[data-platform="macos"] #app {
+    @apply bg-transparent;
   }
   .font-mono,
   code,

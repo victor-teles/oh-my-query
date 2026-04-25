@@ -19,6 +19,19 @@ interface ConnectionLifecycleState {
   reconnect: () => void;
 }
 
+const connectionIdentityKey = (c: DatabaseConnection): string =>
+  JSON.stringify([
+    c.id,
+    c.type,
+    c.host,
+    c.port,
+    c.database,
+    c.username,
+    c.password,
+    c.authSource ?? null,
+    c.trustServerCertificate ?? null,
+  ]);
+
 export const useConnectionLifecycle = (
   connection: DatabaseConnection
 ): ConnectionLifecycleState => {
@@ -35,6 +48,8 @@ export const useConnectionLifecycle = (
   const reconnect = useCallback(() => {
     setReconnectCount((c) => c + 1);
   }, []);
+
+  const identityKey = connectionIdentityKey(connection);
 
   useEffect(() => {
     let cancelled = false;
@@ -100,7 +115,9 @@ export const useConnectionLifecycle = (
       cancelled = true;
       teardown();
     };
-  }, [connection, reconnectCount]);
+    // biome-ignore lint/correctness/useExhaustiveDependencies: identityKey is the stable identity for `connection`; reconnect is intentional when any connection field changes.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [identityKey, reconnectCount]);
 
   return {
     ...state,

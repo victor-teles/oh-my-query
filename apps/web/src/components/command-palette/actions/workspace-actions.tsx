@@ -3,6 +3,7 @@ import {
   CodeIcon,
   Columns2Icon,
   FilePlusIcon,
+  HistoryIcon,
   KeyboardIcon,
   ListRestartIcon,
   MessageSquareIcon,
@@ -20,6 +21,7 @@ import type { QueryTab } from "@/lib/query-types";
 import type { WorkspaceMode } from "@/lib/workspace-mode";
 
 import { useRegisterCommandActions } from "@/components/command-palette/use-register-command-actions";
+import { useHistoryPanel } from "@/hooks/use-history-panel";
 
 interface WorkspaceQueryActionsProps {
   tabs: QueryTab[];
@@ -163,6 +165,8 @@ export const WorkspaceLayoutActions = ({
   onReconnect,
   connectionName,
 }: WorkspaceLayoutActionsProps) => {
+  const { setOpen: openHistory } = useHistoryPanel();
+
   const actions = useMemo<CommandAction[]>(
     () => [
       {
@@ -172,6 +176,15 @@ export const WorkspaceLayoutActions = ({
         label: "Toggle Sidebar",
         perform: onToggleSidebar,
         shortcut: ["⌘", "B"],
+      },
+      {
+        group: "View",
+        icon: HistoryIcon,
+        id: "view.query-history",
+        keywords: ["log", "recent", "past queries"],
+        label: "Open Query History",
+        perform: () => openHistory(true),
+        shortcut: ["⌘", "⇧", "H"],
       },
       {
         group: "View",
@@ -224,6 +237,7 @@ export const WorkspaceLayoutActions = ({
       onShowShortcuts,
       onReconnect,
       connectionName,
+      openHistory,
     ]
   );
 

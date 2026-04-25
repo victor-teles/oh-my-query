@@ -55,5 +55,6 @@
   "editor.codeActionsOnSave": {
     "source.fixAll.oxc": "explicit"
   },
-  "js/ts.tsdk.path": "node_modules/typescript/lib"
+  "js/ts.tsdk.path": "node_modules/typescript/lib",
+  "typescript.native-preview.tsdk": "/Users/victormesquita/conductor/workspaces/oh-my-query/chengdu/node_modules/@typescript/native-preview"
 }
