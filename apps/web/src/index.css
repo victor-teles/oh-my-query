@@ -203,6 +203,10 @@
     -webkit-tap-highlight-color: transparent;
     overscroll-behavior: none;
   }
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--muted-foreground) transparent;
+  }
   img,
   svg {
     -webkit-user-drag: none;
