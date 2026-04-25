@@ -1,0 +1,18 @@
+[package]
+name = "oh-my-query-drivers-mongo"
+version = "0.0.10"
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+authors.workspace = true
+
+[dependencies]
+oh-my-query-core = { path = "../oh-my-query-core", features = ["mongo-errors"] }
+async-trait.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+tokio.workspace = true
+chrono.workspace = true
+log.workspace = true
+mongodb = "3"
+urlencoding = "2"

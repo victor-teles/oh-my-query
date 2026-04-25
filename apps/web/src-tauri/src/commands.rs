@@ -1,27 +1,34 @@
+use std::sync::Arc;
 use std::time::Instant;
 
+use oh_my_query_core::Pool;
 use tauri::State;
+
+use oh_my_query_drivers_redis::{
+    delete_redis_key as do_delete_redis_key, redis_db_info as do_redis_db_info,
+    scan_redis_keys as do_scan_redis_keys, RedisPool,
+};
 
 use crate::cancellation::CancellationRegistry;
 use crate::db::driver::get_driver;
 use crate::db::error::DbError;
-use crate::db::execute::execute_for_pool;
-use crate::db::explain::{explain_for_pool, ExplainParams, ExplainResult};
-use crate::db::pool::{ConnectionPoolManager, DatabasePool};
-use crate::db::redis_keys::{
-    delete_redis_key as do_delete_redis_key, redis_db_info as do_redis_db_info,
-    scan_redis_keys as do_scan_redis_keys,
-};
-use crate::db::schema::{fetch_schema, list_databases};
-use crate::db::transpile::{format_sql as do_format_sql, pool_dialect, transpile_sql};
+use crate::db::explain::{ExplainParams, ExplainResult};
+use crate::db::pool::ConnectionPoolManager;
+use crate::db::transpile::{format_sql as do_format_sql, transpile_sql, DialectType};
 use crate::db::types::{
     ConnectionParams, ExecuteResult, QueryParams, RedisDbInfo, RedisScanPage, SchemaInfo,
     TestConnectionResult,
 };
-use crate::db::version::fetch_version;
 
 const DEFAULT_MAX_ROWS: u64 = 10_000;
 const DEFAULT_TIMEOUT_SECS: u64 = 30;
+
+fn pool_dialect(pool: &Arc<dyn Pool>) -> Result<DialectType, DbError> {
+    pool.dialect().ok_or_else(|| DbError {
+        code: "UNSUPPORTED_TRANSPILE_TARGET".to_string(),
+        message: "SQL transpilation is not supported for this database type".to_string(),
+    })
+}
 
 #[tauri::command]
 pub async fn test_connection(params: ConnectionParams) -> Result<TestConnectionResult, DbError> {
@@ -52,7 +59,7 @@ pub async fn get_server_version(
     state: State<'_, ConnectionPoolManager>,
 ) -> Result<String, DbError> {
     let pool = state.get_pool(&connection_id).await?;
-    fetch_version(&pool).await
+    pool.fetch_version().await
 }
 
 #[tauri::command]
@@ -61,7 +68,7 @@ pub async fn list_connection_databases(
     state: State<'_, ConnectionPoolManager>,
 ) -> Result<Vec<String>, DbError> {
     let pool = state.get_pool(&connection_id).await?;
-    list_databases(&pool).await
+    pool.list_databases().await
 }
 
 #[tauri::command]
@@ -71,7 +78,7 @@ pub async fn get_schema(
     state: State<'_, ConnectionPoolManager>,
 ) -> Result<SchemaInfo, DbError> {
     let pool = state.get_pool(&connection_id).await?;
-    fetch_schema(&pool, &database_name).await
+    pool.fetch_schema(&database_name).await
 }
 
 #[tauri::command]
@@ -101,7 +108,7 @@ pub async fn execute_query(
 
     let query_future = tokio::time::timeout(
         std::time::Duration::from_secs(timeout_secs),
-        execute_for_pool(&pool, &sql, max_rows, params.schema.as_deref()),
+        pool.execute(&sql, max_rows, params.schema.as_deref()),
     );
 
     let result = match cancel_rx {
@@ -163,7 +170,7 @@ pub async fn explain_query(
 
     let query_future = tokio::time::timeout(
         std::time::Duration::from_secs(timeout_secs),
-        explain_for_pool(&pool, &sql, params.analyze, params.schema.as_deref()),
+        pool.explain(&sql, params.analyze, params.schema.as_deref()),
     );
 
     let result = match cancel_rx {
@@ -200,14 +207,13 @@ pub async fn format_sql(sql: String, dialect: String) -> Result<String, DbError>
     do_format_sql(&sql, &dialect)
 }
 
-fn require_redis(pool: &DatabasePool) -> Result<&redis::aio::MultiplexedConnection, DbError> {
-    match pool {
-        DatabasePool::Redis(conn) => Ok(conn),
-        _ => Err(DbError {
+fn require_redis(pool: &Arc<dyn Pool>) -> Result<&RedisPool, DbError> {
+    pool.as_any()
+        .downcast_ref::<RedisPool>()
+        .ok_or_else(|| DbError {
             code: "WRONG_DRIVER".to_string(),
             message: "This command is only available for Redis connections".to_string(),
-        }),
-    }
+        })
 }
 
 #[tauri::command]
@@ -217,8 +223,9 @@ pub async fn redis_db_info(
     state: State<'_, ConnectionPoolManager>,
 ) -> Result<RedisDbInfo, DbError> {
     let pool = state.get_pool(&connection_id).await?;
-    let conn = require_redis(&pool)?;
-    do_redis_db_info(conn, db_index).await
+    let redis_pool = require_redis(&pool)?;
+    let conn = redis_pool.connection();
+    do_redis_db_info(&conn, db_index).await
 }
 
 #[tauri::command]
@@ -231,9 +238,10 @@ pub async fn scan_redis_keys(
     state: State<'_, ConnectionPoolManager>,
 ) -> Result<RedisScanPage, DbError> {
     let pool = state.get_pool(&connection_id).await?;
-    let conn = require_redis(&pool)?;
+    let redis_pool = require_redis(&pool)?;
+    let conn = redis_pool.connection();
     let cursor_ref = cursor.as_deref().unwrap_or("0");
-    do_scan_redis_keys(conn, db_index, pattern.as_deref(), cursor_ref, count).await
+    do_scan_redis_keys(&conn, db_index, pattern.as_deref(), cursor_ref, count).await
 }
 
 #[tauri::command]
@@ -244,6 +252,7 @@ pub async fn delete_redis_key(
     state: State<'_, ConnectionPoolManager>,
 ) -> Result<u64, DbError> {
     let pool = state.get_pool(&connection_id).await?;
-    let conn = require_redis(&pool)?;
-    do_delete_redis_key(conn, db_index, &name).await
+    let redis_pool = require_redis(&pool)?;
+    let conn = redis_pool.connection();
+    do_delete_redis_key(&conn, db_index, &name).await
 }

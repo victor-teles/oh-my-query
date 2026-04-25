@@ -1,0 +1,25 @@
+[package]
+name = "oh-my-query-drivers-sqlite"
+version = "0.0.10"
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+authors.workspace = true
+
+[dependencies]
+oh-my-query-core = { path = "../oh-my-query-core", features = ["sqlx-errors"] }
+async-trait.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+tokio.workspace = true
+chrono.workspace = true
+log.workspace = true
+futures.workspace = true
+sqlx = { version = "0.8", features = [
+  "runtime-tokio",
+  "tls-native-tls",
+  "sqlite",
+  "uuid",
+  "chrono",
+  "json",
+] }

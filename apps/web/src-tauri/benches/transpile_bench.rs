@@ -1,6 +1,5 @@
-use app_lib::db::transpile::{format_sql, transpile_sql};
+use app_lib::db::transpile::{format_sql, transpile_sql, DialectType};
 use codspeed_criterion_compat::{black_box, criterion_group, criterion_main, Criterion};
-use polyglot_sql::DialectType;
 
 const SIMPLE_MYSQL: &str = r#"select IFNULL(avatar_url, name) FROM "users""#;
 

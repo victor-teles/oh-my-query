@@ -3915,16 +3915,41 @@ dependencies = [
 name = "oh-my-query"
 version = "0.0.10"
 dependencies = [
+ "async-trait",
+ "chrono",
+ "codspeed-criterion-compat",
+ "keyring",
+ "log",
+ "oh-my-query-core",
+ "oh-my-query-drivers-clickhouse",
+ "oh-my-query-drivers-duckdb",
+ "oh-my-query-drivers-mongo",
+ "oh-my-query-drivers-mssql",
+ "oh-my-query-drivers-mysql",
+ "oh-my-query-drivers-pg",
+ "oh-my-query-drivers-redis",
+ "oh-my-query-drivers-sqlite",
+ "serde",
+ "serde_json",
+ "tauri",
+ "tauri-build",
+ "tauri-plugin-log",
+ "tauri-plugin-opener",
+ "tokio",
+]
+
+[[package]]
+name = "oh-my-query-core"
+version = "0.0.10"
+dependencies = [
  "aes-gcm",
  "async-trait",
  "base64 0.22.1",
  "bb8",
  "bb8-tiberius",
  "chrono",
- "codspeed-criterion-compat",
  "dirs",
  "duckdb",
- "futures",
  "keyring",
  "log",
  "mongodb",
@@ -3936,13 +3961,135 @@ dependencies = [
  "serde_json",
  "sqlx",
  "tauri",
- "tauri-build",
- "tauri-plugin-log",
- "tauri-plugin-opener",
+ "tiberius",
+ "tokio",
+]
+
+[[package]]
+name = "oh-my-query-drivers-clickhouse"
+version = "0.0.10"
+dependencies = [
+ "async-trait",
+ "base64 0.22.1",
+ "chrono",
+ "log",
+ "oh-my-query-core",
+ "reqwest 0.12.28",
+ "serde",
+ "serde_json",
+ "tokio",
+ "urlencoding",
+]
+
+[[package]]
+name = "oh-my-query-drivers-duckdb"
+version = "0.0.10"
+dependencies = [
+ "async-trait",
+ "base64 0.22.1",
+ "chrono",
+ "duckdb",
+ "log",
+ "oh-my-query-core",
+ "serde",
+ "serde_json",
+ "tokio",
+]
+
+[[package]]
+name = "oh-my-query-drivers-mongo"
+version = "0.0.10"
+dependencies = [
+ "async-trait",
+ "chrono",
+ "log",
+ "mongodb",
+ "oh-my-query-core",
+ "serde",
+ "serde_json",
+ "tokio",
+ "urlencoding",
+]
+
+[[package]]
+name = "oh-my-query-drivers-mssql"
+version = "0.0.10"
+dependencies = [
+ "async-trait",
+ "base64 0.22.1",
+ "bb8",
+ "bb8-tiberius",
+ "chrono",
+ "futures",
+ "log",
+ "oh-my-query-core",
+ "serde",
+ "serde_json",
  "tiberius",
  "tokio",
  "tokio-util",
+]
+
+[[package]]
+name = "oh-my-query-drivers-mysql"
+version = "0.0.10"
+dependencies = [
+ "async-trait",
+ "chrono",
+ "futures",
+ "log",
+ "oh-my-query-core",
+ "serde",
+ "serde_json",
+ "sqlx",
+ "tokio",
  "urlencoding",
+]
+
+[[package]]
+name = "oh-my-query-drivers-pg"
+version = "0.0.10"
+dependencies = [
+ "async-trait",
+ "chrono",
+ "futures",
+ "log",
+ "oh-my-query-core",
+ "serde",
+ "serde_json",
+ "sqlx",
+ "tokio",
+ "urlencoding",
+]
+
+[[package]]
+name = "oh-my-query-drivers-redis"
+version = "0.0.10"
+dependencies = [
+ "async-trait",
+ "chrono",
+ "log",
+ "oh-my-query-core",
+ "redis",
+ "serde",
+ "serde_json",
+ "tokio",
+ "urlencoding",
+]
+
+[[package]]
+name = "oh-my-query-drivers-sqlite"
+version = "0.0.10"
+dependencies = [
+ "async-trait",
+ "chrono",
+ "futures",
+ "log",
+ "oh-my-query-core",
+ "serde",
+ "serde_json",
+ "sqlx",
+ "tokio",
 ]
 
 [[package]]
