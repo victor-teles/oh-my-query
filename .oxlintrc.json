@@ -8,7 +8,8 @@
     "**/*.gen.ts",
     ".agents/**",
     ".claude/**",
-    "apps/web/scripts/**"
+    "apps/web/scripts/**",
+    "apps/web/e2e/**"
   ],
   "rules": {
     "func-style": "off",

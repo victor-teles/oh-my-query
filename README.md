@@ -153,8 +153,12 @@ bun run build          # Build all apps
 bun run check-types    # TypeScript across all workspaces
 bun run check          # Lint + format check (Ultracite)
 bun run fix            # Auto-fix lint/format
-bun run test           # Run Vitest suite
+bun run --cwd apps/web test           # Vitest unit + hook tests
+bun run --cwd apps/web test:coverage  # Vitest with the 40% gate
+bun run --cwd apps/web e2e            # Playwright e2e against the Vite dev server
 ```
+
+See [`TESTING.md`](TESTING.md) for the full story — coverage gates, fixture setup, and the path forward for full Tauri e2e.
 
 <br />
 

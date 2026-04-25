@@ -22,6 +22,8 @@
     "desktop:dev": "turbo -F web desktop:dev",
     "check": "ultracite check",
     "fix": "ultracite fix",
+    "fixtures:up": "docker compose -f infra/docker-compose.yaml up -d postgres",
+    "fixtures:down": "docker compose -f infra/docker-compose.yaml down",
     "prepare": "lefthook install"
   },
   "dependencies": {
