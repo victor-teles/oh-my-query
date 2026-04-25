@@ -22,6 +22,8 @@ export default defineConfig({
     trace: "on-first-retry",
   },
   webServer: {
+    // apps/web's `dev` script is `vite dev` — Vite only, no Tauri/GTK runtime.
+    // The CI e2e job intentionally does not install libwebkit2gtk system deps.
     command: "bun run dev",
     reuseExistingServer: !isCI,
     timeout: 120_000,

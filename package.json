@@ -23,7 +23,7 @@
     "check": "ultracite check",
     "fix": "ultracite fix",
     "fixtures:up": "docker compose -f infra/docker-compose.yaml up -d postgres",
-    "fixtures:down": "docker compose -f infra/docker-compose.yaml down",
+    "fixtures:down": "docker compose -f infra/docker-compose.yaml stop postgres",
     "prepare": "lefthook install"
   },
   "dependencies": {

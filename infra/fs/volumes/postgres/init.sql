@@ -29,4 +29,4 @@ INSERT INTO orders (user_id, total_cents, status) VALUES
   (1, 1999, 'paid'),
   (1, 4500, 'pending'),
   (2,  799, 'refunded'),
-  (2, 12_000, 'paid');
+  (2, 12000, 'paid');
