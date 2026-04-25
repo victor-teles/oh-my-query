@@ -87,8 +87,11 @@ describe("useAllQueryHistory", () => {
     const slowEntries = [makeEntry({ sql: "slow" })];
     const fastEntries = [makeEntry({ sql: "fast" })];
 
-    const { promise: slowPromise, resolve: slowResolve } =
-      Promise.withResolvers<void>();
+    let slowResolve!: () => void;
+    // eslint-disable-next-line promise/avoid-new
+    const slowPromise = new Promise<void>((resolve) => {
+      slowResolve = resolve;
+    });
 
     const getAll = vi.fn();
     getAll.mockImplementationOnce(async () => {
