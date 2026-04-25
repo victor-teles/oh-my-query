@@ -1,4 +1,4 @@
-import { Download, Paintbrush, Palette, Type } from "lucide-react";
+import { Download, Paintbrush, Palette, RefreshCw, Type } from "lucide-react";
 import { useCallback } from "react";
 
 import { isTauri } from "@/lib/tauri";
@@ -8,13 +8,15 @@ export type SettingsSectionId =
   | "appearance"
   | "syntax-theme"
   | "code-font"
-  | "export";
+  | "export"
+  | "updates";
 
 export const SETTINGS_SECTIONS = [
   { icon: Palette, id: "appearance", label: "Appearance" },
   { icon: Paintbrush, id: "syntax-theme", label: "Syntax Theme" },
   { icon: Type, id: "code-font", label: "Code Font" },
   { icon: Download, id: "export", label: "Export" },
+  { icon: RefreshCw, id: "updates", label: "Updates" },
 ] as const satisfies readonly {
   id: SettingsSectionId;
   label: string;

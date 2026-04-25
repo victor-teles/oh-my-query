@@ -24,6 +24,7 @@ log = "0.4"
 tauri = { version = "2.10.0", features = ["devtools", "macos-private-api"] }
 tauri-plugin-log = "2"
 tauri-plugin-opener = "2"
+tauri-plugin-updater = "2"
 sqlx = { version = "0.8", features = [
   "runtime-tokio",
   "tls-native-tls",
