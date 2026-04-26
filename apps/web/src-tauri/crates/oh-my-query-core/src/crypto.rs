@@ -202,7 +202,7 @@ mod tests {
     #[test]
     fn truncated_ciphertext_fails_with_short_error() {
         let key = fixed_key();
-        let short = B64.encode(&[0u8; NONCE_LEN]);
+        let short = B64.encode([0u8; NONCE_LEN]);
         let err = decrypt_with_key(&key, &short).unwrap_err();
         assert!(matches!(err, CryptoError::Short));
     }
