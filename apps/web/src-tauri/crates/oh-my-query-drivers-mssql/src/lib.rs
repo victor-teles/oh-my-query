@@ -32,7 +32,7 @@ pub fn build_mssql_config(params: &ConnectionParams) -> Config {
     }
     config.authentication(AuthMethod::sql_server(&params.username, &params.password));
     config.encryption(EncryptionLevel::Required);
-    if params.trust_server_certificate.unwrap_or(true) {
+    if params.trust_server_certificate.unwrap_or(false) {
         config.trust_cert();
     }
     config
@@ -659,6 +659,13 @@ mod tests {
         params.trust_server_certificate = Some(false);
         let _cfg = build_mssql_config(&params);
         params.trust_server_certificate = Some(true);
+        let _cfg = build_mssql_config(&params);
+    }
+
+    #[test]
+    fn config_does_not_trust_when_flag_unset() {
+        let params = base_params();
+        assert!(params.trust_server_certificate.is_none());
         let _cfg = build_mssql_config(&params);
     }
 

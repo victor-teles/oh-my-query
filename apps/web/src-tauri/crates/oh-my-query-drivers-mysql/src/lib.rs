@@ -250,15 +250,32 @@ fn guard_destructive(sql: &str) -> Result<(), DbError> {
         .next()
         .unwrap_or("")
         .to_ascii_uppercase();
-    match head.as_str() {
-        "SELECT" | "WITH" | "VALUES" | "TABLE" => Ok(()),
-        _ => Err(DbError {
+    let head_ok = matches!(head.as_str(), "SELECT" | "WITH" | "VALUES" | "TABLE");
+    if !head_ok {
+        return Err(DbError {
             code: "EXPLAIN_DESTRUCTIVE".to_string(),
             message: format!(
                 "Refusing to EXPLAIN ANALYZE on a {head} statement — it would execute."
             ),
-        }),
+        });
     }
+    if contains_destructive_keyword(sql) {
+        return Err(DbError {
+            code: "EXPLAIN_DESTRUCTIVE".to_string(),
+            message: "Refusing to EXPLAIN ANALYZE a statement that contains a data-modifying clause (e.g. WITH … AS (DELETE …)). Turn off ANALYZE to see the estimated plan.".to_string(),
+        });
+    }
+    Ok(())
+}
+
+fn contains_destructive_keyword(sql: &str) -> bool {
+    const DESTRUCTIVE: &[&str] = &[
+        "DELETE", "UPDATE", "INSERT", "MERGE", "TRUNCATE", "DROP", "ALTER", "CREATE", "GRANT",
+        "REVOKE", "CALL",
+    ];
+    sql.split(|c: char| !c.is_ascii_alphanumeric() && c != '_')
+        .map(str::to_ascii_uppercase)
+        .any(|tok| DESTRUCTIVE.contains(&tok.as_str()))
 }
 
 pub async fn list_databases_mysql(pool: &sqlx::MySqlPool) -> Result<Vec<String>, DbError> {
@@ -692,5 +709,35 @@ mod mysql_build_tests {
         assert!(t.columns.is_empty());
         assert!(t.indexes.is_empty());
         assert!(t.foreign_keys.is_empty());
+    }
+
+    #[test]
+    fn guard_destructive_allows_plain_select() {
+        assert!(guard_destructive("SELECT 1").is_ok());
+        assert!(guard_destructive("WITH cte AS (SELECT 1) SELECT * FROM cte").is_ok());
+    }
+
+    #[test]
+    fn guard_destructive_rejects_with_delete_cte() {
+        let err = guard_destructive(
+            "WITH d AS (DELETE FROM users WHERE id = 1 RETURNING *) SELECT * FROM d",
+        )
+        .expect_err("expected destructive guard");
+        assert_eq!(err.code, "EXPLAIN_DESTRUCTIVE");
+    }
+
+    #[test]
+    fn guard_destructive_rejects_top_level_dml() {
+        for sql in [
+            "DELETE FROM t",
+            "UPDATE t SET x = 1",
+            "INSERT INTO t VALUES (1)",
+            "DROP TABLE t",
+        ] {
+            assert!(
+                guard_destructive(sql).is_err(),
+                "expected guard to reject `{sql}`"
+            );
+        }
     }
 }

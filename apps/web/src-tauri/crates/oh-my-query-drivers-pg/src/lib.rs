@@ -168,6 +168,18 @@ pub async fn fetch_sql_rows_postgres(
             .await
             .map_err(DbError::from)?;
     }
+    let result = run_native_fetch(&mut conn, sql, max_rows).await;
+    if schema.is_some() {
+        let _ = sqlx::query("RESET search_path").execute(&mut *conn).await;
+    }
+    result
+}
+
+async fn run_native_fetch(
+    conn: &mut sqlx::PgConnection,
+    sql: &str,
+    max_rows: usize,
+) -> Result<(Vec<ColumnInfo>, Vec<Vec<serde_json::Value>>, bool), DbError> {
     fetch_rows_native!(&mut *conn, sql, max_rows)
 }
 
@@ -177,8 +189,6 @@ pub async fn explain_postgres(
     analyze: bool,
     schema: Option<&str>,
 ) -> Result<ExplainResult, DbError> {
-    use futures::TryStreamExt;
-
     let trimmed = sql.trim().trim_end_matches(';').trim();
     if trimmed.is_empty() {
         return Err(DbError {
@@ -198,21 +208,55 @@ pub async fn explain_postgres(
     };
     let wrapped = format!("EXPLAIN ({options}) {trimmed}");
 
-    let mut conn = pool.acquire().await.map_err(DbError::from)?;
+    let mut tx = pool.begin().await.map_err(DbError::from)?;
+
+    if analyze {
+        sqlx::query("SET TRANSACTION READ ONLY")
+            .execute(&mut *tx)
+            .await
+            .map_err(DbError::from)?;
+    }
+
     if let Some(schema_name) = schema {
         validate_schema_name(schema_name)?;
-        sqlx::query(&format!("SET search_path TO \"{schema_name}\""))
-            .execute(&mut *conn)
+        sqlx::query(&format!("SET LOCAL search_path TO \"{schema_name}\""))
+            .execute(&mut *tx)
             .await
             .map_err(DbError::from)?;
     }
 
     let start = Instant::now();
-    let mut stream = sqlx::raw_sql(&wrapped).fetch(&mut *conn);
+    let parsed = fetch_explain_json(&mut tx, &wrapped, analyze).await?;
+    let _ = tx.rollback().await;
+
+    let raw = serde_json::to_string_pretty(&parsed).unwrap_or_default();
+    let root = parse_postgres(&parsed).map_err(|e| DbError {
+        code: "EXPLAIN_PARSE_ERROR".to_string(),
+        message: e,
+    })?;
+
+    Ok(ExplainResult {
+        engine: "postgresql",
+        root,
+        raw,
+        analyze_ran: analyze,
+        supports_analyze: true,
+        execution_time_ms: start.elapsed().as_millis() as u64,
+    })
+}
+
+async fn fetch_explain_json(
+    tx: &mut sqlx::Transaction<'_, sqlx::Postgres>,
+    wrapped: &str,
+    analyze: bool,
+) -> Result<serde_json::Value, DbError> {
+    use futures::TryStreamExt;
+
+    let mut stream = sqlx::raw_sql(wrapped).fetch(&mut **tx);
     let row = stream
         .try_next()
         .await
-        .map_err(DbError::from)?
+        .map_err(|e| map_read_only_violation(e, analyze))?
         .ok_or_else(|| DbError {
             code: "EXPLAIN_PARSE_ERROR".to_string(),
             message: "PostgreSQL EXPLAIN returned no rows".to_string(),
@@ -232,20 +276,21 @@ pub async fn explain_postgres(
                 })
         })?;
     drop(stream);
-    let raw = serde_json::to_string_pretty(&parsed).unwrap_or_default();
-    let root = parse_postgres(&parsed).map_err(|e| DbError {
-        code: "EXPLAIN_PARSE_ERROR".to_string(),
-        message: e,
-    })?;
+    Ok(parsed)
+}
 
-    Ok(ExplainResult {
-        engine: "postgresql",
-        root,
-        raw,
-        analyze_ran: analyze,
-        supports_analyze: true,
-        execution_time_ms: start.elapsed().as_millis() as u64,
-    })
+fn map_read_only_violation(err: sqlx::Error, analyze: bool) -> DbError {
+    if analyze {
+        if let sqlx::Error::Database(ref db) = err {
+            if db.code().as_deref() == Some("25006") {
+                return DbError {
+                    code: "EXPLAIN_DESTRUCTIVE".to_string(),
+                    message: "Refusing to EXPLAIN ANALYZE a statement that would modify data. Turn off ANALYZE to see the estimated plan.".to_string(),
+                };
+            }
+        }
+    }
+    DbError::from(err)
 }
 
 fn guard_destructive(sql: &str) -> Result<(), DbError> {

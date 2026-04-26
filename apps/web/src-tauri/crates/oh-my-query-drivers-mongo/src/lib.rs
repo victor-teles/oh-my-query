@@ -14,27 +14,24 @@ pub struct MongoDbDriver;
 
 pub fn build_mongodb_uri(params: &ConnectionParams) -> String {
     let has_auth = !params.username.is_empty();
-    if has_auth {
-        let auth_source = params
-            .auth_source
-            .as_deref()
-            .filter(|s| !s.is_empty())
-            .unwrap_or("admin");
-        format!(
-            "mongodb://{}:{}@{}:{}/{}?authSource={}",
-            urlencoding::encode(&params.username),
-            urlencoding::encode(&params.password),
-            params.host,
-            params.port,
-            urlencoding::encode(&params.database),
-            auth_source,
-        )
-    } else {
-        format!(
+    if !has_auth {
+        return format!(
             "mongodb://{}:{}/{}",
             params.host, params.port, params.database
-        )
+        );
     }
+    let mut uri = format!(
+        "mongodb://{}:{}@{}:{}/{}",
+        urlencoding::encode(&params.username),
+        urlencoding::encode(&params.password),
+        params.host,
+        params.port,
+        urlencoding::encode(&params.database),
+    );
+    if let Some(auth_source) = params.auth_source.as_deref().filter(|s| !s.is_empty()) {
+        uri.push_str(&format!("?authSource={}", urlencoding::encode(auth_source)));
+    }
+    uri
 }
 
 pub struct MongoDbPool {
@@ -508,5 +505,58 @@ pub async fn execute_mongodb(
                 "Unsupported MongoDB operation: {other}. Supported: find, findOne, insertOne, updateOne, deleteOne, countDocuments, aggregate"
             ),
         }),
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    fn params(username: &str, auth_source: Option<&str>) -> ConnectionParams {
+        ConnectionParams {
+            db_type: "mongodb".to_string(),
+            host: "localhost".to_string(),
+            port: 27017,
+            database: "appdb".to_string(),
+            username: username.to_string(),
+            password: "secret".to_string(),
+            auth_source: auth_source.map(str::to_string),
+            trust_server_certificate: None,
+        }
+    }
+
+    #[test]
+    fn omits_auth_when_username_blank() {
+        let uri = build_mongodb_uri(&params("", None));
+        assert_eq!(uri, "mongodb://localhost:27017/appdb");
+    }
+
+    #[test]
+    fn omits_auth_source_when_unset() {
+        let uri = build_mongodb_uri(&params("alice", None));
+        assert!(!uri.contains("authSource"), "uri = {uri}");
+        assert!(uri.contains("alice:secret@"));
+        assert!(uri.ends_with("/appdb"));
+    }
+
+    #[test]
+    fn omits_auth_source_when_blank() {
+        let uri = build_mongodb_uri(&params("alice", Some("")));
+        assert!(!uri.contains("authSource"), "uri = {uri}");
+    }
+
+    #[test]
+    fn includes_auth_source_when_set() {
+        let uri = build_mongodb_uri(&params("alice", Some("admin")));
+        assert!(uri.ends_with("?authSource=admin"), "uri = {uri}");
+    }
+
+    #[test]
+    fn url_encodes_credentials_and_auth_source() {
+        let mut p = params("us@r", Some("dev/db"));
+        p.password = "p@ss/word".to_string();
+        let uri = build_mongodb_uri(&p);
+        assert!(uri.contains("us%40r:p%40ss%2Fword@"));
+        assert!(uri.contains("?authSource=dev%2Fdb"));
     }
 }
