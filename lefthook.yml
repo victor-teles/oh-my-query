@@ -21,9 +21,9 @@ pre-commit:
     - name: rust-fmt
       glob: "apps/web/src-tauri/**/*.rs"
       root: apps/web/src-tauri
-      run: cargo fmt --check
+      run: cargo fmt --all --check
 
     - name: rust-clippy
       glob: "apps/web/src-tauri/**/*.rs"
       root: apps/web/src-tauri
-      run: cargo clippy -- -D warnings
+      run: cargo clippy --workspace --all-targets --no-deps -- -D warnings
