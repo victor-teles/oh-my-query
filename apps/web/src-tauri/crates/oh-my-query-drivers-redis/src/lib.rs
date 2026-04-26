@@ -39,11 +39,16 @@ pub fn build_redis_url(params: &ConnectionParams) -> String {
 
 pub struct RedisPool {
     pub conn: redis::aio::MultiplexedConnection,
+    pub client: redis::Client,
 }
 
 impl RedisPool {
     pub fn connection(&self) -> redis::aio::MultiplexedConnection {
         self.conn.clone()
+    }
+
+    pub fn client(&self) -> &redis::Client {
+        &self.client
     }
 }
 
@@ -97,7 +102,7 @@ impl Driver for RedisDriver {
             .await
             .map_err(DbError::from)?;
 
-        Ok(Arc::new(RedisPool { conn }))
+        Ok(Arc::new(RedisPool { conn, client }))
     }
 }
 
@@ -220,10 +225,10 @@ fn size_command(kind: &RedisKeyKind) -> Option<&'static str> {
     }
 }
 
-async fn select_db(
-    conn: &mut redis::aio::MultiplexedConnection,
-    db_index: u8,
-) -> Result<(), DbError> {
+async fn select_db<C>(conn: &mut C, db_index: u8) -> Result<(), DbError>
+where
+    C: redis::aio::ConnectionLike + Send,
+{
     let _: redis::Value = redis::cmd("SELECT")
         .arg(db_index)
         .query_async(conn)
@@ -232,11 +237,17 @@ async fn select_db(
     Ok(())
 }
 
-pub async fn redis_db_info(
-    conn: &redis::aio::MultiplexedConnection,
-    db_index: u8,
-) -> Result<RedisDbInfo, DbError> {
-    let mut c = conn.clone();
+async fn dedicated_conn(
+    client: &redis::Client,
+) -> Result<redis::aio::MultiplexedConnection, DbError> {
+    client
+        .get_multiplexed_tokio_connection()
+        .await
+        .map_err(DbError::from)
+}
+
+pub async fn redis_db_info(client: &redis::Client, db_index: u8) -> Result<RedisDbInfo, DbError> {
+    let mut c = dedicated_conn(client).await?;
     select_db(&mut c, db_index).await?;
 
     let total_keys: u64 = redis::cmd("DBSIZE")
@@ -263,13 +274,13 @@ pub async fn redis_db_info(
 }
 
 pub async fn scan_redis_keys(
-    conn: &redis::aio::MultiplexedConnection,
+    client: &redis::Client,
     db_index: u8,
     pattern: Option<&str>,
     cursor: &str,
     count: Option<u32>,
 ) -> Result<RedisScanPage, DbError> {
-    let mut c = conn.clone();
+    let mut c = dedicated_conn(client).await?;
     select_db(&mut c, db_index).await?;
 
     let count = count.unwrap_or(DEFAULT_COUNT).clamp(10, MAX_COUNT);
@@ -364,11 +375,11 @@ pub async fn scan_redis_keys(
 }
 
 pub async fn delete_redis_key(
-    conn: &redis::aio::MultiplexedConnection,
+    client: &redis::Client,
     db_index: u8,
     name: &str,
 ) -> Result<u64, DbError> {
-    let mut c = conn.clone();
+    let mut c = dedicated_conn(client).await?;
     select_db(&mut c, db_index).await?;
 
     let removed: u64 = redis::cmd("DEL")

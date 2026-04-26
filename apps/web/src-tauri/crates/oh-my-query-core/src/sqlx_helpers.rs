@@ -69,12 +69,21 @@ macro_rules! fetch_rows_native {
                         .map(|v: i64| ::serde_json::Value::Number(v.into()))
                         .unwrap_or(::serde_json::Value::Null),
 
-                    "FLOAT4" | "FLOAT8" | "REAL" | "DOUBLE" | "DOUBLE PRECISION" | "NUMERIC"
-                    | "DECIMAL" | "FLOAT" => row
-                        .try_get::<f64, _>(idx)
-                        .ok()
-                        .and_then(|v| {
-                            ::serde_json::Number::from_f64(v).map(::serde_json::Value::Number)
+                    "FLOAT4" | "FLOAT8" | "REAL" | "DOUBLE" | "DOUBLE PRECISION" | "FLOAT" => {
+                        row.try_get::<f64, _>(idx)
+                            .ok()
+                            .and_then(|v| {
+                                ::serde_json::Number::from_f64(v).map(::serde_json::Value::Number)
+                            })
+                            .unwrap_or(::serde_json::Value::Null)
+                    }
+
+                    "NUMERIC" | "DECIMAL" => row
+                        .try_get::<String, _>(idx)
+                        .map(::serde_json::Value::String)
+                        .or_else(|_| {
+                            row.try_get::<f64, _>(idx)
+                                .map(|v| ::serde_json::Value::String(v.to_string()))
                         })
                         .unwrap_or(::serde_json::Value::Null),
 
@@ -104,9 +113,18 @@ macro_rules! fetch_rows_native {
                         .map(|v| ::serde_json::Value::String(v.to_string()))
                         .unwrap_or(::serde_json::Value::Null),
 
-                    "TIME" | "TIMETZ" => row
+                    "TIME" => row
                         .try_get::<::sqlx::types::chrono::NaiveTime, _>(idx)
                         .map(|v| ::serde_json::Value::String(v.to_string()))
+                        .unwrap_or(::serde_json::Value::Null),
+
+                    "TIMETZ" => row
+                        .try_get::<String, _>(idx)
+                        .map(::serde_json::Value::String)
+                        .or_else(|_| {
+                            row.try_get::<::sqlx::types::chrono::NaiveTime, _>(idx)
+                                .map(|v| ::serde_json::Value::String(v.to_string()))
+                        })
                         .unwrap_or(::serde_json::Value::Null),
 
                     "JSON" | "JSONB" => row

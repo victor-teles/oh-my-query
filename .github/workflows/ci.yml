@@ -145,7 +145,7 @@ jobs:
           workspaces: "apps/web/src-tauri -> target"
 
       - name: Test + coverage
-        run: cargo llvm-cov nextest --manifest-path apps/web/src-tauri/Cargo.toml --workspace --profile ci --ignore-filename-regex '(^|/)(commands|lib|main)\.rs$|/oh-my-query-core/src/(config|error|persistence|types)\.rs$|/oh-my-query-drivers-[a-z]+/src/lib\.rs$|/src/db/(driver|mod|pool)\.rs$' --lcov --output-path lcov.info --fail-under-lines 40
+        run: cargo llvm-cov nextest --manifest-path apps/web/src-tauri/Cargo.toml --workspace --profile ci --ignore-filename-regex '/src-tauri/src/(commands|lib|main|update_channel)\.rs$|/oh-my-query-core/src/(config|error|persistence|types)\.rs$|/src/db/(driver|mod|pool)\.rs$' --lcov --output-path lcov.info --fail-under-lines 40
 
       - name: Upload coverage report
         if: always()

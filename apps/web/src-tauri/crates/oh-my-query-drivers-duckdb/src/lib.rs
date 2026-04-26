@@ -328,8 +328,8 @@ fn format_timestamp_unit(unit: duckdb::types::TimeUnit, v: i64) -> String {
         TimeUnit::Nanosecond => 1,
     };
     let total_nanos = (v as i128) * (nanos_per_unit as i128);
-    let secs = (total_nanos / 1_000_000_000) as i64;
-    let nsecs = (total_nanos.rem_euclid(1_000_000_000)) as u32;
+    let secs = total_nanos.div_euclid(1_000_000_000) as i64;
+    let nsecs = total_nanos.rem_euclid(1_000_000_000) as u32;
     match DateTime::from_timestamp(secs, nsecs) {
         Some(dt) => dt.format("%Y-%m-%d %H:%M:%S%.f").to_string(),
         None => format!("{v}"),
@@ -447,7 +447,40 @@ fn contains_destructive_keyword(sql: &str) -> bool {
         "DELETE", "UPDATE", "INSERT", "MERGE", "TRUNCATE", "DROP", "ALTER", "CREATE", "ATTACH",
         "DETACH", "GRANT", "REVOKE", "CALL", "COPY",
     ];
-    sql.split(|c: char| !c.is_ascii_alphanumeric() && c != '_')
+
+    let mut scrubbed = String::with_capacity(sql.len());
+    let mut chars = sql.chars().peekable();
+    let mut in_single_quote = false;
+    let mut in_double_quote = false;
+
+    while let Some(ch) = chars.next() {
+        if in_single_quote {
+            if ch == '\'' {
+                if chars.peek() == Some(&'\'') {
+                    chars.next();
+                } else {
+                    in_single_quote = false;
+                }
+            }
+            continue;
+        }
+
+        if in_double_quote {
+            if ch == '"' {
+                in_double_quote = false;
+            }
+            continue;
+        }
+
+        match ch {
+            '\'' => in_single_quote = true,
+            '"' => in_double_quote = true,
+            _ => scrubbed.push(ch),
+        }
+    }
+
+    scrubbed
+        .split(|c: char| !c.is_ascii_alphanumeric() && c != '_')
         .map(str::to_ascii_uppercase)
         .any(|tok| DESTRUCTIVE.contains(&tok.as_str()))
 }
@@ -752,5 +785,39 @@ mod tests {
                 "expected guard to reject `{sql}`"
             );
         }
+    }
+
+    #[test]
+    fn guard_destructive_ignores_keywords_in_single_quoted_literals() {
+        assert!(guard_destructive("SELECT 'DELETE FROM x'").is_ok());
+        assert!(guard_destructive("SELECT 'It''s ok to DROP'").is_ok());
+    }
+
+    #[test]
+    fn guard_destructive_ignores_keywords_in_double_quoted_identifiers() {
+        assert!(guard_destructive(r#"SELECT 1 AS "delete""#).is_ok());
+        assert!(guard_destructive(r#"SELECT "drop_count" FROM t"#).is_ok());
+    }
+
+    #[test]
+    fn timestamp_unit_handles_pre_epoch_values() {
+        use duckdb::types::TimeUnit;
+
+        assert_eq!(
+            format_timestamp_unit(TimeUnit::Second, 0),
+            "1970-01-01 00:00:00"
+        );
+
+        let pre_epoch_us = format_timestamp_unit(TimeUnit::Microsecond, -500_000);
+        assert!(
+            pre_epoch_us.starts_with("1969-12-31 23:59:59"),
+            "expected 1969 prefix, got `{pre_epoch_us}`"
+        );
+
+        let pre_epoch_s = format_timestamp_unit(TimeUnit::Second, -1);
+        assert!(
+            pre_epoch_s.starts_with("1969-12-31 23:59:59"),
+            "expected 1969 prefix, got `{pre_epoch_s}`"
+        );
     }
 }

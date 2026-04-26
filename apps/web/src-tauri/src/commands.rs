@@ -224,8 +224,7 @@ pub async fn redis_db_info(
 ) -> Result<RedisDbInfo, DbError> {
     let pool = state.get_pool(&connection_id).await?;
     let redis_pool = require_redis(&pool)?;
-    let conn = redis_pool.connection();
-    do_redis_db_info(&conn, db_index).await
+    do_redis_db_info(redis_pool.client(), db_index).await
 }
 
 #[tauri::command]
@@ -239,9 +238,15 @@ pub async fn scan_redis_keys(
 ) -> Result<RedisScanPage, DbError> {
     let pool = state.get_pool(&connection_id).await?;
     let redis_pool = require_redis(&pool)?;
-    let conn = redis_pool.connection();
     let cursor_ref = cursor.as_deref().unwrap_or("0");
-    do_scan_redis_keys(&conn, db_index, pattern.as_deref(), cursor_ref, count).await
+    do_scan_redis_keys(
+        redis_pool.client(),
+        db_index,
+        pattern.as_deref(),
+        cursor_ref,
+        count,
+    )
+    .await
 }
 
 #[tauri::command]
@@ -253,6 +258,5 @@ pub async fn delete_redis_key(
 ) -> Result<u64, DbError> {
     let pool = state.get_pool(&connection_id).await?;
     let redis_pool = require_redis(&pool)?;
-    let conn = redis_pool.connection();
-    do_delete_redis_key(&conn, db_index, &name).await
+    do_delete_redis_key(redis_pool.client(), db_index, &name).await
 }

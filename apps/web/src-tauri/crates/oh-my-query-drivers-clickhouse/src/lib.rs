@@ -233,6 +233,18 @@ fn normalize_value(val: serde_json::Value) -> serde_json::Value {
     }
 }
 
+fn escape_clickhouse_string_literal(s: &str) -> String {
+    let mut out = String::with_capacity(s.len());
+    for ch in s.chars() {
+        match ch {
+            '\\' => out.push_str(r"\\"),
+            '\'' => out.push_str(r"\'"),
+            _ => out.push(ch),
+        }
+    }
+    out
+}
+
 pub struct ClickHouseDriver;
 
 pub struct ClickHousePool {
@@ -436,11 +448,12 @@ async fn fetch_tables_clickhouse(
     conn: &ClickHouseConnection,
     database_name: &str,
 ) -> Result<Vec<TableItem>, DbError> {
+    let db_lit = escape_clickhouse_string_literal(database_name);
     let (_, table_rows, _, _) = conn
         .query(
             &format!(
                 "SELECT name, total_rows FROM system.tables \
-                 WHERE database = '{database_name}' \
+                 WHERE database = '{db_lit}' \
                  AND engine NOT IN ('View', 'MaterializedView') \
                  ORDER BY name"
             ),
@@ -477,11 +490,12 @@ async fn fetch_views_clickhouse(
     conn: &ClickHouseConnection,
     database_name: &str,
 ) -> Result<Vec<ViewItem>, DbError> {
+    let db_lit = escape_clickhouse_string_literal(database_name);
     let (_, view_rows, _, _) = conn
         .query(
             &format!(
                 "SELECT name FROM system.tables \
-                 WHERE database = '{database_name}' \
+                 WHERE database = '{db_lit}' \
                  AND engine IN ('View', 'MaterializedView') \
                  ORDER BY name"
             ),
@@ -514,12 +528,14 @@ async fn fetch_columns_clickhouse(
     database_name: &str,
     table_name: &str,
 ) -> Result<Vec<ColumnDetail>, DbError> {
+    let db_lit = escape_clickhouse_string_literal(database_name);
+    let table_lit = escape_clickhouse_string_literal(table_name);
     let (_, rows, _, _) = conn
         .query(
             &format!(
                 "SELECT name, type, default_kind, default_expression, is_in_primary_key \
                  FROM system.columns \
-                 WHERE database = '{database_name}' AND table = '{table_name}' \
+                 WHERE database = '{db_lit}' AND table = '{table_lit}' \
                  ORDER BY position"
             ),
             None,
@@ -567,12 +583,14 @@ async fn fetch_indexes_clickhouse(
     database_name: &str,
     table_name: &str,
 ) -> Result<Vec<IndexItem>, DbError> {
+    let db_lit = escape_clickhouse_string_literal(database_name);
+    let table_lit = escape_clickhouse_string_literal(table_name);
     let (_, rows, _, _) = conn
         .query(
             &format!(
                 "SELECT name, expr, type \
                  FROM system.data_skipping_indices \
-                 WHERE database = '{database_name}' AND table = '{table_name}'"
+                 WHERE database = '{db_lit}' AND table = '{table_lit}'"
             ),
             None,
             None,
@@ -686,5 +704,26 @@ mod tests {
         assert!(!is_data_query("ALTER TABLE t ADD COLUMN c String"));
         assert!(!is_data_query("INSERT INTO t VALUES (1)"));
         assert!(!is_data_query("TRUNCATE TABLE t"));
+    }
+
+    #[test]
+    fn escape_passes_plain_names_unchanged() {
+        assert_eq!(escape_clickhouse_string_literal("default"), "default");
+        assert_eq!(escape_clickhouse_string_literal("my_db"), "my_db");
+    }
+
+    #[test]
+    fn escape_quotes_and_backslashes() {
+        assert_eq!(escape_clickhouse_string_literal("o'reilly"), r"o\'reilly");
+        assert_eq!(escape_clickhouse_string_literal(r"a\b"), r"a\\b");
+        assert_eq!(
+            escape_clickhouse_string_literal(r"db'; DROP TABLE x; --"),
+            r"db\'; DROP TABLE x; --"
+        );
+    }
+
+    #[test]
+    fn escape_handles_mixed_special_chars() {
+        assert_eq!(escape_clickhouse_string_literal(r"a\'b"), r"a\\\'b");
     }
 }

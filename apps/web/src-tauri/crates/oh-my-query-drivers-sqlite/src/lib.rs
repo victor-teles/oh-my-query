@@ -136,11 +136,8 @@ pub async fn fetch_sql_rows_sqlite(
     fetch_rows_native!(pool, sql, max_rows)
 }
 
-fn is_safe_identifier(name: &str) -> bool {
-    !name.is_empty()
-        && name
-            .chars()
-            .all(|c| c.is_alphanumeric() || c == '_' || c == '-' || c == '.')
+fn escape_sqlite_string_literal(name: &str) -> String {
+    name.replace('\'', "''")
 }
 
 pub async fn fetch_schema_sqlite(pool: &sqlx::SqlitePool) -> Result<SchemaInfo, DbError> {
@@ -171,7 +168,7 @@ async fn fetch_tables_sqlite(pool: &sqlx::SqlitePool) -> Result<Vec<TableItem>, 
     for table_row in &table_rows {
         let table_name: String = table_row.try_get("name").unwrap_or_default();
 
-        if !is_safe_identifier(&table_name) {
+        if table_name.is_empty() {
             continue;
         }
 
@@ -206,7 +203,7 @@ async fn fetch_views_sqlite(pool: &sqlx::SqlitePool) -> Result<Vec<ViewItem>, Db
     for view_row in &view_rows {
         let view_name: String = view_row.try_get("name").unwrap_or_default();
 
-        if !is_safe_identifier(&view_name) {
+        if view_name.is_empty() {
             continue;
         }
 
@@ -225,7 +222,8 @@ async fn fetch_columns_sqlite(
     pool: &sqlx::SqlitePool,
     table_name: &str,
 ) -> Result<Vec<ColumnDetail>, DbError> {
-    let query = format!("PRAGMA table_info('{table_name}')");
+    let escaped = escape_sqlite_string_literal(table_name);
+    let query = format!("PRAGMA table_info('{escaped}')");
     let rows = sqlx::query(&query)
         .fetch_all(pool)
         .await
@@ -251,7 +249,8 @@ async fn fetch_indexes_sqlite(
     pool: &sqlx::SqlitePool,
     table_name: &str,
 ) -> Result<Vec<IndexItem>, DbError> {
-    let list_query = format!("PRAGMA index_list('{table_name}')");
+    let escaped_table = escape_sqlite_string_literal(table_name);
+    let list_query = format!("PRAGMA index_list('{escaped_table}')");
     let index_rows = sqlx::query(&list_query)
         .fetch_all(pool)
         .await
@@ -263,11 +262,12 @@ async fn fetch_indexes_sqlite(
         let index_name: String = index_row.try_get("name").unwrap_or_default();
         let unique: i32 = index_row.try_get("unique").unwrap_or(0);
 
-        if !is_safe_identifier(&index_name) {
+        if index_name.is_empty() {
             continue;
         }
 
-        let info_query = format!("PRAGMA index_info('{index_name}')");
+        let escaped_index = escape_sqlite_string_literal(&index_name);
+        let info_query = format!("PRAGMA index_info('{escaped_index}')");
         let col_rows = sqlx::query(&info_query)
             .fetch_all(pool)
             .await
@@ -292,7 +292,8 @@ async fn fetch_fks_sqlite(
     pool: &sqlx::SqlitePool,
     table_name: &str,
 ) -> Result<Vec<ForeignKeyItem>, DbError> {
-    let query = format!("PRAGMA foreign_key_list('{table_name}')");
+    let escaped = escape_sqlite_string_literal(table_name);
+    let query = format!("PRAGMA foreign_key_list('{escaped}')");
     let rows = sqlx::query(&query)
         .fetch_all(pool)
         .await
@@ -318,4 +319,28 @@ async fn fetch_fks_sqlite(
     }
 
     Ok(fk_map.into_values().collect())
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn escape_leaves_plain_names_unchanged() {
+        assert_eq!(escape_sqlite_string_literal("users"), "users");
+        assert_eq!(escape_sqlite_string_literal("schema.table"), "schema.table");
+    }
+
+    #[test]
+    fn escape_doubles_single_quotes() {
+        assert_eq!(escape_sqlite_string_literal("it's"), "it''s");
+        assert_eq!(escape_sqlite_string_literal("'"), "''");
+        assert_eq!(escape_sqlite_string_literal("a''b"), "a''''b");
+    }
+
+    #[test]
+    fn escape_preserves_unicode_and_spaces() {
+        assert_eq!(escape_sqlite_string_literal("café"), "café");
+        assert_eq!(escape_sqlite_string_literal("my table"), "my table");
+    }
 }
