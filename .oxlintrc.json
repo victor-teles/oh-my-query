@@ -8,9 +8,11 @@
     "**/*.gen.ts",
     ".agents/**",
     ".claude/**",
-    "apps/web/scripts/**",
-    "apps/web/e2e/**"
+    "apps/app/scripts/**",
+    "apps/app/e2e/**",
+    "apps/web/**"
   ],
+  "plugins": ["unicorn", "typescript", "react", "import", "promise"],
   "rules": {
     "func-style": "off",
     "no-danger": "off",
@@ -18,6 +20,9 @@
     "no-negated-condition": "off",
     "no-nodejs-modules": "off",
     "filename-case": "off",
-    "vitest/prefer-describe-function-title": "off"
+    "vitest/prefer-describe-function-title": "off",
+    "jest/no-hooks": "off",
+    "jest/require-hook": "off",
+    "jest/require-top-level-describe": "off"
   }
 }

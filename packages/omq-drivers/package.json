@@ -1,0 +1,24 @@
+{
+  "name": "@oh-my-query/drivers",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "dependencies": {
+    "@oh-my-query/core": "workspace:*",
+    "@oh-my-query/drivers-clickhouse": "workspace:*",
+    "@oh-my-query/drivers-duckdb": "workspace:*",
+    "@oh-my-query/drivers-mongo": "workspace:*",
+    "@oh-my-query/drivers-mssql": "workspace:*",
+    "@oh-my-query/drivers-mysql": "workspace:*",
+    "@oh-my-query/drivers-pg": "workspace:*",
+    "@oh-my-query/drivers-redis": "workspace:*",
+    "@oh-my-query/drivers-sqlite": "workspace:*"
+  },
+  "devDependencies": {
+    "@oh-my-query/config": "workspace:*",
+    "@typescript/native-preview": "catalog:"
+  }
+}

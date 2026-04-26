@@ -1,0 +1,19 @@
+{
+  "name": "@oh-my-query/core",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./client": "./src/client.ts"
+  },
+  "dependencies": {
+    "@polyglot-sql/sdk": "^0.3.2",
+    "keytar": "^7.9.0"
+  },
+  "devDependencies": {
+    "@oh-my-query/config": "workspace:*",
+    "@types/bun": "latest",
+    "@typescript/native-preview": "catalog:"
+  }
+}

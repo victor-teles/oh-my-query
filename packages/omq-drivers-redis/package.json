@@ -1,0 +1,17 @@
+{
+  "name": "@oh-my-query/drivers-redis",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "dependencies": {
+    "@oh-my-query/core": "workspace:*",
+    "ioredis": "^5.4.2"
+  },
+  "devDependencies": {
+    "@oh-my-query/config": "workspace:*",
+    "@typescript/native-preview": "catalog:"
+  }
+}

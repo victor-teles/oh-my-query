@@ -1,0 +1,45 @@
+// Renderer-safe entry: types + pure-data constants only.
+// Excludes anything that touches keytar, the polyglot WASM runtime, or
+// `node:fs`/`node:os`. Safe to import from a Vite-bundled webview.
+export type { AISettings, AppConfig } from "./config.ts";
+export type {
+  ExplainEngine,
+  ExplainParams,
+  ExplainResult,
+  PlanCost,
+  PlanNode,
+  PlanRows,
+  PlanTiming,
+} from "./explain.ts";
+export { ENGINE_SUPPORTS_ANALYZE, ENGINE_SUPPORTS_EXPLAIN } from "./explain.ts";
+export type {
+  DatabaseConnection,
+  HistoryEntry,
+  HistoryFilters,
+  PersistedTab,
+  TabState,
+} from "./persistence.ts";
+export type {
+  CellValue,
+  ColumnDetail,
+  ColumnInfo,
+  ConnectionParams,
+  DialectType,
+  DocumentResult,
+  ExecuteResult,
+  ForeignKeyItem,
+  IndexItem,
+  QueryParams,
+  QueryResult,
+  RedisDbInfo,
+  RedisKey,
+  RedisKeyKind,
+  RedisScanPage,
+  RedisSizeUnit,
+  SchemaInfo,
+  SchemaItem,
+  TableItem,
+  TabularResult,
+  TestConnectionResult,
+  ViewItem,
+} from "./types.ts";
