@@ -97,8 +97,8 @@ jobs:
       - name: Rustfmt
         run: cargo fmt --manifest-path apps/web/src-tauri/Cargo.toml --all --check
 
-  rust-clippy:
-    name: Rust / clippy
+  rust:
+    name: Rust / clippy + test
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -111,30 +111,7 @@ jobs:
 
       - uses: dtolnay/rust-toolchain@stable
         with:
-          components: clippy
-
-      - uses: swatinem/rust-cache@v2
-        with:
-          workspaces: "apps/web/src-tauri -> target"
-
-      - name: Clippy
-        run: cargo clippy --manifest-path apps/web/src-tauri/Cargo.toml --workspace --all-targets -- -D warnings
-
-  rust-test:
-    name: Rust / test + coverage
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Install system dependencies
-        uses: awalsh128/cache-apt-pkgs-action@v1
-        with:
-          packages: libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf libssl-dev
-          version: 1.0
-
-      - uses: dtolnay/rust-toolchain@stable
-        with:
-          components: llvm-tools-preview
+          components: clippy, llvm-tools-preview
 
       - uses: taiki-e/install-action@v2
         with:
@@ -143,6 +120,9 @@ jobs:
       - uses: swatinem/rust-cache@v2
         with:
           workspaces: "apps/web/src-tauri -> target"
+
+      - name: Clippy
+        run: cargo clippy --manifest-path apps/web/src-tauri/Cargo.toml --workspace --lib --bins --tests -- -D warnings
 
       - name: Test + coverage
         run: cargo llvm-cov nextest --manifest-path apps/web/src-tauri/Cargo.toml --workspace --profile ci --ignore-filename-regex '/src-tauri/src/(commands|lib|main|update_channel)\.rs$|/oh-my-query-core/src/(config|error|persistence|types)\.rs$|/src/db/(driver|mod|pool)\.rs$' --lcov --output-path lcov.info --fail-under-lines 40
