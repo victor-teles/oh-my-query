@@ -1,5 +1,6 @@
 mod commands;
 pub mod db;
+mod update_channel;
 
 pub use oh_my_query_core::cancellation;
 pub use oh_my_query_core::config;
@@ -20,6 +21,7 @@ pub fn run() {
                 .build(),
         )
         .plugin(tauri_plugin_opener::init())
+        .plugin(tauri_plugin_updater::Builder::new().build())
         .manage(ConnectionPoolManager::new())
         .manage(CancellationRegistry::new())
         .setup(|app| {
@@ -101,6 +103,10 @@ pub fn run() {
             persistence::get_all_history,
             persistence::get_connections,
             persistence::save_connections,
+            update_channel::get_update_channel,
+            update_channel::set_update_channel,
+            update_channel::check_for_update,
+            update_channel::install_update,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

@@ -56,9 +56,11 @@ log = "0.4"
 tauri = { version = "2.10.0", features = ["devtools", "macos-private-api"] }
 tauri-plugin-log = "2"
 tauri-plugin-opener = "2"
+tauri-plugin-updater = "2"
 async-trait = "0.1"
 tokio = { version = "1", features = ["full"] }
 chrono = { version = "0.4", features = ["serde"] }
+dirs = "6"
 
 [target.'cfg(target_os = "macos")'.dependencies]
 keyring = { version = "3", features = ["apple-native"] }
