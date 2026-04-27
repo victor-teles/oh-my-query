@@ -1,0 +1,149 @@
+import { render, screen } from "@testing-library/react";
+import { userEvent } from "@testing-library/user-event";
+import { describe, expect, it, vi } from "vitest";
+
+import type { NarrativeState } from "@/hooks/use-explain-ai-narrative";
+import type { ExplainResult } from "@/lib/tauri";
+
+import { useEditorInsert } from "@/contexts/editor-insert-context";
+import { useExplainAiNarrative } from "@/hooks/use-explain-ai-narrative";
+
+import { ExplainAiNarrative } from "./explain-ai-narrative";
+
+vi.mock("@/hooks/use-explain-ai-narrative");
+vi.mock("@/contexts/editor-insert-context");
+
+const mockAnalyze = vi.fn();
+const mockStop = vi.fn();
+const mockReset = vi.fn();
+const mockInsertAtCursor = vi.fn();
+
+const setupMocks = (stateOverrides: Partial<NarrativeState> = {}) => {
+  const state: NarrativeState = {
+    errorMessage: null,
+    resultKey: null,
+    status: "idle",
+    text: "",
+    ...stateOverrides,
+  };
+  vi.mocked(useExplainAiNarrative).mockReturnValue({
+    analyze: mockAnalyze,
+    reset: mockReset,
+    state,
+    stop: mockStop,
+  });
+  vi.mocked(useEditorInsert).mockReturnValue({
+    focusEditor: vi.fn(),
+    getSelectedText: vi.fn(),
+    hasSelection: vi.fn(),
+    insertAtCursor: mockInsertAtCursor,
+    jumpTo: vi.fn(),
+    openQuery: vi.fn(),
+    openQueryAndRun: vi.fn(),
+    queryTable: vi.fn(),
+    registerEditor: vi.fn(),
+    registerOpenQuery: vi.fn(),
+    registerOpenQueryAndRun: vi.fn(),
+    registerQueryTable: vi.fn(),
+    replaceSelection: vi.fn(),
+  });
+};
+
+const makeResult = (): ExplainResult => ({
+  analyzeRan: false,
+  engine: "postgresql",
+  executionTimeMs: 10,
+  raw: "Seq Scan on users",
+  root: {
+    children: [],
+    cost: { actualTotalMs: 10, selfMs: 10, startup: null, total: null },
+    details: [],
+    id: "root",
+    label: "Seq Scan on users",
+    nodeType: "Seq Scan",
+    rows: { actual: 1000, estimated: 1 },
+    timing: { actualTotalMs: 10, loops: 1, startupMs: null },
+    warnings: [],
+  },
+  supportsAnalyze: true,
+});
+
+describe("explainAiNarrative", () => {
+  it("shows Analyze button in idle state", () => {
+    setupMocks({ status: "idle" });
+    render(<ExplainAiNarrative result={makeResult()} sql="SELECT 1" />);
+    expect(
+      screen.getByRole("button", { name: /analyze query plan/i })
+    ).toBeDefined();
+  });
+
+  it("calls analyze when Analyze button is clicked", async () => {
+    setupMocks({ status: "idle" });
+    render(<ExplainAiNarrative result={makeResult()} sql="SELECT 1" />);
+    await userEvent.click(
+      screen.getByRole("button", { name: /analyze query plan/i })
+    );
+    expect(mockAnalyze).toHaveBeenCalledWith(
+      expect.objectContaining({ engine: "postgresql" }),
+      "SELECT 1"
+    );
+  });
+
+  it("shows Stop button while streaming", () => {
+    setupMocks({ status: "streaming", text: "Diagnosis: slow scan" });
+    render(<ExplainAiNarrative result={makeResult()} sql="SELECT 1" />);
+    expect(
+      screen.getByRole("button", { name: /stop analysis/i })
+    ).toBeDefined();
+  });
+
+  it("shows streaming text during streaming", () => {
+    setupMocks({
+      status: "streaming",
+      text: "Diagnosis: sequential scan bottleneck",
+    });
+    render(<ExplainAiNarrative result={makeResult()} sql="SELECT 1" />);
+    expect(screen.getByText(/sequential scan bottleneck/i)).toBeDefined();
+  });
+
+  it("shows Insert into editor button for SQL blocks when done", () => {
+    const text =
+      "**Diagnosis:** slow.\n\n**Suggested index:**\n```sql\nCREATE INDEX idx ON users(id);\n```";
+    setupMocks({ status: "done", text });
+    render(<ExplainAiNarrative result={makeResult()} sql="SELECT 1" />);
+    expect(
+      screen.getByRole("button", { name: /insert into editor/i })
+    ).toBeDefined();
+  });
+
+  it("inserts SQL into editor when Insert button is clicked", async () => {
+    const sqlCode = "CREATE INDEX idx ON users(id);";
+    const text = `**Suggested index:**\n\`\`\`sql\n${sqlCode}\n\`\`\``;
+    setupMocks({ status: "done", text });
+    render(<ExplainAiNarrative result={makeResult()} sql="SELECT 1" />);
+    await userEvent.click(
+      screen.getByRole("button", { name: /insert into editor/i })
+    );
+    expect(mockInsertAtCursor).toHaveBeenCalledWith(
+      expect.stringContaining(sqlCode)
+    );
+  });
+
+  it("shows error message in error state", () => {
+    setupMocks({ errorMessage: "Invalid API key.", status: "error" });
+    render(<ExplainAiNarrative result={makeResult()} sql="SELECT 1" />);
+    expect(screen.getByText(/Invalid API key/i)).toBeDefined();
+  });
+
+  it("shows Re-analyze button after error", () => {
+    setupMocks({ errorMessage: "Network error.", status: "error" });
+    render(<ExplainAiNarrative result={makeResult()} sql="SELECT 1" />);
+    expect(screen.getByRole("button", { name: /re-analyze/i })).toBeDefined();
+  });
+
+  it("shows loading indicator during loading", () => {
+    setupMocks({ status: "loading" });
+    render(<ExplainAiNarrative result={makeResult()} sql="SELECT 1" />);
+    expect(screen.getByText(/analyzing plan/i)).toBeDefined();
+  });
+});

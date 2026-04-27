@@ -16,6 +16,7 @@ import { useQueryTabsContext } from "@/contexts/query-tabs-context";
 import { ENGINE_SUPPORTS_ANALYZE, ENGINE_SUPPORTS_EXPLAIN } from "@/lib/tauri";
 import { cn } from "@/lib/utils";
 
+import { ExplainAiNarrative } from "./explain-ai-narrative";
 import {
   ExplainErrorState,
   ExplainIdleState,
@@ -151,6 +152,7 @@ export const ExplainPanel = ({ tab, hasSelection }: ExplainPanelProps) => {
             <ExplainBody
               error={error}
               result={result}
+              sql={tab.sql}
               status={tab.explainStatus}
               viewMode={viewMode}
             />
@@ -182,10 +184,17 @@ interface ExplainBodyProps {
   result: QueryTab["explainResult"];
   status: QueryTab["explainStatus"];
   error: string | null;
+  sql: string;
   viewMode: ViewMode;
 }
 
-const ExplainBody = ({ result, status, error, viewMode }: ExplainBodyProps) => {
+const ExplainBody = ({
+  result,
+  status,
+  error,
+  sql,
+  viewMode,
+}: ExplainBodyProps) => {
   if (status === "running") {
     return (
       <div className="flex h-full flex-col items-center justify-center gap-2 p-8 text-center">
@@ -204,16 +213,17 @@ const ExplainBody = ({ result, status, error, viewMode }: ExplainBodyProps) => {
     if (viewMode === "raw") {
       return <PlanRawView raw={result.raw} />;
     }
-    return <PlanInspector result={result} />;
+    return <PlanInspector result={result} sql={sql} />;
   }
   return <ExplainIdleState />;
 };
 
 interface PlanInspectorProps {
   result: NonNullable<QueryTab["explainResult"]>;
+  sql: string;
 }
 
-const PlanInspector = ({ result }: PlanInspectorProps) => {
+const PlanInspector = ({ result, sql }: PlanInspectorProps) => {
   const analysis = useMemo(
     () => computePlanAnalysis(result.root),
     [result.root]
@@ -299,29 +309,39 @@ const PlanInspector = ({ result }: PlanInspectorProps) => {
   const selectedNode = findNodeById(result.root, selectedNodeId) ?? result.root;
 
   return (
-    <ResizablePanelGroup className="h-full" orientation="horizontal">
-      <ResizablePanel defaultSize="60%" minSize="35%">
-        <div
-          className="h-full overflow-auto outline-none"
-          onKeyDown={handleKeyDown}
-          // biome-ignore lint/a11y/noNoninteractiveTabindex: tree needs keyboard focus
-          tabIndex={0}
-        >
-          <PlanTree
-            expanded={expanded}
-            hotPath={analysis.hotPath}
-            maxCost={analysis.maxCost}
-            onSelect={setSelectedNodeId}
-            onToggleExpand={handleToggleExpand}
-            root={result.root}
-            selectedNodeId={selectedNodeId}
-          />
-        </div>
+    <ResizablePanelGroup className="h-full" orientation="vertical">
+      <ResizablePanel defaultSize="70%" minSize="40%">
+        <ResizablePanelGroup className="h-full" orientation="horizontal">
+          <ResizablePanel defaultSize="60%" minSize="35%">
+            <div
+              className="h-full overflow-auto outline-none"
+              onKeyDown={handleKeyDown}
+              // biome-ignore lint/a11y/noNoninteractiveTabindex: tree needs keyboard focus
+              tabIndex={0}
+            >
+              <PlanTree
+                expanded={expanded}
+                hotPath={analysis.hotPath}
+                maxCost={analysis.maxCost}
+                onSelect={setSelectedNodeId}
+                onToggleExpand={handleToggleExpand}
+                root={result.root}
+                selectedNodeId={selectedNodeId}
+              />
+            </div>
+          </ResizablePanel>
+          <ResizableHandle withHandle />
+          <ResizablePanel defaultSize="40%" minSize="25%">
+            <div className="h-full overflow-auto p-3">
+              <PlanNodeDetails node={selectedNode} />
+            </div>
+          </ResizablePanel>
+        </ResizablePanelGroup>
       </ResizablePanel>
-      <ResizableHandle withHandle />
-      <ResizablePanel defaultSize="40%" minSize="25%">
-        <div className="h-full overflow-auto p-3">
-          <PlanNodeDetails node={selectedNode} />
+      <ResizableHandle />
+      <ResizablePanel defaultSize="30%" minSize="15%">
+        <div className="h-full overflow-auto">
+          <ExplainAiNarrative result={result} sql={sql} />
         </div>
       </ResizablePanel>
     </ResizablePanelGroup>
