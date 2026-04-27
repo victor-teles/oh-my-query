@@ -8,6 +8,7 @@ export default {
   },
   build: {
     copy: {
+      "assets/bun/polyglot_sql_wasm_bg.wasm": "bun/polyglot_sql_wasm_bg.wasm",
       "dist/**/*": "views/mainview/",
     },
     linux: {
@@ -15,6 +16,10 @@ export default {
     },
     mac: {
       bundleCEF: false,
+      codesign: process.env.ELECTROBUN_DEVELOPER_ID !== undefined,
+      notarize:
+        process.env.ELECTROBUN_APPLEID !== undefined ||
+        process.env.ELECTROBUN_APPLEAPIKEY !== undefined,
     },
     views: {
       mainview: {

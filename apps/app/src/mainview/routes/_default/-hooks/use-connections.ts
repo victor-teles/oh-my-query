@@ -9,6 +9,7 @@ import {
   saveConnection,
   togglePinConnection,
 } from "@/lib/connections";
+import { resetSecrets as ipcResetSecrets } from "@/lib/ipc";
 
 const UNDO_DURATION_MS = 5000;
 
@@ -21,11 +22,19 @@ const sortByRecency = (a: DatabaseConnection, b: DatabaseConnection) => {
 export const useConnections = () => {
   const [connections, setConnections] = useState<DatabaseConnection[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<Error | null>(null);
 
   const load = useCallback(async () => {
-    const loaded = await getConnections();
-    setConnections(loaded);
-    setIsLoading(false);
+    setError(null);
+    try {
+      const loaded = await getConnections();
+      setConnections(loaded);
+    } catch (error) {
+      setError(error instanceof Error ? error : new Error(String(error)));
+      setConnections([]);
+    } finally {
+      setIsLoading(false);
+    }
   }, []);
 
   useEffect(() => {
@@ -71,13 +80,20 @@ export const useConnections = () => {
     setConnections(updated);
   }, []);
 
+  const resetSecrets = useCallback(async () => {
+    await ipcResetSecrets();
+    await load();
+  }, [load]);
+
   return {
     connections,
+    error,
     flatList,
     isLoading,
     pinned,
     refresh,
     remove,
+    resetSecrets,
     togglePin,
     unpinned,
   };

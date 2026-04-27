@@ -68,14 +68,14 @@ jobs:
         run: bun run build
 
       - name: Test + coverage
-        run: bun run --cwd apps/web test:coverage
+        run: bun run --cwd apps/app test:coverage
 
       - name: Upload coverage report
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: vitest-coverage
-          path: apps/web/coverage/
+          path: apps/app/coverage/
           if-no-files-found: ignore
 
       - name: Lint & format
@@ -83,57 +83,6 @@ jobs:
 
       - name: Type-check
         run: bun run check-types
-
-  rust-fmt:
-    name: Rust / fmt
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: dtolnay/rust-toolchain@stable
-        with:
-          components: rustfmt
-
-      - name: Rustfmt
-        run: cargo fmt --manifest-path apps/web/src-tauri/Cargo.toml --all --check
-
-  rust:
-    name: Rust / clippy + test
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Install system dependencies
-        uses: awalsh128/cache-apt-pkgs-action@v1
-        with:
-          packages: libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf libssl-dev
-          version: 1.0
-
-      - uses: dtolnay/rust-toolchain@stable
-        with:
-          components: clippy, llvm-tools-preview
-
-      - uses: taiki-e/install-action@v2
-        with:
-          tool: cargo-nextest,cargo-llvm-cov
-
-      - uses: swatinem/rust-cache@v2
-        with:
-          workspaces: "apps/web/src-tauri -> target"
-
-      - name: Clippy
-        run: cargo clippy --manifest-path apps/web/src-tauri/Cargo.toml --workspace --lib --bins --tests -- -D warnings
-
-      - name: Test + coverage
-        run: cargo llvm-cov nextest --manifest-path apps/web/src-tauri/Cargo.toml --workspace --profile ci --ignore-filename-regex '/src-tauri/src/(commands|lib|main|update_channel)\.rs$|/oh-my-query-core/src/(config|error|persistence|types)\.rs$|/src/db/(driver|mod|pool)\.rs$' --lcov --output-path lcov.info --fail-under-lines 40
-
-      - name: Upload coverage report
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: rust-coverage
-          path: lcov.info
-          if-no-files-found: ignore
 
   e2e:
     name: E2E
@@ -170,8 +119,6 @@ jobs:
           restore-keys: |
             playwright-${{ runner.os }}-
 
-      # apps/web's `dev` script is `vite dev` (not `tauri dev`), so the
-      # Playwright webServer does not need libwebkit2gtk / GTK system deps.
       - name: Install Playwright browsers
         if: steps.playwright-cache.outputs.cache-hit != 'true'
         run: bunx playwright install --with-deps chromium
@@ -184,12 +131,12 @@ jobs:
         run: bun run --cwd packages/vitest-visual build
 
       - name: Run Playwright
-        run: bun run --cwd apps/web e2e
+        run: bun run --cwd apps/app e2e
 
       - name: Upload Playwright report
         if: failure()
         uses: actions/upload-artifact@v4
         with:
           name: playwright-report
-          path: apps/web/playwright-report/
+          path: apps/app/playwright-report/
           if-no-files-found: ignore

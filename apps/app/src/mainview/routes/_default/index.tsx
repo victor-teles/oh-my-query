@@ -14,6 +14,7 @@ import {
 import { AddConnectionDialog } from "./-components/add-connection-dialog";
 import { ConnectionsBoard } from "./-components/connections-board";
 import { NoConnectionsState } from "./-components/connections-empty-state";
+import { ConnectionsErrorState } from "./-components/connections-error-state";
 import { EditConnectionDialog } from "./-components/edit-connection-dialog";
 import { HomeTitlebarActions } from "./-components/home-titlebar-actions";
 import { WelcomeState } from "./-components/welcome-state";
@@ -29,12 +30,14 @@ const HomeComponent = () => {
   const navigate = useNavigate();
   const {
     connections,
+    error,
     isLoading,
     pinned,
     unpinned,
     flatList,
     refresh,
     remove,
+    resetSecrets,
     togglePin,
   } = useConnections();
   const { listboxRef, selectedConnection, selectedId, setSelectedId } =
@@ -152,13 +155,44 @@ const HomeComponent = () => {
     setSelectedId,
   });
 
-  const isEmpty = !isLoading && connections.length === 0;
+  const loadError = isLoading ? null : error;
+  const isEmpty = !isLoading && loadError === null && connections.length === 0;
 
   const renderEmpty = () => {
     if (isFirstConnectionSeen()) {
       return <NoConnectionsState key="empty-no-conn" onAdd={handleAddOpen} />;
     }
     return <WelcomeState key="empty-welcome" onAdd={handleAddOpen} />;
+  };
+
+  const renderBody = () => {
+    if (loadError) {
+      return (
+        <ConnectionsErrorState
+          error={loadError}
+          key="error"
+          onResetSecrets={resetSecrets}
+          onRetry={refresh}
+        />
+      );
+    }
+    if (isEmpty) {
+      return renderEmpty();
+    }
+    return (
+      <ConnectionsBoard
+        glowingId={firstConnectionId}
+        key="populated"
+        listboxRef={listboxRef}
+        onDeleteRequest={remove}
+        onEditRequest={handleEditRequest}
+        onLaunch={prepareLaunch}
+        onTogglePin={togglePin}
+        pinned={pinned}
+        selectedId={selectedId}
+        unpinned={unpinned}
+      />
+    );
   };
 
   return (
@@ -174,22 +208,7 @@ const HomeComponent = () => {
 
       <div className="flex flex-1 flex-col items-center justify-center px-6 py-10">
         <AnimatePresence initial={false} mode="wait">
-          {isEmpty ? (
-            renderEmpty()
-          ) : (
-            <ConnectionsBoard
-              glowingId={firstConnectionId}
-              key="populated"
-              listboxRef={listboxRef}
-              onDeleteRequest={remove}
-              onEditRequest={handleEditRequest}
-              onLaunch={prepareLaunch}
-              onTogglePin={togglePin}
-              pinned={pinned}
-              selectedId={selectedId}
-              unpinned={unpinned}
-            />
-          )}
+          {renderBody()}
         </AnimatePresence>
       </div>
 

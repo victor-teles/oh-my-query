@@ -253,6 +253,9 @@ export const saveConnections = (
   connections: DatabaseConnection[]
 ): Promise<void> => rpc.request.saveConnections({ connections });
 
+export const resetSecrets = (): Promise<void> =>
+  rpc.request.resetSecrets({} as never);
+
 export const getConfig = () => rpc.request.getConfig({} as never);
 export const saveConfig = (
   config: Parameters<typeof rpc.request.saveConfig>[0]["config"]

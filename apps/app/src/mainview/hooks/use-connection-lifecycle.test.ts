@@ -29,19 +29,19 @@ describe("useConnectionLifecycle", () => {
   it("connects, fetches version, and marks the connection as used", async () => {
     const calls: string[] = [];
     mockTauri({
-      connect_to_database: (payload) => {
+      connectToDatabase: (payload) => {
         calls.push("connect");
         expect(payload).toMatchObject({ connectionId: "conn-1" });
       },
-      disconnect_from_database: () => {
+      disconnectFromDatabase: () => {
         calls.push("disconnect");
       },
-      get_connections: () => [],
-      get_server_version: () => {
+      getConnections: () => [],
+      getServerVersion: () => {
         calls.push("version");
         return "PostgreSQL 17.0";
       },
-      save_connections: () => {
+      saveConnections: () => {
         calls.push("save");
       },
     });
@@ -59,11 +59,11 @@ describe("useConnectionLifecycle", () => {
 
   it("captures connection errors", async () => {
     mockTauri({
-      connect_to_database: () => {
+      connectToDatabase: () => {
         throw new Error("host unreachable");
       },
-      disconnect_from_database: noop,
-      get_server_version: () => "ignored",
+      disconnectFromDatabase: noop,
+      getServerVersion: () => "ignored",
     });
 
     const connection = makeConnection();
@@ -76,13 +76,13 @@ describe("useConnectionLifecycle", () => {
 
   it("still reports connected when version fetch fails", async () => {
     mockTauri({
-      connect_to_database: noop,
-      disconnect_from_database: noop,
-      get_connections: () => [],
-      get_server_version: () => {
+      connectToDatabase: noop,
+      disconnectFromDatabase: noop,
+      getConnections: () => [],
+      getServerVersion: () => {
         throw new Error("no version RPC");
       },
-      save_connections: noop,
+      saveConnections: noop,
     });
 
     const connection = makeConnection();
@@ -95,11 +95,11 @@ describe("useConnectionLifecycle", () => {
   it("reconnect() triggers another connect cycle", async () => {
     const connect = vi.fn();
     mockTauri({
-      connect_to_database: connect,
-      disconnect_from_database: noop,
-      get_connections: () => [],
-      get_server_version: () => "PostgreSQL 17.0",
-      save_connections: noop,
+      connectToDatabase: connect,
+      disconnectFromDatabase: noop,
+      getConnections: () => [],
+      getServerVersion: () => "PostgreSQL 17.0",
+      saveConnections: noop,
     });
 
     const connection = makeConnection();
@@ -118,11 +118,11 @@ describe("useConnectionLifecycle", () => {
   it("disconnects on unmount", async () => {
     const disconnect = vi.fn();
     mockTauri({
-      connect_to_database: noop,
-      disconnect_from_database: disconnect,
-      get_connections: () => [],
-      get_server_version: () => "PostgreSQL 17.0",
-      save_connections: noop,
+      connectToDatabase: noop,
+      disconnectFromDatabase: disconnect,
+      getConnections: () => [],
+      getServerVersion: () => "PostgreSQL 17.0",
+      saveConnections: noop,
     });
 
     const connection = makeConnection();

@@ -18,6 +18,7 @@
 /out/
 /build/
 /dist/
+/assets/bun/
 .vinxi
 .output
 .react-router/

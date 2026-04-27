@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-**oh-my-query** is a desktop application built for querying databases with IA. It's a Turborepo monorepo with a React frontend that runs both as a web app (Vite) and a native desktop app (Tauri v2). There is no backend — this is a frontend-only project.
+**oh-my-query** is a desktop application built for querying databases with IA. It's a Turborepo monorepo with a React renderer (Vite) packaged as a native desktop app via Electrobun. The bun-side process lives in `apps/app/src/bun/` and exposes RPC handlers consumed by the renderer through `electrobun/view`.
 
 ## Commands
 
@@ -14,11 +14,11 @@ bun install
 
 # Development
 bun run dev          # Start all apps via Turborepo
-bun run dev:web      # Start only the web app (http://localhost:3001)
+bun run dev:web      # Start only the renderer (http://localhost:3001)
 
-# Tauri desktop app (run from apps/web)
-cd apps/web && bun run desktop:dev    # Dev mode
-cd apps/web && bun run desktop:build  # Production build
+# Electrobun desktop app (run from apps/app)
+cd apps/app && bun run desktop:dev    # Dev mode (concurrent vite + electrobun watcher)
+cd apps/app && bun run desktop:build  # Production build
 
 # Build & type-check
 bun run build        # Build all apps
@@ -35,11 +35,11 @@ bun run fix          # Auto-fix lint/format issues
 - Do not stop mid-implementation. If a plan has multiple tasks, execute all of them sequentially and only pause for explicit user questions.
 - When fixing CI failures, address the root cause — never loosen thresholds or disable checks to make them pass.
 - Before implementing a GitHub issue, verify the current git branch and create a feature branch if on main.
-- **Always write tests for new implementations.** When you add a new component, hook, or module, colocate a `*.test.tsx` / `*.test.ts` file next to it (Vitest + `@testing-library/react`, jsdom). Cover rendering, primary interactions, and conditional branches — at minimum, the behavior a reviewer would otherwise manually re-verify. Run `bun run --cwd apps/web test` before declaring the task complete. CI gates Vitest, Playwright e2e, and `cargo nextest` at 40% line coverage — see `TESTING.md` for the full story.
+- **Always write tests for new implementations.** When you add a new component, hook, or module, colocate a `*.test.tsx` / `*.test.ts` file next to it (Vitest + `@testing-library/react`, jsdom). Cover rendering, primary interactions, and conditional branches — at minimum, the behavior a reviewer would otherwise manually re-verify. Run `bun run --cwd apps/app test` before declaring the task complete. CI gates Vitest and Playwright e2e at 40% line coverage — see `TESTING.md` for the full story.
 
 ## Monorepo Structure
 
-- **`apps/web/`** — Main frontend app (React 19, TanStack Router, Vite, Tailwind v4, Tauri v2)
+- **`apps/app/`** — Desktop app (React 19 renderer in `src/mainview/`, bun-side process in `src/bun/`, Electrobun, TanStack Router, Vite, Tailwind v4)
 - **`packages/config/`** — Shared TypeScript config (`tsconfig.base.json`)
 - **`packages/env/`** — Type-safe environment variables via `@t3-oss/env-core`
 
@@ -47,21 +47,18 @@ Workspace packages are prefixed `@oh-my-query/` and use `workspace:*` protocol. 
 
 ## Architecture
 
-### Web App (`apps/web/`)
+### Desktop App (`apps/app/`)
 
-- **Routing**: TanStack Router with file-based routing in `src/routes/`. Route tree is auto-generated (`routeTree.gen.ts`).
-- **Styling**: Tailwind CSS v4 via `@tailwindcss/vite` plugin. CSS entry point is `src/index.css`. Theme uses CSS variables with `oklch` color format for light/dark modes. Glassmorphism effects use `backdrop-blur-xl backdrop-saturate-200` with semi-transparent backgrounds (e.g., `bg-secondary/50`).
-- **UI Components**: shadcn/ui (base-mira style, non-RSC mode). Components live in `src/components/ui/`. Add new components with `bunx shadcn@latest add <component>` from the `apps/web/` directory.
-- **Path alias**: `@/` maps to `apps/web/src/` (configured in both `vite.config.ts` and `tsconfig.json`).
+- **Routing**: TanStack Router with file-based routing in `src/mainview/routes/`. Route tree is auto-generated (`routeTree.gen.ts`).
+- **Styling**: Tailwind CSS v4 via `@tailwindcss/vite` plugin. CSS entry point is `src/mainview/index.css`. Theme uses CSS variables with `oklch` color format for light/dark modes. Glassmorphism effects use `backdrop-blur-xl backdrop-saturate-200` with semi-transparent backgrounds (e.g., `bg-secondary/50`).
+- **UI Components**: shadcn/ui (base-mira style, non-RSC mode). Components live in `src/mainview/components/ui/`. Add new components with `bunx shadcn@latest add <component>` from the `apps/app/` directory.
+- **Path alias**: `@/` maps to `apps/app/src/mainview/` (configured in both `vite.config.ts` and `tsconfig.json`).
 - **Theming**: `next-themes` with dark mode default, class-based strategy.
-- **Desktop**: Tauri v2 wraps the Vite dev server. Rust source in `src-tauri/`.
-  - Window config: `decorations: true`, `titleBarStyle: "Overlay"` (PascalCase required), `hiddenTitle: true`, `transparent: true`
-  - macOS vibrancy via `windowEffects` with `effects: ["sidebar"]` (requires `macOSPrivateApi: true` + `macos-private-api` Cargo feature)
-  - Use `data-tauri-drag-region=""` for draggable areas; `TRAFFIC_LIGHT_INSET` (~78px) reserves space for native window controls
-  - When overlaying interactive UI on `data-tauri-drag-region`, use `pointer-events-none` on the container and `pointer-events-auto` on the interactive element to allow both window dragging and UI interaction
-  - Platform detection: `isTauri()` helper for conditional desktop vs browser logic
-  - Frontend-to-Rust calls via `@tauri-apps/api/core`'s `invoke`
-  - Rust backend: Tauri commands use `sqlx` for database interactions. Dynamic SQL queries are dispatched based on database type (e.g., different `SELECT version()` syntax per DBMS).
+- **Desktop runtime**: Electrobun. Renderer code is bundled by Vite into `dist/` and copied into the `.app` at `views/mainview/`. The bun-side process is bundled from `src/bun/` (entry `src/bun/index.ts`).
+  - Renderer ↔ bun communication uses Electrobun RPC (`Electroview.defineRPC` on the renderer side in `src/mainview/lib/ipc.ts`; `defineElectrobunRPC` on the bun side in `src/bun/rpc.ts`).
+  - Database drivers and persistence helpers live in TypeScript packages (`@oh-my-query/core`, `@oh-my-query/drivers`, `@oh-my-query/drivers-redis`) consumed by `src/bun/rpc.ts`.
+  - The `@polyglot-sql/sdk` WASM blob is copied next to the bundled bun code via `apps/app/scripts/copy-bun-assets.ts` (run before `electrobun dev` and `electrobun build`).
+  - Vite must use `base: "./"` so `dist/index.html` references assets via relative paths — Electrobun's bundler resolves them from the dist root.
 - **Animations**: `motion` (Framer Motion v12+) for complex animations. Use `layout` props for morphing transitions and `AnimatePresence` for enter/exit animations. Spring config `{ type: "spring", stiffness: 400, damping: 30 }` for iOS-like snappiness. Simple animations can use CSS `@keyframes`.
 - **State Management**: Custom React hooks (e.g., `useQueryTabs`, `useConnectionLifecycle`) centralize state logic. React Context (e.g., `QueryExecutionContext`) for cross-component state sharing between disconnected parts of the component tree.
 - **Titlebar**: Uses `leading`, `center`, and `children` slot props. The `center` slot uses absolute positioning to overlay content (like the Dynamic Island) without disrupting the flex layout.
@@ -79,10 +76,6 @@ When working with React/TypeScript frontend code, activate these skills:
 - `vercel-react-best-practices`
 - `web-design-guidelines`
 
-When working with Rust code (`src-tauri/`), activate this skill:
-
-- `rust-best-practices`
-
 ## Key Conventions
 
 - **Package manager**: bun (v1.3.9)
@@ -99,11 +92,11 @@ Keep route files thin. A route's job is to orchestrate — wire hooks, render la
 
 **File placement**
 
-- Reusable primitives (buttons, inputs, popovers, etc.): `apps/web/src/components/ui/`
-- Cross-screen feature components: `apps/web/src/components/<feature>/`
+- Reusable primitives (buttons, inputs, popovers, etc.): `apps/app/src/mainview/components/ui/`
+- Cross-screen feature components: `apps/app/src/mainview/components/<feature>/`
 - Screen-specific components: `<route>/-components/` (TanStack Router ignores `-`-prefixed dirs)
 - Screen-specific hooks: `<route>/-hooks/`
-- App-wide hooks: `apps/web/src/hooks/`
+- App-wide hooks: `apps/app/src/mainview/hooks/`
 
 **Extraction patterns**
 

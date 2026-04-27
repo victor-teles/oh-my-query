@@ -8,9 +8,9 @@ A modern database client for querying with AI.
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg?style=flat)](LICENSE)
 [![macOS](https://img.shields.io/badge/platform-macOS-000000.svg?style=flat&logo=apple&logoColor=white)](https://github.com)
-[![Tauri](https://img.shields.io/badge/Tauri-v2-FFC131.svg?style=flat&logo=tauri&logoColor=white)](https://v2.tauri.app)
+[![Electrobun](https://img.shields.io/badge/Electrobun-1.16-FBF0DF.svg?style=flat&logo=bun&logoColor=black)](https://electrobun.dev)
 [![React](https://img.shields.io/badge/React-19-61DAFB.svg?style=flat&logo=react&logoColor=white)](https://react.dev)
-[![Rust](https://img.shields.io/badge/Rust-2021-DEA584.svg?style=flat&logo=rust&logoColor=white)](https://rust-lang.org)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6.svg?style=flat&logo=typescript&logoColor=white)](https://www.typescriptlang.org)
 
 </div>
 
@@ -53,7 +53,7 @@ A Dynamic Island-style connection indicator lives in the titlebar, showing live 
 
 ### Native experience
 
-Built with Tauri v2. macOS vibrancy effects, `prefers-reduced-motion` respected throughout, dark mode by default, and iOS-style spring animations that stay out of your way.
+Built with Electrobun. macOS vibrancy effects, `prefers-reduced-motion` respected throughout, dark mode by default, and iOS-style spring animations that stay out of your way.
 
 <br />
 
@@ -129,7 +129,6 @@ Grab the latest installer from the [GitHub Releases](https://github.com/victor-t
 ### Prerequisites
 
 - [Bun](https://bun.sh) v1.3.9+
-- [Rust](https://rustup.rs) (for the desktop app)
 
 ### Getting started
 
@@ -137,14 +136,14 @@ Grab the latest installer from the [GitHub Releases](https://github.com/victor-t
 # Install dependencies
 bun install
 
-# Start the web app
+# Start the renderer only (browser)
 bun run dev:web
 
-# Start the desktop app
-cd apps/web && bun run desktop:dev
+# Start the desktop app (Vite + Electrobun watcher)
+bun run desktop:dev
 ```
 
-The web app runs at [localhost:3001](http://localhost:3001).
+The renderer runs at [localhost:3001](http://localhost:3001).
 
 ### Other commands
 
@@ -153,12 +152,12 @@ bun run build          # Build all apps
 bun run check-types    # TypeScript across all workspaces
 bun run check          # Lint + format check (Ultracite)
 bun run fix            # Auto-fix lint/format
-bun run --cwd apps/web test           # Vitest unit + hook tests
-bun run --cwd apps/web test:coverage  # Vitest with the 40% gate
-bun run --cwd apps/web e2e            # Playwright e2e against the Vite dev server
+bun run --cwd apps/app test           # Vitest unit + hook tests
+bun run --cwd apps/app test:coverage  # Vitest with the 40% gate
+bun run --cwd apps/app e2e            # Playwright e2e against the Vite dev server
 ```
 
-See [`TESTING.md`](TESTING.md) for the full story — coverage gates, fixture setup, and the path forward for full Tauri e2e.
+See [`TESTING.md`](TESTING.md) for the full story — coverage gates and fixture setup.
 
 <br />
 
@@ -167,17 +166,22 @@ See [`TESTING.md`](TESTING.md) for the full story — coverage gates, fixture se
 ```
 oh-my-query/
 ├── apps/
-│   └── web/                       # React frontend + Tauri desktop shell
+│   └── app/                       # Electrobun desktop app
 │       ├── src/
-│       │   ├── routes/            # File-based routing (TanStack Router)
-│       │   ├── components/        # UI components
-│       │   ├── hooks/             # Shared React hooks
-│       │   ├── contexts/          # React contexts
-│       │   └── lib/               # Utilities, Tauri bridge, AI providers
-│       └── src-tauri/             # Rust backend (database drivers, commands)
+│       │   ├── mainview/          # React renderer
+│       │   │   ├── routes/        # File-based routing (TanStack Router)
+│       │   │   ├── components/    # UI components
+│       │   │   ├── hooks/         # Shared React hooks
+│       │   │   └── lib/           # Utilities, IPC bridge, AI providers
+│       │   └── bun/               # Bun-side process (RPC handlers, window, menus)
+│       └── electrobun.config.ts
 ├── packages/
 │   ├── config/                    # Shared TypeScript config
+│   ├── core/                      # Persistence, transpile, traits
+│   ├── drivers/                   # SQL driver adapters
+│   ├── drivers-redis/             # Redis driver
 │   ├── env/                       # Type-safe environment variables
+│   ├── rpc/                       # RPC schema shared across renderer + bun
 │   └── vitest-visual/             # Visual testing utilities
 ├── turbo.json
 └── package.json
@@ -189,7 +193,7 @@ oh-my-query/
 
 **Frontend** — React 19, TanStack Router, TanStack Form, TanStack Table/Virtual, Tailwind CSS v4, shadcn/ui, CodeMirror 6, Motion, Recharts, Vercel AI SDK
 
-**Desktop** — Tauri v2, Rust 2021, sqlx (PostgreSQL/MySQL/SQLite), tiberius (SQL Server), duckdb, clickhouse-http, mongodb, redis, polyglot-sql
+**Desktop** — Electrobun, Bun runtime, TypeScript drivers for PostgreSQL/MySQL/SQLite/SQL Server/DuckDB/ClickHouse/MongoDB/Redis, polyglot-sql
 
 **Tooling** — Turborepo, Bun, TypeScript 5, Vitest, Ultracite (Oxlint + Oxfmt)
 

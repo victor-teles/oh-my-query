@@ -4,10 +4,12 @@ import type { HistoryEntry, TabState } from "@/lib/persistence";
 
 import {
   appendHistory,
+  getAllHistory,
   getHistory,
   getTabs,
   saveTabs,
 } from "@/lib/persistence";
+import { mockTauri } from "@/test/tauri-mock";
 
 const tabState: TabState = {
   activeTabId: "t1",
@@ -30,33 +32,57 @@ const entry = (overrides: Partial<HistoryEntry> = {}): HistoryEntry => ({
   ...overrides,
 });
 
-describe("tabs persistence (browser mode)", () => {
-  it("round-trips tabs through localStorage", async () => {
+type TabsStore = Record<string, TabState>;
+
+type HistoryStore = Record<string, HistoryEntry[]>;
+
+const setupTabsMock = (): TabsStore => {
+  const store: TabsStore = {};
+  mockTauri({
+    getTabs: (payload) => store[payload.connectionId as string] ?? null,
+    saveTabs: (payload) => {
+      store[payload.connectionId as string] = payload.state as TabState;
+    },
+  });
+  return store;
+};
+
+const setupHistoryMock = (): HistoryStore => {
+  const store: HistoryStore = {};
+  mockTauri({
+    appendHistory: (payload) => {
+      const e = payload.entry as HistoryEntry;
+      const list = store[e.connectionId] ?? [];
+      list.unshift(e);
+      store[e.connectionId] = list;
+    },
+    getAllHistory: () => Object.values(store).flat(),
+    getHistory: (payload) => {
+      const list = store[payload.connectionId as string] ?? [];
+      const offset = (payload.offset as number | null) ?? 0;
+      const limit = (payload.limit as number | null) ?? list.length;
+      return list.slice(offset, offset + limit);
+    },
+  });
+  return store;
+};
+
+describe("tabs persistence (RPC wrapper)", () => {
+  it("forwards saveTabs and getTabs through the IPC client", async () => {
+    setupTabsMock();
     await saveTabs("conn-1", tabState);
-    const restored = await getTabs("conn-1");
-    expect(restored).toStrictEqual(tabState);
+    await expect(getTabs("conn-1")).resolves.toStrictEqual(tabState);
   });
 
-  it("returns null when nothing is stored", async () => {
+  it("returns null when the bun side has no tabs for the connection", async () => {
+    setupTabsMock();
     await expect(getTabs("missing")).resolves.toBeNull();
-  });
-
-  it("returns null when stored payload is invalid JSON", async () => {
-    localStorage.setItem("oh-my-query-tabs-conn-1", "{oops");
-    await expect(getTabs("conn-1")).resolves.toBeNull();
-  });
-
-  it("returns null when stored payload has the wrong shape", async () => {
-    localStorage.setItem(
-      "oh-my-query-tabs-conn-1",
-      JSON.stringify({ tabs: "not-an-array" })
-    );
-    await expect(getTabs("conn-1")).resolves.toBeNull();
   });
 });
 
-describe("history persistence (browser mode)", () => {
-  it("appends and returns entries in reverse chronological order", async () => {
+describe("history persistence (RPC wrapper)", () => {
+  it("appends and reads entries via IPC in reverse chronological order", async () => {
+    setupHistoryMock();
     await appendHistory(entry({ sql: "one" }));
     await appendHistory(entry({ sql: "two" }));
 
@@ -64,7 +90,8 @@ describe("history persistence (browser mode)", () => {
     expect(history.map((h) => h.sql)).toStrictEqual(["two", "one"]);
   });
 
-  it("limits and offsets results", async () => {
+  it("forwards limit/offset to the bun-side handler", async () => {
+    setupHistoryMock();
     for (let i = 0; i < 10; i += 1) {
       await appendHistory(entry({ sql: `q${i}` }));
     }
@@ -72,18 +99,16 @@ describe("history persistence (browser mode)", () => {
     expect(page.map((h) => h.sql)).toStrictEqual(["q7", "q6", "q5"]);
   });
 
-  it("returns an empty list when nothing stored", async () => {
+  it("returns an empty list when the connection has no history", async () => {
+    setupHistoryMock();
     await expect(getHistory("missing")).resolves.toStrictEqual([]);
   });
 
-  it("caps stored entries at 500", async () => {
-    for (let i = 0; i < 520; i += 1) {
-      await appendHistory(entry({ sql: `q${i}` }));
-    }
-    const raw = localStorage.getItem("oh-my-query-history-conn-1") as string;
-    const stored = JSON.parse(raw) as HistoryEntry[];
-    expect(stored).toHaveLength(500);
-    expect(stored[0]?.sql).toBe("q20");
-    expect(stored[499]?.sql).toBe("q519");
+  it("getAllHistory returns the full set across connections", async () => {
+    setupHistoryMock();
+    await appendHistory(entry({ connectionId: "a", sql: "one" }));
+    await appendHistory(entry({ connectionId: "b", sql: "two" }));
+    const all = await getAllHistory();
+    expect(all.map((h) => h.sql).toSorted()).toStrictEqual(["one", "two"]);
   });
 });

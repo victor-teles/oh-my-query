@@ -14,9 +14,6 @@ pre-commit:
       glob: "{apps,packages}/**/*.{ts,tsx}"
       run: bun run check-types
 
-    # TODO(electrobun-migration): re-enable once renderer test mocks are
-    # rebuilt around the Electroview RPC client (currently still expect the
-    # old @tauri-apps/api/mocks invoke surface). Tracked separately.
-    # - name: test
-    #   glob: "{apps,packages}/**/*.{ts,tsx}"
-    #   run: bun run --cwd apps/app test
+    - name: test
+      glob: "{apps,packages}/**/*.{ts,tsx}"
+      run: bun run --cwd apps/app test

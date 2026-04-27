@@ -4,13 +4,9 @@ import { formatSql } from "@/lib/format-sql";
 import { mockTauri } from "@/test/tauri-mock";
 
 describe("formatSql", () => {
-  it("returns the input unchanged in browser (non-Tauri) environments", async () => {
-    await expect(formatSql("select 1", "postgresql")).resolves.toBe("select 1");
-  });
-
-  it("invokes the Tauri format_sql command in desktop environments", async () => {
+  it("forwards the SQL and dialect to the bun-side formatter", async () => {
     mockTauri({
-      format_sql: (payload) => {
+      formatSql: (payload) => {
         expect(payload).toStrictEqual({
           dialect: "postgresql",
           sql: "select 1",

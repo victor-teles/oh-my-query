@@ -6,10 +6,10 @@
   "scripts": {
     "dev": "concurrently -k -n vite,bun -c blue,green \"bun run vite:dev\" \"bun run bun:dev\"",
     "vite:dev": "vite",
-    "bun:dev": "ELECTROBUN_DEV_URL=http://localhost:3001 electrobun dev --watch",
+    "bun:dev": "bun run scripts/copy-bun-assets.ts && ELECTROBUN_DEV_URL=http://localhost:3001 electrobun dev --watch",
     "build": "vite build",
     "desktop:dev": "bun run dev",
-    "desktop:build": "vite build && electrobun build",
+    "desktop:build": "bun run scripts/copy-bun-assets.ts && vite build && electrobun build",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",

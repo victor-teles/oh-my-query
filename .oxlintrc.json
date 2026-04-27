@@ -9,8 +9,7 @@
     ".agents/**",
     ".claude/**",
     "apps/app/scripts/**",
-    "apps/app/e2e/**",
-    "apps/web/**"
+    "apps/app/e2e/**"
   ],
   "plugins": ["unicorn", "typescript", "react", "import", "promise"],
   "rules": {
@@ -20,9 +19,6 @@
     "no-negated-condition": "off",
     "no-nodejs-modules": "off",
     "filename-case": "off",
-    "vitest/prefer-describe-function-title": "off",
-    "jest/no-hooks": "off",
-    "jest/require-hook": "off",
-    "jest/require-top-level-describe": "off"
+    "vitest/prefer-describe-function-title": "off"
   }
 }

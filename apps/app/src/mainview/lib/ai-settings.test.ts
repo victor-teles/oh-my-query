@@ -18,18 +18,14 @@ describe("getDefaultModel", () => {
 });
 
 describe("getAISettings", () => {
-  it("returns null in browser (non-Tauri) environments", async () => {
-    await expect(getAISettings()).resolves.toBeNull();
-  });
-
-  it("returns the settings from get_config in Tauri", async () => {
+  it("returns the settings from getConfig", async () => {
     const stored = {
       apiKey: "sk-test",
       model: "gpt-4o",
       provider: "openai" as const,
     };
     mockTauri({
-      get_config: () => ({ ai: stored }),
+      getConfig: () => ({ ai: stored }),
     });
 
     await expect(getAISettings()).resolves.toStrictEqual(stored);
@@ -37,24 +33,18 @@ describe("getAISettings", () => {
 
   it("returns null when ai is missing from the config", async () => {
     mockTauri({
-      get_config: () => ({}),
+      getConfig: () => ({}),
     });
     await expect(getAISettings()).resolves.toBeNull();
   });
 });
 
 describe("saveAISettings", () => {
-  it("does nothing in browser environments", async () => {
-    await expect(
-      saveAISettings({ apiKey: "x", provider: "openai" })
-    ).resolves.toBeUndefined();
-  });
-
-  it("normalizes and persists settings via save_config", async () => {
+  it("normalizes and persists settings via saveConfig", async () => {
     let saved: unknown = null;
     mockTauri({
-      get_config: () => ({}),
-      save_config: (payload) => {
+      getConfig: () => ({}),
+      saveConfig: (payload) => {
         saved = payload;
       },
     });
@@ -79,12 +69,15 @@ describe("saveAISettings", () => {
 
 describe("hasAISettings", () => {
   it("is false when no settings stored", async () => {
+    mockTauri({
+      getConfig: () => ({}),
+    });
     await expect(hasAISettings()).resolves.toBeFalsy();
   });
 
   it("is true when settings are configured", async () => {
     mockTauri({
-      get_config: () => ({
+      getConfig: () => ({
         ai: { apiKey: "sk-test", provider: "openai" as const },
       }),
     });

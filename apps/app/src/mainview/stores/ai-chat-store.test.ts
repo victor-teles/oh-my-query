@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import { selectConnectionState, useAiChatStore } from "@/stores/ai-chat-store";
+import { mockTauri } from "@/test/tauri-mock";
 
 describe("ensureConnection", () => {
   it("seeds an empty state for an unknown connection", () => {
@@ -102,7 +103,11 @@ describe("clearError + clearMessages", () => {
 });
 
 describe("sendMessage — not configured", () => {
-  it("sets a not-configured error when AI settings are missing (no Tauri)", async () => {
+  it("sets a not-configured error when AI settings are missing", async () => {
+    mockTauri({
+      getConfig: () => ({}),
+    });
+
     await useAiChatStore.getState().sendMessage("conn-6", "hi", {
       databaseType: "postgresql",
       schema: null,

@@ -7,14 +7,6 @@ import { mockTauri } from "@/test/tauri-mock";
 import { SettingsFeedbackProvider } from "./settings-feedback-context";
 import { UpdateChannelSection } from "./update-channel-section";
 
-const enableTauri = () => {
-  Object.defineProperty(window, "__TAURI_INTERNALS__", {
-    configurable: true,
-    value: {},
-    writable: true,
-  });
-};
-
 const renderSection = () =>
   render(
     <SettingsFeedbackProvider>
@@ -22,17 +14,9 @@ const renderSection = () =>
     </SettingsFeedbackProvider>
   );
 
-describe("updateChannelSection (web)", () => {
-  it("renders the desktop-only empty state when not in Tauri", () => {
-    renderSection();
-    expect(screen.getByText(/only work in the desktop app/i)).toBeDefined();
-  });
-});
-
-describe("updateChannelSection (tauri)", () => {
+describe("updateChannelSection", () => {
   it("shows three channel options with Nightly disabled", async () => {
-    enableTauri();
-    mockTauri({ get_update_channel: () => "stable" });
+    mockTauri({ getUpdateChannel: () => "stable" });
     renderSection();
 
     const stable = await screen.findByRole("button", { name: /Stable/ });
@@ -45,11 +29,10 @@ describe("updateChannelSection (tauri)", () => {
   });
 
   it("writes the channel and surfaces the restart prompt", async () => {
-    enableTauri();
     let stored = "stable";
     mockTauri({
-      get_update_channel: () => stored,
-      set_update_channel: (payload) => {
+      getUpdateChannel: () => stored,
+      setUpdateChannel: (payload) => {
         stored = payload.channel as string;
         return stored;
       },
@@ -69,10 +52,9 @@ describe("updateChannelSection (tauri)", () => {
   });
 
   it("renders the up-to-date confirmation after a check", async () => {
-    enableTauri();
     mockTauri({
-      check_for_update: () => null,
-      get_update_channel: () => "stable",
+      checkForUpdate: () => null,
+      getUpdateChannel: () => "stable",
     });
 
     renderSection();
@@ -88,15 +70,14 @@ describe("updateChannelSection (tauri)", () => {
   });
 
   it("offers Install & restart when an update is available", async () => {
-    enableTauri();
     mockTauri({
-      check_for_update: () => ({
+      checkForUpdate: () => ({
         currentVersion: "0.0.10",
         date: null,
         notes: "Bug fixes",
         version: "0.0.11",
       }),
-      get_update_channel: () => "stable",
+      getUpdateChannel: () => "stable",
     });
 
     renderSection();

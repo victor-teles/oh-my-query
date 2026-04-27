@@ -41,10 +41,10 @@ describe("useSchema hook", () => {
   it("does nothing while disconnected", () => {
     resetSchemaStore();
     mockTauri({
-      get_schema: () => {
+      getSchema: () => {
         throw new Error("should not be called");
       },
-      list_connection_databases: () => {
+      listConnectionDatabases: () => {
         throw new Error("should not be called");
       },
     });
@@ -57,14 +57,14 @@ describe("useSchema hook", () => {
   it("loads databases then the schema once connected", async () => {
     resetSchemaStore();
     mockTauri({
-      get_schema: (payload) => {
+      getSchema: (payload) => {
         expect(payload).toMatchObject({
           connectionId: "conn-1",
           databaseName: "public",
         });
         return sampleSchema;
       },
-      list_connection_databases: (payload) => {
+      listConnectionDatabases: (payload) => {
         expect(payload).toMatchObject({ connectionId: "conn-1" });
         return ["public", "analytics"];
       },
@@ -85,8 +85,8 @@ describe("useSchema hook", () => {
   it("falls back to the first database when public is absent", async () => {
     resetSchemaStore();
     mockTauri({
-      get_schema: () => sampleSchema,
-      list_connection_databases: () => ["alpha", "beta"],
+      getSchema: () => sampleSchema,
+      listConnectionDatabases: () => ["alpha", "beta"],
     });
 
     const { result } = renderHook(() => useSchema("conn-1", true));
@@ -99,8 +99,8 @@ describe("useSchema hook", () => {
   it("captures errors from list_connection_databases", async () => {
     resetSchemaStore();
     mockTauri({
-      get_schema: () => sampleSchema,
-      list_connection_databases: () => {
+      getSchema: () => sampleSchema,
+      listConnectionDatabases: () => {
         throw new Error("boom");
       },
     });
@@ -117,11 +117,11 @@ describe("useSchema hook", () => {
     resetSchemaStore();
     let lastDb = "";
     mockTauri({
-      get_schema: (payload) => {
+      getSchema: (payload) => {
         lastDb = payload.databaseName as string;
         return sampleSchema;
       },
-      list_connection_databases: () => ["public", "analytics"],
+      listConnectionDatabases: () => ["public", "analytics"],
     });
 
     const { result } = renderHook(() => useSchema("conn-1", true));
@@ -141,11 +141,11 @@ describe("useSchema hook", () => {
     let listCalls = 0;
     let schemaCalls = 0;
     mockTauri({
-      get_schema: () => {
+      getSchema: () => {
         schemaCalls += 1;
         return sampleSchema;
       },
-      list_connection_databases: () => {
+      listConnectionDatabases: () => {
         listCalls += 1;
         return ["public"];
       },
@@ -171,11 +171,11 @@ describe("useSchema hook", () => {
     resetSchemaStore();
     let schemaCalls = 0;
     mockTauri({
-      get_schema: () => {
+      getSchema: () => {
         schemaCalls += 1;
         return sampleSchema;
       },
-      list_connection_databases: () => ["public"],
+      listConnectionDatabases: () => ["public"],
     });
 
     const { result, rerender } = renderHook(
@@ -198,11 +198,11 @@ describe("useSchema hook", () => {
     resetSchemaStore();
     let schemaCalls = 0;
     mockTauri({
-      get_schema: () => {
+      getSchema: () => {
         schemaCalls += 1;
         return sampleSchema;
       },
-      list_connection_databases: () => ["public"],
+      listConnectionDatabases: () => ["public"],
     });
 
     const { result } = renderHook(() => useSchema("conn-1", true));

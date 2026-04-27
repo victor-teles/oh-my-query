@@ -12,8 +12,7 @@ import {
   togglePinConnection,
   updateConnection,
 } from "@/lib/connections";
-
-const STORAGE_KEY = "oh-my-query-connections";
+import { mockTauri } from "@/test/tauri-mock";
 
 const makeConnection = (
   overrides: Partial<DatabaseConnection> = {}
@@ -32,8 +31,18 @@ const makeConnection = (
   ...overrides,
 });
 
-const seed = (connections: DatabaseConnection[]): void => {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(connections));
+const setupStore = (
+  initial: DatabaseConnection[] = []
+): DatabaseConnection[] => {
+  const store = initial.map((c) => ({ ...c }));
+  mockTauri({
+    getConnections: () => store,
+    saveConnections: (payload) => {
+      store.length = 0;
+      store.push(...(payload.connections as DatabaseConnection[]));
+    },
+  });
+  return store;
 };
 
 describe("isSqlDatabase predicate", () => {
@@ -71,13 +80,14 @@ describe("default ports", () => {
   });
 });
 
-describe("connections CRUD (browser/localStorage mode)", () => {
+describe("connections CRUD (RPC wrapper)", () => {
   it("returns empty list when nothing stored", async () => {
+    setupStore();
     await expect(getConnections()).resolves.toStrictEqual([]);
   });
 
   it("normalizes legacy entries missing pinned/lastConnectedAt", async () => {
-    seed([
+    setupStore([
       {
         createdAt: "2024-01-01T00:00:00.000Z",
         database: "app",
@@ -97,6 +107,7 @@ describe("connections CRUD (browser/localStorage mode)", () => {
   });
 
   it("saves a new connection", async () => {
+    setupStore();
     const conn = makeConnection({ id: "abc", name: "alpha" });
     await saveConnection(conn);
 
@@ -107,7 +118,7 @@ describe("connections CRUD (browser/localStorage mode)", () => {
 
   it("updates an existing connection by id", async () => {
     const conn = makeConnection({ id: "abc", name: "alpha" });
-    seed([conn]);
+    setupStore([conn]);
 
     await updateConnection({ ...conn, name: "renamed" });
 
@@ -116,7 +127,7 @@ describe("connections CRUD (browser/localStorage mode)", () => {
   });
 
   it("deletes a connection by id", async () => {
-    seed([makeConnection({ id: "a" }), makeConnection({ id: "b" })]);
+    setupStore([makeConnection({ id: "a" }), makeConnection({ id: "b" })]);
 
     await deleteConnection("a");
 
@@ -125,7 +136,7 @@ describe("connections CRUD (browser/localStorage mode)", () => {
   });
 
   it("toggles pin state", async () => {
-    seed([makeConnection({ id: "a", pinned: false })]);
+    setupStore([makeConnection({ id: "a", pinned: false })]);
 
     await togglePinConnection("a");
     const afterFirst = await getConnections();
@@ -137,7 +148,7 @@ describe("connections CRUD (browser/localStorage mode)", () => {
   });
 
   it("marks a connection as used with a fresh timestamp", async () => {
-    seed([makeConnection({ id: "a", lastConnectedAt: null })]);
+    setupStore([makeConnection({ id: "a", lastConnectedAt: null })]);
 
     const before = Date.now();
     await markConnectionUsed("a");
@@ -150,7 +161,7 @@ describe("connections CRUD (browser/localStorage mode)", () => {
   });
 
   it("leaves other connections untouched when updating one", async () => {
-    seed([
+    setupStore([
       makeConnection({ id: "a", name: "alpha" }),
       makeConnection({ id: "b", name: "beta" }),
     ]);

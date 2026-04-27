@@ -23,4 +23,5 @@ function main(): void {
   console.log(`oh-my-query window started (id: ${mainWindow.id})`);
 }
 
+// oxlint-disable-next-line jest/require-hook
 main();

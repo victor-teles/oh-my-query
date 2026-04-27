@@ -115,20 +115,7 @@
       "name": "@oh-my-query/config",
       "version": "0.0.0",
     },
-    "packages/env": {
-      "name": "@oh-my-query/env",
-      "version": "0.0.0",
-      "dependencies": {
-        "@t3-oss/env-core": "^0.13.1",
-        "dotenv": "catalog:",
-        "zod": "catalog:",
-      },
-      "devDependencies": {
-        "@oh-my-query/config": "workspace:*",
-        "@typescript/native-preview": "catalog:",
-      },
-    },
-    "packages/omq-core": {
+    "packages/core": {
       "name": "@oh-my-query/core",
       "version": "0.0.0",
       "dependencies": {
@@ -141,7 +128,7 @@
         "@typescript/native-preview": "catalog:",
       },
     },
-    "packages/omq-drivers": {
+    "packages/drivers": {
       "name": "@oh-my-query/drivers",
       "version": "0.0.0",
       "dependencies": {
@@ -160,7 +147,7 @@
         "@typescript/native-preview": "catalog:",
       },
     },
-    "packages/omq-drivers-clickhouse": {
+    "packages/drivers-clickhouse": {
       "name": "@oh-my-query/drivers-clickhouse",
       "version": "0.0.0",
       "dependencies": {
@@ -172,7 +159,7 @@
         "@typescript/native-preview": "catalog:",
       },
     },
-    "packages/omq-drivers-duckdb": {
+    "packages/drivers-duckdb": {
       "name": "@oh-my-query/drivers-duckdb",
       "version": "0.0.0",
       "dependencies": {
@@ -184,7 +171,7 @@
         "@typescript/native-preview": "catalog:",
       },
     },
-    "packages/omq-drivers-mongo": {
+    "packages/drivers-mongo": {
       "name": "@oh-my-query/drivers-mongo",
       "version": "0.0.0",
       "dependencies": {
@@ -196,7 +183,7 @@
         "@typescript/native-preview": "catalog:",
       },
     },
-    "packages/omq-drivers-mssql": {
+    "packages/drivers-mssql": {
       "name": "@oh-my-query/drivers-mssql",
       "version": "0.0.0",
       "dependencies": {
@@ -209,7 +196,7 @@
         "@typescript/native-preview": "catalog:",
       },
     },
-    "packages/omq-drivers-mysql": {
+    "packages/drivers-mysql": {
       "name": "@oh-my-query/drivers-mysql",
       "version": "0.0.0",
       "dependencies": {
@@ -221,7 +208,7 @@
         "@typescript/native-preview": "catalog:",
       },
     },
-    "packages/omq-drivers-pg": {
+    "packages/drivers-pg": {
       "name": "@oh-my-query/drivers-pg",
       "version": "0.0.0",
       "dependencies": {
@@ -234,7 +221,7 @@
         "@typescript/native-preview": "catalog:",
       },
     },
-    "packages/omq-drivers-redis": {
+    "packages/drivers-redis": {
       "name": "@oh-my-query/drivers-redis",
       "version": "0.0.0",
       "dependencies": {
@@ -246,7 +233,7 @@
         "@typescript/native-preview": "catalog:",
       },
     },
-    "packages/omq-drivers-sqlite": {
+    "packages/drivers-sqlite": {
       "name": "@oh-my-query/drivers-sqlite",
       "version": "0.0.0",
       "dependencies": {
@@ -258,7 +245,20 @@
         "@typescript/native-preview": "catalog:",
       },
     },
-    "packages/omq-rpc": {
+    "packages/env": {
+      "name": "@oh-my-query/env",
+      "version": "0.0.0",
+      "dependencies": {
+        "@t3-oss/env-core": "^0.13.1",
+        "dotenv": "catalog:",
+        "zod": "catalog:",
+      },
+      "devDependencies": {
+        "@oh-my-query/config": "workspace:*",
+        "@typescript/native-preview": "catalog:",
+      },
+    },
+    "packages/rpc": {
       "name": "@oh-my-query/rpc",
       "version": "0.0.0",
       "dependencies": {
@@ -630,29 +630,29 @@
 
     "@oh-my-query/config": ["@oh-my-query/config@workspace:packages/config"],
 
-    "@oh-my-query/core": ["@oh-my-query/core@workspace:packages/omq-core"],
+    "@oh-my-query/core": ["@oh-my-query/core@workspace:packages/core"],
 
-    "@oh-my-query/drivers": ["@oh-my-query/drivers@workspace:packages/omq-drivers"],
+    "@oh-my-query/drivers": ["@oh-my-query/drivers@workspace:packages/drivers"],
 
-    "@oh-my-query/drivers-clickhouse": ["@oh-my-query/drivers-clickhouse@workspace:packages/omq-drivers-clickhouse"],
+    "@oh-my-query/drivers-clickhouse": ["@oh-my-query/drivers-clickhouse@workspace:packages/drivers-clickhouse"],
 
-    "@oh-my-query/drivers-duckdb": ["@oh-my-query/drivers-duckdb@workspace:packages/omq-drivers-duckdb"],
+    "@oh-my-query/drivers-duckdb": ["@oh-my-query/drivers-duckdb@workspace:packages/drivers-duckdb"],
 
-    "@oh-my-query/drivers-mongo": ["@oh-my-query/drivers-mongo@workspace:packages/omq-drivers-mongo"],
+    "@oh-my-query/drivers-mongo": ["@oh-my-query/drivers-mongo@workspace:packages/drivers-mongo"],
 
-    "@oh-my-query/drivers-mssql": ["@oh-my-query/drivers-mssql@workspace:packages/omq-drivers-mssql"],
+    "@oh-my-query/drivers-mssql": ["@oh-my-query/drivers-mssql@workspace:packages/drivers-mssql"],
 
-    "@oh-my-query/drivers-mysql": ["@oh-my-query/drivers-mysql@workspace:packages/omq-drivers-mysql"],
+    "@oh-my-query/drivers-mysql": ["@oh-my-query/drivers-mysql@workspace:packages/drivers-mysql"],
 
-    "@oh-my-query/drivers-pg": ["@oh-my-query/drivers-pg@workspace:packages/omq-drivers-pg"],
+    "@oh-my-query/drivers-pg": ["@oh-my-query/drivers-pg@workspace:packages/drivers-pg"],
 
-    "@oh-my-query/drivers-redis": ["@oh-my-query/drivers-redis@workspace:packages/omq-drivers-redis"],
+    "@oh-my-query/drivers-redis": ["@oh-my-query/drivers-redis@workspace:packages/drivers-redis"],
 
-    "@oh-my-query/drivers-sqlite": ["@oh-my-query/drivers-sqlite@workspace:packages/omq-drivers-sqlite"],
+    "@oh-my-query/drivers-sqlite": ["@oh-my-query/drivers-sqlite@workspace:packages/drivers-sqlite"],
 
     "@oh-my-query/env": ["@oh-my-query/env@workspace:packages/env"],
 
-    "@oh-my-query/rpc": ["@oh-my-query/rpc@workspace:packages/omq-rpc"],
+    "@oh-my-query/rpc": ["@oh-my-query/rpc@workspace:packages/rpc"],
 
     "@oh-my-query/vitest-visual": ["@oh-my-query/vitest-visual@workspace:packages/vitest-visual"],
 

@@ -7,30 +7,13 @@ import type { CheckState } from "./use-update-channel";
 
 import { useUpdateChannel } from "./use-update-channel";
 
-const enableTauri = () => {
-  Object.defineProperty(window, "__TAURI_INTERNALS__", {
-    configurable: true,
-    value: {},
-    writable: true,
-  });
-};
-
 const availableVersion = (state: CheckState): string | null =>
   state.status === "available" ? state.update.version : null;
 
-describe("useUpdateChannel (web)", () => {
-  it("reports unsupported when not in Tauri", async () => {
-    const { result } = renderHook(() => useUpdateChannel());
-    await waitFor(() => expect(result.current.loading).toBeFalsy());
-    expect(result.current.supported).toBeFalsy();
-  });
-});
-
-describe("useUpdateChannel (tauri)", () => {
+describe("useUpdateChannel", () => {
   it("loads the persisted channel on mount", async () => {
-    enableTauri();
     mockTauri({
-      get_update_channel: () => "beta",
+      getUpdateChannel: () => "beta",
     });
 
     const { result } = renderHook(() => useUpdateChannel());
@@ -40,11 +23,10 @@ describe("useUpdateChannel (tauri)", () => {
   });
 
   it("writes a new channel and flips pendingRestart", async () => {
-    enableTauri();
     let stored = "stable";
     mockTauri({
-      get_update_channel: () => stored,
-      set_update_channel: (payload) => {
+      getUpdateChannel: () => stored,
+      setUpdateChannel: (payload) => {
         stored = payload.channel as string;
         return stored;
       },
@@ -62,10 +44,9 @@ describe("useUpdateChannel (tauri)", () => {
   });
 
   it("checkNow surfaces no-update when the backend returns null", async () => {
-    enableTauri();
     mockTauri({
-      check_for_update: () => null,
-      get_update_channel: () => "stable",
+      checkForUpdate: () => null,
+      getUpdateChannel: () => "stable",
     });
 
     const { result } = renderHook(() => useUpdateChannel());
@@ -79,15 +60,14 @@ describe("useUpdateChannel (tauri)", () => {
   });
 
   it("checkNow surfaces an available update", async () => {
-    enableTauri();
     mockTauri({
-      check_for_update: () => ({
+      checkForUpdate: () => ({
         currentVersion: "0.0.10",
         date: null,
         notes: "fixes",
         version: "0.0.11",
       }),
-      get_update_channel: () => "stable",
+      getUpdateChannel: () => "stable",
     });
 
     const { result } = renderHook(() => useUpdateChannel());

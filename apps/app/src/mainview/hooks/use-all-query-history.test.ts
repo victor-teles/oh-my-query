@@ -25,7 +25,7 @@ describe("useAllQueryHistory", () => {
   it("calls get_all_history with the filters and returns entries", async () => {
     const entries = [makeEntry({ sql: "one" }), makeEntry({ sql: "two" })];
     const getAll = vi.fn(() => entries);
-    mockTauri({ get_all_history: getAll });
+    mockTauri({ getAllHistory: getAll });
 
     const filters = { erroredOnly: true };
     const { result } = renderHook(() => useAllQueryHistory(filters));
@@ -37,7 +37,7 @@ describe("useAllQueryHistory", () => {
 
   it("refreshes when HISTORY_UPDATED_EVENT fires", async () => {
     const getAll = vi.fn(() => []);
-    mockTauri({ get_all_history: getAll });
+    mockTauri({ getAllHistory: getAll });
 
     const { result } = renderHook(() => useAllQueryHistory({}));
     await waitFor(() => expect(result.current.isLoading).toBeFalsy());
@@ -52,7 +52,7 @@ describe("useAllQueryHistory", () => {
 
   it("reports errors thrown by the backend", async () => {
     mockTauri({
-      get_all_history: () => {
+      getAllHistory: () => {
         throw new Error("boom");
       },
     });
@@ -67,7 +67,7 @@ describe("useAllQueryHistory", () => {
   it("flips isLoading back to true when filters change", async () => {
     const entries = [makeEntry()];
     const getAll = vi.fn(() => entries);
-    mockTauri({ get_all_history: getAll });
+    mockTauri({ getAllHistory: getAll });
 
     const { result, rerender } = renderHook(
       ({ filters }: { filters: HistoryFilters }) => useAllQueryHistory(filters),
@@ -100,7 +100,7 @@ describe("useAllQueryHistory", () => {
     });
     getAll.mockImplementation(() => fastEntries);
 
-    mockTauri({ get_all_history: getAll });
+    mockTauri({ getAllHistory: getAll });
 
     const { result, rerender } = renderHook(
       ({ filters }: { filters: HistoryFilters }) => useAllQueryHistory(filters),

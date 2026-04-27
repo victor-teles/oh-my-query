@@ -87,7 +87,7 @@ const flushSave = vi.fn(async () => {
 describe("useTabExecution", () => {
   it("runs a successful query and updates the tab result", async () => {
     mockTauri({
-      execute_query: () => ({
+      executeQuery: () => ({
         columns: [{ name: "one", typeName: "INT4" }],
         executionTimeMs: 2,
         isTruncated: false,
@@ -121,7 +121,7 @@ describe("useTabExecution", () => {
 
   it("reports errors from executeQuery", async () => {
     mockTauri({
-      execute_query: () => {
+      executeQuery: () => {
         throw Object.assign(new Error("syntax error"), { code: "42601" });
       },
     });
@@ -146,7 +146,7 @@ describe("useTabExecution", () => {
 
   it("treats QUERY_CANCELLED as idle, not an error", async () => {
     mockTauri({
-      execute_query: () => {
+      executeQuery: () => {
         throw Object.assign(new Error("cancelled"), {
           code: "QUERY_CANCELLED",
         });
@@ -176,7 +176,7 @@ describe("useTabExecution", () => {
       return false;
     });
     const executeHandler = vi.fn();
-    mockTauri({ execute_query: executeHandler });
+    mockTauri({ executeQuery: executeHandler });
 
     const setTabs = vi.fn();
     const { result } = renderHook(() =>
@@ -196,7 +196,7 @@ describe("useTabExecution", () => {
 
   it("forwards cancel() to cancel_query", async () => {
     const cancelHandler = vi.fn();
-    mockTauri({ cancel_query: cancelHandler });
+    mockTauri({ cancelQuery: cancelHandler });
 
     const { result } = renderHook(() =>
       useTabExecution({

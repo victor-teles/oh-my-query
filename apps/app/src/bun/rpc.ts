@@ -11,6 +11,7 @@ import {
   getHistory,
   getTabs,
   raceWithCancel,
+  resetSecrets,
   saveConfig,
   saveConnections,
   saveTabs,
@@ -181,6 +182,9 @@ export function createRpc() {
         },
         redisDbInfo: ({ connectionId, dbIndex }) =>
           doRedisDbInfo(requireRedis(connectionId), dbIndex),
+        resetSecrets: async () => {
+          await resetSecrets();
+        },
         saveConfig: async ({ config }) => {
           await saveConfig(config);
         },
