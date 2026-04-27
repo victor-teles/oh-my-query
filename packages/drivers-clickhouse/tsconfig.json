@@ -1,0 +1,7 @@
+{
+  "extends": "@oh-my-query/config/tsconfig.base.json",
+  "compilerOptions": {
+    "strictNullChecks": true
+  },
+  "include": ["src/**/*"]
+}

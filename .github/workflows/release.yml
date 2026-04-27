@@ -17,7 +17,6 @@ jobs:
       channel: ${{ steps.parse.outputs.channel }}
       version: ${{ steps.parse.outputs.version }}
       prerelease: ${{ steps.parse.outputs.prerelease }}
-      rolling-tag: ${{ steps.parse.outputs.rolling-tag }}
     steps:
       - name: Parse tag
         id: parse
@@ -37,7 +36,6 @@ jobs:
           echo "channel=${CHANNEL}" >> "$GITHUB_OUTPUT"
           echo "version=${VERSION}" >> "$GITHUB_OUTPUT"
           echo "prerelease=${PRERELEASE}" >> "$GITHUB_OUTPUT"
-          echo "rolling-tag=updater-${CHANNEL}" >> "$GITHUB_OUTPUT"
 
   bump-version:
     name: Bump version from tag
@@ -51,17 +49,16 @@ jobs:
         with:
           ref: main
 
-      - name: Bump version in config files
+      - name: Bump version in electrobun.config.ts
         run: |
           VERSION="${{ needs.resolve-channel.outputs.version }}"
-          jq --arg v "$VERSION" '.version = $v' apps/web/src-tauri/tauri.conf.json > tmp.json && mv tmp.json apps/web/src-tauri/tauri.conf.json
-          sed -i "s/^version = \".*\"/version = \"$VERSION\"/" apps/web/src-tauri/Cargo.toml
+          sed -i "s/version: \"[^\"]*\"/version: \"$VERSION\"/" apps/app/electrobun.config.ts
 
       - name: Commit version bump
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add apps/web/src-tauri/tauri.conf.json apps/web/src-tauri/Cargo.toml
+          git add apps/app/electrobun.config.ts
           git diff --staged --quiet && exit 0
           git commit -m "chore: bump version to ${{ needs.resolve-channel.outputs.version }}"
           git push origin main
@@ -76,10 +73,12 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - target: aarch64-apple-darwin
+          - arch: arm64
             label: arm64
-          - target: x86_64-apple-darwin
+            tauri-arch: aarch64
+          - arch: x64
             label: x64
+            tauri-arch: x64
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v4
@@ -90,17 +89,7 @@ jobs:
         if: needs.resolve-channel.outputs.channel == 'beta'
         run: |
           VERSION="${{ needs.resolve-channel.outputs.version }}"
-          jq --arg v "$VERSION" '.version = $v' apps/web/src-tauri/tauri.conf.json > tmp.json && mv tmp.json apps/web/src-tauri/tauri.conf.json
-          sed -i '' "s/^version = \".*\"/version = \"$VERSION\"/" apps/web/src-tauri/Cargo.toml
-
-      - name: Verify signing secret is set
-        env:
-          TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
-        run: |
-          if [ -z "$TAURI_SIGNING_PRIVATE_KEY" ]; then
-            echo "::error::TAURI_SIGNING_PRIVATE_KEY secret is not set. See RELEASING.md for one-time key setup."
-            exit 1
-          fi
+          sed -i '' "s/version: \"[^\"]*\"/version: \"$VERSION\"/" apps/app/electrobun.config.ts
 
       - uses: oven-sh/setup-bun@v2
         with:
@@ -112,33 +101,51 @@ jobs:
       - name: Build workspace packages
         run: bun run build
 
-      - uses: dtolnay/rust-toolchain@stable
-        with:
-          targets: aarch64-apple-darwin,x86_64-apple-darwin
-
-      - uses: swatinem/rust-cache@v2
-        with:
-          workspaces: "apps/web/src-tauri -> target"
-
-      - uses: tauri-apps/tauri-action@v0
+      - name: Import Apple signing certificate
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
-          TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
           APPLE_CERTIFICATE: ${{ secrets.APPLE_CERTIFICATE }}
           APPLE_CERTIFICATE_PASSWORD: ${{ secrets.APPLE_CERTIFICATE_PASSWORD }}
-          APPLE_SIGNING_IDENTITY: ${{ secrets.APPLE_SIGNING_IDENTITY }}
-          APPLE_ID: ${{ secrets.APPLE_ID }}
-          APPLE_PASSWORD: ${{ secrets.APPLE_PASSWORD }}
-          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
-        with:
-          projectPath: apps/web
-          tagName: ${{ github.ref_name }}
-          releaseName: "oh_my_query ${{ github.ref_name }}"
-          releaseBody: "See assets below to download.\n\n**macOS:** `brew install --cask victor-teles/tap/oh-my-query`"
-          releaseDraft: false
-          prerelease: ${{ needs.resolve-channel.outputs.prerelease }}
-          args: --target ${{ matrix.target }}
+        run: |
+          set -euo pipefail
+          KEYCHAIN_PATH="$RUNNER_TEMP/build.keychain"
+          KEYCHAIN_PASSWORD=$(openssl rand -base64 24)
+          security create-keychain -p "$KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH"
+          security set-keychain-settings -lut 21600 "$KEYCHAIN_PATH"
+          security unlock-keychain -p "$KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH"
+          echo -n "$APPLE_CERTIFICATE" | base64 --decode -o "$RUNNER_TEMP/cert.p12"
+          security import "$RUNNER_TEMP/cert.p12" \
+            -k "$KEYCHAIN_PATH" \
+            -P "$APPLE_CERTIFICATE_PASSWORD" \
+            -T /usr/bin/codesign \
+            -T /usr/bin/security
+          security set-key-partition-list -S apple-tool:,apple: -s -k "$KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH"
+          security list-keychains -d user -s "$KEYCHAIN_PATH" $(security list-keychains -d user | xargs)
+
+      - name: Build Electrobun app
+        env:
+          ELECTROBUN_DEVELOPER_ID: ${{ secrets.APPLE_SIGNING_IDENTITY }}
+          ELECTROBUN_APPLEID: ${{ secrets.APPLE_ID }}
+          ELECTROBUN_APPLEIDPASS: ${{ secrets.APPLE_PASSWORD }}
+          ELECTROBUN_TEAMID: ${{ secrets.APPLE_TEAM_ID }}
+        run: bun run --cwd apps/app desktop:build
+
+      - name: Rename and upload artifact
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VERSION: ${{ needs.resolve-channel.outputs.version }}
+          ARCH_LABEL: ${{ matrix.tauri-arch }}
+          BUILD_ARCH: ${{ matrix.arch }}
+        run: |
+          set -euo pipefail
+          SRC="apps/app/build/stable-macos-${BUILD_ARCH}/oh-my-query.dmg"
+          if [ ! -f "$SRC" ]; then
+            echo "::error::Expected DMG not found at $SRC"
+            ls -la apps/app/build/ || true
+            exit 1
+          fi
+          DEST="oh_my_query_${VERSION}_${ARCH_LABEL}.dmg"
+          cp "$SRC" "$DEST"
+          gh release upload "${{ github.ref_name }}" "$DEST" --clobber
 
   build-windows:
     name: Build Windows (${{ matrix.label }}) [${{ needs.resolve-channel.outputs.channel }}]
@@ -150,9 +157,9 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - target: x86_64-pc-windows-msvc
+          - arch: x64
             label: x64
-          - target: aarch64-pc-windows-msvc
+          - arch: arm64
             label: arm64
     runs-on: windows-latest
     steps:
@@ -165,20 +172,9 @@ jobs:
         shell: pwsh
         run: |
           $version = "${{ needs.resolve-channel.outputs.version }}"
-          $conf = Get-Content apps/web/src-tauri/tauri.conf.json -Raw | ConvertFrom-Json
-          $conf.version = $version
-          $conf | ConvertTo-Json -Depth 100 | Set-Content apps/web/src-tauri/tauri.conf.json
-          (Get-Content apps/web/src-tauri/Cargo.toml) -replace '^version = ".*"', "version = `"$version`"" | Set-Content apps/web/src-tauri/Cargo.toml
-
-      - name: Verify signing secret is set
-        shell: bash
-        env:
-          TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
-        run: |
-          if [ -z "$TAURI_SIGNING_PRIVATE_KEY" ]; then
-            echo "::error::TAURI_SIGNING_PRIVATE_KEY secret is not set. See RELEASING.md for one-time key setup."
-            exit 1
-          fi
+          (Get-Content apps/app/electrobun.config.ts) `
+            -replace 'version: "[^"]*"', "version: `"$version`"" `
+            | Set-Content apps/app/electrobun.config.ts
 
       - uses: oven-sh/setup-bun@v2
         with:
@@ -190,37 +186,8 @@ jobs:
       - name: Build workspace packages
         run: bun run build
 
-      - uses: dtolnay/rust-toolchain@stable
-        with:
-          targets: x86_64-pc-windows-msvc,aarch64-pc-windows-msvc
-
-      - uses: swatinem/rust-cache@v2
-        with:
-          workspaces: "apps/web/src-tauri -> target"
-
-      - uses: tauri-apps/tauri-action@v0
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
-          TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
-        with:
-          projectPath: apps/web
-          tagName: ${{ github.ref_name }}
-          releaseName: "oh_my_query ${{ github.ref_name }}"
-          releaseDraft: false
-          prerelease: ${{ needs.resolve-channel.outputs.prerelease }}
-          args: --target ${{ matrix.target }}
-
-      - name: Sign Windows artifact
-        if: vars.WINDOWS_SIGNING_ENABLED == 'true'
-        shell: pwsh
-        env:
-          WINDOWS_CERTIFICATE: ${{ secrets.WINDOWS_CERTIFICATE }}
-          WINDOWS_CERTIFICATE_PASSWORD: ${{ secrets.WINDOWS_CERTIFICATE_PASSWORD }}
-        run: |
-          # TODO: implement signtool / Azure Trusted Signing flow.
-          # Tracked in RELEASING.md → "Windows code signing".
-          Write-Host "Windows signing enabled — implement signtool here."
+      - name: Build Electrobun app
+        run: bun run --cwd apps/app desktop:build
 
       - name: Note unsigned Windows build
         if: vars.WINDOWS_SIGNING_ENABLED != 'true'
@@ -228,96 +195,24 @@ jobs:
         run: |
           echo "::warning::Windows artifact is unsigned. Set repo variable WINDOWS_SIGNING_ENABLED=true and add WINDOWS_CERTIFICATE secrets to enable signing."
 
-      - name: Upload portable exe
+      - name: Upload Windows artifact
         shell: pwsh
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           $version = "${{ needs.resolve-channel.outputs.version }}"
-          $exe = Get-ChildItem -Path "apps/web/src-tauri/target/${{ matrix.target }}/release/oh-my-query.exe" -ErrorAction Stop
           $label = "${{ matrix.label }}"
-          $dest = "oh_my_query_${version}_${label}_portable.exe"
-          Copy-Item $exe.FullName $dest
-          gh release upload "${{ github.ref_name }}" $dest --clobber
-
-  publish-appcast:
-    name: Publish appcast (${{ needs.resolve-channel.outputs.channel }})
-    needs: [resolve-channel, build-macos, build-windows]
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Build latest.json
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          REPO: ${{ github.repository }}
-          TAG: ${{ github.ref_name }}
-          VERSION: ${{ needs.resolve-channel.outputs.version }}
-        run: |
-          set -euo pipefail
-          mkdir -p out
-
-          # Pull release notes from the GitHub release body.
-          NOTES=$(gh release view "$TAG" --json body -q .body 2>/dev/null || echo "")
-          PUB_DATE=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
-          BASE="https://github.com/${REPO}/releases/download/${TAG}"
-
-          fetch_sig () {
-            local asset="$1"
-            curl -sfL -o "out/${asset}.sig" "${BASE}/${asset}.sig" || return 1
+          $arch = "${{ matrix.arch }}"
+          # Electrobun's Windows build emits a self-extracting zip in apps/app/artifacts/.
+          $candidate = Get-ChildItem -Path "apps/app/artifacts" -Filter "stable-win-${arch}-*.zip" -ErrorAction SilentlyContinue | Select-Object -First 1
+          if (-not $candidate) {
+            Write-Error "No Electrobun Windows artifact found in apps/app/artifacts/"
+            Get-ChildItem -Path "apps/app/artifacts" -ErrorAction SilentlyContinue
+            exit 1
           }
-
-          declare -A PLATFORMS=(
-            [darwin-aarch64]="oh_my_query_${VERSION}_aarch64.app.tar.gz"
-            [darwin-x86_64]="oh_my_query_${VERSION}_x64.app.tar.gz"
-            [windows-x86_64]="oh_my_query_${VERSION}_x64-setup.nsis.zip"
-            [windows-aarch64]="oh_my_query_${VERSION}_arm64-setup.nsis.zip"
-          )
-
-          PLATFORMS_JSON="{}"
-          for key in "${!PLATFORMS[@]}"; do
-            asset="${PLATFORMS[$key]}"
-            if fetch_sig "$asset"; then
-              SIG=$(cat "out/${asset}.sig")
-              PLATFORMS_JSON=$(jq --arg k "$key" --arg sig "$SIG" --arg url "${BASE}/${asset}" \
-                '. + {($k): {signature: $sig, url: $url}}' <<<"$PLATFORMS_JSON")
-            else
-              echo "::warning::Missing .sig for $asset — platform $key omitted from appcast"
-            fi
-          done
-
-          jq -n \
-            --arg version "$VERSION" \
-            --arg notes "$NOTES" \
-            --arg pub_date "$PUB_DATE" \
-            --argjson platforms "$PLATFORMS_JSON" \
-            '{version: $version, notes: $notes, pub_date: $pub_date, platforms: $platforms}' \
-            > out/latest.json
-
-          cat out/latest.json
-
-      - name: Publish to rolling tag
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          ROLLING_TAG: ${{ needs.resolve-channel.outputs.rolling-tag }}
-          CHANNEL: ${{ needs.resolve-channel.outputs.channel }}
-        run: |
-          set -euo pipefail
-          # Recreate the rolling tag at the current commit so the asset URL stays stable.
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git tag -f "$ROLLING_TAG"
-          git push -f origin "$ROLLING_TAG"
-
-          if gh release view "$ROLLING_TAG" >/dev/null 2>&1; then
-            gh release edit "$ROLLING_TAG" --target "$GITHUB_SHA" --prerelease=true --title "Updater feed (${CHANNEL})"
-          else
-            gh release create "$ROLLING_TAG" --target "$GITHUB_SHA" --prerelease --title "Updater feed (${CHANNEL})" --notes "Auto-published appcast for the ${CHANNEL} channel."
-          fi
-
-          gh release upload "$ROLLING_TAG" out/latest.json --clobber
+          $dest = "oh_my_query_${version}_${label}_setup.zip"
+          Copy-Item $candidate.FullName $dest
+          gh release upload "${{ github.ref_name }}" $dest --clobber
 
   update-homebrew-tap:
     name: Update Homebrew tap

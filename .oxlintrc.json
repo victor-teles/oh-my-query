@@ -8,9 +8,10 @@
     "**/*.gen.ts",
     ".agents/**",
     ".claude/**",
-    "apps/web/scripts/**",
-    "apps/web/e2e/**"
+    "apps/app/scripts/**",
+    "apps/app/e2e/**"
   ],
+  "plugins": ["unicorn", "typescript", "react", "import", "promise"],
   "rules": {
     "func-style": "off",
     "no-danger": "off",

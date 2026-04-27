@@ -53,6 +53,10 @@ async function waitForStability(
   element: HTMLElement,
   timeout: number
 ): Promise<void> {
+  if (typeof document !== "undefined" && document.fonts) {
+    await Promise.race([document.fonts.ready, delay(timeout)]);
+  }
+
   const animations = element.getAnimations({ subtree: true });
   if (animations.length > 0) {
     await Promise.race([
