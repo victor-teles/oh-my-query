@@ -10,6 +10,7 @@ import { CommandPalette } from "@/components/command-palette/command-palette";
 import { AppIsland } from "@/components/titlebar/dynamic-island/dynamic-island";
 import { Toaster } from "@/components/ui/sonner";
 import { useMenuNavigation } from "@/hooks/use-menu-navigation";
+import { useTitlebarDoubleClick } from "@/hooks/use-titlebar-double-click";
 import "@/index.css";
 
 export interface RouterAppContext {
@@ -39,6 +40,7 @@ export const Route = createRootRouteWithContext<RouterAppContext>()({
 
 function RootComponent() {
   useMenuNavigation();
+  useTitlebarDoubleClick();
 
   return (
     <>

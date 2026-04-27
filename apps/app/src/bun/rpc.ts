@@ -1,4 +1,5 @@
 import type { RpcSchema } from "@oh-my-query/rpc";
+import type { BrowserWindow } from "electrobun/bun";
 
 import {
   appendHistory,
@@ -60,10 +61,48 @@ function requireRedis(connectionId: string): RedisPool {
   return pool;
 }
 
-export function createRpc() {
+// Electrobun's RPC layer only forwards `error.message` across the boundary
+// (see node_modules/electrobun/dist/api/shared/rpc.ts handler), so DbError.code
+// is silently dropped. Encode it into the message here; the renderer's IPC
+// layer decodes it back into an Error with `.code` set.
+const ENCODED_ERROR_PREFIX = "__omq_err__";
+
+const encodeRpcError = (err: unknown): never => {
+  if (err instanceof DbError) {
+    const payload = JSON.stringify({ code: err.code, message: err.message });
+    throw new Error(`${ENCODED_ERROR_PREFIX}${payload}`);
+  }
+  throw err;
+};
+
+// oxlint-disable-next-line typescript/no-explicit-any
+type AnyHandlers = Record<string, (...args: any[]) => unknown>;
+
+const wrapRequests = <T extends AnyHandlers>(handlers: T): T => {
+  const wrapped: AnyHandlers = {};
+  for (const [name, handler] of Object.entries(handlers)) {
+    wrapped[name] = async (...args: unknown[]) => {
+      try {
+        return await handler(...args);
+      } catch (error) {
+        encodeRpcError(error);
+      }
+    };
+  }
+  return wrapped as T;
+};
+
+export interface CreateRpcOptions {
+  getMainWindow: () => BrowserWindow | null;
+}
+
+const noWindow: CreateRpcOptions = { getMainWindow: () => null };
+
+export function createRpc(options: CreateRpcOptions = noWindow) {
+  const { getMainWindow } = options;
   return defineElectrobunRPC<AppRpcSchema>("bun", {
     handlers: {
-      requests: {
+      requests: wrapRequests({
         appendHistory: async ({ entry }) => {
           await appendHistory(entry);
         },
@@ -207,7 +246,20 @@ export function createRpc() {
 
         testConnection: ({ params }) =>
           getDriver(params.type).testConnection(params),
-      },
+
+        toggleWindowMaximize: () => {
+          const window = getMainWindow();
+          if (!window) {
+            return false;
+          }
+          if (window.isMaximized()) {
+            window.unmaximize();
+            return false;
+          }
+          window.maximize();
+          return true;
+        },
+      }),
     },
   });
 }

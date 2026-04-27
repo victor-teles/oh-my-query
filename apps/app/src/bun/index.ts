@@ -5,8 +5,9 @@ import { createRpc } from "./rpc.ts";
 import { windowOptions } from "./window.ts";
 
 function main(): void {
-  const rpc = createRpc();
-  const mainWindow = new BrowserWindow({
+  let mainWindow: BrowserWindow | null = null;
+  const rpc = createRpc({ getMainWindow: () => mainWindow });
+  mainWindow = new BrowserWindow({
     ...windowOptions,
     rpc,
   } as never);

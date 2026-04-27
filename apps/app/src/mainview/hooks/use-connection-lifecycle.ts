@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 import type { DatabaseConnection } from "@/lib/connections";
 
@@ -9,6 +9,7 @@ import {
   disconnectFromDatabase,
   getServerVersion,
 } from "@/lib/tauri";
+import { useSchemaStore } from "@/stores/schema-store";
 
 interface ConnectionLifecycleState {
   isConnected: boolean;
@@ -50,9 +51,15 @@ export const useConnectionLifecycle = (
   }, []);
 
   const identityKey = connectionIdentityKey(connection);
+  const previousIdentityKey = useRef(identityKey);
 
   useEffect(() => {
     let cancelled = false;
+
+    if (previousIdentityKey.current !== identityKey) {
+      useSchemaStore.getState().clear(connection.id);
+      previousIdentityKey.current = identityKey;
+    }
 
     const connect = async () => {
       setState({

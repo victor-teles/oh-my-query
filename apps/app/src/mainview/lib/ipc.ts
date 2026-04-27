@@ -125,7 +125,61 @@ const electroview = new Electroview({ rpc: definedRpc });
 if (!electroview.rpc) {
   throw new Error("Electroview RPC client failed to initialize");
 }
-const { rpc } = electroview;
+
+// Mirrors the encoder in apps/app/src/bun/rpc.ts: Electrobun's RPC layer only
+// forwards `error.message`, so DbError.code is encoded into the message there
+// and decoded back here so cancellation/timeout/etc. branches keep working.
+const ENCODED_ERROR_PREFIX = "__omq_err__";
+
+const decodeRpcError = (err: unknown): unknown => {
+  if (!(err instanceof Error)) {
+    return err;
+  }
+  if (!err.message.startsWith(ENCODED_ERROR_PREFIX)) {
+    return err;
+  }
+  try {
+    const parsed = JSON.parse(
+      err.message.slice(ENCODED_ERROR_PREFIX.length)
+    ) as { code?: unknown; message?: unknown };
+    if (typeof parsed.code !== "string" || typeof parsed.message !== "string") {
+      return err;
+    }
+    const decoded = new Error(parsed.message);
+    (decoded as Error & { code: string }).code = parsed.code;
+    decoded.name = "DbError";
+    return decoded;
+  } catch {
+    return err;
+  }
+};
+
+const baseRequest = electroview.rpc.request as unknown as Record<
+  string,
+  // oxlint-disable-next-line typescript/no-explicit-any
+  (params: unknown) => Promise<any>
+>;
+
+const wrappedRequest = new Proxy(baseRequest, {
+  get(target, prop, receiver) {
+    const original = Reflect.get(target, prop, receiver);
+    if (typeof original !== "function") {
+      return original;
+    }
+    return async (params: unknown) => {
+      try {
+        return await original(params);
+      } catch (error) {
+        throw decodeRpcError(error);
+      }
+    };
+  },
+});
+
+const rpc = {
+  ...electroview.rpc,
+  request: wrappedRequest as unknown as typeof electroview.rpc.request,
+};
 
 export function onMenuNavigate(handler: (route: string) => void): () => void {
   messageHandlers.menuNavigate = (payload) => handler(payload.route);
@@ -273,5 +327,8 @@ export const installUpdate = (): Promise<boolean> =>
 
 export const openExternal = (url: string): Promise<void> =>
   rpc.request.openExternal({ url });
+
+export const toggleWindowMaximize = (): Promise<boolean> =>
+  rpc.request.toggleWindowMaximize({} as never);
 
 export type ExplainEngine = "postgresql" | "mysql" | "clickhouse" | "duckdb";

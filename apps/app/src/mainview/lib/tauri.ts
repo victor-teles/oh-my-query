@@ -34,6 +34,7 @@ export {
   scanRedisKeys,
   setUpdateChannel,
   testConnection,
+  toggleWindowMaximize,
 } from "@/lib/ipc";
 export type {
   AppConfig,
