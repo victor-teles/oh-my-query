@@ -13,10 +13,12 @@ export default {
     },
     linux: {
       bundleCEF: false,
+      icon: "assets/icon.png",
     },
     mac: {
       bundleCEF: false,
       codesign: process.env.ELECTROBUN_DEVELOPER_ID !== undefined,
+      icons: "assets/icon.iconset",
       notarize:
         process.env.ELECTROBUN_APPLEID !== undefined ||
         process.env.ELECTROBUN_APPLEAPIKEY !== undefined,
@@ -28,6 +30,7 @@ export default {
     },
     win: {
       bundleCEF: false,
+      icon: "assets/icon.ico",
     },
   },
 } satisfies ElectrobunConfig;
