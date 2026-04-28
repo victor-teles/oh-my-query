@@ -3,7 +3,11 @@ import { useShallow } from "zustand/react/shallow";
 
 import { selectSchemaState, useSchemaStore } from "@/stores/schema-store";
 
-export const useSchema = (connectionId: string, isConnected: boolean) => {
+export const useSchema = (
+  connectionId: string,
+  identityKey: string,
+  isConnected: boolean
+) => {
   const { databases, selectedDatabase, schema, isLoading, error } =
     useSchemaStore(useShallow(selectSchemaState(connectionId)));
 
@@ -16,9 +20,9 @@ export const useSchema = (connectionId: string, isConnected: boolean) => {
 
   useEffect(() => {
     if (isConnected) {
-      loadDatabases(connectionId);
+      loadDatabases(connectionId, identityKey);
     }
-  }, [isConnected, connectionId, loadDatabases]);
+  }, [isConnected, connectionId, identityKey, loadDatabases]);
 
   useEffect(() => {
     if (selectedDatabase) {

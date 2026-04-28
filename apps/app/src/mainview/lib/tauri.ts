@@ -24,6 +24,7 @@ export {
   installUpdate,
   isMacOS,
   listDatabases,
+  onBunReady,
   onMenuNavigate,
   onUpdateProgress,
   openExternal,
@@ -34,6 +35,7 @@ export {
   scanRedisKeys,
   setUpdateChannel,
   testConnection,
+  toggleWindowMaximize,
 } from "@/lib/ipc";
 export type {
   AppConfig,

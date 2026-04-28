@@ -145,6 +145,16 @@ export interface RpcSchema {
     installUpdate: { params: Record<string, never>; response: boolean };
 
     openExternal: { params: { url: string }; response: void };
+
+    toggleWindowMaximize: {
+      params: Record<string, never>;
+      response: boolean;
+    };
+
+    rendererReady: {
+      params: Record<string, never>;
+      response: void;
+    };
   };
   messages: {
     menuNavigate: { route: string };

@@ -84,7 +84,7 @@ When working with React/TypeScript frontend code, activate these skills:
 - **Linting**: Oxlint with Ultracite's core + React presets
 - **React 19**: Use ref as a prop directly, no `forwardRef`
 - **TypeScript**: Strict mode with `noUncheckedIndexedAccess`, `verbatimModuleSyntax`
-- Do not add comments to the code unless necessary for clarity
+- **No code comments by default.** Do not narrate what the code does, restate identifiers in prose, or leave breadcrumbs about recent changes ("added X", "now uses Y", "removed Z"). Rename variables, restructure code, or push the explanation into the commit/PR description instead. Only write a comment when the _why_ is genuinely non-obvious — a hidden constraint, a subtle invariant, or a workaround for a specific bug — and even then keep it to one short line. If removing the comment wouldn't confuse a future reader, don't write it.
 
 ## Component & Route Composition
 
