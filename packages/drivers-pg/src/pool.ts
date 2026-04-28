@@ -255,9 +255,29 @@ export function mapPgError(err: unknown): DbError {
   if (err instanceof DbError) {
     return err;
   }
-  const e = err as { code?: string; message?: string };
+  if (err instanceof AggregateError && err.errors.length > 0) {
+    const [inner, ...rest] = err.errors;
+    const mapped = mapPgError(inner);
+    if (rest.length === 0) {
+      return mapped;
+    }
+    const extras = rest
+      .map((sub) => (sub instanceof Error ? sub.message : String(sub)))
+      .filter((m) => m.length > 0);
+    const combined =
+      extras.length > 0
+        ? `${mapped.message} (also: ${extras.join("; ")})`
+        : mapped.message;
+    return new DbError(mapped.code, combined);
+  }
+  const e = err as { code?: string; message?: string; name?: string };
   const code = e.code ?? "DB_ERROR";
-  const message = e.message ?? String(err);
+  const stringified = String(err);
+  const message =
+    (typeof e.message === "string" && e.message.length > 0 && e.message) ||
+    (stringified !== "[object Object]" && stringified) ||
+    e.name ||
+    code;
   return new DbError(code, message);
 }
 

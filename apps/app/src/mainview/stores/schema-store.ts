@@ -6,6 +6,7 @@ import { getErrorMessage } from "@/lib/error-message";
 import { getSchema, listDatabases } from "@/lib/tauri";
 
 interface SchemaConnectionState {
+  identityKey: string | null;
   databases: string[] | null;
   selectedDatabase: string | null;
   schema: SchemaInfo | null;
@@ -16,7 +17,7 @@ interface SchemaConnectionState {
 
 interface SchemaStore {
   byConnection: Record<string, SchemaConnectionState>;
-  loadDatabases: (connectionId: string) => Promise<void>;
+  loadDatabases: (connectionId: string, identityKey: string) => Promise<void>;
   loadSchema: (connectionId: string, databaseName: string) => Promise<void>;
   setSelectedDatabase: (connectionId: string, database: string) => void;
   refresh: (connectionId: string) => Promise<void>;
@@ -26,6 +27,7 @@ interface SchemaStore {
 export const EMPTY_SCHEMA_STATE: SchemaConnectionState = {
   databases: null,
   error: null,
+  identityKey: null,
   isLoading: false,
   schema: null,
   schemaDatabase: null,
@@ -51,10 +53,16 @@ export const useSchemaStore = create<SchemaStore>((set, get) => {
     });
   };
 
-  const fetchDatabases = async (connectionId: string) => {
-    patch(connectionId, { error: null, isLoading: true });
+  const isStale = (connectionId: string, identityKey: string | null): boolean =>
+    (get().byConnection[connectionId]?.identityKey ?? null) !== identityKey;
+
+  const fetchDatabases = async (connectionId: string, identityKey: string) => {
+    patch(connectionId, { error: null, identityKey, isLoading: true });
     try {
       const databases = await listDatabases(connectionId);
+      if (isStale(connectionId, identityKey)) {
+        return;
+      }
       const selected =
         databases.find((db) => db === "public") ?? databases[0] ?? null;
       patch(connectionId, (prev) => ({
@@ -63,15 +71,23 @@ export const useSchemaStore = create<SchemaStore>((set, get) => {
         selectedDatabase: prev.selectedDatabase ?? selected,
       }));
     } catch (error) {
+      if (isStale(connectionId, identityKey)) {
+        return;
+      }
       const message = getErrorMessage(error, "Failed to list databases");
       patch(connectionId, { error: message, isLoading: false });
     }
   };
 
   const fetchSchema = async (connectionId: string, databaseName: string) => {
+    const startIdentityKey =
+      get().byConnection[connectionId]?.identityKey ?? null;
     patch(connectionId, { error: null, isLoading: true });
     try {
       const schema = await getSchema(connectionId, databaseName);
+      if (isStale(connectionId, startIdentityKey)) {
+        return;
+      }
       patch(connectionId, (prev) => {
         if (prev.selectedDatabase !== databaseName) {
           return { isLoading: false };
@@ -84,6 +100,9 @@ export const useSchemaStore = create<SchemaStore>((set, get) => {
         };
       });
     } catch (error) {
+      if (isStale(connectionId, startIdentityKey)) {
+        return;
+      }
       const message = getErrorMessage(error, "Failed to load schema");
       patch(connectionId, (prev) => {
         if (prev.selectedDatabase !== databaseName) {
@@ -112,12 +131,14 @@ export const useSchemaStore = create<SchemaStore>((set, get) => {
       });
     },
 
-    loadDatabases: async (connectionId) => {
+    loadDatabases: async (connectionId, identityKey) => {
       const slice = get().byConnection[connectionId];
-      if (slice?.databases || slice?.isLoading) {
+      if (slice && slice.identityKey !== identityKey) {
+        get().clear(connectionId);
+      } else if (slice?.databases || slice?.isLoading) {
         return;
       }
-      await fetchDatabases(connectionId);
+      await fetchDatabases(connectionId, identityKey);
     },
 
     loadSchema: async (connectionId, databaseName) => {

@@ -1,4 +1,5 @@
 import type { RpcSchema } from "@oh-my-query/rpc";
+import type { BrowserWindow } from "electrobun/bun";
 
 import {
   appendHistory,
@@ -24,6 +25,7 @@ import {
   RedisPool,
   scanRedisKeys as doScanRedisKeys,
 } from "@oh-my-query/drivers-redis";
+import { encodeRpcError } from "@oh-my-query/rpc";
 import { defineElectrobunRPC, Utils } from "electrobun/bun";
 
 import {
@@ -60,10 +62,61 @@ function requireRedis(connectionId: string): RedisPool {
   return pool;
 }
 
-export function createRpc() {
+type RequestHandlers = {
+  [M in keyof RpcSchema["requests"]]: (
+    params: RpcSchema["requests"][M]["params"]
+  ) =>
+    | RpcSchema["requests"][M]["response"]
+    | Promise<RpcSchema["requests"][M]["response"]>;
+};
+
+type RawHandler = (params: unknown) => unknown;
+
+const TRACED_METHODS = new Set([
+  "connectToDatabase",
+  "disconnectFromDatabase",
+  "listConnectionDatabases",
+  "getSchema",
+  "getServerVersion",
+  "executeQuery",
+]);
+
+const wrapHandlers = (handlers: RequestHandlers): RequestHandlers => {
+  const wrapped: Record<string, RawHandler> = {};
+  for (const [key, fn] of Object.entries(handlers)) {
+    const handler = fn as RawHandler;
+    const traced = TRACED_METHODS.has(key);
+    wrapped[key] = async (params: unknown) => {
+      try {
+        const result = await handler(params);
+        if (traced) {
+          console.log(`[rpc] ok  ${key}`);
+        }
+        return result;
+      } catch (error) {
+        const err = error as Error & { code?: string };
+        console.log(
+          `[rpc] err ${key}: name=${err?.name ?? "-"} code=${err?.code ?? "-"} msg=${err?.message ?? "-"}`
+        );
+        console.log(err?.stack ?? "(no stack)");
+        throw encodeRpcError(error);
+      }
+    };
+  }
+  return wrapped as RequestHandlers;
+};
+
+export interface CreateRpcOptions {
+  getMainWindow: () => BrowserWindow | null;
+}
+
+const noWindow: CreateRpcOptions = { getMainWindow: () => null };
+
+export function createRpc(options: CreateRpcOptions = noWindow) {
+  const { getMainWindow } = options;
   return defineElectrobunRPC<AppRpcSchema>("bun", {
     handlers: {
-      requests: {
+      requests: wrapHandlers({
         appendHistory: async ({ entry }) => {
           await appendHistory(entry);
         },
@@ -182,6 +235,9 @@ export function createRpc() {
         },
         redisDbInfo: ({ connectionId, dbIndex }) =>
           doRedisDbInfo(requireRedis(connectionId), dbIndex),
+        rendererReady: () => {
+          console.log("[rpc] renderer ready");
+        },
         resetSecrets: async () => {
           await resetSecrets();
         },
@@ -207,7 +263,23 @@ export function createRpc() {
 
         testConnection: ({ params }) =>
           getDriver(params.type).testConnection(params),
-      },
+
+        toggleWindowMaximize: () => {
+          const window = getMainWindow();
+          if (!window) {
+            return false;
+          }
+          if (window.isMaximized()) {
+            window.unmaximize();
+            return false;
+          }
+          window.maximize();
+          return true;
+        },
+      }),
     },
+    // Long queries may legitimately run for minutes; cancelQuery is the
+    // user-driven recovery path for hung calls, not a transport-level timeout.
+    maxRequestTime: Number.POSITIVE_INFINITY,
   });
 }

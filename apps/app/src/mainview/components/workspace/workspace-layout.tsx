@@ -20,6 +20,7 @@ import { useWorkspaceIslandSync } from "@/hooks/use-workspace-island-sync";
 import { useWorkspaceMode } from "@/hooks/use-workspace-mode";
 import { useWorkspaceModeHotkeys } from "@/hooks/use-workspace-mode-hotkeys";
 import { composeActionMessage } from "@/lib/ai-actions";
+import { connectionIdentityKey } from "@/lib/connections";
 
 import { ChatSidebar } from "./chat/chat-sidebar";
 import { KeyboardShortcutsOverlay } from "./keyboard-shortcuts-overlay";
@@ -43,7 +44,7 @@ export const WorkspaceLayout = () => {
     databases,
     selectedDatabase,
     setSelectedDatabase,
-  } = useSchema(connection.id, isConnected);
+  } = useSchema(connection.id, connectionIdentityKey(connection), isConnected);
 
   const handleSidebarToggle = useCallback(() => {
     const panel = sidebarRef.current;

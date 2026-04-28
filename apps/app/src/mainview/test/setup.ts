@@ -8,11 +8,16 @@ const noopStub = () => {
   /* no-op */
 };
 
+const idlePromise = Promise.withResolvers<unknown>().promise;
+
 const dispatchToRegistry =
   (method: string) =>
   (payload?: Record<string, unknown>): Promise<unknown> => {
     const handler = ipcHandlerRegistry[method];
     if (!handler) {
+      if (method === "rendererReady") {
+        return idlePromise;
+      }
       return Promise.reject(
         new Error(
           `Unexpected RPC command: ${method}. Register it via mockTauri()/mockIpc().`
