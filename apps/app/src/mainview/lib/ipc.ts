@@ -127,13 +127,111 @@ const definedRpc = Electroview.defineRPC<AppRpcSchema>({
   maxRequestTime: Number.POSITIVE_INFINITY,
 });
 
-const electroview = new Electroview({ rpc: definedRpc });
+const BROWSER_CONNECTIONS_KEY = "oh-my-query-connections";
 
-if (!electroview.rpc) {
-  throw new Error("Electroview RPC client failed to initialize");
-}
+const isElectrobunHost = (): boolean => {
+  if (typeof window === "undefined") {
+    return false;
+  }
+  return (
+    (window as Window & { __electrobunWebviewId?: number })
+      .__electrobunWebviewId !== undefined
+  );
+};
 
-const { request } = electroview.rpc;
+const readBrowserConnections = (): DatabaseConnection[] => {
+  if (typeof localStorage === "undefined") {
+    return [];
+  }
+  const raw = localStorage.getItem(BROWSER_CONNECTIONS_KEY);
+  if (!raw) {
+    return [];
+  }
+  try {
+    const parsed: unknown = JSON.parse(raw);
+    return Array.isArray(parsed) ? (parsed as DatabaseConnection[]) : [];
+  } catch {
+    return [];
+  }
+};
+
+const writeBrowserConnections = (connections: DatabaseConnection[]): void => {
+  if (typeof localStorage === "undefined") {
+    return;
+  }
+  localStorage.setItem(BROWSER_CONNECTIONS_KEY, JSON.stringify(connections));
+};
+
+const dispatchBrowserRequest = (prop: string, payload: unknown): unknown => {
+  switch (prop) {
+    case "rendererReady": {
+      return undefined;
+    }
+    case "getConnections": {
+      return readBrowserConnections();
+    }
+    case "saveConnections": {
+      writeBrowserConnections(
+        (payload as { connections: DatabaseConnection[] }).connections
+      );
+      return undefined;
+    }
+    case "getConfig": {
+      return {};
+    }
+    case "getUpdateChannel": {
+      return "stable";
+    }
+    case "getTabs": {
+      return null;
+    }
+    case "getAllHistory":
+    case "getHistory": {
+      return [];
+    }
+    default: {
+      throw new Error(`Browser-mode IPC stub does not implement '${prop}'`);
+    }
+  }
+};
+
+// Used when the renderer runs without an Electrobun host (vite-only dev,
+// Playwright e2e). Persistence drops to localStorage so the shell still boots.
+const createBrowserRequestStub = (): Record<
+  string,
+  (payload?: unknown) => Promise<unknown>
+> =>
+  new Proxy(
+    {},
+    {
+      get:
+        (_target, prop: string) =>
+        (payload?: unknown): Promise<unknown> => {
+          try {
+            return Promise.resolve(dispatchBrowserRequest(prop, payload));
+          } catch (error) {
+            return Promise.reject(error);
+          }
+        },
+    }
+  );
+
+const createElectroview = () => new Electroview({ rpc: definedRpc });
+
+const buildRequest = (): NonNullable<
+  ReturnType<typeof createElectroview>["rpc"]
+>["request"] => {
+  if (isElectrobunHost()) {
+    const electroview = createElectroview();
+    if (!electroview.rpc) {
+      throw new Error("Electroview RPC client failed to initialize");
+    }
+    return electroview.rpc.request;
+  }
+  return createBrowserRequestStub() as never;
+};
+
+const request = buildRequest();
 
 const handshake = async (): Promise<void> => {
   try {

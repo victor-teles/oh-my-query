@@ -10,6 +10,12 @@ const noopStub = () => {
 
 const idlePromise = Promise.withResolvers<unknown>().promise;
 
+if (typeof window !== "undefined") {
+  (
+    window as Window & { __electrobunWebviewId?: number }
+  ).__electrobunWebviewId = 0;
+}
+
 const dispatchToRegistry =
   (method: string) =>
   (payload?: Record<string, unknown>): Promise<unknown> => {
