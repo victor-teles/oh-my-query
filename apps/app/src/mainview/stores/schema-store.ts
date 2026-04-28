@@ -53,10 +53,16 @@ export const useSchemaStore = create<SchemaStore>((set, get) => {
     });
   };
 
+  const isStale = (connectionId: string, identityKey: string | null): boolean =>
+    (get().byConnection[connectionId]?.identityKey ?? null) !== identityKey;
+
   const fetchDatabases = async (connectionId: string, identityKey: string) => {
     patch(connectionId, { error: null, identityKey, isLoading: true });
     try {
       const databases = await listDatabases(connectionId);
+      if (isStale(connectionId, identityKey)) {
+        return;
+      }
       const selected =
         databases.find((db) => db === "public") ?? databases[0] ?? null;
       patch(connectionId, (prev) => ({
@@ -65,15 +71,23 @@ export const useSchemaStore = create<SchemaStore>((set, get) => {
         selectedDatabase: prev.selectedDatabase ?? selected,
       }));
     } catch (error) {
+      if (isStale(connectionId, identityKey)) {
+        return;
+      }
       const message = getErrorMessage(error, "Failed to list databases");
       patch(connectionId, { error: message, isLoading: false });
     }
   };
 
   const fetchSchema = async (connectionId: string, databaseName: string) => {
+    const startIdentityKey =
+      get().byConnection[connectionId]?.identityKey ?? null;
     patch(connectionId, { error: null, isLoading: true });
     try {
       const schema = await getSchema(connectionId, databaseName);
+      if (isStale(connectionId, startIdentityKey)) {
+        return;
+      }
       patch(connectionId, (prev) => {
         if (prev.selectedDatabase !== databaseName) {
           return { isLoading: false };
@@ -86,6 +100,9 @@ export const useSchemaStore = create<SchemaStore>((set, get) => {
         };
       });
     } catch (error) {
+      if (isStale(connectionId, startIdentityKey)) {
+        return;
+      }
       const message = getErrorMessage(error, "Failed to load schema");
       patch(connectionId, (prev) => {
         if (prev.selectedDatabase !== databaseName) {

@@ -77,4 +77,19 @@ describe("rpc error round-trip", () => {
     expect(decoded.message).toBe("All connect attempts failed");
     expect(decoded.code).toBe("DB_ERROR");
   });
+
+  it("never leaks [object Object] when sub-errors are plain objects", () => {
+    const aggregate = new AggregateError(
+      [{ code: "ECONNREFUSED", port: 5432 }, { weird: true }],
+      "connect failed"
+    );
+
+    const decoded = decodeRpcError(sendOverWire(aggregate)) as Error & {
+      code?: string;
+    };
+
+    expect(decoded.message).not.toContain("[object Object]");
+    expect(decoded.message).toContain("ECONNREFUSED");
+    expect(decoded.code).toBe("ECONNREFUSED");
+  });
 });

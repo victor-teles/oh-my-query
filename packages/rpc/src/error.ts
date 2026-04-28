@@ -2,19 +2,35 @@ import { DbError } from "@oh-my-query/core/client";
 
 const ENCODED_ERROR_PREFIX = "__omq_err__";
 
+const stringifySubError = (sub: unknown): string => {
+  if (sub instanceof Error) {
+    return sub.message;
+  }
+  if (typeof sub === "string") {
+    return sub;
+  }
+  if (sub === null || sub === undefined) {
+    return "";
+  }
+  if (typeof sub === "object") {
+    const msg = (sub as { message?: unknown }).message;
+    if (typeof msg === "string" && msg.length > 0) {
+      return msg;
+    }
+    try {
+      return JSON.stringify(sub);
+    } catch {
+      return "";
+    }
+  }
+  return String(sub);
+};
+
 const flattenAggregate = (
   err: AggregateError
 ): { code: string; message: string } => {
   const messages = err.errors
-    .map((sub) => {
-      if (sub instanceof DbError) {
-        return sub.message;
-      }
-      if (sub instanceof Error) {
-        return sub.message;
-      }
-      return String(sub);
-    })
+    .map(stringifySubError)
     .filter((m) => m.length > 0);
   const firstWithCode = err.errors.find(
     (sub): sub is { code: string } & object =>

@@ -107,20 +107,29 @@ interface MessageHandlers {
     downloaded: number;
     total: number;
   }) => void;
-  bunReady?: () => void;
 }
 
 const messageHandlers: MessageHandlers = {};
 
+const bunReadyHandlers = new Set<() => void>();
+const bunReadyState = { fired: false };
+
 const definedRpc = Electroview.defineRPC<AppRpcSchema>({
   handlers: {
     messages: {
-      bunReady: () => messageHandlers.bunReady?.(),
+      bunReady: () => {
+        bunReadyState.fired = true;
+        for (const handler of bunReadyHandlers) {
+          handler();
+        }
+      },
       menuNavigate: (payload) => messageHandlers.menuNavigate?.(payload),
       updateProgress: (payload) => messageHandlers.updateProgress?.(payload),
     },
     requests: {},
   },
+  // Long queries may legitimately run for minutes; cancelQuery is the
+  // user-driven recovery path for hung calls, not a transport-level timeout.
   maxRequestTime: Number.POSITIVE_INFINITY,
 });
 
@@ -148,9 +157,12 @@ export function onMenuNavigate(handler: (route: string) => void): () => void {
 }
 
 export function onBunReady(handler: () => void): () => void {
-  messageHandlers.bunReady = handler;
+  bunReadyHandlers.add(handler);
+  if (bunReadyState.fired) {
+    handler();
+  }
   return () => {
-    messageHandlers.bunReady = undefined;
+    bunReadyHandlers.delete(handler);
   };
 }
 

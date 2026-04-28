@@ -275,6 +275,8 @@ export function createRpc(options: CreateRpcOptions = noWindow) {
         },
       }),
     },
+    // Long queries may legitimately run for minutes; cancelQuery is the
+    // user-driven recovery path for hung calls, not a transport-level timeout.
     maxRequestTime: Number.POSITIVE_INFINITY,
   });
 }

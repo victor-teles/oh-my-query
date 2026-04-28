@@ -247,4 +247,39 @@ describe("useSchema hook", () => {
     );
     expect(listCalls).toBe(2);
   });
+
+  it("drops stale listDatabases responses when identityKey changes mid-fetch", async () => {
+    resetSchemaStore();
+    const slow = Promise.withResolvers<string[]>();
+    const responses: unknown[] = [slow.promise, ["beta"]];
+    let listCalls = 0;
+    mockTauri({
+      getSchema: () => sampleSchema,
+      listConnectionDatabases: () => {
+        const next = responses[listCalls];
+        listCalls += 1;
+        return next;
+      },
+    });
+
+    const { result, rerender } = renderHook(
+      ({ identityKey }: { identityKey: string }) =>
+        useSchema("conn-1", identityKey, true),
+      { initialProps: { identityKey: "id-a" } }
+    );
+
+    await waitFor(() => expect(listCalls).toBe(1));
+
+    rerender({ identityKey: "id-b" });
+    await waitFor(() =>
+      expect(result.current.databases).toStrictEqual(["beta"])
+    );
+
+    await act(async () => {
+      slow.resolve(["alpha"]);
+      await slow.promise;
+    });
+
+    expect(result.current.databases).toStrictEqual(["beta"]);
+  });
 });
