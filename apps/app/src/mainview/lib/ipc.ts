@@ -155,11 +155,22 @@ const readBrowserConnections = (): DatabaseConnection[] => {
   }
 };
 
+// Browser mode is only used by vite-only dev and Playwright e2e — never the
+// production path. Strip credentials before localStorage so a passing dev
+// session can't accidentally leak passwords to disk.
+const stripBrowserSecrets = (
+  connection: DatabaseConnection
+): DatabaseConnection => ({
+  ...connection,
+  password: "",
+});
+
 const writeBrowserConnections = (connections: DatabaseConnection[]): void => {
   if (typeof localStorage === "undefined") {
     return;
   }
-  localStorage.setItem(BROWSER_CONNECTIONS_KEY, JSON.stringify(connections));
+  const sanitized = connections.map(stripBrowserSecrets);
+  localStorage.setItem(BROWSER_CONNECTIONS_KEY, JSON.stringify(sanitized));
 };
 
 const dispatchBrowserRequest = (prop: string, payload: unknown): unknown => {
@@ -178,6 +189,9 @@ const dispatchBrowserRequest = (prop: string, payload: unknown): unknown => {
     }
     case "getConfig": {
       return {};
+    }
+    case "saveConfig": {
+      return undefined;
     }
     case "getUpdateChannel": {
       return "stable";

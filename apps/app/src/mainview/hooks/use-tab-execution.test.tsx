@@ -54,6 +54,7 @@ const makeTab = (overrides: Partial<QueryTab> = {}): QueryTab => ({
   explainAnalyze: false,
   explainError: null,
   explainResult: null,
+  explainSql: null,
   explainStatus: "idle",
   id: "tab-1",
   pendingExecution: null,

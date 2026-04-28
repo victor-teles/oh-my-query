@@ -1,5 +1,5 @@
 import { streamText } from "ai";
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 import type { ExplainResult } from "@/lib/tauri";
 
@@ -83,12 +83,14 @@ export const useExplainAiNarrative = () => {
       }
     } catch (error) {
       if (error instanceof Error && error.name === "AbortError") {
-        setState({
-          errorMessage: null,
-          resultKey: null,
-          status: "idle",
-          text: "",
-        });
+        if (abortRef.current === controller) {
+          setState({
+            errorMessage: null,
+            resultKey: null,
+            status: "idle",
+            text: "",
+          });
+        }
         return;
       }
       const classified = classifyAIError(error);
@@ -99,6 +101,13 @@ export const useExplainAiNarrative = () => {
       }));
     }
   }, []);
+
+  useEffect(
+    () => () => {
+      abortRef.current?.abort();
+    },
+    []
+  );
 
   const stop = useCallback(() => {
     abortRef.current?.abort();

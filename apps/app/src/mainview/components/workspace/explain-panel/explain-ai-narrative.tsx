@@ -1,5 +1,7 @@
+import type { ReactNode } from "react";
+
 import { Check, ClipboardCopy, Loader2, RefreshCw, X } from "lucide-react";
-import { useCallback, useEffect, useState } from "react";
+import { Fragment, useCallback, useEffect, useState } from "react";
 
 import type { ExplainResult } from "@/lib/tauri";
 
@@ -229,6 +231,22 @@ const NarrativeContent = ({
   );
 };
 
+const BOLD_SEGMENT_RE = /(\*\*[^*]+\*\*)/g;
+
+const renderBoldSegments = (line: string): ReactNode[] =>
+  line.split(BOLD_SEGMENT_RE).map((part, index) => {
+    if (part.startsWith("**") && part.endsWith("**") && part.length > 4) {
+      return (
+        // oxlint-disable-next-line react/no-array-index-key
+        <strong key={`b-${index}`}>{part.slice(2, -2)}</strong>
+      );
+    }
+    return (
+      // oxlint-disable-next-line react/no-array-index-key
+      <Fragment key={`t-${index}`}>{part}</Fragment>
+    );
+  });
+
 const FormattedText = ({ text }: { text: string }) => {
   let charOffset = 0;
   const lineEntries = text.split("\n").map((line) => {
@@ -243,16 +261,13 @@ const FormattedText = ({ text }: { text: string }) => {
         if (!line.trim()) {
           return <div key={`l-${offset}`} className="h-1" />;
         }
-        const boldLine = line.replaceAll(
-          /\*\*(.+?)\*\*/g,
-          "<strong>$1</strong>"
-        );
         return (
           <p
             key={`l-${offset}`}
             className="text-[11px] leading-relaxed text-foreground/85"
-            dangerouslySetInnerHTML={{ __html: boldLine }}
-          />
+          >
+            {renderBoldSegments(line)}
+          </p>
         );
       })}
     </div>

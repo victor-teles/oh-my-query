@@ -57,6 +57,7 @@ export const useTabExplain = ({
             ? {
                 ...t,
                 explainError: null,
+                explainSql: null,
                 explainStatus: "running",
                 runningExplainId: queryId,
               }
@@ -80,6 +81,7 @@ export const useTabExplain = ({
                   ...t,
                   explainError: null,
                   explainResult: result,
+                  explainSql: sql,
                   explainStatus: "success",
                   runningExplainId: null,
                 }

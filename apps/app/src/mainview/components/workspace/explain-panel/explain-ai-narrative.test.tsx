@@ -146,4 +146,16 @@ describe("explainAiNarrative", () => {
     render(<ExplainAiNarrative result={makeResult()} sql="SELECT 1" />);
     expect(screen.getByText(/analyzing plan/i)).toBeDefined();
   });
+
+  it("renders HTML in narrative text as literal characters, not markup", () => {
+    const text =
+      "Look at <script>alert('xss')</script> and **bold** in the output.";
+    setupMocks({ status: "done", text });
+    const { container } = render(
+      <ExplainAiNarrative result={makeResult()} sql="SELECT 1" />
+    );
+    expect(container.querySelector("script")).toBeNull();
+    expect(screen.getByText(/<script>alert\('xss'\)<\/script>/)).toBeDefined();
+    expect(screen.getByText("bold").tagName).toBe("STRONG");
+  });
 });

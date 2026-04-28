@@ -16,6 +16,7 @@ export interface QueryTab {
   pendingExecution: PendingExecution | null;
   runningQueryId: string | null;
   explainResult: ExplainResult | null;
+  explainSql: string | null;
   explainStatus: TabStatus;
   explainError: string | null;
   explainAnalyze: boolean;

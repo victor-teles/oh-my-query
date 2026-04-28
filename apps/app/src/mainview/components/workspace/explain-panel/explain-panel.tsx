@@ -152,7 +152,7 @@ export const ExplainPanel = ({ tab, hasSelection }: ExplainPanelProps) => {
             <ExplainBody
               error={error}
               result={result}
-              sql={tab.sql}
+              sql={tab.explainSql ?? tab.sql}
               status={tab.explainStatus}
               viewMode={viewMode}
             />
