@@ -1,4 +1,5 @@
 /// <reference types="vitest/config" />
+/// <reference types="@vitest/browser/providers/playwright" />
 
 import { visualRegression } from "@oh-my-query/vitest-visual";
 import { storybookTest } from "@storybook/addon-vitest/vitest-plugin";
@@ -120,6 +121,9 @@ export default defineConfig({
             instances: [
               {
                 browser: "chromium",
+                launch: {
+                  args: ["--font-render-hinting=none", "--disable-lcd-text"],
+                },
               },
             ],
             provider: "playwright",

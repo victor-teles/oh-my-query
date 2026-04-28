@@ -19,6 +19,7 @@ const config: StorybookConfig = {
     getAbsolutePath("@oh-my-query/vitest-visual"),
   ],
   framework: getAbsolutePath("@storybook/react-vite"),
+  staticDirs: ["../public"],
   stories: ["../src/**/*.mdx", "../src/**/*.stories.@(js|jsx|mjs|ts|tsx)"],
 };
 export default config;
