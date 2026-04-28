@@ -235,6 +235,9 @@ export function createRpc(options: CreateRpcOptions = noWindow) {
         },
         redisDbInfo: ({ connectionId, dbIndex }) =>
           doRedisDbInfo(requireRedis(connectionId), dbIndex),
+        rendererReady: () => {
+          console.log("[rpc] renderer ready");
+        },
         resetSecrets: async () => {
           await resetSecrets();
         },

@@ -117,12 +117,6 @@ const bunReadyState = { fired: false };
 const definedRpc = Electroview.defineRPC<AppRpcSchema>({
   handlers: {
     messages: {
-      bunReady: () => {
-        bunReadyState.fired = true;
-        for (const handler of bunReadyHandlers) {
-          handler();
-        }
-      },
       menuNavigate: (payload) => messageHandlers.menuNavigate?.(payload),
       updateProgress: (payload) => messageHandlers.updateProgress?.(payload),
     },
@@ -140,6 +134,21 @@ if (!electroview.rpc) {
 }
 
 const { request } = electroview.rpc;
+
+const handshake = async (): Promise<void> => {
+  try {
+    await request.rendererReady({});
+    bunReadyState.fired = true;
+    for (const handler of bunReadyHandlers) {
+      handler();
+    }
+  } catch (error) {
+    console.error("[ipc] rendererReady handshake failed", error);
+  }
+};
+
+// oxlint-disable-next-line jest/require-hook
+handshake();
 
 const callRpc = async <T>(call: () => Promise<T>): Promise<T> => {
   try {

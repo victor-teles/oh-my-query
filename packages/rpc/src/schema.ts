@@ -150,10 +150,14 @@ export interface RpcSchema {
       params: Record<string, never>;
       response: boolean;
     };
+
+    rendererReady: {
+      params: Record<string, never>;
+      response: void;
+    };
   };
   messages: {
     menuNavigate: { route: string };
     updateProgress: { percent: number; downloaded: number; total: number };
-    bunReady: Record<string, never>;
   };
 }
