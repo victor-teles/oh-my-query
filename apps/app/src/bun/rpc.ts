@@ -25,6 +25,7 @@ import {
   RedisPool,
   scanRedisKeys as doScanRedisKeys,
 } from "@oh-my-query/drivers-redis";
+import { encodeRpcError } from "@oh-my-query/rpc";
 import { defineElectrobunRPC, Utils } from "electrobun/bun";
 
 import {
@@ -61,35 +62,48 @@ function requireRedis(connectionId: string): RedisPool {
   return pool;
 }
 
-// Electrobun's RPC layer only forwards `error.message` across the boundary
-// (see node_modules/electrobun/dist/api/shared/rpc.ts handler), so DbError.code
-// is silently dropped. Encode it into the message here; the renderer's IPC
-// layer decodes it back into an Error with `.code` set.
-const ENCODED_ERROR_PREFIX = "__omq_err__";
-
-const encodeRpcError = (err: unknown): never => {
-  if (err instanceof DbError) {
-    const payload = JSON.stringify({ code: err.code, message: err.message });
-    throw new Error(`${ENCODED_ERROR_PREFIX}${payload}`);
-  }
-  throw err;
+type RequestHandlers = {
+  [M in keyof RpcSchema["requests"]]: (
+    params: RpcSchema["requests"][M]["params"]
+  ) =>
+    | RpcSchema["requests"][M]["response"]
+    | Promise<RpcSchema["requests"][M]["response"]>;
 };
 
-// oxlint-disable-next-line typescript/no-explicit-any
-type AnyHandlers = Record<string, (...args: any[]) => unknown>;
+type RawHandler = (params: unknown) => unknown;
 
-const wrapRequests = <T extends AnyHandlers>(handlers: T): T => {
-  const wrapped: AnyHandlers = {};
-  for (const [name, handler] of Object.entries(handlers)) {
-    wrapped[name] = async (...args: unknown[]) => {
+const TRACED_METHODS = new Set([
+  "connectToDatabase",
+  "disconnectFromDatabase",
+  "listConnectionDatabases",
+  "getSchema",
+  "getServerVersion",
+  "executeQuery",
+]);
+
+const wrapHandlers = (handlers: RequestHandlers): RequestHandlers => {
+  const wrapped: Record<string, RawHandler> = {};
+  for (const [key, fn] of Object.entries(handlers)) {
+    const handler = fn as RawHandler;
+    const traced = TRACED_METHODS.has(key);
+    wrapped[key] = async (params: unknown) => {
       try {
-        return await handler(...args);
+        const result = await handler(params);
+        if (traced) {
+          console.log(`[rpc] ok  ${key}`);
+        }
+        return result;
       } catch (error) {
-        encodeRpcError(error);
+        const err = error as Error & { code?: string };
+        console.log(
+          `[rpc] err ${key}: name=${err?.name ?? "-"} code=${err?.code ?? "-"} msg=${err?.message ?? "-"}`
+        );
+        console.log(err?.stack ?? "(no stack)");
+        throw encodeRpcError(error);
       }
     };
   }
-  return wrapped as T;
+  return wrapped as RequestHandlers;
 };
 
 export interface CreateRpcOptions {
@@ -102,7 +116,7 @@ export function createRpc(options: CreateRpcOptions = noWindow) {
   const { getMainWindow } = options;
   return defineElectrobunRPC<AppRpcSchema>("bun", {
     handlers: {
-      requests: wrapRequests({
+      requests: wrapHandlers({
         appendHistory: async ({ entry }) => {
           await appendHistory(entry);
         },
@@ -261,5 +275,6 @@ export function createRpc(options: CreateRpcOptions = noWindow) {
         },
       }),
     },
+    maxRequestTime: Number.POSITIVE_INFINITY,
   });
 }

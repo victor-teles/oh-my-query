@@ -1,15 +1,15 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import type { DatabaseConnection } from "@/lib/connections";
 
-import { markConnectionUsed } from "@/lib/connections";
+import { connectionIdentityKey, markConnectionUsed } from "@/lib/connections";
 import { getErrorMessage } from "@/lib/error-message";
 import {
   connectToDatabase,
   disconnectFromDatabase,
   getServerVersion,
+  onBunReady,
 } from "@/lib/tauri";
-import { useSchemaStore } from "@/stores/schema-store";
 
 interface ConnectionLifecycleState {
   isConnected: boolean;
@@ -19,19 +19,6 @@ interface ConnectionLifecycleState {
   serverVersion: string | null;
   reconnect: () => void;
 }
-
-const connectionIdentityKey = (c: DatabaseConnection): string =>
-  JSON.stringify([
-    c.id,
-    c.type,
-    c.host,
-    c.port,
-    c.database,
-    c.username,
-    c.password,
-    c.authSource ?? null,
-    c.trustServerCertificate ?? null,
-  ]);
 
 export const useConnectionLifecycle = (
   connection: DatabaseConnection
@@ -50,16 +37,12 @@ export const useConnectionLifecycle = (
     setReconnectCount((c) => c + 1);
   }, []);
 
+  useEffect(() => onBunReady(reconnect), [reconnect]);
+
   const identityKey = connectionIdentityKey(connection);
-  const previousIdentityKey = useRef(identityKey);
 
   useEffect(() => {
     let cancelled = false;
-
-    if (previousIdentityKey.current !== identityKey) {
-      useSchemaStore.getState().clear(connection.id);
-      previousIdentityKey.current = identityKey;
-    }
 
     const connect = async () => {
       setState({

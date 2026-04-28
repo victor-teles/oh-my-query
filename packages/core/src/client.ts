@@ -1,6 +1,8 @@
 // Renderer-safe entry: types + pure-data constants only.
 // Excludes anything that touches keytar, the polyglot WASM runtime, or
 // `node:fs`/`node:os`. Safe to import from a Vite-bundled webview.
+export { DbError } from "./error.ts";
+export type { DbErrorShape } from "./error.ts";
 export type { AISettings, AppConfig } from "./config.ts";
 export type {
   ExplainEngine,

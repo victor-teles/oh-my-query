@@ -154,5 +154,6 @@ export interface RpcSchema {
   messages: {
     menuNavigate: { route: string };
     updateProgress: { percent: number; downloaded: number; total: number };
+    bunReady: Record<string, never>;
   };
 }

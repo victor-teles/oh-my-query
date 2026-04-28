@@ -24,6 +24,7 @@ export {
   installUpdate,
   isMacOS,
   listDatabases,
+  onBunReady,
   onMenuNavigate,
   onUpdateProgress,
   openExternal,

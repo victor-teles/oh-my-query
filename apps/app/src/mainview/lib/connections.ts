@@ -114,3 +114,16 @@ export const markConnectionUsed = async (id: string): Promise<void> => {
   );
   await writeConnections(connections);
 };
+
+export const connectionIdentityKey = (c: DatabaseConnection): string =>
+  JSON.stringify([
+    c.id,
+    c.type,
+    c.host,
+    c.port,
+    c.database,
+    c.username,
+    c.password,
+    c.authSource ?? null,
+    c.trustServerCertificate ?? null,
+  ]);

@@ -6,6 +6,7 @@ import { getErrorMessage } from "@/lib/error-message";
 import { getSchema, listDatabases } from "@/lib/tauri";
 
 interface SchemaConnectionState {
+  identityKey: string | null;
   databases: string[] | null;
   selectedDatabase: string | null;
   schema: SchemaInfo | null;
@@ -16,7 +17,7 @@ interface SchemaConnectionState {
 
 interface SchemaStore {
   byConnection: Record<string, SchemaConnectionState>;
-  loadDatabases: (connectionId: string) => Promise<void>;
+  loadDatabases: (connectionId: string, identityKey: string) => Promise<void>;
   loadSchema: (connectionId: string, databaseName: string) => Promise<void>;
   setSelectedDatabase: (connectionId: string, database: string) => void;
   refresh: (connectionId: string) => Promise<void>;
@@ -26,6 +27,7 @@ interface SchemaStore {
 export const EMPTY_SCHEMA_STATE: SchemaConnectionState = {
   databases: null,
   error: null,
+  identityKey: null,
   isLoading: false,
   schema: null,
   schemaDatabase: null,
@@ -51,8 +53,8 @@ export const useSchemaStore = create<SchemaStore>((set, get) => {
     });
   };
 
-  const fetchDatabases = async (connectionId: string) => {
-    patch(connectionId, { error: null, isLoading: true });
+  const fetchDatabases = async (connectionId: string, identityKey: string) => {
+    patch(connectionId, { error: null, identityKey, isLoading: true });
     try {
       const databases = await listDatabases(connectionId);
       const selected =
@@ -112,12 +114,14 @@ export const useSchemaStore = create<SchemaStore>((set, get) => {
       });
     },
 
-    loadDatabases: async (connectionId) => {
+    loadDatabases: async (connectionId, identityKey) => {
       const slice = get().byConnection[connectionId];
-      if (slice?.databases || slice?.isLoading) {
+      if (slice && slice.identityKey !== identityKey) {
+        get().clear(connectionId);
+      } else if (slice?.databases || slice?.isLoading) {
         return;
       }
-      await fetchDatabases(connectionId);
+      await fetchDatabases(connectionId, identityKey);
     },
 
     loadSchema: async (connectionId, databaseName) => {

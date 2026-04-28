@@ -21,6 +21,8 @@ function main(): void {
     }
   });
 
+  rpc.send.bunReady({});
+
   console.log(`oh-my-query window started (id: ${mainWindow.id})`);
 }
 

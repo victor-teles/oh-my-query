@@ -49,7 +49,7 @@ describe("useSchema hook", () => {
       },
     });
 
-    const { result } = renderHook(() => useSchema("conn-1", false));
+    const { result } = renderHook(() => useSchema("conn-1", "id-a", false));
     expect(result.current.databases).toBeNull();
     expect(result.current.schema).toBeNull();
   });
@@ -70,7 +70,7 @@ describe("useSchema hook", () => {
       },
     });
 
-    const { result } = renderHook(() => useSchema("conn-1", true));
+    const { result } = renderHook(() => useSchema("conn-1", "id-a", true));
 
     await waitFor(() => {
       expect(result.current.schema).not.toBeNull();
@@ -89,7 +89,7 @@ describe("useSchema hook", () => {
       listConnectionDatabases: () => ["alpha", "beta"],
     });
 
-    const { result } = renderHook(() => useSchema("conn-1", true));
+    const { result } = renderHook(() => useSchema("conn-1", "id-a", true));
 
     await waitFor(() => {
       expect(result.current.selectedDatabase).toBe("alpha");
@@ -105,7 +105,7 @@ describe("useSchema hook", () => {
       },
     });
 
-    const { result } = renderHook(() => useSchema("conn-1", true));
+    const { result } = renderHook(() => useSchema("conn-1", "id-a", true));
 
     await waitFor(() => {
       expect(result.current.error).toMatch(/boom/);
@@ -124,7 +124,7 @@ describe("useSchema hook", () => {
       listConnectionDatabases: () => ["public", "analytics"],
     });
 
-    const { result } = renderHook(() => useSchema("conn-1", true));
+    const { result } = renderHook(() => useSchema("conn-1", "id-a", true));
 
     await waitFor(() => expect(lastDb).toBe("public"));
 
@@ -151,7 +151,7 @@ describe("useSchema hook", () => {
       },
     });
 
-    const first = renderHook(() => useSchema("conn-1", true));
+    const first = renderHook(() => useSchema("conn-1", "id-a", true));
     await waitFor(() => expect(first.result.current.schema).not.toBeNull());
 
     expect(listCalls).toBe(1);
@@ -159,7 +159,7 @@ describe("useSchema hook", () => {
 
     first.unmount();
 
-    const second = renderHook(() => useSchema("conn-1", true));
+    const second = renderHook(() => useSchema("conn-1", "id-a", true));
     await waitFor(() => expect(second.result.current.schema).not.toBeNull());
 
     expect(listCalls).toBe(1);
@@ -180,7 +180,7 @@ describe("useSchema hook", () => {
 
     const { result, rerender } = renderHook(
       ({ isConnected }: { isConnected: boolean }) =>
-        useSchema("conn-1", isConnected),
+        useSchema("conn-1", "id-a", isConnected),
       { initialProps: { isConnected: true } }
     );
 
@@ -205,7 +205,7 @@ describe("useSchema hook", () => {
       listConnectionDatabases: () => ["public"],
     });
 
-    const { result } = renderHook(() => useSchema("conn-1", true));
+    const { result } = renderHook(() => useSchema("conn-1", "id-a", true));
     await waitFor(() => expect(result.current.schema).not.toBeNull());
     expect(schemaCalls).toBe(1);
 
@@ -214,5 +214,37 @@ describe("useSchema hook", () => {
     });
 
     await waitFor(() => expect(schemaCalls).toBe(2));
+  });
+
+  it("refetches when identityKey changes for the same connectionId", async () => {
+    resetSchemaStore();
+    const databasesQueue: string[][] = [["alpha"], ["beta"], ["alpha"]];
+    let listCalls = 0;
+    mockTauri({
+      getSchema: () => sampleSchema,
+      listConnectionDatabases: () => {
+        const databases = databasesQueue[listCalls] as string[];
+        listCalls += 1;
+        return databases;
+      },
+    });
+
+    const { result, rerender } = renderHook(
+      ({ identityKey }: { identityKey: string }) =>
+        useSchema("conn-1", identityKey, true),
+      { initialProps: { identityKey: "id-a" } }
+    );
+
+    await waitFor(() =>
+      expect(result.current.databases).toStrictEqual(["alpha"])
+    );
+    expect(listCalls).toBe(1);
+
+    rerender({ identityKey: "id-b" });
+
+    await waitFor(() =>
+      expect(result.current.databases).toStrictEqual(["beta"])
+    );
+    expect(listCalls).toBe(2);
   });
 });
