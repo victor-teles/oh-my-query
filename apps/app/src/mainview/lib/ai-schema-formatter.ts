@@ -128,9 +128,13 @@ type TableShape = SchemaInfo["schemas"][number]["tables"][number];
 const buildFkMap = (fks: TableShape["foreignKeys"]): Map<string, string> => {
   const map = new Map<string, string>();
   for (const fk of fks) {
-    for (let i = 0; i < fk.columns.length; i += 1) {
-      const col = fk.columns[i];
-      const ref = fk.referencedColumns[i];
+    const cols = Array.isArray(fk.columns) ? fk.columns : [];
+    const refs = Array.isArray(fk.referencedColumns)
+      ? fk.referencedColumns
+      : [];
+    for (let i = 0; i < cols.length; i += 1) {
+      const col = cols[i];
+      const ref = refs[i];
       if (col && ref) {
         map.set(col, `${fk.referencedTable}.${ref}`);
       }
@@ -144,22 +148,32 @@ const renderTableBlock = (
   schemaName: string,
   table: TableShape
 ) => {
-  const fkMap = buildFkMap(table.foreignKeys);
+  const tableColumns = Array.isArray(table.columns) ? table.columns : [];
+  const tableIndexes = Array.isArray(table.indexes) ? table.indexes : [];
+  const tableForeignKeys = Array.isArray(table.foreignKeys)
+    ? table.foreignKeys
+    : [];
+
+  const fkMap = buildFkMap(tableForeignKeys);
   const prefix = schemaName !== "public" ? `${schemaName}.` : "";
   lines.push(`Table: ${prefix}${table.name}`);
-  for (const col of table.columns) {
+  for (const col of tableColumns) {
     lines.push(formatColumn(col, fkMap.get(col.name)));
   }
 
-  const nonPkIndexes = table.indexes.filter(
-    (idx) =>
-      !idx.columns.every((c) =>
-        table.columns.some((col) => col.name === c && col.isPrimaryKey)
-      )
-  );
-  for (const idx of nonPkIndexes) {
+  for (const idx of tableIndexes) {
+    const indexCols = Array.isArray(idx.columns) ? idx.columns : [];
+    if (indexCols.length === 0) {
+      continue;
+    }
+    const isOnlyPk = indexCols.every((c) =>
+      tableColumns.some((col) => col.name === c && col.isPrimaryKey)
+    );
+    if (isOnlyPk) {
+      continue;
+    }
     const unique = idx.isUnique ? ", unique" : "";
-    lines.push(`  Index: ${idx.name} (${idx.columns.join(", ")}${unique})`);
+    lines.push(`  Index: ${idx.name} (${indexCols.join(", ")}${unique})`);
   }
   lines.push("");
 };
