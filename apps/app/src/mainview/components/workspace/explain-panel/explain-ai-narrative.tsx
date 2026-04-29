@@ -1,6 +1,13 @@
 import type { ReactNode } from "react";
 
-import { Check, ClipboardCopy, Loader2, RefreshCw, X } from "lucide-react";
+import {
+  AlertTriangle,
+  Check,
+  ClipboardCopy,
+  Loader2,
+  RefreshCw,
+  X,
+} from "lucide-react";
 import { Fragment, useCallback, useEffect, useState } from "react";
 
 import type { ExplainResult } from "@/lib/tauri";
@@ -37,39 +44,67 @@ export const ExplainAiNarrative = ({
     [insertAtCursor]
   );
 
+  const isWorking = state.status === "streaming" || state.status === "loading";
+
   return (
-    <div className="flex shrink-0 flex-col border-t bg-muted/5">
+    <div className="flex h-full flex-col border-t bg-muted/5">
       <NarrativeHeader
-        isStreaming={state.status === "streaming" || state.status === "loading"}
+        isWorking={isWorking}
         onAnalyze={handleAnalyze}
+        onRetry={handleAnalyze}
         onStop={stop}
         showAnalyze={state.status === "idle"}
         showRetry={state.status === "error" || state.status === "done"}
-        onRetry={handleAnalyze}
       />
 
-      {(state.status === "loading" ||
-        state.status === "streaming" ||
-        state.status === "done") && (
-        <NarrativeBody
-          isDone={state.status === "done"}
-          isLoading={state.status === "loading"}
-          onInsert={handleInsert}
-          text={state.text}
-        />
-      )}
+      <div className="min-h-0 flex-1 overflow-y-auto">
+        {state.status === "idle" && (
+          <p className="px-3 pb-3 text-xs text-muted-foreground/80">
+            Diagnose the plan and suggest fixes.
+          </p>
+        )}
 
-      {state.status === "error" && state.errorMessage && (
-        <p className="px-3 pb-3 text-[11px] text-destructive">
-          {state.errorMessage}
-        </p>
-      )}
+        {state.status === "loading" && (
+          <p
+            aria-live="polite"
+            className="px-3 pb-3 text-xs text-muted-foreground"
+            role="status"
+          >
+            Analyzing plan…
+          </p>
+        )}
+
+        {(state.status === "streaming" || state.status === "done") &&
+          state.text && (
+            <div aria-live="polite" className="px-3 pb-3" role="status">
+              <NarrativeContent
+                isStreaming={state.status === "streaming"}
+                onInsert={handleInsert}
+                text={state.text}
+              />
+            </div>
+          )}
+
+        {state.status === "error" && state.errorMessage && (
+          <div
+            aria-live="assertive"
+            className="mx-3 mb-3 flex items-start gap-2 rounded-md border border-destructive/30 bg-destructive/10 px-2.5 py-1.5"
+            role="alert"
+          >
+            <AlertTriangle
+              aria-hidden="true"
+              className="mt-0.5 size-3.5 shrink-0 text-destructive"
+            />
+            <p className="text-xs text-destructive">{state.errorMessage}</p>
+          </div>
+        )}
+      </div>
     </div>
   );
 };
 
 interface NarrativeHeaderProps {
-  isStreaming: boolean;
+  isWorking: boolean;
   onAnalyze: () => void;
   onRetry: () => void;
   onStop: () => void;
@@ -78,7 +113,7 @@ interface NarrativeHeaderProps {
 }
 
 const NarrativeHeader = ({
-  isStreaming,
+  isWorking,
   onAnalyze,
   onRetry,
   onStop,
@@ -91,7 +126,7 @@ const NarrativeHeader = ({
     </span>
 
     <div className="ml-auto flex items-center gap-1">
-      {isStreaming && (
+      {isWorking && (
         <>
           <Loader2
             aria-hidden="true"
@@ -136,47 +171,9 @@ const NarrativeHeader = ({
   </div>
 );
 
-interface NarrativeBodyProps {
-  text: string;
-  isDone: boolean;
-  isLoading: boolean;
-  onInsert: (code: string) => void;
-}
-
-const NarrativeBody = ({
-  text,
-  isDone,
-  isLoading,
-  onInsert,
-}: NarrativeBodyProps) => {
-  if (isLoading) {
-    return (
-      <div className="flex items-center gap-2 px-3 pb-3">
-        <Loader2
-          aria-hidden="true"
-          className="size-3.5 animate-spin text-muted-foreground motion-reduce:animate-none"
-        />
-        <span className="text-[11px] text-muted-foreground">
-          Analyzing plan…
-        </span>
-      </div>
-    );
-  }
-
-  if (!text) {
-    return null;
-  }
-
-  return (
-    <div className="max-h-52 overflow-y-auto px-3 pb-3">
-      <NarrativeContent isDone={isDone} onInsert={onInsert} text={text} />
-    </div>
-  );
-};
-
 interface NarrativeContentProps {
   text: string;
-  isDone: boolean;
+  isStreaming: boolean;
   onInsert: (code: string) => void;
 }
 
@@ -184,17 +181,9 @@ const SQL_BLOCK_RE = /```sql\n?([\s\S]*?)```/g;
 
 const NarrativeContent = ({
   text,
-  isDone,
+  isStreaming,
   onInsert,
 }: NarrativeContentProps) => {
-  if (!isDone) {
-    return (
-      <pre className="whitespace-pre-wrap font-sans text-[11px] leading-relaxed text-foreground/90">
-        {text}
-      </pre>
-    );
-  }
-
   const parts: { type: "text" | "sql"; content: string; offset: number }[] = [];
   let lastIdx = 0;
   SQL_BLOCK_RE.lastIndex = 0;
@@ -216,7 +205,7 @@ const NarrativeContent = ({
 
   return (
     <div className="flex flex-col gap-2">
-      {parts.map((part) =>
+      {parts.map((part, index) =>
         part.type === "sql" ? (
           <SqlBlock
             code={part.content}
@@ -224,7 +213,11 @@ const NarrativeContent = ({
             onInsert={onInsert}
           />
         ) : (
-          <FormattedText key={`text-${part.offset}`} text={part.content} />
+          <FormattedText
+            key={`text-${part.offset}`}
+            showCaret={isStreaming && index === parts.length - 1}
+            text={part.content}
+          />
         )
       )}
     </div>
@@ -232,6 +225,7 @@ const NarrativeContent = ({
 };
 
 const BOLD_SEGMENT_RE = /(\*\*[^*]+\*\*)/g;
+const LIST_ITEM_RE = /^(\d+\.|[-*])\s+(.*)$/;
 
 const renderBoldSegments = (line: string): ReactNode[] =>
   line.split(BOLD_SEGMENT_RE).map((part, index) => {
@@ -247,7 +241,12 @@ const renderBoldSegments = (line: string): ReactNode[] =>
     );
   });
 
-const FormattedText = ({ text }: { text: string }) => {
+interface FormattedTextProps {
+  text: string;
+  showCaret: boolean;
+}
+
+const FormattedText = ({ text, showCaret }: FormattedTextProps) => {
   let charOffset = 0;
   const lineEntries = text.split("\n").map((line) => {
     const offset = charOffset;
@@ -257,22 +256,48 @@ const FormattedText = ({ text }: { text: string }) => {
 
   return (
     <div className="flex flex-col gap-0.5">
-      {lineEntries.map(({ line, offset }) => {
+      {lineEntries.map(({ line, offset }, index) => {
+        const isLast = index === lineEntries.length - 1;
         if (!line.trim()) {
-          return <div key={`l-${offset}`} className="h-1" />;
+          return <div className="h-1" key={`l-${offset}`} />;
+        }
+        const listMatch = LIST_ITEM_RE.exec(line);
+        if (listMatch) {
+          return (
+            <p
+              className="flex gap-2 text-xs leading-relaxed text-foreground/85"
+              key={`l-${offset}`}
+            >
+              <span className="shrink-0 tabular-nums text-muted-foreground">
+                {listMatch[1]}
+              </span>
+              <span className="min-w-0">
+                {renderBoldSegments(listMatch[2] ?? "")}
+                {showCaret && isLast && <StreamingCaret />}
+              </span>
+            </p>
+          );
         }
         return (
           <p
+            className="text-xs leading-relaxed text-foreground/85"
             key={`l-${offset}`}
-            className="text-[11px] leading-relaxed text-foreground/85"
           >
             {renderBoldSegments(line)}
+            {showCaret && isLast && <StreamingCaret />}
           </p>
         );
       })}
     </div>
   );
 };
+
+const StreamingCaret = () => (
+  <span
+    aria-hidden="true"
+    className="ml-0.5 inline-block h-3 w-px translate-y-0.5 animate-pulse bg-foreground/60 motion-reduce:animate-none"
+  />
+);
 
 interface SqlBlockProps {
   code: string;
@@ -294,7 +319,7 @@ const SqlBlock = ({ code, onInsert }: SqlBlockProps) => {
 
   return (
     <div className="rounded-md border border-border/60 bg-background/60">
-      <pre className="overflow-x-auto px-3 py-2 font-mono text-[10px] leading-relaxed text-foreground">
+      <pre className="overflow-x-auto px-3 py-2 font-mono text-[13px] leading-relaxed text-foreground">
         {code}
       </pre>
       <div

@@ -158,4 +158,49 @@ describe("explainAiNarrative", () => {
     expect(screen.getByText(/<script>alert\('xss'\)<\/script>/)).toBeDefined();
     expect(screen.getByText("bold").tagName).toBe("STRONG");
   });
+
+  it("shows an idle hint before the user clicks Analyze", () => {
+    setupMocks({ status: "idle" });
+    render(<ExplainAiNarrative result={makeResult()} sql="SELECT 1" />);
+    expect(
+      screen.getByText(/diagnose the plan and suggest fixes/i)
+    ).toBeDefined();
+  });
+
+  it("renders streaming output with role=status and aria-live=polite", () => {
+    setupMocks({ status: "streaming", text: "Diagnosis: hot path" });
+    render(<ExplainAiNarrative result={makeResult()} sql="SELECT 1" />);
+    const live = screen.getByRole("status");
+    expect(live.getAttribute("aria-live")).toBe("polite");
+    expect(live.textContent).toContain("hot path");
+  });
+
+  it("renders SqlBlock during streaming once the closing fence arrives", () => {
+    const text = "**Suggested index:**\n```sql\nCREATE INDEX foo;\n```";
+    setupMocks({ status: "streaming", text });
+    render(<ExplainAiNarrative result={makeResult()} sql="SELECT 1" />);
+    expect(
+      screen.getByRole("button", { name: /insert into editor/i })
+    ).toBeDefined();
+  });
+
+  it("renders error state with role=alert and AlertTriangle icon", () => {
+    setupMocks({ errorMessage: "Network error.", status: "error" });
+    const { container } = render(
+      <ExplainAiNarrative result={makeResult()} sql="SELECT 1" />
+    );
+    const alert = screen.getByRole("alert");
+    expect(alert.getAttribute("aria-live")).toBe("assertive");
+    expect(alert.textContent).toContain("Network error.");
+    expect(container.querySelector("svg")).toBeTruthy();
+  });
+
+  it("renders numbered list lines with the marker as a separate column", () => {
+    const text = "**Fixes:**\n1. Add an index on user_id\n2. Use partial scan";
+    setupMocks({ status: "done", text });
+    render(<ExplainAiNarrative result={makeResult()} sql="SELECT 1" />);
+    expect(screen.getByText("1.")).toBeDefined();
+    expect(screen.getByText("2.")).toBeDefined();
+    expect(screen.getByText(/Add an index on user_id/)).toBeDefined();
+  });
 });

@@ -340,9 +340,7 @@ const PlanInspector = ({ result, sql }: PlanInspectorProps) => {
       </ResizablePanel>
       <ResizableHandle />
       <ResizablePanel defaultSize="30%" minSize="15%">
-        <div className="h-full overflow-auto">
-          <ExplainAiNarrative result={result} sql={sql} />
-        </div>
+        <ExplainAiNarrative result={result} sql={sql} />
       </ResizablePanel>
     </ResizablePanelGroup>
   );
