@@ -12,6 +12,7 @@ describe("getDefaultModel", () => {
   it("returns provider-specific defaults", () => {
     expect(getDefaultModel("openai")).toMatch(/gpt/);
     expect(getDefaultModel("anthropic")).toMatch(/claude/);
+    expect(getDefaultModel("google")).toMatch(/gemini/);
     expect(getDefaultModel("openrouter")).toMatch(/claude/);
     expect(getDefaultModel("local")).toBe("llama3");
   });

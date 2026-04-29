@@ -36,6 +36,14 @@ describe("createAIModel", () => {
     expect(model).toBeTruthy();
   });
 
+  it("creates a Google Generative AI model when provider is google", () => {
+    const model = createAIModel({
+      apiKey: "g-test",
+      provider: "google",
+    });
+    expect(model).toBeTruthy();
+  });
+
   it("respects an explicit model override", () => {
     const model = createAIModel({
       apiKey: "sk-test",

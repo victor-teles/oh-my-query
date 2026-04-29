@@ -23,6 +23,22 @@ describe("ai settings draft normalization", () => {
     });
   });
 
+  it("trims google api key and fills the gemini default model", () => {
+    expect(
+      normalizeAISettingsDraft({
+        apiKey: "  g-key  ",
+        baseUrl: "",
+        model: "",
+        provider: "google",
+      })
+    ).toStrictEqual({
+      apiKey: "g-key",
+      baseUrl: undefined,
+      model: "gemini-2.5-flash",
+      provider: "google",
+    });
+  });
+
   it("fills a default local base URL and allows an empty API key", () => {
     expect(
       normalizeAISettingsDraft({
