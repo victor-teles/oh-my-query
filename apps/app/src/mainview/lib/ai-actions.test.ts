@@ -1,6 +1,33 @@
 import { describe, expect, it } from "vitest";
 
+import type { ExplainResult, PlanNode } from "@/lib/tauri";
+
 import { composeActionMessage } from "@/lib/ai-actions";
+
+const makePlanNode = (overrides: Partial<PlanNode> = {}): PlanNode => ({
+  children: [],
+  cost: { actualTotalMs: null, selfMs: null, startup: null, total: null },
+  details: [],
+  id: "root",
+  label: "Seq Scan on users",
+  nodeType: "Seq Scan",
+  rows: { actual: null, estimated: null },
+  timing: { actualTotalMs: null, loops: null, startupMs: null },
+  warnings: [],
+  ...overrides,
+});
+
+const makeExplainResult = (
+  overrides: Partial<ExplainResult> = {}
+): ExplainResult => ({
+  analyzeRan: false,
+  engine: "postgresql",
+  executionTimeMs: 42,
+  raw: "Seq Scan on users",
+  root: makePlanNode(),
+  supportsAnalyze: true,
+  ...overrides,
+});
 
 describe("composeActionMessage — explain", () => {
   it("returns null when sql is empty", () => {
@@ -61,6 +88,37 @@ describe("composeActionMessage — fix", () => {
     });
     expect(msg).toContain("Error: syntax error");
     expect(msg).not.toContain("```sql");
+  });
+});
+
+describe("composeActionMessage — improve-plan", () => {
+  it("returns null when plan is missing", () => {
+    expect(
+      composeActionMessage({ sql: "SELECT 1", type: "improve-plan" })
+    ).toBeNull();
+  });
+
+  it("returns null when sql is empty", () => {
+    expect(
+      composeActionMessage({
+        plan: makeExplainResult(),
+        sql: "  ",
+        type: "improve-plan",
+      })
+    ).toBeNull();
+  });
+
+  it("includes the plan summary, the SQL fence, and a task directive", () => {
+    const sql = "SELECT id FROM orders WHERE status = 'open'";
+    const msg = composeActionMessage({
+      plan: makeExplainResult(),
+      sql,
+      type: "improve-plan",
+    });
+    expect(msg).toContain("Engine: postgresql");
+    expect(msg).toContain(sql);
+    expect(msg).toContain("## Task");
+    expect(msg).toContain("Diagnose the bottleneck");
   });
 });
 

@@ -2,10 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import type { ExplainResult, PlanNode } from "@/lib/tauri";
 
-import {
-  buildExplainNarrativePrompt,
-  formatExplainContext,
-} from "./explain-ai-context";
+import { formatExplainContext } from "./explain-ai-context";
 
 const makeNode = (overrides: Partial<PlanNode> = {}): PlanNode => ({
   children: [],
@@ -99,30 +96,5 @@ describe("formatExplainContext", () => {
     });
     const ctx = formatExplainContext(makeResult({ root }), "SELECT 1");
     expect(ctx).toContain("10×");
-  });
-});
-
-describe("buildExplainNarrativePrompt", () => {
-  it("includes a Task section with the structure instructions", () => {
-    const prompt = buildExplainNarrativePrompt(makeResult(), "SELECT 1");
-    expect(prompt).toContain("## Task");
-    expect(prompt).toContain("Diagnosis:");
-    expect(prompt).toContain("Fixes:");
-  });
-
-  it("notes when ANALYZE was not run", () => {
-    const prompt = buildExplainNarrativePrompt(
-      makeResult({ analyzeRan: false }),
-      "SELECT 1"
-    );
-    expect(prompt).toContain("estimated costs");
-  });
-
-  it("notes when ANALYZE was run", () => {
-    const prompt = buildExplainNarrativePrompt(
-      makeResult({ analyzeRan: true }),
-      "SELECT 1"
-    );
-    expect(prompt).toContain("Actual timings are available");
   });
 });

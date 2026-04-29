@@ -1,8 +1,9 @@
-import { AlertTriangle, Flame, Loader2, Play, X } from "lucide-react";
+import { AlertTriangle, Flame, Loader2, Play, Wand2, X } from "lucide-react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { useCallback, useEffect, useMemo, useState } from "react";
 
 import type { QueryTab } from "@/lib/query-types";
+import type { ExplainResult } from "@/lib/tauri";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -16,7 +17,6 @@ import { useQueryTabsContext } from "@/contexts/query-tabs-context";
 import { ENGINE_SUPPORTS_ANALYZE, ENGINE_SUPPORTS_EXPLAIN } from "@/lib/tauri";
 import { cn } from "@/lib/utils";
 
-import { ExplainAiNarrative } from "./explain-ai-narrative";
 import {
   ExplainErrorState,
   ExplainIdleState,
@@ -55,9 +55,14 @@ const formatDurationMs = (ms: number): string => {
 interface ExplainPanelProps {
   tab: QueryTab | undefined;
   hasSelection: boolean;
+  onAiImprovePlan?: (plan: ExplainResult) => void;
 }
 
-export const ExplainPanel = ({ tab, hasSelection }: ExplainPanelProps) => {
+export const ExplainPanel = ({
+  tab,
+  hasSelection,
+  onAiImprovePlan,
+}: ExplainPanelProps) => {
   const { connection } = useConnection();
   const { cancelExplain, explainTab, setExplainAnalyze } =
     useQueryTabsContext();
@@ -89,6 +94,13 @@ export const ExplainPanel = ({ tab, hasSelection }: ExplainPanelProps) => {
     }
   }, [tab, setExplainAnalyze]);
 
+  const explainResult = tab?.explainResult;
+  const handleImprove = useCallback(() => {
+    if (explainResult) {
+      onAiImprovePlan?.(explainResult);
+    }
+  }, [explainResult, onAiImprovePlan]);
+
   if (!tab) {
     return null;
   }
@@ -99,11 +111,13 @@ export const ExplainPanel = ({ tab, hasSelection }: ExplainPanelProps) => {
         <ExplainHeader
           analyze={tab.explainAnalyze}
           analyzeSupported={supportsAnalyze}
+          canImproveWithAi={false}
           canRun={false}
           engine={engine}
           hasSelection={hasSelection}
           isRunning={false}
           onCancel={handleCancel}
+          onImprove={handleImprove}
           onRun={handleRun}
           onToggleAnalyze={handleToggleAnalyze}
           onViewChange={setViewMode}
@@ -119,17 +133,23 @@ export const ExplainPanel = ({ tab, hasSelection }: ExplainPanelProps) => {
 
   const canRun = tab.sql.trim().length > 0 && tab.explainStatus !== "running";
   const { explainError: error, explainResult: result } = tab;
+  const canImproveWithAi =
+    Boolean(result) &&
+    tab.explainStatus === "success" &&
+    Boolean(onAiImprovePlan);
 
   return (
     <div className="flex h-full flex-col">
       <ExplainHeader
         analyze={tab.explainAnalyze}
         analyzeSupported={supportsAnalyze}
+        canImproveWithAi={canImproveWithAi}
         canRun={canRun}
         engine={engine}
         hasSelection={hasSelection}
         isRunning={tab.explainStatus === "running"}
         onCancel={handleCancel}
+        onImprove={handleImprove}
         onRun={handleRun}
         onToggleAnalyze={handleToggleAnalyze}
         onViewChange={setViewMode}
@@ -152,7 +172,6 @@ export const ExplainPanel = ({ tab, hasSelection }: ExplainPanelProps) => {
             <ExplainBody
               error={error}
               result={result}
-              sql={tab.explainSql ?? tab.sql}
               status={tab.explainStatus}
               viewMode={viewMode}
             />
@@ -184,17 +203,10 @@ interface ExplainBodyProps {
   result: QueryTab["explainResult"];
   status: QueryTab["explainStatus"];
   error: string | null;
-  sql: string;
   viewMode: ViewMode;
 }
 
-const ExplainBody = ({
-  result,
-  status,
-  error,
-  sql,
-  viewMode,
-}: ExplainBodyProps) => {
+const ExplainBody = ({ result, status, error, viewMode }: ExplainBodyProps) => {
   if (status === "running") {
     return (
       <div className="flex h-full flex-col items-center justify-center gap-2 p-8 text-center">
@@ -213,17 +225,16 @@ const ExplainBody = ({
     if (viewMode === "raw") {
       return <PlanRawView raw={result.raw} />;
     }
-    return <PlanInspector result={result} sql={sql} />;
+    return <PlanInspector result={result} />;
   }
   return <ExplainIdleState />;
 };
 
 interface PlanInspectorProps {
   result: NonNullable<QueryTab["explainResult"]>;
-  sql: string;
 }
 
-const PlanInspector = ({ result, sql }: PlanInspectorProps) => {
+const PlanInspector = ({ result }: PlanInspectorProps) => {
   const analysis = useMemo(
     () => computePlanAnalysis(result.root),
     [result.root]
@@ -309,38 +320,30 @@ const PlanInspector = ({ result, sql }: PlanInspectorProps) => {
   const selectedNode = findNodeById(result.root, selectedNodeId) ?? result.root;
 
   return (
-    <ResizablePanelGroup className="h-full" orientation="vertical">
-      <ResizablePanel defaultSize="70%" minSize="40%">
-        <ResizablePanelGroup className="h-full" orientation="horizontal">
-          <ResizablePanel defaultSize="60%" minSize="35%">
-            <div
-              className="h-full overflow-auto outline-none"
-              onKeyDown={handleKeyDown}
-              // biome-ignore lint/a11y/noNoninteractiveTabindex: tree needs keyboard focus
-              tabIndex={0}
-            >
-              <PlanTree
-                expanded={expanded}
-                hotPath={analysis.hotPath}
-                maxCost={analysis.maxCost}
-                onSelect={setSelectedNodeId}
-                onToggleExpand={handleToggleExpand}
-                root={result.root}
-                selectedNodeId={selectedNodeId}
-              />
-            </div>
-          </ResizablePanel>
-          <ResizableHandle withHandle />
-          <ResizablePanel defaultSize="40%" minSize="25%">
-            <div className="h-full overflow-auto p-3">
-              <PlanNodeDetails node={selectedNode} />
-            </div>
-          </ResizablePanel>
-        </ResizablePanelGroup>
+    <ResizablePanelGroup className="h-full" orientation="horizontal">
+      <ResizablePanel defaultSize="60%" minSize="35%">
+        <div
+          className="h-full overflow-auto outline-none"
+          onKeyDown={handleKeyDown}
+          // biome-ignore lint/a11y/noNoninteractiveTabindex: tree needs keyboard focus
+          tabIndex={0}
+        >
+          <PlanTree
+            expanded={expanded}
+            hotPath={analysis.hotPath}
+            maxCost={analysis.maxCost}
+            onSelect={setSelectedNodeId}
+            onToggleExpand={handleToggleExpand}
+            root={result.root}
+            selectedNodeId={selectedNodeId}
+          />
+        </div>
       </ResizablePanel>
-      <ResizableHandle />
-      <ResizablePanel defaultSize="30%" minSize="15%">
-        <ExplainAiNarrative result={result} sql={sql} />
+      <ResizableHandle withHandle />
+      <ResizablePanel defaultSize="40%" minSize="25%">
+        <div className="h-full overflow-auto p-3">
+          <PlanNodeDetails node={selectedNode} />
+        </div>
       </ResizablePanel>
     </ResizablePanelGroup>
   );
@@ -349,11 +352,13 @@ const PlanInspector = ({ result, sql }: PlanInspectorProps) => {
 interface ExplainHeaderProps {
   analyze: boolean;
   analyzeSupported: boolean;
+  canImproveWithAi: boolean;
   canRun: boolean;
   engine: string;
   hasSelection: boolean;
   isRunning: boolean;
   onCancel: () => void;
+  onImprove: () => void;
   onRun: () => void;
   onToggleAnalyze: () => void;
   onViewChange: (mode: ViewMode) => void;
@@ -361,14 +366,16 @@ interface ExplainHeaderProps {
   viewMode: ViewMode;
 }
 
-const ExplainHeader = ({
+export const ExplainHeader = ({
   analyze,
   analyzeSupported,
+  canImproveWithAi,
   canRun,
   engine,
   hasSelection,
   isRunning,
   onCancel,
+  onImprove,
   onRun,
   onToggleAnalyze,
   onViewChange,
@@ -437,6 +444,18 @@ const ExplainHeader = ({
     )}
 
     <div className="ml-auto flex items-center gap-1">
+      {canImproveWithAi && (
+        <Button
+          aria-label="Improve query with AI"
+          className="h-7 gap-1 px-2 text-xs"
+          onClick={onImprove}
+          size="sm"
+          variant="ghost"
+        >
+          <Wand2 aria-hidden="true" className="size-3" />
+          Improve with AI
+        </Button>
+      )}
       {showViewToggle && (
         <ViewToggle onViewChange={onViewChange} viewMode={viewMode} />
       )}

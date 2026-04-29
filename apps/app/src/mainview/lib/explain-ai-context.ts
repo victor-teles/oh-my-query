@@ -110,36 +110,3 @@ export const formatExplainContext = (
 
   return lines.join("\n");
 };
-
-export const buildExplainNarrativePrompt = (
-  result: ExplainResult,
-  sql: string
-): string => {
-  const context = formatExplainContext(result, sql);
-  const analyzeNote = result.analyzeRan
-    ? "Actual timings are available."
-    : "Only estimated costs are available — actual row counts are unknown.";
-
-  return `${context}
-
-## Task
-${analyzeNote} Analyze this plan and reply in exactly this structure:
-
-**Diagnosis:** [one sentence — what is the primary bottleneck and why]
-
-**Fixes:**
-1. [specific, actionable fix using the real table/column names visible in the plan]
-2. [second fix, if applicable]
-3. [third fix, if applicable — omit if not needed]
-
-**Suggested index:** (include only when a sequential scan is present and an index would help)
-\`\`\`sql
-CREATE INDEX ... ON ... (...);
-\`\`\`
-
-Rules:
-- Reference real cost numbers from the plan above. Never invent statistics.
-- Do not guess table or column names not present in the plan.
-- If no index is warranted, omit the "Suggested index" section entirely.
-- Keep the response concise — this is a developer tool, not a blog post.`;
-};
