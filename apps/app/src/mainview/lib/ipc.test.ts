@@ -83,3 +83,62 @@ describe("rendererReady handshake", () => {
     consoleError.mockRestore();
   });
 });
+
+describe("browser-mode IPC stub", () => {
+  const ELECTROBUN_KEY = "__electrobunWebviewId";
+
+  const enterBrowserMode = () => {
+    vi.resetModules();
+    const w = window as unknown as Record<string, unknown>;
+    const previous = w[ELECTROBUN_KEY];
+    Reflect.deleteProperty(w, ELECTROBUN_KEY);
+    localStorage.clear();
+    return {
+      restore: () => {
+        if (previous !== undefined) {
+          w[ELECTROBUN_KEY] = previous;
+        }
+      },
+    };
+  };
+
+  it("strips password before persisting connections to localStorage", async () => {
+    const { restore } = await enterBrowserMode();
+    const ipc = await import("@/lib/ipc");
+
+    await ipc.saveConnections([
+      {
+        createdAt: new Date(0).toISOString(),
+        database: "appdb",
+        host: "db.internal",
+        id: "conn-1",
+        lastConnectedAt: null,
+        name: "Prod",
+        password: "super-secret",
+        pinned: false,
+        port: 5432,
+        type: "postgresql",
+        username: "admin",
+      },
+    ] as never);
+
+    const stored = localStorage.getItem("oh-my-query-connections");
+    expect(stored).not.toBeNull();
+    expect(stored).not.toContain("super-secret");
+    const parsed = JSON.parse(String(stored)) as { password: string }[];
+    expect(parsed[0]?.password).toBe("");
+
+    restore();
+  });
+
+  it("treats saveConfig as a no-op instead of throwing", async () => {
+    const { restore } = await enterBrowserMode();
+    const ipc = await import("@/lib/ipc");
+
+    await expect(
+      ipc.saveConfig({ ai: null } as never)
+    ).resolves.toBeUndefined();
+
+    restore();
+  });
+});

@@ -3,6 +3,7 @@ import type { AIProvider, AISettings } from "@/lib/ai-settings";
 const DEFAULT_LOCAL_BASE_URL = "http://localhost:11434/v1";
 const DEFAULT_MODELS: Record<AIProvider, string> = {
   anthropic: "claude-sonnet-4-20250514",
+  google: "gemini-2.5-flash",
   local: "llama3",
   openai: "gpt-4.1",
   openrouter: "anthropic/claude-sonnet-4",

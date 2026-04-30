@@ -1,6 +1,9 @@
+import type { ExplainResult } from "@/lib/tauri";
+
+import { formatExplainContext } from "@/lib/explain-ai-context";
 import { classifyError } from "@/lib/query-error";
 
-export type AIActionType = "generate" | "explain" | "fix";
+export type AIActionType = "generate" | "explain" | "fix" | "improve-plan";
 
 export interface AIAction {
   type: AIActionType;
@@ -8,7 +11,18 @@ export interface AIAction {
   error?: string;
   errorCode?: string | null;
   isSelection?: boolean;
+  plan?: ExplainResult;
 }
+
+const composeImprovePlanMessage = (action: AIAction): string | null => {
+  if (!(action.plan && action.sql?.trim())) {
+    return null;
+  }
+  return `${formatExplainContext(action.plan, action.sql)}
+
+## Task
+Diagnose the bottleneck and propose specific fixes. Use real table and column names from the plan above.`;
+};
 
 export const composeActionMessage = (action: AIAction): string | null => {
   switch (action.type) {
@@ -20,6 +34,9 @@ export const composeActionMessage = (action: AIAction): string | null => {
         ? "the highlighted selection"
         : "this SQL query";
       return `Explain ${scope}, step by step. Call out any tables, joins, or filters that might be non-obvious.\n\n\`\`\`sql\n${action.sql.trim()}\n\`\`\``;
+    }
+    case "improve-plan": {
+      return composeImprovePlanMessage(action);
     }
     case "fix": {
       if (!action.sql?.trim() && !action.error?.trim()) {

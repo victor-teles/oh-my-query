@@ -4,7 +4,12 @@ import {
 } from "@/lib/ai-settings-form";
 import { getConfig, saveConfig } from "@/lib/ipc";
 
-export type AIProvider = "openai" | "anthropic" | "openrouter" | "local";
+export type AIProvider =
+  | "openai"
+  | "anthropic"
+  | "google"
+  | "openrouter"
+  | "local";
 
 export interface AISettings {
   provider: AIProvider;
@@ -19,6 +24,7 @@ export interface AppConfig {
 
 const DEFAULT_MODELS: Record<AIProvider, string> = {
   anthropic: "claude-sonnet-4-20250514",
+  google: "gemini-2.5-flash",
   local: "llama3",
   openai: "gpt-4.1",
   openrouter: "anthropic/claude-sonnet-4",

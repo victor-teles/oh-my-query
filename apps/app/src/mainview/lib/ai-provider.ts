@@ -1,6 +1,7 @@
 import type { LanguageModel } from "ai";
 
 import { createAnthropic } from "@ai-sdk/anthropic";
+import { createGoogleGenerativeAI } from "@ai-sdk/google";
 import { createOpenAI } from "@ai-sdk/openai";
 
 import type { AISettings } from "@/lib/ai-settings";
@@ -31,6 +32,12 @@ export const createAIModel = (settings: AISettings): LanguageModel => {
         apiKey: settings.apiKey,
       });
       return anthropic(model);
+    }
+    case "google": {
+      const google = createGoogleGenerativeAI({
+        apiKey: settings.apiKey,
+      });
+      return google(model);
     }
     default: {
       throw new Error(`Unsupported AI provider: ${settings.provider}`);

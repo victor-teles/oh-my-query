@@ -415,7 +415,9 @@ async function fetchIndexes(
     [schema, table]
   );
   return r.rows.map((row) => ({
-    columns: row.columns ?? [],
+    columns: Array.isArray(row.columns)
+      ? row.columns.filter((c): c is string => typeof c === "string")
+      : [],
     isUnique: Boolean(row.is_unique),
     name: row.index_name,
   }));

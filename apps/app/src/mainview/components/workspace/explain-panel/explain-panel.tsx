@@ -1,8 +1,9 @@
-import { AlertTriangle, Flame, Loader2, Play, X } from "lucide-react";
+import { AlertTriangle, Flame, Loader2, Play, Wand2, X } from "lucide-react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { useCallback, useEffect, useMemo, useState } from "react";
 
 import type { QueryTab } from "@/lib/query-types";
+import type { ExplainResult } from "@/lib/tauri";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -54,9 +55,14 @@ const formatDurationMs = (ms: number): string => {
 interface ExplainPanelProps {
   tab: QueryTab | undefined;
   hasSelection: boolean;
+  onAiImprovePlan?: (plan: ExplainResult) => void;
 }
 
-export const ExplainPanel = ({ tab, hasSelection }: ExplainPanelProps) => {
+export const ExplainPanel = ({
+  tab,
+  hasSelection,
+  onAiImprovePlan,
+}: ExplainPanelProps) => {
   const { connection } = useConnection();
   const { cancelExplain, explainTab, setExplainAnalyze } =
     useQueryTabsContext();
@@ -88,6 +94,13 @@ export const ExplainPanel = ({ tab, hasSelection }: ExplainPanelProps) => {
     }
   }, [tab, setExplainAnalyze]);
 
+  const explainResult = tab?.explainResult;
+  const handleImprove = useCallback(() => {
+    if (explainResult) {
+      onAiImprovePlan?.(explainResult);
+    }
+  }, [explainResult, onAiImprovePlan]);
+
   if (!tab) {
     return null;
   }
@@ -98,11 +111,13 @@ export const ExplainPanel = ({ tab, hasSelection }: ExplainPanelProps) => {
         <ExplainHeader
           analyze={tab.explainAnalyze}
           analyzeSupported={supportsAnalyze}
+          canImproveWithAi={false}
           canRun={false}
           engine={engine}
           hasSelection={hasSelection}
           isRunning={false}
           onCancel={handleCancel}
+          onImprove={handleImprove}
           onRun={handleRun}
           onToggleAnalyze={handleToggleAnalyze}
           onViewChange={setViewMode}
@@ -118,17 +133,23 @@ export const ExplainPanel = ({ tab, hasSelection }: ExplainPanelProps) => {
 
   const canRun = tab.sql.trim().length > 0 && tab.explainStatus !== "running";
   const { explainError: error, explainResult: result } = tab;
+  const canImproveWithAi =
+    Boolean(result) &&
+    tab.explainStatus === "success" &&
+    Boolean(onAiImprovePlan);
 
   return (
     <div className="flex h-full flex-col">
       <ExplainHeader
         analyze={tab.explainAnalyze}
         analyzeSupported={supportsAnalyze}
+        canImproveWithAi={canImproveWithAi}
         canRun={canRun}
         engine={engine}
         hasSelection={hasSelection}
         isRunning={tab.explainStatus === "running"}
         onCancel={handleCancel}
+        onImprove={handleImprove}
         onRun={handleRun}
         onToggleAnalyze={handleToggleAnalyze}
         onViewChange={setViewMode}
@@ -331,11 +352,13 @@ const PlanInspector = ({ result }: PlanInspectorProps) => {
 interface ExplainHeaderProps {
   analyze: boolean;
   analyzeSupported: boolean;
+  canImproveWithAi: boolean;
   canRun: boolean;
   engine: string;
   hasSelection: boolean;
   isRunning: boolean;
   onCancel: () => void;
+  onImprove: () => void;
   onRun: () => void;
   onToggleAnalyze: () => void;
   onViewChange: (mode: ViewMode) => void;
@@ -343,14 +366,16 @@ interface ExplainHeaderProps {
   viewMode: ViewMode;
 }
 
-const ExplainHeader = ({
+export const ExplainHeader = ({
   analyze,
   analyzeSupported,
+  canImproveWithAi,
   canRun,
   engine,
   hasSelection,
   isRunning,
   onCancel,
+  onImprove,
   onRun,
   onToggleAnalyze,
   onViewChange,
@@ -419,6 +444,18 @@ const ExplainHeader = ({
     )}
 
     <div className="ml-auto flex items-center gap-1">
+      {canImproveWithAi && (
+        <Button
+          aria-label="Improve query with AI"
+          className="h-7 gap-1 px-2 text-xs"
+          onClick={onImprove}
+          size="sm"
+          variant="ghost"
+        >
+          <Wand2 aria-hidden="true" className="size-3" />
+          Improve with AI
+        </Button>
+      )}
       {showViewToggle && (
         <ViewToggle onViewChange={onViewChange} viewMode={viewMode} />
       )}

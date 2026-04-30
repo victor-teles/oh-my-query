@@ -61,6 +61,13 @@ const PROVIDERS: ProviderInfo[] = [
     value: "anthropic",
   },
   {
+    description: "Gemini models from Google AI Studio",
+    keyUrl: "https://aistudio.google.com/apikey",
+    keyUrlLabel: "aistudio.google.com",
+    label: "Google Gemini",
+    value: "google",
+  },
+  {
     description: "Access multiple providers through one API",
     keyUrl: "https://openrouter.ai/keys",
     keyUrlLabel: "openrouter.ai",
