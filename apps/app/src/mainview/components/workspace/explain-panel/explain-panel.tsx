@@ -3,7 +3,6 @@ import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { useCallback, useEffect, useMemo, useState } from "react";
 
 import type { QueryTab } from "@/lib/query-types";
-import type { ExplainResult } from "@/lib/tauri";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -22,6 +21,7 @@ import {
   ExplainIdleState,
   ExplainUnsupportedState,
 } from "./explain-empty-states";
+import { PlanNarrativePanel } from "./plan-narrative-panel";
 import { PlanNodeDetails } from "./plan-node-details";
 import { PlanRawView } from "./plan-raw-view";
 import { PlanTree } from "./plan-tree";
@@ -32,8 +32,10 @@ import {
   flattenVisibleNodes,
   usePlanAnalysis,
 } from "./use-plan-analysis";
+import { usePlanNarrative } from "./use-plan-narrative";
 
 type ViewMode = "tree" | "raw";
+type RightPanelView = "node" | "ai";
 
 const SPRING_TRANSITION = {
   damping: 30,
@@ -55,14 +57,9 @@ const formatDurationMs = (ms: number): string => {
 interface ExplainPanelProps {
   tab: QueryTab | undefined;
   hasSelection: boolean;
-  onAiImprovePlan?: (plan: ExplainResult) => void;
 }
 
-export const ExplainPanel = ({
-  tab,
-  hasSelection,
-  onAiImprovePlan,
-}: ExplainPanelProps) => {
+export const ExplainPanel = ({ tab, hasSelection }: ExplainPanelProps) => {
   const { connection } = useConnection();
   const { cancelExplain, explainTab, setExplainAnalyze } =
     useQueryTabsContext();
@@ -70,6 +67,7 @@ export const ExplainPanel = ({
   const [viewMode, setViewMode] = useState<ViewMode>("tree");
   const reducedMotion = useReducedMotion();
   const spring = reducedMotion ? REDUCED_MOTION_TRANSITION : SPRING_TRANSITION;
+  const narrative = usePlanNarrative();
 
   const engine = connection.type;
   const isEngineSupported = ENGINE_SUPPORTS_EXPLAIN[engine] ?? false;
@@ -97,9 +95,17 @@ export const ExplainPanel = ({
   const explainResult = tab?.explainResult;
   const handleImprove = useCallback(() => {
     if (explainResult) {
-      onAiImprovePlan?.(explainResult);
+      const sql = tab?.explainSql ?? tab?.sql ?? "";
+      narrative.run(explainResult, sql);
     }
-  }, [explainResult, onAiImprovePlan]);
+  }, [explainResult, tab, narrative]);
+
+  // Reset narrative when the explain result changes (new plan run)
+  const explainResultId = tab?.explainResult?.root.id;
+  useEffect(() => {
+    narrative.reset();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [explainResultId]);
 
   if (!tab) {
     return null;
@@ -133,10 +139,7 @@ export const ExplainPanel = ({
 
   const canRun = tab.sql.trim().length > 0 && tab.explainStatus !== "running";
   const { explainError: error, explainResult: result } = tab;
-  const canImproveWithAi =
-    Boolean(result) &&
-    tab.explainStatus === "success" &&
-    Boolean(onAiImprovePlan);
+  const canImproveWithAi = Boolean(result) && tab.explainStatus === "success";
 
   return (
     <div className="flex h-full flex-col">
@@ -171,7 +174,9 @@ export const ExplainPanel = ({
           >
             <ExplainBody
               error={error}
+              narrative={narrative}
               result={result}
+              sql={tab.explainSql ?? tab.sql}
               status={tab.explainStatus}
               viewMode={viewMode}
             />
@@ -204,9 +209,18 @@ interface ExplainBodyProps {
   status: QueryTab["explainStatus"];
   error: string | null;
   viewMode: ViewMode;
+  narrative: ReturnType<typeof usePlanNarrative>;
+  sql: string;
 }
 
-const ExplainBody = ({ result, status, error, viewMode }: ExplainBodyProps) => {
+const ExplainBody = ({
+  result,
+  status,
+  error,
+  viewMode,
+  narrative,
+  sql,
+}: ExplainBodyProps) => {
   if (status === "running") {
     return (
       <div className="flex h-full flex-col items-center justify-center gap-2 p-8 text-center">
@@ -225,16 +239,18 @@ const ExplainBody = ({ result, status, error, viewMode }: ExplainBodyProps) => {
     if (viewMode === "raw") {
       return <PlanRawView raw={result.raw} />;
     }
-    return <PlanInspector result={result} />;
+    return <PlanInspector narrative={narrative} result={result} sql={sql} />;
   }
   return <ExplainIdleState />;
 };
 
 interface PlanInspectorProps {
   result: NonNullable<QueryTab["explainResult"]>;
+  narrative: ReturnType<typeof usePlanNarrative>;
+  sql: string;
 }
 
-const PlanInspector = ({ result }: PlanInspectorProps) => {
+const PlanInspector = ({ result, narrative, sql }: PlanInspectorProps) => {
   const analysis = useMemo(
     () => computePlanAnalysis(result.root),
     [result.root]
@@ -243,11 +259,19 @@ const PlanInspector = ({ result }: PlanInspectorProps) => {
   const [expanded, setExpanded] = useState<Set<string>>(() =>
     defaultExpandedNodes(result.root, analysis.hotPath)
   );
+  const [rightView, setRightView] = useState<RightPanelView>("node");
 
   useEffect(() => {
     setSelectedNodeId(result.root.id);
     setExpanded(defaultExpandedNodes(result.root, analysis.hotPath));
   }, [result.root, analysis.hotPath]);
+
+  // Auto-switch to AI view when narrative activates
+  useEffect(() => {
+    if (narrative.status !== "idle") {
+      setRightView("ai");
+    }
+  }, [narrative.status]);
 
   const handleToggleExpand = useCallback((id: string) => {
     setExpanded((prev) => {
@@ -319,6 +343,16 @@ const PlanInspector = ({ result }: PlanInspectorProps) => {
 
   const selectedNode = findNodeById(result.root, selectedNodeId) ?? result.root;
 
+  const handleRetry = useCallback(() => {
+    narrative.run(result, sql);
+  }, [narrative, result, sql]);
+
+  const handleCancel = useCallback(() => {
+    narrative.cancel();
+  }, [narrative]);
+
+  const showRightToggle = narrative.status !== "idle";
+
   return (
     <ResizablePanelGroup className="h-full" orientation="horizontal">
       <ResizablePanel defaultSize="60%" minSize="35%">
@@ -341,11 +375,79 @@ const PlanInspector = ({ result }: PlanInspectorProps) => {
       </ResizablePanel>
       <ResizableHandle withHandle />
       <ResizablePanel defaultSize="40%" minSize="25%">
-        <div className="h-full overflow-auto p-3">
-          <PlanNodeDetails node={selectedNode} />
+        <div className="flex h-full flex-col">
+          {showRightToggle && (
+            <RightPanelViewToggle
+              onViewChange={setRightView}
+              view={rightView}
+            />
+          )}
+          <div className="min-h-0 flex-1 overflow-auto">
+            {rightView === "ai" ? (
+              <PlanNarrativePanel
+                content={narrative.content}
+                errorMessage={narrative.errorMessage}
+                errorRetryable={narrative.errorRetryable}
+                onCancel={handleCancel}
+                onRetry={handleRetry}
+                status={
+                  narrative.status === "idle"
+                    ? "unconfigured"
+                    : narrative.status
+                }
+              />
+            ) : (
+              <div className="p-3">
+                <PlanNodeDetails node={selectedNode} />
+              </div>
+            )}
+          </div>
         </div>
       </ResizablePanel>
     </ResizablePanelGroup>
+  );
+};
+
+interface RightPanelViewToggleProps {
+  view: RightPanelView;
+  onViewChange: (v: RightPanelView) => void;
+}
+
+const RightPanelViewToggle = ({
+  view,
+  onViewChange,
+}: RightPanelViewToggleProps) => {
+  const selectNode = useCallback(() => onViewChange("node"), [onViewChange]);
+  const selectAi = useCallback(() => onViewChange("ai"), [onViewChange]);
+  return (
+    <div className="flex shrink-0 items-center gap-px border-b border-border/50 bg-muted/10 px-2 py-1">
+      <button
+        aria-pressed={view === "node"}
+        className={cn(
+          "rounded-sm px-2 py-0.5 text-[10px] transition-colors",
+          view === "node"
+            ? "bg-background text-foreground"
+            : "text-muted-foreground hover:text-foreground"
+        )}
+        onClick={selectNode}
+        type="button"
+      >
+        Node
+      </button>
+      <button
+        aria-pressed={view === "ai"}
+        className={cn(
+          "rounded-sm px-2 py-0.5 text-[10px] transition-colors",
+          view === "ai"
+            ? "bg-background text-foreground"
+            : "text-muted-foreground hover:text-foreground"
+        )}
+        onClick={selectAi}
+        type="button"
+      >
+        AI
+      </button>
+    </div>
   );
 };
 

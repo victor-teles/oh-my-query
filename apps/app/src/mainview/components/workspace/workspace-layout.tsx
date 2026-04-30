@@ -3,7 +3,6 @@ import { useCallback, useState } from "react";
 import { usePanelRef } from "react-resizable-panels";
 
 import type { AIAction, AIActionType } from "@/lib/ai-actions";
-import type { ExplainResult } from "@/lib/tauri";
 
 import { WorkspaceLayoutActions } from "@/components/command-palette/actions/workspace-actions";
 import { QueryHistoryPanel } from "@/components/history/query-history-panel";
@@ -91,14 +90,12 @@ export const WorkspaceLayout = () => {
         error?: string;
         errorCode?: string | null;
         isSelection?: boolean;
-        plan?: ExplainResult;
       }
     ) => {
       const aiAction: AIAction = {
         error: context?.error,
         errorCode: context?.errorCode ?? null,
         isSelection: context?.isSelection,
-        plan: context?.plan,
         sql: context?.sql,
         type: action,
       };

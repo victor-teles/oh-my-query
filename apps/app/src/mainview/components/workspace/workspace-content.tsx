@@ -7,7 +7,7 @@ import { useCallback, useEffect, useState } from "react";
 import type { AIActionType } from "@/lib/ai-actions";
 import type { DatabaseType } from "@/lib/connections";
 import type { QueryTab } from "@/lib/query-types";
-import type { ExecuteResult, ExplainResult, SchemaInfo } from "@/lib/tauri";
+import type { ExecuteResult, SchemaInfo } from "@/lib/tauri";
 
 import { WorkspaceQueryActions } from "@/components/command-palette/actions/workspace-actions";
 import { Kbd, KbdGroup } from "@/components/ui/kbd";
@@ -77,7 +77,6 @@ interface WorkspaceContentProps {
       error?: string;
       errorCode?: string | null;
       isSelection?: boolean;
-      plan?: ExplainResult;
     }
   ) => void;
   schema: SchemaInfo | null;
@@ -200,7 +199,6 @@ interface ConnectedWorkspaceProps {
       error?: string;
       errorCode?: string | null;
       isSelection?: boolean;
-      plan?: ExplainResult;
     }
   ) => void;
 }
@@ -377,14 +375,6 @@ const ConnectedWorkspace = ({
     onAiAction?.("fix", { error, errorCode, sql });
   }, [activeTab, onAiAction]);
 
-  const handleAiImprovePlan = useCallback(
-    (plan: ExplainResult) => {
-      const sql = activeTab?.explainSql ?? activeTab?.sql ?? "";
-      onAiAction?.("improve-plan", { plan, sql });
-    },
-    [activeTab, onAiAction]
-  );
-
   const handleExplain = useCallback(() => {
     if (!(activeTab && supportsExplain)) {
       return;
@@ -487,7 +477,6 @@ const ConnectedWorkspace = ({
             hasSelection={hasSelection}
             isSyntaxTreeOpen={syntaxTreeEnabled}
             onAiFix={onAiAction ? handleAiExplainError : undefined}
-            onAiImprovePlan={onAiAction ? handleAiImprovePlan : undefined}
             onExplainTabChange={setBottomTab}
             supportsExplain={supportsExplain}
             treeData={treeData}
@@ -865,7 +854,6 @@ interface BottomPanelProps extends ResultsPanelProps {
   onExplainTabChange: (value: string) => void;
   hasSelection: boolean;
   supportsExplain: boolean;
-  onAiImprovePlan?: (plan: ExplainResult) => void;
 }
 
 const BottomPanel = ({
@@ -876,7 +864,6 @@ const BottomPanel = ({
   onExplainTabChange,
   hasSelection,
   supportsExplain,
-  onAiImprovePlan,
   ...resultsPanelProps
 }: BottomPanelProps) => {
   const showExplainTab = supportsExplain;
@@ -902,11 +889,7 @@ const BottomPanel = ({
       </TabsContent>
       {showExplainTab && (
         <TabsContent value="explain" className="min-h-0 flex-1">
-          <ExplainPanel
-            hasSelection={hasSelection}
-            onAiImprovePlan={onAiImprovePlan}
-            tab={activeTab}
-          />
+          <ExplainPanel hasSelection={hasSelection} tab={activeTab} />
         </TabsContent>
       )}
       {isSyntaxTreeOpen && (
