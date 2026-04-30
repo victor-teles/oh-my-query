@@ -10,13 +10,8 @@ interface TitlebarProps {
   className?: string;
 }
 
-export const TRAFFIC_LIGHT_INSET = "78px";
+export const TRAFFIC_LIGHT_INSET = "0px";
 export const TITLEBAR_CONTROL_HEIGHT = "h-6";
-
-// Electrobun marks draggable window regions via two well-known class names
-// rather than the inline `-webkit-app-region` style — see
-// node_modules/electrobun/.../api/bun/preload/dragRegions.ts. Class selectors
-// are unambiguous, unlike `[style*="drag"]` which would also match `no-drag`.
 const DRAG = "electrobun-webkit-app-region-drag";
 const NO_DRAG = "electrobun-webkit-app-region-no-drag";
 

@@ -4,15 +4,11 @@ export const APPLICATION_MENU: ApplicationMenuItemConfig[] = [
   {
     label: "oh-my-query",
     submenu: [
-      { role: "about" },
-      { type: "separator" },
       { accelerator: "CmdOrCtrl+,", action: "settings", label: "Settings…" },
-      { type: "separator" },
-      { role: "services" },
       { type: "separator" },
       { role: "hide" },
       { role: "hideOthers" },
-      { role: "unhide" },
+      { role: "showAll" },
       { type: "separator" },
       { role: "quit" },
     ],
@@ -31,7 +27,7 @@ export const APPLICATION_MENU: ApplicationMenuItemConfig[] = [
   },
   {
     label: "View",
-    submenu: [{ role: "togglefullscreen" }],
+    submenu: [{ role: "toggleFullScreen" }],
   },
   {
     label: "Window",
