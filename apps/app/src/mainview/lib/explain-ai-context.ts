@@ -18,7 +18,14 @@ const getSelfCost = (node: PlanNode): number => {
   if (node.cost.selfMs !== null) {
     return node.cost.selfMs;
   }
-  return getEffectiveCost(node);
+  if (node.cost.total !== null) {
+    const childrenTotal = node.children.reduce(
+      (sum, c) => sum + (c.cost.total ?? 0),
+      0
+    );
+    return Math.max(0, node.cost.total - childrenTotal);
+  }
+  return 0;
 };
 
 const collectAll = (root: PlanNode): PlanNode[] => {

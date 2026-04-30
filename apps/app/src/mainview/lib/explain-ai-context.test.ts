@@ -88,6 +88,28 @@ describe("formatExplainContext", () => {
     expect(ctx).toContain("sequential scan on large table");
   });
 
+  it("ranks estimated-cost leaves above parents whose total includes them", () => {
+    const leaf = makeNode({
+      cost: { actualTotalMs: null, selfMs: null, startup: null, total: 900 },
+      id: "leaf",
+      label: "expensive_scan",
+      nodeType: "Seq Scan",
+    });
+    const root = makeNode({
+      children: [leaf],
+      cost: { actualTotalMs: null, selfMs: null, startup: null, total: 1000 },
+      id: "root",
+      label: "coordinator_join",
+      nodeType: "Hash Join",
+    });
+    const ctx = formatExplainContext(makeResult({ root }), "SELECT 1");
+    const leafIdx = ctx.indexOf("expensive_scan");
+    const rootIdx = ctx.indexOf("coordinator_join");
+    expect(leafIdx).toBeGreaterThan(-1);
+    expect(rootIdx).toBeGreaterThan(-1);
+    expect(leafIdx).toBeLessThan(rootIdx);
+  });
+
   it("notes row estimate mismatch when off by 10x", () => {
     const root = makeNode({
       cost: { actualTotalMs: 10, selfMs: 10, startup: null, total: null },
