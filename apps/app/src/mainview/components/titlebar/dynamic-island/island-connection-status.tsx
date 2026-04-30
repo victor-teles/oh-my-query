@@ -16,7 +16,14 @@ import {
 import { cn } from "@/lib/utils";
 
 import { IslandErrorMessage } from "./island-error-message";
-import { ISLAND_ITEM_TRANSITION, ISLAND_ITEM_VARIANTS } from "./island-motion";
+import {
+  CONNECT_DOT_TRANSITION,
+  ERROR_ICON_TRANSITION,
+  ERROR_ICON_VARIANTS,
+  ISLAND_ITEM_TRANSITION,
+  ISLAND_ITEM_VARIANTS,
+  RECONNECT_DOT_TRANSITION,
+} from "./island-motion";
 
 interface ConnectingStatusProps {
   connectionName: string;
@@ -42,18 +49,16 @@ export const ConnectingStatus = ({ connectionName }: ConnectingStatusProps) => {
             }
             className="size-1 rounded-full bg-muted-foreground"
             key={id}
-            transition={{
-              delay: i * 0.2,
-              duration: 1.2,
-              ease: "easeInOut",
-              repeat: Infinity,
-            }}
+            transition={CONNECT_DOT_TRANSITION(i)}
           />
         ))}
       </motion.div>
       <span className="sr-only">Connecting to </span>
       <motion.span
-        className="text-chrome max-w-60 truncate text-muted-foreground"
+        className={cn(
+          "text-chrome max-w-60 truncate text-muted-foreground",
+          shouldReduceMotion && "font-semibold"
+        )}
         transition={ISLAND_ITEM_TRANSITION}
         variants={ISLAND_ITEM_VARIANTS}
       >
@@ -83,17 +88,15 @@ export const ReconnectingStatus = ({
             }
             className="size-1 rounded-full bg-warning"
             key={id}
-            transition={{
-              delay: i * 0.15,
-              duration: 1,
-              ease: "easeInOut",
-              repeat: Infinity,
-            }}
+            transition={RECONNECT_DOT_TRANSITION(i)}
           />
         ))}
       </motion.div>
       <motion.span
-        className="text-chrome max-w-65 truncate text-warning"
+        className={cn(
+          "text-chrome max-w-65 truncate text-warning",
+          shouldReduceMotion && "font-semibold"
+        )}
         transition={ISLAND_ITEM_TRANSITION}
         variants={ISLAND_ITEM_VARIANTS}
       >
@@ -259,8 +262,8 @@ export const ConnectionErrorStatus = ({
   <>
     <motion.span
       aria-hidden="true"
-      transition={ISLAND_ITEM_TRANSITION}
-      variants={ISLAND_ITEM_VARIANTS}
+      transition={ERROR_ICON_TRANSITION}
+      variants={ERROR_ICON_VARIANTS}
     >
       <AlertCircle className="size-3 shrink-0 text-destructive" />
     </motion.span>

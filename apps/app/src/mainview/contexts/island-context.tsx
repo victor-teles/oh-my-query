@@ -26,6 +26,9 @@ export type IslandSnapshot =
       environment: ConnectionEnvironment | undefined;
     }
   | { kind: "query-running" }
+  | { kind: "query-streaming"; tokensReceived: number }
+  | { kind: "query-planning" }
+  | { kind: "query-cancelled" }
   | {
       kind: "query-success";
       rowCount: number;

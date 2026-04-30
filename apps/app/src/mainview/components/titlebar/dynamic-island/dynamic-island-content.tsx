@@ -1,9 +1,12 @@
-import type { Transition, Variants } from "motion/react";
-
 import { AnimatePresence, motion } from "motion/react";
 
 import type { IslandSnapshot } from "@/contexts/island-context";
 
+import {
+  QueryCancelledStatus,
+  QueryPlanningStatus,
+  QueryStreamingStatus,
+} from "./island-ai-status";
 import {
   AmbientStatus,
   ConnectedIdleStatus,
@@ -12,6 +15,7 @@ import {
   ReconnectingStatus,
   WelcomeStatus,
 } from "./island-connection-status";
+import { CONTAINER_VARIANTS, LAYOUT_TRANSITION } from "./island-motion";
 import {
   QueryErrorStatus,
   QueryRunningStatus,
@@ -21,22 +25,6 @@ import {
 interface DynamicIslandContentProps {
   snapshot: IslandSnapshot;
 }
-
-const CONTAINER_VARIANTS: Variants = {
-  hidden: {
-    transition: { staggerChildren: 0.02 },
-  },
-  visible: {
-    transition: { delayChildren: 0.02, staggerChildren: 0.04 },
-  },
-};
-
-const LAYOUT_TRANSITION: Transition = {
-  damping: 38,
-  mass: 0.7,
-  stiffness: 450,
-  type: "spring",
-};
 
 export const DynamicIslandContent = ({
   snapshot,
@@ -84,6 +72,11 @@ export const DynamicIslandContent = ({
           />
         )}
         {snapshot.kind === "query-running" && <QueryRunningStatus />}
+        {snapshot.kind === "query-streaming" && (
+          <QueryStreamingStatus tokensReceived={snapshot.tokensReceived} />
+        )}
+        {snapshot.kind === "query-planning" && <QueryPlanningStatus />}
+        {snapshot.kind === "query-cancelled" && <QueryCancelledStatus />}
         {snapshot.kind === "query-success" && (
           <QuerySuccessStatus
             executionTimeMs={snapshot.executionTimeMs}

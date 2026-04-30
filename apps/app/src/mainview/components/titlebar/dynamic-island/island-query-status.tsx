@@ -1,43 +1,45 @@
-import type { Variants } from "motion/react";
-
 import { AlertTriangle, Check, Loader2 } from "lucide-react";
-import { motion } from "motion/react";
+import { motion, useReducedMotion } from "motion/react";
+
+import { cn } from "@/lib/utils";
 
 import { IslandErrorMessage } from "./island-error-message";
-import { ISLAND_ITEM_TRANSITION, ISLAND_ITEM_VARIANTS } from "./island-motion";
+import {
+  CHECK_TRANSITION,
+  CHECK_VARIANTS,
+  ERROR_ICON_TRANSITION,
+  ERROR_ICON_VARIANTS,
+  ISLAND_ITEM_TRANSITION,
+  ISLAND_ITEM_VARIANTS,
+} from "./island-motion";
 
-const CHECK_VARIANTS: Variants = {
-  hidden: { filter: "blur(4px)", opacity: 0, scale: 0.4 },
-  visible: { filter: "blur(0px)", opacity: 1, scale: 1 },
+export const QueryRunningStatus = () => {
+  const shouldReduceMotion = useReducedMotion();
+
+  return (
+    <>
+      <motion.span
+        aria-hidden="true"
+        transition={ISLAND_ITEM_TRANSITION}
+        variants={ISLAND_ITEM_VARIANTS}
+      >
+        <Loader2 className="size-3 shrink-0 animate-spin text-muted-foreground motion-reduce:animate-none" />
+      </motion.span>
+      <span className="sr-only">Executing query</span>
+      <motion.span
+        aria-hidden="true"
+        className={cn(
+          "text-chrome text-muted-foreground",
+          shouldReduceMotion && "font-semibold"
+        )}
+        transition={ISLAND_ITEM_TRANSITION}
+        variants={ISLAND_ITEM_VARIANTS}
+      >
+        Executing…
+      </motion.span>
+    </>
+  );
 };
-
-const CHECK_TRANSITION = {
-  damping: 18,
-  mass: 0.5,
-  stiffness: 520,
-  type: "spring",
-} as const;
-
-export const QueryRunningStatus = () => (
-  <>
-    <motion.span
-      aria-hidden="true"
-      transition={ISLAND_ITEM_TRANSITION}
-      variants={ISLAND_ITEM_VARIANTS}
-    >
-      <Loader2 className="size-3 shrink-0 animate-spin text-muted-foreground motion-reduce:animate-none" />
-    </motion.span>
-    <span className="sr-only">Executing query</span>
-    <motion.span
-      aria-hidden="true"
-      className="text-chrome text-muted-foreground"
-      transition={ISLAND_ITEM_TRANSITION}
-      variants={ISLAND_ITEM_VARIANTS}
-    >
-      Executing…
-    </motion.span>
-  </>
-);
 
 interface QuerySuccessStatusProps {
   rowCount: number;
@@ -98,8 +100,8 @@ export const QueryErrorStatus = ({ error }: QueryErrorStatusProps) => (
   <>
     <motion.span
       aria-hidden="true"
-      transition={ISLAND_ITEM_TRANSITION}
-      variants={ISLAND_ITEM_VARIANTS}
+      transition={ERROR_ICON_TRANSITION}
+      variants={ERROR_ICON_VARIANTS}
     >
       <AlertTriangle className="size-3 shrink-0 text-destructive" />
     </motion.span>
