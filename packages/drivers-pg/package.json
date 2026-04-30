@@ -6,6 +6,10 @@
   "exports": {
     ".": "./src/index.ts"
   },
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
   "dependencies": {
     "@oh-my-query/core": "workspace:*",
     "pg": "^8.13.1"
@@ -13,6 +17,7 @@
   "devDependencies": {
     "@oh-my-query/config": "workspace:*",
     "@types/pg": "^8.11.10",
-    "@typescript/native-preview": "catalog:"
+    "@typescript/native-preview": "catalog:",
+    "vitest": "^3.2.4"
   }
 }

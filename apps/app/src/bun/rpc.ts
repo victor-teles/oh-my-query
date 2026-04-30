@@ -1,3 +1,4 @@
+import type { SchemaInfo } from "@oh-my-query/core";
 import type { RpcSchema } from "@oh-my-query/rpc";
 import type { BrowserWindow } from "electrobun/bun";
 
@@ -37,9 +38,21 @@ import {
 
 const DEFAULT_MAX_ROWS = 10_000;
 const DEFAULT_TIMEOUT_SECS = 30;
+const SCHEMA_CACHE_TTL_MS = 60_000;
 
 const pools = new ConnectionPoolManager();
 const cancellation = new CancellationRegistry();
+const schemaCache = new Map<string, { value: SchemaInfo; expiresAt: number }>();
+const schemaCacheKey = (connectionId: string, db: string): string =>
+  `${connectionId}::${db}`;
+const invalidateSchemaCacheFor = (connectionId: string): void => {
+  const prefix = `${connectionId}::`;
+  for (const key of schemaCache.keys()) {
+    if (key.startsWith(prefix)) {
+      schemaCache.delete(key);
+    }
+  }
+};
 
 interface AppRpcSchema {
   bun: RpcSchema;
@@ -133,6 +146,7 @@ export function createRpc(options: CreateRpcOptions = noWindow) {
           doDeleteRedisKey(requireRedis(connectionId), dbIndex, name),
 
         disconnectFromDatabase: async ({ connectionId }) => {
+          invalidateSchemaCacheFor(connectionId);
           await pools.disconnect(connectionId);
         },
 
@@ -221,8 +235,23 @@ export function createRpc(options: CreateRpcOptions = noWindow) {
         getHistory: ({ connectionId, limit, offset }) =>
           getHistory(connectionId, limit ?? null, offset ?? null),
 
-        getSchema: ({ connectionId, databaseName }) =>
-          pools.getPool(connectionId).fetchSchema(databaseName),
+        getSchema: async ({ connectionId, databaseName, force }) => {
+          const key = schemaCacheKey(connectionId, databaseName);
+          if (!force) {
+            const hit = schemaCache.get(key);
+            if (hit && hit.expiresAt > Date.now()) {
+              return hit.value;
+            }
+          }
+          const value = await pools
+            .getPool(connectionId)
+            .fetchSchema(databaseName);
+          schemaCache.set(key, {
+            expiresAt: Date.now() + SCHEMA_CACHE_TTL_MS,
+            value,
+          });
+          return value;
+        },
         getServerVersion: ({ connectionId }) =>
           pools.getPool(connectionId).fetchVersion(),
         getTabs: ({ connectionId }) => getTabs(connectionId),
