@@ -345,9 +345,16 @@ export const listDatabases = (connectionId: string): Promise<string[]> =>
 
 export const getSchema = (
   connectionId: string,
-  databaseName: string
+  databaseName: string,
+  options?: { force?: boolean }
 ): Promise<SchemaInfo> =>
-  callRpc(() => request.getSchema({ connectionId, databaseName }));
+  callRpc(() =>
+    request.getSchema({
+      connectionId,
+      databaseName,
+      force: options?.force ?? false,
+    })
+  );
 
 export const executeQuery = (params: QueryParams): Promise<ExecuteResult> =>
   callRpc(() => request.executeQuery({ params }));

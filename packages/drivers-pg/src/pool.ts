@@ -77,9 +77,23 @@ export class PostgresPool implements Pool {
 
   async fetchSchema(schemaName: string): Promise<SchemaInfo> {
     validateSchemaName(schemaName);
-    const tables = await fetchTables(this.#pool, schemaName);
-    const views = await fetchViews(this.#pool, schemaName);
-    return { schemas: [{ name: schemaName, tables, views }] };
+    try {
+      const [relations, columns, indexes, foreignKeys] = await Promise.all([
+        fetchRelations(this.#pool, schemaName),
+        fetchAllColumns(this.#pool, schemaName),
+        fetchAllIndexes(this.#pool, schemaName),
+        fetchAllForeignKeys(this.#pool, schemaName),
+      ]);
+      const { tables, views } = buildSchemaItem(
+        relations,
+        columns,
+        indexes,
+        foreignKeys
+      );
+      return { schemas: [{ name: schemaName, tables, views }] };
+    } catch (error) {
+      throw mapPgError(error);
+    }
   }
 
   async execute(
@@ -292,184 +306,245 @@ function mapExplainError(err: unknown, analyze: boolean): DbError {
   return mapPgError(err);
 }
 
-async function fetchTables(pool: PgPoolType, schema: string) {
-  const tableRows = await pool.query<{ table_name: string }>(
-    `SELECT table_name FROM information_schema.tables
-     WHERE table_schema = $1 AND table_type = 'BASE TABLE'
-     ORDER BY table_name`,
-    [schema]
-  );
-  const estimates = await fetchRowEstimates(pool, schema);
-  const result = [];
-  for (const row of tableRows.rows) {
-    const tableName = row.table_name;
-    const [columns, indexes, foreignKeys] = await Promise.all([
-      fetchColumns(pool, schema, tableName),
-      fetchIndexes(pool, schema, tableName),
-      fetchForeignKeys(pool, schema, tableName),
-    ]);
-    result.push({
-      columns,
-      foreignKeys,
-      indexes,
-      name: tableName,
-      rowEstimate: estimates.get(tableName) ?? null,
-    });
-  }
-  return result;
+interface RelationRow {
+  name: string;
+  kind: "r" | "p" | "v";
+  row_estimate: string | null;
 }
 
-async function fetchRowEstimates(
+interface ColumnRow {
+  table_name: string;
+  column_name: string;
+  data_type: string;
+  is_nullable: string;
+  column_default: string | null;
+  is_pk: boolean;
+}
+
+interface IndexRow {
+  table_name: string;
+  index_name: string;
+  is_unique: boolean;
+  columns: (string | null)[] | null;
+}
+
+interface ForeignKeyRow {
+  table_name: string;
+  constraint_name: string;
+  column_name: string;
+  referenced_table: string;
+  referenced_column: string;
+}
+
+interface TableLike {
+  name: string;
+  columns: ColumnDetail[];
+  indexes: IndexItem[];
+  foreignKeys: ForeignKeyItem[];
+  rowEstimate: number | null;
+}
+
+interface ViewLike {
+  name: string;
+  columns: ColumnDetail[];
+}
+
+async function fetchRelations(
   pool: PgPoolType,
   schema: string
-): Promise<Map<string, number>> {
-  const r = await pool.query<{ table_name: string; row_estimate: string }>(
-    `SELECT c.relname AS table_name, c.reltuples::bigint AS row_estimate
+): Promise<RelationRow[]> {
+  const r = await pool.query<RelationRow>(
+    `SELECT c.relname AS name,
+            c.relkind AS kind,
+            CASE WHEN c.relkind IN ('r', 'p') THEN c.reltuples::bigint ELSE NULL END AS row_estimate
      FROM pg_class c
      JOIN pg_namespace n ON n.oid = c.relnamespace
-     WHERE n.nspname = $1 AND c.relkind = 'r'`,
+     WHERE n.nspname = $1
+       AND c.relkind IN ('r', 'p', 'v')
+     ORDER BY c.relname`,
     [schema]
   );
-  const out = new Map<string, number>();
-  for (const row of r.rows) {
-    const est = Number.parseInt(String(row.row_estimate), 10);
-    if (Number.isFinite(est) && est >= 0) {
-      out.set(row.table_name, est);
-    }
-  }
-  return out;
+  return r.rows;
 }
 
-async function fetchViews(pool: PgPoolType, schema: string) {
-  const r = await pool.query<{ table_name: string }>(
-    `SELECT table_name FROM information_schema.tables
-     WHERE table_schema = $1 AND table_type = 'VIEW'
-     ORDER BY table_name`,
-    [schema]
-  );
-  const views = [];
-  for (const row of r.rows) {
-    const columns = await fetchColumns(pool, schema, row.table_name);
-    views.push({ columns, name: row.table_name });
-  }
-  return views;
-}
-
-async function fetchColumns(
+async function fetchAllColumns(
   pool: PgPoolType,
-  schema: string,
-  table: string
-): Promise<ColumnDetail[]> {
-  const r = await pool.query<{
-    column_name: string;
-    data_type: string;
-    is_nullable: string;
-    column_default: string | null;
-    is_pk: boolean;
-  }>(
-    `SELECT c.column_name, c.data_type, c.is_nullable, c.column_default,
-            CASE WHEN pk.column_name IS NOT NULL THEN true ELSE false END AS is_pk
+  schema: string
+): Promise<ColumnRow[]> {
+  const r = await pool.query<ColumnRow>(
+    `SELECT c.table_name,
+            c.column_name,
+            c.data_type,
+            c.is_nullable,
+            c.column_default,
+            (pk.column_name IS NOT NULL) AS is_pk
      FROM information_schema.columns c
      LEFT JOIN (
-       SELECT kcu.column_name FROM information_schema.table_constraints tc
+       SELECT kcu.table_name, kcu.column_name
+       FROM information_schema.table_constraints tc
        JOIN information_schema.key_column_usage kcu
          ON tc.constraint_name = kcu.constraint_name
-        AND tc.table_schema = kcu.table_schema
+        AND tc.table_schema   = kcu.table_schema
+        AND tc.table_name     = kcu.table_name
        WHERE tc.constraint_type = 'PRIMARY KEY'
-         AND tc.table_schema = $1 AND tc.table_name = $2
-     ) pk ON c.column_name = pk.column_name
-     WHERE c.table_schema = $1 AND c.table_name = $2
-     ORDER BY c.ordinal_position`,
-    [schema, table]
+         AND tc.table_schema    = $1
+     ) pk ON pk.table_name = c.table_name AND pk.column_name = c.column_name
+     WHERE c.table_schema = $1
+     ORDER BY c.table_name, c.ordinal_position`,
+    [schema]
   );
-  return r.rows.map((row) => ({
-    dataType: row.data_type,
-    defaultValue: row.column_default,
-    isNullable: row.is_nullable === "YES",
-    isPrimaryKey: Boolean(row.is_pk),
-    name: row.column_name,
-  }));
+  return r.rows;
 }
 
-async function fetchIndexes(
+async function fetchAllIndexes(
   pool: PgPoolType,
-  schema: string,
-  table: string
-): Promise<IndexItem[]> {
-  const r = await pool.query<{
-    index_name: string;
-    is_unique: boolean;
-    columns: string[];
-  }>(
-    `SELECT i.relname AS index_name,
+  schema: string
+): Promise<IndexRow[]> {
+  const r = await pool.query<IndexRow>(
+    `SELECT t.relname AS table_name,
+            i.relname AS index_name,
             ix.indisunique AS is_unique,
-            array_agg(a.attname ORDER BY array_position(ix.indkey, a.attnum)) AS columns
+            array_agg(COALESCE(a.attname, '(expression)') ORDER BY k.ord) AS columns
      FROM pg_index ix
      JOIN pg_class t ON t.oid = ix.indrelid
      JOIN pg_class i ON i.oid = ix.indexrelid
      JOIN pg_namespace n ON n.oid = t.relnamespace
-     JOIN pg_attribute a ON a.attrelid = t.oid AND a.attnum = ANY(ix.indkey)
-     WHERE n.nspname = $1 AND t.relname = $2
-     GROUP BY i.relname, ix.indisunique
-     ORDER BY i.relname`,
-    [schema, table]
+     JOIN LATERAL generate_subscripts(ix.indkey, 1) AS k(ord) ON TRUE
+     LEFT JOIN pg_attribute a
+       ON a.attrelid = t.oid
+      AND a.attnum   = ix.indkey[k.ord]
+      AND ix.indkey[k.ord] <> 0
+     WHERE n.nspname = $1 AND t.relkind IN ('r', 'p')
+     GROUP BY t.relname, i.relname, ix.indisunique
+     ORDER BY t.relname, i.relname`,
+    [schema]
   );
-  return r.rows.map((row) => ({
-    columns: Array.isArray(row.columns)
-      ? row.columns.filter((c): c is string => typeof c === "string")
-      : [],
-    isUnique: Boolean(row.is_unique),
-    name: row.index_name,
-  }));
+  return r.rows;
 }
 
-async function fetchForeignKeys(
+async function fetchAllForeignKeys(
   pool: PgPoolType,
-  schema: string,
-  table: string
-): Promise<ForeignKeyItem[]> {
-  const r = await pool.query<{
-    constraint_name: string;
-    column_name: string;
-    referenced_table: string;
-    referenced_column: string;
-  }>(
-    `SELECT tc.constraint_name,
+  schema: string
+): Promise<ForeignKeyRow[]> {
+  const r = await pool.query<ForeignKeyRow>(
+    `SELECT tc.table_name,
+            tc.constraint_name,
             kcu.column_name,
-            ccu.table_name AS referenced_table,
+            ccu.table_name  AS referenced_table,
             ccu.column_name AS referenced_column
      FROM information_schema.table_constraints tc
      JOIN information_schema.key_column_usage kcu
        ON tc.constraint_name = kcu.constraint_name
-      AND tc.table_schema = kcu.table_schema
+      AND tc.table_schema   = kcu.table_schema
+      AND tc.table_name     = kcu.table_name
      JOIN information_schema.constraint_column_usage ccu
        ON ccu.constraint_name = tc.constraint_name
-      AND ccu.table_schema = tc.table_schema
+      AND ccu.table_schema   = tc.table_schema
      WHERE tc.constraint_type = 'FOREIGN KEY'
-       AND tc.table_schema = $1 AND tc.table_name = $2
-     ORDER BY tc.constraint_name, kcu.ordinal_position`,
-    [schema, table]
+       AND tc.table_schema    = $1
+     ORDER BY tc.table_name, tc.constraint_name, kcu.ordinal_position`,
+    [schema]
   );
-  const map = new Map<string, ForeignKeyItem>();
-  for (const row of r.rows) {
-    let entry = map.get(row.constraint_name);
+  return r.rows;
+}
+
+function parseRowEstimate(raw: string | null): number | null {
+  if (raw === null) {
+    return null;
+  }
+  const est = Number.parseInt(String(raw), 10);
+  return Number.isFinite(est) && est >= 0 ? est : null;
+}
+
+function buildSchemaItem(
+  relations: RelationRow[],
+  columns: ColumnRow[],
+  indexes: IndexRow[],
+  foreignKeys: ForeignKeyRow[]
+): { tables: TableLike[]; views: ViewLike[] } {
+  const tables = new Map<string, TableLike>();
+  const views = new Map<string, ViewLike>();
+
+  for (const r of relations) {
+    if (r.kind === "v") {
+      views.set(r.name, { columns: [], name: r.name });
+    } else {
+      tables.set(r.name, {
+        columns: [],
+        foreignKeys: [],
+        indexes: [],
+        name: r.name,
+        rowEstimate: parseRowEstimate(r.row_estimate),
+      });
+    }
+  }
+
+  for (const c of columns) {
+    const target = tables.get(c.table_name) ?? views.get(c.table_name);
+    if (!target) {
+      continue;
+    }
+    target.columns.push({
+      dataType: c.data_type,
+      defaultValue: c.column_default,
+      isNullable: c.is_nullable === "YES",
+      isPrimaryKey: Boolean(c.is_pk),
+      name: c.column_name,
+    });
+  }
+
+  for (const i of indexes) {
+    const table = tables.get(i.table_name);
+    if (!table) {
+      continue;
+    }
+    table.indexes.push({
+      columns: Array.isArray(i.columns)
+        ? i.columns.filter((col): col is string => typeof col === "string")
+        : [],
+      isUnique: Boolean(i.is_unique),
+      name: i.index_name,
+    });
+  }
+
+  const fkByTable = new Map<string, Map<string, ForeignKeyItem>>();
+  for (const f of foreignKeys) {
+    if (!tables.has(f.table_name)) {
+      continue;
+    }
+    let perTable = fkByTable.get(f.table_name);
+    if (!perTable) {
+      perTable = new Map<string, ForeignKeyItem>();
+      fkByTable.set(f.table_name, perTable);
+    }
+    let entry = perTable.get(f.constraint_name);
     if (!entry) {
       entry = {
         columns: [],
-        name: row.constraint_name,
+        name: f.constraint_name,
         referencedColumns: [],
-        referencedTable: row.referenced_table,
+        referencedTable: f.referenced_table,
       };
-      map.set(row.constraint_name, entry);
+      perTable.set(f.constraint_name, entry);
     }
-    if (!entry.columns.includes(row.column_name)) {
-      entry.columns.push(row.column_name);
+    if (!entry.columns.includes(f.column_name)) {
+      entry.columns.push(f.column_name);
     }
-    if (!entry.referencedColumns.includes(row.referenced_column)) {
-      entry.referencedColumns.push(row.referenced_column);
+    if (!entry.referencedColumns.includes(f.referenced_column)) {
+      entry.referencedColumns.push(f.referenced_column);
     }
   }
-  return [...map.values()];
+  for (const [tableName, perTable] of fkByTable) {
+    const table = tables.get(tableName);
+    if (table) {
+      table.foreignKeys = [...perTable.values()];
+    }
+  }
+
+  return {
+    tables: [...tables.values()],
+    views: [...views.values()],
+  };
 }
 
 export { NOOP };
