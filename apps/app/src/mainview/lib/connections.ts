@@ -32,6 +32,8 @@ export interface DatabaseConnection extends Omit<
   type: DatabaseType;
   color?: ConnectionColor;
   environment?: ConnectionEnvironment;
+  piiRedaction?: boolean;
+  customPiiPatterns?: string[];
 }
 
 export const DEFAULT_PORTS: Record<DatabaseType, number> = {
@@ -113,6 +115,13 @@ export const markConnectionUsed = async (id: string): Promise<void> => {
     c.id === id ? { ...c, lastConnectedAt: new Date().toISOString() } : c
   );
   await writeConnections(connections);
+};
+
+export const isPiiRedactionEnabled = (c: DatabaseConnection): boolean => {
+  if (c.piiRedaction !== undefined) {
+    return c.piiRedaction;
+  }
+  return c.environment === "prod";
 };
 
 export const connectionIdentityKey = (c: DatabaseConnection): string =>

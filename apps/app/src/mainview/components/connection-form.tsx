@@ -5,6 +5,7 @@ import {
   Loader2,
   XCircle,
 } from "lucide-react";
+import { AnimatePresence, motion } from "motion/react";
 import { useCallback, useState } from "react";
 import { toast } from "sonner";
 
@@ -37,6 +38,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
 import {
   CONNECTION_COLORS,
   getConnectionColorClasses,
@@ -383,6 +385,106 @@ const AppearanceSection = ({
   </Collapsible>
 );
 
+interface AiContextSectionProps {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  piiRedaction: boolean | undefined;
+  customPiiPatterns: string;
+  environment: ConnectionEnvironment | "";
+  onPiiRedactionChange: (checked: boolean) => void;
+  onCustomPiiPatternsChange: (
+    e: React.ChangeEvent<HTMLTextAreaElement>
+  ) => void;
+}
+
+const effectivePiiEnabled = (
+  piiRedaction: boolean | undefined,
+  environment: ConnectionEnvironment | ""
+): boolean => {
+  if (piiRedaction !== undefined) {
+    return piiRedaction;
+  }
+  return environment === "prod";
+};
+
+const AiContextSection = ({
+  open,
+  onOpenChange,
+  piiRedaction,
+  customPiiPatterns,
+  environment,
+  onPiiRedactionChange,
+  onCustomPiiPatternsChange,
+}: AiContextSectionProps) => {
+  const isEnabled = effectivePiiEnabled(piiRedaction, environment);
+  const autoEnabled = piiRedaction === undefined && environment === "prod";
+
+  return (
+    <Collapsible onOpenChange={onOpenChange} open={open}>
+      <CollapsibleTrigger
+        render={
+          <button
+            className="flex w-full items-center gap-1.5 text-section-label hover:text-foreground"
+            type="button"
+          >
+            <ChevronDown
+              className={cn(
+                "size-3 transition-transform",
+                open && "rotate-180"
+              )}
+            />
+            AI context
+          </button>
+        }
+      />
+      <CollapsibleContent className="grid gap-3 pt-3">
+        <div className="grid gap-1.5">
+          <Label className="flex items-center gap-2 font-normal">
+            <Checkbox
+              checked={isEnabled}
+              onCheckedChange={onPiiRedactionChange}
+            />
+            Redact PII from schema context
+          </Label>
+          <p className="pl-6 text-xs text-muted-foreground">
+            Scrubs emails, phone numbers, API keys, and similar patterns from
+            schema context before sending to AI providers.
+          </p>
+          {autoEnabled && (
+            <p className="pl-6 text-xs text-warning">
+              Enabled automatically for production connections.
+            </p>
+          )}
+        </div>
+
+        <AnimatePresence initial={false}>
+          {isEnabled && (
+            <motion.div
+              animate={{ height: "auto", opacity: 1 }}
+              className="grid gap-1.5 overflow-hidden"
+              exit={{ height: 0, opacity: 0 }}
+              initial={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.15, ease: [0.22, 1, 0.36, 1] }}
+            >
+              <Label htmlFor="conn-pii-patterns">Custom patterns</Label>
+              <Textarea
+                className="min-h-[72px] resize-y font-mono text-xs"
+                id="conn-pii-patterns"
+                onChange={onCustomPiiPatternsChange}
+                placeholder={"# one regex per line\ncustomer_id_\\d+"}
+                value={customPiiPatterns}
+              />
+              <p className="text-xs text-muted-foreground">
+                Each line is a JavaScript RegExp. No delimiters needed.
+              </p>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </CollapsibleContent>
+    </Collapsible>
+  );
+};
+
 interface ConnectionFormProps {
   connection?: DatabaseConnection;
   onSuccess?: (connection: DatabaseConnection) => void;
@@ -401,6 +503,8 @@ interface FormState {
   emoji: string;
   color: ConnectionColor | "";
   environment: ConnectionEnvironment | "";
+  piiRedaction: boolean | undefined;
+  customPiiPatterns: string;
 }
 
 type TestStatus =
@@ -412,12 +516,14 @@ type TestStatus =
 const INITIAL_STATE: FormState = {
   authSource: "",
   color: "",
+  customPiiPatterns: "",
   database: "",
   emoji: "",
   environment: "",
   host: "localhost",
   name: "",
   password: "",
+  piiRedaction: undefined,
   port: String(DEFAULT_PORTS.postgresql),
   trustServerCertificate: true,
   type: "postgresql",
@@ -427,12 +533,14 @@ const INITIAL_STATE: FormState = {
 const connectionToFormState = (conn: DatabaseConnection): FormState => ({
   authSource: conn.authSource ?? "",
   color: conn.color ?? "",
+  customPiiPatterns: conn.customPiiPatterns?.join("\n") ?? "",
   database: conn.database,
   emoji: conn.emoji ?? "",
   environment: conn.environment ?? "",
   host: conn.host,
   name: conn.name,
   password: conn.password,
+  piiRedaction: conn.piiRedaction,
   port: String(conn.port),
   trustServerCertificate: conn.trustServerCertificate ?? true,
   type: conn.type,
@@ -512,10 +620,21 @@ const getDatabasePlaceholder = (type: DatabaseType): string => {
   return "my_database";
 };
 
+const parseCustomPiiPatterns = (raw: string): string[] | undefined => {
+  const lines = raw
+    .split("\n")
+    .map((l) => l.trim())
+    .filter((l) => l.length > 0 && !l.startsWith("#"));
+  return lines.length > 0 ? lines : undefined;
+};
+
 const buildConnection = (form: FormState): DatabaseConnection => {
   const hasHost = NEEDS_HOST.has(form.type);
   const hasUsername = NEEDS_USERNAME.has(form.type);
   const emoji = form.emoji.trim();
+  const customPiiPatterns = form.piiRedaction
+    ? parseCustomPiiPatterns(form.customPiiPatterns)
+    : undefined;
   return {
     authSource:
       form.type === "mongodb" && form.authSource.trim()
@@ -523,6 +642,7 @@ const buildConnection = (form: FormState): DatabaseConnection => {
         : undefined,
     color: form.color || undefined,
     createdAt: new Date().toISOString(),
+    customPiiPatterns,
     database: form.database.trim(),
     emoji: emoji || undefined,
     environment: form.environment || undefined,
@@ -531,6 +651,7 @@ const buildConnection = (form: FormState): DatabaseConnection => {
     lastConnectedAt: null,
     name: form.name.trim(),
     password: hasHost ? form.password : "",
+    piiRedaction: form.piiRedaction,
     pinned: false,
     port: hasHost ? Number(form.port) : 0,
     trustServerCertificate:
@@ -609,6 +730,9 @@ export const ConnectionForm = ({
   const [appearanceOpen, setAppearanceOpen] = useState(
     Boolean(connection?.emoji || connection?.color)
   );
+  const [aiContextOpen, setAiContextOpen] = useState(
+    Boolean(connection?.piiRedaction)
+  );
   const hasHost = NEEDS_HOST.has(form.type);
   const hasUsername = NEEDS_USERNAME.has(form.type);
 
@@ -654,11 +778,27 @@ export const ConnectionForm = ({
     if (!value) {
       return;
     }
+    const env = value === "none" ? "" : (value as ConnectionEnvironment);
     setForm((prev) => ({
       ...prev,
-      environment: value === "none" ? "" : (value as ConnectionEnvironment),
+      environment: env,
+      piiRedaction:
+        env === "prod" && prev.piiRedaction === undefined
+          ? true
+          : prev.piiRedaction,
     }));
   }, []);
+
+  const handlePiiRedactionChange = useCallback((checked: boolean) => {
+    setForm((prev) => ({ ...prev, piiRedaction: checked }));
+  }, []);
+
+  const handleCustomPiiPatternsChange = useCallback(
+    (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+      setForm((prev) => ({ ...prev, customPiiPatterns: e.target.value }));
+    },
+    []
+  );
 
   const handleTestConnection = useCallback(async () => {
     const validationError = validate(form);
@@ -822,6 +962,16 @@ export const ConnectionForm = ({
         onEmojiSelect={handleEmojiSelect}
         onOpenChange={setAppearanceOpen}
         open={appearanceOpen}
+      />
+
+      <AiContextSection
+        open={aiContextOpen}
+        onOpenChange={setAiContextOpen}
+        piiRedaction={form.piiRedaction}
+        customPiiPatterns={form.customPiiPatterns}
+        environment={form.environment}
+        onPiiRedactionChange={handlePiiRedactionChange}
+        onCustomPiiPatternsChange={handleCustomPiiPatternsChange}
       />
 
       <div className="flex items-center gap-2">

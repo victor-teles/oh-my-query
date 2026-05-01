@@ -3,6 +3,7 @@ import { create } from "zustand";
 
 import type { ActiveQuerySnapshot } from "@/contexts/active-query-context";
 import type { AIError } from "@/lib/ai-errors";
+import type { SchemaRedactOptions } from "@/lib/ai-schema-formatter";
 import type { RedisKey, SchemaInfo } from "@/lib/tauri";
 
 import { formatActiveQueryContext } from "@/lib/ai-context";
@@ -27,6 +28,7 @@ export interface ChatContext {
   databaseType: string;
   getSnapshot?: () => ActiveQuerySnapshot;
   redisKeys?: RedisKey[] | null;
+  redact?: SchemaRedactOptions;
 }
 
 interface ChatConnectionState {
@@ -160,7 +162,8 @@ export const useAiChatStore = create<AiChatStore>((set, get) => {
           ? buildSystemPrompt(
               context.schema,
               context.databaseType,
-              context.redisKeys ?? null
+              context.redisKeys ?? null,
+              context.redact
             )
           : `You are a SQL assistant for a ${context.databaseType} database. Help users write queries, explain SQL, diagnose errors, and suggest optimizations. Wrap SQL in \`\`\`sql code blocks.`;
 
