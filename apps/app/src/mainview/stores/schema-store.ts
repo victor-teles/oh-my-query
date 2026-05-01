@@ -79,12 +79,18 @@ export const useSchemaStore = create<SchemaStore>((set, get) => {
     }
   };
 
-  const fetchSchema = async (connectionId: string, databaseName: string) => {
+  const fetchSchema = async (
+    connectionId: string,
+    databaseName: string,
+    options?: { force?: boolean }
+  ) => {
     const startIdentityKey =
       get().byConnection[connectionId]?.identityKey ?? null;
     patch(connectionId, { error: null, isLoading: true });
     try {
-      const schema = await getSchema(connectionId, databaseName);
+      const schema = await getSchema(connectionId, databaseName, {
+        force: options?.force ?? false,
+      });
       if (isStale(connectionId, startIdentityKey)) {
         return;
       }
@@ -159,7 +165,7 @@ export const useSchemaStore = create<SchemaStore>((set, get) => {
       if (!database) {
         return;
       }
-      await fetchSchema(connectionId, database);
+      await fetchSchema(connectionId, database, { force: true });
     },
 
     setSelectedDatabase: (connectionId, database) => {

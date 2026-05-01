@@ -61,7 +61,11 @@ export interface RpcSchema {
       response: string[];
     };
     getSchema: {
-      params: { connectionId: string; databaseName: string };
+      params: {
+        connectionId: string;
+        databaseName: string;
+        force?: boolean;
+      };
       response: SchemaInfo;
     };
     executeQuery: {
