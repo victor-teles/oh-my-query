@@ -45,6 +45,27 @@ export const PLAN_DOT_TRANSITION: Transition = {
   repeatType: "mirror",
 };
 
+// Running heartbeat — slow amber pulse that doubles as the user's "your query is alive" signal
+export const RUNNING_PULSE_TRANSITION: Transition = {
+  duration: 1.4,
+  ease: "easeInOut",
+  repeat: Infinity,
+  repeatType: "mirror",
+};
+
+// Cancelled — recoil-and-settle entry; spring with a small overshoot, then no exit motion
+export const CANCELLED_VARIANTS: Variants = {
+  hidden: { filter: "blur(4px)", opacity: 0, scale: 1.15 },
+  visible: { filter: "blur(0px)", opacity: 1, scale: 1 },
+};
+
+export const CANCELLED_TRANSITION: Transition = {
+  damping: 16,
+  mass: 0.6,
+  stiffness: 380,
+  type: "spring",
+};
+
 // Error icon — spring scale pop on entry for assertive attention
 export const ERROR_ICON_VARIANTS: Variants = {
   hidden: { filter: "blur(4px)", opacity: 0, scale: 0.7 },

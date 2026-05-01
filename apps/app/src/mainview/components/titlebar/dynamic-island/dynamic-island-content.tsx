@@ -2,11 +2,7 @@ import { AnimatePresence, motion } from "motion/react";
 
 import type { IslandSnapshot } from "@/contexts/island-context";
 
-import {
-  QueryCancelledStatus,
-  QueryPlanningStatus,
-  QueryStreamingStatus,
-} from "./island-ai-status";
+import { QueryPlanningStatus, QueryStreamingStatus } from "./island-ai-status";
 import {
   AmbientStatus,
   ConnectedIdleStatus,
@@ -17,6 +13,7 @@ import {
 } from "./island-connection-status";
 import { CONTAINER_VARIANTS, LAYOUT_TRANSITION } from "./island-motion";
 import {
+  QueryCancelledStatus,
   QueryErrorStatus,
   QueryRunningStatus,
   QuerySuccessStatus,
@@ -31,6 +28,12 @@ export const DynamicIslandContent = ({
 }: DynamicIslandContentProps) => {
   const handleReconnect =
     snapshot.kind === "connection-error" ? snapshot.onReconnect : undefined;
+  const handleCancel =
+    snapshot.kind === "query-running" ||
+    snapshot.kind === "query-streaming" ||
+    snapshot.kind === "query-planning"
+      ? snapshot.onCancel
+      : undefined;
 
   return (
     <AnimatePresence initial={false} mode="popLayout">
@@ -71,11 +74,21 @@ export const DynamicIslandContent = ({
             username={snapshot.username}
           />
         )}
-        {snapshot.kind === "query-running" && <QueryRunningStatus />}
-        {snapshot.kind === "query-streaming" && (
-          <QueryStreamingStatus tokensReceived={snapshot.tokensReceived} />
+        {snapshot.kind === "query-running" && (
+          <QueryRunningStatus
+            onCancel={handleCancel}
+            startedAt={snapshot.startedAt}
+          />
         )}
-        {snapshot.kind === "query-planning" && <QueryPlanningStatus />}
+        {snapshot.kind === "query-streaming" && (
+          <QueryStreamingStatus
+            onCancel={handleCancel}
+            tokensReceived={snapshot.tokensReceived}
+          />
+        )}
+        {snapshot.kind === "query-planning" && (
+          <QueryPlanningStatus onCancel={handleCancel} />
+        )}
         {snapshot.kind === "query-cancelled" && <QueryCancelledStatus />}
         {snapshot.kind === "query-success" && (
           <QuerySuccessStatus

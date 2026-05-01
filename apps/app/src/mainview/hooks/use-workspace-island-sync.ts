@@ -9,6 +9,7 @@ import { useQueryExecution } from "@/contexts/query-execution-context";
 
 const DISMISS_DELAY_SUCCESS = 3000;
 const DISMISS_DELAY_ERROR = 4000;
+const DISMISS_DELAY_CANCELLED = 1500;
 
 export const useWorkspaceIslandSync = () => {
   const {
@@ -21,22 +22,41 @@ export const useWorkspaceIslandSync = () => {
     reconnect,
   } = useConnection();
   const { setSnapshot } = useIsland();
-  const { state: execState } = useQueryExecution();
+  const { state: execState, cancelActive } = useQueryExecution();
   const [dismissed, setDismissed] = useState(false);
+  const [showCancelledUntil, setShowCancelledUntil] = useState(0);
+  const prevStatusRef = useRef(execState.status);
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const cancelledTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     if (execState.status === "running") {
       setDismissed(false);
+      setShowCancelledUntil(0);
       if (timerRef.current) {
         clearTimeout(timerRef.current);
         timerRef.current = null;
       }
+      if (cancelledTimerRef.current) {
+        clearTimeout(cancelledTimerRef.current);
+        cancelledTimerRef.current = null;
+      }
     }
+    if (prevStatusRef.current === "running" && execState.status === "idle") {
+      const until = Date.now() + DISMISS_DELAY_CANCELLED;
+      setShowCancelledUntil(until);
+      cancelledTimerRef.current = setTimeout(
+        () => setShowCancelledUntil(0),
+        DISMISS_DELAY_CANCELLED
+      );
+    }
+    prevStatusRef.current = execState.status;
   }, [execState.status]);
 
   useEffect(() => {
+    const showCancelled = Date.now() < showCancelledUntil;
     const snapshot = resolveSnapshot({
+      cancelActive,
       connection,
       connectionError,
       dismissed,
@@ -46,6 +66,7 @@ export const useWorkspaceIslandSync = () => {
       isReconnecting,
       onReconnect: reconnect,
       serverVersion,
+      showCancelled,
     });
     setSnapshot(snapshot);
 
@@ -68,6 +89,7 @@ export const useWorkspaceIslandSync = () => {
       }
     };
   }, [
+    cancelActive,
     connection,
     connectionError,
     dismissed,
@@ -78,10 +100,21 @@ export const useWorkspaceIslandSync = () => {
     reconnect,
     serverVersion,
     setSnapshot,
+    showCancelledUntil,
   ]);
+
+  useEffect(
+    () => () => {
+      if (cancelledTimerRef.current) {
+        clearTimeout(cancelledTimerRef.current);
+      }
+    },
+    []
+  );
 };
 
 interface ResolveInput {
+  cancelActive: (() => void) | null;
   connection: DatabaseConnection;
   connectionError: string | null;
   dismissed: boolean;
@@ -91,9 +124,11 @@ interface ResolveInput {
   isReconnecting: boolean;
   onReconnect: () => void;
   serverVersion: string | null;
+  showCancelled: boolean;
 }
 
 const resolveSnapshot = ({
+  cancelActive,
   connection,
   connectionError,
   dismissed,
@@ -103,6 +138,7 @@ const resolveSnapshot = ({
   isReconnecting,
   onReconnect,
   serverVersion,
+  showCancelled,
 }: ResolveInput): IslandSnapshot => {
   if (isReconnecting) {
     return { connectionName: connection.name, kind: "reconnecting" };
@@ -126,7 +162,14 @@ const resolveSnapshot = ({
     };
   }
   if (execState.status === "running") {
-    return { kind: "query-running" };
+    return {
+      kind: "query-running",
+      onCancel: cancelActive ?? undefined,
+      startedAt: execState.startedAt ?? Date.now(),
+    };
+  }
+  if (showCancelled) {
+    return { kind: "query-cancelled" };
   }
   if (execState.status === "error" && execState.error && !dismissed) {
     return { error: execState.error, kind: "query-error" };

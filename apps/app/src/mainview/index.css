@@ -249,10 +249,6 @@
     @apply text-[10px] font-medium uppercase tracking-wider text-muted-foreground;
   }
 
-  .text-chrome {
-    @apply text-[11px] font-medium tracking-tight;
-  }
-
   .text-data {
     @apply font-mono tabular-nums tracking-tight;
   }

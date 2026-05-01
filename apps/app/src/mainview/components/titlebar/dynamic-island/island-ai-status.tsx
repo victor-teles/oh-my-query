@@ -1,8 +1,8 @@
-import { X } from "lucide-react";
 import { motion, useReducedMotion } from "motion/react";
 
 import { cn } from "@/lib/utils";
 
+import { IslandCancelButton } from "./island-cancel-button";
 import {
   ISLAND_ITEM_TRANSITION,
   ISLAND_ITEM_VARIANTS,
@@ -12,13 +12,16 @@ import {
 } from "./island-motion";
 
 const BAR_IDS = ["b1", "b2", "b3"] as const;
+const BAR_HEIGHT_PX = 10;
 
 interface QueryStreamingStatusProps {
   tokensReceived: number;
+  onCancel?: () => void;
 }
 
 export const QueryStreamingStatus = ({
   tokensReceived,
+  onCancel,
 }: QueryStreamingStatusProps) => {
   const shouldReduceMotion = useReducedMotion();
 
@@ -27,7 +30,7 @@ export const QueryStreamingStatus = ({
       <motion.div
         aria-hidden="true"
         className="flex items-end gap-px"
-        style={{ height: 10 }}
+        style={{ height: BAR_HEIGHT_PX }}
         transition={ISLAND_ITEM_TRANSITION}
         variants={ISLAND_ITEM_VARIANTS}
       >
@@ -38,10 +41,10 @@ export const QueryStreamingStatus = ({
                 ? undefined
                 : { scaleY: [STREAM_BAR_HEIGHTS[i], 1, STREAM_BAR_HEIGHTS[i]] }
             }
-            className="w-0.5 origin-bottom rounded-full bg-primary"
+            className="w-0.5 origin-bottom rounded-full bg-muted-foreground"
             initial={{ scaleY: STREAM_BAR_HEIGHTS[i] }}
             key={id}
-            style={{ height: 10 }}
+            style={{ height: BAR_HEIGHT_PX }}
             transition={STREAM_BAR_TRANSITION(i)}
           />
         ))}
@@ -49,7 +52,7 @@ export const QueryStreamingStatus = ({
       <span className="sr-only">Streaming AI response</span>
       <motion.span
         className={cn(
-          "text-chrome flex items-baseline gap-1 text-muted-foreground",
+          "text-xs font-medium tracking-tight flex items-baseline gap-1 text-muted-foreground",
           shouldReduceMotion && "font-semibold"
         )}
         transition={ISLAND_ITEM_TRANSITION}
@@ -57,14 +60,23 @@ export const QueryStreamingStatus = ({
       >
         <span>Streaming</span>
         {tokensReceived > 0 && (
-          <span className="text-muted-foreground/50">· {tokensReceived}</span>
+          <span className="text-muted-foreground/50 tabular-nums">
+            · {tokensReceived} tokens
+          </span>
         )}
       </motion.span>
+      {onCancel && (
+        <IslandCancelButton onCancel={onCancel} label="Stop generating" />
+      )}
     </>
   );
 };
 
-export const QueryPlanningStatus = () => {
+interface QueryPlanningStatusProps {
+  onCancel?: () => void;
+}
+
+export const QueryPlanningStatus = ({ onCancel }: QueryPlanningStatusProps) => {
   const shouldReduceMotion = useReducedMotion();
 
   return (
@@ -72,14 +84,14 @@ export const QueryPlanningStatus = () => {
       <motion.span
         animate={shouldReduceMotion ? undefined : { scale: [0.5, 1, 0.5] }}
         aria-hidden="true"
-        className="size-1.5 shrink-0 rounded-full bg-primary"
+        className="size-1.5 shrink-0 rounded-full bg-muted-foreground"
         initial={{ scale: 0.75 }}
         transition={PLAN_DOT_TRANSITION}
       />
       <span className="sr-only">AI planning query</span>
       <motion.span
         className={cn(
-          "text-chrome text-muted-foreground",
+          "text-muted-foreground text-xs font-medium tracking-tight",
           shouldReduceMotion && "font-semibold"
         )}
         transition={ISLAND_ITEM_TRANSITION}
@@ -87,27 +99,9 @@ export const QueryPlanningStatus = () => {
       >
         Planning…
       </motion.span>
+      {onCancel && (
+        <IslandCancelButton onCancel={onCancel} label="Stop planning" />
+      )}
     </>
   );
 };
-
-export const QueryCancelledStatus = () => (
-  <>
-    <motion.span
-      aria-hidden="true"
-      transition={ISLAND_ITEM_TRANSITION}
-      variants={ISLAND_ITEM_VARIANTS}
-    >
-      <X className="size-3 shrink-0 text-muted-foreground/60" />
-    </motion.span>
-    <span className="sr-only">Query cancelled</span>
-    <motion.span
-      aria-hidden="true"
-      className="text-chrome text-muted-foreground/60"
-      transition={ISLAND_ITEM_TRANSITION}
-      variants={ISLAND_ITEM_VARIANTS}
-    >
-      Cancelled
-    </motion.span>
-  </>
-);

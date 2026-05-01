@@ -56,7 +56,7 @@ export const ConnectingStatus = ({ connectionName }: ConnectingStatusProps) => {
       <span className="sr-only">Connecting to </span>
       <motion.span
         className={cn(
-          "text-chrome max-w-60 truncate text-muted-foreground",
+          "text-xs font-medium tracking-tight max-w-60 truncate text-muted-foreground",
           shouldReduceMotion && "font-semibold"
         )}
         transition={ISLAND_ITEM_TRANSITION}
@@ -94,7 +94,7 @@ export const ReconnectingStatus = ({
       </motion.div>
       <motion.span
         className={cn(
-          "text-chrome max-w-65 truncate text-warning",
+          "max-w-65 truncate text-warning text-xs font-medium tracking-tight",
           shouldReduceMotion && "font-semibold"
         )}
         transition={ISLAND_ITEM_TRANSITION}
@@ -175,33 +175,36 @@ export const ConnectedIdleStatus = ({
               </Badge>
             )}
             {emoji && (
-              <span aria-hidden="true" className="text-[11px] leading-none">
+              <span
+                aria-hidden="true"
+                className="text-xs font-medium tracking-tight leading-none"
+              >
                 {emoji}
               </span>
             )}
             <span
               aria-hidden="true"
-              className="text-chrome max-w-40 truncate text-muted-foreground"
+              className="text-xs font-medium tracking-tight max-w-40 truncate text-muted-foreground"
             >
               {connectionName}
             </span>
             {serverVersion && (
               <span
                 aria-hidden="true"
-                className="text-data text-[11px] text-muted-foreground"
+                className="text-xs font-medium tracking-tight tabular-nums text-muted-foreground"
               >
                 {serverVersion}
               </span>
             )}
             <span
               aria-hidden="true"
-              className="text-[11px] text-muted-foreground/30"
+              className="text-xs font-medium tracking-tight text-muted-foreground/30"
             >
               ·
             </span>
             <span
               aria-hidden="true"
-              className="text-data text-[11px] text-muted-foreground"
+              className="text-xs font-medium tracking-tight text-muted-foreground"
             >
               {username}@{database}
             </span>
@@ -270,7 +273,7 @@ export const ConnectionErrorStatus = ({
     <IslandErrorMessage error={error} maxWidthClass="max-w-[280px]" />
     <motion.button
       aria-label="Retry connection"
-      className="text-chrome cursor-pointer rounded-sm text-destructive underline underline-offset-2 transition-all duration-150 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50"
+      className="text-xs font-medium tracking-tight cursor-pointer rounded-sm text-destructive underline underline-offset-2 transition-all duration-150 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50"
       onClick={onReconnect}
       transition={ISLAND_ITEM_TRANSITION}
       type="button"
@@ -297,7 +300,7 @@ export const AmbientStatus = ({ connectionName }: AmbientStatusProps) => (
     />
     <span className="sr-only">Database: </span>
     <motion.span
-      className="text-chrome max-w-60 truncate text-muted-foreground"
+      className="text-xs font-medium tracking-tight max-w-60 truncate text-muted-foreground"
       transition={ISLAND_ITEM_TRANSITION}
       variants={ISLAND_ITEM_VARIANTS}
     >
@@ -315,7 +318,7 @@ export const WelcomeStatus = () => (
       variants={ISLAND_ITEM_VARIANTS}
     />
     <motion.span
-      className="text-chrome text-muted-foreground"
+      className="text-muted-foreground text-xs font-medium tracking-tight"
       transition={ISLAND_ITEM_TRANSITION}
       variants={ISLAND_ITEM_VARIANTS}
     >

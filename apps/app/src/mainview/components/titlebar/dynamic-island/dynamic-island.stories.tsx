@@ -111,10 +111,32 @@ export const ConnectedIdleNoEnv: Story = {
 
 export const QueryRunning: Story = {
   args: {
-    snapshot: { kind: "query-running" },
+    snapshot: { kind: "query-running", startedAt: Date.now() - 2500 },
+  },
+};
+
+export const QueryRunningWithCancel: Story = {
+  args: {
+    snapshot: {
+      kind: "query-running",
+      onCancel: fn(),
+      startedAt: Date.now() - 4200,
+    },
   },
   play: async ({ canvas }) => {
-    await expect(canvas.getByText("Executing…")).toBeInTheDocument();
+    await expect(
+      canvas.getByRole("button", { name: /cancel query/i })
+    ).toBeVisible();
+  },
+};
+
+export const QueryRunningSlow: Story = {
+  args: {
+    snapshot: {
+      kind: "query-running",
+      onCancel: fn(),
+      startedAt: Date.now() - 72_500,
+    },
   },
 };
 
@@ -206,9 +228,13 @@ export const AllStates: Story = {
             serverVersion: "16.2",
             username: "admin",
           },
-          { kind: "query-running" },
-          { kind: "query-streaming", tokensReceived: 128 },
-          { kind: "query-planning" },
+          {
+            kind: "query-running",
+            onCancel: fn(),
+            startedAt: Date.now() - 2400,
+          },
+          { kind: "query-streaming", onCancel: fn(), tokensReceived: 128 },
+          { kind: "query-planning", onCancel: fn() },
           { kind: "query-cancelled" },
           { executionTimeMs: 142, kind: "query-success", rowCount: 2847 },
           {

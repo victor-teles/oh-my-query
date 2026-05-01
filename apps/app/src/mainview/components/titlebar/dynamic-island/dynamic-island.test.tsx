@@ -60,8 +60,37 @@ describe("dynamicIslandContent", () => {
 
   describe("query states", () => {
     it("renders query-running with executing label", () => {
-      renderSnapshot({ kind: "query-running" });
+      renderSnapshot({ kind: "query-running", startedAt: Date.now() });
       expect(screen.getByText("Executing query")).toBeDefined();
+      expect(screen.getByText("Running")).toBeDefined();
+    });
+
+    it("renders query-running cancel button when onCancel is provided", () => {
+      const onCancel = vi.fn();
+      renderSnapshot({
+        kind: "query-running",
+        onCancel,
+        startedAt: Date.now(),
+      });
+      const btn = screen.getByRole("button", { name: /cancel query/i });
+      expect(btn).toBeDefined();
+      btn.click();
+      expect(onCancel).toHaveBeenCalledOnce();
+    });
+
+    it("renders query-running without cancel button when onCancel is absent", () => {
+      renderSnapshot({ kind: "query-running", startedAt: Date.now() });
+      expect(
+        screen.queryByRole("button", { name: /cancel query/i })
+      ).toBeNull();
+    });
+
+    it("renders elapsed time after threshold", () => {
+      renderSnapshot({
+        kind: "query-running",
+        startedAt: Date.now() - 4200,
+      });
+      expect(screen.getByText(/4\.\ds/)).toBeDefined();
     });
 
     it("renders query-success with row count and time", () => {
@@ -133,8 +162,36 @@ describe("dynamicIslandContent", () => {
     });
 
     it("sr-only labels are present for query-running", () => {
-      renderSnapshot({ kind: "query-running" });
+      renderSnapshot({ kind: "query-running", startedAt: Date.now() });
       expect(screen.getByText("Executing query")).toBeDefined();
+    });
+
+    it("cancel button on running has Escape keyshortcut", () => {
+      renderSnapshot({
+        kind: "query-running",
+        onCancel: vi.fn(),
+        startedAt: Date.now(),
+      });
+      const btn = screen.getByRole("button", { name: /cancel query/i });
+      expect(btn.getAttribute("aria-keyshortcuts")).toBe("Escape");
+    });
+
+    it("cancel button on streaming labels as Stop generating", () => {
+      renderSnapshot({
+        kind: "query-streaming",
+        onCancel: vi.fn(),
+        tokensReceived: 64,
+      });
+      expect(
+        screen.getByRole("button", { name: /stop generating/i })
+      ).toBeDefined();
+    });
+
+    it("cancel button on planning labels as Stop planning", () => {
+      renderSnapshot({ kind: "query-planning", onCancel: vi.fn() });
+      expect(
+        screen.getByRole("button", { name: /stop planning/i })
+      ).toBeDefined();
     });
 
     it("sr-only cancelled label is present", () => {

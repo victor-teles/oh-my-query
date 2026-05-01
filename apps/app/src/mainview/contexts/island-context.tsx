@@ -25,9 +25,13 @@ export type IslandSnapshot =
       emoji: string | undefined;
       environment: ConnectionEnvironment | undefined;
     }
-  | { kind: "query-running" }
-  | { kind: "query-streaming"; tokensReceived: number }
-  | { kind: "query-planning" }
+  | { kind: "query-running"; startedAt: number; onCancel?: () => void }
+  | {
+      kind: "query-streaming";
+      tokensReceived: number;
+      onCancel?: () => void;
+    }
+  | { kind: "query-planning"; onCancel?: () => void }
   | { kind: "query-cancelled" }
   | {
       kind: "query-success";

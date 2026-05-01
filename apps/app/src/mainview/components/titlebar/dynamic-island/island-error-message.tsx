@@ -39,7 +39,7 @@ export const IslandErrorMessage = ({
         render={
           <motion.button
             aria-label={`Show full error. Current error: ${error}`}
-            className={`text-chrome ${maxWidthClass} truncate rounded-sm text-left text-destructive cursor-pointer transition-all duration-150 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50`}
+            className={`text-xs font-medium tracking-tight ${maxWidthClass} truncate rounded-sm text-left text-destructive cursor-pointer transition-all duration-150 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50`}
             title={error}
             transition={ISLAND_ITEM_TRANSITION}
             type="button"

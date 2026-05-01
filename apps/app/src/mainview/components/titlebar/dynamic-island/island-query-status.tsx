@@ -1,42 +1,75 @@
-import { AlertTriangle, Check, Loader2 } from "lucide-react";
+import { AlertTriangle, Check, X } from "lucide-react";
 import { motion, useReducedMotion } from "motion/react";
 
 import { cn } from "@/lib/utils";
 
+import { IslandCancelButton } from "./island-cancel-button";
 import { IslandErrorMessage } from "./island-error-message";
 import {
+  CANCELLED_TRANSITION,
+  CANCELLED_VARIANTS,
   CHECK_TRANSITION,
   CHECK_VARIANTS,
   ERROR_ICON_TRANSITION,
   ERROR_ICON_VARIANTS,
   ISLAND_ITEM_TRANSITION,
   ISLAND_ITEM_VARIANTS,
+  RUNNING_PULSE_TRANSITION,
 } from "./island-motion";
+import { formatElapsed, useElapsedSince } from "./use-elapsed-time";
 
-export const QueryRunningStatus = () => {
+const ELAPSED_THRESHOLD_MS = 1000;
+
+interface QueryRunningStatusProps {
+  startedAt: number;
+  onCancel?: () => void;
+}
+
+export const QueryRunningStatus = ({
+  startedAt,
+  onCancel,
+}: QueryRunningStatusProps) => {
   const shouldReduceMotion = useReducedMotion();
+  const elapsed = useElapsedSince(startedAt);
+  const showElapsed = elapsed >= ELAPSED_THRESHOLD_MS;
 
   return (
     <>
       <motion.span
+        animate={
+          shouldReduceMotion
+            ? undefined
+            : { opacity: [0.45, 1, 0.45], scale: [0.85, 1.05, 0.85] }
+        }
         aria-hidden="true"
-        transition={ISLAND_ITEM_TRANSITION}
-        variants={ISLAND_ITEM_VARIANTS}
-      >
-        <Loader2 className="size-3 shrink-0 animate-spin text-muted-foreground motion-reduce:animate-none" />
-      </motion.span>
+        className="size-1.5 shrink-0 rounded-full bg-primary"
+        initial={{ opacity: 0.7, scale: 0.9 }}
+        transition={RUNNING_PULSE_TRANSITION}
+      />
       <span className="sr-only">Executing query</span>
       <motion.span
         aria-hidden="true"
         className={cn(
-          "text-chrome text-muted-foreground",
+          "text-muted-foreground text-xs font-medium tracking-tight",
           shouldReduceMotion && "font-semibold"
         )}
         transition={ISLAND_ITEM_TRANSITION}
         variants={ISLAND_ITEM_VARIANTS}
       >
-        Executing…
+        Running
       </motion.span>
+      {showElapsed && (
+        <motion.span
+          aria-hidden="true"
+          className="tabular-nums text-muted-foreground text-xs font-medium tracking-tight"
+          initial={{ filter: "blur(4px)", opacity: 0 }}
+          animate={{ filter: "blur(0px)", opacity: 1 }}
+          transition={ISLAND_ITEM_TRANSITION}
+        >
+          {formatElapsed(elapsed)}
+        </motion.span>
+      )}
+      {onCancel && <IslandCancelButton onCancel={onCancel} />}
     </>
   );
 };
@@ -79,7 +112,7 @@ export const QuerySuccessStatus = ({
       </span>
       <motion.span
         aria-hidden="true"
-        className="text-data flex items-baseline gap-1 text-[11px] text-muted-foreground"
+        className="flex items-baseline gap-1 tabular-nums text-muted-foreground text-xs font-medium tracking-tight"
         transition={ISLAND_ITEM_TRANSITION}
         variants={ISLAND_ITEM_VARIANTS}
       >
@@ -107,5 +140,26 @@ export const QueryErrorStatus = ({ error }: QueryErrorStatusProps) => (
     </motion.span>
     <span className="sr-only">Query failed: </span>
     <IslandErrorMessage error={error} maxWidthClass="max-w-[360px]" />
+  </>
+);
+
+export const QueryCancelledStatus = () => (
+  <>
+    <motion.span
+      aria-hidden="true"
+      transition={CANCELLED_TRANSITION}
+      variants={CANCELLED_VARIANTS}
+    >
+      <X className="size-3 shrink-0 text-muted-foreground" />
+    </motion.span>
+    <span className="sr-only">Query cancelled</span>
+    <motion.span
+      aria-hidden="true"
+      className="text-muted-foreground text-xs font-medium tracking-tight"
+      transition={CANCELLED_TRANSITION}
+      variants={CANCELLED_VARIANTS}
+    >
+      Cancelled
+    </motion.span>
   </>
 );
