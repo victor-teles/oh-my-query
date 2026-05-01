@@ -139,6 +139,7 @@ export function createRpc(options: CreateRpcOptions = noWindow) {
         checkForUpdate: () => doCheckForUpdate(),
 
         connectToDatabase: async ({ connectionId, params }) => {
+          invalidateSchemaCacheFor(connectionId);
           await pools.connect(connectionId, params);
         },
 

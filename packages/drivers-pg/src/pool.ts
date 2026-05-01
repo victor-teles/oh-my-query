@@ -308,7 +308,7 @@ function mapExplainError(err: unknown, analyze: boolean): DbError {
 
 interface RelationRow {
   name: string;
-  kind: "r" | "v";
+  kind: "r" | "p" | "v";
   row_estimate: string | null;
 }
 
@@ -356,11 +356,11 @@ async function fetchRelations(
   const r = await pool.query<RelationRow>(
     `SELECT c.relname AS name,
             c.relkind AS kind,
-            CASE WHEN c.relkind = 'r' THEN c.reltuples::bigint ELSE NULL END AS row_estimate
+            CASE WHEN c.relkind IN ('r', 'p') THEN c.reltuples::bigint ELSE NULL END AS row_estimate
      FROM pg_class c
      JOIN pg_namespace n ON n.oid = c.relnamespace
      WHERE n.nspname = $1
-       AND c.relkind IN ('r', 'v')
+       AND c.relkind IN ('r', 'p', 'v')
      ORDER BY c.relname`,
     [schema]
   );
@@ -414,7 +414,7 @@ async function fetchAllIndexes(
        ON a.attrelid = t.oid
       AND a.attnum   = ix.indkey[k.ord]
       AND ix.indkey[k.ord] <> 0
-     WHERE n.nspname = $1 AND t.relkind = 'r'
+     WHERE n.nspname = $1 AND t.relkind IN ('r', 'p')
      GROUP BY t.relname, i.relname, ix.indisunique
      ORDER BY t.relname, i.relname`,
     [schema]
@@ -436,6 +436,7 @@ async function fetchAllForeignKeys(
      JOIN information_schema.key_column_usage kcu
        ON tc.constraint_name = kcu.constraint_name
       AND tc.table_schema   = kcu.table_schema
+      AND tc.table_name     = kcu.table_name
      JOIN information_schema.constraint_column_usage ccu
        ON ccu.constraint_name = tc.constraint_name
       AND ccu.table_schema   = tc.table_schema
@@ -465,7 +466,9 @@ function buildSchemaItem(
   const views = new Map<string, ViewLike>();
 
   for (const r of relations) {
-    if (r.kind === "r") {
+    if (r.kind === "v") {
+      views.set(r.name, { columns: [], name: r.name });
+    } else {
       tables.set(r.name, {
         columns: [],
         foreignKeys: [],
@@ -473,8 +476,6 @@ function buildSchemaItem(
         name: r.name,
         rowEstimate: parseRowEstimate(r.row_estimate),
       });
-    } else {
-      views.set(r.name, { columns: [], name: r.name });
     }
   }
 

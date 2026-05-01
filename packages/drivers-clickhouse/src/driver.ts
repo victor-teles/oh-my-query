@@ -11,8 +11,15 @@ import { ClickhousePool, mapClickhouseError } from "./pool.ts";
 
 const CONNECT_TIMEOUT_MS = 10_000;
 
+function bracketIfIPv6(host: string): string {
+  if (host.startsWith("[") || !host.includes(":")) {
+    return host;
+  }
+  return `[${host}]`;
+}
+
 function buildClickhouseUrl(p: ConnectionParams): string {
-  return `http://${p.host}:${p.port}`;
+  return `http://${bracketIfIPv6(p.host)}:${p.port}`;
 }
 
 export class ClickhouseDriver implements Driver {
@@ -51,14 +58,15 @@ export class ClickhouseDriver implements Driver {
   }
 
   async connect(_id: string, params: ConnectionParams): Promise<Pool> {
-    const client = createClient({
+    const url = buildClickhouseUrl(params);
+    const baseConfig = {
       application: this.dbType,
-      database: params.database,
       password: params.password,
       request_timeout: CONNECT_TIMEOUT_MS,
-      url: buildClickhouseUrl(params),
+      url,
       username: params.username,
-    });
+    };
+    const client = createClient({ ...baseConfig, database: params.database });
     try {
       const result = await client.ping({ select: true });
       if (!result.success) {
@@ -72,6 +80,10 @@ export class ClickhouseDriver implements Driver {
       }
       throw mapClickhouseError(error);
     }
-    return new ClickhousePool(client);
+    return new ClickhousePool({
+      clientFor: (database) => createClient({ ...baseConfig, database }),
+      defaultClient: client,
+      defaultDatabase: params.database,
+    });
   }
 }

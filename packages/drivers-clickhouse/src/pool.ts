@@ -55,17 +55,41 @@ interface JsonCompactResult {
   rows: number;
 }
 
+export interface ClickhousePoolOptions {
+  defaultClient: ClickHouseClient;
+  defaultDatabase: string;
+  clientFor?: (database: string) => ClickHouseClient;
+}
+
 export class ClickhousePool implements Pool {
   readonly dialect: DialectType = "clickhouse";
   readonly supportsExplain = false;
   readonly #client: ClickHouseClient;
+  readonly #defaultDatabase: string;
+  readonly #clientFor: ((database: string) => ClickHouseClient) | null;
+  readonly #extras = new Map<string, ClickHouseClient>();
 
-  constructor(client: ClickHouseClient) {
-    this.#client = client;
+  constructor(options: ClickhousePoolOptions) {
+    this.#client = options.defaultClient;
+    this.#defaultDatabase = options.defaultDatabase;
+    this.#clientFor = options.clientFor ?? null;
   }
 
   get raw(): ClickHouseClient {
     return this.#client;
+  }
+
+  #clientForDatabase(database: string | null): ClickHouseClient {
+    if (!database || database === this.#defaultDatabase || !this.#clientFor) {
+      return this.#client;
+    }
+    const cached = this.#extras.get(database);
+    if (cached) {
+      return cached;
+    }
+    const fresh = this.#clientFor(database);
+    this.#extras.set(database, fresh);
+    return fresh;
   }
 
   async fetchVersion(): Promise<string> {
@@ -124,11 +148,9 @@ export class ClickhousePool implements Pool {
       throw DbError.cancelled();
     }
     try {
-      const rs = await this.#client.query({
+      const client = this.#clientForDatabase(schema);
+      const rs = await client.query({
         abort_signal: signal,
-        ...(schema
-          ? { clickhouse_settings: { database: schema } as never }
-          : {}),
         format: "JSONCompact",
         query: sql,
       });
@@ -167,11 +189,17 @@ export class ClickhousePool implements Pool {
   }
 
   async close(): Promise<void> {
-    try {
-      await this.#client.close();
-    } catch {
-      // best-effort close
-    }
+    const clients = [this.#client, ...this.#extras.values()];
+    this.#extras.clear();
+    await Promise.all(
+      clients.map(async (c) => {
+        try {
+          await c.close();
+        } catch {
+          // best-effort close
+        }
+      })
+    );
   }
 }
 

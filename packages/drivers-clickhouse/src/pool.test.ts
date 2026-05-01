@@ -45,10 +45,21 @@ const must = <T>(value: T | undefined, label: string): T => {
   return value;
 };
 
+const buildPool = (
+  client: ClickHouseClient,
+  database = "default",
+  clientFor?: (db: string) => ClickHouseClient
+): ClickhousePool =>
+  new ClickhousePool({
+    clientFor,
+    defaultClient: client,
+    defaultDatabase: database,
+  });
+
 describe("clickhousePool.fetchSchema", () => {
   it("issues exactly three schema-wide queries", async () => {
     const { fakeClient, query } = buildClient({});
-    const pool = new ClickhousePool(fakeClient);
+    const pool = buildPool(fakeClient);
     const schema = await pool.fetchSchema("default");
     expect(query).toHaveBeenCalledTimes(3);
     expect(schema.schemas).toStrictEqual([
@@ -64,7 +75,7 @@ describe("clickhousePool.fetchSchema", () => {
         { engine: "MaterializedView", name: "events_mv", total_rows: null },
       ],
     });
-    const pool = new ClickhousePool(fakeClient);
+    const pool = buildPool(fakeClient);
     const result = await pool.fetchSchema("default");
     const schema = must(result.schemas[0], "schemas[0]");
     expect(schema.tables.map((t) => t.name)).toStrictEqual(["events"]);
@@ -96,7 +107,7 @@ describe("clickhousePool.fetchSchema", () => {
       ],
       tables: [{ engine: "MergeTree", name: "events", total_rows: "0" }],
     });
-    const pool = new ClickhousePool(fakeClient);
+    const pool = buildPool(fakeClient);
     const result = await pool.fetchSchema("default");
     const schema = must(result.schemas[0], "schemas[0]");
     const table = must(schema.tables[0], "tables[0]");
@@ -130,7 +141,7 @@ describe("clickhousePool.fetchSchema", () => {
       ],
       tables: [{ engine: "MergeTree", name: "events", total_rows: "0" }],
     });
-    const pool = new ClickhousePool(fakeClient);
+    const pool = buildPool(fakeClient);
     const result = await pool.fetchSchema("default");
     const schema = must(result.schemas[0], "schemas[0]");
     const table = must(schema.tables[0], "tables[0]");
@@ -156,7 +167,7 @@ describe("clickhousePool.fetchSchema", () => {
       ],
       tables: [{ engine: "View", name: "live_events", total_rows: null }],
     });
-    const pool = new ClickhousePool(fakeClient);
+    const pool = buildPool(fakeClient);
     const result = await pool.fetchSchema("default");
     const schema = must(result.schemas[0], "schemas[0]");
     expect(schema.tables).toStrictEqual([]);
@@ -177,7 +188,7 @@ describe("clickhousePool.fetchSchema", () => {
 
   it("returns an empty schema when no relations exist", async () => {
     const { fakeClient } = buildClient({});
-    const pool = new ClickhousePool(fakeClient);
+    const pool = buildPool(fakeClient);
     const result = await pool.fetchSchema("default");
     expect(result).toStrictEqual({
       schemas: [{ name: "default", tables: [], views: [] }],
@@ -188,16 +199,85 @@ describe("clickhousePool.fetchSchema", () => {
     const failure = new Error("network down");
     const query = vi.fn().mockRejectedValue(failure);
     const fakeClient = { query } as unknown as ClickHouseClient;
-    const pool = new ClickhousePool(fakeClient);
+    const pool = buildPool(fakeClient);
     await expect(pool.fetchSchema("default")).rejects.toBeInstanceOf(DbError);
   });
 
   it("rejects invalid database names without issuing queries", async () => {
     const { fakeClient, query } = buildClient({});
-    const pool = new ClickhousePool(fakeClient);
+    const pool = buildPool(fakeClient);
     await expect(pool.fetchSchema('"; DROP DATABASE x; --')).rejects.toThrow(
       /schema/i
     );
     expect(query).not.toHaveBeenCalled();
+  });
+});
+
+describe("clickhousePool.execute", () => {
+  const buildExecuteClient = (rows: unknown[][]) => {
+    const json = vi
+      // eslint-disable-next-line @typescript-eslint/require-await
+      .fn(async () => ({
+        data: rows,
+        meta: [{ name: "id", type: "UInt64" }],
+        rows: rows.length,
+      }));
+    const query = vi
+      // eslint-disable-next-line @typescript-eslint/require-await
+      .fn(async () => ({ json }));
+    const close = vi.fn(async () => {
+      await Promise.resolve();
+    });
+    const client = { close, query } as unknown as ClickHouseClient;
+    return { client, close, json, query };
+  };
+
+  it("uses the default client when schema matches the default database", async () => {
+    const { client, query } = buildExecuteClient([[1]]);
+    const factory = vi.fn();
+    const pool = buildPool(client, "analytics", factory as never);
+    const result = await pool.execute(
+      "SELECT 1",
+      100,
+      "analytics",
+      new AbortController().signal
+    );
+    expect(result.resultType).toBe("tabular");
+    expect(query).toHaveBeenCalledOnce();
+    expect(factory).not.toHaveBeenCalled();
+  });
+
+  it("creates and reuses a per-database client when schema differs", async () => {
+    const { client: defaultClient } = buildExecuteClient([]);
+    const { client: otherClient, query: otherQuery } = buildExecuteClient([
+      [42],
+    ]);
+    const factory = vi.fn(() => otherClient);
+    const pool = buildPool(defaultClient, "analytics", factory as never);
+
+    await pool.execute("SELECT 1", 100, "logs", new AbortController().signal);
+    await pool.execute("SELECT 2", 100, "logs", new AbortController().signal);
+
+    expect(factory).toHaveBeenCalledOnce();
+    expect(factory).toHaveBeenCalledWith("logs");
+    expect(otherQuery).toHaveBeenCalledTimes(2);
+  });
+
+  it("close() shuts down both default and per-database clients", async () => {
+    const { client: defaultClient, close: defaultClose } = buildExecuteClient(
+      []
+    );
+    const { client: otherClient, close: otherClose } = buildExecuteClient([]);
+    const pool = buildPool(
+      defaultClient,
+      "analytics",
+      (() => otherClient) as never
+    );
+
+    await pool.execute("SELECT 1", 10, "logs", new AbortController().signal);
+    await pool.close();
+
+    expect(otherClose).toHaveBeenCalledOnce();
+    expect(defaultClose).toHaveBeenCalledOnce();
   });
 });
