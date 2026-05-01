@@ -127,7 +127,13 @@ export const EditorFontSection = () => {
 
       {themeExtension && (
         <div
-          className="overflow-hidden rounded-lg ring-1 ring-foreground/10 [&_.cm-content]:[font-family:var(--cm-font)]! [&_.cm-content]:[font-size:var(--cm-font-size)]! [&_.cm-gutters]:[font-family:var(--cm-font)]! [&_.cm-gutters]:[font-size:var(--cm-font-size)]!"
+          className="
+            overflow-hidden rounded-lg ring-1 ring-foreground/10
+            [&_.cm-content]:[font-family:var(--cm-font)]!
+            [&_.cm-content]:[font-size:var(--cm-font-size)]!
+            [&_.cm-gutters]:[font-family:var(--cm-font)]!
+            [&_.cm-gutters]:[font-size:var(--cm-font-size)]!
+          "
           style={previewStyle}
         >
           <CodeMirror
@@ -139,7 +145,10 @@ export const EditorFontSection = () => {
               highlightActiveLine: false,
               lineNumbers: true,
             }}
-            className="max-h-[160px] overflow-hidden text-sm [&_.cm-scroller]:overflow-hidden"
+            className="
+              max-h-[160px] overflow-hidden text-sm
+              [&_.cm-scroller]:overflow-hidden
+            "
             editable={false}
             extensions={extensions}
             readOnly

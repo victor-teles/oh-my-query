@@ -49,15 +49,15 @@ export const MessageContent = ({
   className,
   ...props
 }: MessageContentProps) => (
-  <div
-    className={cn(
-      "is-user:dark flex w-fit min-w-0 max-w-full flex-col gap-2 overflow-hidden text-sm",
-      "group-[.is-user]:ml-auto group-[.is-user]:rounded-2xl group-[.is-user]:rounded-br-sm group-[.is-user]:bg-primary group-[.is-user]:px-4 group-[.is-user]:py-2.5 group-[.is-user]:text-primary-foreground",
-      "group-[.is-assistant]:text-foreground",
-      className
-    )}
-    {...props}
-  >
+  <div className={cn(`
+        is-user:dark
+        flex w-fit max-w-full min-w-0 flex-col gap-2 overflow-hidden text-sm
+      `, `
+        group-[.is-user]:ml-auto group-[.is-user]:rounded-2xl
+        group-[.is-user]:rounded-br-sm group-[.is-user]:bg-primary
+        group-[.is-user]:px-4 group-[.is-user]:py-2.5
+        group-[.is-user]:text-primary-foreground
+      `, "group-[.is-assistant]:text-foreground", className)} {...props}>
     {children}
   </div>
 );
@@ -183,10 +183,10 @@ export const MessageBranch = ({
 
   return (
     <MessageBranchContext.Provider value={contextValue}>
-      <div
-        className={cn("grid w-full gap-2 [&>div]:pb-0", className)}
-        {...props}
-      />
+      <div className={cn(`
+            grid w-full gap-2
+            [&>div]:pb-0
+          `, className)} {...props} />
     </MessageBranchContext.Provider>
   );
 };
@@ -211,14 +211,10 @@ export const MessageBranchContent = ({
   }, [childrenArray, branches, setBranches]);
 
   return childrenArray.map((branch, index) => (
-    <div
-      className={cn(
-        "grid gap-2 overflow-hidden [&>div]:pb-0",
-        index === currentBranch ? "block" : "hidden"
-      )}
-      key={branch.key}
-      {...props}
-    >
+    <div className={cn(`
+          grid gap-2 overflow-hidden
+          [&>div]:pb-0
+        `, index === currentBranch ? "block" : "hidden")} key={branch.key} {...props}>
       {branch}
     </div>
   ));
@@ -237,16 +233,10 @@ export const MessageBranchSelector = ({
     return null;
   }
 
-  return (
-    <ButtonGroup
-      className={cn(
-        "[&>*:not(:first-child)]:rounded-l-md [&>*:not(:last-child)]:rounded-r-md",
-        className
-      )}
-      orientation="horizontal"
-      {...props}
-    />
-  );
+  return <ButtonGroup className={cn(`
+          [&>*:not(:first-child)]:rounded-l-md
+          [&>*:not(:last-child)]:rounded-r-md
+        `, className)} orientation="horizontal" {...props} />;
 };
 
 export type MessageBranchPreviousProps = ComponentProps<typeof Button>;
@@ -321,16 +311,11 @@ export type MessageResponseProps = ComponentProps<typeof Streamdown>;
 const streamdownPlugins = { cjk, code, math, mermaid };
 
 export const MessageResponse = memo(
-  ({ className, ...props }: MessageResponseProps) => (
-    <Streamdown
-      className={cn(
-        "size-full [&>*:first-child]:mt-0 [&>*:last-child]:mb-0",
-        className
-      )}
-      plugins={streamdownPlugins}
-      {...props}
-    />
-  ),
+  ({ className, ...props }: MessageResponseProps) => <Streamdown className={cn(`
+          size-full
+          [&>*:first-child]:mt-0
+          [&>*:last-child]:mb-0
+        `, className)} plugins={streamdownPlugins} {...props} />,
   (prevProps, nextProps) => prevProps.children === nextProps.children
 );
 

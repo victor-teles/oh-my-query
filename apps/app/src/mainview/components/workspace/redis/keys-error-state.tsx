@@ -13,7 +13,7 @@ export const KeysErrorState = ({ message, onRetry }: KeysErrorStateProps) => (
     <p className="text-sm font-medium text-foreground">
       Couldn&apos;t scan keyspace
     </p>
-    <p className="text-xs leading-relaxed text-muted-foreground">{message}</p>
+    <p className="text-xs/relaxed text-muted-foreground">{message}</p>
     <Button
       className="mt-1 h-6 px-2 text-[11px]"
       onClick={onRetry}

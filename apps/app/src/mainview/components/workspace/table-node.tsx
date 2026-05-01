@@ -161,8 +161,18 @@ export const TableNode = ({
 
   const triggerRow = (
     <div className="flex items-center">
-      <CollapsibleTrigger className="flex flex-1 items-center gap-1.5 rounded-md px-2 py-1 text-xs hover:bg-sidebar-accent/50 [&[data-panel-open]>svg:first-child]:rotate-90">
-        <ChevronRight className="size-3 shrink-0 text-muted-foreground transition-transform" />
+      <CollapsibleTrigger
+        className="
+          flex flex-1 items-center gap-1.5 rounded-md px-2 py-1 text-xs
+          hover:bg-sidebar-accent/50
+          [&[data-panel-open]>svg:first-child]:rotate-90
+        "
+      >
+        <ChevronRight
+          className="
+          size-3 shrink-0 text-muted-foreground transition-transform
+        "
+        />
         {isView ? (
           <Eye className="size-3.5 shrink-0 text-muted-foreground" />
         ) : (
@@ -184,7 +194,11 @@ export const TableNode = ({
           render={
             <button
               type="button"
-              className="mr-1 rounded p-0.5 text-muted-foreground opacity-0 hover:bg-sidebar-accent/50 hover:text-sidebar-foreground group-hover/table:opacity-100"
+              className="
+                mr-1 rounded-sm p-0.5 text-muted-foreground opacity-0
+                group-hover/table:opacity-100
+                hover:bg-sidebar-accent/50 hover:text-sidebar-foreground
+              "
               onClick={handleQueryTable}
               aria-label={`Query ${table.name}`}
             />
@@ -217,7 +231,7 @@ export const TableNode = ({
         )}
         <CollapsibleContent>
           <div className="ml-3 border-l border-sidebar-border pl-2">
-            <div className="mb-0.5 mt-1 px-2 text-section-label">
+            <div className="text-section-label mt-1 mb-0.5 px-2">
               Columns ({table.columns.length})
             </div>
             {table.columns.map((col) => (
@@ -226,18 +240,25 @@ export const TableNode = ({
 
             {hasIndexes && tableData && (
               <>
-                <div className="mb-0.5 mt-2 px-2 text-section-label">
+                <div className="text-section-label mt-2 mb-0.5 px-2">
                   Indexes ({tableData.indexes.length})
                 </div>
                 {tableData.indexes.map((idx) => (
                   <div
-                    className="flex items-center gap-2 px-2 py-1 text-xs text-muted-foreground"
+                    className="
+                      flex items-center gap-2 px-2 py-1 text-xs
+                      text-muted-foreground
+                    "
                     key={idx.name}
                   >
                     <ListOrdered className="size-3 shrink-0" />
                     <span className="truncate">{idx.name}</span>
                     {idx.isUnique && (
-                      <span className="ml-auto shrink-0 text-[10px] text-amber-500/70">
+                      <span
+                        className="
+                          ml-auto shrink-0 text-[10px] text-amber-500/70
+                        "
+                      >
                         unique
                       </span>
                     )}
@@ -248,12 +269,15 @@ export const TableNode = ({
 
             {hasForeignKeys && tableData && (
               <>
-                <div className="mb-0.5 mt-2 px-2 text-section-label">
+                <div className="text-section-label mt-2 mb-0.5 px-2">
                   Foreign Keys ({tableData.foreignKeys.length})
                 </div>
                 {tableData.foreignKeys.map((fk) => (
                   <div
-                    className="flex items-center gap-2 px-2 py-1 text-xs text-muted-foreground"
+                    className="
+                      flex items-center gap-2 px-2 py-1 text-xs
+                      text-muted-foreground
+                    "
                     key={fk.name}
                   >
                     <Link className="size-3 shrink-0" />

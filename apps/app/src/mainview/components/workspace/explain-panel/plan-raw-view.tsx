@@ -32,7 +32,12 @@ export const PlanRawView = ({ raw }: PlanRawViewProps) => {
         <Copy aria-hidden="true" className="size-3" />
         {copied ? "Copied" : "Copy"}
       </Button>
-      <pre className="flex-1 overflow-auto bg-muted/20 p-3 font-mono text-[11px] leading-relaxed text-foreground/80">
+      <pre
+        className="
+          flex-1 overflow-auto bg-muted/20 p-3 font-mono text-[11px]
+          leading-relaxed text-foreground/80
+        "
+      >
         {raw}
       </pre>
     </div>

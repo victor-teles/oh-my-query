@@ -1,4 +1,5 @@
 import { render, screen } from "@testing-library/react";
+import { userEvent } from "@testing-library/user-event";
 import { describe, expect, it } from "vitest";
 
 import type { DatabaseConnection, DatabaseType } from "@/lib/connections";
@@ -87,5 +88,28 @@ describe("connectionForm engine variants", () => {
 
     const username = screen.getByLabelText("Username") as HTMLInputElement;
     expect(username.placeholder).toBe("default");
+  });
+});
+
+describe("connectionForm inline validation", () => {
+  it("shows an inline alert when Test connection is clicked with an empty name", async () => {
+    const user = userEvent.setup();
+    render(<ConnectionForm />);
+
+    await user.click(screen.getByRole("button", { name: "Test connection" }));
+
+    const alert = await screen.findByRole("alert");
+    expect(alert.textContent).toContain("Connection name is required");
+  });
+
+  it("clears the inline alert once the user edits a field", async () => {
+    const user = userEvent.setup();
+    render(<ConnectionForm />);
+
+    await user.click(screen.getByRole("button", { name: "Test connection" }));
+    await expect(screen.findByRole("alert")).resolves.toBeDefined();
+
+    await user.type(screen.getByLabelText("Connection name"), "Local");
+    expect(screen.queryByRole("alert")).toBeNull();
   });
 });

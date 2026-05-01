@@ -44,13 +44,10 @@ const unitSuffix = (size: number, unit: RedisSizeUnit): string => {
 export const SizeChip = ({ size, unit, className }: SizeChipProps) => {
   if (size === null) {
     return (
-      <span
-        aria-hidden="true"
-        className={cn(
-          "inline-flex min-w-[34px] justify-end font-mono text-[10px] tabular-nums text-muted-foreground/35",
-          className
-        )}
-      >
+      <span aria-hidden="true" className={cn(`
+            inline-flex min-w-[34px] justify-end font-mono text-[10px]
+            text-muted-foreground/35 tabular-nums
+          `, className)}>
         —
       </span>
     );
@@ -60,13 +57,10 @@ export const SizeChip = ({ size, unit, className }: SizeChipProps) => {
   const suffix = unitSuffix(size, unit);
 
   return (
-    <span
-      className={cn(
-        "inline-flex min-w-[34px] justify-end font-mono text-[10px] tabular-nums text-muted-foreground/70",
-        className
-      )}
-      title={`${size.toLocaleString()} ${unit}`}
-    >
+    <span className={cn(`
+          inline-flex min-w-[34px] justify-end font-mono text-[10px]
+          text-muted-foreground/70 tabular-nums
+        `, className)} title={`${size.toLocaleString()} ${unit}`}>
       {value}
       {suffix && <span className="text-muted-foreground/40">{suffix}</span>}
     </span>

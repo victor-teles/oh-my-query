@@ -72,7 +72,7 @@ const PlanTreeNode = ({
       aria-level={depth + 1}
       className={cn(
         "flex flex-col gap-1",
-        depth > 0 && "border-border/40 border-l pl-3"
+        depth > 0 && "border-l border-border/40 pl-3"
       )}
       role="treeitem"
     >

@@ -187,7 +187,14 @@ export const SqlEditor = ({
         highlightActiveLine: true,
         lineNumbers: true,
       }}
-      className="h-full overflow-auto text-sm [&_.cm-editor]:h-full [&_.cm-scroller]:h-full [&_.cm-editor]:bg-background! [&_.cm-gutters]:bg-background! [&_.cm-gutters]:border-r-0! [&_.cm-gutters]:px-2! [&_.cm-activeLineGutter]:bg-background!"
+      className="
+        h-full overflow-auto text-sm
+        [&_.cm-activeLineGutter]:bg-background!
+        [&_.cm-editor]:h-full [&_.cm-editor]:bg-background!
+        [&_.cm-gutters]:border-r-0! [&_.cm-gutters]:bg-background!
+        [&_.cm-gutters]:px-2!
+        [&_.cm-scroller]:h-full
+      "
     />
   );
 };

@@ -1,14 +1,47 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
+import { MotionConfig } from "motion/react";
 import { expect, fn } from "storybook/test";
 
-import type { IslandSnapshot } from "@/contexts/island-context";
+import type {
+  IslandSnapshot,
+  RunningQueryEntry,
+} from "@/contexts/island-context";
 
 import { DynamicIslandContent } from "./dynamic-island-content";
 
+const makeRunner = (
+  overrides: Partial<RunningQueryEntry> = {}
+): RunningQueryEntry => ({
+  connectionColor: undefined,
+  connectionEmoji: undefined,
+  connectionEnvironment: undefined,
+  connectionId: "conn-1",
+  connectionLabel: "analytics-db",
+  onCancel: fn(),
+  startedAt: Date.now() - 2400,
+  tabId: "tab-1",
+  tabTitle: "Top users",
+  ...overrides,
+});
+
+const makeRunningSnapshot = (runners: RunningQueryEntry[]): IslandSnapshot => ({
+  headlineTabId: runners[0]?.tabId ?? "",
+  kind: "query-running",
+  onCancelAll: fn(),
+  onCancelHeadline: runners[0]?.onCancel ?? fn(),
+  runners,
+});
+
 const IslandShell = ({ snapshot }: { snapshot: IslandSnapshot }) => (
   <div className="flex items-center justify-center p-8">
-    <div className="relative flex h-6 items-center rounded-full border border-border/60 bg-background/85 px-2.5 shadow-sm backdrop-blur-xl backdrop-saturate-200">
+    <div
+      className="
+        relative flex h-6 items-center gap-1.5 rounded-full border
+        border-border/60 bg-background/85 px-2.5 shadow-sm backdrop-blur-xl
+        backdrop-saturate-200
+      "
+    >
       <DynamicIslandContent snapshot={snapshot} />
     </div>
   </div>
@@ -109,35 +142,78 @@ export const ConnectedIdleNoEnv: Story = {
   },
 };
 
-export const QueryRunning: Story = {
+export const QueryRunningSingle: Story = {
   args: {
-    snapshot: { kind: "query-running", startedAt: Date.now() - 2500 },
-  },
-};
-
-export const QueryRunningWithCancel: Story = {
-  args: {
-    snapshot: {
-      kind: "query-running",
-      onCancel: fn(),
-      startedAt: Date.now() - 4200,
-    },
+    snapshot: makeRunningSnapshot([
+      makeRunner({ startedAt: Date.now() - 4200 }),
+    ]),
   },
   play: async ({ canvas }) => {
-    await expect(
-      canvas.getByRole("button", { name: /cancel query/i })
-    ).toBeVisible();
+    await expect(canvas.getByText("Running")).toBeInTheDocument();
   },
 };
 
-export const QueryRunningSlow: Story = {
+export const QueryRunningThree: Story = {
   args: {
-    snapshot: {
-      kind: "query-running",
-      onCancel: fn(),
-      startedAt: Date.now() - 72_500,
-    },
+    snapshot: makeRunningSnapshot([
+      makeRunner({
+        connectionEnvironment: "prod",
+        connectionLabel: "analytics-db",
+        startedAt: Date.now() - 12_400,
+        tabId: "t1",
+        tabTitle: "Top users",
+      }),
+      makeRunner({
+        connectionColor: "denim",
+        connectionLabel: "billing-db",
+        startedAt: Date.now() - 4500,
+        tabId: "t2",
+        tabTitle: "Recent invoices",
+      }),
+      makeRunner({
+        connectionColor: "moss",
+        connectionEnvironment: "staging",
+        connectionLabel: "search-staging",
+        startedAt: Date.now() - 1100,
+        tabId: "t3",
+        tabTitle: "Index rebuild",
+      }),
+    ]),
   },
+  play: async ({ canvas }) => {
+    await expect(canvas.getByText("+2")).toBeVisible();
+  },
+};
+
+export const QueryRunningOverflow: Story = {
+  args: {
+    snapshot: makeRunningSnapshot(
+      Array.from({ length: 6 }, (_, i) =>
+        makeRunner({
+          connectionLabel: `db-${i + 1}`,
+          startedAt: Date.now() - (i + 1) * 2300,
+          tabId: `t${i + 1}`,
+          tabTitle: `Long-running query ${i + 1}`,
+        })
+      )
+    ),
+  },
+};
+
+export const QueryRunningReducedMotion: Story = {
+  args: {
+    snapshot: makeRunningSnapshot([
+      makeRunner({ startedAt: Date.now() - 3300, tabId: "t1" }),
+      makeRunner({ startedAt: Date.now() - 1100, tabId: "t2" }),
+    ]),
+  },
+  decorators: [
+    (Story) => (
+      <MotionConfig reducedMotion="always">
+        <Story />
+      </MotionConfig>
+    ),
+  ],
 };
 
 export const QueryStreaming: Story = {
@@ -228,11 +304,7 @@ export const AllStates: Story = {
             serverVersion: "16.2",
             username: "admin",
           },
-          {
-            kind: "query-running",
-            onCancel: fn(),
-            startedAt: Date.now() - 2400,
-          },
+          makeRunningSnapshot([makeRunner({ startedAt: Date.now() - 2400 })]),
           { kind: "query-streaming", onCancel: fn(), tokensReceived: 128 },
           { kind: "query-planning", onCancel: fn() },
           { kind: "query-cancelled" },
@@ -244,10 +316,20 @@ export const AllStates: Story = {
         ] satisfies IslandSnapshot[]
       ).map((snapshot) => (
         <div className="flex items-center gap-4" key={snapshot.kind}>
-          <span className="text-data w-36 text-right text-[10px] text-muted-foreground/50">
+          <span
+            className="
+              text-data w-36 text-right text-[10px] text-muted-foreground/50
+            "
+          >
             {snapshot.kind}
           </span>
-          <div className="flex h-6 items-center rounded-full border border-border/60 bg-background/85 px-2.5 shadow-sm backdrop-blur-xl backdrop-saturate-200">
+          <div
+            className="
+              flex h-6 items-center gap-1.5 rounded-full border border-border/60
+              bg-background/85 px-2.5 shadow-sm backdrop-blur-xl
+              backdrop-saturate-200
+            "
+          >
             <DynamicIslandContent snapshot={snapshot} />
           </div>
         </div>

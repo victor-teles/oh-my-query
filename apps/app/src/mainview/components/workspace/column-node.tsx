@@ -27,7 +27,10 @@ export const ColumnNode = ({ column }: ColumnNodeProps) => {
         render={
           <button
             type="button"
-            className="flex w-full items-center gap-2 rounded-md px-2 py-1 text-xs hover:bg-sidebar-accent/50"
+            className="
+              flex w-full items-center gap-2 rounded-md px-2 py-1 text-xs
+              hover:bg-sidebar-accent/50
+            "
             onClick={handleClick}
           />
         }

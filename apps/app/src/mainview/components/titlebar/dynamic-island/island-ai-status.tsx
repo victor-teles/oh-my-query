@@ -4,11 +4,9 @@ import { cn } from "@/lib/utils";
 
 import { IslandCancelButton } from "./island-cancel-button";
 import {
-  ISLAND_ITEM_TRANSITION,
-  ISLAND_ITEM_VARIANTS,
-  PLAN_DOT_TRANSITION,
+  INDICATOR_DOT_STAGGER_S,
+  INDICATOR_LOOP_TRANSITION,
   STREAM_BAR_HEIGHTS,
-  STREAM_BAR_TRANSITION,
 } from "./island-motion";
 
 const BAR_IDS = ["b1", "b2", "b3"] as const;
@@ -27,46 +25,39 @@ export const QueryStreamingStatus = ({
 
   return (
     <>
-      <motion.div
+      <div
         aria-hidden="true"
         className="flex items-end gap-px"
         style={{ height: BAR_HEIGHT_PX }}
-        transition={ISLAND_ITEM_TRANSITION}
-        variants={ISLAND_ITEM_VARIANTS}
       >
         {BAR_IDS.map((id, i) => (
           <motion.span
             animate={
               shouldReduceMotion
                 ? undefined
-                : { scaleY: [STREAM_BAR_HEIGHTS[i], 1, STREAM_BAR_HEIGHTS[i]] }
+                : { scaleY: [STREAM_BAR_HEIGHTS[i], 1] }
             }
             className="w-0.5 origin-bottom rounded-full bg-muted-foreground"
-            initial={{ scaleY: STREAM_BAR_HEIGHTS[i] }}
             key={id}
             style={{ height: BAR_HEIGHT_PX }}
-            transition={STREAM_BAR_TRANSITION(i)}
+            transition={INDICATOR_LOOP_TRANSITION(i * INDICATOR_DOT_STAGGER_S)}
           />
         ))}
-      </motion.div>
+      </div>
       <span className="sr-only">Streaming AI response</span>
-      <motion.span
-        className={cn(
-          "text-xs font-medium tracking-tight flex items-baseline gap-1 text-muted-foreground",
-          shouldReduceMotion && "font-semibold"
-        )}
-        transition={ISLAND_ITEM_TRANSITION}
-        variants={ISLAND_ITEM_VARIANTS}
-      >
+      <span className={cn(`
+            flex items-baseline gap-1 text-xs font-medium tracking-tight
+            text-muted-foreground
+          `, shouldReduceMotion && "font-semibold")}>
         <span>Streaming</span>
         {tokensReceived > 0 && (
           <span className="text-muted-foreground/50 tabular-nums">
             · {tokensReceived} tokens
           </span>
         )}
-      </motion.span>
+      </span>
       {onCancel && (
-        <IslandCancelButton onCancel={onCancel} label="Stop generating" />
+        <IslandCancelButton label="Stop generating" onCancel={onCancel} />
       )}
     </>
   );
@@ -82,25 +73,22 @@ export const QueryPlanningStatus = ({ onCancel }: QueryPlanningStatusProps) => {
   return (
     <>
       <motion.span
-        animate={shouldReduceMotion ? undefined : { scale: [0.5, 1, 0.5] }}
+        animate={shouldReduceMotion ? undefined : { scale: [0.6, 1] }}
         aria-hidden="true"
         className="size-1.5 shrink-0 rounded-full bg-muted-foreground"
-        initial={{ scale: 0.75 }}
-        transition={PLAN_DOT_TRANSITION}
+        transition={INDICATOR_LOOP_TRANSITION()}
       />
       <span className="sr-only">AI planning query</span>
-      <motion.span
+      <span
         className={cn(
-          "text-muted-foreground text-xs font-medium tracking-tight",
+          "text-xs font-medium tracking-tight text-muted-foreground",
           shouldReduceMotion && "font-semibold"
         )}
-        transition={ISLAND_ITEM_TRANSITION}
-        variants={ISLAND_ITEM_VARIANTS}
       >
         Planning…
-      </motion.span>
+      </span>
       {onCancel && (
-        <IslandCancelButton onCancel={onCancel} label="Stop planning" />
+        <IslandCancelButton label="Stop planning" onCancel={onCancel} />
       )}
     </>
   );

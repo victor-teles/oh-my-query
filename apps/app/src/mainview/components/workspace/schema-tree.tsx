@@ -112,7 +112,7 @@ export const SchemaTree = ({
 
   if (isSearching) {
     return (
-      <div className="px-1 py-1">
+      <div className="p-1">
         {searchResults.map(({ item, isView, matches }) => (
           <TableNode
             highlightMatches={matches}
@@ -128,10 +128,10 @@ export const SchemaTree = ({
   }
 
   return (
-    <div className="px-1 py-1">
+    <div className="p-1">
       {favoriteItems.length > 0 && (
         <>
-          <div className="mb-0.5 flex items-center gap-1 px-2 text-section-label">
+          <div className="text-section-label mb-0.5 flex items-center gap-1 px-2">
             <Star className="size-2.5" />
             Favorites ({favoriteItems.length})
           </div>
@@ -149,7 +149,7 @@ export const SchemaTree = ({
       {tableItems.length > 0 && (
         <>
           {(favoriteItems.length > 0 || viewItems.length > 0) && (
-            <div className="mb-0.5 mt-3 px-2 text-section-label">
+            <div className="text-section-label mt-3 mb-0.5 px-2">
               Tables ({tableItems.length})
             </div>
           )}
@@ -166,7 +166,7 @@ export const SchemaTree = ({
 
       {viewItems.length > 0 && (
         <>
-          <div className="mb-0.5 mt-3 px-2 text-section-label">
+          <div className="text-section-label mt-3 mb-0.5 px-2">
             Views ({viewItems.length})
           </div>
           {viewItems.map((view) => (

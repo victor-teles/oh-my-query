@@ -72,16 +72,14 @@ export const PlanNodeCard = ({
   );
 
   return (
-    <div
-      className={cn(
-        "group relative overflow-hidden rounded-md border transition-all duration-150",
-        isSelected
-          ? "border-primary/50 bg-card shadow-sm"
-          : "border-border/60 bg-card/60 hover:border-border hover:bg-card",
-        isOnHotPath && !isSelected && "border-warning/40"
-      )}
-    >
-      <div className="relative flex items-center gap-1 px-2 py-2">
+    <div className={cn(`
+          group relative overflow-hidden rounded-md border transition-all
+          duration-150
+        `, isSelected ? "border-primary/50 bg-card shadow-sm" : `
+            border-border/60 bg-card/60
+            hover:border-border hover:bg-card
+          `, isOnHotPath && !isSelected && "border-warning/40")}>
+      <div className="relative flex items-center gap-1 p-2">
         <TierAccent tier={tier} />
         <ChevronToggle
           hasChildren={hasChildren}
@@ -90,7 +88,11 @@ export const PlanNodeCard = ({
         />
         <button
           aria-pressed={isSelected}
-          className="flex min-w-0 flex-1 items-center gap-2 text-left outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring/60"
+          className="
+            flex min-w-0 flex-1 items-center gap-2 text-left outline-none
+            focus-visible:ring-2 focus-visible:ring-ring/60
+            focus-visible:ring-inset
+          "
           onClick={handleSelect}
           type="button"
         >
@@ -131,7 +133,12 @@ const ChevronToggle = ({
     <button
       aria-expanded={isExpanded}
       aria-label={isExpanded ? "Collapse" : "Expand"}
-      className="flex size-4 shrink-0 items-center justify-center rounded-sm text-muted-foreground outline-none transition-colors hover:bg-accent hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring/60"
+      className="
+        flex size-4 shrink-0 items-center justify-center rounded-sm
+        text-muted-foreground transition-colors outline-none
+        hover:bg-accent hover:text-foreground
+        focus-visible:ring-2 focus-visible:ring-ring/60
+      "
       onClick={onToggle}
       type="button"
     >
@@ -156,18 +163,26 @@ const NodeSummary = ({
   return (
     <div className="flex min-w-0 flex-1 flex-col gap-0.5">
       <div className="flex items-center gap-1.5">
-        <span className="truncate font-medium text-[12px] text-foreground">
+        <span className="truncate text-[12px] font-medium text-foreground">
           {node.label}
         </span>
         {isOnHotPath && (
-          <span className="shrink-0 rounded-sm bg-warning/15 px-1 py-px font-medium text-[9px] text-warning uppercase tracking-wide">
+          <span
+            className="
+              shrink-0 rounded-sm bg-warning/15 px-1 py-px text-[9px]
+              font-medium tracking-wide text-warning uppercase
+            "
+          >
             hot
           </span>
         )}
         {node.warnings.length > 0 && (
           <span
             aria-label={`${node.warnings.length} warning(s): ${node.warnings.join(", ")}`}
-            className="inline-flex shrink-0 items-center gap-0.5 rounded-sm bg-warning/15 px-1 py-px font-medium text-[10px] text-warning"
+            className="
+              inline-flex shrink-0 items-center gap-0.5 rounded-sm bg-warning/15
+              px-1 py-px text-[10px] font-medium text-warning
+            "
           >
             <AlertTriangle aria-hidden="true" className="size-2.5" />
             {node.warnings[0]?.split(" ")[0]?.toLowerCase() ??
@@ -189,7 +204,11 @@ const RowsLine = ({
   rowsActual: string | null;
   rowsEst: string | null;
 }) => (
-  <div className="flex items-center gap-2 font-mono text-[10px] text-muted-foreground">
+  <div
+    className="
+      flex items-center gap-2 font-mono text-[10px] text-muted-foreground
+    "
+  >
     {rowsActual && rowsEst ? (
       <span>
         <span className="text-foreground/70">{rowsActual}</span>
@@ -212,7 +231,11 @@ const NodeMetric = ({ node, tier }: { node: PlanNode; tier: CostTier }) => {
       : null;
 
   return (
-    <div className="flex shrink-0 items-baseline gap-2 font-mono text-[11px] tabular-nums">
+    <div
+      className="
+        flex shrink-0 items-baseline gap-2 font-mono text-[11px] tabular-nums
+      "
+    >
       {selfMs && (
         <span
           className={cn(

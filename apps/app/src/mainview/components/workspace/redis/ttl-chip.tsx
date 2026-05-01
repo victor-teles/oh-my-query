@@ -23,14 +23,10 @@ const formatTtl = (secs: number): string => {
 export const TtlChip = ({ ttlSecs, className }: TtlChipProps) => {
   if (ttlSecs === null) {
     return (
-      <span
-        aria-hidden="true"
-        className={cn(
-          "inline-flex min-w-[26px] justify-end font-mono text-[10px] tabular-nums text-muted-foreground/35",
-          className
-        )}
-        title="No expiry"
-      >
+      <span aria-hidden="true" className={cn(`
+            inline-flex min-w-[26px] justify-end font-mono text-[10px]
+            text-muted-foreground/35 tabular-nums
+          `, className)} title="No expiry">
         —
       </span>
     );
@@ -39,16 +35,10 @@ export const TtlChip = ({ ttlSecs, className }: TtlChipProps) => {
   const isExpiring = ttlSecs < WARNING_THRESHOLD;
 
   return (
-    <span
-      className={cn(
-        "inline-flex min-w-[26px] justify-end font-mono text-[10px] tabular-nums",
-        isExpiring
-          ? "font-medium text-amber-500"
-          : "font-normal text-muted-foreground/70",
-        className
-      )}
-      title={`Expires in ${ttlSecs}s`}
-    >
+    <span className={cn(`
+          inline-flex min-w-[26px] justify-end font-mono text-[10px]
+          tabular-nums
+        `, isExpiring ? "font-medium text-amber-500" : "font-normal text-muted-foreground/70", className)} title={`Expires in ${ttlSecs}s`}>
       {formatTtl(ttlSecs)}
     </span>
   );

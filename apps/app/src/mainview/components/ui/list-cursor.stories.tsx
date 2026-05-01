@@ -27,12 +27,13 @@ function ListCursorDemo() {
           key={item}
           type="button"
           onClick={() => setActive(item)}
-          className={cn(
-            "relative rounded-md px-3 py-1.5 text-left text-xs transition-colors",
-            active === item
-              ? "text-primary-foreground"
-              : "text-muted-foreground hover:text-foreground"
-          )}
+          className={cn(`
+              relative rounded-md px-3 py-1.5 text-left text-xs
+              transition-colors
+            `, active === item ? "text-primary-foreground" : `
+                text-muted-foreground
+                hover:text-foreground
+              `)}
         >
           {active === item && (
             <ListCursor layoutId="list-cursor-demo" className="inset-0 -z-10" />

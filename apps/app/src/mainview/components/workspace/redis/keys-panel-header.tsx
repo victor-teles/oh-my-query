@@ -30,7 +30,7 @@ export const KeysPanelHeader = ({
   onRefresh,
   isLoading,
 }: KeysPanelHeaderProps) => (
-  <div className="flex flex-col gap-1.5 border-b border-sidebar-border px-2 py-2">
+  <div className="flex flex-col gap-1.5 border-b border-sidebar-border p-2">
     <div className="flex items-center gap-1.5">
       <RedisDbChip
         dbIndex={dbIndex}

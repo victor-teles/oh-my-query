@@ -6,7 +6,6 @@ import {
   XCircle,
 } from "lucide-react";
 import { useCallback, useState } from "react";
-import { toast } from "sonner";
 
 import type {
   ConnectionColor,
@@ -115,7 +114,11 @@ const EmojiPicker = ({ value, defaultEmoji, onSelect }: EmojiPickerProps) => {
         render={
           <button
             aria-label="Choose emoji"
-            className="flex size-9 items-center justify-center rounded-md border border-input bg-background text-lg transition-colors hover:border-foreground/40"
+            className="
+              flex size-9 items-center justify-center rounded-md border
+              border-input bg-background text-lg transition-colors
+              hover:border-foreground/40
+            "
             type="button"
           >
             {value || <span className="opacity-40">{defaultEmoji}</span>}
@@ -158,10 +161,11 @@ const EmojiButton = ({ emoji, isSelected, onSelect }: EmojiButtonProps) => {
     <button
       aria-label={`Select ${emoji}`}
       aria-pressed={isSelected}
-      className={cn(
-        "flex size-8 items-center justify-center rounded-md text-base transition-colors hover:bg-muted",
-        isSelected && "bg-accent"
-      )}
+      className={cn(`
+          flex size-8 items-center justify-center rounded-md text-base
+          transition-colors
+          hover:bg-muted
+        `, isSelected && "bg-accent")}
       onClick={handleClick}
       type="button"
     >
@@ -184,16 +188,11 @@ const ColorSwatch = ({ color, isSelected, onSelect }: ColorSwatchProps) => {
 
   if (color === "") {
     return (
-      <button
-        aria-label="No color"
-        aria-pressed={isSelected}
-        className={cn(
-          "flex size-6 items-center justify-center rounded-full border border-dashed border-border text-muted-foreground transition-colors hover:border-foreground/40",
-          isSelected && "ring-2 ring-ring ring-offset-2 ring-offset-background"
-        )}
-        onClick={handleClick}
-        type="button"
-      >
+      <button aria-label="No color" aria-pressed={isSelected} className={cn(`
+            flex size-6 items-center justify-center rounded-full border
+            border-dashed border-border text-muted-foreground transition-colors
+            hover:border-foreground/40
+          `, isSelected && "ring-2 ring-ring ring-offset-2 ring-offset-background")} onClick={handleClick} type="button">
         <span className="sr-only">None</span>
         <span aria-hidden="true" className="text-[10px]">
           ∅
@@ -207,17 +206,11 @@ const ColorSwatch = ({ color, isSelected, onSelect }: ColorSwatchProps) => {
   }
 
   return (
-    <button
-      aria-label={color}
-      aria-pressed={isSelected}
-      className={cn(
-        "flex size-6 items-center justify-center rounded-full transition-transform hover:scale-110",
-        classes.swatch,
-        isSelected && "ring-2 ring-ring ring-offset-2 ring-offset-background"
-      )}
-      onClick={handleClick}
-      type="button"
-    >
+    <button aria-label={color} aria-pressed={isSelected} className={cn(`
+          flex size-6 items-center justify-center rounded-full
+          transition-transform
+          hover:scale-110
+        `, classes.swatch, isSelected && "ring-2 ring-ring ring-offset-2 ring-offset-background")} onClick={handleClick} type="button">
       {isSelected && (
         <Check aria-hidden="true" className="size-3.5 text-white" />
       )}
@@ -342,7 +335,10 @@ const AppearanceSection = ({
     <CollapsibleTrigger
       render={
         <button
-          className="flex w-full items-center gap-1.5 text-section-label hover:text-foreground"
+          className="
+            text-section-label flex w-full items-center gap-1.5
+            hover:text-foreground
+          "
           type="button"
         >
           <ChevronDown
@@ -352,7 +348,11 @@ const AppearanceSection = ({
         </button>
       }
     />
-    <CollapsibleContent className="grid grid-cols-[auto_1fr] items-start gap-4 pt-3">
+    <CollapsibleContent
+      className="
+      grid grid-cols-[auto_1fr] items-start gap-4 pt-3
+    "
+    >
       <div className="grid gap-1.5">
         <Label>Emoji</Label>
         <EmojiPicker
@@ -606,6 +606,7 @@ export const ConnectionForm = ({
     connection ? connectionToFormState(connection) : INITIAL_STATE
   );
   const [testStatus, setTestStatus] = useState<TestStatus>({ state: "idle" });
+  const [formError, setFormError] = useState<string | null>(null);
   const [appearanceOpen, setAppearanceOpen] = useState(
     Boolean(connection?.emoji || connection?.color)
   );
@@ -617,6 +618,7 @@ export const ConnectionForm = ({
       (e: React.ChangeEvent<HTMLInputElement>) => {
         setForm((prev) => ({ ...prev, [key]: e.target.value }));
         setTestStatus({ state: "idle" });
+        setFormError(null);
       },
     []
   );
@@ -663,19 +665,13 @@ export const ConnectionForm = ({
   const handleTestConnection = useCallback(async () => {
     const validationError = validate(form);
     if (validationError) {
-      toast.error(validationError);
+      setFormError(validationError);
       return;
     }
-
+    setFormError(null);
     setTestStatus({ state: "testing" });
     const status = await attemptTestConnection(form);
     setTestStatus(status);
-
-    if (status.state === "success") {
-      toast.success(`Connected in ${status.latencyMs}ms`);
-    } else if (status.state === "error") {
-      toast.error(status.message);
-    }
   }, [form]);
 
   const handleSubmit = useCallback(
@@ -683,9 +679,10 @@ export const ConnectionForm = ({
       e.preventDefault();
       const error = validate(form);
       if (error) {
-        toast.error(error);
+        setFormError(error);
         return;
       }
+      setFormError(null);
 
       if (connection) {
         const updated: DatabaseConnection = {
@@ -696,12 +693,10 @@ export const ConnectionForm = ({
           pinned: connection.pinned,
         };
         await updateConnection(updated);
-        toast.success(`Connection "${updated.name}" updated`);
         onSuccess?.(updated);
       } else {
         const newConn = buildConnection(form);
         await saveConnection(newConn);
-        toast.success(`Connection "${newConn.name}" saved`);
         onSuccess?.(newConn);
       }
     },
@@ -855,6 +850,17 @@ export const ConnectionForm = ({
           </span>
         )}
       </div>
+
+      {formError && (
+        <p
+          aria-live="polite"
+          className="flex items-center gap-1 text-xs text-destructive"
+          role="alert"
+        >
+          <XCircle className="size-3.5" />
+          {formError}
+        </p>
+      )}
 
       <Button type="submit">
         {connection ? "Update connection" : "Save connection"}

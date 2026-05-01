@@ -17,7 +17,6 @@ import {
 import { useConnection } from "@/contexts/connection-context";
 import { useHistoryPanel } from "@/hooks/use-history-panel";
 import { useSchema } from "@/hooks/use-schema";
-import { useWorkspaceIslandSync } from "@/hooks/use-workspace-island-sync";
 import { useWorkspaceMode } from "@/hooks/use-workspace-mode";
 import { useWorkspaceModeHotkeys } from "@/hooks/use-workspace-mode-hotkeys";
 import { composeActionMessage } from "@/lib/ai-actions";
@@ -34,8 +33,6 @@ export const WorkspaceLayout = () => {
   const [shortcutsOpen, setShortcutsOpen] = useState(false);
   const [pendingAction, setPendingAction] = useState<AIAction | null>(null);
   const { mode, setMode } = useWorkspaceMode(connection.id);
-
-  useWorkspaceIslandSync();
 
   const {
     schema,
@@ -145,7 +142,7 @@ export const WorkspaceLayout = () => {
           workspaceMode={mode}
         />
       </Titlebar>
-      <div className="relative flex flex-1 min-h-0">
+      <div className="relative flex min-h-0 flex-1">
         <ResizablePanelGroup
           className="flex-1"
           key={mode}

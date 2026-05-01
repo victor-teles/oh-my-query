@@ -70,7 +70,10 @@ export const KeysPatternInput = ({
             type="button"
             onClick={handleClear}
             aria-label="Clear pattern"
-            className="rounded p-0.5 text-muted-foreground hover:bg-sidebar-accent/50 hover:text-sidebar-foreground"
+            className="
+              rounded-sm p-0.5 text-muted-foreground
+              hover:bg-sidebar-accent/50 hover:text-sidebar-foreground
+            "
           >
             <X className="size-3" />
           </button>

@@ -1,12 +1,38 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 
-import type { IslandSnapshot } from "@/contexts/island-context";
+import type {
+  IslandSnapshot,
+  RunningQueryEntry,
+} from "@/contexts/island-context";
 
 import { DynamicIslandContent } from "./dynamic-island-content";
 
 const renderSnapshot = (snapshot: IslandSnapshot) =>
   render(<DynamicIslandContent snapshot={snapshot} />);
+
+const makeRunner = (
+  overrides: Partial<RunningQueryEntry> = {}
+): RunningQueryEntry => ({
+  connectionColor: undefined,
+  connectionEmoji: undefined,
+  connectionEnvironment: undefined,
+  connectionId: "conn-1",
+  connectionLabel: "my-db",
+  onCancel: vi.fn(),
+  startedAt: Date.now(),
+  tabId: "tab-1",
+  tabTitle: "Untitled",
+  ...overrides,
+});
+
+const makeRunning = (runners: RunningQueryEntry[]): IslandSnapshot => ({
+  headlineTabId: runners[0]?.tabId ?? "",
+  kind: "query-running",
+  onCancelAll: vi.fn(),
+  onCancelHeadline: runners[0]?.onCancel ?? vi.fn(),
+  runners,
+});
 
 describe("dynamicIslandContent", () => {
   describe("connection states", () => {
@@ -60,37 +86,39 @@ describe("dynamicIslandContent", () => {
 
   describe("query states", () => {
     it("renders query-running with executing label", () => {
-      renderSnapshot({ kind: "query-running", startedAt: Date.now() });
+      renderSnapshot(makeRunning([makeRunner()]));
       expect(screen.getByText("Executing query")).toBeDefined();
       expect(screen.getByText("Running")).toBeDefined();
     });
 
-    it("renders query-running cancel button when onCancel is provided", () => {
-      const onCancel = vi.fn();
-      renderSnapshot({
-        kind: "query-running",
-        onCancel,
-        startedAt: Date.now(),
-      });
-      const btn = screen.getByRole("button", { name: /cancel query/i });
-      expect(btn).toBeDefined();
-      btn.click();
-      expect(onCancel).toHaveBeenCalledOnce();
-    });
-
-    it("renders query-running without cancel button when onCancel is absent", () => {
-      renderSnapshot({ kind: "query-running", startedAt: Date.now() });
+    it("renders trigger button that opens the picker", () => {
+      renderSnapshot(makeRunning([makeRunner({ tabTitle: "First" })]));
       expect(
-        screen.queryByRole("button", { name: /cancel query/i })
-      ).toBeNull();
+        screen.getByRole("button", { name: /show running query/i })
+      ).toBeDefined();
     });
 
     it("renders elapsed time after threshold", () => {
-      renderSnapshot({
-        kind: "query-running",
-        startedAt: Date.now() - 4200,
-      });
+      renderSnapshot(
+        makeRunning([makeRunner({ startedAt: Date.now() - 4200 })])
+      );
       expect(screen.getByText(/4\.\ds/)).toBeDefined();
+    });
+
+    it("renders +N-1 count chip when 2 or more runners", () => {
+      renderSnapshot(
+        makeRunning([
+          makeRunner({ tabId: "t1", tabTitle: "First" }),
+          makeRunner({ tabId: "t2", tabTitle: "Second" }),
+          makeRunner({ tabId: "t3", tabTitle: "Third" }),
+        ])
+      );
+      expect(screen.getByText("+2")).toBeDefined();
+    });
+
+    it("hides +N-1 chip with single runner", () => {
+      renderSnapshot(makeRunning([makeRunner()]));
+      expect(screen.queryByText(/^\+\d+$/)).toBeNull();
     });
 
     it("renders query-success with row count and time", () => {
@@ -162,18 +190,15 @@ describe("dynamicIslandContent", () => {
     });
 
     it("sr-only labels are present for query-running", () => {
-      renderSnapshot({ kind: "query-running", startedAt: Date.now() });
+      renderSnapshot(makeRunning([makeRunner()]));
       expect(screen.getByText("Executing query")).toBeDefined();
     });
 
-    it("cancel button on running has Escape keyshortcut", () => {
-      renderSnapshot({
-        kind: "query-running",
-        onCancel: vi.fn(),
-        startedAt: Date.now(),
-      });
-      const btn = screen.getByRole("button", { name: /cancel query/i });
-      expect(btn.getAttribute("aria-keyshortcuts")).toBe("Escape");
+    it("running trigger advertises listbox popup via aria-haspopup", () => {
+      renderSnapshot(makeRunning([makeRunner()]));
+      const btn = screen.getByRole("button", { name: /show running query/i });
+      expect(btn.getAttribute("aria-haspopup")).toBe("listbox");
+      expect(btn.getAttribute("aria-expanded")).toBe("false");
     });
 
     it("cancel button on streaming labels as Stop generating", () => {

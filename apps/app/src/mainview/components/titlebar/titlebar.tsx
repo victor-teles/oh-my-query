@@ -27,7 +27,7 @@ export const Titlebar = ({
   return (
     <header
       className={cn(
-        "flex h-9.5 shrink-0 select-none items-center",
+        "flex h-9.5 shrink-0 items-center select-none",
         !hasSidebar && "border-b border-sidebar-border bg-sidebar/80",
         DRAG,
         className

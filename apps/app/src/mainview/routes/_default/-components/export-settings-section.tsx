@@ -51,7 +51,13 @@ const CheckboxField = ({
           render={
             <button
               aria-label={`What does ${label} mean?`}
-              className="cursor-pointer text-muted-foreground/60 transition-colors hover:text-muted-foreground focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sidebar-ring"
+              className="
+                cursor-pointer text-muted-foreground/60 transition-colors
+                hover:text-muted-foreground
+                focus:outline-none
+                focus-visible:outline-2 focus-visible:outline-offset-2
+                focus-visible:outline-sidebar-ring
+              "
               type="button"
             />
           }

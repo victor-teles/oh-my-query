@@ -34,7 +34,7 @@ export const Default: Story = {
     await expect(canvas.getByText("users")).toBeVisible();
   },
   render: () => (
-    <ScrollArea className="h-48 w-48 rounded-md border">
+    <ScrollArea className="size-48 rounded-md border">
       <div className="p-3">
         <h4 className="mb-3 text-sm font-medium">Tables</h4>
         {tables.map((table) => (
@@ -55,7 +55,10 @@ export const Horizontal: Story = {
         {tables.map((table) => (
           <div
             key={table}
-            className="flex h-16 w-24 shrink-0 items-center justify-center rounded-md border text-xs"
+            className="
+              flex h-16 w-24 shrink-0 items-center justify-center rounded-md
+              border text-xs
+            "
           >
             {table}
           </div>

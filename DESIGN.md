@@ -31,31 +31,31 @@ colors:
   json-boolean: "oklch(0.84 0.14 70)"
 typography:
   headline:
-    fontFamily: "Switzer, -apple-system, BlinkMacSystemFont, sans-serif"
+    fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', Arial, sans-serif"
     fontSize: "1.125rem"
     fontWeight: 500
     lineHeight: 1.3
     letterSpacing: "-0.028em"
   title:
-    fontFamily: "Switzer, -apple-system, BlinkMacSystemFont, sans-serif"
+    fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', Arial, sans-serif"
     fontSize: "0.875rem"
     fontWeight: 500
     lineHeight: 1.4
     letterSpacing: "-0.003em"
   body:
-    fontFamily: "Switzer, -apple-system, BlinkMacSystemFont, sans-serif"
+    fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', Arial, sans-serif"
     fontSize: "0.75rem"
     fontWeight: 400
     lineHeight: 1.65
     letterSpacing: "-0.003em"
   chrome:
-    fontFamily: "Switzer, -apple-system, BlinkMacSystemFont, sans-serif"
+    fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', Arial, sans-serif"
     fontSize: "0.6875rem"
     fontWeight: 500
     lineHeight: 1.4
     letterSpacing: "-0.028em"
   section-label:
-    fontFamily: "Switzer, -apple-system, BlinkMacSystemFont, sans-serif"
+    fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', Arial, sans-serif"
     fontSize: "0.625rem"
     fontWeight: 500
     lineHeight: 1.2
@@ -162,7 +162,7 @@ This system explicitly rejects: bureaucratic grey admin panels (DBeaver, phpMyAd
 - Amber primary used sparingly (focus rings, selected state, the Island at attention)
 - Pro-density type scale (10–14px) with generous vertical rhythm between groups
 - Real macOS vibrancy via `backdrop-blur-xl backdrop-saturate-200`, only where it earns its weight
-- Switzer (variable) for UI, JetBrains Mono (variable, ligatures off) for SQL and data
+- macOS system font (San Francisco via `-apple-system`) for UI, JetBrains Mono (variable, ligatures off) for SQL and data
 - iOS-like springs for motion; `prefers-reduced-motion` respected fully
 
 ## 2. Colors
@@ -213,10 +213,10 @@ These are never used as chart colors or status indicators. They belong to connec
 
 ## 3. Typography
 
-**Display / UI Font:** Switzer Variable (100–900), with fallback `-apple-system, BlinkMacSystemFont, sans-serif`.
+**Display / UI Font:** macOS system font stack — `-apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Arial, sans-serif`. On macOS this resolves to San Francisco; the stack degrades cleanly on other platforms.
 **Mono Font:** JetBrains Mono Variable, with fallback `ui-monospace, SFMono-Regular, monospace`.
 
-**Character:** Switzer brings geometric precision with humanist warmth — distinctive without being showy, and crucially not Inter. Stylistic sets `ss01`, `ss03`, `cv11` are enabled for a slightly more editorial character. Default tracking is a whisper tight (`-0.003em`) so the UI feels deliberate at small sizes. JetBrains Mono handles SQL and result data with ligatures explicitly disabled (`liga: 0`) — SQL operators should read as operators, not as custom glyphs — and with slashed zero (`zero`) and stylistic set `ss02` for data legibility.
+**Character:** SF Pro is the native macOS UI face — calm, neutral, and unmistakably at home in the OS chrome. The app inherits its proportions and spacing rather than competing with them. Default tracking is a whisper tight (`-0.003em`) so the UI feels deliberate at small sizes. JetBrains Mono handles SQL and result data with ligatures explicitly disabled (`liga: 0`) — SQL operators should read as operators, not as custom glyphs — and with slashed zero (`zero`) and stylistic set `ss02` for data legibility.
 
 ### Hierarchy
 
@@ -235,7 +235,7 @@ Sizes run small on purpose. This is a pro tool; users want information. Rhythm c
 
 **The Ligatures-Off Rule.** Mono renders SQL. `=>`, `!=`, `<=`, `->` are operators, not arrows. `font-feature-settings: "liga" 0, "zero"` is not optional.
 
-**The No-Inter Rule.** Inter, IBM Plex, Space Grotesk, Fraunces, and Instrument Sans are forbidden. Switzer is the identity; the whole point is to not look like everyone else's developer tool.
+**The Native-Type Rule.** The UI face is the macOS system font, not a bundled web font. Don't reach for Inter, IBM Plex, Space Grotesk, Fraunces, or Instrument Sans to "give the app personality" — personality lives in color, motion, and the Dynamic Island, not in the typeface. Letting SF do the talking is the whole point of native-calm.
 
 ## 4. Elevation
 
@@ -328,7 +328,7 @@ The titlebar's centered status pill is the single most distinctive surface in th
 - **Do** tint every neutral warm (0.005–0.008 chroma, 34–48° hue). There is no such thing as pure grey in this app.
 - **Do** reserve the Amber Heartbeat for focus rings, selected state, the primary button, and the Dynamic Island at attention.
 - **Do** build depth through tonal surface layering (Warm Ink → Warm Raised → Warm Accent).
-- **Do** use Switzer for UI and JetBrains Mono for SQL and data — with ligatures off on mono.
+- **Do** use the macOS system font (`-apple-system`) for UI and JetBrains Mono for SQL and data — with ligatures off on mono.
 - **Do** keep default controls at 28px (`h-7`) and body text at 12px. Density is the point.
 - **Do** use real macOS vibrancy via `windowEffects: ["sidebar"]` on the Tauri window, and `backdrop-blur-xl backdrop-saturate-200` on the Dynamic Island.
 - **Do** put iOS-like springs (`stiffness: 400, damping: 30`) on morphing elements and exponential ease-outs on state transitions (`150ms ease-out`).
@@ -341,7 +341,7 @@ The titlebar's centered status pill is the single most distinctive surface in th
 - **Don't** use purple or cyan gradients, neon accents on dark, or sparkle iconography. This is not a "✨ AI-powered" product.
 - **Don't** build a chatbot drawer bolted onto the IDE. AI output lands in the editor like a colleague pasted it — not like a product feature.
 - **Don't** imitate DBeaver / phpMyAdmin / pgAdmin chrome — bureaucratic grey panels, icon-heavy toolbars, zero personality. That's the anti-brand.
-- **Don't** use Inter, IBM Plex, Space Grotesk, Fraunces, or Instrument Sans. Switzer is the identity.
+- **Don't** use Inter, IBM Plex, Space Grotesk, Fraunces, or Instrument Sans. The macOS system font is the UI face — let it disappear into the OS.
 - **Don't** scale controls up to 36/40px to feel "safer". The system's rhythm breaks.
 - **Don't** use `border-left` / `border-right` greater than 1px as a colored accent stripe on cards, list items, or callouts. Rewrite with full borders, tonal backgrounds, or leading icons.
 - **Don't** use `background-clip: text` with gradients. Emphasis is weight and size.

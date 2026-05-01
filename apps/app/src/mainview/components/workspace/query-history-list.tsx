@@ -248,7 +248,7 @@ export const QueryHistoryList = ({ connectionId }: QueryHistoryListProps) => {
   return (
     <div className="flex h-full flex-col">
       {showFilter && (
-        <div className="px-2 py-2">
+        <div className="p-2">
           <InputGroup>
             <InputGroupAddon>
               <InputGroupText>
@@ -272,10 +272,14 @@ export const QueryHistoryList = ({ connectionId }: QueryHistoryListProps) => {
                       aria-label="Show successful queries"
                       aria-pressed={showSuccess}
                       className={cn(
-                        "rounded p-0.5 transition-colors",
-                        showSuccess
-                          ? "text-emerald-500 hover:text-emerald-400"
-                          : "text-muted-foreground/40 hover:text-muted-foreground"
+                        "rounded-sm p-0.5 transition-colors",
+                        showSuccess ? `
+                            text-emerald-500
+                            hover:text-emerald-400
+                          ` : `
+                            text-muted-foreground/40
+                            hover:text-muted-foreground
+                          `
                       )}
                     />
                   }
@@ -293,10 +297,14 @@ export const QueryHistoryList = ({ connectionId }: QueryHistoryListProps) => {
                       aria-label="Show failed queries"
                       aria-pressed={showFailure}
                       className={cn(
-                        "rounded p-0.5 transition-colors",
-                        showFailure
-                          ? "text-destructive hover:text-destructive/80"
-                          : "text-muted-foreground/40 hover:text-muted-foreground"
+                        "rounded-sm p-0.5 transition-colors",
+                        showFailure ? `
+                            text-destructive
+                            hover:text-destructive/80
+                          ` : `
+                            text-muted-foreground/40
+                            hover:text-muted-foreground
+                          `
                       )}
                     />
                   }
@@ -329,7 +337,10 @@ export const QueryHistoryList = ({ connectionId }: QueryHistoryListProps) => {
               >
                 <div
                   role="separator"
-                  className="sticky top-0 z-10 bg-sidebar px-2 pb-1 text-[10px] font-medium text-muted-foreground uppercase tracking-wider"
+                  className="
+                    sticky top-0 z-10 bg-sidebar px-2 pb-1 text-[10px]
+                    font-medium tracking-wider text-muted-foreground uppercase
+                  "
                 >
                   {group.label}
                 </div>
@@ -383,15 +394,25 @@ const HistoryItem = memo(function HistoryItem({ entry }: HistoryItemProps) {
             aria-label={`Open query in new tab: ${truncateSql(entry.sql, 50)}`}
             className={cn(
               "flex w-full flex-col gap-1 rounded-md px-2 py-1.5 text-left",
-              "hover:bg-accent/50 transition-[color,background-color,transform] duration-100",
+              `
+                transition-[color,background-color,transform] duration-100
+                hover:bg-accent/50
+              `,
               "motion-safe:active:scale-[0.98]",
-              "focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:outline-none"
+              `
+                focus-visible:ring-2 focus-visible:ring-ring/50
+                focus-visible:outline-none
+              `
             )}
           />
         }
       >
         <div className="flex items-center justify-between gap-2">
-          <div className="flex items-center gap-1.5 text-[10px] text-muted-foreground">
+          <div
+            className="
+              flex items-center gap-1.5 text-[10px] text-muted-foreground
+            "
+          >
             {entry.success ? (
               <CheckCircle2 className="size-3 text-emerald-500" />
             ) : (
@@ -402,7 +423,11 @@ const HistoryItem = memo(function HistoryItem({ entry }: HistoryItemProps) {
             )}
             <span className="tabular-nums">{entry.executionTimeMs}ms</span>
           </div>
-          <div className="flex items-center gap-1 text-[10px] text-muted-foreground">
+          <div
+            className="
+              flex items-center gap-1 text-[10px] text-muted-foreground
+            "
+          >
             <Clock className="size-2.5" />
             <span>
               {formatDistanceToNow(new Date(entry.timestamp), {
@@ -411,7 +436,7 @@ const HistoryItem = memo(function HistoryItem({ entry }: HistoryItemProps) {
             </span>
           </div>
         </div>
-        <p className="line-clamp-2 text-xs font-mono text-foreground">
+        <p className="line-clamp-2 font-mono text-xs text-foreground">
           {normalizeSql(entry.sql)}
         </p>
         {!entry.success && entry.error && (
@@ -421,9 +446,13 @@ const HistoryItem = memo(function HistoryItem({ entry }: HistoryItemProps) {
         )}
       </TooltipTrigger>
       <TooltipContent side="right" className="max-w-80">
-        <pre className="whitespace-pre-wrap text-xs">{entry.sql}</pre>
+        <pre className="text-xs whitespace-pre-wrap">{entry.sql}</pre>
         {!entry.success && entry.error && (
-          <p className="mt-2 border-t border-destructive/20 pt-2 text-xs text-destructive">
+          <p
+            className="
+              mt-2 border-t border-destructive/20 pt-2 text-xs text-destructive
+            "
+          >
             {entry.error}
           </p>
         )}

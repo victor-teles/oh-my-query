@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { toast } from "sonner";
 
 import type { DatabaseConnection } from "@/lib/connections";
 import type { RedisKey } from "@/lib/tauri";
@@ -169,7 +168,6 @@ export const KeysPanel = ({
 
   const handleCopyName = useCallback((key: RedisKey) => {
     navigator.clipboard.writeText(key.name);
-    toast.success("Key copied");
   }, []);
 
   const handleRequestDelete = useCallback((key: RedisKey) => {
@@ -263,7 +261,7 @@ export const KeysPanel = ({
             <KeysErrorState message={errorMessage} onRetry={refresh} />
           )}
           {keys.length > 0 && (
-            <div className="px-1 py-1">
+            <div className="p-1">
               <KeysNamespaceTree
                 actions={{
                   onCheckTtl: handleCheckTtl,

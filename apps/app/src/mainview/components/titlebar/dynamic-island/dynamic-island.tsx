@@ -9,8 +9,13 @@ import { isTauri } from "@/lib/tauri";
 import { cn } from "@/lib/utils";
 
 import { DynamicIslandContent } from "./dynamic-island-content";
-
-const SPRING = { damping: 30, stiffness: 400, type: "spring" } as const;
+import {
+  CONTENT_CROSSFADE_ANIMATE,
+  CONTENT_CROSSFADE_INITIAL,
+  CONTENT_CROSSFADE_TRANSITION,
+  PILL_LAYOUT_TRANSITION,
+  PILL_PRESENCE_TRANSITION,
+} from "./island-motion";
 
 const isErrorKind = (kind: IslandSnapshot["kind"]): boolean =>
   kind === "connection-error" || kind === "query-error";
@@ -18,8 +23,10 @@ const isErrorKind = (kind: IslandSnapshot["kind"]): boolean =>
 const getCancelHandler = (
   snapshot: IslandSnapshot
 ): (() => void) | undefined => {
+  if (snapshot.kind === "query-running") {
+    return snapshot.onCancelHeadline;
+  }
   if (
-    snapshot.kind === "query-running" ||
     snapshot.kind === "query-streaming" ||
     snapshot.kind === "query-planning"
   ) {
@@ -39,6 +46,13 @@ const isInteractiveTarget = (target: EventTarget | null): boolean => {
   return target.isContentEditable;
 };
 
+const isInsideIslandPicker = (target: EventTarget | null): boolean => {
+  if (!(target instanceof HTMLElement)) {
+    return false;
+  }
+  return target.closest("[data-island-picker]") !== null;
+};
+
 export const AppIsland = () => {
   const { snapshot } = useIsland();
   const isHidden = snapshot.kind === "hidden";
@@ -56,6 +70,12 @@ export const AppIsland = () => {
       if (isInteractiveTarget(event.target)) {
         return;
       }
+      if (
+        isInsideIslandPicker(event.target) ||
+        document.querySelector("[data-island-picker]")
+      ) {
+        return;
+      }
       event.preventDefault();
       onCancel();
     };
@@ -64,27 +84,48 @@ export const AppIsland = () => {
   }, [onCancel]);
 
   return (
-    <div className="pointer-events-none fixed inset-x-0 top-0 isolate z-50 flex h-9.5 select-none">
+    <div
+      className="
+        pointer-events-none fixed inset-x-0 top-0 isolate z-50 flex h-9.5
+        select-none
+      "
+    >
       {isTauri() && <div style={{ width: TRAFFIC_LIGHT_INSET }} />}
       <div className="relative flex flex-1 items-center justify-center">
         <AnimatePresence>
           {!isHidden && (
             <motion.div
+              animate={{ opacity: 1, scale: 1 }}
+              aria-atomic="true"
+              aria-live={isError ? "assertive" : "polite"}
+              className={cn(`
+                  pointer-events-auto relative flex h-6 items-center
+                  overflow-hidden rounded-full border bg-background/85 px-2.5
+                  shadow-sm backdrop-blur-xl backdrop-saturate-200
+                `, isError ? "border-destructive/30" : "border-border/60")}
+              exit={{ opacity: 0, scale: 0.9 }}
+              initial={{ opacity: 0, scale: 0.9 }}
               key="island"
               layout
               role={isError ? "alert" : "status"}
-              aria-live={isError ? "assertive" : "polite"}
-              aria-atomic="true"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={SPRING}
-              className={cn(
-                "pointer-events-auto relative flex h-6 items-center rounded-full border bg-background/85 px-2.5 shadow-sm backdrop-blur-xl backdrop-saturate-200",
-                isError ? "border-destructive/30" : "border-border/60"
-              )}
+              transition={{
+                layout: PILL_LAYOUT_TRANSITION,
+                opacity: PILL_PRESENCE_TRANSITION,
+                scale: PILL_PRESENCE_TRANSITION,
+              }}
             >
-              <DynamicIslandContent snapshot={snapshot} />
+              <AnimatePresence initial={false} mode="popLayout">
+                <motion.div
+                  animate={CONTENT_CROSSFADE_ANIMATE}
+                  className="flex items-center gap-1.5"
+                  exit={CONTENT_CROSSFADE_INITIAL}
+                  initial={CONTENT_CROSSFADE_INITIAL}
+                  key={snapshot.kind}
+                  transition={CONTENT_CROSSFADE_TRANSITION}
+                >
+                  <DynamicIslandContent snapshot={snapshot} />
+                </motion.div>
+              </AnimatePresence>
             </motion.div>
           )}
         </AnimatePresence>
