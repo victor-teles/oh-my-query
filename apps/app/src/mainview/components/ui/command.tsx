@@ -63,7 +63,7 @@ function CommandInput({
     <div data-slot="command-input-wrapper" className="p-1 pb-0">
       <InputGroup
         className="
-          h-8! bg-input/20
+          h-7! bg-input/20
           dark:bg-input/30
         "
       >

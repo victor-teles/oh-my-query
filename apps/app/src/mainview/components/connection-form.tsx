@@ -51,28 +51,20 @@ import { cn } from "@/lib/utils";
 const EMOJI_CATALOG = [
   "🐘",
   "🐬",
+  "🦆",
   "🍃",
-  "⚡️",
-  "💾",
-  "🗃",
+  "🗄️",
   "📊",
   "📈",
+  "💾",
+  "⚡️",
   "🔑",
   "🔒",
   "🧪",
-  "🚀",
-  "🔥",
   "🌐",
-  "🌲",
-  "🌊",
-  "⭐️",
-  "🌱",
-  "🍂",
-  "🌙",
-  "🧩",
   "⚙️",
   "📦",
-  "🎯",
+  "🗃",
 ] as const;
 
 const EMOJI_BY_TYPE: Record<DatabaseType, string> = {
@@ -115,8 +107,8 @@ const EmojiPicker = ({ value, defaultEmoji, onSelect }: EmojiPickerProps) => {
           <button
             aria-label="Choose emoji"
             className="
-              flex size-9 items-center justify-center rounded-md border
-              border-input bg-background text-lg transition-colors
+              flex size-7 items-center justify-center rounded-md border
+              border-input bg-background text-base transition-colors
               hover:border-foreground/40
             "
             type="button"
@@ -212,7 +204,10 @@ const ColorSwatch = ({ color, isSelected, onSelect }: ColorSwatchProps) => {
           hover:scale-110
         `, classes.swatch, isSelected && "ring-2 ring-ring ring-offset-2 ring-offset-background")} onClick={handleClick} type="button">
       {isSelected && (
-        <Check aria-hidden="true" className="size-3.5 text-white" />
+        <Check
+          aria-hidden="true"
+          className="size-3.5 text-[oklch(0.18_0.005_40)]"
+        />
       )}
     </button>
   );
@@ -363,7 +358,7 @@ const AppearanceSection = ({
       </div>
       <div className="grid gap-1.5">
         <Label>Color</Label>
-        <div className="flex h-9 items-center gap-2">
+        <div className="flex h-7 items-center gap-2">
           <ColorSwatch
             color=""
             isSelected={color === ""}

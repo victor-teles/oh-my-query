@@ -287,11 +287,7 @@ export const QueryHistoryPanel = () => {
           className={cn(
             "absolute inset-y-0 right-0 z-40 flex flex-col",
             "w-[min(720px,60vw)] min-w-[480px]",
-            `
-              bg-background/95
-              supports-backdrop-filter:backdrop-blur-xl
-              supports-backdrop-filter:backdrop-saturate-150
-            `,
+            "bg-background",
             "border-l border-border"
           )}
           exit={reduceMotion ? { opacity: 0 } : { x: "100%" }}

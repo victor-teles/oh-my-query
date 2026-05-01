@@ -72,7 +72,7 @@ export const ChatInput = ({
       <PromptInput onSubmit={handleSubmit}>
         <PromptInputBody>
           <PromptInputTextarea
-            className="min-h-11"
+            className="min-h-7"
             disabled={isConfigured !== true}
             onChange={handleChange}
             placeholder="Ask about your database..."

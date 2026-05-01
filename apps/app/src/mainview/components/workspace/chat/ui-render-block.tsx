@@ -495,8 +495,8 @@ const CardSpecHeader = ({
       "flex items-center justify-between gap-2 px-3 py-1",
       !isBare && hasRepairPill && "border-b",
       isBare && `
-          absolute top-1 right-1 z-10 rounded-md bg-background/60 px-1 py-0.5
-          backdrop-blur-sm transition-opacity duration-150
+          absolute top-1 right-1 z-10 rounded-md bg-background/85 px-1 py-0.5
+          transition-opacity duration-150
           group-focus-within/card:opacity-100
           group-hover/card:opacity-100
         `,

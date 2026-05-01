@@ -38,11 +38,7 @@ export const NamespaceRow = ({
       className={cn(`
           group relative flex h-7 w-full items-center gap-1.5 rounded-md pr-2
           text-left text-xs outline-none
-        `, "hover:bg-sidebar-accent/50", "focus-visible:ring-1 focus-visible:ring-ring/60", "data-active:bg-sidebar-accent/70", `
-          data-active:before:absolute data-active:before:inset-y-1
-          data-active:before:left-0 data-active:before:w-[2px]
-          data-active:before:rounded-full data-active:before:bg-primary/60
-        `)}
+        `, "hover:bg-sidebar-accent/50", "focus-visible:ring-1 focus-visible:ring-ring/60", "data-active:bg-sidebar-accent")}
       style={{ paddingLeft: `${Math.max(8, 8 + depth * 12)}px` }}
     >
       <ChevronRight className={cn(`

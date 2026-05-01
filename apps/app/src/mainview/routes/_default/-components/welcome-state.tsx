@@ -33,7 +33,7 @@ const WelcomeState = ({ onAdd }: WelcomeStateProps) => (
     <Empty className="gap-5 p-0">
       <EmptyMedia
         className="
-          mb-2 size-16 rounded-2xl bg-primary/10 text-primary ring-1
+          mb-2 size-16 rounded-lg bg-primary/10 text-primary ring-1
           ring-primary/20 ring-inset
           [&_svg:not([class*='size-'])]:size-7
         "

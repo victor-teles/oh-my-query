@@ -1,4 +1,5 @@
 import { AlertTriangle, ChevronDown, ChevronRight } from "lucide-react";
+import { useReducedMotion } from "motion/react";
 import { useCallback } from "react";
 
 import type { PlanNode } from "@/lib/tauri";
@@ -255,16 +256,22 @@ const NodeMetric = ({ node, tier }: { node: PlanNode; tier: CostTier }) => {
   );
 };
 
-const CostBar = ({ tier, widthPct }: { tier: CostTier; widthPct: number }) => (
-  <div aria-hidden="true" className="h-[2px] w-full bg-muted/40">
-    <div
-      className={cn(
-        "h-full transition-[width] duration-300 ease-out",
-        tier === "high" && "bg-destructive/80",
-        tier === "medium" && "bg-warning/80",
-        tier === "low" && "bg-success/60"
-      )}
-      style={{ width: `${widthPct}%` }}
-    />
-  </div>
-);
+const CostBar = ({ tier, widthPct }: { tier: CostTier; widthPct: number }) => {
+  const reduced = useReducedMotion();
+  return (
+    <div aria-hidden="true" className="h-[2px] w-full bg-muted/40">
+      <div
+        className={cn(
+          "h-full w-full origin-left",
+          !reduced && "transition-transform duration-150 ease-out",
+          tier === "high" && "bg-destructive/80",
+          tier === "medium" && "bg-warning/80",
+          tier === "low" && "bg-success/60"
+        )}
+        style={{
+          transform: `scaleX(${Math.max(0, Math.min(1, widthPct / 100))})`,
+        }}
+      />
+    </div>
+  );
+};

@@ -57,7 +57,7 @@ export const SyntaxTreeNode = memo(function SyntaxTreeNode({
             flex w-full cursor-pointer items-center gap-1 rounded-sm px-1 py-0.5
             text-left
             hover:bg-muted/50
-          `, isCursorNode && "border-l-2 border-primary bg-primary/10")} onClick={handleToggle}>
+          `, isCursorNode && "bg-primary/15")} onClick={handleToggle}>
         <span className="flex size-3.5 shrink-0 items-center justify-center">
           {hasChildren && (
             <ChevronRight
