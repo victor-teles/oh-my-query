@@ -401,6 +401,7 @@ interface FormState {
   emoji: string;
   color: ConnectionColor | "";
   environment: ConnectionEnvironment | "";
+  safeModeEnabled: boolean;
 }
 
 type TestStatus =
@@ -419,6 +420,7 @@ const INITIAL_STATE: FormState = {
   name: "",
   password: "",
   port: String(DEFAULT_PORTS.postgresql),
+  safeModeEnabled: true,
   trustServerCertificate: true,
   type: "postgresql",
   username: "",
@@ -434,6 +436,7 @@ const connectionToFormState = (conn: DatabaseConnection): FormState => ({
   name: conn.name,
   password: conn.password,
   port: String(conn.port),
+  safeModeEnabled: conn.safeModeEnabled ?? true,
   trustServerCertificate: conn.trustServerCertificate ?? true,
   type: conn.type,
   username: conn.username,
@@ -533,6 +536,7 @@ const buildConnection = (form: FormState): DatabaseConnection => {
     password: hasHost ? form.password : "",
     pinned: false,
     port: hasHost ? Number(form.port) : 0,
+    safeModeEnabled: form.safeModeEnabled,
     trustServerCertificate:
       form.type === "mssql" ? form.trustServerCertificate : undefined,
     type: form.type,
@@ -660,6 +664,10 @@ export const ConnectionForm = ({
     }));
   }, []);
 
+  const handleSafeModeChange = useCallback((checked: boolean) => {
+    setForm((prev) => ({ ...prev, safeModeEnabled: checked }));
+  }, []);
+
   const handleTestConnection = useCallback(async () => {
     const validationError = validate(form);
     if (validationError) {
@@ -760,12 +768,26 @@ export const ConnectionForm = ({
         </div>
       </div>
 
-      {form.environment === "prod" && (
-        <p className="-mt-2 text-xs text-destructive">
-          Destructive queries will require typing the connection name to
-          confirm.
+      <div className="grid gap-1.5">
+        <Label
+          className={cn(
+            "flex items-center gap-2 font-normal",
+            form.environment === "prod" && "cursor-not-allowed opacity-60"
+          )}
+        >
+          <Checkbox
+            checked={form.environment === "prod" ? true : form.safeModeEnabled}
+            disabled={form.environment === "prod"}
+            onCheckedChange={handleSafeModeChange}
+          />
+          Safe mode
+        </Label>
+        <p className="pl-6 text-xs text-muted-foreground">
+          {form.environment === "prod"
+            ? "Always enforced for production connections — destructive queries require typing the connection name."
+            : "Intercept destructive queries (DROP, TRUNCATE, unscoped DELETE/UPDATE; MongoDB deleteMany({})/drop(); Redis FLUSHDB/FLUSHALL) and require confirmation."}
         </p>
-      )}
+      </div>
 
       <ServerFields
         authSource={form.authSource}

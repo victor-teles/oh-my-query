@@ -2,7 +2,7 @@ import type { ReactNode } from "react";
 
 import { createContext, use, useCallback, useMemo, useState } from "react";
 
-import type { ConnectionEnvironment } from "@/lib/connections";
+import type { ConnectionEnvironment, DatabaseType } from "@/lib/connections";
 import type { DestructiveClassification } from "@/lib/safe-mode";
 
 import { SafeModeConfirmDialog } from "@/components/workspace/safe-mode-confirm-dialog";
@@ -11,6 +11,8 @@ import { classifyDestructiveSql } from "@/lib/safe-mode";
 interface ConfirmationContext {
   environment?: ConnectionEnvironment;
   connectionName?: string;
+  connectionType?: DatabaseType;
+  perConnectionEnabled?: boolean;
 }
 
 interface PendingConfirmation {
@@ -42,13 +44,24 @@ export const SafeModeProvider = ({ children }: { children: ReactNode }) => {
 
   const requestConfirmation = useCallback(
     (sql: string, context?: ConfirmationContext): Promise<boolean> => {
-      if (!enabled) {
+      const isProd = context?.environment === "prod";
+      const perConnectionEnabled = context?.perConnectionEnabled ?? true;
+
+      // Prod connections always enforce the guard; non-prod respects the toggles
+      const guardActive = isProd || (enabled && perConnectionEnabled);
+
+      if (!guardActive) {
         return Promise.resolve(true);
       }
-      const classification = classifyDestructiveSql(sql);
+
+      const classification = classifyDestructiveSql(
+        sql,
+        context?.connectionType
+      );
       if (!classification) {
         return Promise.resolve(true);
       }
+
       const { promise, resolve } = Promise.withResolvers<boolean>();
       setPending({
         classification,

@@ -63,7 +63,9 @@ export const useTabExecution = ({
     ) => {
       const confirmed = await requestConfirmation(sql, {
         connectionName: connection.name,
+        connectionType: connection.type,
         environment: connection.environment,
+        perConnectionEnabled: connection.safeModeEnabled ?? true,
       });
       if (!confirmed) {
         return;
@@ -183,6 +185,7 @@ export const useTabExecution = ({
     [
       connection.environment,
       connection.name,
+      connection.safeModeEnabled,
       connection.type,
       connectionId,
       selectedDatabase,

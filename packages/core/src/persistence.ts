@@ -65,6 +65,7 @@ export interface DatabaseConnection {
   color?: string;
   emoji?: string;
   environment?: string;
+  safeModeEnabled?: boolean;
 }
 
 const fileLocks = new Map<string, Promise<unknown>>();
