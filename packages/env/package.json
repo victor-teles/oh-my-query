@@ -6,6 +6,10 @@
   "exports": {
     "./web": "./src/web.ts"
   },
+  "scripts": {
+    "test": "vitest run --passWithNoTests",
+    "test:watch": "vitest"
+  },
   "dependencies": {
     "@t3-oss/env-core": "^0.13.1",
     "dotenv": "catalog:",
@@ -13,6 +17,7 @@
   },
   "devDependencies": {
     "@oh-my-query/config": "workspace:*",
-    "@typescript/native-preview": "catalog:"
+    "@typescript/native-preview": "catalog:",
+    "vitest": "catalog:"
   }
 }

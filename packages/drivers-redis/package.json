@@ -6,12 +6,17 @@
   "exports": {
     ".": "./src/index.ts"
   },
+  "scripts": {
+    "test": "vitest run --passWithNoTests",
+    "test:watch": "vitest"
+  },
   "dependencies": {
     "@oh-my-query/core": "workspace:*",
     "ioredis": "^5.4.2"
   },
   "devDependencies": {
     "@oh-my-query/config": "workspace:*",
-    "@typescript/native-preview": "catalog:"
+    "@typescript/native-preview": "catalog:",
+    "vitest": "catalog:"
   }
 }

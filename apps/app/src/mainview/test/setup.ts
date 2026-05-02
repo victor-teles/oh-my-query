@@ -50,7 +50,7 @@ vi.mock<typeof ElectrobunView>(import("electrobun/view"), () => {
   return { Electroview } as unknown as typeof ElectrobunView;
 });
 
-// oxlint-disable-next-line jest/require-top-level-describe, jest/no-hooks
+// oxlint-disable-next-line jest/require-top-level-describe
 afterEach(() => {
   resetIpcHandlers();
   if (typeof localStorage !== "undefined") {

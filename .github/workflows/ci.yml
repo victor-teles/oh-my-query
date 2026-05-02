@@ -87,9 +87,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: visual-regression-diffs
-          path: |
-            apps/app/.storybook/snapshots/__actual__/
-            apps/app/.storybook/snapshots/__diff__/
+          path: apps/app/src/**/__screenshots__/**
           if-no-files-found: ignore
 
       - name: Lint & format
@@ -144,9 +142,6 @@ jobs:
       - name: Install Playwright system deps
         if: steps.playwright-cache.outputs.cache-hit == 'true'
         run: bunx playwright install-deps chromium
-
-      - name: Build workspace packages
-        run: bun run --cwd packages/vitest-visual build
 
       - name: Run Playwright
         run: bun run --cwd apps/app e2e

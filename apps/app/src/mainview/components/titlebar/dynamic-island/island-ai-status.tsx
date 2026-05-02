@@ -45,14 +45,14 @@ export const QueryStreamingStatus = ({
         ))}
       </div>
       <span className="sr-only">Streaming AI response</span>
-      <span className={cn(`
+      <span aria-hidden="true" className={cn(`
             flex items-baseline gap-1 text-xs font-medium tracking-tight
             text-muted-foreground
           `, shouldReduceMotion && "font-semibold")}>
         <span>Streaming</span>
         {tokensReceived > 0 && (
           <span className="text-muted-foreground/50 tabular-nums">
-            · {tokensReceived} tokens
+            · {tokensReceived} {tokensReceived === 1 ? "token" : "tokens"}
           </span>
         )}
       </span>
@@ -80,6 +80,7 @@ export const QueryPlanningStatus = ({ onCancel }: QueryPlanningStatusProps) => {
       />
       <span className="sr-only">AI planning query</span>
       <span
+        aria-hidden="true"
         className={cn(
           "text-xs font-medium tracking-tight text-muted-foreground",
           shouldReduceMotion && "font-semibold"
