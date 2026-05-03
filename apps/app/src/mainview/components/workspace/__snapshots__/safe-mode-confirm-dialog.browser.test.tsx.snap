@@ -1,0 +1,181 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`safeModeConfirmDialog > renders a generic destructive prompt 1`] = `
+<div
+  aria-describedby="base-ui-_r_6_"
+  aria-labelledby="base-ui-_r_5_"
+  class="fixed top-1/2 left-1/2 z-50 grid w-full max-w-[calc(100%-2rem)] -translate-1/2 gap-4 rounded-xl bg-background p-4 text-xs/relaxed ring-1 ring-foreground/10 transition-all duration-100 ease-out outline-none focus-visible:ring-2 focus-visible:ring-ring/50 sm:max-w-sm data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95"
+  data-base-ui-focusable=""
+  data-open=""
+  data-slot="dialog-content"
+  id="_r_2_"
+  role="dialog"
+  style="--nested-dialogs: 0"
+  tabindex="-1"
+>
+  <div
+    class="flex flex-col gap-1"
+    data-slot="dialog-header"
+  >
+    <h2
+      class="text-sm font-medium flex items-center gap-1.5"
+      data-slot="dialog-title"
+      id="base-ui-_r_5_"
+    >
+      <svg
+        aria-hidden="true"
+        class="lucide lucide-shield-alert 
+              size-3.5
+              text-muted-foreground"
+        fill="none"
+        height="24"
+        stroke="currentColor"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        viewBox="0 0 24 24"
+        width="24"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"
+        />
+        <path
+          d="M12 8v4"
+        />
+        <path
+          d="M12 16h.01"
+        />
+      </svg>
+      Run DROP query?
+    </h2>
+    <p
+      class="text-xs/relaxed text-muted-foreground *:[a]:underline *:[a]:underline-offset-3 *:[a]:hover:text-foreground"
+      data-slot="dialog-description"
+      id="base-ui-_r_6_"
+    >
+      Permanently removes a database object.
+       Safe mode is on — confirm to run anyway.
+    </p>
+  </div>
+  <pre
+    class="
+          max-h-40 overflow-auto rounded-md bg-muted p-3 font-mono text-[11px]
+          leading-relaxed wrap-break-word whitespace-pre-wrap text-foreground
+        "
+  >
+    DROP TABLE users
+  </pre>
+  <div
+    class="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end"
+    data-slot="dialog-footer"
+  >
+    <button
+      class="group/button inline-flex shrink-0 items-center justify-center rounded-md border bg-clip-padding font-medium whitespace-nowrap transition-all duration-150 ease-out outline-none select-none focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-2 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 h-6 gap-1 px-2 text-xs/relaxed has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 [&_svg:not([class*='size-'])]:size-3 border-border hover:bg-input/50 hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:bg-input/30"
+      data-slot="button"
+      tabindex="0"
+      type="button"
+    >
+      Cancel
+    </button>
+    <button
+      class="group/button inline-flex shrink-0 items-center justify-center rounded-md border border-transparent bg-clip-padding font-medium whitespace-nowrap transition-all duration-150 ease-out outline-none select-none focus-visible:ring-2 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-2 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 h-6 gap-1 px-2 text-xs/relaxed has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 [&_svg:not([class*='size-'])]:size-3 bg-destructive/10 text-destructive hover:bg-destructive/20 focus-visible:border-destructive/40 focus-visible:ring-destructive/20 dark:bg-destructive/20 dark:hover:bg-destructive/30 dark:focus-visible:ring-destructive/40"
+      data-slot="button"
+      tabindex="0"
+      type="button"
+    >
+      Run anyway
+    </button>
+  </div>
+</div>
+`;
+
+exports[`safeModeConfirmDialog > uses the warning tone for staging environments 1`] = `
+<div
+  aria-describedby="base-ui-_r_l_"
+  aria-labelledby="base-ui-_r_k_"
+  class="fixed top-1/2 left-1/2 z-50 grid w-full max-w-[calc(100%-2rem)] -translate-1/2 gap-4 rounded-xl bg-background p-4 text-xs/relaxed ring-1 ring-foreground/10 transition-all duration-100 ease-out outline-none focus-visible:ring-2 focus-visible:ring-ring/50 sm:max-w-sm data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95"
+  data-base-ui-focusable=""
+  data-open=""
+  data-slot="dialog-content"
+  id="_r_h_"
+  role="dialog"
+  style="--nested-dialogs: 0"
+  tabindex="-1"
+>
+  <div
+    class="flex flex-col gap-1"
+    data-slot="dialog-header"
+  >
+    <h2
+      class="text-sm font-medium flex items-center gap-1.5"
+      data-slot="dialog-title"
+      id="base-ui-_r_k_"
+    >
+      <svg
+        aria-hidden="true"
+        class="lucide lucide-triangle-alert 
+              size-3.5
+              text-warning"
+        fill="none"
+        height="24"
+        stroke="currentColor"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        viewBox="0 0 24 24"
+        width="24"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"
+        />
+        <path
+          d="M12 9v4"
+        />
+        <path
+          d="M12 17h.01"
+        />
+      </svg>
+      Run DROP query?
+    </h2>
+    <p
+      class="text-xs/relaxed text-muted-foreground *:[a]:underline *:[a]:underline-offset-3 *:[a]:hover:text-foreground"
+      data-slot="dialog-description"
+      id="base-ui-_r_l_"
+    >
+      Permanently removes a database object.
+       Safe mode is on — confirm to run anyway.
+    </p>
+  </div>
+  <pre
+    class="
+          max-h-40 overflow-auto rounded-md bg-muted p-3 font-mono text-[11px]
+          leading-relaxed wrap-break-word whitespace-pre-wrap text-foreground
+        "
+  >
+    DROP TABLE users
+  </pre>
+  <div
+    class="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end"
+    data-slot="dialog-footer"
+  >
+    <button
+      class="group/button inline-flex shrink-0 items-center justify-center rounded-md border bg-clip-padding font-medium whitespace-nowrap transition-all duration-150 ease-out outline-none select-none focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-2 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 h-6 gap-1 px-2 text-xs/relaxed has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 [&_svg:not([class*='size-'])]:size-3 border-border hover:bg-input/50 hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:bg-input/30"
+      data-slot="button"
+      tabindex="0"
+      type="button"
+    >
+      Cancel
+    </button>
+    <button
+      class="group/button inline-flex shrink-0 items-center justify-center rounded-md border border-transparent bg-clip-padding font-medium whitespace-nowrap transition-all duration-150 ease-out outline-none select-none focus-visible:ring-2 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-2 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 h-6 gap-1 px-2 text-xs/relaxed has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 [&_svg:not([class*='size-'])]:size-3 bg-destructive/10 text-destructive hover:bg-destructive/20 focus-visible:border-destructive/40 focus-visible:ring-destructive/20 dark:bg-destructive/20 dark:hover:bg-destructive/30 dark:focus-visible:ring-destructive/40"
+      data-slot="button"
+      tabindex="0"
+      type="button"
+    >
+      Run anyway
+    </button>
+  </div>
+</div>
+`;

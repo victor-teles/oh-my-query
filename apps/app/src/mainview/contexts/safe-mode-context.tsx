@@ -15,11 +15,14 @@ interface ConfirmationContext {
   connectionType?: DatabaseType;
 }
 
-interface PendingConfirmation {
-  sql: string;
+export interface SafeModeConfirmationRequest {
+  query: string;
   classification: DestructiveClassification;
   environment: ConnectionEnvironment | null;
   connectionName: string | null;
+}
+
+interface PendingConfirmation extends SafeModeConfirmationRequest {
   resolve: (confirmed: boolean) => void;
 }
 
@@ -43,7 +46,7 @@ export const SafeModeProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   const requestConfirmation = useCallback(
-    (sql: string, context?: ConfirmationContext): Promise<boolean> => {
+    (query: string, context?: ConfirmationContext): Promise<boolean> => {
       if (context?.environment !== "prod" && !enabled) {
         return Promise.resolve(true);
       }
@@ -51,7 +54,8 @@ export const SafeModeProvider = ({ children }: { children: ReactNode }) => {
       const classify = context?.connectionType
         ? getDestructiveClassifier(context.connectionType)
         : classifyStandardSql;
-      const classification = classify(sql);
+      const classification = classify(query);
+
       if (!classification) {
         return Promise.resolve(true);
       }
@@ -61,9 +65,10 @@ export const SafeModeProvider = ({ children }: { children: ReactNode }) => {
         classification,
         connectionName: context?.connectionName ?? null,
         environment: context?.environment ?? null,
+        query,
         resolve,
-        sql,
       });
+
       return promise;
     },
     [enabled]
@@ -96,12 +101,18 @@ export const SafeModeProvider = ({ children }: { children: ReactNode }) => {
     <SafeModeContext value={value}>
       {children}
       <SafeModeConfirmDialog
-        classification={pending?.classification ?? null}
-        connectionName={pending?.connectionName ?? null}
-        environment={pending?.environment ?? null}
         onCancel={handleCancel}
         onConfirm={handleConfirm}
-        sql={pending?.sql ?? null}
+        request={
+          pending
+            ? {
+                classification: pending.classification,
+                connectionName: pending.connectionName,
+                environment: pending.environment,
+                query: pending.query,
+              }
+            : null
+        }
       />
     </SafeModeContext>
   );
