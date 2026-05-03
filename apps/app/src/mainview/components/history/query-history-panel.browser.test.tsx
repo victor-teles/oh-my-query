@@ -1,9 +1,8 @@
 import type { useVirtualizer as UseVirtualizer } from "@tanstack/react-virtual";
 
-import { render, screen } from "@testing-library/react";
-import { userEvent } from "@testing-library/user-event";
 import { act } from "react";
 import { describe, expect, it, vi } from "vitest";
+import { render } from "vitest-browser-react";
 
 import type { DatabaseConnection } from "@/lib/connections";
 import type { HistoryEntry } from "@/lib/persistence";
@@ -162,23 +161,22 @@ describe("queryHistoryPanel", () => {
     }));
 
     openPanel();
-    render(
+    const screen = render(
       <EditorInsertProvider>
         <QueryHistoryPanel />
       </EditorInsertProvider>
     );
 
-    await expect(
-      screen.findByRole("complementary", { name: /query history/i })
-    ).resolves.toBeTruthy();
-    await expect(screen.findByText(/2 queries/i)).resolves.toBeTruthy();
-    expect(screen.getByText(/select \* from users/i)).toBeTruthy();
-    expect(screen.getByText(/select \* from orders/i)).toBeTruthy();
+    await expect
+      .element(screen.getByRole("complementary", { name: /query history/i }))
+      .toBeInTheDocument();
+    await expect.element(screen.getByText(/2 queries/i)).toBeInTheDocument();
+    expect(screen.getByText(/select \* from users/i)).toBeInTheDocument();
+    expect(screen.getByText(/select \* from orders/i)).toBeInTheDocument();
   });
 
   it("focuses a row on click without closing, and opens + closes on double-click", async () => {
     resetPanel();
-    const user = userEvent.setup();
     const entry = makeEntry({ sql: "SELECT * FROM users" });
     mockUseAllQueryHistory.mockImplementation(() => ({
       entries: [entry],
@@ -188,23 +186,24 @@ describe("queryHistoryPanel", () => {
     }));
 
     openPanel();
-    render(
+    const screen = render(
       <EditorInsertProvider>
         <QueryHistoryPanel />
       </EditorInsertProvider>
     );
 
-    const row = await screen.findByRole("option", {
+    const row = screen.getByRole("option", {
       name: /query from primary postgres/i,
     });
+    await expect.element(row).toBeInTheDocument();
 
-    await user.click(row);
+    await row.click();
     expect(setPanelOpen).not.toHaveBeenCalledWith(false);
-    await expect(
-      screen.findByLabelText(/query preview/i)
-    ).resolves.toBeTruthy();
+    await expect
+      .element(screen.getByLabelText(/query preview/i))
+      .toBeInTheDocument();
 
-    await user.dblClick(row);
+    await row.dblClick();
     expect(setPanelOpen).toHaveBeenCalledWith(false);
   });
 
@@ -212,15 +211,15 @@ describe("queryHistoryPanel", () => {
     resetPanel();
 
     openPanel();
-    render(
+    const screen = render(
       <EditorInsertProvider>
         <QueryHistoryPanel />
       </EditorInsertProvider>
     );
 
-    await expect(
-      screen.findByText(/no matching queries/i)
-    ).resolves.toBeTruthy();
+    await expect
+      .element(screen.getByText(/no matching queries/i))
+      .toBeInTheDocument();
   });
 
   it("shows error state with a retry button", async () => {
@@ -233,16 +232,18 @@ describe("queryHistoryPanel", () => {
     }));
 
     openPanel();
-    render(
+    const screen = render(
       <EditorInsertProvider>
         <QueryHistoryPanel />
       </EditorInsertProvider>
     );
 
-    await expect(
-      screen.findByText(/history didn't load/i)
-    ).resolves.toBeTruthy();
-    expect(screen.getByText(/keyring locked/i)).toBeTruthy();
-    expect(screen.getByRole("button", { name: /try again/i })).toBeTruthy();
+    await expect
+      .element(screen.getByText(/history didn't load/i))
+      .toBeInTheDocument();
+    expect(screen.getByText(/keyring locked/i)).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: /try again/i })
+    ).toBeInTheDocument();
   });
 });

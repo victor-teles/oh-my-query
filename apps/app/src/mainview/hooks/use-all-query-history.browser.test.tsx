@@ -1,9 +1,9 @@
-import { renderHook, waitFor } from "@testing-library/react";
 import { act } from "react";
 import { describe, expect, it, vi } from "vitest";
 
 import type { HistoryEntry, HistoryFilters } from "@/lib/persistence";
 
+import { renderHook, waitFor } from "@/test/render-hook";
 import { mockTauri } from "@/test/tauri-mock";
 
 const { useAllQueryHistory } = await import("@/hooks/use-all-query-history");

@@ -91,3 +91,85 @@ describe("query-error-display", () => {
     expect(screen.container).toMatchSnapshot();
   });
 });
+
+const isPrimary = (btn: Element) =>
+  (btn.getAttribute("class") ?? "").includes("bg-primary");
+
+describe("queryErrorDisplay primary action", () => {
+  it("promotes Jump to line for syntax errors with a parseable location", () => {
+    const screen = render(
+      <QueryErrorDisplay
+        error='syntax error at or near "FROMM" at line 3, column 7'
+        errorCode="42601"
+        onAiFix={vi.fn()}
+        onJumpToLine={vi.fn()}
+        onRetry={vi.fn()}
+        sql="SELECT * FROMM users;"
+      />
+    );
+
+    const jump = screen.getByRole("button", { name: /jump to/i }).element();
+    const retry = screen.getByRole("button", { name: /^retry$/i }).element();
+    const ai = screen.getByRole("button", { name: /fix with ai/i }).element();
+
+    expect(isPrimary(jump)).toBeTruthy();
+    expect(isPrimary(retry)).toBeFalsy();
+    expect(isPrimary(ai)).toBeFalsy();
+  });
+
+  it("promotes Reconnect for connection errors", () => {
+    const screen = render(
+      <QueryErrorDisplay
+        error="connection refused"
+        errorCode="IO_ERROR"
+        onReconnect={vi.fn()}
+        onRetry={vi.fn()}
+      />
+    );
+
+    const reconnect = screen
+      .getByRole("button", { name: /reconnect/i })
+      .element();
+    const retry = screen.getByRole("button", { name: /^retry$/i }).element();
+
+    expect(isPrimary(reconnect)).toBeTruthy();
+    expect(isPrimary(retry)).toBeFalsy();
+  });
+
+  it("falls back to Retry as the primary action", () => {
+    const screen = render(
+      <QueryErrorDisplay
+        error='relation "users" does not exist'
+        errorCode="42P01"
+        onAiFix={vi.fn()}
+        onRetry={vi.fn()}
+      />
+    );
+
+    const retry = screen.getByRole("button", { name: /^retry$/i }).element();
+    const ai = screen.getByRole("button", { name: /fix with ai/i }).element();
+
+    expect(isPrimary(retry)).toBeTruthy();
+    expect(isPrimary(ai)).toBeFalsy();
+  });
+
+  it("shows exactly one primary-styled action button", () => {
+    const screen = render(
+      <QueryErrorDisplay
+        error='syntax error at or near "FROMM" at line 3, column 7'
+        errorCode="42601"
+        onAiFix={vi.fn()}
+        onJumpToLine={vi.fn()}
+        onReconnect={vi.fn()}
+        onRetry={vi.fn()}
+        sql="SELECT * FROMM users;"
+      />
+    );
+
+    const primaryButtons = [
+      ...screen.container.querySelectorAll("button"),
+    ].filter((btn) => isPrimary(btn));
+
+    expect(primaryButtons).toHaveLength(1);
+  });
+});

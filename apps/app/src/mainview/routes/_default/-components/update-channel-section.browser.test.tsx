@@ -1,6 +1,5 @@
-import { render, screen, waitFor } from "@testing-library/react";
-import { userEvent } from "@testing-library/user-event";
 import { describe, expect, it } from "vitest";
+import { render } from "vitest-browser-react";
 
 import { mockTauri } from "@/test/tauri-mock";
 
@@ -17,15 +16,16 @@ const renderSection = () =>
 describe("updateChannelSection", () => {
   it("shows three channel options with Nightly disabled", async () => {
     mockTauri({ getUpdateChannel: () => "stable" });
-    renderSection();
+    const screen = renderSection();
 
-    const stable = await screen.findByRole("button", { name: /Stable/ });
+    const stable = screen.getByRole("button", { name: /Stable/ });
     const beta = screen.getByRole("button", { name: /Beta/ });
     const nightly = screen.getByRole("button", { name: /Nightly/ });
 
-    expect(stable.hasAttribute("disabled")).toBeFalsy();
-    expect(beta.hasAttribute("disabled")).toBeFalsy();
-    expect(nightly.hasAttribute("disabled")).toBeTruthy();
+    await expect.element(stable).toBeInTheDocument();
+    expect(stable.element().hasAttribute("disabled")).toBeFalsy();
+    expect(beta.element().hasAttribute("disabled")).toBeFalsy();
+    expect(nightly.element().hasAttribute("disabled")).toBeTruthy();
   });
 
   it("writes the channel and surfaces the restart prompt", async () => {
@@ -38,16 +38,15 @@ describe("updateChannelSection", () => {
       },
     });
 
-    renderSection();
+    const screen = renderSection();
 
-    const betaButton = await screen.findByRole("button", { name: /Beta/ });
-    await userEvent.click(betaButton);
+    await screen.getByRole("button", { name: /Beta/ }).click();
 
-    await waitFor(() => {
-      expect(
+    await expect
+      .element(
         screen.getByText(/Restart oh-my-query to start receiving updates/i)
-      ).toBeDefined();
-    });
+      )
+      .toBeInTheDocument();
     expect(stored).toBe("beta");
   });
 
@@ -57,16 +56,11 @@ describe("updateChannelSection", () => {
       getUpdateChannel: () => "stable",
     });
 
-    renderSection();
+    const screen = renderSection();
 
-    const checkButton = await screen.findByRole("button", {
-      name: /Check now/i,
-    });
-    await userEvent.click(checkButton);
+    await screen.getByRole("button", { name: /Check now/i }).click();
 
-    await waitFor(() => {
-      expect(screen.getByText(/up to date/i)).toBeDefined();
-    });
+    await expect.element(screen.getByText(/up to date/i)).toBeInTheDocument();
   });
 
   it("offers Install & restart when an update is available", async () => {
@@ -80,18 +74,15 @@ describe("updateChannelSection", () => {
       getUpdateChannel: () => "stable",
     });
 
-    renderSection();
+    const screen = renderSection();
 
-    const checkButton = await screen.findByRole("button", {
-      name: /Check now/i,
-    });
-    await userEvent.click(checkButton);
+    await screen.getByRole("button", { name: /Check now/i }).click();
 
-    await waitFor(() => {
-      expect(screen.getByText(/Update available/i)).toBeDefined();
-    });
+    await expect
+      .element(screen.getByText(/Update available/i))
+      .toBeInTheDocument();
     expect(
       screen.getByRole("button", { name: /Install & restart/i })
-    ).toBeDefined();
+    ).toBeInTheDocument();
   });
 });

@@ -1,6 +1,6 @@
-import { render, screen } from "@testing-library/react";
-import { userEvent } from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
+import { render } from "vitest-browser-react";
+import { page } from "vitest/browser";
 
 import type { RedisKey } from "@/lib/tauri";
 
@@ -16,13 +16,12 @@ const sampleKey: RedisKey = {
 
 describe("deleteKeyDialog", () => {
   it("closes silently after a successful delete", async () => {
-    const user = userEvent.setup();
     const onConfirm = vi.fn(async () => {
       // resolves with void
     });
     const onClose = vi.fn();
 
-    render(
+    const screen = render(
       <DeleteKeyDialog
         dbIndex={0}
         onClose={onClose}
@@ -31,15 +30,14 @@ describe("deleteKeyDialog", () => {
       />
     );
 
-    await user.click(screen.getByRole("button", { name: "Delete" }));
+    await page.getByRole("button", { name: "Delete" }).click();
 
     expect(onConfirm).toHaveBeenCalledWith("user:42");
     expect(onClose).toHaveBeenCalledWith();
-    expect(screen.queryByRole("alert")).toBeNull();
+    expect(screen.getByRole("alert").query()).toBeNull();
   });
 
   it("renders an inline alert and stays open when delete fails", async () => {
-    const user = userEvent.setup();
     const onConfirm = vi.fn().mockRejectedValue(new Error("WRONGTYPE error"));
     const onClose = vi.fn();
 
@@ -52,10 +50,11 @@ describe("deleteKeyDialog", () => {
       />
     );
 
-    await user.click(screen.getByRole("button", { name: "Delete" }));
+    await page.getByRole("button", { name: "Delete" }).click();
 
-    const alert = await screen.findByRole("alert");
-    expect(alert.textContent).toContain("WRONGTYPE error");
+    const alert = page.getByRole("alert");
+    await expect.element(alert).toBeInTheDocument();
+    expect(alert.element().textContent).toContain("WRONGTYPE error");
     expect(onClose).not.toHaveBeenCalled();
   });
 });

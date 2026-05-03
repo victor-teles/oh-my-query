@@ -56,4 +56,20 @@ describe("textarea", () => {
     expect(textarea).toHaveAttribute("aria-invalid", "true");
     expect(textarea.element()).toMatchSnapshot();
   });
+
+  it("applies desktop-friendly defaults", () => {
+    const screen = render(<Textarea />);
+    const textarea = screen.container.querySelector("textarea");
+    expect(textarea).not.toBeNull();
+    expect(textarea?.getAttribute("autocomplete")).toBe("off");
+    expect(textarea?.getAttribute("autocorrect")).toBe("off");
+    expect(textarea?.getAttribute("autocapitalize")).toBe("off");
+    expect(textarea?.getAttribute("spellcheck")).toBe("false");
+  });
+
+  it("lets consumers re-enable spellcheck for prose fields", () => {
+    const screen = render(<Textarea spellCheck />);
+    const textarea = screen.container.querySelector("textarea");
+    expect(textarea?.getAttribute("spellcheck")).toBe("true");
+  });
 });

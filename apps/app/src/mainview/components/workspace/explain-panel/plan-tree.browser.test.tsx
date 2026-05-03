@@ -1,6 +1,5 @@
-import { render, screen } from "@testing-library/react";
-import { userEvent } from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
+import { render } from "vitest-browser-react";
 
 import type { PlanNode } from "@/lib/tauri";
 
@@ -48,21 +47,21 @@ const renderTree = (
 
 describe("planTree", () => {
   it("renders root and all expanded children", () => {
-    renderTree();
-    expect(screen.getByText("hash_join")).toBeDefined();
-    expect(screen.getByText("scan_users")).toBeDefined();
-    expect(screen.getByText("scan_orders")).toBeDefined();
+    const screen = renderTree();
+    expect(screen.getByText("hash_join")).toBeInTheDocument();
+    expect(screen.getByText("scan_users")).toBeInTheDocument();
+    expect(screen.getByText("scan_orders")).toBeInTheDocument();
   });
 
   it("hides children of collapsed parent", () => {
-    renderTree("r", new Set<string>(["r.0", "r.1"]));
-    expect(screen.getByText("hash_join")).toBeDefined();
-    expect(screen.queryByText("scan_users")).toBeNull();
+    const screen = renderTree("r", new Set<string>(["r.0", "r.1"]));
+    expect(screen.getByText("hash_join")).toBeInTheDocument();
+    expect(screen.getByText("scan_users").query()).toBeNull();
   });
 
   it("calls onSelect when a node's button is clicked", async () => {
     const onSelect = vi.fn();
-    render(
+    const screen = render(
       <PlanTree
         expanded={new Set<string>(["r"])}
         hotPath={new Set<string>()}
@@ -73,13 +72,13 @@ describe("planTree", () => {
         selectedNodeId={null}
       />
     );
-    await userEvent.click(screen.getByRole("button", { name: /scan_users/i }));
+    await screen.getByRole("button", { name: /scan_users/i }).click();
     expect(onSelect).toHaveBeenCalledWith("r.0");
   });
 
   it("calls onToggleExpand when the chevron is clicked", async () => {
     const onToggleExpand = vi.fn();
-    render(
+    const screen = render(
       <PlanTree
         expanded={new Set<string>(["r"])}
         hotPath={new Set<string>()}
@@ -90,13 +89,15 @@ describe("planTree", () => {
         selectedNodeId={null}
       />
     );
-    await userEvent.click(screen.getByRole("button", { name: /collapse/i }));
+    await screen.getByRole("button", { name: /collapse/i }).click();
     expect(onToggleExpand).toHaveBeenCalledWith("r");
   });
 
   it("exposes tree semantics for assistive technology", () => {
-    renderTree();
-    expect(screen.getByRole("tree")).toBeDefined();
-    expect(screen.getAllByRole("treeitem").length).toBeGreaterThan(0);
+    const screen = renderTree();
+    expect(screen.getByRole("tree")).toBeInTheDocument();
+    expect(
+      screen.container.querySelectorAll('[role="treeitem"]').length
+    ).toBeGreaterThan(0);
   });
 });

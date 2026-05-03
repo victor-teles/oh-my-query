@@ -100,6 +100,7 @@ export default defineConfig({
             headless: true,
             instances: [{ browser: "chromium" }],
             provider: playwright(),
+            screenshotFailures: false,
           },
           include: ["src/**/*.browser.test.tsx"],
           name: "browser",

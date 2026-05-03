@@ -1,6 +1,5 @@
-import { render, screen } from "@testing-library/react";
-import { userEvent } from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
+import { render } from "vitest-browser-react";
 
 import { ExplainHeader } from "./explain-panel";
 
@@ -23,31 +22,35 @@ const baseProps = {
 
 describe("explainHeader Improve with AI button", () => {
   it("hides the button when canImproveWithAi is false", () => {
-    render(<ExplainHeader {...baseProps} canImproveWithAi={false} />);
+    const screen = render(
+      <ExplainHeader {...baseProps} canImproveWithAi={false} />
+    );
     expect(
-      screen.queryByRole("button", { name: /improve query with ai/i })
+      screen.getByRole("button", { name: /improve query with ai/i }).query()
     ).toBeNull();
   });
 
   it("shows the button when canImproveWithAi is true", () => {
-    render(<ExplainHeader {...baseProps} canImproveWithAi={true} />);
+    const screen = render(
+      <ExplainHeader {...baseProps} canImproveWithAi={true} />
+    );
     expect(
       screen.getByRole("button", { name: /improve query with ai/i })
-    ).toBeDefined();
+    ).toBeInTheDocument();
   });
 
   it("calls onImprove when the button is clicked", async () => {
     const onImprove = vi.fn();
-    render(
+    const screen = render(
       <ExplainHeader
         {...baseProps}
         canImproveWithAi={true}
         onImprove={onImprove}
       />
     );
-    await userEvent.click(
-      screen.getByRole("button", { name: /improve query with ai/i })
-    );
+    await screen
+      .getByRole("button", { name: /improve query with ai/i })
+      .click();
     expect(onImprove).toHaveBeenCalledOnce();
   });
 });

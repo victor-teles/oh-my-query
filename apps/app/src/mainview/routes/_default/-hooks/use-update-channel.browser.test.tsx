@@ -1,6 +1,7 @@
-import { act, renderHook, waitFor } from "@testing-library/react";
+import { act } from "react";
 import { describe, expect, it } from "vitest";
 
+import { renderHook, waitFor } from "@/test/render-hook";
 import { mockTauri } from "@/test/tauri-mock";
 
 import type { CheckState } from "./use-update-channel";

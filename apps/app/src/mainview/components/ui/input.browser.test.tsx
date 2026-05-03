@@ -76,4 +76,37 @@ describe("input", () => {
     expect(input).toBeTruthy();
     expect(screen.container).toMatchSnapshot();
   });
+
+  it("disables browser autofill and spellcheck by default", () => {
+    const screen = render(<Input />);
+    const input = screen.container.querySelector("input");
+    expect(input).not.toBeNull();
+    expect(input?.getAttribute("autocomplete")).toBe("off");
+    expect(input?.getAttribute("autocorrect")).toBe("off");
+    expect(input?.getAttribute("autocapitalize")).toBe("off");
+    expect(input?.getAttribute("spellcheck")).toBe("false");
+  });
+
+  it("hides itself from password managers by default", () => {
+    const screen = render(<Input />);
+    const input = screen.container.querySelector(
+      "input"
+    ) as HTMLInputElement | null;
+    expect(input).not.toBeNull();
+    expect(input?.dataset["1pIgnore"]).toBe("true");
+    expect(input?.dataset.lpignore).toBe("true");
+    expect(input?.dataset.formType).toBe("other");
+  });
+
+  it("lets consumers override the autocomplete attribute", () => {
+    const screen = render(<Input autoComplete="username" />);
+    const input = screen.container.querySelector("input");
+    expect(input?.getAttribute("autocomplete")).toBe("username");
+  });
+
+  it("lets consumers re-enable spellcheck", () => {
+    const screen = render(<Input spellCheck />);
+    const input = screen.container.querySelector("input");
+    expect(input?.getAttribute("spellcheck")).toBe("true");
+  });
 });

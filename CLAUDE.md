@@ -119,13 +119,14 @@ Keep route files thin. A route's job is to orchestrate — wire hooks, render la
 
 ## Component Tests
 
-Component tests run in Vitest 4 browser mode (Playwright + Chromium). Add or update a `*.browser.test.tsx` next to the component for any UI change; pure-logic tests stay as `*.test.ts` / `*.test.tsx` in jsdom.
+Every React test — components and hooks alike — runs in Vitest 4 browser mode (Playwright + Chromium) via `vitest-browser-react`. Add or update a `*.browser.test.tsx` next to the unit under test for any UI or hook change. Only pure-logic tests (no JSX, no DOM) stay as `*.test.ts(x)` in the jsdom `unit` project.
 
-- Pattern: `import { render } from "vitest-browser-react"; const screen = render(<Component … />)`. Use `screen.getByRole(...)` for queries, `await el.click()` for interactions, and `expect(el.element()).toMatchSnapshot()` (or `expect(screen.container).toMatchSnapshot()`) for DOM snapshots.
+- Pattern: `import { render } from "vitest-browser-react"; const screen = render(<Component … />)`. Use `screen.getByRole(...)` for queries, `await el.click()` for interactions, and `expect(el.element()).toMatchSnapshot()` (or `expect(screen.container).toMatchSnapshot()`) for DOM snapshots. For negative assertions, `screen.getBy*(...).query()` returns `null` when absent.
+- For hooks, use the local helper: `import { renderHook, waitFor } from "@/test/render-hook"`. Same shape as the historical `@testing-library/react` API (`{ result, rerender, unmount }`, `renderHook(cb, { initialProps })`).
 - Snapshots are committed in `__snapshots__/` next to each test. The setup in `src/mainview/test/setup-browser.ts` strips volatile inline styles (`transform`, `opacity`, etc.) so motion-driven components serialize stably.
 - Run scripts (`apps/app`):
   - `bun run test` — both projects
-  - `bun run test:unit` — jsdom logic tests only (`*.test.ts` / `*.test.tsx`)
+  - `bun run test:unit` — jsdom logic-only tests (`*.test.ts` / `*.test.tsx`)
   - `bun run test:browser` — browser interaction + snapshot tests (`*.browser.test.tsx`)
   - `bun run test:watch` — watch mode for both
   - Scope to one file: append the path, e.g. `bun run test:browser src/mainview/components/ui/button.browser.test.tsx`.

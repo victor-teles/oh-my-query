@@ -1,9 +1,9 @@
-import { renderHook, waitFor } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 
 import type { DatabaseConnection } from "@/lib/connections";
 import type { QueryTab } from "@/lib/query-types";
 
+import { renderHook, waitFor } from "@/test/render-hook";
 import { mockTauri } from "@/test/tauri-mock";
 
 const fakeConnection: DatabaseConnection = {

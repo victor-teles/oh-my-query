@@ -359,3 +359,184 @@ describe("dynamic-island", () => {
     expect(screen.container).toMatchSnapshot();
   });
 });
+
+const renderSnapshot = (snapshot: IslandSnapshot) =>
+  render(<DynamicIslandContent snapshot={snapshot} />);
+
+describe("dynamicIslandContent semantics", () => {
+  describe("connection states", () => {
+    it("renders welcome state", () => {
+      const screen = renderSnapshot({ kind: "welcome" });
+      expect(screen.getByText("Welcome")).toBeInTheDocument();
+    });
+
+    it("renders ambient state with connection name", () => {
+      const screen = renderSnapshot({
+        connectionName: "my-db",
+        kind: "ambient",
+      });
+      expect(screen.getByText("my-db")).toBeInTheDocument();
+    });
+
+    it("renders connecting state with sr label and connection name", () => {
+      const screen = renderSnapshot({
+        connectionName: "prod-pg",
+        kind: "connecting",
+      });
+      expect(screen.getByText("Connecting to")).toBeInTheDocument();
+      expect(screen.getByText("prod-pg")).toBeInTheDocument();
+    });
+
+    it("renders reconnecting state with connection name", () => {
+      const screen = renderSnapshot({
+        connectionName: "staging",
+        kind: "reconnecting",
+      });
+      expect(screen.getByText("Reconnecting to staging")).toBeInTheDocument();
+    });
+
+    it("renders connection-error with retry button", () => {
+      const onReconnect = vi.fn();
+      const screen = renderSnapshot({
+        error: "ECONNREFUSED",
+        kind: "connection-error",
+        onReconnect,
+      });
+      expect(
+        screen.getByRole("button", { name: /retry/i })
+      ).toBeInTheDocument();
+    });
+
+    it("renders connected-idle with accessible label", () => {
+      const screen = renderSnapshot({
+        color: "honey",
+        connectionName: "analytics",
+        database: "app",
+        emoji: undefined,
+        environment: undefined,
+        kind: "connected-idle",
+        serverVersion: "15.1",
+        username: "admin",
+      });
+      expect(
+        screen.getByRole("button", { name: /Connected to analytics/i })
+      ).toBeInTheDocument();
+    });
+  });
+
+  describe("query states", () => {
+    it("renders query-running with executing label", () => {
+      const screen = renderSnapshot(makeRunningSnapshot([makeRunner()]));
+      expect(screen.getByText("Executing query")).toBeInTheDocument();
+      expect(screen.getByText("Running")).toBeInTheDocument();
+    });
+
+    it("renders elapsed time after threshold", () => {
+      const screen = renderSnapshot(
+        makeRunningSnapshot([makeRunner({ startedAt: Date.now() - 4200 })])
+      );
+      expect(screen.getByText(/4\.\ds/)).toBeInTheDocument();
+    });
+
+    it("hides +N-1 chip with single runner", () => {
+      const screen = renderSnapshot(makeRunningSnapshot([makeRunner()]));
+      expect(screen.getByText(/^\+\d+$/).query()).toBeNull();
+    });
+
+    it("renders query-success with row count and time", () => {
+      const screen = renderSnapshot({
+        executionTimeMs: 250,
+        kind: "query-success",
+        rowCount: 42,
+      });
+      expect(screen.getByText("42", { exact: true })).toBeInTheDocument();
+      expect(screen.getByText("rows", { exact: true })).toBeInTheDocument();
+      expect(screen.getByText("250ms", { exact: true })).toBeInTheDocument();
+    });
+
+    it("renders query-success with singular row label", () => {
+      const screen = renderSnapshot({
+        executionTimeMs: 10,
+        kind: "query-success",
+        rowCount: 1,
+      });
+      expect(screen.getByText("row", { exact: true })).toBeInTheDocument();
+    });
+
+    it("renders query-error with sr label", () => {
+      const screen = renderSnapshot({
+        error: "syntax error at position 1",
+        kind: "query-error",
+      });
+      expect(screen.getByText("Query failed:")).toBeInTheDocument();
+    });
+  });
+
+  describe("aI states", () => {
+    it("renders query-streaming with streaming label", () => {
+      const screen = renderSnapshot({
+        kind: "query-streaming",
+        tokensReceived: 64,
+      });
+      expect(screen.getByText("Streaming AI response")).toBeInTheDocument();
+    });
+
+    it("renders query-streaming shows token count when non-zero", () => {
+      const screen = renderSnapshot({
+        kind: "query-streaming",
+        tokensReceived: 64,
+      });
+      expect(screen.getByText(/64/)).toBeInTheDocument();
+    });
+
+    it("renders query-streaming without token count when zero", () => {
+      const screen = renderSnapshot({
+        kind: "query-streaming",
+        tokensReceived: 0,
+      });
+      expect(screen.getByText("· 0").query()).toBeNull();
+    });
+
+    it("renders query-planning with planning label", () => {
+      const screen = renderSnapshot({ kind: "query-planning" });
+      expect(screen.getByText("AI planning query")).toBeInTheDocument();
+    });
+
+    it("renders query-cancelled with cancelled label", () => {
+      const screen = renderSnapshot({ kind: "query-cancelled" });
+      expect(screen.getByText("Query cancelled")).toBeInTheDocument();
+    });
+  });
+
+  describe("accessibility", () => {
+    it("running trigger advertises listbox popup via aria-haspopup", () => {
+      const screen = renderSnapshot(makeRunningSnapshot([makeRunner()]));
+      const btn = screen
+        .getByRole("button", { name: /show running query/i })
+        .element();
+      expect(btn.getAttribute("aria-haspopup")).toBe("listbox");
+      expect(btn.getAttribute("aria-expanded")).toBe("false");
+    });
+
+    it("cancel button on streaming labels as Stop generating", () => {
+      const screen = renderSnapshot({
+        kind: "query-streaming",
+        onCancel: vi.fn(),
+        tokensReceived: 64,
+      });
+      expect(
+        screen.getByRole("button", { name: /stop generating/i })
+      ).toBeInTheDocument();
+    });
+
+    it("cancel button on planning labels as Stop planning", () => {
+      const screen = renderSnapshot({
+        kind: "query-planning",
+        onCancel: vi.fn(),
+      });
+      expect(
+        screen.getByRole("button", { name: /stop planning/i })
+      ).toBeInTheDocument();
+    });
+  });
+});

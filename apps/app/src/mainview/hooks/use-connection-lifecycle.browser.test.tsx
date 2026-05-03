@@ -1,9 +1,10 @@
-import { act, renderHook, waitFor } from "@testing-library/react";
+import { act } from "react";
 import { describe, expect, it, vi } from "vitest";
 
 import type { DatabaseConnection } from "@/lib/connections";
 
 import { useConnectionLifecycle } from "@/hooks/use-connection-lifecycle";
+import { renderHook, waitFor } from "@/test/render-hook";
 import { mockTauri } from "@/test/tauri-mock";
 
 const noop = vi.fn();

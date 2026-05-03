@@ -1,7 +1,7 @@
-import { renderHook } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 
 import { useTitlebarDoubleClick } from "@/hooks/use-titlebar-double-click";
+import { renderHook } from "@/test/render-hook";
 import { mockTauri } from "@/test/tauri-mock";
 
 const fireDoubleClick = (target: EventTarget) => {
@@ -32,7 +32,7 @@ describe("useTitlebarDoubleClick", () => {
 
     const dragRegion = document.createElement("div");
     dragRegion.className = "electrobun-webkit-app-region-drag";
-    const noDragChild = document.createElement("button");
+    const noDragChild = document.createElement("span");
     noDragChild.className = "electrobun-webkit-app-region-no-drag";
     dragRegion.append(noDragChild);
     document.body.append(dragRegion);
