@@ -1,3 +1,4 @@
+import type { ExplainDensity } from "@/lib/query-types";
 import type { PlanNode } from "@/lib/tauri";
 
 import { cn } from "@/lib/utils";
@@ -10,6 +11,7 @@ interface PlanTreeProps {
   hotPath: Set<string>;
   maxCost: number;
   expanded: Set<string>;
+  density: ExplainDensity;
   onSelect: (id: string) => void;
   onToggleExpand: (id: string) => void;
 }
@@ -20,15 +22,20 @@ export const PlanTree = ({
   hotPath,
   maxCost,
   expanded,
+  density,
   onSelect,
   onToggleExpand,
 }: PlanTreeProps) => (
   <div
     aria-label="Query plan tree"
-    className="flex flex-col gap-1 p-3"
+    className={cn(
+      "flex flex-col p-3",
+      density === "compact" ? "gap-px" : "gap-0.5"
+    )}
     role="tree"
   >
     <PlanTreeNode
+      density={density}
       depth={0}
       expanded={expanded}
       hotPath={hotPath}
@@ -47,10 +54,13 @@ interface PlanTreeNodeProps {
   maxCost: number;
   hotPath: Set<string>;
   expanded: Set<string>;
+  density: ExplainDensity;
   selectedNodeId: string | null;
   onSelect: (id: string) => void;
   onToggleExpand: (id: string) => void;
 }
+
+const RAIL_INDENT_PX = 14;
 
 const PlanTreeNode = ({
   node,
@@ -58,6 +68,7 @@ const PlanTreeNode = ({
   maxCost,
   hotPath,
   expanded,
+  density,
   selectedNodeId,
   onSelect,
   onToggleExpand,
@@ -66,19 +77,26 @@ const PlanTreeNode = ({
   const isOnHotPath = hotPath.has(node.id);
   const isSelected = selectedNodeId === node.id;
   const hasChildren = node.children.length > 0;
+  const isHotPathLeaf =
+    isOnHotPath && !node.children.some((child) => hotPath.has(child.id));
 
   return (
     <div
       aria-level={depth + 1}
+      aria-selected={isSelected}
       className={cn(
-        "flex flex-col gap-1",
-        depth > 0 && "border-l border-border/40 pl-3"
+        "relative flex flex-col",
+        density === "compact" ? "gap-px" : "gap-0.5"
       )}
       role="treeitem"
+      style={depth > 0 ? { paddingLeft: RAIL_INDENT_PX } : undefined}
     >
+      {depth > 0 && <IndentRail isOnHotPath={isOnHotPath} />}
       <PlanNodeCard
+        density={density}
         hasChildren={hasChildren}
         isExpanded={isExpanded}
+        isHotPathLeaf={isHotPathLeaf}
         isOnHotPath={isOnHotPath}
         isSelected={isSelected}
         maxCost={maxCost}
@@ -87,9 +105,16 @@ const PlanTreeNode = ({
         onToggleExpand={onToggleExpand}
       />
       {hasChildren && isExpanded && (
-        <div className="flex flex-col gap-1" role="group">
+        <div
+          className={cn(
+            "flex flex-col",
+            density === "compact" ? "gap-px" : "gap-0.5"
+          )}
+          role="group"
+        >
           {node.children.map((child) => (
             <PlanTreeNode
+              density={density}
               depth={depth + 1}
               expanded={expanded}
               hotPath={hotPath}
@@ -106,3 +131,13 @@ const PlanTreeNode = ({
     </div>
   );
 };
+
+const IndentRail = ({ isOnHotPath }: { isOnHotPath: boolean }) => (
+  <span
+    aria-hidden="true"
+    className={cn(
+      "pointer-events-none absolute top-0 bottom-0 left-[5px] w-px",
+      isOnHotPath ? "bg-warning/40" : "bg-border/40"
+    )}
+  />
+);

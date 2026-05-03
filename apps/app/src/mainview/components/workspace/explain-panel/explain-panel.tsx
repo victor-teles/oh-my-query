@@ -2,7 +2,7 @@ import { AlertTriangle, Flame, Loader2, Play, Wand2, X } from "lucide-react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { useCallback, useEffect, useMemo, useState } from "react";
 
-import type { QueryTab } from "@/lib/query-types";
+import type { ExplainDensity, QueryTab } from "@/lib/query-types";
 import type { ExplainResult } from "@/lib/tauri";
 
 import { Button } from "@/components/ui/button";
@@ -64,7 +64,7 @@ export const ExplainPanel = ({
   onAiImprovePlan,
 }: ExplainPanelProps) => {
   const { connection } = useConnection();
-  const { cancelExplain, explainTab, setExplainAnalyze } =
+  const { cancelExplain, explainTab, setExplainAnalyze, setExplainDensity } =
     useQueryTabsContext();
   const { getSelectedText } = useEditorInsert();
   const [viewMode, setViewMode] = useState<ViewMode>("tree");
@@ -94,6 +94,15 @@ export const ExplainPanel = ({
     }
   }, [tab, setExplainAnalyze]);
 
+  const handleDensityChange = useCallback(
+    (density: ExplainDensity) => {
+      if (tab) {
+        setExplainDensity(tab.id, density);
+      }
+    },
+    [tab, setExplainDensity]
+  );
+
   const explainResult = tab?.explainResult;
   const handleImprove = useCallback(() => {
     if (explainResult) {
@@ -113,14 +122,17 @@ export const ExplainPanel = ({
           analyzeSupported={supportsAnalyze}
           canImproveWithAi={false}
           canRun={false}
+          density={tab.explainDensity}
           engine={engine}
           hasSelection={hasSelection}
           isRunning={false}
           onCancel={handleCancel}
+          onDensityChange={handleDensityChange}
           onImprove={handleImprove}
           onRun={handleRun}
           onToggleAnalyze={handleToggleAnalyze}
           onViewChange={setViewMode}
+          showDensityToggle={false}
           showViewToggle={false}
           viewMode={viewMode}
         />
@@ -145,14 +157,17 @@ export const ExplainPanel = ({
         analyzeSupported={supportsAnalyze}
         canImproveWithAi={canImproveWithAi}
         canRun={canRun}
+        density={tab.explainDensity}
         engine={engine}
         hasSelection={hasSelection}
         isRunning={tab.explainStatus === "running"}
         onCancel={handleCancel}
+        onDensityChange={handleDensityChange}
         onImprove={handleImprove}
         onRun={handleRun}
         onToggleAnalyze={handleToggleAnalyze}
         onViewChange={setViewMode}
+        showDensityToggle={Boolean(result) && viewMode === "tree"}
         showViewToggle={Boolean(result)}
         viewMode={viewMode}
       />
@@ -170,6 +185,7 @@ export const ExplainPanel = ({
             transition={spring}
           >
             <ExplainBody
+              density={tab.explainDensity}
               error={error}
               result={result}
               status={tab.explainStatus}
@@ -204,9 +220,16 @@ interface ExplainBodyProps {
   status: QueryTab["explainStatus"];
   error: string | null;
   viewMode: ViewMode;
+  density: ExplainDensity;
 }
 
-const ExplainBody = ({ result, status, error, viewMode }: ExplainBodyProps) => {
+const ExplainBody = ({
+  result,
+  status,
+  error,
+  viewMode,
+  density,
+}: ExplainBodyProps) => {
   if (status === "running") {
     return (
       <div
@@ -232,16 +255,17 @@ const ExplainBody = ({ result, status, error, viewMode }: ExplainBodyProps) => {
     if (viewMode === "raw") {
       return <PlanRawView raw={result.raw} />;
     }
-    return <PlanInspector result={result} />;
+    return <PlanInspector density={density} result={result} />;
   }
   return <ExplainIdleState />;
 };
 
 interface PlanInspectorProps {
   result: NonNullable<QueryTab["explainResult"]>;
+  density: ExplainDensity;
 }
 
-const PlanInspector = ({ result }: PlanInspectorProps) => {
+const PlanInspector = ({ result, density }: PlanInspectorProps) => {
   const analysis = useMemo(
     () => computePlanAnalysis(result.root),
     [result.root]
@@ -336,6 +360,7 @@ const PlanInspector = ({ result }: PlanInspectorProps) => {
           tabIndex={0}
         >
           <PlanTree
+            density={density}
             expanded={expanded}
             hotPath={analysis.hotPath}
             maxCost={analysis.maxCost}
@@ -361,14 +386,17 @@ interface ExplainHeaderProps {
   analyzeSupported: boolean;
   canImproveWithAi: boolean;
   canRun: boolean;
+  density: ExplainDensity;
   engine: string;
   hasSelection: boolean;
   isRunning: boolean;
   onCancel: () => void;
+  onDensityChange: (density: ExplainDensity) => void;
   onImprove: () => void;
   onRun: () => void;
   onToggleAnalyze: () => void;
   onViewChange: (mode: ViewMode) => void;
+  showDensityToggle: boolean;
   showViewToggle: boolean;
   viewMode: ViewMode;
 }
@@ -378,14 +406,17 @@ export const ExplainHeader = ({
   analyzeSupported,
   canImproveWithAi,
   canRun,
+  density,
   engine,
   hasSelection,
   isRunning,
   onCancel,
+  onDensityChange,
   onImprove,
   onRun,
   onToggleAnalyze,
   onViewChange,
+  showDensityToggle,
   showViewToggle,
   viewMode,
 }: ExplainHeaderProps) => (
@@ -476,6 +507,9 @@ export const ExplainHeader = ({
           Improve with AI
         </Button>
       )}
+      {showDensityToggle && (
+        <DensityToggle density={density} onDensityChange={onDensityChange} />
+      )}
       {showViewToggle && (
         <ViewToggle onViewChange={onViewChange} viewMode={viewMode} />
       )}
@@ -520,6 +554,58 @@ const ViewToggle = ({ viewMode, onViewChange }: ViewToggleProps) => {
         type="button"
       >
         Raw
+      </button>
+    </div>
+  );
+};
+
+interface DensityToggleProps {
+  density: ExplainDensity;
+  onDensityChange: (density: ExplainDensity) => void;
+}
+
+const DensityToggle = ({ density, onDensityChange }: DensityToggleProps) => {
+  const selectComfortable = useCallback(
+    () => onDensityChange("comfortable"),
+    [onDensityChange]
+  );
+  const selectCompact = useCallback(
+    () => onDensityChange("compact"),
+    [onDensityChange]
+  );
+  return (
+    <div
+      aria-label="Plan density"
+      className="flex overflow-hidden rounded-sm border border-border/60"
+      role="group"
+    >
+      <button
+        aria-pressed={density === "comfortable"}
+        className={cn(
+          "px-2 py-0.5 text-[10px] transition-colors",
+          density === "comfortable" ? "bg-background text-foreground" : `
+              text-muted-foreground
+              hover:text-foreground
+            `
+        )}
+        onClick={selectComfortable}
+        type="button"
+      >
+        Comfy
+      </button>
+      <button
+        aria-pressed={density === "compact"}
+        className={cn(
+          "px-2 py-0.5 text-[10px] transition-colors",
+          density === "compact" ? "bg-background text-foreground" : `
+              text-muted-foreground
+              hover:text-foreground
+            `
+        )}
+        onClick={selectCompact}
+        type="button"
+      >
+        Compact
       </button>
     </div>
   );

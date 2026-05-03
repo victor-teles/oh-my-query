@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 
 import type { PersistedTab, TabState } from "@/lib/persistence";
-import type { QueryTab } from "@/lib/query-types";
+import type { ExplainDensity, QueryTab } from "@/lib/query-types";
 
 import { getTabs, saveTabs } from "@/lib/persistence";
 import {
@@ -363,6 +363,17 @@ export const useQueryTabs = (
     );
   }, []);
 
+  const setExplainDensity = useCallback(
+    (tabId: string, density: ExplainDensity) => {
+      setTabs((prev) =>
+        prev.map((t) =>
+          t.id === tabId ? { ...t, explainDensity: density } : t
+        )
+      );
+    },
+    []
+  );
+
   const onConfirmClose = useCallback(() => {
     setCloseRequested(false);
     window.close();
@@ -390,6 +401,7 @@ export const useQueryTabs = (
     reopenTab,
     setActiveTabId,
     setExplainAnalyze,
+    setExplainDensity,
     tabs,
     updateTabDialect,
     updateTabSql,

@@ -1,30 +1,6 @@
 import type { PlanNode } from "@/lib/tauri";
 
-const formatMs = (ms: number | null): string => {
-  if (ms === null) {
-    return "—";
-  }
-  if (ms < 1) {
-    return `${(ms * 1000).toFixed(0)}µs`;
-  }
-  if (ms < 1000) {
-    return `${ms.toFixed(2)}ms`;
-  }
-  return `${(ms / 1000).toFixed(2)}s`;
-};
-
-const formatRows = (rows: number | null): string => {
-  if (rows === null) {
-    return "—";
-  }
-  if (rows >= 1_000_000) {
-    return `${(rows / 1_000_000).toFixed(1)}M`;
-  }
-  if (rows >= 1000) {
-    return `${(rows / 1000).toFixed(1)}k`;
-  }
-  return Math.round(rows).toString();
-};
+import { formatMs, formatRows } from "./format";
 
 export const PlanNodeDetails = ({ node }: { node: PlanNode }) => (
   <div className="flex flex-col gap-3">

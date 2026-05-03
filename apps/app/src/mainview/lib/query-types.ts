@@ -3,6 +3,8 @@ import type { ExecuteResult, ExplainResult } from "@/lib/tauri";
 
 export type TabStatus = "idle" | "running" | "success" | "error";
 
+export type ExplainDensity = "comfortable" | "compact";
+
 export interface QueryTab {
   id: string;
   title: string;
@@ -20,5 +22,6 @@ export interface QueryTab {
   explainStatus: TabStatus;
   explainError: string | null;
   explainAnalyze: boolean;
+  explainDensity: ExplainDensity;
   runningExplainId: string | null;
 }

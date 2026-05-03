@@ -35,6 +35,7 @@ const renderTree = (
 ) =>
   render(
     <PlanTree
+      density="comfortable"
       expanded={expanded}
       hotPath={new Set<string>(["r", "r.1"])}
       maxCost={5}
@@ -63,6 +64,7 @@ describe("planTree", () => {
     const onSelect = vi.fn();
     const screen = render(
       <PlanTree
+        density="comfortable"
         expanded={new Set<string>(["r"])}
         hotPath={new Set<string>()}
         maxCost={5}
@@ -80,6 +82,7 @@ describe("planTree", () => {
     const onToggleExpand = vi.fn();
     const screen = render(
       <PlanTree
+        density="comfortable"
         expanded={new Set<string>(["r"])}
         hotPath={new Set<string>()}
         maxCost={5}
@@ -99,5 +102,25 @@ describe("planTree", () => {
     expect(
       screen.container.querySelectorAll('[role="treeitem"]').length
     ).toBeGreaterThan(0);
+  });
+
+  it("hides the rows line in compact density", () => {
+    const screen = render(
+      <PlanTree
+        density="compact"
+        expanded={new Set<string>(["r"])}
+        hotPath={new Set<string>()}
+        maxCost={5}
+        onSelect={vi.fn()}
+        onToggleExpand={vi.fn()}
+        root={{
+          ...branchy,
+          rows: { actual: 100, estimated: 80 },
+        }}
+        selectedNodeId={null}
+      />
+    );
+    expect(screen.getByText("hash_join")).toBeInTheDocument();
+    expect(screen.getByText(/est$/).query()).toBeNull();
   });
 });

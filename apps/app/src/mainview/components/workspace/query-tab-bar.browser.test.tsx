@@ -10,6 +10,7 @@ const tab = (overrides: Partial<QueryTab> = {}): QueryTab => ({
   errorCode: null,
   executedSql: null,
   explainAnalyze: false,
+  explainDensity: "comfortable",
   explainError: null,
   explainResult: null,
   explainSql: null,

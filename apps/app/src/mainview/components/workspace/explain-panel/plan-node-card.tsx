@@ -1,48 +1,25 @@
-import { AlertTriangle, ChevronDown, ChevronRight } from "lucide-react";
-import { useReducedMotion } from "motion/react";
+import { AlertTriangle, ChevronDown, ChevronRight, Flame } from "lucide-react";
 import { useCallback } from "react";
 
+import type { ExplainDensity } from "@/lib/query-types";
 import type { PlanNode } from "@/lib/tauri";
 
 import { cn } from "@/lib/utils";
 
+import { formatMsShort, formatRowsShort } from "./format";
 import { costTier, relativeCostFraction } from "./use-plan-analysis";
 
 type CostTier = ReturnType<typeof costTier>;
-
-const formatMsShort = (ms: number | null): string | null => {
-  if (ms === null) {
-    return null;
-  }
-  if (ms < 1) {
-    return `${(ms * 1000).toFixed(0)}µs`;
-  }
-  if (ms < 1000) {
-    return `${ms.toFixed(1)}ms`;
-  }
-  return `${(ms / 1000).toFixed(2)}s`;
-};
-
-const formatRowsShort = (rows: number | null): string | null => {
-  if (rows === null) {
-    return null;
-  }
-  if (rows >= 1_000_000) {
-    return `${(rows / 1_000_000).toFixed(1)}M`;
-  }
-  if (rows >= 1000) {
-    return `${(rows / 1000).toFixed(1)}k`;
-  }
-  return Math.round(rows).toString();
-};
 
 interface PlanNodeCardProps {
   node: PlanNode;
   maxCost: number;
   isOnHotPath: boolean;
+  isHotPathLeaf: boolean;
   isSelected: boolean;
   hasChildren: boolean;
   isExpanded: boolean;
+  density: ExplainDensity;
   onSelect: (id: string) => void;
   onToggleExpand: (id: string) => void;
 }
@@ -51,15 +28,16 @@ export const PlanNodeCard = ({
   node,
   maxCost,
   isOnHotPath,
+  isHotPathLeaf,
   isSelected,
   hasChildren,
   isExpanded,
+  density,
   onSelect,
   onToggleExpand,
 }: PlanNodeCardProps) => {
-  const fraction = relativeCostFraction(node, maxCost);
-  const tier = costTier(fraction);
-  const barWidthPct = Math.round(fraction * 100);
+  const tier = costTier(relativeCostFraction(node, maxCost));
+  const isCompact = density === "compact";
 
   const handleSelect = useCallback(() => {
     onSelect(node.id);
@@ -73,50 +51,31 @@ export const PlanNodeCard = ({
   );
 
   return (
-    <div className={cn(`
-          group relative overflow-hidden rounded-md border transition-all
-          duration-150
-        `, isSelected ? "border-primary/50 bg-card shadow-sm" : `
-            border-border/60 bg-card/60
-            hover:border-border hover:bg-card
-          `, isOnHotPath && !isSelected && "border-warning/40")}>
-      <div className="relative flex items-center gap-1 p-2">
-        <TierAccent tier={tier} />
-        <ChevronToggle
-          hasChildren={hasChildren}
-          isExpanded={isExpanded}
-          onToggle={handleToggle}
-        />
-        <button
-          aria-pressed={isSelected}
-          className="
-            flex min-w-0 flex-1 items-center gap-2 text-left outline-none
-            focus-visible:ring-2 focus-visible:ring-ring/60
+    <div
+      className={cn(
+        "group relative flex items-center gap-1.5 rounded-md px-1.5 transition-colors",
+        isCompact ? "py-0.5" : "py-1.5",
+        isSelected && "bg-primary/10",
+        !isSelected && isOnHotPath && "bg-warning/[0.06]",
+        !isSelected && "hover:bg-foreground/[0.035]"
+      )}
+    >
+      <ChevronToggle
+        hasChildren={hasChildren}
+        isExpanded={isExpanded}
+        onToggle={handleToggle}
+      />
+      <button aria-pressed={isSelected} className={cn(`
+            flex min-w-0 flex-1 items-center gap-2 rounded-sm text-left outline-none
+            focus-visible:ring-2 focus-visible:ring-primary/60
             focus-visible:ring-inset
-          "
-          onClick={handleSelect}
-          type="button"
-        >
-          <NodeSummary isOnHotPath={isOnHotPath} node={node} />
-          <NodeMetric node={node} tier={tier} />
-        </button>
-      </div>
-      <CostBar tier={tier} widthPct={barWidthPct} />
+          `)} onClick={handleSelect} type="button">
+        <NodeSummary compact={isCompact} node={node} />
+        <NodeMetric isHotPathLeaf={isHotPathLeaf} node={node} tier={tier} />
+      </button>
     </div>
   );
 };
-
-const TierAccent = ({ tier }: { tier: CostTier }) => (
-  <span
-    aria-hidden="true"
-    className={cn(
-      "absolute inset-y-1 left-0 w-[3px] rounded-r-sm",
-      tier === "high" && "bg-destructive",
-      tier === "medium" && "bg-warning",
-      tier === "low" && "bg-success/70"
-    )}
-  />
-);
 
 const ChevronToggle = ({
   hasChildren,
@@ -128,17 +87,17 @@ const ChevronToggle = ({
   onToggle: (e: React.MouseEvent) => void;
 }) => {
   if (!hasChildren) {
-    return <span aria-hidden="true" className="size-4 shrink-0" />;
+    return <span aria-hidden="true" className="size-3.5 shrink-0" />;
   }
   return (
     <button
       aria-expanded={isExpanded}
       aria-label={isExpanded ? "Collapse" : "Expand"}
       className="
-        flex size-4 shrink-0 items-center justify-center rounded-sm
-        text-muted-foreground transition-colors outline-none
-        hover:bg-accent hover:text-foreground
-        focus-visible:ring-2 focus-visible:ring-ring/60
+        flex size-3.5 shrink-0 items-center justify-center rounded-sm
+        text-muted-foreground/70 transition-colors outline-none
+        hover:bg-foreground/10 hover:text-foreground
+        focus-visible:ring-2 focus-visible:ring-primary/60
       "
       onClick={onToggle}
       type="button"
@@ -154,44 +113,42 @@ const ChevronToggle = ({
 
 const NodeSummary = ({
   node,
-  isOnHotPath,
+  compact,
 }: {
   node: PlanNode;
-  isOnHotPath: boolean;
+  compact: boolean;
 }) => {
   const rowsEst = formatRowsShort(node.rows.estimated);
   const rowsActual = formatRowsShort(node.rows.actual);
+  const hasRows = Boolean(rowsEst || rowsActual);
+  const [warning] = node.warnings;
+
   return (
-    <div className="flex min-w-0 flex-1 flex-col gap-0.5">
-      <div className="flex items-center gap-1.5">
-        <span className="truncate text-[12px] font-medium text-foreground">
+    <div className="flex min-w-0 flex-1 flex-col">
+      <div className="flex min-w-0 items-center gap-1.5">
+        <span className="truncate text-[13px] font-medium tracking-tight text-foreground">
           {node.label}
         </span>
-        {isOnHotPath && (
+        {warning && (
           <span
-            className="
-              shrink-0 rounded-sm bg-warning/15 px-1 py-px text-[9px]
-              font-medium tracking-wide text-warning uppercase
-            "
+            aria-label={
+              node.warnings.length > 1
+                ? `${node.warnings.length} warnings: ${node.warnings.join(", ")}`
+                : warning
+            }
+            className="inline-flex shrink-0 items-center gap-0.5 text-warning/90"
+            title={node.warnings.join("\n")}
           >
-            hot
-          </span>
-        )}
-        {node.warnings.length > 0 && (
-          <span
-            aria-label={`${node.warnings.length} warning(s): ${node.warnings.join(", ")}`}
-            className="
-              inline-flex shrink-0 items-center gap-0.5 rounded-sm bg-warning/15
-              px-1 py-px text-[10px] font-medium text-warning
-            "
-          >
-            <AlertTriangle aria-hidden="true" className="size-2.5" />
-            {node.warnings[0]?.split(" ")[0]?.toLowerCase() ??
-              node.warnings.length}
+            <AlertTriangle aria-hidden="true" className="size-3" />
+            {node.warnings.length > 1 && (
+              <span className="font-mono text-[10px]">
+                {node.warnings.length}
+              </span>
+            )}
           </span>
         )}
       </div>
-      {(rowsEst || rowsActual) && (
+      {!compact && hasRows && (
         <RowsLine rowsActual={rowsActual} rowsEst={rowsEst} />
       )}
     </div>
@@ -205,15 +162,11 @@ const RowsLine = ({
   rowsActual: string | null;
   rowsEst: string | null;
 }) => (
-  <div
-    className="
-      flex items-center gap-2 font-mono text-[10px] text-muted-foreground
-    "
-  >
+  <div className="flex items-center gap-2 font-mono text-[10.5px] text-muted-foreground/80">
     {rowsActual && rowsEst ? (
       <span>
         <span className="text-foreground/70">{rowsActual}</span>
-        <span className="mx-1 text-muted-foreground/60">/</span>
+        <span className="mx-1 text-muted-foreground/50">/</span>
         <span>{rowsEst} est</span>
       </span>
     ) : (
@@ -222,7 +175,15 @@ const RowsLine = ({
   </div>
 );
 
-const NodeMetric = ({ node, tier }: { node: PlanNode; tier: CostTier }) => {
+const NodeMetric = ({
+  node,
+  tier,
+  isHotPathLeaf,
+}: {
+  node: PlanNode;
+  tier: CostTier;
+  isHotPathLeaf: boolean;
+}) => {
   const selfMs = formatMsShort(
     node.cost.selfMs ?? node.cost.actualTotalMs ?? node.timing.actualTotalMs
   );
@@ -231,16 +192,20 @@ const NodeMetric = ({ node, tier }: { node: PlanNode; tier: CostTier }) => {
       ? node.cost.total.toFixed(1)
       : null;
 
+  if (!(selfMs || costEstimate)) {
+    return null;
+  }
+
   return (
-    <div
-      className="
-        flex shrink-0 items-baseline gap-2 font-mono text-[11px] tabular-nums
-      "
-    >
-      {selfMs && (
+    <div className="flex shrink-0 items-center gap-1.5 font-mono text-[11px] tabular-nums">
+      {isHotPathLeaf && (
+        <Flame aria-label="Hottest node" className="size-3 text-warning/80" />
+      )}
+      <CostDot tier={tier} />
+      {selfMs ? (
         <span
           className={cn(
-            "font-semibold",
+            "font-medium",
             tier === "high" && "text-destructive",
             tier === "medium" && "text-warning",
             tier === "low" && "text-foreground/70"
@@ -248,30 +213,23 @@ const NodeMetric = ({ node, tier }: { node: PlanNode; tier: CostTier }) => {
         >
           {selfMs}
         </span>
-      )}
-      {!selfMs && costEstimate && (
-        <span className="text-foreground/60">≈{costEstimate}</span>
+      ) : (
+        costEstimate && (
+          <span className="text-foreground/55">≈{costEstimate}</span>
+        )
       )}
     </div>
   );
 };
 
-const CostBar = ({ tier, widthPct }: { tier: CostTier; widthPct: number }) => {
-  const reduced = useReducedMotion();
-  return (
-    <div aria-hidden="true" className="h-[2px] w-full bg-muted/40">
-      <div
-        className={cn(
-          "h-full w-full origin-left",
-          !reduced && "transition-transform duration-150 ease-out",
-          tier === "high" && "bg-destructive/80",
-          tier === "medium" && "bg-warning/80",
-          tier === "low" && "bg-success/60"
-        )}
-        style={{
-          transform: `scaleX(${Math.max(0, Math.min(1, widthPct / 100))})`,
-        }}
-      />
-    </div>
-  );
-};
+const CostDot = ({ tier }: { tier: CostTier }) => (
+  <span
+    aria-hidden="true"
+    className={cn(
+      "size-1.5 shrink-0 rounded-full",
+      tier === "high" && "bg-destructive/80",
+      tier === "medium" && "bg-warning/80",
+      tier === "low" && "bg-success/50"
+    )}
+  />
+);
