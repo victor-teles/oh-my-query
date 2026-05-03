@@ -23,7 +23,7 @@ const RULES: DestructiveRule[] = [
     },
   },
   {
-    pattern: /^\s*del\s+\*/im,
+    pattern: /^\s*del\s+\*(?:\s|$)/im,
     result: {
       keyword: "DEL *",
       kind: "delete",

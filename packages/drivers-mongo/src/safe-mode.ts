@@ -23,7 +23,7 @@ const RULES: DestructiveRule[] = [
     },
   },
   {
-    pattern: /\.drop\s*\(\s*\)/i,
+    pattern: /\.drop\s*\(/i,
     result: {
       keyword: "drop",
       kind: "drop",
@@ -31,7 +31,7 @@ const RULES: DestructiveRule[] = [
     },
   },
   {
-    pattern: /\.deleteMany\s*\(\s*\{?\s*\}?\s*\)/i,
+    pattern: /\.deleteMany\s*\(\s*(?:\{\s*\})?\s*[,)]/i,
     result: {
       keyword: "deleteMany",
       kind: "delete",
@@ -39,7 +39,7 @@ const RULES: DestructiveRule[] = [
     },
   },
   {
-    pattern: /\.deleteOne\s*\(\s*\{?\s*\}?\s*\)/i,
+    pattern: /\.deleteOne\s*\(\s*(?:\{\s*\})?\s*[,)]/i,
     result: {
       keyword: "deleteOne",
       kind: "delete",
@@ -47,7 +47,7 @@ const RULES: DestructiveRule[] = [
     },
   },
   {
-    pattern: /\.remove\s*\(\s*\{?\s*\}?\s*\)/i,
+    pattern: /\.remove\s*\(\s*(?:\{\s*\})?\s*[,)]/i,
     result: {
       keyword: "remove",
       kind: "delete",

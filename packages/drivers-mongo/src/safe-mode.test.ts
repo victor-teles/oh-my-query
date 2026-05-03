@@ -37,6 +37,24 @@ describe("mongoDB classification", () => {
     });
   });
 
+  it("flags drop() with options", () => {
+    expect(
+      classifyDestructive('db.users.drop({ writeConcern: { w: "majority" } })')
+    ).toMatchObject({ keyword: "drop", kind: "drop" });
+  });
+
+  it("flags deleteMany with empty filter and options", () => {
+    expect(
+      classifyDestructive("db.users.deleteMany({}, { writeConcern: { w: 1 } })")
+    ).toMatchObject({ keyword: "deleteMany", kind: "delete" });
+  });
+
+  it("flags deleteOne with empty filter and options", () => {
+    expect(
+      classifyDestructive("db.users.deleteOne({}, { writeConcern: { w: 1 } })")
+    ).toMatchObject({ keyword: "deleteOne", kind: "delete" });
+  });
+
   it("flags dropCollection()", () => {
     expect(classifyDestructive('db.dropCollection("users")')).toMatchObject({
       keyword: "drop",

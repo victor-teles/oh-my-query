@@ -24,12 +24,11 @@ const CLASSIFIERS: Record<string, DestructiveClassifier> = {
 export const getDestructiveClassifier = (
   dbType: string
 ): DestructiveClassifier => {
-  const classifier = CLASSIFIERS[dbType];
-  if (!classifier) {
+  if (!Object.hasOwn(CLASSIFIERS, dbType)) {
     throw new DbError(
       "UNSUPPORTED_DB_TYPE",
       `Unknown database type: ${dbType}`
     );
   }
-  return classifier;
+  return CLASSIFIERS[dbType] as DestructiveClassifier;
 };

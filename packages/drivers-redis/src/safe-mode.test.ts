@@ -32,6 +32,10 @@ describe("redis classification", () => {
     expect(classifyDestructive("DEL session:abc123")).toBeNull();
   });
 
+  it("does not flag DEL on a key that merely starts with *", () => {
+    expect(classifyDestructive("DEL *abc")).toBeNull();
+  });
+
   it("does not flag GET commands", () => {
     expect(classifyDestructive("GET mykey")).toBeNull();
   });

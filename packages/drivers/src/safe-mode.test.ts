@@ -37,4 +37,13 @@ describe("getDestructiveClassifier", () => {
       /Unknown database type/
     );
   });
+
+  it("rejects prototype keys instead of returning inherited values", () => {
+    expect(() => getDestructiveClassifier("__proto__")).toThrow(
+      /Unknown database type/
+    );
+    expect(() => getDestructiveClassifier("toString")).toThrow(
+      /Unknown database type/
+    );
+  });
 });
