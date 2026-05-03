@@ -15,6 +15,7 @@ import { useEditorInsert } from "@/contexts/editor-insert-context";
 import { useAiChat } from "@/hooks/use-ai-chat";
 import { composeActionMessage } from "@/lib/ai-actions";
 import { hasAISettings } from "@/lib/ai-settings";
+import { isPiiRedactionEnabled } from "@/lib/connections";
 import { scanRedisKeys } from "@/lib/tauri";
 
 import { ChatError } from "./chat-error";
@@ -131,6 +132,10 @@ export const ChatSidebar = ({
     connectionId: connection.id,
     databaseType: connection.type,
     getSnapshot: activeQuery?.getSnapshot,
+    redact: {
+      customPatterns: connection.customPiiPatterns,
+      enabled: isPiiRedactionEnabled(connection),
+    },
     redisKeys,
     schema,
   });

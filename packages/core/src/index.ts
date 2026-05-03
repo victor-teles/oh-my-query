@@ -1,4 +1,5 @@
 export * from "./cancellation.ts";
+export * from "./pii-redactor.ts";
 export * from "./config.ts";
 export * from "./crypto.ts";
 export * from "./error.ts";
