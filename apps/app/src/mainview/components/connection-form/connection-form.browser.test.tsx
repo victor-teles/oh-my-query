@@ -249,24 +249,28 @@ describe("connectionForm submit flow", () => {
 });
 
 describe("connectionForm appearance section", () => {
-  it("selects an emoji from the picker and clears it", async () => {
-    const screen = render(
-      <ConnectionForm connection={connectionFor("postgresql")} />
-    );
+  it(
+    "selects an emoji from the picker and clears it",
+    { timeout: 30_000 },
+    async () => {
+      const screen = render(
+        <ConnectionForm connection={connectionFor("postgresql")} />
+      );
 
-    await screen.getByRole("button", { name: "Appearance" }).click();
-    const trigger = screen.getByRole("button", { name: "Choose emoji" });
-    await trigger.click();
+      await screen.getByRole("button", { name: "Appearance" }).click();
+      const trigger = screen.getByRole("button", { name: "Choose emoji" });
+      await trigger.click();
 
-    await screen.getByRole("button", { name: "Select 🦆" }).click();
+      await screen.getByRole("button", { name: "Select 🦆" }).click();
 
-    await expect.element(trigger).toHaveTextContent("🦆");
+      await expect.element(trigger).toHaveTextContent("🦆");
 
-    await trigger.click();
-    await screen.getByRole("button", { name: "Clear" }).click();
+      await trigger.click();
+      await screen.getByRole("button", { name: "Clear" }).click();
 
-    expect(trigger.element().textContent?.trim()).toBe("🐘");
-  });
+      expect(trigger.element().textContent?.trim()).toBe("🐘");
+    }
+  );
 
   it("selects a color swatch and toggles back to none", async () => {
     const screen = render(

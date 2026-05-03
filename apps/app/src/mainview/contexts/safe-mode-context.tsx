@@ -1,23 +1,28 @@
+import type { DestructiveClassification } from "@oh-my-query/core/client";
 import type { ReactNode } from "react";
 
+import { classifyStandardSql } from "@oh-my-query/core/client";
+import { getDestructiveClassifier } from "@oh-my-query/drivers/safe-mode";
 import { createContext, use, useCallback, useMemo, useState } from "react";
 
-import type { ConnectionEnvironment } from "@/lib/connections";
-import type { DestructiveClassification } from "@/lib/safe-mode";
+import type { ConnectionEnvironment, DatabaseType } from "@/lib/connections";
 
 import { SafeModeConfirmDialog } from "@/components/workspace/safe-mode-confirm-dialog";
-import { classifyDestructiveSql } from "@/lib/safe-mode";
 
 interface ConfirmationContext {
   environment?: ConnectionEnvironment;
   connectionName?: string;
+  connectionType?: DatabaseType;
 }
 
-interface PendingConfirmation {
-  sql: string;
+export interface SafeModeConfirmationRequest {
+  query: string;
   classification: DestructiveClassification;
   environment: ConnectionEnvironment | null;
   connectionName: string | null;
+}
+
+interface PendingConfirmation extends SafeModeConfirmationRequest {
   resolve: (confirmed: boolean) => void;
 }
 
@@ -41,22 +46,29 @@ export const SafeModeProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   const requestConfirmation = useCallback(
-    (sql: string, context?: ConfirmationContext): Promise<boolean> => {
-      if (!enabled) {
+    (query: string, context?: ConfirmationContext): Promise<boolean> => {
+      if (context?.environment !== "prod" && !enabled) {
         return Promise.resolve(true);
       }
-      const classification = classifyDestructiveSql(sql);
+
+      const classify = context?.connectionType
+        ? getDestructiveClassifier(context.connectionType)
+        : classifyStandardSql;
+      const classification = classify(query);
+
       if (!classification) {
         return Promise.resolve(true);
       }
+
       const { promise, resolve } = Promise.withResolvers<boolean>();
       setPending({
         classification,
         connectionName: context?.connectionName ?? null,
         environment: context?.environment ?? null,
+        query,
         resolve,
-        sql,
       });
+
       return promise;
     },
     [enabled]
@@ -89,12 +101,18 @@ export const SafeModeProvider = ({ children }: { children: ReactNode }) => {
     <SafeModeContext value={value}>
       {children}
       <SafeModeConfirmDialog
-        classification={pending?.classification ?? null}
-        connectionName={pending?.connectionName ?? null}
-        environment={pending?.environment ?? null}
         onCancel={handleCancel}
         onConfirm={handleConfirm}
-        sql={pending?.sql ?? null}
+        request={
+          pending
+            ? {
+                classification: pending.classification,
+                connectionName: pending.connectionName,
+                environment: pending.environment,
+                query: pending.query,
+              }
+            : null
+        }
       />
     </SafeModeContext>
   );

@@ -1,13 +1,3 @@
-const COMMENT_LINE = /--.*$/gm;
-const COMMENT_BLOCK = /\/\*[\s\S]*?\*\//g;
-const STRING_SINGLE = /'(?:''|[^'])*'/g;
-const STRING_DOLLAR = /\$([a-zA-Z_]*)\$[\s\S]*?\$\1\$/g;
-
-const UNCONDITIONAL = /\b(drop|truncate|alter)\b/i;
-const DELETE_KEYWORD = /\bdelete\b/i;
-const UPDATE_KEYWORD = /\bupdate\b/i;
-const WHERE_CLAUSE = /\bwhere\b/i;
-
 export type DestructiveKind =
   | "drop"
   | "truncate"
@@ -21,12 +11,37 @@ export interface DestructiveClassification {
   reason: string;
 }
 
+export interface DestructiveRule {
+  pattern: RegExp;
+  result: DestructiveClassification;
+}
+
+export type DestructiveClassifier = (
+  rawSql: string
+) => DestructiveClassification | null;
+
+const COMMENT_LINE = /--.*$/gm;
+const COMMENT_BLOCK = /\/\*[\s\S]*?\*\//g;
+const STRING_SINGLE = /'(?:''|[^'])*'/g;
+const STRING_DOLLAR = /\$([a-zA-Z_]*)\$[\s\S]*?\$\1\$/g;
+
+const UNCONDITIONAL = /\b(drop|truncate|alter)\b/i;
+const DELETE_KEYWORD = /\bdelete\b/i;
+const UPDATE_KEYWORD = /\bupdate\b/i;
+const WHERE_CLAUSE = /\bwhere\b/i;
+
 export const normalizeSqlForAnalysis = (sql: string): string =>
   sql
     .replace(COMMENT_BLOCK, " ")
     .replace(COMMENT_LINE, " ")
     .replace(STRING_DOLLAR, " ")
     .replace(STRING_SINGLE, " ");
+
+export const matchRule = (
+  raw: string,
+  rules: DestructiveRule[]
+): DestructiveClassification | null =>
+  rules.find((rule) => rule.pattern.test(raw))?.result ?? null;
 
 const classifyUnconditional = (
   normalized: string
@@ -91,9 +106,7 @@ const classifyUnscopedMutation = (
   return null;
 };
 
-export const classifyDestructiveSql = (
-  rawSql: string
-): DestructiveClassification | null => {
+export const classifyStandardSql: DestructiveClassifier = (rawSql) => {
   const normalized = normalizeSqlForAnalysis(rawSql);
   return (
     classifyUnconditional(normalized) ?? classifyUnscopedMutation(normalized)

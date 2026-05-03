@@ -3,8 +3,8 @@ import type { ComponentType } from "react";
 import { AlertTriangle, ShieldAlert } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 
+import type { SafeModeConfirmationRequest } from "@/contexts/safe-mode-context";
 import type { ConnectionEnvironment } from "@/lib/connections";
-import type { DestructiveClassification } from "@/lib/safe-mode";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -21,19 +21,9 @@ import { Label } from "@/components/ui/label";
 const SQL_PREVIEW_MAX = 400;
 
 interface SafeModeConfirmDialogProps {
-  classification: DestructiveClassification | null;
-  sql: string | null;
-  environment: ConnectionEnvironment | null;
-  connectionName: string | null;
+  request: SafeModeConfirmationRequest | null;
   onCancel: () => void;
   onConfirm: () => void;
-}
-
-interface FrozenPayload {
-  classification: DestructiveClassification;
-  sql: string;
-  environment: ConnectionEnvironment | null;
-  connectionName: string | null;
 }
 
 interface HeaderStyle {
@@ -41,20 +31,14 @@ interface HeaderStyle {
   tone: string;
 }
 
-const HEADER_STYLES: Record<"prod" | "staging" | "default", HeaderStyle> = {
-  default: { Icon: ShieldAlert, tone: "text-muted-foreground" },
-  prod: { Icon: ShieldAlert, tone: "text-destructive" },
-  staging: { Icon: AlertTriangle, tone: "text-warning" },
-};
-
 const getHeaderStyle = (env: ConnectionEnvironment | null): HeaderStyle => {
   if (env === "prod") {
-    return HEADER_STYLES.prod;
+    return { Icon: ShieldAlert, tone: "text-destructive" };
   }
   if (env === "staging") {
-    return HEADER_STYLES.staging;
+    return { Icon: AlertTriangle, tone: "text-warning" };
   }
-  return HEADER_STYLES.default;
+  return { Icon: ShieldAlert, tone: "text-muted-foreground" };
 };
 
 const truncate = (text: string): string =>
@@ -91,29 +75,29 @@ const ProdConfirmInput = ({
   </div>
 );
 
-const buildDescription = (display: FrozenPayload) => {
-  if (display.environment === "prod") {
+const buildDescription = (request: SafeModeConfirmationRequest) => {
+  if (request.environment === "prod") {
     return (
       <>
         Connection{" "}
         <span className="font-medium text-foreground">
-          {display.connectionName}
+          {request.connectionName}
         </span>{" "}
         is tagged <span className="font-medium text-destructive">prod</span>.{" "}
-        {display.classification.reason} Type the connection name exactly to
+        {request.classification.reason} Type the connection name exactly to
         confirm.
       </>
     );
   }
   return (
     <>
-      {display.classification.reason} Safe mode is on — confirm to run anyway.
+      {request.classification.reason} Safe mode is on — confirm to run anyway.
     </>
   );
 };
 
 interface DialogBodyProps {
-  display: FrozenPayload;
+  request: SafeModeConfirmationRequest;
   typedConfirmation: string;
   onConfirmInput: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onCancel: () => void;
@@ -121,22 +105,22 @@ interface DialogBodyProps {
 }
 
 const DialogBody = ({
-  display,
+  request,
   typedConfirmation,
   onConfirmInput,
   onCancel,
   onConfirm,
 }: DialogBodyProps) => {
-  const isProd = display.environment === "prod";
-  const requiresTyping = isProd && Boolean(display.connectionName);
+  const isProd = request.environment === "prod";
+  const requiresTyping = isProd && Boolean(request.connectionName);
   const confirmEnabled =
-    !requiresTyping || typedConfirmation === display.connectionName;
+    !requiresTyping || typedConfirmation === request.connectionName;
   const { Icon: HeaderIcon, tone: iconTone } = getHeaderStyle(
-    display.environment
+    request.environment
   );
   const title = isProd
-    ? `Run ${display.classification.keyword} against production?`
-    : `Run ${display.classification.keyword} query?`;
+    ? `Run ${request.classification.keyword} against production?`
+    : `Run ${request.classification.keyword} query?`;
   const confirmLabel = isProd
     ? "I understand — run against prod"
     : "Run anyway";
@@ -151,7 +135,7 @@ const DialogBody = ({
             `} />
           {title}
         </DialogTitle>
-        <DialogDescription>{buildDescription(display)}</DialogDescription>
+        <DialogDescription>{buildDescription(request)}</DialogDescription>
       </DialogHeader>
       <pre
         className="
@@ -159,11 +143,11 @@ const DialogBody = ({
           leading-relaxed wrap-break-word whitespace-pre-wrap text-foreground
         "
       >
-        {truncate(display.sql)}
+        {truncate(request.query)}
       </pre>
-      {requiresTyping && display.connectionName && (
+      {requiresTyping && request.connectionName && (
         <ProdConfirmInput
-          connectionName={display.connectionName}
+          connectionName={request.connectionName}
           onChange={onConfirmInput}
           value={typedConfirmation}
         />
@@ -191,25 +175,19 @@ const DialogBody = ({
 };
 
 export const SafeModeConfirmDialog = ({
-  classification,
-  sql,
-  environment,
-  connectionName,
+  request,
   onCancel,
   onConfirm,
 }: SafeModeConfirmDialogProps) => {
-  const open = classification !== null && sql !== null;
-  const frozenRef = useRef<FrozenPayload | null>(null);
+  const open = request !== null;
+  const frozenRef = useRef<SafeModeConfirmationRequest | null>(null);
   const [typedConfirmation, setTypedConfirmation] = useState("");
 
-  if (classification && sql) {
-    frozenRef.current = { classification, connectionName, environment, sql };
+  if (request) {
+    frozenRef.current = request;
   }
 
-  const display: FrozenPayload | null =
-    classification && sql
-      ? { classification, connectionName, environment, sql }
-      : frozenRef.current;
+  const display = request ?? frozenRef.current;
 
   useEffect(() => {
     if (!open) {
@@ -237,10 +215,10 @@ export const SafeModeConfirmDialog = ({
     <Dialog onOpenChange={handleOpenChange} open={open}>
       {display && (
         <DialogBody
-          display={display}
           onCancel={onCancel}
           onConfirm={onConfirm}
           onConfirmInput={handleConfirmInput}
+          request={display}
           typedConfirmation={typedConfirmation}
         />
       )}

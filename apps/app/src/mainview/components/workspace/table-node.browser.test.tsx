@@ -76,7 +76,9 @@ describe("table-node", () => {
     await screen.getByRole("button", { name: /users/i }).first().click();
 
     await expect.element(screen.getByText("Columns (2)")).toBeInTheDocument();
-    await expect.element(screen.getByText("id")).toBeInTheDocument();
+    await expect
+      .element(screen.getByText("id", { exact: true }))
+      .toBeInTheDocument();
     await expect.element(screen.getByText("email")).toBeInTheDocument();
   });
 

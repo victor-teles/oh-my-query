@@ -62,6 +62,7 @@ export const useTabExecution = ({
     ) => {
       const confirmed = await requestConfirmation(sql, {
         connectionName: connection.name,
+        connectionType: connection.type,
         environment: connection.environment,
       });
       if (!confirmed) {
