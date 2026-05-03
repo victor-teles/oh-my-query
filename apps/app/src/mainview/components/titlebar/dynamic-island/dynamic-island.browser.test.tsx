@@ -1,5 +1,5 @@
 import { MotionConfig } from "motion/react";
-import { describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { render } from "vitest-browser-react";
 
 import type {
@@ -8,6 +8,8 @@ import type {
 } from "@/contexts/island-context";
 
 import { DynamicIslandContent } from "./dynamic-island-content";
+
+const FROZEN_NOW = 1_700_000_000_000;
 
 const makeRunner = (
   overrides: Partial<RunningQueryEntry> = {}
@@ -47,6 +49,14 @@ const IslandShell = ({ snapshot }: { snapshot: IslandSnapshot }) => (
 );
 
 describe("dynamic-island", () => {
+  beforeEach(() => {
+    vi.useFakeTimers({ now: FROZEN_NOW, toFake: ["Date"] });
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
   it("welcome", () => {
     const screen = render(<IslandShell snapshot={{ kind: "welcome" }} />);
     expect(screen.getByText("Welcome")).toBeInTheDocument();
