@@ -132,7 +132,6 @@ export const ExplainPanel = ({
           onRun={handleRun}
           onToggleAnalyze={handleToggleAnalyze}
           onViewChange={setViewMode}
-          showDensityToggle={false}
           showViewToggle={false}
           viewMode={viewMode}
         />
@@ -167,7 +166,6 @@ export const ExplainPanel = ({
         onRun={handleRun}
         onToggleAnalyze={handleToggleAnalyze}
         onViewChange={setViewMode}
-        showDensityToggle={Boolean(result) && viewMode === "tree"}
         showViewToggle={Boolean(result)}
         viewMode={viewMode}
       />
@@ -396,7 +394,6 @@ interface ExplainHeaderProps {
   onRun: () => void;
   onToggleAnalyze: () => void;
   onViewChange: (mode: ViewMode) => void;
-  showDensityToggle: boolean;
   showViewToggle: boolean;
   viewMode: ViewMode;
 }
@@ -416,7 +413,6 @@ export const ExplainHeader = ({
   onRun,
   onToggleAnalyze,
   onViewChange,
-  showDensityToggle,
   showViewToggle,
   viewMode,
 }: ExplainHeaderProps) => (
@@ -507,11 +503,13 @@ export const ExplainHeader = ({
           Improve with AI
         </Button>
       )}
-      {showDensityToggle && (
-        <DensityToggle density={density} onDensityChange={onDensityChange} />
-      )}
       {showViewToggle && (
-        <ViewToggle onViewChange={onViewChange} viewMode={viewMode} />
+        <ViewToggle
+          density={density}
+          onDensityChange={onDensityChange}
+          onViewChange={onViewChange}
+          viewMode={viewMode}
+        />
       )}
     </div>
   </div>
@@ -519,97 +517,72 @@ export const ExplainHeader = ({
 
 interface ViewToggleProps {
   viewMode: ViewMode;
-  onViewChange: (mode: ViewMode) => void;
-}
-
-const ViewToggle = ({ viewMode, onViewChange }: ViewToggleProps) => {
-  const selectTree = useCallback(() => onViewChange("tree"), [onViewChange]);
-  const selectRaw = useCallback(() => onViewChange("raw"), [onViewChange]);
-  return (
-    <div className="flex overflow-hidden rounded-sm border border-border/60">
-      <button
-        aria-pressed={viewMode === "tree"}
-        className={cn(
-          "px-2 py-0.5 text-[10px] transition-colors",
-          viewMode === "tree" ? "bg-background text-foreground" : `
-              text-muted-foreground
-              hover:text-foreground
-            `
-        )}
-        onClick={selectTree}
-        type="button"
-      >
-        Tree
-      </button>
-      <button
-        aria-pressed={viewMode === "raw"}
-        className={cn(
-          "px-2 py-0.5 text-[10px] transition-colors",
-          viewMode === "raw" ? "bg-background text-foreground" : `
-              text-muted-foreground
-              hover:text-foreground
-            `
-        )}
-        onClick={selectRaw}
-        type="button"
-      >
-        Raw
-      </button>
-    </div>
-  );
-};
-
-interface DensityToggleProps {
   density: ExplainDensity;
+  onViewChange: (mode: ViewMode) => void;
   onDensityChange: (density: ExplainDensity) => void;
 }
 
-const DensityToggle = ({ density, onDensityChange }: DensityToggleProps) => {
-  const selectComfortable = useCallback(
-    () => onDensityChange("comfortable"),
-    [onDensityChange]
-  );
-  const selectCompact = useCallback(
-    () => onDensityChange("compact"),
-    [onDensityChange]
-  );
+const ViewToggle = ({
+  viewMode,
+  density,
+  onViewChange,
+  onDensityChange,
+}: ViewToggleProps) => {
+  const selectTree = useCallback(() => {
+    onViewChange("tree");
+    onDensityChange("comfortable");
+  }, [onViewChange, onDensityChange]);
+  const selectCompact = useCallback(() => {
+    onViewChange("tree");
+    onDensityChange("compact");
+  }, [onViewChange, onDensityChange]);
+  const selectRaw = useCallback(() => onViewChange("raw"), [onViewChange]);
+
+  const isTree = viewMode === "tree" && density === "comfortable";
+  const isCompact = viewMode === "tree" && density === "compact";
+  const isRaw = viewMode === "raw";
+
   return (
     <div
-      aria-label="Plan density"
+      aria-label="Plan view"
       className="flex overflow-hidden rounded-sm border border-border/60"
       role="group"
     >
-      <button
-        aria-pressed={density === "comfortable"}
-        className={cn(
-          "px-2 py-0.5 text-[10px] transition-colors",
-          density === "comfortable" ? "bg-background text-foreground" : `
-              text-muted-foreground
-              hover:text-foreground
-            `
-        )}
-        onClick={selectComfortable}
-        type="button"
-      >
-        Comfy
-      </button>
-      <button
-        aria-pressed={density === "compact"}
-        className={cn(
-          "px-2 py-0.5 text-[10px] transition-colors",
-          density === "compact" ? "bg-background text-foreground" : `
-              text-muted-foreground
-              hover:text-foreground
-            `
-        )}
-        onClick={selectCompact}
-        type="button"
-      >
-        Compact
-      </button>
+      <ViewToggleButton active={isTree} label="Tree" onSelect={selectTree} />
+      <ViewToggleButton
+        active={isCompact}
+        label="Compact"
+        onSelect={selectCompact}
+      />
+      <ViewToggleButton active={isRaw} label="Raw" onSelect={selectRaw} />
     </div>
   );
 };
+
+const ViewToggleButton = ({
+  active,
+  label,
+  onSelect,
+}: {
+  active: boolean;
+  label: string;
+  onSelect: () => void;
+}) => (
+  <button
+    aria-pressed={active}
+    className={cn(
+      "px-2 py-0.5 text-[10px] transition-colors",
+      active ? "bg-background text-foreground" : `
+          text-muted-foreground
+          hover:text-foreground
+        `
+    )}
+    onClick={onSelect}
+    type="button"
+  >
+    {label}
+  </button>
+);
 
 const ExplainSummaryStrip = ({
   result,

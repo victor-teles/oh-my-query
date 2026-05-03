@@ -55,9 +55,9 @@ export const PlanNodeCard = ({
       className={cn(
         "group relative flex items-center gap-1.5 rounded-md px-1.5 transition-colors",
         isCompact ? "py-0.5" : "py-1.5",
-        isSelected && "bg-primary/10",
-        !isSelected && isOnHotPath && "bg-warning/[0.06]",
-        !isSelected && "hover:bg-foreground/[0.035]"
+        isOnHotPath && "bg-warning/[0.07]",
+        isSelected && "ring-1 ring-primary/45 ring-inset",
+        !isSelected && "hover:bg-foreground/[0.045]"
       )}
     >
       <ChevronToggle

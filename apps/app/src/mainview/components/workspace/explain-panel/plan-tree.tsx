@@ -137,7 +137,7 @@ const IndentRail = ({ isOnHotPath }: { isOnHotPath: boolean }) => (
     aria-hidden="true"
     className={cn(
       "pointer-events-none absolute top-0 bottom-0 left-[5px] w-px",
-      isOnHotPath ? "bg-warning/40" : "bg-border/40"
+      isOnHotPath ? "bg-warning/65" : "bg-border/15"
     )}
   />
 );

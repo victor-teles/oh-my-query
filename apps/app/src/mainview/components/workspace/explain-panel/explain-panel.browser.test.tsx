@@ -18,7 +18,6 @@ const baseProps = {
   onRun: vi.fn(),
   onToggleAnalyze: vi.fn(),
   onViewChange: vi.fn(),
-  showDensityToggle: false,
   showViewToggle: false,
   viewMode: "tree" as const,
 };
@@ -58,41 +57,100 @@ describe("explainHeader Improve with AI button", () => {
   });
 });
 
-describe("explainHeader density toggle", () => {
-  it("hides the toggle when showDensityToggle is false", () => {
+describe("explainHeader view + density toggle", () => {
+  it("hides the toggle when showViewToggle is false", () => {
     const screen = render(
-      <ExplainHeader {...baseProps} showDensityToggle={false} />
+      <ExplainHeader {...baseProps} showViewToggle={false} />
     );
-    expect(screen.getByRole("button", { name: "Comfy" }).query()).toBeNull();
+    expect(screen.getByRole("button", { name: "Tree" }).query()).toBeNull();
     expect(screen.getByRole("button", { name: "Compact" }).query()).toBeNull();
+    expect(screen.getByRole("button", { name: "Raw" }).query()).toBeNull();
   });
 
-  it("calls onDensityChange when Compact is clicked", async () => {
+  it("selects compact density and tree view when Compact is clicked", async () => {
+    const onViewChange = vi.fn();
     const onDensityChange = vi.fn();
     const screen = render(
       <ExplainHeader
         {...baseProps}
         onDensityChange={onDensityChange}
-        showDensityToggle={true}
+        onViewChange={onViewChange}
+        showViewToggle={true}
       />
     );
     await screen.getByRole("button", { name: "Compact" }).click();
+    expect(onViewChange).toHaveBeenCalledWith("tree");
     expect(onDensityChange).toHaveBeenCalledWith("compact");
   });
 
-  it("marks the active density button as pressed", () => {
+  it("selects comfortable density and tree view when Tree is clicked", async () => {
+    const onViewChange = vi.fn();
+    const onDensityChange = vi.fn();
     const screen = render(
       <ExplainHeader
         {...baseProps}
         density="compact"
-        showDensityToggle={true}
+        onDensityChange={onDensityChange}
+        onViewChange={onViewChange}
+        showViewToggle={true}
+      />
+    );
+    await screen.getByRole("button", { name: "Tree" }).click();
+    expect(onViewChange).toHaveBeenCalledWith("tree");
+    expect(onDensityChange).toHaveBeenCalledWith("comfortable");
+  });
+
+  it("preserves density when switching to Raw", async () => {
+    const onViewChange = vi.fn();
+    const onDensityChange = vi.fn();
+    const screen = render(
+      <ExplainHeader
+        {...baseProps}
+        density="compact"
+        onDensityChange={onDensityChange}
+        onViewChange={onViewChange}
+        showViewToggle={true}
+      />
+    );
+    await screen.getByRole("button", { name: "Raw" }).click();
+    expect(onViewChange).toHaveBeenCalledWith("raw");
+    expect(onDensityChange).not.toHaveBeenCalled();
+  });
+
+  it("marks Compact as pressed when in tree view + compact density", () => {
+    const screen = render(
+      <ExplainHeader
+        {...baseProps}
+        density="compact"
+        showViewToggle={true}
+        viewMode="tree"
       />
     );
     expect(
       screen.getByRole("button", { name: "Compact" }).element()
     ).toHaveAttribute("aria-pressed", "true");
     expect(
-      screen.getByRole("button", { name: "Comfy" }).element()
+      screen.getByRole("button", { name: "Tree" }).element()
+    ).toHaveAttribute("aria-pressed", "false");
+    expect(
+      screen.getByRole("button", { name: "Raw" }).element()
+    ).toHaveAttribute("aria-pressed", "false");
+  });
+
+  it("marks Raw as pressed regardless of density", () => {
+    const screen = render(
+      <ExplainHeader
+        {...baseProps}
+        density="compact"
+        showViewToggle={true}
+        viewMode="raw"
+      />
+    );
+    expect(
+      screen.getByRole("button", { name: "Raw" }).element()
+    ).toHaveAttribute("aria-pressed", "true");
+    expect(
+      screen.getByRole("button", { name: "Compact" }).element()
     ).toHaveAttribute("aria-pressed", "false");
   });
 });
