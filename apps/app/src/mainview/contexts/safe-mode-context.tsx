@@ -1,12 +1,13 @@
+import type { DestructiveClassification } from "@oh-my-query/core/client";
 import type { ReactNode } from "react";
 
+import { classifyStandardSql } from "@oh-my-query/core/client";
+import { getDestructiveClassifier } from "@oh-my-query/drivers/safe-mode";
 import { createContext, use, useCallback, useMemo, useState } from "react";
 
 import type { ConnectionEnvironment, DatabaseType } from "@/lib/connections";
-import type { DestructiveClassification } from "@/lib/safe-mode";
 
 import { SafeModeConfirmDialog } from "@/components/workspace/safe-mode-confirm-dialog";
-import { classifyDestructiveSql } from "@/lib/safe-mode";
 
 interface ConfirmationContext {
   environment?: ConnectionEnvironment;
@@ -47,10 +48,10 @@ export const SafeModeProvider = ({ children }: { children: ReactNode }) => {
         return Promise.resolve(true);
       }
 
-      const classification = classifyDestructiveSql(
-        sql,
-        context?.connectionType
-      );
+      const classify = context?.connectionType
+        ? getDestructiveClassifier(context.connectionType)
+        : classifyStandardSql;
+      const classification = classify(sql);
       if (!classification) {
         return Promise.resolve(true);
       }

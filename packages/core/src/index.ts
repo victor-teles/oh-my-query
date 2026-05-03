@@ -7,6 +7,7 @@ export * from "./explain-parser.ts";
 export * from "./explain.ts";
 export * from "./paths.ts";
 export * from "./persistence.ts";
+export * from "./safe-mode.ts";
 export * from "./sql-helpers.ts";
 export * from "./traits.ts";
 export * from "./transpile.ts";

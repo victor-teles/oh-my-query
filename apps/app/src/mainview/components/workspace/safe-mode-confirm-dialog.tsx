@@ -1,10 +1,10 @@
+import type { DestructiveClassification } from "@oh-my-query/core/client";
 import type { ComponentType } from "react";
 
 import { AlertTriangle, ShieldAlert } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 
 import type { ConnectionEnvironment } from "@/lib/connections";
-import type { DestructiveClassification } from "@/lib/safe-mode";
 
 import { Button } from "@/components/ui/button";
 import {

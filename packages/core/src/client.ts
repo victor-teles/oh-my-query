@@ -5,6 +5,17 @@ export { DbError } from "./error.ts";
 export type { DbErrorShape } from "./error.ts";
 export { redactPii } from "./pii-redactor.ts";
 export type { RedactOptions, RedactResult } from "./pii-redactor.ts";
+export {
+  classifyStandardSql,
+  matchRule,
+  normalizeSqlForAnalysis,
+} from "./safe-mode.ts";
+export type {
+  DestructiveClassification,
+  DestructiveClassifier,
+  DestructiveKind,
+  DestructiveRule,
+} from "./safe-mode.ts";
 export type { AISettings, AppConfig } from "./config.ts";
 export type {
   ExplainEngine,
