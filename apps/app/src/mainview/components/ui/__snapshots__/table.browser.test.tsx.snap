@@ -1,0 +1,377 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`table > default 1`] = `
+<div>
+  <div
+    class="relative w-full overflow-x-auto"
+    data-slot="table-container"
+  >
+    <table
+      class="w-full caption-bottom text-xs"
+      data-slot="table"
+    >
+      <thead
+        class="[&_tr]:border-b"
+        data-slot="table-header"
+      >
+        <tr
+          class="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted"
+          data-slot="table-row"
+        >
+          <th
+            class="h-8 px-2 text-left align-middle font-medium whitespace-nowrap text-foreground [&:has([role=checkbox])]:pr-0"
+            data-slot="table-head"
+          >
+            ID
+          </th>
+          <th
+            class="h-8 px-2 text-left align-middle font-medium whitespace-nowrap text-foreground [&:has([role=checkbox])]:pr-0"
+            data-slot="table-head"
+          >
+            Name
+          </th>
+          <th
+            class="h-8 px-2 text-left align-middle font-medium whitespace-nowrap text-foreground [&:has([role=checkbox])]:pr-0"
+            data-slot="table-head"
+          >
+            Email
+          </th>
+          <th
+            class="h-8 px-2 text-left align-middle font-medium whitespace-nowrap text-foreground [&:has([role=checkbox])]:pr-0"
+            data-slot="table-head"
+          >
+            Role
+          </th>
+        </tr>
+      </thead>
+      <tbody
+        class="[&_tr:last-child]:border-0"
+        data-slot="table-body"
+      >
+        <tr
+          class="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted"
+          data-slot="table-row"
+        >
+          <td
+            class="p-2 align-middle whitespace-nowrap [&:has([role=checkbox])]:pr-0"
+            data-slot="table-cell"
+          >
+            1
+          </td>
+          <td
+            class="p-2 align-middle whitespace-nowrap [&:has([role=checkbox])]:pr-0"
+            data-slot="table-cell"
+          >
+            Alice Johnson
+          </td>
+          <td
+            class="p-2 align-middle whitespace-nowrap [&:has([role=checkbox])]:pr-0"
+            data-slot="table-cell"
+          >
+            alice@example.com
+          </td>
+          <td
+            class="p-2 align-middle whitespace-nowrap [&:has([role=checkbox])]:pr-0"
+            data-slot="table-cell"
+          >
+            Admin
+          </td>
+        </tr>
+        <tr
+          class="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted"
+          data-slot="table-row"
+        >
+          <td
+            class="p-2 align-middle whitespace-nowrap [&:has([role=checkbox])]:pr-0"
+            data-slot="table-cell"
+          >
+            2
+          </td>
+          <td
+            class="p-2 align-middle whitespace-nowrap [&:has([role=checkbox])]:pr-0"
+            data-slot="table-cell"
+          >
+            Bob Smith
+          </td>
+          <td
+            class="p-2 align-middle whitespace-nowrap [&:has([role=checkbox])]:pr-0"
+            data-slot="table-cell"
+          >
+            bob@example.com
+          </td>
+          <td
+            class="p-2 align-middle whitespace-nowrap [&:has([role=checkbox])]:pr-0"
+            data-slot="table-cell"
+          >
+            Editor
+          </td>
+        </tr>
+        <tr
+          class="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted"
+          data-slot="table-row"
+        >
+          <td
+            class="p-2 align-middle whitespace-nowrap [&:has([role=checkbox])]:pr-0"
+            data-slot="table-cell"
+          >
+            3
+          </td>
+          <td
+            class="p-2 align-middle whitespace-nowrap [&:has([role=checkbox])]:pr-0"
+            data-slot="table-cell"
+          >
+            Carol White
+          </td>
+          <td
+            class="p-2 align-middle whitespace-nowrap [&:has([role=checkbox])]:pr-0"
+            data-slot="table-cell"
+          >
+            carol@example.com
+          </td>
+          <td
+            class="p-2 align-middle whitespace-nowrap [&:has([role=checkbox])]:pr-0"
+            data-slot="table-cell"
+          >
+            Viewer
+          </td>
+        </tr>
+        <tr
+          class="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted"
+          data-slot="table-row"
+        >
+          <td
+            class="p-2 align-middle whitespace-nowrap [&:has([role=checkbox])]:pr-0"
+            data-slot="table-cell"
+          >
+            4
+          </td>
+          <td
+            class="p-2 align-middle whitespace-nowrap [&:has([role=checkbox])]:pr-0"
+            data-slot="table-cell"
+          >
+            Dave Brown
+          </td>
+          <td
+            class="p-2 align-middle whitespace-nowrap [&:has([role=checkbox])]:pr-0"
+            data-slot="table-cell"
+          >
+            dave@example.com
+          </td>
+          <td
+            class="p-2 align-middle whitespace-nowrap [&:has([role=checkbox])]:pr-0"
+            data-slot="table-cell"
+          >
+            Editor
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+`;
+
+exports[`table > empty 1`] = `
+<div>
+  <div
+    class="relative w-full overflow-x-auto"
+    data-slot="table-container"
+  >
+    <table
+      class="w-full caption-bottom text-xs"
+      data-slot="table"
+    >
+      <thead
+        class="[&_tr]:border-b"
+        data-slot="table-header"
+      >
+        <tr
+          class="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted"
+          data-slot="table-row"
+        >
+          <th
+            class="h-8 px-2 text-left align-middle font-medium whitespace-nowrap text-foreground [&:has([role=checkbox])]:pr-0"
+            data-slot="table-head"
+          >
+            ID
+          </th>
+          <th
+            class="h-8 px-2 text-left align-middle font-medium whitespace-nowrap text-foreground [&:has([role=checkbox])]:pr-0"
+            data-slot="table-head"
+          >
+            Name
+          </th>
+          <th
+            class="h-8 px-2 text-left align-middle font-medium whitespace-nowrap text-foreground [&:has([role=checkbox])]:pr-0"
+            data-slot="table-head"
+          >
+            Email
+          </th>
+        </tr>
+      </thead>
+      <tbody
+        class="[&_tr:last-child]:border-0"
+        data-slot="table-body"
+      >
+        <tr
+          class="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted"
+          data-slot="table-row"
+        >
+          <td
+            class="p-2 align-middle whitespace-nowrap [&:has([role=checkbox])]:pr-0 text-center text-muted-foreground"
+            colspan="3"
+            data-slot="table-cell"
+          >
+            No results.
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+`;
+
+exports[`table > withCaption 1`] = `
+<div>
+  <div
+    class="relative w-full overflow-x-auto"
+    data-slot="table-container"
+  >
+    <table
+      class="w-full caption-bottom text-xs"
+      data-slot="table"
+    >
+      <caption
+        class="mt-4 text-xs text-muted-foreground"
+        data-slot="table-caption"
+      >
+        Query results — 4 rows returned
+      </caption>
+      <thead
+        class="[&_tr]:border-b"
+        data-slot="table-header"
+      >
+        <tr
+          class="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted"
+          data-slot="table-row"
+        >
+          <th
+            class="h-8 px-2 text-left align-middle font-medium whitespace-nowrap text-foreground [&:has([role=checkbox])]:pr-0"
+            data-slot="table-head"
+          >
+            ID
+          </th>
+          <th
+            class="h-8 px-2 text-left align-middle font-medium whitespace-nowrap text-foreground [&:has([role=checkbox])]:pr-0"
+            data-slot="table-head"
+          >
+            Name
+          </th>
+          <th
+            class="h-8 px-2 text-left align-middle font-medium whitespace-nowrap text-foreground [&:has([role=checkbox])]:pr-0"
+            data-slot="table-head"
+          >
+            Role
+          </th>
+        </tr>
+      </thead>
+      <tbody
+        class="[&_tr:last-child]:border-0"
+        data-slot="table-body"
+      >
+        <tr
+          class="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted"
+          data-slot="table-row"
+        >
+          <td
+            class="p-2 align-middle whitespace-nowrap [&:has([role=checkbox])]:pr-0"
+            data-slot="table-cell"
+          >
+            1
+          </td>
+          <td
+            class="p-2 align-middle whitespace-nowrap [&:has([role=checkbox])]:pr-0"
+            data-slot="table-cell"
+          >
+            Alice Johnson
+          </td>
+          <td
+            class="p-2 align-middle whitespace-nowrap [&:has([role=checkbox])]:pr-0"
+            data-slot="table-cell"
+          >
+            Admin
+          </td>
+        </tr>
+        <tr
+          class="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted"
+          data-slot="table-row"
+        >
+          <td
+            class="p-2 align-middle whitespace-nowrap [&:has([role=checkbox])]:pr-0"
+            data-slot="table-cell"
+          >
+            2
+          </td>
+          <td
+            class="p-2 align-middle whitespace-nowrap [&:has([role=checkbox])]:pr-0"
+            data-slot="table-cell"
+          >
+            Bob Smith
+          </td>
+          <td
+            class="p-2 align-middle whitespace-nowrap [&:has([role=checkbox])]:pr-0"
+            data-slot="table-cell"
+          >
+            Editor
+          </td>
+        </tr>
+        <tr
+          class="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted"
+          data-slot="table-row"
+        >
+          <td
+            class="p-2 align-middle whitespace-nowrap [&:has([role=checkbox])]:pr-0"
+            data-slot="table-cell"
+          >
+            3
+          </td>
+          <td
+            class="p-2 align-middle whitespace-nowrap [&:has([role=checkbox])]:pr-0"
+            data-slot="table-cell"
+          >
+            Carol White
+          </td>
+          <td
+            class="p-2 align-middle whitespace-nowrap [&:has([role=checkbox])]:pr-0"
+            data-slot="table-cell"
+          >
+            Viewer
+          </td>
+        </tr>
+        <tr
+          class="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted"
+          data-slot="table-row"
+        >
+          <td
+            class="p-2 align-middle whitespace-nowrap [&:has([role=checkbox])]:pr-0"
+            data-slot="table-cell"
+          >
+            4
+          </td>
+          <td
+            class="p-2 align-middle whitespace-nowrap [&:has([role=checkbox])]:pr-0"
+            data-slot="table-cell"
+          >
+            Dave Brown
+          </td>
+          <td
+            class="p-2 align-middle whitespace-nowrap [&:has([role=checkbox])]:pr-0"
+            data-slot="table-cell"
+          >
+            Editor
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+`;

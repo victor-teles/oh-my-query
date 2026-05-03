@@ -76,7 +76,7 @@ export const ThemePreviewCard = ({
       <div className="overflow-hidden rounded-lg ring-2 ring-foreground/10">
         <div className="h-[100px] animate-pulse bg-muted" />
         <div className="border-t border-foreground/10 px-3 py-2">
-          <div className="h-3.5 w-1/2 animate-pulse rounded bg-muted" />
+          <div className="h-3.5 w-1/2 animate-pulse rounded-sm bg-muted" />
         </div>
       </div>
     );
@@ -84,19 +84,25 @@ export const ThemePreviewCard = ({
 
   return (
     <div className="relative">
-      <button
-        className={cn(
-          "group block w-full cursor-pointer overflow-hidden rounded-lg text-left ring-2 transition-colors",
-          "focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sidebar-ring",
-          isSelected
-            ? "ring-primary"
-            : "ring-foreground/10 hover:ring-foreground/25"
-        )}
-        onClick={handleSelect}
-        type="button"
-      >
+      <button className={cn(`
+            group block w-full cursor-pointer overflow-hidden rounded-lg
+            text-left ring-2 transition-colors
+          `, `
+            focus:outline-none
+            focus-visible:outline-2 focus-visible:outline-offset-2
+            focus-visible:outline-sidebar-ring
+          `, isSelected ? "ring-primary" : `
+              ring-foreground/10
+              hover:ring-foreground/25
+            `)} onClick={handleSelect} type="button">
         <div
-          className="pointer-events-none h-[100px] overflow-hidden text-[10px] [&_.cm-content]:[font-family:var(--cm-font)]! [&_.cm-content]:[font-size:var(--cm-font-size)]! [&_.cm-gutters]:[font-family:var(--cm-font)]! [&_.cm-gutters]:[font-size:var(--cm-font-size)]!"
+          className="
+            pointer-events-none h-[100px] overflow-hidden text-[10px]
+            [&_.cm-content]:[font-family:var(--cm-font)]!
+            [&_.cm-content]:[font-size:var(--cm-font-size)]!
+            [&_.cm-gutters]:[font-family:var(--cm-font)]!
+            [&_.cm-gutters]:[font-size:var(--cm-font-size)]!
+          "
           style={previewStyle}
         >
           <CodeMirror
@@ -108,7 +114,11 @@ export const ThemePreviewCard = ({
               highlightActiveLine: false,
               lineNumbers: false,
             }}
-            className="h-full [&_.cm-editor]:h-full [&_.cm-scroller]:h-full [&_.cm-scroller]:overflow-hidden"
+            className="
+              h-full
+              [&_.cm-editor]:h-full
+              [&_.cm-scroller]:h-full [&_.cm-scroller]:overflow-hidden
+            "
             editable={false}
             extensions={STATIC_EXTENSIONS}
             readOnly
@@ -119,9 +129,10 @@ export const ThemePreviewCard = ({
         <div
           className={cn(
             "border-t px-3 py-2 text-sm font-medium transition-colors",
-            isSelected
-              ? "border-primary/30 text-foreground"
-              : "border-foreground/10 text-muted-foreground group-hover:text-foreground"
+            isSelected ? "border-primary/30 text-foreground" : `
+                border-foreground/10 text-muted-foreground
+                group-hover:text-foreground
+              `
           )}
         >
           {label}
@@ -130,7 +141,9 @@ export const ThemePreviewCard = ({
       {pulseKey !== null && (
         <motion.div
           animate={reduced ? { opacity: 0 } : { opacity: 0, scale: 1.05 }}
-          className="pointer-events-none absolute inset-0 rounded-lg ring-2 ring-primary"
+          className="
+            pointer-events-none absolute inset-0 rounded-lg ring-2 ring-primary
+          "
           initial={reduced ? { opacity: 0.6 } : { opacity: 0.9, scale: 1 }}
           key={pulseKey}
           onAnimationComplete={handlePulseComplete}

@@ -30,10 +30,14 @@ export const KeysGateBanner = ({
     <div className="flex flex-col items-start gap-2 px-4 py-6 text-left">
       <Info className="size-5 text-muted-foreground" />
       <p className="text-sm font-medium text-foreground">Large keyspace</p>
-      <p className="text-xs leading-relaxed text-muted-foreground">
+      <p className="text-xs/relaxed text-muted-foreground">
         This DB has {totalKeys.toLocaleString()} keys. Type a pattern above
         (e.g.{" "}
-        <code className="rounded bg-sidebar-accent/60 px-1 font-mono text-[11px]">
+        <code
+          className="
+          rounded-sm bg-sidebar-accent/60 px-1 font-mono text-[11px]
+        "
+        >
           user:*
         </code>
         ) to narrow the scan.

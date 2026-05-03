@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { toast } from "sonner";
 
 import type { PersistedTab, TabState } from "@/lib/persistence";
 import type { QueryTab } from "@/lib/query-types";
@@ -15,7 +14,7 @@ import { useTabExecution } from "./use-tab-execution";
 import { useTabExplain } from "./use-tab-explain";
 
 const SAVE_DEBOUNCE_MS = 150;
-const SAVE_ERROR_TOAST_THROTTLE_MS = 10_000;
+const SAVE_ERROR_LOG_THROTTLE_MS = 10_000;
 const MAX_CLOSED_TABS = 5;
 const DESTRUCTIVE_SQL_PATTERN =
   /^\s*(insert|update|delete|drop|truncate|alter|create|grant|revoke|merge|replace)\b/i;
@@ -42,7 +41,7 @@ export const useQueryTabs = (
   const [isRestored, setIsRestored] = useState(false);
   const [closeRequested, setCloseRequested] = useState(false);
   const saveTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const lastSaveErrorToastRef = useRef(0);
+  const lastSaveErrorLogRef = useRef(0);
   const autoResumedRef = useRef(false);
   const tabsRef = useRef(tabs);
   tabsRef.current = tabs;
@@ -64,14 +63,11 @@ export const useQueryTabs = (
     };
     try {
       await saveTabs(connectionIdRef.current, state);
-    } catch {
+    } catch (error) {
       const now = Date.now();
-      if (now - lastSaveErrorToastRef.current > SAVE_ERROR_TOAST_THROTTLE_MS) {
-        lastSaveErrorToastRef.current = now;
-        toast.error("Couldn't save your tabs", {
-          description:
-            "Your recent edits may not survive a restart. Check disk space and permissions.",
-        });
+      if (now - lastSaveErrorLogRef.current > SAVE_ERROR_LOG_THROTTLE_MS) {
+        lastSaveErrorLogRef.current = now;
+        console.warn("Couldn't save tabs", error);
       }
     }
   }, []);
@@ -168,12 +164,8 @@ export const useQueryTabs = (
               : t
           )
         );
-        toast.warning("Interrupted query not auto-resumed", {
-          description: `${tab.title} may modify data — click Run to retry.`,
-        });
         continue;
       }
-      toast.info("Resuming interrupted query", { description: tab.title });
       execute(tab.id, pending.sql, pending.sourceDialect);
     }
   }, [isRestored, selectedDatabase, execute]);

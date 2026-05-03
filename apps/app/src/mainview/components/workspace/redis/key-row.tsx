@@ -33,13 +33,11 @@ export const KeyRow = ({
       onClick={handleClick}
       data-active={isActive || undefined}
       data-row-id={redisKey.name}
-      className={cn(
-        "group relative grid h-7 w-full grid-cols-[auto_minmax(0,1fr)_auto_auto] items-center gap-1.5 rounded-md px-2 text-left text-xs outline-none",
-        "hover:bg-sidebar-accent/50",
-        "focus-visible:ring-1 focus-visible:ring-ring/60",
-        "data-[active]:bg-sidebar-accent/70",
-        "data-[active]:before:absolute data-[active]:before:inset-y-1 data-[active]:before:left-0 data-[active]:before:w-[2px] data-[active]:before:rounded-full data-[active]:before:bg-primary/60"
-      )}
+      className={cn(`
+          group relative grid h-7 w-full
+          grid-cols-[auto_minmax(0,1fr)_auto_auto] items-center gap-1.5
+          rounded-md px-2 text-left text-xs outline-none
+        `, "hover:bg-sidebar-accent/50", "focus-visible:ring-1 focus-visible:ring-ring/60", "data-active:bg-sidebar-accent")}
       style={{ paddingLeft: `${Math.max(8, 8 + depth * 12)}px` }}
       title={redisKey.name}
     >

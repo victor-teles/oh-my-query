@@ -30,6 +30,7 @@ import { useExportSettings } from "@/hooks/use-export-settings";
 import { useQueryTabs } from "@/hooks/use-query-tabs";
 import { useSyntaxTree } from "@/hooks/use-syntax-tree";
 import { useWorkspaceHotkeys } from "@/hooks/use-workspace-hotkeys";
+import { useWorkspaceIslandSync } from "@/hooks/use-workspace-island-sync";
 import { isSqlDatabase } from "@/lib/connections";
 import { downloadCsv, tabularResultToCsv } from "@/lib/csv";
 import { formatDuration } from "@/lib/format-metrics";
@@ -100,7 +101,11 @@ export const WorkspaceContent = ({
 
   if (!queryTabs.isRestored || isConnecting) {
     return (
-      <div className="flex h-full flex-col items-center justify-center gap-3 bg-background">
+      <div
+        className="
+          flex h-full flex-col items-center justify-center gap-3 bg-background
+        "
+      >
         <Loader2 className="size-6 animate-spin text-muted-foreground" />
         <p className="text-sm text-muted-foreground">
           Connecting to {connection.name}...
@@ -250,6 +255,7 @@ const ConnectedWorkspace = ({
   } = useEditorInsert();
 
   useActiveQuerySync(activeTab);
+  useWorkspaceIslandSync();
 
   const [isSyntaxTreeOpen, setIsSyntaxTreeOpen] = useState(false);
   const [hasSelection, setHasSelection] = useState(false);
@@ -603,7 +609,10 @@ const REDUCED_MOTION_TRANSITION = { duration: 0 } as const;
 const RunningSqlPreview = ({ sql }: { sql: string }) => (
   <pre
     aria-hidden="true"
-    className="max-h-48 max-w-2xl overflow-hidden whitespace-pre-wrap wrap-break-word text-center font-mono text-muted-foreground/60 text-xs leading-relaxed"
+    className="
+      max-h-48 max-w-2xl overflow-hidden text-center font-mono text-xs/relaxed
+      wrap-break-word whitespace-pre-wrap text-muted-foreground/60
+    "
     style={{
       WebkitMaskImage:
         "linear-gradient(to bottom, black 55%, transparent 100%)",
@@ -623,19 +632,36 @@ const RunningStatusBar = ({ onCancel }: RunningStatusBarProps) => {
   return (
     <div
       aria-live="polite"
-      className="relative flex items-center gap-2 overflow-hidden border-t bg-muted/30 px-3 py-1.5 text-xs text-muted-foreground"
+      className="
+        relative flex items-center gap-2 overflow-hidden border-t bg-muted/30
+        px-3 py-1.5 text-xs text-muted-foreground
+      "
       role="status"
     >
       <span
         aria-hidden="true"
-        className="-translate-x-full pointer-events-none absolute inset-y-0 left-0 w-1/3 bg-linear-to-r from-transparent via-primary/20 to-transparent motion-safe:animate-[query-shimmer_1.8s_ease-in-out_infinite] motion-reduce:hidden"
+        className="
+          pointer-events-none absolute inset-y-0 left-0 w-1/3 -translate-x-full
+          bg-linear-to-r from-transparent via-primary/20 to-transparent
+          motion-safe:animate-[query-shimmer_1.8s_ease-in-out_infinite]
+          motion-reduce:hidden
+        "
       />
-      <span className="relative inline-flex size-1.5 rounded-full bg-primary motion-safe:animate-pulse" />
+      <span
+        className="
+          relative inline-flex size-1.5 rounded-full bg-primary
+          motion-safe:animate-pulse
+        "
+      />
       <span className="relative font-medium text-foreground">Running…</span>
       <span className="relative tabular-nums">{formatDuration(elapsed)}</span>
       {onCancel && (
         <button
-          className="relative ml-auto rounded px-2 py-0.5 text-xs text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+          className="
+            relative ml-auto rounded-sm px-2 py-0.5 text-xs
+            text-muted-foreground transition-colors
+            hover:bg-accent hover:text-foreground
+          "
           onClick={onCancel}
           type="button"
         >
@@ -772,7 +798,11 @@ const renderResultsState = ({
     return {
       content: (
         <div className="flex h-full flex-col">
-          <div className="flex flex-1 items-center justify-center overflow-hidden p-6">
+          <div
+            className="
+              flex flex-1 items-center justify-center overflow-hidden p-6
+            "
+          >
             {runningSql && <RunningSqlPreview sql={runningSql} />}
           </div>
           <RunningStatusBar onCancel={handleCancel} />
@@ -840,10 +870,10 @@ const renderResultsState = ({
     content: (
       <div className="flex h-full items-center justify-center p-8">
         <div className="flex flex-col items-center gap-4">
-          <p className="text-muted-foreground text-sm">
+          <p className="text-sm text-muted-foreground">
             {isSql ? "Write a query above" : "Write a command above"}
           </p>
-          <div className="flex items-center gap-2 text-muted-foreground/75 text-xs">
+          <div className="flex items-center gap-2 text-xs text-muted-foreground/75">
             <span>Run with</span>
             <KbdGroup>
               <Kbd>⌘</Kbd>

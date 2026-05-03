@@ -117,17 +117,20 @@ Keep route files thin. A route's job is to orchestrate — wire hooks, render la
 - Don't create a primitive in `components/ui/` for something used once. Keep it local until a second caller appears.
 - Don't split a 30-line component just to hit a line count. Split when there are distinct responsibilities (data, layout, interaction) worth naming.
 
-When working on UI components, always use the `storybook` MCP tools to access Storybook's component and documentation knowledge before answering or taking any action.
+## Component Tests
 
-- **CRITICAL: Never hallucinate component properties!** Before using ANY property on a component from a design system (including common-sounding ones like `shadow`, etc.), you MUST use the MCP tools to check if the property is actually documented for that component.
-- Query `list-all-documentation` to get a list of all components
-- Query `get-documentation` for that component to see all available properties and examples
-- Only use properties that are explicitly documented or shown in example stories
-- If a property isn't documented, do not assume properties based on naming conventions or common patterns from other libraries. Check back with the user in these cases.
-- Use the `get-storybook-story-instructions` tool to fetch the latest instructions for creating or updating stories. This will ensure you follow current conventions and recommendations.
-- Check your work by running `run-story-tests`.
+Every React test — components and hooks alike — runs in Vitest 4 browser mode (Playwright + Chromium) via `vitest-browser-react`. Add or update a `*.browser.test.tsx` next to the unit under test for any UI or hook change. Only pure-logic tests (no JSX, no DOM) stay as `*.test.ts(x)` in the jsdom `unit` project.
 
-Remember: A story name might not reflect the property name correctly, so always verify properties through documentation or example stories before using them.
+- Pattern: `import { render } from "vitest-browser-react"; const screen = render(<Component … />)`. Use `screen.getByRole(...)` for queries, `await el.click()` for interactions, and `expect(el.element()).toMatchSnapshot()` (or `expect(screen.container).toMatchSnapshot()`) for DOM snapshots. For negative assertions, `screen.getBy*(...).query()` returns `null` when absent.
+- For hooks, use the local helper: `import { renderHook, waitFor } from "@/test/render-hook"`. Same shape as the historical `@testing-library/react` API (`{ result, rerender, unmount }`, `renderHook(cb, { initialProps })`).
+- Snapshots are committed in `__snapshots__/` next to each test. The setup in `src/mainview/test/setup-browser.ts` strips volatile inline styles (`transform`, `opacity`, etc.) so motion-driven components serialize stably.
+- Run scripts (`apps/app`):
+  - `bun run test` — both projects
+  - `bun run test:unit` — jsdom logic-only tests (`*.test.ts` / `*.test.tsx`)
+  - `bun run test:browser` — browser interaction + snapshot tests (`*.browser.test.tsx`)
+  - `bun run test:watch` — watch mode for both
+  - Scope to one file: append the path, e.g. `bun run test:browser src/mainview/components/ui/button.browser.test.tsx`.
+- Update snapshots: `bun run test:browser -- -u`. Snapshot files are platform-independent text and live in git; review the diff like any other code change.
 
 ## Design Context
 

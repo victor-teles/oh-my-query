@@ -255,7 +255,7 @@
       "refersTo": "button-primary",
       "description": "The single primary action per surface — amber heartbeat with warm-ink text.",
       "html": "<button class=\"ds-btn-primary\" type=\"button\">Run query</button>",
-      "css": ".ds-btn-primary { display: inline-flex; align-items: center; justify-content: center; gap: 4px; height: 28px; padding: 0 8px; background: oklch(0.9247 0.0524 66.1732); color: oklch(0.182 0.007 34.3); border: 1px solid transparent; border-radius: 5.2px; font-family: 'Switzer', -apple-system, BlinkMacSystemFont, sans-serif; font-size: 12px; font-weight: 500; letter-spacing: -0.003em; line-height: 1.6; white-space: nowrap; cursor: pointer; transition: background 150ms cubic-bezier(0, 0, 0.2, 1), opacity 150ms cubic-bezier(0, 0, 0.2, 1); outline: none; user-select: none; } .ds-btn-primary:hover { background: oklch(0.9247 0.0524 66.1732 / 0.8); } .ds-btn-primary:focus-visible { box-shadow: 0 0 0 2px oklch(0.9247 0.0524 66.1732 / 0.5); border-color: oklch(0.9247 0.0524 66.1732); }"
+      "css": ".ds-btn-primary { display: inline-flex; align-items: center; justify-content: center; gap: 4px; height: 28px; padding: 0 8px; background: oklch(0.9247 0.0524 66.1732); color: oklch(0.182 0.007 34.3); border: 1px solid transparent; border-radius: 5.2px; font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', Arial, sans-serif; font-size: 12px; font-weight: 500; letter-spacing: -0.003em; line-height: 1.6; white-space: nowrap; cursor: pointer; transition: background 150ms cubic-bezier(0, 0, 0.2, 1), opacity 150ms cubic-bezier(0, 0, 0.2, 1); outline: none; user-select: none; } .ds-btn-primary:hover { background: oklch(0.9247 0.0524 66.1732 / 0.8); } .ds-btn-primary:focus-visible { box-shadow: 0 0 0 2px oklch(0.9247 0.0524 66.1732 / 0.5); border-color: oklch(0.9247 0.0524 66.1732); }"
     },
     {
       "name": "Ghost Button",
@@ -263,7 +263,7 @@
       "refersTo": "button-ghost",
       "description": "The workhorse — transparent at rest, warm-muted fill on hover. Toolbars, row actions.",
       "html": "<button class=\"ds-btn-ghost\" type=\"button\"><svg width=\"14\" height=\"14\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M12 5v14M5 12h14\"/></svg><span>New query</span></button>",
-      "css": ".ds-btn-ghost { display: inline-flex; align-items: center; justify-content: center; gap: 4px; height: 28px; padding: 0 8px; background: transparent; color: oklch(0.7699 0 0); border: 1px solid transparent; border-radius: 5.2px; font-family: 'Switzer', -apple-system, BlinkMacSystemFont, sans-serif; font-size: 12px; font-weight: 500; letter-spacing: -0.003em; line-height: 1.6; cursor: pointer; transition: background 150ms cubic-bezier(0, 0, 0.2, 1), color 150ms cubic-bezier(0, 0, 0.2, 1); outline: none; } .ds-btn-ghost svg { width: 14px; height: 14px; flex-shrink: 0; } .ds-btn-ghost:hover { background: oklch(0.252 0 0 / 0.5); color: oklch(0.9491 0 0); } .ds-btn-ghost:focus-visible { box-shadow: 0 0 0 2px oklch(0.9247 0.0524 66.1732 / 0.5); border-color: oklch(0.9247 0.0524 66.1732); }"
+      "css": ".ds-btn-ghost { display: inline-flex; align-items: center; justify-content: center; gap: 4px; height: 28px; padding: 0 8px; background: transparent; color: oklch(0.7699 0 0); border: 1px solid transparent; border-radius: 5.2px; font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', Arial, sans-serif; font-size: 12px; font-weight: 500; letter-spacing: -0.003em; line-height: 1.6; cursor: pointer; transition: background 150ms cubic-bezier(0, 0, 0.2, 1), color 150ms cubic-bezier(0, 0, 0.2, 1); outline: none; } .ds-btn-ghost svg { width: 14px; height: 14px; flex-shrink: 0; } .ds-btn-ghost:hover { background: oklch(0.252 0 0 / 0.5); color: oklch(0.9491 0 0); } .ds-btn-ghost:focus-visible { box-shadow: 0 0 0 2px oklch(0.9247 0.0524 66.1732 / 0.5); border-color: oklch(0.9247 0.0524 66.1732); }"
     },
     {
       "name": "Outline Button",
@@ -271,7 +271,7 @@
       "refersTo": "button-outline",
       "description": "Secondary action with a hairline border — findable without demanding attention.",
       "html": "<button class=\"ds-btn-outline\" type=\"button\">Cancel</button>",
-      "css": ".ds-btn-outline { display: inline-flex; align-items: center; justify-content: center; gap: 4px; height: 28px; padding: 0 8px; background: oklch(0.4017 0 0 / 0.3); color: oklch(0.9491 0 0); border: 1px solid oklch(1 0 0 / 0.14); border-radius: 5.2px; font-family: 'Switzer', -apple-system, BlinkMacSystemFont, sans-serif; font-size: 12px; font-weight: 500; letter-spacing: -0.003em; line-height: 1.6; cursor: pointer; transition: background 150ms cubic-bezier(0, 0, 0.2, 1); outline: none; } .ds-btn-outline:hover { background: oklch(0.4017 0 0 / 0.5); }"
+      "css": ".ds-btn-outline { display: inline-flex; align-items: center; justify-content: center; gap: 4px; height: 28px; padding: 0 8px; background: oklch(0.4017 0 0 / 0.3); color: oklch(0.9491 0 0); border: 1px solid oklch(1 0 0 / 0.14); border-radius: 5.2px; font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', Arial, sans-serif; font-size: 12px; font-weight: 500; letter-spacing: -0.003em; line-height: 1.6; cursor: pointer; transition: background 150ms cubic-bezier(0, 0, 0.2, 1); outline: none; } .ds-btn-outline:hover { background: oklch(0.4017 0 0 / 0.5); }"
     },
     {
       "name": "Input",
@@ -279,7 +279,7 @@
       "refersTo": "input-default",
       "description": "Warm-raised fill with ghost border — amber ring on focus.",
       "html": "<input class=\"ds-input\" type=\"text\" placeholder=\"SELECT * FROM users WHERE...\" />",
-      "css": ".ds-input { display: block; width: 100%; height: 28px; padding: 2px 8px; background: oklch(0.4017 0 0 / 0.3); color: oklch(0.9491 0 0); border: 1px solid oklch(0.4017 0 0); border-radius: 5.2px; font-family: 'Switzer', -apple-system, BlinkMacSystemFont, sans-serif; font-size: 12px; letter-spacing: -0.003em; line-height: 1.6; outline: none; transition: border-color 150ms cubic-bezier(0, 0, 0.2, 1), box-shadow 150ms cubic-bezier(0, 0, 0.2, 1); } .ds-input::placeholder { color: oklch(0.7699 0 0); } .ds-input:focus-visible { border-color: oklch(0.9247 0.0524 66.1732); box-shadow: 0 0 0 2px oklch(0.9247 0.0524 66.1732 / 0.5); }"
+      "css": ".ds-input { display: block; width: 100%; height: 28px; padding: 2px 8px; background: oklch(0.4017 0 0 / 0.3); color: oklch(0.9491 0 0); border: 1px solid oklch(0.4017 0 0); border-radius: 5.2px; font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', Arial, sans-serif; font-size: 12px; letter-spacing: -0.003em; line-height: 1.6; outline: none; transition: border-color 150ms cubic-bezier(0, 0, 0.2, 1), box-shadow 150ms cubic-bezier(0, 0, 0.2, 1); } .ds-input::placeholder { color: oklch(0.7699 0 0); } .ds-input:focus-visible { border-color: oklch(0.9247 0.0524 66.1732); box-shadow: 0 0 0 2px oklch(0.9247 0.0524 66.1732 / 0.5); }"
     },
     {
       "name": "Card",
@@ -287,14 +287,14 @@
       "refersTo": "card-default",
       "description": "Warm-raised surface with a ghost border ring — no drop shadow, separation is tonal.",
       "html": "<div class=\"ds-card\"><div class=\"ds-card-header\"><div class=\"ds-card-title\">Connection</div><div class=\"ds-card-desc\">Primary production database</div></div><div class=\"ds-card-body\"><div class=\"ds-card-row\"><span class=\"ds-card-label\">HOST</span><span class=\"ds-card-value\">db.internal.prod</span></div><div class=\"ds-card-row\"><span class=\"ds-card-label\">ENGINE</span><span class=\"ds-card-value\">PostgreSQL 16</span></div></div></div>",
-      "css": ".ds-card { display: flex; flex-direction: column; gap: 16px; padding: 16px 0; background: oklch(0.28 0.007 48.5); color: oklch(0.9491 0 0); border-radius: 7.2px; box-shadow: inset 0 0 0 1px oklch(0.9491 0 0 / 0.10); overflow: hidden; font-family: 'Switzer', -apple-system, BlinkMacSystemFont, sans-serif; font-size: 12px; letter-spacing: -0.003em; line-height: 1.65; } .ds-card-header, .ds-card-body { padding: 0 16px; } .ds-card-header { display: flex; flex-direction: column; gap: 4px; } .ds-card-title { font-size: 14px; font-weight: 500; line-height: 1.4; } .ds-card-desc { color: oklch(0.7699 0 0); font-size: 12px; } .ds-card-body { display: flex; flex-direction: column; gap: 8px; } .ds-card-row { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; } .ds-card-label { color: oklch(0.7699 0 0); font-size: 10px; font-weight: 500; letter-spacing: 0.022em; text-transform: uppercase; } .ds-card-value { font-family: 'JetBrains Mono Variable', ui-monospace, SFMono-Regular, monospace; font-size: 13px; font-variant-numeric: tabular-nums; }"
+      "css": ".ds-card { display: flex; flex-direction: column; gap: 16px; padding: 16px 0; background: oklch(0.28 0.007 48.5); color: oklch(0.9491 0 0); border-radius: 7.2px; box-shadow: inset 0 0 0 1px oklch(0.9491 0 0 / 0.10); overflow: hidden; font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', Arial, sans-serif; font-size: 12px; letter-spacing: -0.003em; line-height: 1.65; } .ds-card-header, .ds-card-body { padding: 0 16px; } .ds-card-header { display: flex; flex-direction: column; gap: 4px; } .ds-card-title { font-size: 14px; font-weight: 500; line-height: 1.4; } .ds-card-desc { color: oklch(0.7699 0 0); font-size: 12px; } .ds-card-body { display: flex; flex-direction: column; gap: 8px; } .ds-card-row { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; } .ds-card-label { color: oklch(0.7699 0 0); font-size: 10px; font-weight: 500; letter-spacing: 0.022em; text-transform: uppercase; } .ds-card-value { font-family: 'JetBrains Mono Variable', ui-monospace, SFMono-Regular, monospace; font-size: 13px; font-variant-numeric: tabular-nums; }"
     },
     {
       "name": "Connection Chip",
       "kind": "chip",
       "description": "Named-connection tag. One of six hue-distinct swatches that identifies a connection at a glance.",
       "html": "<span class=\"ds-chip\"><span class=\"ds-chip-dot\"></span>prod-read-replica</span>",
-      "css": ".ds-chip { display: inline-flex; align-items: center; gap: 6px; height: 20px; padding: 0 8px; background: oklch(0.28 0.007 48.5); color: oklch(0.9491 0 0); border-radius: 3.2px; font-family: 'Switzer', -apple-system, BlinkMacSystemFont, sans-serif; font-size: 10px; font-weight: 500; letter-spacing: 0.022em; text-transform: uppercase; } .ds-chip-dot { width: 6px; height: 6px; border-radius: 9999px; background: oklch(0.65 0.09 235); flex-shrink: 0; }"
+      "css": ".ds-chip { display: inline-flex; align-items: center; gap: 6px; height: 20px; padding: 0 8px; background: oklch(0.28 0.007 48.5); color: oklch(0.9491 0 0); border-radius: 3.2px; font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', Arial, sans-serif; font-size: 10px; font-weight: 500; letter-spacing: 0.022em; text-transform: uppercase; } .ds-chip-dot { width: 6px; height: 6px; border-radius: 9999px; background: oklch(0.65 0.09 235); flex-shrink: 0; }"
     },
     {
       "name": "Tab Trigger (Segment, Active)",
@@ -302,7 +302,7 @@
       "refersTo": "tabs-trigger-active",
       "description": "Segmented tab switcher — borderless at rest, warm-raised fill when active.",
       "html": "<div class=\"ds-tabs-list\"><button class=\"ds-tab\" type=\"button\">Results</button><button class=\"ds-tab ds-tab-active\" type=\"button\">Explain</button><button class=\"ds-tab\" type=\"button\">Schema</button></div>",
-      "css": ".ds-tabs-list { display: inline-flex; align-items: center; background: oklch(0.252 0 0 / 0.3); border-radius: 5.2px; padding: 0; } .ds-tab { position: relative; display: inline-flex; align-items: center; justify-content: center; padding: 6px 12px; background: transparent; color: oklch(0.7699 0 0); border: 1px solid transparent; border-radius: 3.2px; font-family: 'Switzer', -apple-system, BlinkMacSystemFont, sans-serif; font-size: 12px; font-weight: 500; letter-spacing: -0.003em; cursor: pointer; transition: background 150ms cubic-bezier(0, 0, 0.2, 1), color 150ms cubic-bezier(0, 0, 0.2, 1); outline: none; } .ds-tab:not(:first-child)::before { content: \"\"; position: absolute; left: 0; top: 25%; height: 50%; width: 1px; background: oklch(1 0 0 / 0.14); opacity: 0.5; transition: opacity 150ms; } .ds-tab:hover { color: oklch(0.9491 0 0 / 0.8); } .ds-tab-active { background: oklch(0.182 0.007 34.3); color: oklch(0.9491 0 0); box-shadow: 0 1px 2px 0 oklch(0 0 0 / 0.10); } .ds-tab-active::before, .ds-tab-active + .ds-tab::before { opacity: 0; }"
+      "css": ".ds-tabs-list { display: inline-flex; align-items: center; background: oklch(0.252 0 0 / 0.3); border-radius: 5.2px; padding: 0; } .ds-tab { position: relative; display: inline-flex; align-items: center; justify-content: center; padding: 6px 12px; background: transparent; color: oklch(0.7699 0 0); border: 1px solid transparent; border-radius: 3.2px; font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', Arial, sans-serif; font-size: 12px; font-weight: 500; letter-spacing: -0.003em; cursor: pointer; transition: background 150ms cubic-bezier(0, 0, 0.2, 1), color 150ms cubic-bezier(0, 0, 0.2, 1); outline: none; } .ds-tab:not(:first-child)::before { content: \"\"; position: absolute; left: 0; top: 25%; height: 50%; width: 1px; background: oklch(1 0 0 / 0.14); opacity: 0.5; transition: opacity 150ms; } .ds-tab:hover { color: oklch(0.9491 0 0 / 0.8); } .ds-tab-active { background: oklch(0.182 0.007 34.3); color: oklch(0.9491 0 0); box-shadow: 0 1px 2px 0 oklch(0 0 0 / 0.10); } .ds-tab-active::before, .ds-tab-active + .ds-tab::before { opacity: 0; }"
     },
     {
       "name": "Dynamic Island (Signature)",
@@ -310,7 +310,7 @@
       "refersTo": "dynamic-island",
       "description": "The centered titlebar pill — connection health, query progress, and errors converge here. The one place blur and shadow earn their weight.",
       "html": "<div class=\"ds-island\"><span class=\"ds-island-dot\"></span><span class=\"ds-island-label\">prod-db</span><span class=\"ds-island-sep\"></span><span class=\"ds-island-timer\">1.284s</span></div>",
-      "css": ".ds-island { display: inline-flex; align-items: center; gap: 8px; height: 24px; padding: 0 10px; background: oklch(0.182 0.007 34.3 / 0.85); color: oklch(0.9491 0 0); border: 1px solid oklch(1 0 0 / 0.084); border-radius: 9999px; box-shadow: 0 1px 2px 0 oklch(0 0 0 / 0.10), 0 1px 3px 0 oklch(0 0 0 / 0.08); backdrop-filter: blur(24px) saturate(200%); -webkit-backdrop-filter: blur(24px) saturate(200%); font-family: 'Switzer', -apple-system, BlinkMacSystemFont, sans-serif; font-size: 11px; font-weight: 500; letter-spacing: -0.028em; white-space: nowrap; user-select: none; } .ds-island-dot { width: 6px; height: 6px; border-radius: 9999px; background: oklch(0.72 0.15 145); box-shadow: 0 0 6px 0 oklch(0.72 0.15 145 / 0.6); flex-shrink: 0; } .ds-island-label { color: oklch(0.9491 0 0); } .ds-island-sep { width: 1px; height: 10px; background: oklch(1 0 0 / 0.14); } .ds-island-timer { font-family: 'JetBrains Mono Variable', ui-monospace, SFMono-Regular, monospace; font-size: 11px; font-variant-numeric: tabular-nums; color: oklch(0.7699 0 0); }"
+      "css": ".ds-island { display: inline-flex; align-items: center; gap: 8px; height: 24px; padding: 0 10px; background: oklch(0.182 0.007 34.3 / 0.85); color: oklch(0.9491 0 0); border: 1px solid oklch(1 0 0 / 0.084); border-radius: 9999px; box-shadow: 0 1px 2px 0 oklch(0 0 0 / 0.10), 0 1px 3px 0 oklch(0 0 0 / 0.08); backdrop-filter: blur(24px) saturate(200%); -webkit-backdrop-filter: blur(24px) saturate(200%); font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', Arial, sans-serif; font-size: 11px; font-weight: 500; letter-spacing: -0.028em; white-space: nowrap; user-select: none; } .ds-island-dot { width: 6px; height: 6px; border-radius: 9999px; background: oklch(0.72 0.15 145); box-shadow: 0 0 6px 0 oklch(0.72 0.15 145 / 0.6); flex-shrink: 0; } .ds-island-label { color: oklch(0.9491 0 0); } .ds-island-sep { width: 1px; height: 10px; background: oklch(1 0 0 / 0.14); } .ds-island-timer { font-family: 'JetBrains Mono Variable', ui-monospace, SFMono-Regular, monospace; font-size: 11px; font-variant-numeric: tabular-nums; color: oklch(0.7699 0 0); }"
     }
   ],
   "narrative": {
@@ -322,7 +322,7 @@
       "Amber primary used sparingly (focus rings, selected state, the Island at attention)",
       "Pro-density type scale (10–14px) with generous vertical rhythm between groups",
       "Real macOS vibrancy via backdrop-blur-xl backdrop-saturate-200, only where it earns its weight",
-      "Switzer (variable) for UI, JetBrains Mono (variable, ligatures off) for SQL and data",
+      "macOS system font (San Francisco via -apple-system) for UI, JetBrains Mono (variable, ligatures off) for SQL and data",
       "iOS-like springs for motion; prefers-reduced-motion respected fully"
     ],
     "rules": [
@@ -352,8 +352,8 @@
         "section": "typography"
       },
       {
-        "name": "The No-Inter Rule",
-        "body": "Inter, IBM Plex, Space Grotesk, Fraunces, and Instrument Sans are forbidden. Switzer is the identity; the whole point is to not look like everyone else's developer tool.",
+        "name": "The Native-Type Rule",
+        "body": "The UI face is the macOS system font, not a bundled web font. Don't reach for Inter, IBM Plex, Space Grotesk, Fraunces, or Instrument Sans to give the app personality — personality lives in color, motion, and the Dynamic Island, not in the typeface. Letting SF do the talking is the whole point of native-calm.",
         "section": "typography"
       },
       {
@@ -386,7 +386,7 @@
       "Do tint every neutral warm (0.005–0.008 chroma, 34–48° hue). There is no such thing as pure grey in this app.",
       "Do reserve the Amber Heartbeat for focus rings, selected state, the primary button, and the Dynamic Island at attention.",
       "Do build depth through tonal surface layering (Warm Ink → Warm Raised → Warm Accent).",
-      "Do use Switzer for UI and JetBrains Mono for SQL and data — with ligatures off on mono.",
+      "Do use the macOS system font (-apple-system) for UI and JetBrains Mono for SQL and data — with ligatures off on mono.",
       "Do keep default controls at 28px (h-7) and body text at 12px. Density is the point.",
       "Do use real macOS vibrancy via windowEffects: ['sidebar'] on the Tauri window, and backdrop-blur-xl backdrop-saturate-200 on the Dynamic Island.",
       "Do put iOS-like springs (stiffness: 400, damping: 30) on morphing elements and exponential ease-outs on state transitions (150ms ease-out).",
@@ -398,7 +398,7 @@
       "Don't use purple or cyan gradients, neon accents on dark, or sparkle iconography. This is not a '✨ AI-powered' product.",
       "Don't build a chatbot drawer bolted onto the IDE. AI output lands in the editor like a colleague pasted it — not like a product feature.",
       "Don't imitate DBeaver / phpMyAdmin / pgAdmin chrome — bureaucratic grey panels, icon-heavy toolbars, zero personality. That's the anti-brand.",
-      "Don't use Inter, IBM Plex, Space Grotesk, Fraunces, or Instrument Sans. Switzer is the identity.",
+      "Don't use Inter, IBM Plex, Space Grotesk, Fraunces, or Instrument Sans. The macOS system font is the UI face — let it disappear into the OS.",
       "Don't scale controls up to 36/40px to feel 'safer'. The system's rhythm breaks.",
       "Don't use border-left / border-right greater than 1px as a colored accent stripe on cards, list items, or callouts. Rewrite with full borders, tonal backgrounds, or leading icons.",
       "Don't use background-clip: text with gradients. Emphasis is weight and size.",

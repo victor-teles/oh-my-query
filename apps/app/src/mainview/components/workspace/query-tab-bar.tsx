@@ -51,7 +51,13 @@ const TabCloseButton = ({ tabTitle, tabId, onClose }: TabCloseButtonProps) => {
   return (
     <button
       aria-label={`Close ${tabTitle}`}
-      className="ml-0.5 rounded-sm p-0.5 text-muted-foreground/70 hover:bg-muted hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:outline-none group-hover/tab:text-muted-foreground"
+      className="
+        ml-0.5 rounded-sm p-0.5 text-muted-foreground/70
+        group-hover/tab:text-muted-foreground
+        hover:bg-muted hover:text-foreground
+        focus-visible:ring-2 focus-visible:ring-ring/50
+        focus-visible:outline-none
+      "
       onClick={handleClick}
       title={`Close ${tabTitle} (⌘W)`}
       type="button"
@@ -91,12 +97,18 @@ export const QueryTabBar = ({
               aria-description={statusDescription[tab.status] || undefined}
             >
               {statusDotClass[tab.status] ? (
-                <span
-                  className={`inline-block size-1.5 shrink-0 rounded-full ${statusDotClass[tab.status]}`}
-                />
+                <span className={`
+                    inline-block size-1.5 shrink-0 rounded-full
+                    ${statusDotClass[tab.status]}
+                  `} />
               ) : (
                 isTabDirty(tab) && (
-                  <span className="inline-block size-1.5 shrink-0 rounded-full bg-foreground/25" />
+                  <span
+                    className="
+                      inline-block size-1.5 shrink-0 rounded-full
+                      bg-foreground/25
+                    "
+                  />
                 )
               )}
               <span className="max-w-30 truncate">{tab.title}</span>

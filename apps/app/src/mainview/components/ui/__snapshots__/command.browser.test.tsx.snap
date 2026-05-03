@@ -1,0 +1,289 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`command > default 1`] = `
+<div>
+  <div
+    class="flex size-full flex-col overflow-hidden bg-popover p-1 text-popover-foreground w-80 rounded-lg border shadow-md"
+    cmdk-root=""
+    data-slot="command"
+    tabindex="-1"
+  >
+    <label
+      cmdk-label=""
+      for="radix-_r_2_"
+      id="radix-_r_1_"
+      style="position: absolute; width: 1px; height: 1px; padding: 0px; margin: -1px; overflow: hidden; clip: rect(0px, 0px, 0px, 0px); white-space: nowrap; border-width: 0px"
+    />
+    <div
+      class="p-1 pb-0"
+      data-slot="command-input-wrapper"
+    >
+      <div
+        class="group/input-group relative flex h-7 w-full min-w-0 items-center rounded-md border border-input transition-all duration-150 ease-out outline-none in-data-[slot=combobox-content]:focus-within:border-inherit in-data-[slot=combobox-content]:focus-within:ring-0 has-data-[align=block-end]:rounded-md has-data-[align=block-start]:rounded-md has-[[data-slot=input-group-control]:focus-visible]:border-ring has-[[data-slot=input-group-control]:focus-visible]:ring-2 has-[[data-slot=input-group-control]:focus-visible]:ring-ring/50 has-[[data-slot][aria-invalid=true]]:border-destructive has-[[data-slot][aria-invalid=true]]:ring-2 has-[[data-slot][aria-invalid=true]]:ring-destructive/20 has-[textarea]:rounded-md has-[>[data-align=block-end]]:h-auto has-[>[data-align=block-end]]:flex-col has-[>[data-align=block-start]]:h-auto has-[>[data-align=block-start]]:flex-col has-[>textarea]:h-auto dark:has-[[data-slot][aria-invalid=true]]:ring-destructive/40 has-[>[data-align=block-end]]:[&>input]:pt-3 has-[>[data-align=block-start]]:[&>input]:pb-3 has-[>[data-align=inline-end]]:[&>input]:pr-1.5 has-[>[data-align=inline-start]]:[&>input]:pl-1.5 h-7! bg-input/20 dark:bg-input/30"
+        data-slot="input-group"
+        role="group"
+      >
+        <input
+          aria-autocomplete="list"
+          aria-controls="radix-_r_0_"
+          aria-expanded="true"
+          aria-labelledby="radix-_r_1_"
+          autocomplete="off"
+          autocorrect="off"
+          class="w-full text-xs/relaxed outline-none disabled:cursor-not-allowed disabled:opacity-50"
+          cmdk-input=""
+          data-slot="input-group-control"
+          id="radix-_r_2_"
+          placeholder="Type a command or search..."
+          role="combobox"
+          spellcheck="false"
+          type="text"
+          value="settings"
+        />
+        <div
+          class="flex h-auto cursor-text items-center justify-center gap-1 py-2 text-xs/relaxed font-medium text-muted-foreground select-none group-data-[disabled=true]/input-group:opacity-50 **:data-[slot=kbd]:rounded-[calc(var(--radius-sm)-2px)] **:data-[slot=kbd]:bg-muted-foreground/10 **:data-[slot=kbd]:px-1 **:data-[slot=kbd]:text-[0.625rem] [&>svg:not([class*='size-'])]:size-3.5 order-first pl-2 has-[>button]:ml-[-0.275rem] has-[>kbd]:ml-[-0.275rem]"
+          data-align="inline-start"
+          data-slot="input-group-addon"
+        >
+          <svg
+            aria-hidden="true"
+            class="lucide lucide-search size-3.5 shrink-0 opacity-50"
+            fill="none"
+            height="24"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="m21 21-4.34-4.34"
+            />
+            <circle
+              cx="11"
+              cy="11"
+              r="8"
+            />
+          </svg>
+        </div>
+      </div>
+    </div>
+    <div
+      aria-label="Suggestions"
+      class="no-scrollbar max-h-72 scroll-py-1 overflow-x-hidden overflow-y-auto outline-none"
+      cmdk-list=""
+      data-slot="command-list"
+      id="radix-_r_0_"
+      role="listbox"
+      tabindex="-1"
+    >
+      <div
+        cmdk-list-sizer=""
+      >
+        <div
+          class="overflow-hidden p-1 text-foreground **:[[cmdk-group-heading]]:px-2.5 **:[[cmdk-group-heading]]:py-1.5 **:[[cmdk-group-heading]]:text-xs **:[[cmdk-group-heading]]:font-medium **:[[cmdk-group-heading]]:text-muted-foreground"
+          cmdk-group=""
+          data-slot="command-group"
+          data-value="Actions"
+          hidden=""
+          role="presentation"
+        >
+          <div
+            aria-hidden="true"
+            cmdk-group-heading=""
+            id="radix-_r_4_"
+          >
+            Actions
+          </div>
+          <div
+            aria-labelledby="radix-_r_4_"
+            cmdk-group-items=""
+            role="group"
+          />
+        </div>
+        <div
+          class="overflow-hidden p-1 text-foreground **:[[cmdk-group-heading]]:px-2.5 **:[[cmdk-group-heading]]:py-1.5 **:[[cmdk-group-heading]]:text-xs **:[[cmdk-group-heading]]:font-medium **:[[cmdk-group-heading]]:text-muted-foreground"
+          cmdk-group=""
+          data-slot="command-group"
+          data-value="Navigation"
+          role="presentation"
+        >
+          <div
+            aria-hidden="true"
+            cmdk-group-heading=""
+            id="radix-_r_8_"
+          >
+            Navigation
+          </div>
+          <div
+            aria-labelledby="radix-_r_8_"
+            cmdk-group-items=""
+            role="group"
+          >
+            <div
+              aria-disabled="false"
+              aria-selected="true"
+              class="group/command-item relative flex min-h-7 cursor-default items-center gap-2 rounded-md px-2.5 py-1.5 text-xs/relaxed transition-all duration-150 ease-out outline-none select-none focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:ring-inset in-data-[slot=dialog-content]:rounded-md data-[disabled=true]:pointer-events-none data-[disabled=true]:opacity-50 data-selected:bg-muted data-selected:text-foreground [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-3.5 data-selected:*:[svg]:text-foreground"
+              cmdk-item=""
+              data-disabled="false"
+              data-selected="true"
+              data-slot="command-item"
+              data-value="Settings⌘,"
+              id="radix-_r_a_"
+              role="option"
+            >
+              <svg
+                aria-hidden="true"
+                class="lucide lucide-settings"
+                fill="none"
+                height="24"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+                width="24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M9.671 4.136a2.34 2.34 0 0 1 4.659 0 2.34 2.34 0 0 0 3.319 1.915 2.34 2.34 0 0 1 2.33 4.033 2.34 2.34 0 0 0 0 3.831 2.34 2.34 0 0 1-2.33 4.033 2.34 2.34 0 0 0-3.319 1.915 2.34 2.34 0 0 1-4.659 0 2.34 2.34 0 0 0-3.32-1.915 2.34 2.34 0 0 1-2.33-4.033 2.34 2.34 0 0 0 0-3.831A2.34 2.34 0 0 1 6.35 6.051a2.34 2.34 0 0 0 3.319-1.915"
+                />
+                <circle
+                  cx="12"
+                  cy="12"
+                  r="3"
+                />
+              </svg>
+              Settings
+              <span
+                class="ml-auto text-[0.625rem] tracking-widest text-muted-foreground group-data-selected/command-item:text-foreground"
+                data-slot="command-shortcut"
+              >
+                ⌘,
+              </span>
+              <svg
+                aria-hidden="true"
+                class="lucide lucide-check 
+          ml-auto opacity-0
+          group-has-data-[slot=command-shortcut]/command-item:hidden
+          group-data-[checked=true]/command-item:opacity-100"
+                fill="none"
+                height="24"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+                width="24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M20 6 9 17l-5-5"
+                />
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`command > empty 1`] = `
+<div>
+  <div
+    class="flex size-full flex-col overflow-hidden bg-popover p-1 text-popover-foreground w-80 rounded-lg border shadow-md"
+    cmdk-root=""
+    data-slot="command"
+    tabindex="-1"
+  >
+    <label
+      cmdk-label=""
+      for="radix-_r_d_"
+      id="radix-_r_c_"
+      style="position: absolute; width: 1px; height: 1px; padding: 0px; margin: -1px; overflow: hidden; clip: rect(0px, 0px, 0px, 0px); white-space: nowrap; border-width: 0px"
+    />
+    <div
+      class="p-1 pb-0"
+      data-slot="command-input-wrapper"
+    >
+      <div
+        class="group/input-group relative flex h-7 w-full min-w-0 items-center rounded-md border border-input transition-all duration-150 ease-out outline-none in-data-[slot=combobox-content]:focus-within:border-inherit in-data-[slot=combobox-content]:focus-within:ring-0 has-data-[align=block-end]:rounded-md has-data-[align=block-start]:rounded-md has-[[data-slot=input-group-control]:focus-visible]:border-ring has-[[data-slot=input-group-control]:focus-visible]:ring-2 has-[[data-slot=input-group-control]:focus-visible]:ring-ring/50 has-[[data-slot][aria-invalid=true]]:border-destructive has-[[data-slot][aria-invalid=true]]:ring-2 has-[[data-slot][aria-invalid=true]]:ring-destructive/20 has-[textarea]:rounded-md has-[>[data-align=block-end]]:h-auto has-[>[data-align=block-end]]:flex-col has-[>[data-align=block-start]]:h-auto has-[>[data-align=block-start]]:flex-col has-[>textarea]:h-auto dark:has-[[data-slot][aria-invalid=true]]:ring-destructive/40 has-[>[data-align=block-end]]:[&>input]:pt-3 has-[>[data-align=block-start]]:[&>input]:pb-3 has-[>[data-align=inline-end]]:[&>input]:pr-1.5 has-[>[data-align=inline-start]]:[&>input]:pl-1.5 h-7! bg-input/20 dark:bg-input/30"
+        data-slot="input-group"
+        role="group"
+      >
+        <input
+          aria-autocomplete="list"
+          aria-controls="radix-_r_b_"
+          aria-expanded="true"
+          aria-labelledby="radix-_r_c_"
+          autocomplete="off"
+          autocorrect="off"
+          class="w-full text-xs/relaxed outline-none disabled:cursor-not-allowed disabled:opacity-50"
+          cmdk-input=""
+          data-slot="input-group-control"
+          id="radix-_r_d_"
+          placeholder="Search..."
+          role="combobox"
+          spellcheck="false"
+          type="text"
+          value=""
+        />
+        <div
+          class="flex h-auto cursor-text items-center justify-center gap-1 py-2 text-xs/relaxed font-medium text-muted-foreground select-none group-data-[disabled=true]/input-group:opacity-50 **:data-[slot=kbd]:rounded-[calc(var(--radius-sm)-2px)] **:data-[slot=kbd]:bg-muted-foreground/10 **:data-[slot=kbd]:px-1 **:data-[slot=kbd]:text-[0.625rem] [&>svg:not([class*='size-'])]:size-3.5 order-first pl-2 has-[>button]:ml-[-0.275rem] has-[>kbd]:ml-[-0.275rem]"
+          data-align="inline-start"
+          data-slot="input-group-addon"
+        >
+          <svg
+            aria-hidden="true"
+            class="lucide lucide-search size-3.5 shrink-0 opacity-50"
+            fill="none"
+            height="24"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="m21 21-4.34-4.34"
+            />
+            <circle
+              cx="11"
+              cy="11"
+              r="8"
+            />
+          </svg>
+        </div>
+      </div>
+    </div>
+    <div
+      aria-label="Suggestions"
+      class="no-scrollbar max-h-72 scroll-py-1 overflow-x-hidden overflow-y-auto outline-none"
+      cmdk-list=""
+      data-slot="command-list"
+      id="radix-_r_b_"
+      role="listbox"
+      tabindex="-1"
+    >
+      <div
+        cmdk-list-sizer=""
+      >
+        <div
+          class="py-6 text-center text-xs/relaxed"
+          cmdk-empty=""
+          data-slot="command-empty"
+          role="presentation"
+        >
+          No results found.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;

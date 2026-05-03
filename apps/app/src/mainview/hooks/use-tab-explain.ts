@@ -1,5 +1,4 @@
 import { useCallback } from "react";
-import { toast } from "sonner";
 
 import type { QueryTab } from "@/lib/query-types";
 
@@ -104,9 +103,6 @@ export const useTabExplain = ({
               : t
           )
         );
-        if (cancelled) {
-          toast.info("EXPLAIN cancelled");
-        }
       }
     },
     [connectionId, selectedDatabase, setTabs]
@@ -115,8 +111,8 @@ export const useTabExplain = ({
   const cancel = useCallback(async (queryId: string) => {
     try {
       await cancelQuery(queryId);
-    } catch {
-      toast.error("Couldn't cancel EXPLAIN");
+    } catch (error) {
+      console.warn("Couldn't cancel EXPLAIN", error);
     }
   }, []);
 

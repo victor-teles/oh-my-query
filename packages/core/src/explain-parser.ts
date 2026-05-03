@@ -179,7 +179,7 @@ export function parseMysql(rootJson: JsonValue): PlanNode {
     throw new Error("MySQL EXPLAIN output missing query_block");
   }
   const queryBlock = (rootJson as Record<string, JsonValue>).query_block;
-  if (queryBlock === null) {
+  if (queryBlock === null || queryBlock === undefined) {
     throw new Error("MySQL EXPLAIN output missing query_block");
   }
   return parseMysqlBlock(queryBlock, "m");
@@ -311,7 +311,7 @@ export function parseDuckdb(rootJson: JsonValue): PlanNode {
   if (Array.isArray(rootJson)) {
     [root] = rootJson;
   }
-  if (root === null) {
+  if (root === null || root === undefined) {
     throw new Error("DuckDB EXPLAIN empty");
   }
   return parseDuckNode(root, "d");

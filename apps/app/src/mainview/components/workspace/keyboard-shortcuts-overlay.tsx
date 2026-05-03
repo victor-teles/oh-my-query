@@ -85,7 +85,7 @@ export const KeyboardShortcutsOverlay = ({
       <div className="grid gap-5">
         {SECTIONS.map((section) => (
           <section key={section.heading}>
-            <h3 className="mb-1 text-section-label">{section.heading}</h3>
+            <h3 className="text-section-label mb-1">{section.heading}</h3>
             <div>
               {section.entries.map((entry) => (
                 <Shortcut

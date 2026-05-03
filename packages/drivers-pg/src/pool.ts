@@ -103,7 +103,7 @@ export class PostgresPool implements Pool {
     signal: AbortSignal
   ): Promise<ExecuteResult> {
     const client = await this.#pool.connect();
-    bindAbort(client, signal);
+    const release = bindAbort(client, signal);
     try {
       if (schema) {
         validateSchemaName(schema);
@@ -122,7 +122,7 @@ export class PostgresPool implements Pool {
         }
         columns = (result.fields ?? []).map(toColumnInfo);
       } finally {
-        if (schema) {
+        if (schema && !signal.aborted) {
           try {
             await client.query("RESET search_path");
           } catch {
@@ -139,9 +139,12 @@ export class PostgresPool implements Pool {
         rows: rows.map(jsonifyRow) as never,
       };
     } catch (error) {
+      if (signal.aborted && signal.reason instanceof DbError) {
+        throw signal.reason;
+      }
       throw mapPgError(error);
     } finally {
-      client.release();
+      release();
     }
   }
 
@@ -164,7 +167,7 @@ export class PostgresPool implements Pool {
     const wrapped = `EXPLAIN (${opts}) ${trimmed}`;
 
     const client = await this.#pool.connect();
-    bindAbort(client, signal);
+    const release = bindAbort(client, signal);
     const start = performance.now();
     try {
       await client.query("BEGIN");
@@ -190,16 +193,21 @@ export class PostgresPool implements Pool {
           supportsAnalyze: true,
         };
       } finally {
-        try {
-          await client.query("ROLLBACK");
-        } catch {
-          // best-effort
+        if (!signal.aborted) {
+          try {
+            await client.query("ROLLBACK");
+          } catch {
+            // best-effort
+          }
         }
       }
     } catch (error) {
+      if (signal.aborted && signal.reason instanceof DbError) {
+        throw signal.reason;
+      }
       throw mapExplainError(error, analyze);
     } finally {
-      client.release();
+      release();
     }
   }
 
@@ -247,22 +255,25 @@ function jsonifyValue(v: unknown): unknown {
   return v;
 }
 
-function bindAbort(client: PoolClient, signal: AbortSignal): void {
+function bindAbort(client: PoolClient, signal: AbortSignal): () => void {
+  let released = false;
+  const releaseOnce = (destroy: boolean) => {
+    if (released) {
+      return;
+    }
+    released = true;
+    try {
+      client.release(destroy ? true : undefined);
+    } catch {
+      // pool may have already reaped the client
+    }
+  };
   if (signal.aborted) {
-    client.release(true);
+    releaseOnce(true);
     throw DbError.cancelled();
   }
-  signal.addEventListener(
-    "abort",
-    () => {
-      try {
-        client.release(true);
-      } catch {
-        // already released
-      }
-    },
-    { once: true }
-  );
+  signal.addEventListener("abort", () => releaseOnce(true), { once: true });
+  return () => releaseOnce(false);
 }
 
 export function mapPgError(err: unknown): DbError {

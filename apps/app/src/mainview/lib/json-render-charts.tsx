@@ -202,7 +202,13 @@ const EMPTY_STATE_COPY: Record<EmptyStateReason, string> = {
 };
 
 const ChartEmptyState = ({ reason }: { reason: EmptyStateReason }) => (
-  <div className="flex h-48 items-center justify-center rounded-md border border-dashed border-border bg-background/40 px-4 text-center text-xs text-muted-foreground">
+  <div
+    className="
+      flex h-48 items-center justify-center rounded-md border border-dashed
+      border-border bg-background/40 px-4 text-center text-xs
+      text-muted-foreground
+    "
+  >
     {EMPTY_STATE_COPY[reason]}
   </div>
 );
@@ -620,7 +626,7 @@ const PieCenterLabel = ({ total, viewBox }: PieCenterLabelRenderProps) => {
   return (
     <text dominantBaseline="middle" textAnchor="middle" x={cx} y={cy}>
       <tspan
-        className="fill-muted-foreground text-[10px] uppercase tracking-wide"
+        className="fill-muted-foreground text-[10px] tracking-wide uppercase"
         x={cx}
         y={cy - 8}
       >
@@ -682,16 +688,16 @@ const ChartKpiRenderer = ({ props }: BaseComponentProps<ChartKpiProps>) => {
   return (
     <ChartFrame>
       <div className="flex flex-col gap-1 tabular-nums">
-        <span className="text-xs uppercase tracking-wide text-muted-foreground">
+        <span className="text-xs tracking-wide text-muted-foreground uppercase">
           {label}
         </span>
-        <span className="text-data font-semibold text-3xl text-foreground">
+        <span className="text-data text-3xl font-semibold text-foreground">
           {displayValue}
         </span>
         {formattedDelta ? (
           <span
             aria-label={deltaAriaLabel}
-            className={cn("font-medium text-xs", deltaClass)}
+            className={cn("text-xs font-medium", deltaClass)}
           >
             <span aria-hidden>
               {deltaArrow}

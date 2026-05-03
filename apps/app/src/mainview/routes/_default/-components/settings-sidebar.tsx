@@ -45,27 +45,26 @@ const NavItem = ({
   }, [id, onSelect]);
 
   return (
-    <button
-      aria-current={isActive ? "page" : undefined}
-      className={cn(
-        "group flex w-full cursor-pointer items-center gap-2.5 rounded-md px-2.5 py-1.5 text-sm transition-colors",
-        "focus-visible:ring-2 focus-visible:ring-sidebar-ring focus-visible:outline-none",
-        isActive
-          ? "bg-sidebar-accent text-sidebar-accent-foreground"
-          : "text-sidebar-foreground/75 hover:bg-sidebar-accent/50 hover:text-sidebar-foreground"
-      )}
-      onClick={handleClick}
-      type="button"
-    >
+    <button aria-current={isActive ? "page" : undefined} className={cn(`
+          group flex w-full cursor-pointer items-center gap-2.5 rounded-md
+          px-2.5 py-1.5 text-sm transition-colors
+        `, `
+          focus-visible:ring-2 focus-visible:ring-sidebar-ring
+          focus-visible:outline-none
+        `, isActive ? "bg-sidebar-accent text-sidebar-accent-foreground" : `
+            text-sidebar-foreground/75
+            hover:bg-sidebar-accent/50 hover:text-sidebar-foreground
+          `)} onClick={handleClick} type="button">
       <Icon className="size-4 shrink-0" />
       <span>{label}</span>
       <span
         aria-hidden="true"
         className={cn(
           "ml-auto text-[11px] tabular-nums transition-colors",
-          isActive
-            ? "text-sidebar-accent-foreground/60"
-            : "text-sidebar-foreground/35 group-hover:text-sidebar-foreground/60"
+          isActive ? "text-sidebar-accent-foreground/60" : `
+              text-sidebar-foreground/35
+              group-hover:text-sidebar-foreground/60
+            `
         )}
       >
         {shortcut}
@@ -80,13 +79,10 @@ interface SettingsSidebarProps {
 }
 
 export const SettingsSidebar = ({ active, onSelect }: SettingsSidebarProps) => (
-  <nav
-    aria-label="Settings sections"
-    className={cn(
-      "flex h-full w-52 shrink-0 flex-col gap-0.5 border-r border-sidebar-border px-2 py-3 text-sidebar-foreground",
-      isTauri() ? "bg-sidebar/80" : "bg-sidebar"
-    )}
-  >
+  <nav aria-label="Settings sections" className={cn(`
+        flex h-full w-52 shrink-0 flex-col gap-0.5 border-r
+        border-sidebar-border px-2 py-3 text-sidebar-foreground
+      `, isTauri() ? "bg-sidebar/80" : "bg-sidebar")}>
     {SETTINGS_SECTIONS.map((section, index) => (
       <NavItem
         icon={section.icon}

@@ -119,7 +119,12 @@ const ConnectionListItem = ({
         aria-selected={isSelected}
         data-selected={isSelected ? "true" : undefined}
         onClick={handleClick}
-        className="group/row relative flex items-center gap-3 px-3.5 py-2.5 transition-colors hover:bg-accent/50 data-[selected=true]:bg-accent/70"
+        className="
+          group/row relative flex items-center gap-3 px-3.5 py-2.5
+          transition-colors
+          hover:bg-accent/50
+          data-[selected=true]:bg-accent/70
+        "
       >
         {isSelected && (
           <ListCursor
@@ -153,7 +158,11 @@ const ConnectionListItem = ({
         <div className="flex min-w-0 flex-1 flex-col gap-0.5">
           <div className="flex items-baseline justify-between gap-3">
             <div className="flex min-w-0 items-center gap-2">
-              <span className="truncate text-sm font-medium tracking-tight text-foreground">
+              <span
+                className="
+                  truncate text-sm font-medium tracking-tight text-foreground
+                "
+              >
                 {connection.name}
               </span>
               {envStyle && (
@@ -166,17 +175,17 @@ const ConnectionListItem = ({
               )}
             </div>
             <div className="relative shrink-0">
-              <span
-                className={cn(
-                  "text-[11px] tracking-tight text-muted-foreground/70 transition-opacity duration-150",
-                  isSelected ? "opacity-0" : "group-hover/row:opacity-0"
-                )}
-              >
-                {relativeTime}
-              </span>
+              <span className={cn(`
+                    text-[11px] tracking-tight text-muted-foreground/70
+                    transition-opacity duration-150
+                  `, isSelected ? "opacity-0" : "group-hover/row:opacity-0")}>{relativeTime}</span>
             </div>
           </div>
-          <span className="text-data truncate text-[11px] text-muted-foreground/80">
+          <span
+            className="
+            text-data truncate text-[11px] text-muted-foreground/80
+          "
+          >
             {identifier}
           </span>
         </div>

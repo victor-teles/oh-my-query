@@ -47,18 +47,15 @@ export const ConversationEmptyState = ({
   children,
   ...props
 }: ConversationEmptyStateProps) => (
-  <div
-    className={cn(
-      "flex size-full flex-col items-center justify-center gap-3 p-8 text-center",
-      className
-    )}
-    {...props}
-  >
+  <div className={cn(`
+        flex size-full flex-col items-center justify-center gap-3 p-8
+        text-center
+      `, className)} {...props}>
     {icon && <div className="text-muted-foreground">{icon}</div>}
     <div className="space-y-1">
-      <h3 className="font-medium text-base">{title}</h3>
+      <h3 className="text-base font-medium">{title}</h3>
       {description && (
-        <p className="text-muted-foreground text-xs">{description}</p>
+        <p className="text-xs text-muted-foreground">{description}</p>
       )}
     </div>
     {children}
@@ -79,17 +76,11 @@ export const ConversationScrollButton = ({
 
   return (
     !isAtBottom && (
-      <Button
-        className={cn(
-          "absolute bottom-4 left-[50%] translate-x-[-50%] rounded-full dark:bg-background dark:hover:bg-muted",
-          className
-        )}
-        onClick={handleScrollToBottom}
-        size="icon"
-        type="button"
-        variant="outline"
-        {...props}
-      >
+      <Button className={cn(`
+            absolute bottom-4 left-[50%] translate-x-[-50%] rounded-full
+            dark:bg-background
+            dark:hover:bg-muted
+          `, className)} onClick={handleScrollToBottom} size="icon" type="button" variant="outline" {...props}>
         <ArrowDownIcon className="size-4" />
       </Button>
     )
@@ -146,17 +137,11 @@ export const ConversationDownload = ({
   }, [messages, filename, formatMessage]);
 
   return (
-    <Button
-      className={cn(
-        "absolute top-4 right-4 rounded-full dark:bg-background dark:hover:bg-muted",
-        className
-      )}
-      onClick={handleDownload}
-      size="icon"
-      type="button"
-      variant="outline"
-      {...props}
-    >
+    <Button className={cn(`
+          absolute top-4 right-4 rounded-full
+          dark:bg-background
+          dark:hover:bg-muted
+        `, className)} onClick={handleDownload} size="icon" type="button" variant="outline" {...props}>
       {children ?? <DownloadIcon className="size-4" />}
     </Button>
   );

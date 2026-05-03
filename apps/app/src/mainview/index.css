@@ -4,14 +4,6 @@
 @import "streamdown/styles.css";
 @import "@fontsource-variable/jetbrains-mono";
 
-@font-face {
-  font-family: "Switzer";
-  src: url("/fonts/switzer-variable.woff2") format("woff2-variations");
-  font-weight: 100 900;
-  font-style: normal;
-  font-display: swap;
-}
-
 :root,
 .light {
   --background: oklch(0.9821 0 0);
@@ -51,7 +43,9 @@
   --sidebar-border: oklch(0.86 0.005 48.717);
   --sidebar-ring: oklch(0.709 0.01 56.259);
   --radius: 0.45rem;
-  --font-sans: "Switzer", sans-serif;
+  --font-sans:
+    -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Arial,
+    sans-serif;
   --font-mono: "JetBrains Mono Variable", ui-monospace, monospace;
   --tracking-normal: -0.003em;
   --json-key: oklch(0.5 0.08 60);
@@ -105,7 +99,9 @@
   --sidebar-border: oklch(1 0 0 / 14%);
   --sidebar-ring: oklch(0.553 0.013 58.071);
   --radius: 0.45rem;
-  --font-sans: "Switzer", sans-serif;
+  --font-sans:
+    -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Arial,
+    sans-serif;
   --font-mono: "JetBrains Mono Variable", ui-monospace, monospace;
   --tracking-normal: -0.003em;
   --json-key: oklch(0.78 0.1 60);
@@ -198,7 +194,7 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
-    font-feature-settings: "ss01", "ss03", "cv11", "calt", "kern";
+    font-feature-settings: "calt", "kern";
     -webkit-user-drag: none;
     -webkit-tap-highlight-color: transparent;
     overscroll-behavior: none;
@@ -247,10 +243,6 @@
 @layer components {
   .text-section-label {
     @apply text-[10px] font-medium uppercase tracking-wider text-muted-foreground;
-  }
-
-  .text-chrome {
-    @apply text-[11px] font-medium tracking-tight;
   }
 
   .text-data {

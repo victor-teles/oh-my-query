@@ -56,7 +56,7 @@ export const DocumentViewer = ({ result }: DocumentViewerProps) => {
 };
 
 const DocumentCard = ({ value, index }: { value: unknown; index: number }) => (
-  <div className="mb-3 rounded border border-border p-2">
+  <div className="mb-3 rounded-sm border border-border p-2">
     <span className="mb-1 block text-xs text-muted-foreground">
       Document {index}
     </span>
@@ -84,7 +84,12 @@ const DocumentPagination = ({
   }, [onPageChange, page]);
 
   return (
-    <div className="flex items-center justify-between border-t px-3 py-1.5 text-muted-foreground text-xs">
+    <div
+      className="
+        flex items-center justify-between border-t px-3 py-1.5 text-xs
+        text-muted-foreground
+      "
+    >
       <span>
         Page {page + 1} of {totalPages}
       </span>
@@ -140,7 +145,7 @@ const JsonNode = ({
   if (value === null) {
     return (
       <JsonPrimitive keyName={keyName}>
-        <span className="italic text-muted-foreground">null</span>
+        <span className="text-muted-foreground italic">null</span>
       </JsonPrimitive>
     );
   }
@@ -259,7 +264,10 @@ const JsonCollapsible = ({
       <button
         type="button"
         onClick={toggle}
-        className="inline-flex items-center gap-0.5 hover:text-foreground"
+        className="
+          inline-flex items-center gap-0.5
+          hover:text-foreground
+        "
       >
         {expanded ? (
           <ChevronDown className="size-3" />
