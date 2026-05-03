@@ -2,7 +2,7 @@ import type { ReactNode } from "react";
 
 import { createContext, use } from "react";
 
-import type { QueryTab } from "@/lib/query-types";
+import type { ExplainDensity, QueryTab } from "@/lib/query-types";
 
 interface QueryTabsContextValue {
   tabs: QueryTab[];
@@ -21,6 +21,7 @@ interface QueryTabsContextValue {
   explainTab: (tabId: string, sqlOverride?: string) => void;
   cancelExplain: (tabId: string) => void;
   setExplainAnalyze: (tabId: string, analyze: boolean) => void;
+  setExplainDensity: (tabId: string, density: ExplainDensity) => void;
   closeRequested: boolean;
   onConfirmClose: () => void;
   onCancelClose: () => void;

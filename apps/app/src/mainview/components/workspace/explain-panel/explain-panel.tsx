@@ -2,7 +2,7 @@ import { AlertTriangle, Flame, Loader2, Play, Wand2, X } from "lucide-react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { useCallback, useEffect, useMemo, useState } from "react";
 
-import type { QueryTab } from "@/lib/query-types";
+import type { ExplainDensity, QueryTab } from "@/lib/query-types";
 import type { ExplainResult } from "@/lib/tauri";
 
 import { Button } from "@/components/ui/button";
@@ -64,7 +64,7 @@ export const ExplainPanel = ({
   onAiImprovePlan,
 }: ExplainPanelProps) => {
   const { connection } = useConnection();
-  const { cancelExplain, explainTab, setExplainAnalyze } =
+  const { cancelExplain, explainTab, setExplainAnalyze, setExplainDensity } =
     useQueryTabsContext();
   const { getSelectedText } = useEditorInsert();
   const [viewMode, setViewMode] = useState<ViewMode>("tree");
@@ -94,6 +94,15 @@ export const ExplainPanel = ({
     }
   }, [tab, setExplainAnalyze]);
 
+  const handleDensityChange = useCallback(
+    (density: ExplainDensity) => {
+      if (tab) {
+        setExplainDensity(tab.id, density);
+      }
+    },
+    [tab, setExplainDensity]
+  );
+
   const explainResult = tab?.explainResult;
   const handleImprove = useCallback(() => {
     if (explainResult) {
@@ -113,10 +122,12 @@ export const ExplainPanel = ({
           analyzeSupported={supportsAnalyze}
           canImproveWithAi={false}
           canRun={false}
+          density={tab.explainDensity}
           engine={engine}
           hasSelection={hasSelection}
           isRunning={false}
           onCancel={handleCancel}
+          onDensityChange={handleDensityChange}
           onImprove={handleImprove}
           onRun={handleRun}
           onToggleAnalyze={handleToggleAnalyze}
@@ -145,10 +156,12 @@ export const ExplainPanel = ({
         analyzeSupported={supportsAnalyze}
         canImproveWithAi={canImproveWithAi}
         canRun={canRun}
+        density={tab.explainDensity}
         engine={engine}
         hasSelection={hasSelection}
         isRunning={tab.explainStatus === "running"}
         onCancel={handleCancel}
+        onDensityChange={handleDensityChange}
         onImprove={handleImprove}
         onRun={handleRun}
         onToggleAnalyze={handleToggleAnalyze}
@@ -170,6 +183,7 @@ export const ExplainPanel = ({
             transition={spring}
           >
             <ExplainBody
+              density={tab.explainDensity}
               error={error}
               result={result}
               status={tab.explainStatus}
@@ -204,9 +218,16 @@ interface ExplainBodyProps {
   status: QueryTab["explainStatus"];
   error: string | null;
   viewMode: ViewMode;
+  density: ExplainDensity;
 }
 
-const ExplainBody = ({ result, status, error, viewMode }: ExplainBodyProps) => {
+const ExplainBody = ({
+  result,
+  status,
+  error,
+  viewMode,
+  density,
+}: ExplainBodyProps) => {
   if (status === "running") {
     return (
       <div
@@ -232,16 +253,17 @@ const ExplainBody = ({ result, status, error, viewMode }: ExplainBodyProps) => {
     if (viewMode === "raw") {
       return <PlanRawView raw={result.raw} />;
     }
-    return <PlanInspector result={result} />;
+    return <PlanInspector density={density} result={result} />;
   }
   return <ExplainIdleState />;
 };
 
 interface PlanInspectorProps {
   result: NonNullable<QueryTab["explainResult"]>;
+  density: ExplainDensity;
 }
 
-const PlanInspector = ({ result }: PlanInspectorProps) => {
+const PlanInspector = ({ result, density }: PlanInspectorProps) => {
   const analysis = useMemo(
     () => computePlanAnalysis(result.root),
     [result.root]
@@ -336,6 +358,7 @@ const PlanInspector = ({ result }: PlanInspectorProps) => {
           tabIndex={0}
         >
           <PlanTree
+            density={density}
             expanded={expanded}
             hotPath={analysis.hotPath}
             maxCost={analysis.maxCost}
@@ -361,10 +384,12 @@ interface ExplainHeaderProps {
   analyzeSupported: boolean;
   canImproveWithAi: boolean;
   canRun: boolean;
+  density: ExplainDensity;
   engine: string;
   hasSelection: boolean;
   isRunning: boolean;
   onCancel: () => void;
+  onDensityChange: (density: ExplainDensity) => void;
   onImprove: () => void;
   onRun: () => void;
   onToggleAnalyze: () => void;
@@ -378,10 +403,12 @@ export const ExplainHeader = ({
   analyzeSupported,
   canImproveWithAi,
   canRun,
+  density,
   engine,
   hasSelection,
   isRunning,
   onCancel,
+  onDensityChange,
   onImprove,
   onRun,
   onToggleAnalyze,
@@ -477,7 +504,12 @@ export const ExplainHeader = ({
         </Button>
       )}
       {showViewToggle && (
-        <ViewToggle onViewChange={onViewChange} viewMode={viewMode} />
+        <ViewToggle
+          density={density}
+          onDensityChange={onDensityChange}
+          onViewChange={onViewChange}
+          viewMode={viewMode}
+        />
       )}
     </div>
   </div>
@@ -485,45 +517,83 @@ export const ExplainHeader = ({
 
 interface ViewToggleProps {
   viewMode: ViewMode;
+  density: ExplainDensity;
   onViewChange: (mode: ViewMode) => void;
+  onDensityChange: (density: ExplainDensity) => void;
 }
 
-const ViewToggle = ({ viewMode, onViewChange }: ViewToggleProps) => {
-  const selectTree = useCallback(() => onViewChange("tree"), [onViewChange]);
-  const selectRaw = useCallback(() => onViewChange("raw"), [onViewChange]);
+const ViewToggle = ({
+  viewMode,
+  density,
+  onViewChange,
+  onDensityChange,
+}: ViewToggleProps) => {
+  const isTree = viewMode === "tree" && density === "comfortable";
+  const isCompact = viewMode === "tree" && density === "compact";
+  const isRaw = viewMode === "raw";
+
+  const selectTree = useCallback(() => {
+    if (isTree) {
+      return;
+    }
+    onViewChange("tree");
+    onDensityChange("comfortable");
+  }, [isTree, onViewChange, onDensityChange]);
+  const selectCompact = useCallback(() => {
+    if (isCompact) {
+      return;
+    }
+    onViewChange("tree");
+    onDensityChange("compact");
+  }, [isCompact, onViewChange, onDensityChange]);
+  const selectRaw = useCallback(() => {
+    if (isRaw) {
+      return;
+    }
+    onViewChange("raw");
+  }, [isRaw, onViewChange]);
+
   return (
-    <div className="flex overflow-hidden rounded-sm border border-border/60">
-      <button
-        aria-pressed={viewMode === "tree"}
-        className={cn(
-          "px-2 py-0.5 text-[10px] transition-colors",
-          viewMode === "tree" ? "bg-background text-foreground" : `
-              text-muted-foreground
-              hover:text-foreground
-            `
-        )}
-        onClick={selectTree}
-        type="button"
-      >
-        Tree
-      </button>
-      <button
-        aria-pressed={viewMode === "raw"}
-        className={cn(
-          "px-2 py-0.5 text-[10px] transition-colors",
-          viewMode === "raw" ? "bg-background text-foreground" : `
-              text-muted-foreground
-              hover:text-foreground
-            `
-        )}
-        onClick={selectRaw}
-        type="button"
-      >
-        Raw
-      </button>
+    <div
+      aria-label="Plan view"
+      className="flex overflow-hidden rounded-sm border border-border/60"
+      role="group"
+    >
+      <ViewToggleButton active={isTree} label="Tree" onSelect={selectTree} />
+      <ViewToggleButton
+        active={isCompact}
+        label="Compact"
+        onSelect={selectCompact}
+      />
+      <ViewToggleButton active={isRaw} label="Raw" onSelect={selectRaw} />
     </div>
   );
 };
+
+const ViewToggleButton = ({
+  active,
+  label,
+  onSelect,
+}: {
+  active: boolean;
+  label: string;
+  onSelect: () => void;
+}) => (
+  <button
+    aria-pressed={active}
+    className={cn(
+      "px-2 py-0.5 text-[10px] transition-colors",
+      active ? "bg-background text-foreground" : `
+          text-muted-foreground
+          hover:text-foreground
+        `
+    )}
+    onClick={onSelect}
+    type="button"
+  >
+    {label}
+  </button>
+);
 
 const ExplainSummaryStrip = ({
   result,
