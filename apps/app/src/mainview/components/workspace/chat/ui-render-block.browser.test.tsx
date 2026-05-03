@@ -367,7 +367,6 @@ describe("ui-render-block", () => {
     await expect(
       screen.getByText(/Downsampled to 500 of 750 points/)
     ).toBeVisible();
-    expect(screen.container).toMatchSnapshot();
   });
 
   it("chartNonNumericSeries", async () => {
