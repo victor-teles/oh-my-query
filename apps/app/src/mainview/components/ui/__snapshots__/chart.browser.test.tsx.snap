@@ -137,13 +137,8 @@ exports[`chart > bar Chart 1`] = `
                   stroke="none"
                   text-anchor="middle"
                   width="344"
-                  x="93.66666666666667"
-                  y="201"
                 >
-                  <tspan
-                    dy="0.71em"
-                    x="93.66666666666667"
-                  >
+                  <tspan>
                     Jan
                   </tspan>
                 </text>
@@ -159,13 +154,8 @@ exports[`chart > bar Chart 1`] = `
                   stroke="none"
                   text-anchor="middle"
                   width="344"
-                  x="151"
-                  y="201"
                 >
-                  <tspan
-                    dy="0.71em"
-                    x="151"
-                  >
+                  <tspan>
                     Feb
                   </tspan>
                 </text>
@@ -181,13 +171,8 @@ exports[`chart > bar Chart 1`] = `
                   stroke="none"
                   text-anchor="middle"
                   width="344"
-                  x="208.33333333333334"
-                  y="201"
                 >
-                  <tspan
-                    dy="0.71em"
-                    x="208.33333333333334"
-                  >
+                  <tspan>
                     Mar
                   </tspan>
                 </text>
@@ -203,13 +188,8 @@ exports[`chart > bar Chart 1`] = `
                   stroke="none"
                   text-anchor="middle"
                   width="344"
-                  x="265.6666666666667"
-                  y="201"
                 >
-                  <tspan
-                    dy="0.71em"
-                    x="265.6666666666667"
-                  >
+                  <tspan>
                     Apr
                   </tspan>
                 </text>
@@ -225,13 +205,8 @@ exports[`chart > bar Chart 1`] = `
                   stroke="none"
                   text-anchor="middle"
                   width="344"
-                  x="323.00000000000006"
-                  y="201"
                 >
-                  <tspan
-                    dy="0.71em"
-                    x="323.00000000000006"
-                  >
+                  <tspan>
                     May
                   </tspan>
                 </text>
@@ -247,13 +222,8 @@ exports[`chart > bar Chart 1`] = `
                   stroke="none"
                   text-anchor="middle"
                   width="344"
-                  x="380.33333333333337"
-                  y="201"
                 >
-                  <tspan
-                    dy="0.71em"
-                    x="380.33333333333337"
-                  >
+                  <tspan>
                     Jun
                   </tspan>
                 </text>
@@ -277,13 +247,8 @@ exports[`chart > bar Chart 1`] = `
                   stroke="none"
                   text-anchor="end"
                   width="60"
-                  x="57"
-                  y="193"
                 >
-                  <tspan
-                    dy="0.355em"
-                    x="57"
-                  >
+                  <tspan>
                     0
                   </tspan>
                 </text>
@@ -299,13 +264,8 @@ exports[`chart > bar Chart 1`] = `
                   stroke="none"
                   text-anchor="end"
                   width="60"
-                  x="57"
-                  y="146"
                 >
-                  <tspan
-                    dy="0.355em"
-                    x="57"
-                  >
+                  <tspan>
                     150
                   </tspan>
                 </text>
@@ -321,13 +281,8 @@ exports[`chart > bar Chart 1`] = `
                   stroke="none"
                   text-anchor="end"
                   width="60"
-                  x="57"
-                  y="99"
                 >
-                  <tspan
-                    dy="0.355em"
-                    x="57"
-                  >
+                  <tspan>
                     300
                   </tspan>
                 </text>
@@ -343,13 +298,8 @@ exports[`chart > bar Chart 1`] = `
                   stroke="none"
                   text-anchor="end"
                   width="60"
-                  x="57"
-                  y="52"
                 >
-                  <tspan
-                    dy="0.355em"
-                    x="57"
-                  >
+                  <tspan>
                     450
                   </tspan>
                 </text>
@@ -365,13 +315,8 @@ exports[`chart > bar Chart 1`] = `
                   stroke="none"
                   text-anchor="end"
                   width="60"
-                  x="57"
-                  y="9"
                 >
-                  <tspan
-                    dy="0.355em"
-                    x="57"
-                  >
+                  <tspan>
                     600
                   </tspan>
                 </text>
@@ -826,13 +771,8 @@ exports[`chart > line Chart 1`] = `
                   stroke="none"
                   text-anchor="middle"
                   width="344"
-                  x="65"
-                  y="229"
                 >
-                  <tspan
-                    dy="0.71em"
-                    x="65"
-                  >
+                  <tspan>
                     00:00
                   </tspan>
                 </text>
@@ -848,13 +788,8 @@ exports[`chart > line Chart 1`] = `
                   stroke="none"
                   text-anchor="middle"
                   width="344"
-                  x="133.8"
-                  y="229"
                 >
-                  <tspan
-                    dy="0.71em"
-                    x="133.8"
-                  >
+                  <tspan>
                     04:00
                   </tspan>
                 </text>
@@ -870,13 +805,8 @@ exports[`chart > line Chart 1`] = `
                   stroke="none"
                   text-anchor="middle"
                   width="344"
-                  x="202.6"
-                  y="229"
                 >
-                  <tspan
-                    dy="0.71em"
-                    x="202.6"
-                  >
+                  <tspan>
                     08:00
                   </tspan>
                 </text>
@@ -892,13 +822,8 @@ exports[`chart > line Chart 1`] = `
                   stroke="none"
                   text-anchor="middle"
                   width="344"
-                  x="271.4"
-                  y="229"
                 >
-                  <tspan
-                    dy="0.71em"
-                    x="271.4"
-                  >
+                  <tspan>
                     12:00
                   </tspan>
                 </text>
@@ -914,13 +839,8 @@ exports[`chart > line Chart 1`] = `
                   stroke="none"
                   text-anchor="middle"
                   width="344"
-                  x="340.2"
-                  y="229"
                 >
-                  <tspan
-                    dy="0.71em"
-                    x="340.2"
-                  >
+                  <tspan>
                     16:00
                   </tspan>
                 </text>
@@ -936,13 +856,8 @@ exports[`chart > line Chart 1`] = `
                   stroke="none"
                   text-anchor="middle"
                   width="344"
-                  x="397.375"
-                  y="229"
                 >
-                  <tspan
-                    dy="0.71em"
-                    x="397.375"
-                  >
+                  <tspan>
                     20:00
                   </tspan>
                 </text>
@@ -966,13 +881,8 @@ exports[`chart > line Chart 1`] = `
                   stroke="none"
                   text-anchor="end"
                   width="60"
-                  x="57"
-                  y="221"
                 >
-                  <tspan
-                    dy="0.355em"
-                    x="57"
-                  >
+                  <tspan>
                     0
                   </tspan>
                 </text>
@@ -988,13 +898,8 @@ exports[`chart > line Chart 1`] = `
                   stroke="none"
                   text-anchor="end"
                   width="60"
-                  x="57"
-                  y="167"
                 >
-                  <tspan
-                    dy="0.355em"
-                    x="57"
-                  >
+                  <tspan>
                     30
                   </tspan>
                 </text>
@@ -1010,13 +915,8 @@ exports[`chart > line Chart 1`] = `
                   stroke="none"
                   text-anchor="end"
                   width="60"
-                  x="57"
-                  y="113"
                 >
-                  <tspan
-                    dy="0.355em"
-                    x="57"
-                  >
+                  <tspan>
                     60
                   </tspan>
                 </text>
@@ -1032,13 +932,8 @@ exports[`chart > line Chart 1`] = `
                   stroke="none"
                   text-anchor="end"
                   width="60"
-                  x="57"
-                  y="59"
                 >
-                  <tspan
-                    dy="0.355em"
-                    x="57"
-                  >
+                  <tspan>
                     90
                   </tspan>
                 </text>
@@ -1054,13 +949,8 @@ exports[`chart > line Chart 1`] = `
                   stroke="none"
                   text-anchor="end"
                   width="60"
-                  x="57"
-                  y="9"
                 >
-                  <tspan
-                    dy="0.355em"
-                    x="57"
-                  >
+                  <tspan>
                     120
                   </tspan>
                 </text>

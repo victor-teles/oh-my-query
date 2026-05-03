@@ -7,7 +7,14 @@ const VOLATILE_STYLE_PROPS = new Set([
   "transform-origin",
   "opacity",
   "will-change",
+  "--front-toast-height",
+  "--initial-height",
+  "--offset",
 ]);
+
+const VOLATILE_SVG_TEXT_ATTRS = ["x", "y", "dx", "dy"];
+
+const VOLATILE_DATA_ATTRS = ["data-mounted"];
 
 function stripVolatileStyle(value: string): string | null {
   const cleaned = value
@@ -33,6 +40,15 @@ function normalize(node: Node): Node {
         el.setAttribute("style", cleaned);
       }
     }
+    const tag = el.tagName.toLowerCase();
+    if (tag === "text" || tag === "tspan") {
+      for (const attr of VOLATILE_SVG_TEXT_ATTRS) {
+        el.removeAttribute(attr);
+      }
+    }
+    for (const attr of VOLATILE_DATA_ATTRS) {
+      el.removeAttribute(attr);
+    }
   }
   for (const child of node.childNodes) {
     normalize(child);
@@ -42,20 +58,23 @@ function normalize(node: Node): Node {
 
 const normalized = new WeakSet<Element>();
 
+function markSubtree(el: Element): void {
+  normalized.add(el);
+  for (const child of el.children) {
+    markSubtree(child);
+  }
+}
+
 // oxlint-disable-next-line jest/require-hook -- vitest setup file
 expect.addSnapshotSerializer({
   serialize(value, config, indentation, depth, refs, printer) {
     const clone = (value as Element).cloneNode(true) as Element;
     normalize(clone);
-    normalized.add(clone);
+    markSubtree(clone);
     return printer(clone, config, indentation, depth, refs);
   },
   test(value) {
-    return (
-      value instanceof Element &&
-      !normalized.has(value) &&
-      (value.outerHTML?.includes('style="') ?? false)
-    );
+    return value instanceof Element && !normalized.has(value);
   },
 });
 

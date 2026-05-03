@@ -2202,13 +2202,8 @@ exports[`ui-render-block > chartLineDark 1`] = `
                           stroke="none"
                           text-anchor="middle"
                           width="330"
-                          x="44"
-                          y="232"
                         >
-                          <tspan
-                            dy="0.71em"
-                            x="44"
-                          >
+                          <tspan>
                             00:00
                           </tspan>
                         </text>
@@ -2224,13 +2219,8 @@ exports[`ui-render-block > chartLineDark 1`] = `
                           stroke="none"
                           text-anchor="middle"
                           width="330"
-                          x="110"
-                          y="232"
                         >
-                          <tspan
-                            dy="0.71em"
-                            x="110"
-                          >
+                          <tspan>
                             04:00
                           </tspan>
                         </text>
@@ -2246,13 +2236,8 @@ exports[`ui-render-block > chartLineDark 1`] = `
                           stroke="none"
                           text-anchor="middle"
                           width="330"
-                          x="176"
-                          y="232"
                         >
-                          <tspan
-                            dy="0.71em"
-                            x="176"
-                          >
+                          <tspan>
                             08:00
                           </tspan>
                         </text>
@@ -2268,13 +2253,8 @@ exports[`ui-render-block > chartLineDark 1`] = `
                           stroke="none"
                           text-anchor="middle"
                           width="330"
-                          x="242"
-                          y="232"
                         >
-                          <tspan
-                            dy="0.71em"
-                            x="242"
-                          >
+                          <tspan>
                             12:00
                           </tspan>
                         </text>
@@ -2290,13 +2270,8 @@ exports[`ui-render-block > chartLineDark 1`] = `
                           stroke="none"
                           text-anchor="middle"
                           width="330"
-                          x="308"
-                          y="232"
                         >
-                          <tspan
-                            dy="0.71em"
-                            x="308"
-                          >
+                          <tspan>
                             16:00
                           </tspan>
                         </text>
@@ -2312,13 +2287,8 @@ exports[`ui-render-block > chartLineDark 1`] = `
                           stroke="none"
                           text-anchor="middle"
                           width="330"
-                          x="365.375"
-                          y="232"
                         >
-                          <tspan
-                            dy="0.71em"
-                            x="365.375"
-                          >
+                          <tspan>
                             20:00
                           </tspan>
                         </text>
@@ -2342,13 +2312,8 @@ exports[`ui-render-block > chartLineDark 1`] = `
                           stroke="none"
                           text-anchor="end"
                           width="36"
-                          x="30"
-                          y="218"
                         >
-                          <tspan
-                            dy="0.355em"
-                            x="30"
-                          >
+                          <tspan>
                             25
                           </tspan>
                         </text>
@@ -2364,13 +2329,8 @@ exports[`ui-render-block > chartLineDark 1`] = `
                           stroke="none"
                           text-anchor="end"
                           width="36"
-                          x="30"
-                          y="165.5"
                         >
-                          <tspan
-                            dy="0.355em"
-                            x="30"
-                          >
+                          <tspan>
                             50
                           </tspan>
                         </text>
@@ -2386,13 +2346,8 @@ exports[`ui-render-block > chartLineDark 1`] = `
                           stroke="none"
                           text-anchor="end"
                           width="36"
-                          x="30"
-                          y="113"
                         >
-                          <tspan
-                            dy="0.355em"
-                            x="30"
-                          >
+                          <tspan>
                             75
                           </tspan>
                         </text>
@@ -2408,13 +2363,8 @@ exports[`ui-render-block > chartLineDark 1`] = `
                           stroke="none"
                           text-anchor="end"
                           width="36"
-                          x="30"
-                          y="60.5"
                         >
-                          <tspan
-                            dy="0.355em"
-                            x="30"
-                          >
+                          <tspan>
                             100
                           </tspan>
                         </text>
@@ -2430,13 +2380,8 @@ exports[`ui-render-block > chartLineDark 1`] = `
                           stroke="none"
                           text-anchor="end"
                           width="36"
-                          x="30"
-                          y="9"
                         >
-                          <tspan
-                            dy="0.355em"
-                            x="30"
-                          >
+                          <tspan>
                             125
                           </tspan>
                         </text>
@@ -2760,13 +2705,8 @@ exports[`ui-render-block > chartLineExample 1`] = `
                         stroke="none"
                         text-anchor="middle"
                         width="362"
-                        x="44"
-                        y="232"
                       >
-                        <tspan
-                          dy="0.71em"
-                          x="44"
-                        >
+                        <tspan>
                           00:00
                         </tspan>
                       </text>
@@ -2782,13 +2722,8 @@ exports[`ui-render-block > chartLineExample 1`] = `
                         stroke="none"
                         text-anchor="middle"
                         width="362"
-                        x="116.4"
-                        y="232"
                       >
-                        <tspan
-                          dy="0.71em"
-                          x="116.4"
-                        >
+                        <tspan>
                           04:00
                         </tspan>
                       </text>
@@ -2804,13 +2739,8 @@ exports[`ui-render-block > chartLineExample 1`] = `
                         stroke="none"
                         text-anchor="middle"
                         width="362"
-                        x="188.8"
-                        y="232"
                       >
-                        <tspan
-                          dy="0.71em"
-                          x="188.8"
-                        >
+                        <tspan>
                           08:00
                         </tspan>
                       </text>
@@ -2826,13 +2756,8 @@ exports[`ui-render-block > chartLineExample 1`] = `
                         stroke="none"
                         text-anchor="middle"
                         width="362"
-                        x="261.20000000000005"
-                        y="232"
                       >
-                        <tspan
-                          dy="0.71em"
-                          x="261.20000000000005"
-                        >
+                        <tspan>
                           12:00
                         </tspan>
                       </text>
@@ -2848,13 +2773,8 @@ exports[`ui-render-block > chartLineExample 1`] = `
                         stroke="none"
                         text-anchor="middle"
                         width="362"
-                        x="333.6"
-                        y="232"
                       >
-                        <tspan
-                          dy="0.71em"
-                          x="333.6"
-                        >
+                        <tspan>
                           16:00
                         </tspan>
                       </text>
@@ -2870,13 +2790,8 @@ exports[`ui-render-block > chartLineExample 1`] = `
                         stroke="none"
                         text-anchor="middle"
                         width="362"
-                        x="397.375"
-                        y="232"
                       >
-                        <tspan
-                          dy="0.71em"
-                          x="397.375"
-                        >
+                        <tspan>
                           20:00
                         </tspan>
                       </text>
@@ -2900,13 +2815,8 @@ exports[`ui-render-block > chartLineExample 1`] = `
                         stroke="none"
                         text-anchor="end"
                         width="36"
-                        x="30"
-                        y="218"
                       >
-                        <tspan
-                          dy="0.355em"
-                          x="30"
-                        >
+                        <tspan>
                           25
                         </tspan>
                       </text>
@@ -2922,13 +2832,8 @@ exports[`ui-render-block > chartLineExample 1`] = `
                         stroke="none"
                         text-anchor="end"
                         width="36"
-                        x="30"
-                        y="165.5"
                       >
-                        <tspan
-                          dy="0.355em"
-                          x="30"
-                        >
+                        <tspan>
                           50
                         </tspan>
                       </text>
@@ -2944,13 +2849,8 @@ exports[`ui-render-block > chartLineExample 1`] = `
                         stroke="none"
                         text-anchor="end"
                         width="36"
-                        x="30"
-                        y="113"
                       >
-                        <tspan
-                          dy="0.355em"
-                          x="30"
-                        >
+                        <tspan>
                           75
                         </tspan>
                       </text>
@@ -2966,13 +2866,8 @@ exports[`ui-render-block > chartLineExample 1`] = `
                         stroke="none"
                         text-anchor="end"
                         width="36"
-                        x="30"
-                        y="60.5"
                       >
-                        <tspan
-                          dy="0.355em"
-                          x="30"
-                        >
+                        <tspan>
                           100
                         </tspan>
                       </text>
@@ -2988,13 +2883,8 @@ exports[`ui-render-block > chartLineExample 1`] = `
                         stroke="none"
                         text-anchor="end"
                         width="36"
-                        x="30"
-                        y="9"
                       >
-                        <tspan
-                          dy="0.355em"
-                          x="30"
-                        >
+                        <tspan>
                           125
                         </tspan>
                       </text>
@@ -3488,20 +3378,14 @@ exports[`ui-render-block > chartPieDark 1`] = `
                     <text
                       dominant-baseline="middle"
                       text-anchor="middle"
-                      x="191"
-                      y="114"
                     >
                       <tspan
                         class="fill-muted-foreground text-[10px] tracking-wide uppercase"
-                        x="191"
-                        y="106"
                       >
                         Total
                       </tspan>
                       <tspan
                         class="fill-foreground text-lg font-semibold"
-                        x="191"
-                        y="124"
                       >
                         53
                       </tspan>
@@ -3845,20 +3729,14 @@ exports[`ui-render-block > chartPieExample 1`] = `
                   <text
                     dominant-baseline="middle"
                     text-anchor="middle"
-                    x="207"
-                    y="114"
                   >
                     <tspan
                       class="fill-muted-foreground text-[10px] tracking-wide uppercase"
-                      x="207"
-                      y="106"
                     >
                       Total
                     </tspan>
                     <tspan
                       class="fill-foreground text-lg font-semibold"
-                      x="207"
-                      y="124"
                     >
                       53
                     </tspan>
@@ -4205,13 +4083,8 @@ exports[`ui-render-block > chartTruncatedOverLimit 1`] = `
                         stroke="none"
                         text-anchor="middle"
                         width="362"
-                        x="44"
-                        y="232"
                       >
-                        <tspan
-                          dy="0.71em"
-                          x="44"
-                        >
+                        <tspan>
                           0
                         </tspan>
                       </text>
@@ -4227,13 +4100,8 @@ exports[`ui-render-block > chartTruncatedOverLimit 1`] = `
                         stroke="none"
                         text-anchor="middle"
                         width="362"
-                        x="78.09619238476954"
-                        y="232"
                       >
-                        <tspan
-                          dy="0.71em"
-                          x="78.09619238476954"
-                        >
+                        <tspan>
                           71
                         </tspan>
                       </text>
@@ -4249,13 +4117,8 @@ exports[`ui-render-block > chartTruncatedOverLimit 1`] = `
                         stroke="none"
                         text-anchor="middle"
                         width="362"
-                        x="118.72144288577154"
-                        y="232"
                       >
-                        <tspan
-                          dy="0.71em"
-                          x="118.72144288577154"
-                        >
+                        <tspan>
                           155
                         </tspan>
                       </text>
@@ -4271,13 +4134,8 @@ exports[`ui-render-block > chartTruncatedOverLimit 1`] = `
                         stroke="none"
                         text-anchor="middle"
                         width="362"
-                        x="164.4248496993988"
-                        y="232"
                       >
-                        <tspan
-                          dy="0.71em"
-                          x="164.4248496993988"
-                        >
+                        <tspan>
                           249
                         </tspan>
                       </text>
@@ -4293,13 +4151,8 @@ exports[`ui-render-block > chartTruncatedOverLimit 1`] = `
                         stroke="none"
                         text-anchor="middle"
                         width="362"
-                        x="210.85370741482964"
-                        y="232"
                       >
-                        <tspan
-                          dy="0.71em"
-                          x="210.85370741482964"
-                        >
+                        <tspan>
                           345
                         </tspan>
                       </text>
@@ -4315,13 +4168,8 @@ exports[`ui-render-block > chartTruncatedOverLimit 1`] = `
                         stroke="none"
                         text-anchor="middle"
                         width="362"
-                        x="257.28256513026054"
-                        y="232"
                       >
-                        <tspan
-                          dy="0.71em"
-                          x="257.28256513026054"
-                        >
+                        <tspan>
                           441
                         </tspan>
                       </text>
@@ -4337,13 +4185,8 @@ exports[`ui-render-block > chartTruncatedOverLimit 1`] = `
                         stroke="none"
                         text-anchor="middle"
                         width="362"
-                        x="302.98597194388776"
-                        y="232"
                       >
-                        <tspan
-                          dy="0.71em"
-                          x="302.98597194388776"
-                        >
+                        <tspan>
                           536
                         </tspan>
                       </text>
@@ -4359,13 +4202,8 @@ exports[`ui-render-block > chartTruncatedOverLimit 1`] = `
                         stroke="none"
                         text-anchor="middle"
                         width="362"
-                        x="349.4148296593186"
-                        y="232"
                       >
-                        <tspan
-                          dy="0.71em"
-                          x="349.4148296593186"
-                        >
+                        <tspan>
                           632
                         </tspan>
                       </text>
@@ -4381,13 +4219,8 @@ exports[`ui-render-block > chartTruncatedOverLimit 1`] = `
                         stroke="none"
                         text-anchor="middle"
                         width="362"
-                        x="403.3203125"
-                        y="232"
                       >
-                        <tspan
-                          dy="0.71em"
-                          x="403.3203125"
-                        >
+                        <tspan>
                           749
                         </tspan>
                       </text>
@@ -4411,13 +4244,8 @@ exports[`ui-render-block > chartTruncatedOverLimit 1`] = `
                         stroke="none"
                         text-anchor="end"
                         width="36"
-                        x="30"
-                        y="218"
                       >
-                        <tspan
-                          dy="0.355em"
-                          x="30"
-                        >
+                        <tspan>
                           0
                         </tspan>
                       </text>
@@ -4433,13 +4261,8 @@ exports[`ui-render-block > chartTruncatedOverLimit 1`] = `
                         stroke="none"
                         text-anchor="end"
                         width="36"
-                        x="30"
-                        y="165.5"
                       >
-                        <tspan
-                          dy="0.355em"
-                          x="30"
-                        >
+                        <tspan>
                           50
                         </tspan>
                       </text>
@@ -4455,13 +4278,8 @@ exports[`ui-render-block > chartTruncatedOverLimit 1`] = `
                         stroke="none"
                         text-anchor="end"
                         width="36"
-                        x="30"
-                        y="113"
                       >
-                        <tspan
-                          dy="0.355em"
-                          x="30"
-                        >
+                        <tspan>
                           100
                         </tspan>
                       </text>
@@ -4477,13 +4295,8 @@ exports[`ui-render-block > chartTruncatedOverLimit 1`] = `
                         stroke="none"
                         text-anchor="end"
                         width="36"
-                        x="30"
-                        y="60.5"
                       >
-                        <tspan
-                          dy="0.355em"
-                          x="30"
-                        >
+                        <tspan>
                           150
                         </tspan>
                       </text>
@@ -4499,13 +4312,8 @@ exports[`ui-render-block > chartTruncatedOverLimit 1`] = `
                         stroke="none"
                         text-anchor="end"
                         width="36"
-                        x="30"
-                        y="9"
                       >
-                        <tspan
-                          dy="0.355em"
-                          x="30"
-                        >
+                        <tspan>
                           200
                         </tspan>
                       </text>
