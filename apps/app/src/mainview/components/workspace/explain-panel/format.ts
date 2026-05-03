@@ -1,9 +1,15 @@
 const formatMsValue = (ms: number, msPrecision: number): string => {
   if (ms < 1) {
-    return `${(ms * 1000).toFixed(0)}µs`;
+    const us = Math.round(ms * 1000);
+    if (us < 1000) {
+      return `${us}µs`;
+    }
   }
   if (ms < 1000) {
-    return `${ms.toFixed(msPrecision)}ms`;
+    const msStr = ms.toFixed(msPrecision);
+    if (Number(msStr) < 1000) {
+      return `${msStr}ms`;
+    }
   }
   return `${(ms / 1000).toFixed(2)}s`;
 };

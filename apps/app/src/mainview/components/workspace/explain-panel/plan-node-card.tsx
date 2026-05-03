@@ -71,7 +71,13 @@ export const PlanNodeCard = ({
             focus-visible:ring-inset
           `)} onClick={handleSelect} type="button">
         <NodeSummary compact={isCompact} node={node} />
-        <NodeMetric isHotPathLeaf={isHotPathLeaf} node={node} tier={tier} />
+        {isHotPathLeaf && (
+          <Flame
+            aria-label="Hottest node"
+            className="size-3 shrink-0 text-warning/80"
+          />
+        )}
+        <NodeMetric node={node} tier={tier} />
       </button>
     </div>
   );
@@ -175,15 +181,7 @@ const RowsLine = ({
   </div>
 );
 
-const NodeMetric = ({
-  node,
-  tier,
-  isHotPathLeaf,
-}: {
-  node: PlanNode;
-  tier: CostTier;
-  isHotPathLeaf: boolean;
-}) => {
+const NodeMetric = ({ node, tier }: { node: PlanNode; tier: CostTier }) => {
   const selfMs = formatMsShort(
     node.cost.selfMs ?? node.cost.actualTotalMs ?? node.timing.actualTotalMs
   );
@@ -198,9 +196,6 @@ const NodeMetric = ({
 
   return (
     <div className="flex shrink-0 items-center gap-1.5 font-mono text-[11px] tabular-nums">
-      {isHotPathLeaf && (
-        <Flame aria-label="Hottest node" className="size-3 text-warning/80" />
-      )}
       <CostDot tier={tier} />
       {selfMs ? (
         <span

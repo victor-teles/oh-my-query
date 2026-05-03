@@ -528,19 +528,30 @@ const ViewToggle = ({
   onViewChange,
   onDensityChange,
 }: ViewToggleProps) => {
-  const selectTree = useCallback(() => {
-    onViewChange("tree");
-    onDensityChange("comfortable");
-  }, [onViewChange, onDensityChange]);
-  const selectCompact = useCallback(() => {
-    onViewChange("tree");
-    onDensityChange("compact");
-  }, [onViewChange, onDensityChange]);
-  const selectRaw = useCallback(() => onViewChange("raw"), [onViewChange]);
-
   const isTree = viewMode === "tree" && density === "comfortable";
   const isCompact = viewMode === "tree" && density === "compact";
   const isRaw = viewMode === "raw";
+
+  const selectTree = useCallback(() => {
+    if (isTree) {
+      return;
+    }
+    onViewChange("tree");
+    onDensityChange("comfortable");
+  }, [isTree, onViewChange, onDensityChange]);
+  const selectCompact = useCallback(() => {
+    if (isCompact) {
+      return;
+    }
+    onViewChange("tree");
+    onDensityChange("compact");
+  }, [isCompact, onViewChange, onDensityChange]);
+  const selectRaw = useCallback(() => {
+    if (isRaw) {
+      return;
+    }
+    onViewChange("raw");
+  }, [isRaw, onViewChange]);
 
   return (
     <div
