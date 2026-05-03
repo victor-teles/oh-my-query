@@ -195,6 +195,38 @@ describe("useTabExecution", () => {
     expect(setTabs).not.toHaveBeenCalled();
   });
 
+  it("forwards connection name, type and environment to safe mode", async () => {
+    confirmMock.mockClear();
+    mockTauri({
+      executeQuery: () => ({
+        columns: [],
+        executionTimeMs: 0,
+        isTruncated: false,
+        resultType: "tabular",
+        rowCount: 0,
+        rows: [],
+      }),
+    });
+
+    const { setTabs } = makeSetTabs([makeTab()]);
+    const { result } = renderHook(() =>
+      useTabExecution({
+        connectionId: "conn-1",
+        flushSave,
+        selectedDatabase: "public",
+        setTabs,
+      })
+    );
+
+    await result.current.execute("tab-1", "SELECT 1");
+
+    expect(confirmMock).toHaveBeenCalledWith("SELECT 1", {
+      connectionName: "Local",
+      connectionType: "postgresql",
+      environment: undefined,
+    });
+  });
+
   it("forwards cancel() to cancel_query", async () => {
     const cancelHandler = vi.fn();
     mockTauri({ cancelQuery: cancelHandler });

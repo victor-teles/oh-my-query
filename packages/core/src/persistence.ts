@@ -65,7 +65,6 @@ export interface DatabaseConnection {
   color?: string;
   emoji?: string;
   environment?: string;
-  safeModeEnabled?: boolean;
   piiRedaction?: boolean;
   customPiiPatterns?: string[];
 }

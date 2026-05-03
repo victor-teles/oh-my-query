@@ -10,19 +10,6 @@ const DELETE_KEYWORD = /\bdelete\b/i;
 const UPDATE_KEYWORD = /\bupdate\b/i;
 const WHERE_CLAUSE = /\bwhere\b/i;
 
-// MongoDB destructive patterns
-const MONGO_DELETE_MANY_EMPTY = /\.deleteMany\s*\(\s*\{?\s*\}?\s*\)/i;
-const MONGO_DELETE_ONE_EMPTY = /\.deleteOne\s*\(\s*\{?\s*\}?\s*\)/i;
-const MONGO_REMOVE_EMPTY = /\.remove\s*\(\s*\{?\s*\}?\s*\)/i;
-const MONGO_DROP = /\.drop\s*\(\s*\)/i;
-const MONGO_DROP_COLLECTION = /\.dropCollection\s*\(/i;
-const MONGO_DROP_DATABASE = /\.dropDatabase\s*\(/i;
-
-// Redis destructive patterns
-const REDIS_FLUSHDB = /^\s*flushdb\b/im;
-const REDIS_FLUSHALL = /^\s*flushall\b/im;
-const REDIS_DEL_GLOB = /^\s*del\s+\*/im;
-
 export type DestructiveKind =
   | "drop"
   | "truncate"
@@ -106,79 +93,104 @@ const classifyUnscopedMutation = (
   return null;
 };
 
-const classifyMongoDB = (raw: string): DestructiveClassification | null => {
-  if (MONGO_DROP_DATABASE.test(raw)) {
-    return {
+interface DialectRule {
+  pattern: RegExp;
+  result: DestructiveClassification;
+}
+
+const MONGO_RULES: DialectRule[] = [
+  {
+    pattern: /\.dropDatabase\s*\(/i,
+    result: {
       keyword: "dropDatabase",
       kind: "drop",
       reason: "Permanently drops the entire database.",
-    };
-  }
-  if (MONGO_DROP_COLLECTION.test(raw) || MONGO_DROP.test(raw)) {
-    return {
+    },
+  },
+  {
+    pattern: /\.dropCollection\s*\(/i,
+    result: {
       keyword: "drop",
       kind: "drop",
       reason: "Permanently drops the collection.",
-    };
-  }
-  if (MONGO_DELETE_MANY_EMPTY.test(raw)) {
-    return {
+    },
+  },
+  {
+    pattern: /\.drop\s*\(\s*\)/i,
+    result: {
+      keyword: "drop",
+      kind: "drop",
+      reason: "Permanently drops the collection.",
+    },
+  },
+  {
+    pattern: /\.deleteMany\s*\(\s*\{?\s*\}?\s*\)/i,
+    result: {
       keyword: "deleteMany",
       kind: "delete",
       reason: "Empty filter — deletes every document in the collection.",
-    };
-  }
-  if (MONGO_DELETE_ONE_EMPTY.test(raw)) {
-    return {
+    },
+  },
+  {
+    pattern: /\.deleteOne\s*\(\s*\{?\s*\}?\s*\)/i,
+    result: {
       keyword: "deleteOne",
       kind: "delete",
       reason: "Empty filter — deletes the first document in the collection.",
-    };
-  }
-  if (MONGO_REMOVE_EMPTY.test(raw)) {
-    return {
+    },
+  },
+  {
+    pattern: /\.remove\s*\(\s*\{?\s*\}?\s*\)/i,
+    result: {
       keyword: "remove",
       kind: "delete",
       reason: "Empty filter — removes every document in the collection.",
-    };
-  }
-  return null;
-};
+    },
+  },
+];
 
-const classifyRedis = (raw: string): DestructiveClassification | null => {
-  if (REDIS_FLUSHALL.test(raw)) {
-    return {
+const REDIS_RULES: DialectRule[] = [
+  {
+    pattern: /^\s*flushall\b/im,
+    result: {
       keyword: "FLUSHALL",
       kind: "drop",
       reason: "Deletes all keys across every Redis database.",
-    };
-  }
-  if (REDIS_FLUSHDB.test(raw)) {
-    return {
+    },
+  },
+  {
+    pattern: /^\s*flushdb\b/im,
+    result: {
       keyword: "FLUSHDB",
       kind: "drop",
       reason: "Deletes all keys in the current Redis database.",
-    };
-  }
-  if (REDIS_DEL_GLOB.test(raw)) {
-    return {
+    },
+  },
+  {
+    pattern: /^\s*del\s+\*/im,
+    result: {
       keyword: "DEL *",
       kind: "delete",
       reason: "Glob pattern — may delete all keys.",
-    };
-  }
-  return null;
-};
+    },
+  },
+];
+
+const matchRule = (
+  raw: string,
+  rules: DialectRule[]
+): DestructiveClassification | null =>
+  rules.find((rule) => rule.pattern.test(raw))?.result ?? null;
 
 export const classifyDestructiveSql = (
   rawSql: string,
   dialect?: DatabaseType
 ): DestructiveClassification | null => {
   if (dialect === "mongodb") {
-    return classifyMongoDB(rawSql);
+    return matchRule(rawSql, MONGO_RULES);
   }
   if (dialect === "redis") {
-    return classifyRedis(rawSql);
+    return matchRule(rawSql, REDIS_RULES);
   }
   const normalized = normalizeSqlForAnalysis(rawSql);
   return (

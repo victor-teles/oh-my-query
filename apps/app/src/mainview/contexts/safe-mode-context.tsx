@@ -12,7 +12,6 @@ interface ConfirmationContext {
   environment?: ConnectionEnvironment;
   connectionName?: string;
   connectionType?: DatabaseType;
-  perConnectionEnabled?: boolean;
 }
 
 interface PendingConfirmation {
@@ -44,13 +43,7 @@ export const SafeModeProvider = ({ children }: { children: ReactNode }) => {
 
   const requestConfirmation = useCallback(
     (sql: string, context?: ConfirmationContext): Promise<boolean> => {
-      const isProd = context?.environment === "prod";
-      const perConnectionEnabled = context?.perConnectionEnabled ?? true;
-
-      // Prod connections always enforce the guard; non-prod respects the toggles
-      const guardActive = isProd || (enabled && perConnectionEnabled);
-
-      if (!guardActive) {
+      if (context?.environment !== "prod" && !enabled) {
         return Promise.resolve(true);
       }
 
