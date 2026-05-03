@@ -30,5 +30,6 @@ export const getDestructiveClassifier = (
       `Unknown database type: ${dbType}`
     );
   }
+
   return CLASSIFIERS[dbType] as DestructiveClassifier;
 };
