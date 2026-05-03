@@ -1,5 +1,4 @@
 import { useCallback, useRef } from "react";
-import { toast } from "sonner";
 
 import type { QueryTab } from "@/lib/query-types";
 
@@ -16,7 +15,7 @@ const isCancellationError = (error: unknown): boolean => {
   return code === "QUERY_CANCELLED";
 };
 
-const HISTORY_ERROR_TOAST_THROTTLE_MS = 10_000;
+const HISTORY_ERROR_LOG_THROTTLE_MS = 10_000;
 
 interface ExtractedError {
   message: string;
@@ -50,7 +49,7 @@ export const useTabExecution = ({
   setTabs,
   flushSave,
 }: UseTabExecutionParams) => {
-  const lastHistoryErrorToastRef = useRef(0);
+  const lastHistoryErrorLogRef = useRef(0);
   const { requestConfirmation } = useSafeMode();
   const { connection } = useConnection();
 
@@ -152,9 +151,6 @@ export const useTabExecution = ({
               : t
           )
         );
-        if (cancelled) {
-          toast.info("Query cancelled");
-        }
       }
 
       try {
@@ -169,16 +165,14 @@ export const useTabExecution = ({
           timestamp: new Date().toISOString(),
         });
         window.dispatchEvent(new CustomEvent(HISTORY_UPDATED_EVENT));
-      } catch {
+      } catch (error) {
         const now = Date.now();
         if (
-          now - lastHistoryErrorToastRef.current >
-          HISTORY_ERROR_TOAST_THROTTLE_MS
+          now - lastHistoryErrorLogRef.current >
+          HISTORY_ERROR_LOG_THROTTLE_MS
         ) {
-          lastHistoryErrorToastRef.current = now;
-          toast.error("Couldn't save query history", {
-            description: "The query ran, but it wasn't added to history.",
-          });
+          lastHistoryErrorLogRef.current = now;
+          console.warn("Couldn't save query history", error);
         }
       }
     },
@@ -198,8 +192,8 @@ export const useTabExecution = ({
   const cancel = useCallback(async (queryId: string) => {
     try {
       await cancelQuery(queryId);
-    } catch {
-      toast.error("Couldn't cancel query");
+    } catch (error) {
+      console.warn("Couldn't cancel query", error);
     }
   }, []);
 

@@ -1,22 +1,21 @@
 import { copyFileSync, mkdirSync } from "node:fs";
 import path from "node:path";
-import { fileURLToPath } from "node:url";
 
-const appDir = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
-const corePackageDir = path.join(appDir, "..", "..", "packages", "core");
+import {
+  APP_DIR,
+  ASSETS_BUN_DIR,
+  nativeBunModules,
+} from "./native-bun-assets.ts";
 
-const polyglotEntry = Bun.resolveSync("@polyglot-sql/sdk", corePackageDir);
-const polyglotWasm = path.join(
-  path.dirname(polyglotEntry),
-  "polyglot_sql_wasm_bg.wasm"
-);
+mkdirSync(ASSETS_BUN_DIR, { recursive: true });
 
-const destDir = path.join(appDir, "assets", "bun");
-const destFile = path.join(destDir, "polyglot_sql_wasm_bg.wasm");
-
-mkdirSync(destDir, { recursive: true });
-copyFileSync(polyglotWasm, destFile);
-
-console.log(
-  `copied ${path.relative(appDir, polyglotWasm)} → ${path.relative(appDir, destFile)}`
-);
+for (const module of nativeBunModules) {
+  for (const asset of module.assets) {
+    const source = asset.resolveSource();
+    const dest = path.join(ASSETS_BUN_DIR, asset.fileName);
+    copyFileSync(source, dest);
+    console.log(
+      `[${module.id}] ${path.relative(APP_DIR, source)} → ${path.relative(APP_DIR, dest)}`
+    );
+  }
+}

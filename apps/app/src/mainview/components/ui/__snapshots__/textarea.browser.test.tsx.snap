@@ -1,0 +1,69 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`textarea > default 1`] = `
+<textarea
+  autocapitalize="off"
+  autocomplete="off"
+  autocorrect="off"
+  class="flex field-sizing-content min-h-16 w-full resize-none rounded-md border border-input bg-input/20 p-2 text-sm transition-all duration-150 ease-out outline-none placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-2 aria-invalid:ring-destructive/20 md:text-xs/relaxed dark:bg-input/30 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40"
+  data-slot="textarea"
+  placeholder="Type your message..."
+  spellcheck="false"
+/>
+`;
+
+exports[`textarea > disabled 1`] = `
+<textarea
+  autocapitalize="off"
+  autocomplete="off"
+  autocorrect="off"
+  class="flex field-sizing-content min-h-16 w-full resize-none rounded-md border border-input bg-input/20 p-2 text-sm transition-all duration-150 ease-out outline-none placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-2 aria-invalid:ring-destructive/20 md:text-xs/relaxed dark:bg-input/30 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40"
+  data-slot="textarea"
+  disabled=""
+  placeholder="Type your message..."
+  spellcheck="false"
+>
+  Cannot edit this
+</textarea>
+`;
+
+exports[`textarea > invalid 1`] = `
+<textarea
+  aria-invalid="true"
+  autocapitalize="off"
+  autocomplete="off"
+  autocorrect="off"
+  class="flex field-sizing-content min-h-16 w-full resize-none rounded-md border border-input bg-input/20 p-2 text-sm transition-all duration-150 ease-out outline-none placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-2 aria-invalid:ring-destructive/20 md:text-xs/relaxed dark:bg-input/30 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40"
+  data-slot="textarea"
+  placeholder="Type your message..."
+  spellcheck="false"
+>
+  Invalid content
+</textarea>
+`;
+
+exports[`textarea > withLabel 1`] = `
+<div>
+  <div
+    class="grid gap-1.5"
+  >
+    <label
+      class="flex items-center gap-2 text-xs/relaxed leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50"
+      data-slot="label"
+      for="message"
+    >
+      Message
+    </label>
+    <textarea
+      autocapitalize="off"
+      autocomplete="off"
+      autocorrect="off"
+      class="flex field-sizing-content min-h-16 w-full resize-none rounded-md border border-input bg-input/20 p-2 text-sm transition-all duration-150 ease-out outline-none placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-2 aria-invalid:ring-destructive/20 md:text-xs/relaxed dark:bg-input/30 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40"
+      data-slot="textarea"
+      id="message"
+      placeholder="Type your message..."
+      spellcheck="false"
+    />
+  </div>
+</div>
+`;

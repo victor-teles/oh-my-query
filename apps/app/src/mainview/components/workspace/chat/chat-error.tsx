@@ -21,7 +21,11 @@ export const ChatError = ({
     error.type === "auth" || error.type === "model_not_found";
 
   return (
-    <div className="mx-3 mb-2 rounded-lg border border-destructive/30 bg-destructive/5 p-3">
+    <div
+      className="
+        mx-3 mb-2 rounded-lg border border-destructive/30 bg-destructive/5 p-3
+      "
+    >
       <div className="flex items-start gap-2">
         <AlertCircle className="mt-0.5 size-4 shrink-0 text-destructive" />
         <div className="flex-1 space-y-1">

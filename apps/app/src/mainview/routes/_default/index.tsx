@@ -206,7 +206,11 @@ const HomeComponent = () => {
         />
       </Titlebar>
 
-      <div className="flex flex-1 flex-col items-center justify-center px-6 py-10">
+      <div
+        className="
+        flex flex-1 flex-col items-center justify-center px-6 py-10
+      "
+      >
         <AnimatePresence initial={false} mode="wait">
           {renderBody()}
         </AnimatePresence>

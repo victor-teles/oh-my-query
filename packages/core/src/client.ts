@@ -3,6 +3,8 @@
 // `node:fs`/`node:os`. Safe to import from a Vite-bundled webview.
 export { DbError } from "./error.ts";
 export type { DbErrorShape } from "./error.ts";
+export { redactPii } from "./pii-redactor.ts";
+export type { RedactOptions, RedactResult } from "./pii-redactor.ts";
 export type { AISettings, AppConfig } from "./config.ts";
 export type {
   ExplainEngine,

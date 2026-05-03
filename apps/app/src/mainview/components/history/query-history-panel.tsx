@@ -285,9 +285,9 @@ export const QueryHistoryPanel = () => {
           animate={{ x: 0 }}
           aria-label="Query history"
           className={cn(
-            "absolute right-0 top-0 bottom-0 z-40 flex flex-col",
+            "absolute inset-y-0 right-0 z-40 flex flex-col",
             "w-[min(720px,60vw)] min-w-[480px]",
-            "bg-background/95 supports-backdrop-filter:backdrop-blur-xl supports-backdrop-filter:backdrop-saturate-150",
+            "bg-background",
             "border-l border-border"
           )}
           exit={reduceMotion ? { opacity: 0 } : { x: "100%" }}
@@ -299,12 +299,20 @@ export const QueryHistoryPanel = () => {
               : { damping: 40, stiffness: 380, type: "spring" }
           }
         >
-          <header className="flex items-center gap-3 border-b border-border px-3 py-2">
+          <header
+            className="
+            flex items-center gap-3 border-b border-border px-3 py-2
+          "
+          >
             <HistoryIcon className="size-4 shrink-0 text-muted-foreground" />
             <div className="flex min-w-0 flex-1 items-center gap-2">
               <span className="shrink-0 text-sm font-medium">History</span>
               {resultLabel ? (
-                <span className="truncate text-[11px] text-muted-foreground/70 tabular-nums">
+                <span
+                  className="
+                    truncate text-[11px] text-muted-foreground/70 tabular-nums
+                  "
+                >
                   {resultLabel}
                 </span>
               ) : null}
@@ -410,7 +418,11 @@ export const QueryHistoryPanel = () => {
                     if (item.kind === "header") {
                       return (
                         <div
-                          className="absolute left-0 right-0 flex items-end px-4 pb-1 text-[10px] font-medium uppercase tracking-[0.022em] text-muted-foreground/70"
+                          className="
+                            absolute inset-x-0 flex items-end px-4 pb-1
+                            text-[10px] font-medium tracking-[0.022em]
+                            text-muted-foreground/70 uppercase
+                          "
                           data-index={virtualRow.index}
                           key={virtualRow.key}
                           ref={rowVirtualizer.measureElement}
@@ -430,7 +442,7 @@ export const QueryHistoryPanel = () => {
                     const isFocused = focusedIndex === entryRowIndex;
                     return (
                       <div
-                        className="absolute left-0 right-0 px-2"
+                        className="absolute inset-x-0 px-2"
                         data-index={virtualRow.index}
                         id={`history-row-${entryRowIndex}`}
                         key={virtualRow.key}

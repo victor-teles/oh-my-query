@@ -215,7 +215,12 @@ export const ResultsGrid = ({
               {expandedCell?.column}
             </DialogTitle>
           </DialogHeader>
-          <pre className="max-h-[60vh] overflow-auto whitespace-pre-wrap break-words font-mono text-foreground text-xs leading-relaxed">
+          <pre
+            className="
+              max-h-[60vh] overflow-auto font-mono text-xs/relaxed
+              wrap-break-word whitespace-pre-wrap text-foreground
+            "
+          >
             {expandedCell?.value}
           </pre>
         </DialogContent>

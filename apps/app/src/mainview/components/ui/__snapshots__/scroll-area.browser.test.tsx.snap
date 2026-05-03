@@ -1,0 +1,374 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`scroll-area > default 1`] = `
+<div>
+  <div
+    class="relative size-48 rounded-md border"
+    data-has-overflow-x=""
+    data-has-overflow-y=""
+    data-slot="scroll-area"
+    role="presentation"
+    style="position: relative; --scroll-area-corner-height: 0px; --scroll-area-corner-width: 0px"
+  >
+    <div
+      class="
+          size-full rounded-[inherit] transition-all duration-150 ease-out
+          outline-none
+          focus-visible:ring-2 focus-visible:ring-ring/50
+         base-ui-disable-scrollbar"
+      data-has-overflow-x=""
+      data-has-overflow-y=""
+      data-id="base-ui-_r_0_-viewport"
+      data-slot="scroll-area-viewport"
+      role="presentation"
+      style="overflow: scroll; --scroll-area-overflow-x-start: 0px; --scroll-area-overflow-x-end: 0px; --scroll-area-overflow-y-start: 0px; --scroll-area-overflow-y-end: 214px"
+      tabindex="0"
+    >
+      <div
+        class="p-3"
+      >
+        <h4
+          class="mb-3 text-sm font-medium"
+        >
+          Tables
+        </h4>
+        <div>
+          <div
+            class="py-1.5 text-xs"
+          >
+            users
+          </div>
+          <div
+            aria-orientation="horizontal"
+            class="shrink-0 bg-border data-horizontal:h-px data-horizontal:w-full data-vertical:w-px data-vertical:self-stretch"
+            data-orientation="horizontal"
+            data-slot="separator"
+            role="separator"
+          />
+        </div>
+        <div>
+          <div
+            class="py-1.5 text-xs"
+          >
+            orders
+          </div>
+          <div
+            aria-orientation="horizontal"
+            class="shrink-0 bg-border data-horizontal:h-px data-horizontal:w-full data-vertical:w-px data-vertical:self-stretch"
+            data-orientation="horizontal"
+            data-slot="separator"
+            role="separator"
+          />
+        </div>
+        <div>
+          <div
+            class="py-1.5 text-xs"
+          >
+            products
+          </div>
+          <div
+            aria-orientation="horizontal"
+            class="shrink-0 bg-border data-horizontal:h-px data-horizontal:w-full data-vertical:w-px data-vertical:self-stretch"
+            data-orientation="horizontal"
+            data-slot="separator"
+            role="separator"
+          />
+        </div>
+        <div>
+          <div
+            class="py-1.5 text-xs"
+          >
+            categories
+          </div>
+          <div
+            aria-orientation="horizontal"
+            class="shrink-0 bg-border data-horizontal:h-px data-horizontal:w-full data-vertical:w-px data-vertical:self-stretch"
+            data-orientation="horizontal"
+            data-slot="separator"
+            role="separator"
+          />
+        </div>
+        <div>
+          <div
+            class="py-1.5 text-xs"
+          >
+            reviews
+          </div>
+          <div
+            aria-orientation="horizontal"
+            class="shrink-0 bg-border data-horizontal:h-px data-horizontal:w-full data-vertical:w-px data-vertical:self-stretch"
+            data-orientation="horizontal"
+            data-slot="separator"
+            role="separator"
+          />
+        </div>
+        <div>
+          <div
+            class="py-1.5 text-xs"
+          >
+            payments
+          </div>
+          <div
+            aria-orientation="horizontal"
+            class="shrink-0 bg-border data-horizontal:h-px data-horizontal:w-full data-vertical:w-px data-vertical:self-stretch"
+            data-orientation="horizontal"
+            data-slot="separator"
+            role="separator"
+          />
+        </div>
+        <div>
+          <div
+            class="py-1.5 text-xs"
+          >
+            shipments
+          </div>
+          <div
+            aria-orientation="horizontal"
+            class="shrink-0 bg-border data-horizontal:h-px data-horizontal:w-full data-vertical:w-px data-vertical:self-stretch"
+            data-orientation="horizontal"
+            data-slot="separator"
+            role="separator"
+          />
+        </div>
+        <div>
+          <div
+            class="py-1.5 text-xs"
+          >
+            addresses
+          </div>
+          <div
+            aria-orientation="horizontal"
+            class="shrink-0 bg-border data-horizontal:h-px data-horizontal:w-full data-vertical:w-px data-vertical:self-stretch"
+            data-orientation="horizontal"
+            data-slot="separator"
+            role="separator"
+          />
+        </div>
+        <div>
+          <div
+            class="py-1.5 text-xs"
+          >
+            sessions
+          </div>
+          <div
+            aria-orientation="horizontal"
+            class="shrink-0 bg-border data-horizontal:h-px data-horizontal:w-full data-vertical:w-px data-vertical:self-stretch"
+            data-orientation="horizontal"
+            data-slot="separator"
+            role="separator"
+          />
+        </div>
+        <div>
+          <div
+            class="py-1.5 text-xs"
+          >
+            logs
+          </div>
+          <div
+            aria-orientation="horizontal"
+            class="shrink-0 bg-border data-horizontal:h-px data-horizontal:w-full data-vertical:w-px data-vertical:self-stretch"
+            data-orientation="horizontal"
+            data-slot="separator"
+            role="separator"
+          />
+        </div>
+        <div>
+          <div
+            class="py-1.5 text-xs"
+          >
+            notifications
+          </div>
+          <div
+            aria-orientation="horizontal"
+            class="shrink-0 bg-border data-horizontal:h-px data-horizontal:w-full data-vertical:w-px data-vertical:self-stretch"
+            data-orientation="horizontal"
+            data-slot="separator"
+            role="separator"
+          />
+        </div>
+        <div>
+          <div
+            class="py-1.5 text-xs"
+          >
+            preferences
+          </div>
+          <div
+            aria-orientation="horizontal"
+            class="shrink-0 bg-border data-horizontal:h-px data-horizontal:w-full data-vertical:w-px data-vertical:self-stretch"
+            data-orientation="horizontal"
+            data-slot="separator"
+            role="separator"
+          />
+        </div>
+      </div>
+    </div>
+    <div
+      class="flex touch-none p-px transition-colors select-none data-horizontal:h-2.5 data-horizontal:flex-col data-horizontal:border-t data-horizontal:border-t-transparent data-vertical:h-full data-vertical:w-2.5 data-vertical:border-l data-vertical:border-l-transparent"
+      data-has-overflow-x=""
+      data-has-overflow-y=""
+      data-id="base-ui-_r_0_-scrollbar"
+      data-orientation="vertical"
+      data-slot="scroll-area-scrollbar"
+      style="position: absolute; touch-action: none; user-select: none; top: 0px; bottom: var(--scroll-area-corner-height); inset-inline-end: 0px; --scroll-area-thumb-height: 0px"
+    >
+      <div
+        class="relative flex-1 rounded-full bg-border"
+        data-orientation="vertical"
+        data-slot="scroll-area-thumb"
+        style="height: var(--scroll-area-thumb-height)"
+      />
+    </div>
+    <div
+      style="position: absolute; bottom: 0px; inset-inline-end: 0px; width: 0px; height: 0px"
+    />
+  </div>
+</div>
+`;
+
+exports[`scroll-area > horizontal 1`] = `
+<div>
+  <div
+    class="relative w-72 rounded-md border"
+    data-has-overflow-x=""
+    data-has-overflow-y=""
+    data-slot="scroll-area"
+    role="presentation"
+    style="position: relative; --scroll-area-corner-height: 0px; --scroll-area-corner-width: 0px"
+  >
+    <div
+      class="
+          size-full rounded-[inherit] transition-all duration-150 ease-out
+          outline-none
+          focus-visible:ring-2 focus-visible:ring-ring/50
+         base-ui-disable-scrollbar"
+      data-has-overflow-x=""
+      data-has-overflow-y=""
+      data-id="base-ui-_r_1_-viewport"
+      data-slot="scroll-area-viewport"
+      role="presentation"
+      style="overflow: scroll"
+      tabindex="0"
+    >
+      <div
+        class="flex gap-3 p-3"
+      >
+        <div
+          class="
+                flex h-16 w-24 shrink-0 items-center justify-center rounded-md
+                border text-xs
+              "
+        >
+          users
+        </div>
+        <div
+          class="
+                flex h-16 w-24 shrink-0 items-center justify-center rounded-md
+                border text-xs
+              "
+        >
+          orders
+        </div>
+        <div
+          class="
+                flex h-16 w-24 shrink-0 items-center justify-center rounded-md
+                border text-xs
+              "
+        >
+          products
+        </div>
+        <div
+          class="
+                flex h-16 w-24 shrink-0 items-center justify-center rounded-md
+                border text-xs
+              "
+        >
+          categories
+        </div>
+        <div
+          class="
+                flex h-16 w-24 shrink-0 items-center justify-center rounded-md
+                border text-xs
+              "
+        >
+          reviews
+        </div>
+        <div
+          class="
+                flex h-16 w-24 shrink-0 items-center justify-center rounded-md
+                border text-xs
+              "
+        >
+          payments
+        </div>
+        <div
+          class="
+                flex h-16 w-24 shrink-0 items-center justify-center rounded-md
+                border text-xs
+              "
+        >
+          shipments
+        </div>
+        <div
+          class="
+                flex h-16 w-24 shrink-0 items-center justify-center rounded-md
+                border text-xs
+              "
+        >
+          addresses
+        </div>
+        <div
+          class="
+                flex h-16 w-24 shrink-0 items-center justify-center rounded-md
+                border text-xs
+              "
+        >
+          sessions
+        </div>
+        <div
+          class="
+                flex h-16 w-24 shrink-0 items-center justify-center rounded-md
+                border text-xs
+              "
+        >
+          logs
+        </div>
+        <div
+          class="
+                flex h-16 w-24 shrink-0 items-center justify-center rounded-md
+                border text-xs
+              "
+        >
+          notifications
+        </div>
+        <div
+          class="
+                flex h-16 w-24 shrink-0 items-center justify-center rounded-md
+                border text-xs
+              "
+        >
+          preferences
+        </div>
+      </div>
+    </div>
+    <div
+      class="flex touch-none p-px transition-colors select-none data-horizontal:h-2.5 data-horizontal:flex-col data-horizontal:border-t data-horizontal:border-t-transparent data-vertical:h-full data-vertical:w-2.5 data-vertical:border-l data-vertical:border-l-transparent"
+      data-has-overflow-x=""
+      data-has-overflow-y=""
+      data-id="base-ui-_r_1_-scrollbar"
+      data-orientation="vertical"
+      data-slot="scroll-area-scrollbar"
+      style="position: absolute; touch-action: none; user-select: none; top: 0px; bottom: var(--scroll-area-corner-height); inset-inline-end: 0px; --scroll-area-thumb-height: 0px"
+    >
+      <div
+        class="relative flex-1 rounded-full bg-border"
+        data-orientation="vertical"
+        data-slot="scroll-area-thumb"
+        style="height: var(--scroll-area-thumb-height)"
+      />
+    </div>
+    <div
+      style="position: absolute; bottom: 0px; inset-inline-end: 0px; width: 0px; height: 0px"
+    />
+  </div>
+</div>
+`;

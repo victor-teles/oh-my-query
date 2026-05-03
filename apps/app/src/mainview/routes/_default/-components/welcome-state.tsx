@@ -25,11 +25,18 @@ const WelcomeState = ({ onAdd }: WelcomeStateProps) => (
   >
     <div
       aria-hidden
-      className="pointer-events-none absolute top-6 left-1/2 -z-10 size-64 -translate-x-1/2 rounded-full bg-primary/25 blur-3xl"
+      className="
+        pointer-events-none absolute top-6 left-1/2 -z-10 size-64
+        -translate-x-1/2 rounded-full bg-primary/25 blur-3xl
+      "
     />
     <Empty className="gap-5 p-0">
       <EmptyMedia
-        className="mb-2 size-16 rounded-2xl bg-primary/10 text-primary ring-1 ring-primary/20 ring-inset [&_svg:not([class*='size-'])]:size-7"
+        className="
+          mb-2 size-16 rounded-lg bg-primary/10 text-primary ring-1
+          ring-primary/20 ring-inset
+          [&_svg:not([class*='size-'])]:size-7
+        "
         variant="icon"
       >
         <Database />
@@ -38,7 +45,7 @@ const WelcomeState = ({ onAdd }: WelcomeStateProps) => (
         <EmptyTitle as="h1" className="text-3xl leading-[1.05] tracking-tight">
           Welcome to oh-my-query
         </EmptyTitle>
-        <EmptyDescription className="text-base leading-relaxed">
+        <EmptyDescription className="text-base/relaxed">
           A quiet home for your databases, with an AI that knows your schema.
         </EmptyDescription>
       </EmptyHeader>

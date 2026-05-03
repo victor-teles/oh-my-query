@@ -1,6 +1,13 @@
+import { redactPii } from "@oh-my-query/core/client";
+
 import type { RedisKey, RedisKeyKind, SchemaInfo } from "@/lib/tauri";
 
 import { promptComponents } from "@/lib/json-render";
+
+export interface SchemaRedactOptions {
+  enabled: boolean;
+  customPatterns?: string[];
+}
 
 const MAX_TABLES = 50;
 
@@ -181,47 +188,56 @@ const renderTableBlock = (
 export const formatSchemaForPrompt = (
   schema: SchemaInfo,
   dbType: string,
-  redisKeys?: RedisKey[] | null
+  redisKeys?: RedisKey[] | null,
+  redact?: SchemaRedactOptions
 ): string => {
+  let raw: string;
+
   if (dbType === "redis") {
     const dbName = schema.schemas[0]?.name ?? "db0";
-    return formatRedisKeysForPrompt(redisKeys ?? null, dbName);
-  }
+    raw = formatRedisKeysForPrompt(redisKeys ?? null, dbName);
+  } else {
+    const label = DB_TYPE_LABELS[dbType] ?? dbType;
+    const lines: string[] = [`Database type: ${label}`, ""];
 
-  const label = DB_TYPE_LABELS[dbType] ?? dbType;
-  const lines: string[] = [`Database type: ${label}`, ""];
+    let tableCount = 0;
+    let totalTables = 0;
 
-  let tableCount = 0;
-  let totalTables = 0;
+    for (const s of schema.schemas) {
+      totalTables += s.tables.length;
 
-  for (const s of schema.schemas) {
-    totalTables += s.tables.length;
-
-    for (const table of s.tables) {
-      if (tableCount >= MAX_TABLES) {
-        break;
+      for (const table of s.tables) {
+        if (tableCount >= MAX_TABLES) {
+          break;
+        }
+        tableCount += 1;
+        renderTableBlock(lines, s.name, table);
       }
-      tableCount += 1;
-      renderTableBlock(lines, s.name, table);
+
+      for (const view of s.views) {
+        const colNames = view.columns.map((c) => c.name).join(", ");
+        const prefix = s.name !== "public" ? `${s.name}.` : "";
+        lines.push(`View: ${prefix}${view.name} (${colNames})`);
+      }
+
+      if (s.views.length > 0) {
+        lines.push("");
+      }
     }
 
-    for (const view of s.views) {
-      const colNames = view.columns.map((c) => c.name).join(", ");
-      const prefix = s.name !== "public" ? `${s.name}.` : "";
-      lines.push(`View: ${prefix}${view.name} (${colNames})`);
-    }
-
-    if (s.views.length > 0) {
+    if (totalTables > MAX_TABLES) {
+      lines.push(`... and ${totalTables - MAX_TABLES} more tables`);
       lines.push("");
     }
+
+    raw = lines.join("\n").trim();
   }
 
-  if (totalTables > MAX_TABLES) {
-    lines.push(`... and ${totalTables - MAX_TABLES} more tables`);
-    lines.push("");
+  if (redact?.enabled) {
+    return redactPii(raw, { customPatterns: redact.customPatterns }).text;
   }
 
-  return lines.join("\n").trim();
+  return raw;
 };
 
 const formatComponentDocs = (): string =>
@@ -292,10 +308,16 @@ const UI_GENERATION_PROMPT = buildUiGenerationPrompt();
 export const buildSystemPrompt = (
   schema: SchemaInfo,
   dbType: string,
-  redisKeys?: RedisKey[] | null
+  redisKeys?: RedisKey[] | null,
+  redact?: SchemaRedactOptions
 ): string => {
   const label = DB_TYPE_LABELS[dbType] ?? dbType;
-  const formattedSchema = formatSchemaForPrompt(schema, dbType, redisKeys);
+  const formattedSchema = formatSchemaForPrompt(
+    schema,
+    dbType,
+    redisKeys,
+    redact
+  );
 
   if (dbType === "redis") {
     return `You are a Redis assistant. You help users inspect Redis keyspaces, write Redis commands, diagnose errors, and create visual UIs to display data.

@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef } from "react";
 
 import type { ActiveQuerySnapshot } from "@/contexts/active-query-context";
+import type { SchemaRedactOptions } from "@/lib/ai-schema-formatter";
 import type { RedisKey, SchemaInfo } from "@/lib/tauri";
 import type { ChatContext } from "@/stores/ai-chat-store";
 
@@ -14,6 +15,7 @@ interface UseAiChatOptions {
   connectionId: string;
   getSnapshot?: () => ActiveQuerySnapshot;
   redisKeys?: RedisKey[] | null;
+  redact?: SchemaRedactOptions;
 }
 
 export const useAiChat = ({
@@ -22,6 +24,7 @@ export const useAiChat = ({
   connectionId,
   getSnapshot,
   redisKeys,
+  redact,
 }: UseAiChatOptions) => {
   const ensureConnection = useAiChatStore((s) => s.ensureConnection);
   const sendMessageAction = useAiChatStore((s) => s.sendMessage);
@@ -39,10 +42,11 @@ export const useAiChat = ({
   const contextRef = useRef<ChatContext>({
     databaseType,
     getSnapshot,
+    redact,
     redisKeys,
     schema,
   });
-  contextRef.current = { databaseType, getSnapshot, redisKeys, schema };
+  contextRef.current = { databaseType, getSnapshot, redact, redisKeys, schema };
 
   const sendMessage = useCallback(
     (content: string) =>

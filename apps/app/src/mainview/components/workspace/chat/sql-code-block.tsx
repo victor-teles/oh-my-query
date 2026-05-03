@@ -52,7 +52,11 @@ export const SqlCodeBlock = ({
   }, [code, onRun]);
 
   return (
-    <div className="group relative my-2 overflow-hidden rounded-lg border bg-secondary/30">
+    <div
+      className="
+        group relative my-2 overflow-hidden rounded-lg border bg-secondary/30
+      "
+    >
       <div className="flex items-center justify-between border-b px-3 py-1.5">
         <span className="text-xs text-muted-foreground">SQL</span>
         <div className="flex items-center gap-0.5">

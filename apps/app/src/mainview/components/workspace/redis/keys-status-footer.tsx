@@ -21,11 +21,21 @@ export const KeysStatusFooter = ({
   const totalLabel = total === null ? "—" : total.toLocaleString();
 
   return (
-    <div className="flex h-8 items-center justify-between border-t border-sidebar-border px-2.5 text-[11px] text-muted-foreground">
+    <div
+      className="
+        flex h-8 items-center justify-between border-t border-sidebar-border
+        px-2.5 text-[11px] text-muted-foreground
+      "
+    >
       <span className="font-mono tabular-nums">
         {isLoading ? (
           <span className="inline-flex items-center gap-1.5">
-            <Loader2 className="size-3 animate-spin motion-reduce:animate-none" />
+            <Loader2
+              className="
+                size-3 animate-spin
+                motion-reduce:animate-none
+              "
+            />
             Scanning… {shown.toLocaleString()} so far
           </span>
         ) : (

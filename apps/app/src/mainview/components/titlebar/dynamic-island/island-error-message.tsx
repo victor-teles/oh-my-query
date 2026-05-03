@@ -1,5 +1,4 @@
 import { Check, Copy } from "lucide-react";
-import { motion } from "motion/react";
 import { useCallback, useState } from "react";
 
 import {
@@ -7,8 +6,6 @@ import {
   HoverCardContent,
   HoverCardTrigger,
 } from "@/components/ui/hover-card";
-
-import { ISLAND_ITEM_TRANSITION, ISLAND_ITEM_VARIANTS } from "./island-motion";
 
 interface IslandErrorMessageProps {
   error: string;
@@ -37,25 +34,37 @@ export const IslandErrorMessage = ({
     <HoverCard>
       <HoverCardTrigger
         render={
-          <motion.button
+          <button
             aria-label={`Show full error. Current error: ${error}`}
-            className={`text-chrome ${maxWidthClass} truncate rounded-sm text-left text-destructive cursor-pointer transition-all duration-150 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50`}
+            className={`
+              text-xs font-medium tracking-tight
+              ${maxWidthClass}
+              cursor-pointer truncate rounded-sm text-left text-destructive
+              transition-opacity duration-150 ease-out
+              hover:opacity-80
+              focus-visible:ring-2 focus-visible:ring-ring/50
+              focus-visible:outline-none
+            `}
             title={error}
-            transition={ISLAND_ITEM_TRANSITION}
             type="button"
-            variants={ISLAND_ITEM_VARIANTS}
           />
         }
       >
         {error}
       </HoverCardTrigger>
       <HoverCardContent align="center" className="flex flex-col gap-2">
-        <p className="break-words text-foreground text-sm leading-relaxed">
+        <p className="text-sm/relaxed wrap-break-word text-foreground">
           {error}
         </p>
         <button
           aria-label={copied ? "Error copied to clipboard" : "Copy error"}
-          className="flex items-center gap-1.5 self-end rounded-sm px-2 py-1 text-muted-foreground text-xs transition-all duration-150 ease-out hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50"
+          className="
+            flex items-center gap-1.5 self-end rounded-sm px-2 py-1 text-xs
+            text-muted-foreground transition-all duration-150 ease-out
+            hover:bg-accent hover:text-accent-foreground
+            focus-visible:ring-2 focus-visible:ring-ring/50
+            focus-visible:outline-none
+          "
           onClick={handleCopy}
           type="button"
         >

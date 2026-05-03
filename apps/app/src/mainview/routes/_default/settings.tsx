@@ -67,7 +67,7 @@ const SettingsComponent = () => {
 
           <div className="relative flex flex-1 flex-col overflow-hidden">
             <ScrollArea className="min-h-0 flex-1">
-              <div className="max-w-2xl px-10 py-10">
+              <div className="max-w-2xl p-10">
                 <AnimatePresence mode="wait">
                   <motion.div
                     animate={{ filter: "blur(0px)", opacity: 1 }}

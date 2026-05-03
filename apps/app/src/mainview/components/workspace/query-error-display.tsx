@@ -15,7 +15,6 @@ import {
   TriangleAlert,
 } from "lucide-react";
 import { useCallback, useMemo, useState } from "react";
-import { toast } from "sonner";
 
 import type { ErrorLocation } from "@/lib/error-location";
 import type { ErrorCategory } from "@/lib/query-error";
@@ -112,13 +111,8 @@ export const QueryErrorDisplay = ({
     }
   }, [location, onJumpToLine]);
 
-  const handleCopy = useCallback(async () => {
-    try {
-      await navigator.clipboard.writeText(buildCopyText(error, sql));
-      toast.success("Copied error to clipboard");
-    } catch {
-      toast.error("Couldn't copy to clipboard");
-    }
+  const handleCopy = useCallback(() => {
+    navigator.clipboard.writeText(buildCopyText(error, sql));
   }, [error, sql]);
 
   return (
@@ -128,27 +122,32 @@ export const QueryErrorDisplay = ({
           <div className="flex items-center gap-2">
             <span className="inline-flex items-center gap-1.5 text-destructive">
               <CategoryIcon className="size-4" />
-              <span className="font-semibold text-xs uppercase tracking-wider">
+              <span className="text-xs font-semibold tracking-wider uppercase">
                 {classification.label}
               </span>
             </span>
             {location && (
-              <span className="font-mono text-muted-foreground text-xs">
+              <span className="font-mono text-xs text-muted-foreground">
                 {formatLocationLabel(location)}
               </span>
             )}
             {errorCode &&
               errorCode !== "DB_ERROR" &&
               errorCode !== "UNKNOWN_ERROR" && (
-                <span className="rounded bg-muted px-1.5 py-0.5 font-mono text-[10px] text-muted-foreground">
+                <span
+                  className="
+                    rounded-sm bg-muted px-1.5 py-0.5 font-mono text-[10px]
+                    text-muted-foreground
+                  "
+                >
                   {errorCode}
                 </span>
               )}
           </div>
-          <p className="text-foreground text-sm leading-relaxed">
+          <p className="text-sm/relaxed text-foreground">
             {classification.summary}
           </p>
-          <p className="text-muted-foreground text-xs">{classification.hint}</p>
+          <p className="text-xs text-muted-foreground">{classification.hint}</p>
         </div>
         <div className="flex shrink-0 items-center gap-1">
           {canJump && location && (
@@ -234,7 +233,11 @@ const CollapsibleDetails = ({
   return (
     <div className="flex flex-col gap-2">
       <button
-        className="inline-flex w-fit items-center gap-1 font-medium text-[10px] text-muted-foreground uppercase tracking-wider transition-colors hover:text-foreground"
+        className="
+          inline-flex w-fit items-center gap-1 text-[10px] font-medium
+          tracking-wider text-muted-foreground uppercase transition-colors
+          hover:text-foreground
+        "
         onClick={toggle}
         type="button"
       >
@@ -247,11 +250,23 @@ const CollapsibleDetails = ({
       </button>
       {open && (
         <div className="flex flex-col gap-2">
-          <pre className="max-h-64 overflow-auto whitespace-pre-wrap wrap-break-word rounded-md border border-destructive/30 bg-destructive/5 p-3 font-mono text-foreground text-xs leading-relaxed">
+          <pre
+            className="
+              max-h-64 overflow-auto rounded-md border border-destructive/30
+              bg-destructive/5 p-3 font-mono text-xs/relaxed wrap-break-word
+              whitespace-pre-wrap text-foreground
+            "
+          >
             {error}
           </pre>
           {sql?.trim() && (
-            <pre className="max-h-48 overflow-auto whitespace-pre-wrap wrap-break-word rounded-md border border-border/60 bg-muted/30 p-3 font-mono text-muted-foreground text-xs leading-relaxed">
+            <pre
+              className="
+                max-h-48 overflow-auto rounded-md border border-border/60
+                bg-muted/30 p-3 font-mono text-xs/relaxed wrap-break-word
+                whitespace-pre-wrap text-muted-foreground
+              "
+            >
               {sql}
             </pre>
           )}

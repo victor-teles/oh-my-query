@@ -56,7 +56,12 @@ export const ChatInput = ({
   return (
     <div className="border-t p-3">
       {isConfigured === false && (
-        <div className="mb-2 flex items-center justify-between gap-2 rounded-md border border-border bg-muted/30 px-3 py-2 text-xs text-muted-foreground">
+        <div
+          className="
+            mb-2 flex items-center justify-between gap-2 rounded-md border
+            border-border bg-muted/30 px-3 py-2 text-xs text-muted-foreground
+          "
+        >
           <span>Connect an AI provider to start chatting.</span>
           <Button onClick={onOpenSettings} size="sm" variant="outline">
             <Settings />
@@ -67,7 +72,7 @@ export const ChatInput = ({
       <PromptInput onSubmit={handleSubmit}>
         <PromptInputBody>
           <PromptInputTextarea
-            className="min-h-11"
+            className="min-h-7"
             disabled={isConfigured !== true}
             onChange={handleChange}
             placeholder="Ask about your database..."

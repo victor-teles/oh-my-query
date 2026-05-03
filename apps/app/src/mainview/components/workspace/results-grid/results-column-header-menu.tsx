@@ -177,7 +177,14 @@ export const ResultsColumnHeaderTrigger = ({
     <DropdownMenu>
       <DropdownMenuTrigger
         aria-label={`Column menu for ${column.id}`}
-        className="flex size-5 shrink-0 items-center justify-center rounded text-muted-foreground/70 opacity-0 transition-opacity hover:bg-accent/60 hover:text-foreground focus-visible:opacity-100 focus-visible:outline-none group-hover/header:opacity-100 data-[popup-open]:opacity-100"
+        className="
+          flex size-5 shrink-0 items-center justify-center rounded-sm
+          text-muted-foreground/70 opacity-0 transition-opacity
+          group-hover/header:opacity-100
+          hover:bg-accent/60 hover:text-foreground
+          focus-visible:opacity-100 focus-visible:outline-none
+          data-popup-open:opacity-100
+        "
       >
         <MoreHorizontal className="size-3.5" />
       </DropdownMenuTrigger>

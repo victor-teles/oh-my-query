@@ -66,6 +66,8 @@ export interface DatabaseConnection {
   emoji?: string;
   environment?: string;
   safeModeEnabled?: boolean;
+  piiRedaction?: boolean;
+  customPiiPatterns?: string[];
 }
 
 const fileLocks = new Map<string, Promise<unknown>>();

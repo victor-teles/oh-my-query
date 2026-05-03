@@ -67,7 +67,7 @@ const ConnectionsErrorState = ({
           </Button>
           {confirmingReset ? (
             <div className="flex flex-col items-center gap-2 text-center">
-              <p className="text-muted-foreground text-sm">
+              <p className="text-sm text-muted-foreground">
                 This deletes your saved connections and query history. This
                 cannot be undone.
               </p>

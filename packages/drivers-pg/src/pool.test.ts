@@ -328,3 +328,87 @@ describe("postgresPool.fetchSchema", () => {
     expect(query).not.toHaveBeenCalled();
   });
 });
+
+describe("postgresPool.execute cancellation", () => {
+  const buildExecutePool = () => {
+    const releaseCalls: ("destroy" | "soft")[] = [];
+    let pendingReject: ((err: Error) => void) | null = null;
+
+    const release = vi.fn((destroy?: boolean) => {
+      const kind = destroy ? "destroy" : "soft";
+      if (releaseCalls.length > 0) {
+        // Simulate pg-pool's actual behavior: throws on double release.
+        throw new Error(
+          "Release called on client which has already been released to the pool."
+        );
+      }
+      releaseCalls.push(kind);
+    });
+
+    const query = vi.fn((input: unknown) => {
+      if (
+        typeof input === "object" &&
+        input !== null &&
+        "rowMode" in (input as Record<string, unknown>)
+      ) {
+        const { promise, reject } = Promise.withResolvers<unknown>();
+        pendingReject = reject;
+        return promise;
+      }
+      return Promise.resolve({ fields: [], rows: [] });
+    });
+
+    const client = { query, release };
+    const fakePool = {
+      connect: vi.fn().mockResolvedValue(client),
+    } as unknown as PgPoolType;
+
+    const fireAbort = (controller: AbortController) => {
+      controller.abort(DbError.cancelled());
+      // pg destroys the client; the in-flight query rejects.
+      pendingReject?.(new Error("Connection terminated"));
+    };
+
+    return { fakePool, fireAbort, release, releaseCalls };
+  };
+
+  it("releases the client exactly once when cancelled mid-query", async () => {
+    const { fakePool, fireAbort, releaseCalls } = buildExecutePool();
+    const pool = new PostgresPool(fakePool);
+    const controller = new AbortController();
+    const promise = pool.execute(
+      "SELECT pg_sleep(60)",
+      1000,
+      null,
+      controller.signal
+    );
+    // Let microtasks settle so the query is in-flight.
+    await Promise.resolve();
+    fireAbort(controller);
+    await expect(promise).rejects.toBeInstanceOf(DbError);
+    expect(releaseCalls).toStrictEqual(["destroy"]);
+  });
+
+  it("surfaces QUERY_CANCELLED when the user cancels", async () => {
+    const { fakePool, fireAbort } = buildExecutePool();
+    const pool = new PostgresPool(fakePool);
+    const controller = new AbortController();
+    const promise = pool.execute("SELECT 1", 1000, null, controller.signal);
+    await Promise.resolve();
+    fireAbort(controller);
+    const error = await promise.catch((error: unknown) => error);
+    expect(error).toBeInstanceOf(DbError);
+    expect((error as DbError).code).toBe("QUERY_CANCELLED");
+  });
+
+  it("does not surface 'already released' to the caller", async () => {
+    const { fakePool, fireAbort } = buildExecutePool();
+    const pool = new PostgresPool(fakePool);
+    const controller = new AbortController();
+    const promise = pool.execute("SELECT 1", 1000, null, controller.signal);
+    await Promise.resolve();
+    fireAbort(controller);
+    const error = await promise.catch((error: unknown) => error);
+    expect((error as Error).message).not.toMatch(/already been released/);
+  });
+});

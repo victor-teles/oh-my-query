@@ -65,17 +65,9 @@ export const HighlightedSql = ({ code, className }: HighlightedSqlProps) => {
     [fontExtension]
   );
 
-  return (
-    <CodeMirror
-      basicSetup={false}
-      className={cn(
-        "overflow-x-auto [&_.cm-editor]:bg-transparent! [&_.cm-editor.cm-focused]:outline-none!",
-        className
-      )}
-      editable={false}
-      extensions={extensions}
-      theme={themeExtension}
-      value={code}
-    />
-  );
+  return <CodeMirror basicSetup={false} className={cn(`
+          overflow-x-auto
+          [&_.cm-editor]:bg-transparent!
+          [&_.cm-editor.cm-focused]:outline-none!
+        `, className)} editable={false} extensions={extensions} theme={themeExtension} value={code} />;
 };

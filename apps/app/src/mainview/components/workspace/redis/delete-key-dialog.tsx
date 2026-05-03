@@ -1,5 +1,5 @@
-import { useCallback, useState } from "react";
-import { toast } from "sonner";
+import { XCircle } from "lucide-react";
+import { useCallback, useEffect, useState } from "react";
 
 import type { RedisKey } from "@/lib/tauri";
 
@@ -27,19 +27,25 @@ export const DeleteKeyDialog = ({
   onClose,
 }: DeleteKeyDialogProps) => {
   const [isDeleting, setIsDeleting] = useState(false);
+  const [deleteError, setDeleteError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (redisKey === null) {
+      setDeleteError(null);
+    }
+  }, [redisKey]);
 
   const handleConfirm = useCallback(async () => {
     if (!redisKey) {
       return;
     }
     setIsDeleting(true);
+    setDeleteError(null);
     try {
       await onConfirm(redisKey.name);
-      toast.success(`Deleted \`${redisKey.name}\``);
       onClose();
     } catch (error) {
-      const msg = error instanceof Error ? error.message : "Delete failed";
-      toast.error(msg);
+      setDeleteError(error instanceof Error ? error.message : "Delete failed");
     } finally {
       setIsDeleting(false);
     }
@@ -61,12 +67,25 @@ export const DeleteKeyDialog = ({
           <DialogTitle>Delete key?</DialogTitle>
           <DialogDescription>
             Permanently remove{" "}
-            <code className="rounded bg-muted px-1 font-mono text-xs">
+            <code className="rounded-sm bg-muted px-1 font-mono text-xs">
               {redisKey?.name}
             </code>{" "}
             from db{dbIndex}. This cannot be undone.
           </DialogDescription>
         </DialogHeader>
+        {deleteError && (
+          <p
+            aria-live="polite"
+            className="
+              flex items-start gap-1.5 rounded-md border border-destructive/30
+              bg-destructive/5 px-3 py-2 text-xs text-destructive
+            "
+            role="alert"
+          >
+            <XCircle className="mt-0.5 size-3.5 shrink-0" />
+            <span className="wrap-break-word">{deleteError}</span>
+          </p>
+        )}
         <DialogFooter>
           <Button disabled={isDeleting} onClick={onClose} variant="outline">
             Cancel

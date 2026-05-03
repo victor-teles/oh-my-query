@@ -74,7 +74,7 @@ const ProdConfirmInput = ({
   <div className="grid gap-1.5">
     <Label htmlFor="prod-confirm">
       Type{" "}
-      <code className="rounded bg-muted px-1 py-0.5 font-mono text-[11px]">
+      <code className="rounded-sm bg-muted px-1 py-0.5 font-mono text-[11px]">
         {connectionName}
       </code>{" "}
       to confirm
@@ -145,12 +145,20 @@ const DialogBody = ({
     <DialogContent showCloseButton={false}>
       <DialogHeader>
         <DialogTitle className="flex items-center gap-1.5">
-          <HeaderIcon className={`size-3.5 ${iconTone}`} />
+          <HeaderIcon className={`
+              size-3.5
+              ${iconTone}
+            `} />
           {title}
         </DialogTitle>
         <DialogDescription>{buildDescription(display)}</DialogDescription>
       </DialogHeader>
-      <pre className="max-h-40 overflow-auto whitespace-pre-wrap break-words rounded-md bg-muted p-3 font-mono text-[11px] leading-relaxed text-foreground">
+      <pre
+        className="
+          max-h-40 overflow-auto rounded-md bg-muted p-3 font-mono text-[11px]
+          leading-relaxed wrap-break-word whitespace-pre-wrap text-foreground
+        "
+      >
         {truncate(display.sql)}
       </pre>
       {requiresTyping && display.connectionName && (

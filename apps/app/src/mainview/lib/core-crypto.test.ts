@@ -34,7 +34,6 @@ const permsOf = (mode: number): string => mode.toString(8).slice(-3);
 describe("crypto file-based key", () => {
   let tmpHome: string;
 
-  // oxlint-disable-next-line jest/no-hooks
   beforeEach(async () => {
     tmpHome = await fs.mkdtemp(path.join(os.tmpdir(), "omq-crypto-"));
     homedirState.value = tmpHome;
@@ -43,7 +42,6 @@ describe("crypto file-based key", () => {
     setLegacyKeyLoader(legacyLoader);
   });
 
-  // oxlint-disable-next-line jest/no-hooks
   afterEach(async () => {
     setLegacyKeyLoader(null);
     await fs.rm(tmpHome, { force: true, recursive: true });

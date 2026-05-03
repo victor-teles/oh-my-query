@@ -54,12 +54,25 @@ export const HistoryPreview = ({
           }
         >
           <div className="flex flex-col gap-2 px-3 py-2.5">
-            <div className="flex items-center justify-between gap-2 text-[10px] text-muted-foreground">
+            <div
+              className="
+                flex items-center justify-between gap-2 text-[10px]
+                text-muted-foreground
+              "
+            >
               <div className="flex min-w-0 items-center gap-2">
                 {DialectIcon ? (
-                  <DialectIcon className="size-3 shrink-0 text-muted-foreground/80" />
+                  <DialectIcon
+                    className="
+                    size-3 shrink-0 text-muted-foreground/80
+                  "
+                  />
                 ) : (
-                  <DatabaseIcon className="size-3 shrink-0 text-muted-foreground/80" />
+                  <DatabaseIcon
+                    className="
+                    size-3 shrink-0 text-muted-foreground/80
+                  "
+                  />
                 )}
                 <span
                   className={cn(
@@ -97,11 +110,22 @@ export const HistoryPreview = ({
                 </KbdGroup>
               </Button>
             </div>
-            <pre className="max-h-40 overflow-auto whitespace-pre-wrap rounded-md border border-border bg-background/40 p-2 font-mono text-[12px] leading-relaxed text-foreground">
+            <pre
+              className="
+                max-h-40 overflow-auto rounded-md border border-border
+                bg-background/40 p-2 font-mono text-[12px] leading-relaxed
+                whitespace-pre-wrap text-foreground
+              "
+            >
               {entry.sql}
             </pre>
             {!entry.success && entry.error ? (
-              <p className="rounded-md border border-destructive/20 bg-destructive/5 px-2 py-1 text-[11px] text-destructive">
+              <p
+                className="
+                  rounded-md border border-destructive/20 bg-destructive/5 px-2
+                  py-1 text-[11px] text-destructive
+                "
+              >
                 {entry.error}
               </p>
             ) : null}

@@ -56,25 +56,19 @@ const ChannelCard = ({ meta, selected, onSelect }: ChannelCardProps) => {
   }, [meta.disabled, meta.value, onSelect]);
 
   return (
-    <button
-      aria-pressed={selected}
-      className={cn(
-        "group flex w-full flex-col items-start gap-1.5 rounded-lg border p-4 text-left transition-colors",
-        "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sidebar-ring",
-        meta.disabled && "cursor-not-allowed opacity-50",
-        !meta.disabled && "cursor-pointer",
-        selected
-          ? "border-primary bg-primary/5"
-          : "border-foreground/10 hover:border-foreground/25"
-      )}
-      disabled={meta.disabled}
-      onClick={handleClick}
-      title={meta.disabled ? meta.disabledHint : undefined}
-      type="button"
-    >
+    <button aria-pressed={selected} className={cn(`
+          group flex w-full flex-col items-start gap-1.5 rounded-lg border p-4
+          text-left transition-colors
+        `, `
+          focus-visible:outline-2 focus-visible:outline-offset-2
+          focus-visible:outline-sidebar-ring
+        `, meta.disabled && "cursor-not-allowed opacity-50", !meta.disabled && "cursor-pointer", selected ? "border-primary bg-primary/5" : `
+            border-foreground/10
+            hover:border-foreground/25
+          `)} disabled={meta.disabled} onClick={handleClick} title={meta.disabled ? meta.disabledHint : undefined} type="button">
       <div className="flex w-full items-center justify-between">
         <span className="text-sm font-semibold">{meta.label}</span>
-        <span className="text-[11px] tabular-nums text-muted-foreground">
+        <span className="text-[11px] text-muted-foreground tabular-nums">
           {meta.disabled ? meta.disabledHint : meta.cadence}
         </span>
       </div>
@@ -137,7 +131,10 @@ export const UpdateChannelSection = () => {
 
       <div
         aria-label="Release channel"
-        className="grid gap-3 sm:grid-cols-3"
+        className="
+          grid gap-3
+          sm:grid-cols-3
+        "
         role="radiogroup"
       >
         {CHANNELS.map((meta) => (
@@ -156,7 +153,11 @@ export const UpdateChannelSection = () => {
         </p>
       )}
 
-      <div className="mt-8 flex flex-col gap-3 border-t border-foreground/10 pt-6">
+      <div
+        className="
+        mt-8 flex flex-col gap-3 border-t border-foreground/10 pt-6
+      "
+      >
         <div className="flex items-center justify-between gap-3">
           <div>
             <h3 className="text-sm font-semibold">Check for updates</h3>
@@ -197,7 +198,12 @@ export const UpdateChannelSection = () => {
         )}
 
         {check.status === "available" && (
-          <div className="flex items-center justify-between gap-3 rounded-md border border-primary/30 bg-primary/5 p-3">
+          <div
+            className="
+              flex items-center justify-between gap-3 rounded-md border
+              border-primary/30 bg-primary/5 p-3
+            "
+          >
             <div className="min-w-0">
               <p className="text-sm font-medium">
                 Update available &middot; v{check.update.version}

@@ -2,7 +2,6 @@ import type { RowSelectionState, Table } from "@tanstack/react-table";
 import type { Dispatch, MouseEvent, RefObject, SetStateAction } from "react";
 
 import { useCallback, useMemo, useState } from "react";
-import { toast } from "sonner";
 
 import type { TabularResult } from "@/lib/tauri";
 
@@ -179,7 +178,6 @@ export const useRowSelection = ({
       const value = row?.[activeColumnIndex];
       const text = isNull(value) ? "" : formatCell(value);
       navigator.clipboard.writeText(text);
-      toast.success("Copied cell value");
       return;
     }
     let indices: number[];
@@ -196,9 +194,6 @@ export const useRowSelection = ({
       rows: sorted.map((i) => result.rows[i] ?? []),
     });
     navigator.clipboard.writeText(tsv);
-    toast.success(
-      `Copied ${indices.length} row${indices.length === 1 ? "" : "s"}`
-    );
   }, [selectedRowIndices, activeIndex, activeColumnIndex, result]);
 
   const resetSelection = useCallback(() => {

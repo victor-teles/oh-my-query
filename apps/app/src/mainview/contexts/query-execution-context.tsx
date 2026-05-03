@@ -10,16 +10,20 @@ interface QueryExecutionState {
   status: ExecutionStatus;
   result: ExecuteResult | null;
   error: string | null;
+  startedAt: number | null;
 }
 
 interface QueryExecutionContextValue {
   state: QueryExecutionState;
   setExecutionState: (state: QueryExecutionState) => void;
+  cancelActive: (() => void) | null;
+  setCancelActive: (cancel: (() => void) | null) => void;
 }
 
 const IDLE_STATE: QueryExecutionState = {
   error: null,
   result: null,
+  startedAt: null,
   status: "idle",
 };
 
@@ -33,13 +37,22 @@ export const QueryExecutionProvider = ({
   children: ReactNode;
 }) => {
   const [state, setState] = useState<QueryExecutionState>(IDLE_STATE);
+  const [cancelActive, setCancelActiveState] = useState<(() => void) | null>(
+    null
+  );
 
   const setExecutionState = useCallback((next: QueryExecutionState) => {
     setState(next);
   }, []);
 
+  const setCancelActive = useCallback((cancel: (() => void) | null) => {
+    setCancelActiveState(() => cancel);
+  }, []);
+
   return (
-    <QueryExecutionContext value={{ setExecutionState, state }}>
+    <QueryExecutionContext
+      value={{ cancelActive, setCancelActive, setExecutionState, state }}
+    >
       {children}
     </QueryExecutionContext>
   );

@@ -45,13 +45,10 @@ export const RedisDbChip = ({
 
   return (
     <Select value={`db${dbIndex}`} onValueChange={handleChange}>
-      <SelectTrigger
-        size="sm"
-        className={cn(
-          "h-7 gap-1.5 rounded-full border-sidebar-border bg-sidebar-accent/30 px-2.5 font-mono text-[11px] tabular-nums",
-          className
-        )}
-      >
+      <SelectTrigger size="sm" className={cn(`
+            h-7 gap-1.5 rounded-full border-sidebar-border bg-sidebar-accent/30
+            px-2.5 font-mono text-[11px] tabular-nums
+          `, className)}>
         <Database className="size-3 text-muted-foreground" />
         <SelectValue />
         <span className="ml-1 text-muted-foreground/70">· {keysLabel}</span>

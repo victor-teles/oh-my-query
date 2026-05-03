@@ -1,0 +1,964 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`query-error-display > connectionError 1`] = `
+<div>
+  <div
+    class="flex w-full flex-col gap-4 p-6"
+  >
+    <div
+      class="flex flex-wrap items-start justify-between gap-3"
+    >
+      <div
+        class="flex flex-col gap-1.5"
+      >
+        <div
+          class="flex items-center gap-2"
+        >
+          <span
+            class="inline-flex items-center gap-1.5 text-destructive"
+          >
+            <svg
+              aria-hidden="true"
+              class="lucide lucide-link2-off lucide-link-2-off size-4"
+              fill="none"
+              height="24"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+              width="24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M9 17H7A5 5 0 0 1 7 7"
+              />
+              <path
+                d="M15 7h2a5 5 0 0 1 4 8"
+              />
+              <line
+                x1="8"
+                x2="12"
+                y1="12"
+                y2="12"
+              />
+              <line
+                x1="2"
+                x2="22"
+                y1="2"
+                y2="22"
+              />
+            </svg>
+            <span
+              class="text-xs font-semibold tracking-wider uppercase"
+            >
+              Connection
+            </span>
+          </span>
+          <span
+            class="
+                    rounded-sm bg-muted px-1.5 py-0.5 font-mono text-[10px]
+                    text-muted-foreground
+                  "
+          >
+            IO_ERROR
+          </span>
+        </div>
+        <p
+          class="text-sm/relaxed text-foreground"
+        >
+          The database connection was lost or couldn't be established.
+        </p>
+        <p
+          class="text-xs text-muted-foreground"
+        >
+          Check that the database server is running and reachable, then reconnect.
+        </p>
+      </div>
+      <div
+        class="flex shrink-0 items-center gap-1"
+      >
+        <button
+          aria-label="Reconnect"
+          class="group/button inline-flex shrink-0 items-center justify-center rounded-md border border-transparent bg-clip-padding font-medium whitespace-nowrap transition-all duration-150 ease-out outline-none select-none focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-2 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 h-6 gap-1 px-2 text-xs/relaxed has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 [&_svg:not([class*='size-'])]:size-3 bg-primary text-primary-foreground hover:bg-primary/80"
+          data-slot="button"
+          tabindex="0"
+          title="Reconnect"
+          type="button"
+        >
+          <svg
+            aria-hidden="true"
+            class="lucide lucide-refresh-cw"
+            fill="none"
+            height="24"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"
+            />
+            <path
+              d="M21 3v5h-5"
+            />
+            <path
+              d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"
+            />
+            <path
+              d="M8 16H3v5"
+            />
+          </svg>
+          Reconnect
+        </button>
+        <button
+          aria-label="Retry"
+          class="group/button inline-flex shrink-0 items-center justify-center rounded-md border border-transparent bg-clip-padding font-medium whitespace-nowrap transition-all duration-150 ease-out outline-none select-none focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-2 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 h-6 gap-1 px-2 text-xs/relaxed has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 [&_svg:not([class*='size-'])]:size-3 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50"
+          data-slot="button"
+          tabindex="0"
+          title="Retry"
+          type="button"
+        >
+          <svg
+            aria-hidden="true"
+            class="lucide lucide-rotate-cw"
+            fill="none"
+            height="24"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"
+            />
+            <path
+              d="M21 3v5h-5"
+            />
+          </svg>
+          Retry
+        </button>
+        <button
+          aria-label="Fix with AI"
+          class="group/button inline-flex shrink-0 items-center justify-center rounded-md border border-transparent bg-clip-padding font-medium whitespace-nowrap transition-all duration-150 ease-out outline-none select-none focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-2 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 h-6 gap-1 px-2 text-xs/relaxed has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 [&_svg:not([class*='size-'])]:size-3 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50"
+          data-slot="button"
+          tabindex="0"
+          title="Fix with AI"
+          type="button"
+        >
+          <svg
+            aria-hidden="true"
+            class="lucide lucide-terminal"
+            fill="none"
+            height="24"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M12 19h8"
+            />
+            <path
+              d="m4 17 6-6-6-6"
+            />
+          </svg>
+          Fix with AI
+        </button>
+        <button
+          aria-label="Copy error"
+          class="group/button inline-flex shrink-0 items-center justify-center rounded-md border border-transparent bg-clip-padding font-medium whitespace-nowrap transition-all duration-150 ease-out outline-none select-none focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-2 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 h-6 gap-1 px-2 text-xs/relaxed has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 [&_svg:not([class*='size-'])]:size-3 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50"
+          data-slot="button"
+          tabindex="0"
+          title="Copy error"
+          type="button"
+        >
+          <svg
+            aria-hidden="true"
+            class="lucide lucide-copy"
+            fill="none"
+            height="24"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <rect
+              height="14"
+              rx="2"
+              ry="2"
+              width="14"
+              x="8"
+              y="8"
+            />
+            <path
+              d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"
+            />
+          </svg>
+        </button>
+      </div>
+    </div>
+    <div
+      class="flex flex-col gap-2"
+    >
+      <button
+        class="
+          inline-flex w-fit items-center gap-1 text-[10px] font-medium
+          tracking-wider text-muted-foreground uppercase transition-colors
+          hover:text-foreground
+        "
+        type="button"
+      >
+        <svg
+          aria-hidden="true"
+          class="lucide lucide-chevron-down size-3"
+          fill="none"
+          height="24"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+          width="24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="m6 9 6 6 6-6"
+          />
+        </svg>
+        Details
+      </button>
+      <div
+        class="flex flex-col gap-2"
+      >
+        <pre
+          class="
+              max-h-64 overflow-auto rounded-md border border-destructive/30
+              bg-destructive/5 p-3 font-mono text-xs/relaxed wrap-break-word
+              whitespace-pre-wrap text-foreground
+            "
+        >
+          could not connect to database: connection refused
+        </pre>
+        <pre
+          class="
+                max-h-48 overflow-auto rounded-md border border-border/60
+                bg-muted/30 p-3 font-mono text-xs/relaxed wrap-break-word
+                whitespace-pre-wrap text-muted-foreground
+              "
+        >
+          SELECT 1
+        </pre>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`query-error-display > constraintError 1`] = `
+<div>
+  <div
+    class="flex w-full flex-col gap-4 p-6"
+  >
+    <div
+      class="flex flex-wrap items-start justify-between gap-3"
+    >
+      <div
+        class="flex flex-col gap-1.5"
+      >
+        <div
+          class="flex items-center gap-2"
+        >
+          <span
+            class="inline-flex items-center gap-1.5 text-destructive"
+          >
+            <svg
+              aria-hidden="true"
+              class="lucide lucide-shield-alert size-4"
+              fill="none"
+              height="24"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+              width="24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"
+              />
+              <path
+                d="M12 8v4"
+              />
+              <path
+                d="M12 16h.01"
+              />
+            </svg>
+            <span
+              class="text-xs font-semibold tracking-wider uppercase"
+            >
+              Constraint
+            </span>
+          </span>
+          <span
+            class="
+                    rounded-sm bg-muted px-1.5 py-0.5 font-mono text-[10px]
+                    text-muted-foreground
+                  "
+          >
+            23505
+          </span>
+        </div>
+        <p
+          class="text-sm/relaxed text-foreground"
+        >
+          The operation violates a database constraint.
+        </p>
+        <p
+          class="text-xs text-muted-foreground"
+        >
+          Check the data you're inserting or updating against the table's constraints.
+        </p>
+      </div>
+      <div
+        class="flex shrink-0 items-center gap-1"
+      >
+        <button
+          aria-label="Retry"
+          class="group/button inline-flex shrink-0 items-center justify-center rounded-md border border-transparent bg-clip-padding font-medium whitespace-nowrap transition-all duration-150 ease-out outline-none select-none focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-2 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 h-6 gap-1 px-2 text-xs/relaxed has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 [&_svg:not([class*='size-'])]:size-3 bg-primary text-primary-foreground hover:bg-primary/80"
+          data-slot="button"
+          tabindex="0"
+          title="Retry"
+          type="button"
+        >
+          <svg
+            aria-hidden="true"
+            class="lucide lucide-rotate-cw"
+            fill="none"
+            height="24"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"
+            />
+            <path
+              d="M21 3v5h-5"
+            />
+          </svg>
+          Retry
+        </button>
+        <button
+          aria-label="Fix with AI"
+          class="group/button inline-flex shrink-0 items-center justify-center rounded-md border border-transparent bg-clip-padding font-medium whitespace-nowrap transition-all duration-150 ease-out outline-none select-none focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-2 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 h-6 gap-1 px-2 text-xs/relaxed has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 [&_svg:not([class*='size-'])]:size-3 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50"
+          data-slot="button"
+          tabindex="0"
+          title="Fix with AI"
+          type="button"
+        >
+          <svg
+            aria-hidden="true"
+            class="lucide lucide-terminal"
+            fill="none"
+            height="24"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M12 19h8"
+            />
+            <path
+              d="m4 17 6-6-6-6"
+            />
+          </svg>
+          Fix with AI
+        </button>
+        <button
+          aria-label="Copy error"
+          class="group/button inline-flex shrink-0 items-center justify-center rounded-md border border-transparent bg-clip-padding font-medium whitespace-nowrap transition-all duration-150 ease-out outline-none select-none focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-2 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 h-6 gap-1 px-2 text-xs/relaxed has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 [&_svg:not([class*='size-'])]:size-3 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50"
+          data-slot="button"
+          tabindex="0"
+          title="Copy error"
+          type="button"
+        >
+          <svg
+            aria-hidden="true"
+            class="lucide lucide-copy"
+            fill="none"
+            height="24"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <rect
+              height="14"
+              rx="2"
+              ry="2"
+              width="14"
+              x="8"
+              y="8"
+            />
+            <path
+              d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"
+            />
+          </svg>
+        </button>
+      </div>
+    </div>
+    <div
+      class="flex flex-col gap-2"
+    >
+      <button
+        class="
+          inline-flex w-fit items-center gap-1 text-[10px] font-medium
+          tracking-wider text-muted-foreground uppercase transition-colors
+          hover:text-foreground
+        "
+        type="button"
+      >
+        <svg
+          aria-hidden="true"
+          class="lucide lucide-chevron-down size-3"
+          fill="none"
+          height="24"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+          width="24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="m6 9 6 6 6-6"
+          />
+        </svg>
+        Details
+      </button>
+      <div
+        class="flex flex-col gap-2"
+      >
+        <pre
+          class="
+              max-h-64 overflow-auto rounded-md border border-destructive/30
+              bg-destructive/5 p-3 font-mono text-xs/relaxed wrap-break-word
+              whitespace-pre-wrap text-foreground
+            "
+        >
+          duplicate key value violates unique constraint
+        </pre>
+        <pre
+          class="
+                max-h-48 overflow-auto rounded-md border border-border/60
+                bg-muted/30 p-3 font-mono text-xs/relaxed wrap-break-word
+                whitespace-pre-wrap text-muted-foreground
+              "
+        >
+          INSERT INTO users (id) VALUES (1)
+        </pre>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`query-error-display > retryFires 1`] = `
+<div>
+  <div
+    class="flex w-full flex-col gap-4 p-6"
+  >
+    <div
+      class="flex flex-wrap items-start justify-between gap-3"
+    >
+      <div
+        class="flex flex-col gap-1.5"
+      >
+        <div
+          class="flex items-center gap-2"
+        >
+          <span
+            class="inline-flex items-center gap-1.5 text-destructive"
+          >
+            <svg
+              aria-hidden="true"
+              class="lucide lucide-lock size-4"
+              fill="none"
+              height="24"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+              width="24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <rect
+                height="11"
+                rx="2"
+                ry="2"
+                width="18"
+                x="3"
+                y="11"
+              />
+              <path
+                d="M7 11V7a5 5 0 0 1 10 0v4"
+              />
+            </svg>
+            <span
+              class="text-xs font-semibold tracking-wider uppercase"
+            >
+              Permission
+            </span>
+          </span>
+          <span
+            class="
+                    rounded-sm bg-muted px-1.5 py-0.5 font-mono text-[10px]
+                    text-muted-foreground
+                  "
+          >
+            42501
+          </span>
+        </div>
+        <p
+          class="text-sm/relaxed text-foreground"
+        >
+          You don't have permission to perform this operation.
+        </p>
+        <p
+          class="text-xs text-muted-foreground"
+        >
+          Check that your database user has the required privileges for this operation.
+        </p>
+      </div>
+      <div
+        class="flex shrink-0 items-center gap-1"
+      >
+        <button
+          aria-label="Retry"
+          class="group/button inline-flex shrink-0 items-center justify-center rounded-md border border-transparent bg-clip-padding font-medium whitespace-nowrap transition-all duration-150 ease-out outline-none select-none focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-2 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 h-6 gap-1 px-2 text-xs/relaxed has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 [&_svg:not([class*='size-'])]:size-3 bg-primary text-primary-foreground hover:bg-primary/80"
+          data-slot="button"
+          tabindex="0"
+          title="Retry"
+          type="button"
+        >
+          <svg
+            aria-hidden="true"
+            class="lucide lucide-rotate-cw"
+            fill="none"
+            height="24"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"
+            />
+            <path
+              d="M21 3v5h-5"
+            />
+          </svg>
+          Retry
+        </button>
+        <button
+          aria-label="Fix with AI"
+          class="group/button inline-flex shrink-0 items-center justify-center rounded-md border border-transparent bg-clip-padding font-medium whitespace-nowrap transition-all duration-150 ease-out outline-none select-none focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-2 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 h-6 gap-1 px-2 text-xs/relaxed has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 [&_svg:not([class*='size-'])]:size-3 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50"
+          data-slot="button"
+          tabindex="0"
+          title="Fix with AI"
+          type="button"
+        >
+          <svg
+            aria-hidden="true"
+            class="lucide lucide-terminal"
+            fill="none"
+            height="24"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M12 19h8"
+            />
+            <path
+              d="m4 17 6-6-6-6"
+            />
+          </svg>
+          Fix with AI
+        </button>
+        <button
+          aria-label="Copy error"
+          class="group/button inline-flex shrink-0 items-center justify-center rounded-md border border-transparent bg-clip-padding font-medium whitespace-nowrap transition-all duration-150 ease-out outline-none select-none focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-2 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 h-6 gap-1 px-2 text-xs/relaxed has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 [&_svg:not([class*='size-'])]:size-3 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50"
+          data-slot="button"
+          tabindex="0"
+          title="Copy error"
+          type="button"
+        >
+          <svg
+            aria-hidden="true"
+            class="lucide lucide-copy"
+            fill="none"
+            height="24"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <rect
+              height="14"
+              rx="2"
+              ry="2"
+              width="14"
+              x="8"
+              y="8"
+            />
+            <path
+              d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"
+            />
+          </svg>
+        </button>
+      </div>
+    </div>
+    <div
+      class="flex flex-col gap-2"
+    >
+      <button
+        class="
+          inline-flex w-fit items-center gap-1 text-[10px] font-medium
+          tracking-wider text-muted-foreground uppercase transition-colors
+          hover:text-foreground
+        "
+        type="button"
+      >
+        <svg
+          aria-hidden="true"
+          class="lucide lucide-chevron-down size-3"
+          fill="none"
+          height="24"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+          width="24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="m6 9 6 6 6-6"
+          />
+        </svg>
+        Details
+      </button>
+      <div
+        class="flex flex-col gap-2"
+      >
+        <pre
+          class="
+              max-h-64 overflow-auto rounded-md border border-destructive/30
+              bg-destructive/5 p-3 font-mono text-xs/relaxed wrap-break-word
+              whitespace-pre-wrap text-foreground
+            "
+        >
+          permission denied for table users
+        </pre>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`query-error-display > syntaxError 1`] = `
+<div>
+  <div
+    class="flex w-full flex-col gap-4 p-6"
+  >
+    <div
+      class="flex flex-wrap items-start justify-between gap-3"
+    >
+      <div
+        class="flex flex-col gap-1.5"
+      >
+        <div
+          class="flex items-center gap-2"
+        >
+          <span
+            class="inline-flex items-center gap-1.5 text-destructive"
+          >
+            <svg
+              aria-hidden="true"
+              class="lucide lucide-triangle-alert size-4"
+              fill="none"
+              height="24"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+              width="24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"
+              />
+              <path
+                d="M12 9v4"
+              />
+              <path
+                d="M12 17h.01"
+              />
+            </svg>
+            <span
+              class="text-xs font-semibold tracking-wider uppercase"
+            >
+              Syntax
+            </span>
+          </span>
+          <span
+            class="font-mono text-xs text-muted-foreground"
+          >
+            line 1
+          </span>
+          <span
+            class="
+                    rounded-sm bg-muted px-1.5 py-0.5 font-mono text-[10px]
+                    text-muted-foreground
+                  "
+          >
+            42601
+          </span>
+        </div>
+        <p
+          class="text-sm/relaxed text-foreground"
+        >
+          The SQL contains a syntax error the database can't parse.
+        </p>
+        <p
+          class="text-xs text-muted-foreground"
+        >
+          Check the highlighted line for typos, missing keywords, or mismatched quotes.
+        </p>
+      </div>
+      <div
+        class="flex shrink-0 items-center gap-1"
+      >
+        <button
+          aria-label="Jump to line 1"
+          class="group/button inline-flex shrink-0 items-center justify-center rounded-md border border-transparent bg-clip-padding font-medium whitespace-nowrap transition-all duration-150 ease-out outline-none select-none focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-2 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 h-6 gap-1 px-2 text-xs/relaxed has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 [&_svg:not([class*='size-'])]:size-3 bg-primary text-primary-foreground hover:bg-primary/80"
+          data-slot="button"
+          tabindex="0"
+          title="Jump to line 1"
+          type="button"
+        >
+          <svg
+            aria-hidden="true"
+            class="lucide lucide-arrow-right"
+            fill="none"
+            height="24"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M5 12h14"
+            />
+            <path
+              d="m12 5 7 7-7 7"
+            />
+          </svg>
+          Jump to line
+        </button>
+        <button
+          aria-label="Retry"
+          class="group/button inline-flex shrink-0 items-center justify-center rounded-md border border-transparent bg-clip-padding font-medium whitespace-nowrap transition-all duration-150 ease-out outline-none select-none focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-2 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 h-6 gap-1 px-2 text-xs/relaxed has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 [&_svg:not([class*='size-'])]:size-3 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50"
+          data-slot="button"
+          tabindex="0"
+          title="Retry"
+          type="button"
+        >
+          <svg
+            aria-hidden="true"
+            class="lucide lucide-rotate-cw"
+            fill="none"
+            height="24"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"
+            />
+            <path
+              d="M21 3v5h-5"
+            />
+          </svg>
+          Retry
+        </button>
+        <button
+          aria-label="Fix with AI"
+          class="group/button inline-flex shrink-0 items-center justify-center rounded-md border border-transparent bg-clip-padding font-medium whitespace-nowrap transition-all duration-150 ease-out outline-none select-none focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-2 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 h-6 gap-1 px-2 text-xs/relaxed has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 [&_svg:not([class*='size-'])]:size-3 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50"
+          data-slot="button"
+          tabindex="0"
+          title="Fix with AI"
+          type="button"
+        >
+          <svg
+            aria-hidden="true"
+            class="lucide lucide-terminal"
+            fill="none"
+            height="24"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M12 19h8"
+            />
+            <path
+              d="m4 17 6-6-6-6"
+            />
+          </svg>
+          Fix with AI
+        </button>
+        <button
+          aria-label="Copy error"
+          class="group/button inline-flex shrink-0 items-center justify-center rounded-md border border-transparent bg-clip-padding font-medium whitespace-nowrap transition-all duration-150 ease-out outline-none select-none focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-2 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 h-6 gap-1 px-2 text-xs/relaxed has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 [&_svg:not([class*='size-'])]:size-3 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50"
+          data-slot="button"
+          tabindex="0"
+          title="Copy error"
+          type="button"
+        >
+          <svg
+            aria-hidden="true"
+            class="lucide lucide-copy"
+            fill="none"
+            height="24"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <rect
+              height="14"
+              rx="2"
+              ry="2"
+              width="14"
+              x="8"
+              y="8"
+            />
+            <path
+              d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"
+            />
+          </svg>
+        </button>
+      </div>
+    </div>
+    <div
+      class="flex flex-col gap-2"
+    >
+      <button
+        class="
+          inline-flex w-fit items-center gap-1 text-[10px] font-medium
+          tracking-wider text-muted-foreground uppercase transition-colors
+          hover:text-foreground
+        "
+        type="button"
+      >
+        <svg
+          aria-hidden="true"
+          class="lucide lucide-chevron-down size-3"
+          fill="none"
+          height="24"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+          width="24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="m6 9 6 6 6-6"
+          />
+        </svg>
+        Details
+      </button>
+      <div
+        class="flex flex-col gap-2"
+      >
+        <pre
+          class="
+              max-h-64 overflow-auto rounded-md border border-destructive/30
+              bg-destructive/5 p-3 font-mono text-xs/relaxed wrap-break-word
+              whitespace-pre-wrap text-foreground
+            "
+        >
+          LINE 1: SELCT * FROM users
+        ^
+syntax error at or near "SELCT"
+        </pre>
+        <pre
+          class="
+                max-h-48 overflow-auto rounded-md border border-border/60
+                bg-muted/30 p-3 font-mono text-xs/relaxed wrap-break-word
+                whitespace-pre-wrap text-muted-foreground
+              "
+        >
+          SELCT * FROM users
+        </pre>
+      </div>
+    </div>
+  </div>
+</div>
+`;

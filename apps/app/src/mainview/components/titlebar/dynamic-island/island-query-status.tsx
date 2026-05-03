@@ -1,42 +1,26 @@
-import type { Variants } from "motion/react";
+import { AlertTriangle, Check, X } from "lucide-react";
 
-import { AlertTriangle, Check, Loader2 } from "lucide-react";
-import { motion } from "motion/react";
+import type { RunningQueryEntry } from "@/contexts/island-context";
 
 import { IslandErrorMessage } from "./island-error-message";
-import { ISLAND_ITEM_TRANSITION, ISLAND_ITEM_VARIANTS } from "./island-motion";
+import { IslandRunningQueriesPicker } from "./island-running-queries-picker";
 
-const CHECK_VARIANTS: Variants = {
-  hidden: { filter: "blur(4px)", opacity: 0, scale: 0.4 },
-  visible: { filter: "blur(0px)", opacity: 1, scale: 1 },
-};
+interface QueryRunningStatusProps {
+  runners: RunningQueryEntry[];
+  headlineTabId: string;
+  onCancelAll: () => void;
+}
 
-const CHECK_TRANSITION = {
-  damping: 18,
-  mass: 0.5,
-  stiffness: 520,
-  type: "spring",
-} as const;
-
-export const QueryRunningStatus = () => (
-  <>
-    <motion.span
-      aria-hidden="true"
-      transition={ISLAND_ITEM_TRANSITION}
-      variants={ISLAND_ITEM_VARIANTS}
-    >
-      <Loader2 className="size-3 shrink-0 animate-spin text-muted-foreground motion-reduce:animate-none" />
-    </motion.span>
-    <span className="sr-only">Executing query</span>
-    <motion.span
-      aria-hidden="true"
-      className="text-chrome text-muted-foreground"
-      transition={ISLAND_ITEM_TRANSITION}
-      variants={ISLAND_ITEM_VARIANTS}
-    >
-      Executing…
-    </motion.span>
-  </>
+export const QueryRunningStatus = ({
+  runners,
+  headlineTabId,
+  onCancelAll,
+}: QueryRunningStatusProps) => (
+  <IslandRunningQueriesPicker
+    headlineTabId={headlineTabId}
+    onCancelAll={onCancelAll}
+    runners={runners}
+  />
 );
 
 interface QuerySuccessStatusProps {
@@ -65,27 +49,22 @@ export const QuerySuccessStatus = ({
 
   return (
     <>
-      <motion.span
-        aria-hidden="true"
-        transition={CHECK_TRANSITION}
-        variants={CHECK_VARIANTS}
-      >
-        <Check className="size-3 shrink-0 text-success" />
-      </motion.span>
+      <Check aria-hidden="true" className="size-3 shrink-0 text-success" />
       <span className="sr-only">
         Query returned {rowCount} {rowLabel} in {timeLabel}
       </span>
-      <motion.span
+      <span
         aria-hidden="true"
-        className="text-data flex items-baseline gap-1 text-[11px] text-muted-foreground"
-        transition={ISLAND_ITEM_TRANSITION}
-        variants={ISLAND_ITEM_VARIANTS}
+        className="
+          flex items-baseline gap-1 text-xs font-medium tracking-tight
+          text-muted-foreground tabular-nums
+        "
       >
         <span className="text-foreground">{rowCount}</span>
         <span className="text-muted-foreground/70">{rowLabel}</span>
         <span className="text-muted-foreground/40">·</span>
-        <span className="text-foreground">{timeLabel}</span>
-      </motion.span>
+        <span className="text-muted-foreground/70">{timeLabel}</span>
+      </span>
     </>
   );
 };
@@ -96,14 +75,24 @@ interface QueryErrorStatusProps {
 
 export const QueryErrorStatus = ({ error }: QueryErrorStatusProps) => (
   <>
-    <motion.span
+    <AlertTriangle
       aria-hidden="true"
-      transition={ISLAND_ITEM_TRANSITION}
-      variants={ISLAND_ITEM_VARIANTS}
-    >
-      <AlertTriangle className="size-3 shrink-0 text-destructive" />
-    </motion.span>
+      className="size-3 shrink-0 text-destructive"
+    />
     <span className="sr-only">Query failed: </span>
     <IslandErrorMessage error={error} maxWidthClass="max-w-[360px]" />
+  </>
+);
+
+export const QueryCancelledStatus = () => (
+  <>
+    <X aria-hidden="true" className="size-3 shrink-0 text-muted-foreground" />
+    <span className="sr-only">Query cancelled</span>
+    <span
+      aria-hidden="true"
+      className="text-xs font-medium tracking-tight text-muted-foreground"
+    >
+      Cancelled
+    </span>
   </>
 );

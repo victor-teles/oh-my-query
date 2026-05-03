@@ -31,10 +31,11 @@ export const TypeBadge = ({ kind, className }: TypeBadgeProps) => {
 
   return (
     <span
-      className={cn(
-        "inline-flex h-[18px] min-w-[44px] items-center justify-center rounded-[3px] px-1.5 font-mono text-[9.5px] font-semibold tracking-[0.08em] tabular-nums",
-        className
-      )}
+      className={cn(`
+          inline-flex h-[18px] min-w-[44px] items-center justify-center
+          rounded-[3px] px-1.5 font-mono text-[9.5px] font-semibold
+          tracking-[0.08em] tabular-nums
+        `, className)}
       style={{
         backgroundColor: bg,
         color: fg,

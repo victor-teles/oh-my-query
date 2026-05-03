@@ -126,7 +126,11 @@ export const ResultsRowContextMenu = ({
           <div
             aria-rowindex={sortedIndex + 2}
             aria-selected={isSelected}
-            className="group/row relative flex cursor-default border-border/40 border-b transition-colors before:pointer-events-none before:absolute before:inset-y-0 before:left-0 before:z-30 before:w-[2px] before:bg-ring before:opacity-0 before:transition-opacity before:content-[''] data-[active]:before:opacity-100"
+            className="
+              group/row relative flex cursor-default border-b border-border/40
+              transition-colors
+              data-active:bg-accent/50
+            "
             data-active={isActive ? "" : undefined}
             data-row-index={rowIndex}
             data-state={isSelected ? "selected" : undefined}

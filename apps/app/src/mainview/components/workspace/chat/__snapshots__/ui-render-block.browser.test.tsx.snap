@@ -1,0 +1,4641 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`ui-render-block > chartBarDark 1`] = `
+<div>
+  <div
+    class="dark bg-background p-4 text-foreground"
+  >
+    <div
+      class="group/card relative my-2 rounded-lg outline-none focus-visible:ring-2 focus-visible:ring-ring/30 focus-visible:ring-offset-2"
+      tabindex="0"
+    >
+      <div
+        class="flex items-center justify-between gap-2 absolute top-1 right-1 z-10 rounded-md bg-background/85 px-1 py-0.5 transition-opacity duration-150 group-focus-within/card:opacity-100 group-hover/card:opacity-100 opacity-0"
+      >
+        <div
+          class="flex items-center gap-2 text-xs text-muted-foreground"
+        >
+          <span
+            aria-hidden="true"
+            class="
+      inline-flex items-center gap-1 opacity-0 transition-opacity duration-150
+      group-focus-within/card:opacity-100
+    "
+          >
+            <kbd
+              class="pointer-events-none inline-flex h-5 w-fit min-w-5 items-center justify-center gap-1 rounded-xs bg-muted px-1 font-sans text-[0.625rem] font-medium text-muted-foreground select-none [&_svg:not([class*='size-'])]:size-3"
+              data-slot="kbd"
+            >
+              C
+            </kbd>
+            <span>
+              copy
+            </span>
+            <span
+              class="text-muted-foreground/40"
+            >
+              ·
+            </span>
+            <kbd
+              class="pointer-events-none inline-flex h-5 w-fit min-w-5 items-center justify-center gap-1 rounded-xs bg-muted px-1 font-sans text-[0.625rem] font-medium text-muted-foreground select-none [&_svg:not([class*='size-'])]:size-3"
+              data-slot="kbd"
+            >
+              S
+            </kbd>
+            <span>
+              source
+            </span>
+            <span
+              class="text-muted-foreground/40"
+            >
+              ·
+            </span>
+            <kbd
+              class="pointer-events-none inline-flex h-5 w-fit min-w-5 items-center justify-center gap-1 rounded-xs bg-muted px-1 font-sans text-[0.625rem] font-medium text-muted-foreground select-none [&_svg:not([class*='size-'])]:size-3"
+              data-slot="kbd"
+            >
+              Esc
+            </kbd>
+            <span>
+              collapse
+            </span>
+          </span>
+        </div>
+        <div
+          class="flex items-center gap-1"
+        >
+          <button
+            aria-keyshortcuts="S"
+            aria-label="Show source"
+            aria-pressed="false"
+            class="group/button inline-flex shrink-0 items-center justify-center border border-transparent bg-clip-padding font-medium whitespace-nowrap transition-all duration-150 ease-out outline-none select-none focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-2 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 h-5 gap-1 rounded-sm px-2 text-[0.625rem] has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 [&_svg:not([class*='size-'])]:size-2.5 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50"
+            data-slot="button"
+            tabindex="0"
+            type="button"
+          >
+            <svg
+              aria-hidden="true"
+              class="lucide lucide-code-xml"
+              fill="none"
+              height="24"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+              width="24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="m18 16 4-4-4-4"
+              />
+              <path
+                d="m6 8-4 4 4 4"
+              />
+              <path
+                d="m14.5 4-5 16"
+              />
+            </svg>
+            Source
+          </button>
+          <button
+            aria-expanded="false"
+            aria-haspopup="menu"
+            aria-label="More actions"
+            class="group/button inline-flex shrink-0 items-center justify-center border border-transparent bg-clip-padding text-xs/relaxed font-medium whitespace-nowrap transition-all duration-150 ease-out outline-none select-none focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-2 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 size-5 rounded-sm [&_svg:not([class*='size-'])]:size-2.5 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50"
+            data-slot="dropdown-menu-trigger"
+            id="base-ui-_r_p_"
+            tabindex="0"
+            type="button"
+          >
+            <svg
+              aria-hidden="true"
+              class="lucide lucide-ellipsis size-3"
+              fill="none"
+              height="24"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+              width="24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <circle
+                cx="12"
+                cy="12"
+                r="1"
+              />
+              <circle
+                cx="19"
+                cy="12"
+                r="1"
+              />
+              <circle
+                cx="5"
+                cy="12"
+                r="1"
+              />
+            </svg>
+          </button>
+        </div>
+      </div>
+      <div
+        class="pt-0"
+      >
+        <figure
+          class="space-y-2 tabular-nums"
+        >
+          <figcaption
+            class="space-y-0.5"
+          >
+            <div
+              class="text-sm font-medium text-foreground"
+            >
+              Query volume
+            </div>
+            <div
+              class="text-xs text-muted-foreground"
+            >
+              Monthly query volume and errors for the last six months.
+            </div>
+          </figcaption>
+          <div
+            class="flex aspect-video justify-center text-xs [&_.recharts-cartesian-axis-tick_text]:fill-muted-foreground [&_.recharts-cartesian-grid_line[stroke='#ccc']]:stroke-border/50 [&_.recharts-curve.recharts-tooltip-cursor]:stroke-border [&_.recharts-dot[stroke='#fff']]:stroke-transparent [&_.recharts-layer]:outline-hidden [&_.recharts-polar-grid_[stroke='#ccc']]:stroke-border [&_.recharts-radial-bar-background-sector]:fill-muted [&_.recharts-rectangle.recharts-tooltip-cursor]:fill-muted [&_.recharts-reference-line_[stroke='#ccc']]:stroke-border [&_.recharts-sector]:outline-hidden [&_.recharts-sector[stroke='#fff']]:stroke-transparent [&_.recharts-surface]:outline-hidden h-64 w-full"
+            data-chart="chart-_r_r_"
+            data-slot="chart"
+          >
+            <style>
+              
+.dark [data-chart=chart-_r_r_] {
+  --color-queries: var(--chart-1);
+  --color-errors: var(--chart-2);
+}
+
+
+ [data-chart=chart-_r_r_] {
+  --color-queries: var(--chart-1);
+  --color-errors: var(--chart-2);
+}
+
+            </style>
+            <div
+              class="recharts-responsive-container"
+              style="width: 100%; height: 100%; min-width: 0px"
+            >
+              <div
+                class="recharts-wrapper"
+                style="position: relative; cursor: default; width: 100%; height: 100%; max-height: 256px; max-width: 382px"
+              >
+                <svg
+                  class="recharts-surface"
+                  height="256"
+                  role="application"
+                  style="width: 100%; height: 100%"
+                  tabindex="0"
+                  viewBox="0 0 382 256"
+                  width="382"
+                >
+                  <title />
+                  <desc />
+                  <defs>
+                    <clippath
+                      id="recharts8-clip"
+                    >
+                      <rect
+                        height="212"
+                        width="366"
+                        x="8"
+                        y="8"
+                      />
+                    </clippath>
+                  </defs>
+                  <g
+                    class="recharts-cartesian-grid"
+                  >
+                    <g
+                      class="recharts-cartesian-grid-horizontal"
+                    >
+                      <line
+                        fill="none"
+                        height="212"
+                        stroke="#ccc"
+                        width="366"
+                        x="8"
+                        x1="8"
+                        x2="374"
+                        y="8"
+                        y1="220"
+                        y2="220"
+                      />
+                      <line
+                        fill="none"
+                        height="212"
+                        stroke="#ccc"
+                        width="366"
+                        x="8"
+                        x1="8"
+                        x2="374"
+                        y="8"
+                        y1="167"
+                        y2="167"
+                      />
+                      <line
+                        fill="none"
+                        height="212"
+                        stroke="#ccc"
+                        width="366"
+                        x="8"
+                        x1="8"
+                        x2="374"
+                        y="8"
+                        y1="114"
+                        y2="114"
+                      />
+                      <line
+                        fill="none"
+                        height="212"
+                        stroke="#ccc"
+                        width="366"
+                        x="8"
+                        x1="8"
+                        x2="374"
+                        y="8"
+                        y1="61"
+                        y2="61"
+                      />
+                      <line
+                        fill="none"
+                        height="212"
+                        stroke="#ccc"
+                        width="366"
+                        x="8"
+                        x1="8"
+                        x2="374"
+                        y="8"
+                        y1="8"
+                        y2="8"
+                      />
+                    </g>
+                  </g>
+                  <g
+                    class="recharts-layer recharts-bar"
+                  >
+                    <g
+                      class="recharts-layer recharts-bar-rectangles"
+                    >
+                      <g
+                        class="recharts-layer recharts-bar-rectangle"
+                      >
+                        <path
+                          class="recharts-rectangle"
+                          d="M 14.1,158.27999999999997
+            A 4,4,0,0,1,18.1,154.27999999999997
+            L 32.1,154.27999999999997
+            A 4,4,0,0,1,36.1,158.27999999999997
+            L 36.1,216
+            A 4,4,0,0,1,32.1,220
+            L 18.1,220
+            A 4,4,0,0,1,14.1,216 Z"
+                          fill="var(--color-queries)"
+                          height="65.72000000000003"
+                          radius="4"
+                          width="22"
+                          x="14.1"
+                          y="154.27999999999997"
+                        />
+                      </g>
+                      <g
+                        class="recharts-layer recharts-bar-rectangle"
+                      >
+                        <path
+                          class="recharts-rectangle"
+                          d="M 75.1,116.23333333333333
+            A 4,4,0,0,1,79.1,112.23333333333333
+            L 93.1,112.23333333333333
+            A 4,4,0,0,1,97.1,116.23333333333333
+            L 97.1,216
+            A 4,4,0,0,1,93.1,220
+            L 79.1,220
+            A 4,4,0,0,1,75.1,216 Z"
+                          fill="var(--color-queries)"
+                          height="107.76666666666667"
+                          radius="4"
+                          width="22"
+                          x="75.1"
+                          y="112.23333333333333"
+                        />
+                      </g>
+                      <g
+                        class="recharts-layer recharts-bar-rectangle"
+                      >
+                        <path
+                          class="recharts-rectangle"
+                          d="M 136.1,140.26
+            A 4,4,0,0,1,140.1,136.26
+            L 154.1,136.26
+            A 4,4,0,0,1,158.1,140.26
+            L 158.1,216
+            A 4,4,0,0,1,154.1,220
+            L 140.1,220
+            A 4,4,0,0,1,136.1,216 Z"
+                          fill="var(--color-queries)"
+                          height="83.74000000000001"
+                          radius="4"
+                          width="22"
+                          x="136.1"
+                          y="136.26"
+                        />
+                      </g>
+                      <g
+                        class="recharts-layer recharts-bar-rectangle"
+                      >
+                        <path
+                          class="recharts-rectangle"
+                          d="M 197.1,162.87333333333333
+            A 4,4,0,0,1,201.1,158.87333333333333
+            L 215.1,158.87333333333333
+            A 4,4,0,0,1,219.1,162.87333333333333
+            L 219.1,216
+            A 4,4,0,0,1,215.1,220
+            L 201.1,220
+            A 4,4,0,0,1,197.1,216 Z"
+                          fill="var(--color-queries)"
+                          height="61.126666666666665"
+                          radius="4"
+                          width="22"
+                          x="197.1"
+                          y="158.87333333333333"
+                        />
+                      </g>
+                      <g
+                        class="recharts-layer recharts-bar-rectangle"
+                      >
+                        <path
+                          class="recharts-rectangle"
+                          d="M 258.1,79.48666666666666
+            A 4,4,0,0,1,262.1,75.48666666666666
+            L 276.1,75.48666666666666
+            A 4,4,0,0,1,280.1,79.48666666666666
+            L 280.1,216
+            A 4,4,0,0,1,276.1,220
+            L 262.1,220
+            A 4,4,0,0,1,258.1,216 Z"
+                          fill="var(--color-queries)"
+                          height="144.51333333333332"
+                          radius="4"
+                          width="22"
+                          x="258.1"
+                          y="75.48666666666666"
+                        />
+                      </g>
+                      <g
+                        class="recharts-layer recharts-bar-rectangle"
+                      >
+                        <path
+                          class="recharts-rectangle"
+                          d="M 319.1,148.38666666666666
+            A 4,4,0,0,1,323.1,144.38666666666666
+            L 337.1,144.38666666666666
+            A 4,4,0,0,1,341.1,148.38666666666666
+            L 341.1,216
+            A 4,4,0,0,1,337.1,220
+            L 323.1,220
+            A 4,4,0,0,1,319.1,216 Z"
+                          fill="var(--color-queries)"
+                          height="75.61333333333334"
+                          radius="4"
+                          width="22"
+                          x="319.1"
+                          y="144.38666666666666"
+                        />
+                      </g>
+                    </g>
+                    <g
+                      class="recharts-layer"
+                    />
+                  </g>
+                  <g
+                    class="recharts-layer recharts-bar"
+                  >
+                    <g
+                      class="recharts-layer recharts-bar-rectangles"
+                    >
+                      <g
+                        class="recharts-layer recharts-bar-rectangle"
+                      >
+                        <path
+                          class="recharts-rectangle"
+                          d="M 40.1,217.88
+            A 2.1200000000000045,2.1200000000000045,0,0,1,42.220000000000006,215.76
+            L 59.98,215.76
+            A 2.1200000000000045,2.1200000000000045,0,0,1,62.1,217.88
+            L 62.1,217.88
+            A 2.1200000000000045,2.1200000000000045,0,0,1,59.98,220
+            L 42.220000000000006,220
+            A 2.1200000000000045,2.1200000000000045,0,0,1,40.1,217.88 Z"
+                          fill="var(--color-errors)"
+                          height="4.240000000000009"
+                          radius="4"
+                          width="22"
+                          x="40.1"
+                          y="215.76"
+                        />
+                      </g>
+                      <g
+                        class="recharts-layer recharts-bar-rectangle"
+                      >
+                        <path
+                          class="recharts-rectangle"
+                          d="M 101.1,218.58666666666664
+            A 1.413333333333341,1.413333333333341,0,0,1,102.51333333333334,217.17333333333332
+            L 121.68666666666665,217.17333333333332
+            A 1.413333333333341,1.413333333333341,0,0,1,123.1,218.58666666666664
+            L 123.1,218.58666666666664
+            A 1.413333333333341,1.413333333333341,0,0,1,121.68666666666665,220
+            L 102.51333333333334,220
+            A 1.413333333333341,1.413333333333341,0,0,1,101.1,218.58666666666664 Z"
+                          fill="var(--color-errors)"
+                          height="2.826666666666682"
+                          radius="4"
+                          width="22"
+                          x="101.1"
+                          y="217.17333333333332"
+                        />
+                      </g>
+                      <g
+                        class="recharts-layer recharts-bar-rectangle"
+                      >
+                        <path
+                          class="recharts-rectangle"
+                          d="M 162.1,217.35
+            A 2.6500000000000057,2.6500000000000057,0,0,1,164.75,214.7
+            L 181.45,214.7
+            A 2.6500000000000057,2.6500000000000057,0,0,1,184.1,217.35
+            L 184.1,217.35
+            A 2.6500000000000057,2.6500000000000057,0,0,1,181.45,220
+            L 164.75,220
+            A 2.6500000000000057,2.6500000000000057,0,0,1,162.1,217.35 Z"
+                          fill="var(--color-errors)"
+                          height="5.300000000000011"
+                          radius="4"
+                          width="22"
+                          x="162.1"
+                          y="214.7"
+                        />
+                      </g>
+                      <g
+                        class="recharts-layer recharts-bar-rectangle"
+                      >
+                        <path
+                          class="recharts-rectangle"
+                          d="M 223.1,219.11666666666667
+            A 0.8833333333333258,0.8833333333333258,0,0,1,223.98333333333332,218.23333333333335
+            L 244.21666666666667,218.23333333333335
+            A 0.8833333333333258,0.8833333333333258,0,0,1,245.1,219.11666666666667
+            L 245.1,219.11666666666667
+            A 0.8833333333333258,0.8833333333333258,0,0,1,244.21666666666667,220
+            L 223.98333333333332,220
+            A 0.8833333333333258,0.8833333333333258,0,0,1,223.1,219.11666666666667 Z"
+                          fill="var(--color-errors)"
+                          height="1.7666666666666515"
+                          radius="4"
+                          width="22"
+                          x="223.1"
+                          y="218.23333333333335"
+                        />
+                      </g>
+                      <g
+                        class="recharts-layer recharts-bar-rectangle"
+                      >
+                        <path
+                          class="recharts-rectangle"
+                          d="M 284.1,216.11333333333334
+            A 3.8866666666666703,3.8866666666666703,0,0,1,287.9866666666667,212.22666666666666
+            L 302.21333333333337,212.22666666666666
+            A 3.8866666666666703,3.8866666666666703,0,0,1,306.1,216.11333333333334
+            L 306.1,216.11333333333334
+            A 3.8866666666666703,3.8866666666666703,0,0,1,302.21333333333337,220
+            L 287.9866666666667,220
+            A 3.8866666666666703,3.8866666666666703,0,0,1,284.1,216.11333333333334 Z"
+                          fill="var(--color-errors)"
+                          height="7.7733333333333405"
+                          radius="4"
+                          width="22"
+                          x="284.1"
+                          y="212.22666666666666"
+                        />
+                      </g>
+                      <g
+                        class="recharts-layer recharts-bar-rectangle"
+                      >
+                        <path
+                          class="recharts-rectangle"
+                          d="M 345.1,218.41
+            A 1.5900000000000034,1.5900000000000034,0,0,1,346.69000000000005,216.82
+            L 365.51,216.82
+            A 1.5900000000000034,1.5900000000000034,0,0,1,367.1,218.41
+            L 367.1,218.41
+            A 1.5900000000000034,1.5900000000000034,0,0,1,365.51,220
+            L 346.69000000000005,220
+            A 1.5900000000000034,1.5900000000000034,0,0,1,345.1,218.41 Z"
+                          fill="var(--color-errors)"
+                          height="3.180000000000007"
+                          radius="4"
+                          width="22"
+                          x="345.1"
+                          y="216.82"
+                        />
+                      </g>
+                    </g>
+                    <g
+                      class="recharts-layer"
+                    />
+                  </g>
+                </svg>
+                <div
+                  class="recharts-legend-wrapper"
+                  style="position: absolute; width: 366px; height: auto; left: 8px; bottom: 8px"
+                >
+                  <div
+                    class="flex items-center justify-center gap-4 pt-3"
+                  >
+                    <div
+                      class="flex items-center gap-1.5 [&>svg]:size-3 [&>svg]:text-muted-foreground"
+                    >
+                      <div
+                        class="size-2 shrink-0 rounded-[2px]"
+                        style="background-color: var(--color-queries)"
+                      />
+                      Queries
+                    </div>
+                    <div
+                      class="flex items-center gap-1.5 [&>svg]:size-3 [&>svg]:text-muted-foreground"
+                    >
+                      <div
+                        class="size-2 shrink-0 rounded-[2px]"
+                        style="background-color: var(--color-errors)"
+                      />
+                      Errors
+                    </div>
+                  </div>
+                </div>
+                <div
+                  class="recharts-tooltip-wrapper"
+                  style="visibility: hidden; pointer-events: none; position: absolute; top: 0px; left: 0px"
+                  tabindex="-1"
+                />
+              </div>
+            </div>
+          </div>
+        </figure>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`ui-render-block > chartBarExample 1`] = `
+<div>
+  <div
+    class="group/card relative my-2 rounded-lg outline-none focus-visible:ring-2 focus-visible:ring-ring/30 focus-visible:ring-offset-2"
+    tabindex="0"
+  >
+    <div
+      class="flex items-center justify-between gap-2 absolute top-1 right-1 z-10 rounded-md bg-background/85 px-1 py-0.5 transition-opacity duration-150 group-focus-within/card:opacity-100 group-hover/card:opacity-100 opacity-0"
+    >
+      <div
+        class="flex items-center gap-2 text-xs text-muted-foreground"
+      >
+        <span
+          aria-hidden="true"
+          class="
+      inline-flex items-center gap-1 opacity-0 transition-opacity duration-150
+      group-focus-within/card:opacity-100
+    "
+        >
+          <kbd
+            class="pointer-events-none inline-flex h-5 w-fit min-w-5 items-center justify-center gap-1 rounded-xs bg-muted px-1 font-sans text-[0.625rem] font-medium text-muted-foreground select-none [&_svg:not([class*='size-'])]:size-3"
+            data-slot="kbd"
+          >
+            C
+          </kbd>
+          <span>
+            copy
+          </span>
+          <span
+            class="text-muted-foreground/40"
+          >
+            ·
+          </span>
+          <kbd
+            class="pointer-events-none inline-flex h-5 w-fit min-w-5 items-center justify-center gap-1 rounded-xs bg-muted px-1 font-sans text-[0.625rem] font-medium text-muted-foreground select-none [&_svg:not([class*='size-'])]:size-3"
+            data-slot="kbd"
+          >
+            S
+          </kbd>
+          <span>
+            source
+          </span>
+          <span
+            class="text-muted-foreground/40"
+          >
+            ·
+          </span>
+          <kbd
+            class="pointer-events-none inline-flex h-5 w-fit min-w-5 items-center justify-center gap-1 rounded-xs bg-muted px-1 font-sans text-[0.625rem] font-medium text-muted-foreground select-none [&_svg:not([class*='size-'])]:size-3"
+            data-slot="kbd"
+          >
+            Esc
+          </kbd>
+          <span>
+            collapse
+          </span>
+        </span>
+      </div>
+      <div
+        class="flex items-center gap-1"
+      >
+        <button
+          aria-keyshortcuts="S"
+          aria-label="Show source"
+          aria-pressed="false"
+          class="group/button inline-flex shrink-0 items-center justify-center border border-transparent bg-clip-padding font-medium whitespace-nowrap transition-all duration-150 ease-out outline-none select-none focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-2 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 h-5 gap-1 rounded-sm px-2 text-[0.625rem] has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 [&_svg:not([class*='size-'])]:size-2.5 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50"
+          data-slot="button"
+          tabindex="0"
+          type="button"
+        >
+          <svg
+            aria-hidden="true"
+            class="lucide lucide-code-xml"
+            fill="none"
+            height="24"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="m18 16 4-4-4-4"
+            />
+            <path
+              d="m6 8-4 4 4 4"
+            />
+            <path
+              d="m14.5 4-5 16"
+            />
+          </svg>
+          Source
+        </button>
+        <button
+          aria-expanded="false"
+          aria-haspopup="menu"
+          aria-label="More actions"
+          class="group/button inline-flex shrink-0 items-center justify-center border border-transparent bg-clip-padding text-xs/relaxed font-medium whitespace-nowrap transition-all duration-150 ease-out outline-none select-none focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-2 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 size-5 rounded-sm [&_svg:not([class*='size-'])]:size-2.5 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50"
+          data-slot="dropdown-menu-trigger"
+          id="base-ui-_r_i_"
+          tabindex="0"
+          type="button"
+        >
+          <svg
+            aria-hidden="true"
+            class="lucide lucide-ellipsis size-3"
+            fill="none"
+            height="24"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <circle
+              cx="12"
+              cy="12"
+              r="1"
+            />
+            <circle
+              cx="19"
+              cy="12"
+              r="1"
+            />
+            <circle
+              cx="5"
+              cy="12"
+              r="1"
+            />
+          </svg>
+        </button>
+      </div>
+    </div>
+    <div
+      class="pt-0"
+    >
+      <figure
+        class="space-y-2 tabular-nums"
+      >
+        <figcaption
+          class="space-y-0.5"
+        >
+          <div
+            class="text-sm font-medium text-foreground"
+          >
+            Query volume
+          </div>
+          <div
+            class="text-xs text-muted-foreground"
+          >
+            Monthly query volume and errors for the last six months.
+          </div>
+        </figcaption>
+        <div
+          class="flex aspect-video justify-center text-xs [&_.recharts-cartesian-axis-tick_text]:fill-muted-foreground [&_.recharts-cartesian-grid_line[stroke='#ccc']]:stroke-border/50 [&_.recharts-curve.recharts-tooltip-cursor]:stroke-border [&_.recharts-dot[stroke='#fff']]:stroke-transparent [&_.recharts-layer]:outline-hidden [&_.recharts-polar-grid_[stroke='#ccc']]:stroke-border [&_.recharts-radial-bar-background-sector]:fill-muted [&_.recharts-rectangle.recharts-tooltip-cursor]:fill-muted [&_.recharts-reference-line_[stroke='#ccc']]:stroke-border [&_.recharts-sector]:outline-hidden [&_.recharts-sector[stroke='#fff']]:stroke-transparent [&_.recharts-surface]:outline-hidden h-64 w-full"
+          data-chart="chart-_r_k_"
+          data-slot="chart"
+        >
+          <style>
+            
+.dark [data-chart=chart-_r_k_] {
+  --color-queries: var(--chart-1);
+  --color-errors: var(--chart-2);
+}
+
+
+ [data-chart=chart-_r_k_] {
+  --color-queries: var(--chart-1);
+  --color-errors: var(--chart-2);
+}
+
+          </style>
+          <div
+            class="recharts-responsive-container"
+            style="width: 100%; height: 100%; min-width: 0px"
+          >
+            <div
+              class="recharts-wrapper"
+              style="position: relative; cursor: default; width: 100%; height: 100%; max-height: 256px; max-width: 414px"
+            >
+              <svg
+                class="recharts-surface"
+                height="256"
+                role="application"
+                style="width: 100%; height: 100%"
+                tabindex="0"
+                viewBox="0 0 414 256"
+                width="414"
+              >
+                <title />
+                <desc />
+                <defs>
+                  <clippath
+                    id="recharts1-clip"
+                  >
+                    <rect
+                      height="212"
+                      width="398"
+                      x="8"
+                      y="8"
+                    />
+                  </clippath>
+                </defs>
+                <g
+                  class="recharts-cartesian-grid"
+                >
+                  <g
+                    class="recharts-cartesian-grid-horizontal"
+                  >
+                    <line
+                      fill="none"
+                      height="212"
+                      stroke="#ccc"
+                      width="398"
+                      x="8"
+                      x1="8"
+                      x2="406"
+                      y="8"
+                      y1="220"
+                      y2="220"
+                    />
+                    <line
+                      fill="none"
+                      height="212"
+                      stroke="#ccc"
+                      width="398"
+                      x="8"
+                      x1="8"
+                      x2="406"
+                      y="8"
+                      y1="167"
+                      y2="167"
+                    />
+                    <line
+                      fill="none"
+                      height="212"
+                      stroke="#ccc"
+                      width="398"
+                      x="8"
+                      x1="8"
+                      x2="406"
+                      y="8"
+                      y1="114"
+                      y2="114"
+                    />
+                    <line
+                      fill="none"
+                      height="212"
+                      stroke="#ccc"
+                      width="398"
+                      x="8"
+                      x1="8"
+                      x2="406"
+                      y="8"
+                      y1="61"
+                      y2="61"
+                    />
+                    <line
+                      fill="none"
+                      height="212"
+                      stroke="#ccc"
+                      width="398"
+                      x="8"
+                      x1="8"
+                      x2="406"
+                      y="8"
+                      y1="8"
+                      y2="8"
+                    />
+                  </g>
+                </g>
+                <g
+                  class="recharts-layer recharts-bar"
+                >
+                  <g
+                    class="recharts-layer recharts-bar-rectangles"
+                  >
+                    <g
+                      class="recharts-layer recharts-bar-rectangle"
+                    >
+                      <path
+                        class="recharts-rectangle"
+                        d="M 14.633333333333333,158.27999999999997
+            A 4,4,0,0,1,18.633333333333333,154.27999999999997
+            L 34.63333333333333,154.27999999999997
+            A 4,4,0,0,1,38.63333333333333,158.27999999999997
+            L 38.63333333333333,216
+            A 4,4,0,0,1,34.63333333333333,220
+            L 18.633333333333333,220
+            A 4,4,0,0,1,14.633333333333333,216 Z"
+                        fill="var(--color-queries)"
+                        height="65.72000000000003"
+                        radius="4"
+                        width="24"
+                        x="14.633333333333333"
+                        y="154.27999999999997"
+                      />
+                    </g>
+                    <g
+                      class="recharts-layer recharts-bar-rectangle"
+                    >
+                      <path
+                        class="recharts-rectangle"
+                        d="M 80.96666666666667,116.23333333333333
+            A 4,4,0,0,1,84.96666666666667,112.23333333333333
+            L 100.96666666666667,112.23333333333333
+            A 4,4,0,0,1,104.96666666666667,116.23333333333333
+            L 104.96666666666667,216
+            A 4,4,0,0,1,100.96666666666667,220
+            L 84.96666666666667,220
+            A 4,4,0,0,1,80.96666666666667,216 Z"
+                        fill="var(--color-queries)"
+                        height="107.76666666666667"
+                        radius="4"
+                        width="24"
+                        x="80.96666666666667"
+                        y="112.23333333333333"
+                      />
+                    </g>
+                    <g
+                      class="recharts-layer recharts-bar-rectangle"
+                    >
+                      <path
+                        class="recharts-rectangle"
+                        d="M 147.29999999999998,140.26
+            A 4,4,0,0,1,151.29999999999998,136.26
+            L 167.29999999999998,136.26
+            A 4,4,0,0,1,171.29999999999998,140.26
+            L 171.29999999999998,216
+            A 4,4,0,0,1,167.29999999999998,220
+            L 151.29999999999998,220
+            A 4,4,0,0,1,147.29999999999998,216 Z"
+                        fill="var(--color-queries)"
+                        height="83.74000000000001"
+                        radius="4"
+                        width="24"
+                        x="147.29999999999998"
+                        y="136.26"
+                      />
+                    </g>
+                    <g
+                      class="recharts-layer recharts-bar-rectangle"
+                    >
+                      <path
+                        class="recharts-rectangle"
+                        d="M 213.63333333333333,162.87333333333333
+            A 4,4,0,0,1,217.63333333333333,158.87333333333333
+            L 233.63333333333333,158.87333333333333
+            A 4,4,0,0,1,237.63333333333333,162.87333333333333
+            L 237.63333333333333,216
+            A 4,4,0,0,1,233.63333333333333,220
+            L 217.63333333333333,220
+            A 4,4,0,0,1,213.63333333333333,216 Z"
+                        fill="var(--color-queries)"
+                        height="61.126666666666665"
+                        radius="4"
+                        width="24"
+                        x="213.63333333333333"
+                        y="158.87333333333333"
+                      />
+                    </g>
+                    <g
+                      class="recharts-layer recharts-bar-rectangle"
+                    >
+                      <path
+                        class="recharts-rectangle"
+                        d="M 279.96666666666664,79.48666666666666
+            A 4,4,0,0,1,283.96666666666664,75.48666666666666
+            L 299.96666666666664,75.48666666666666
+            A 4,4,0,0,1,303.96666666666664,79.48666666666666
+            L 303.96666666666664,216
+            A 4,4,0,0,1,299.96666666666664,220
+            L 283.96666666666664,220
+            A 4,4,0,0,1,279.96666666666664,216 Z"
+                        fill="var(--color-queries)"
+                        height="144.51333333333332"
+                        radius="4"
+                        width="24"
+                        x="279.96666666666664"
+                        y="75.48666666666666"
+                      />
+                    </g>
+                    <g
+                      class="recharts-layer recharts-bar-rectangle"
+                    >
+                      <path
+                        class="recharts-rectangle"
+                        d="M 346.29999999999995,148.38666666666666
+            A 4,4,0,0,1,350.29999999999995,144.38666666666666
+            L 366.29999999999995,144.38666666666666
+            A 4,4,0,0,1,370.29999999999995,148.38666666666666
+            L 370.29999999999995,216
+            A 4,4,0,0,1,366.29999999999995,220
+            L 350.29999999999995,220
+            A 4,4,0,0,1,346.29999999999995,216 Z"
+                        fill="var(--color-queries)"
+                        height="75.61333333333334"
+                        radius="4"
+                        width="24"
+                        x="346.29999999999995"
+                        y="144.38666666666666"
+                      />
+                    </g>
+                  </g>
+                  <g
+                    class="recharts-layer"
+                  />
+                </g>
+                <g
+                  class="recharts-layer recharts-bar"
+                >
+                  <g
+                    class="recharts-layer recharts-bar-rectangles"
+                  >
+                    <g
+                      class="recharts-layer recharts-bar-rectangle"
+                    >
+                      <path
+                        class="recharts-rectangle"
+                        d="M 42.63333333333333,217.88
+            A 2.1200000000000045,2.1200000000000045,0,0,1,44.75333333333334,215.76
+            L 64.51333333333332,215.76
+            A 2.1200000000000045,2.1200000000000045,0,0,1,66.63333333333333,217.88
+            L 66.63333333333333,217.88
+            A 2.1200000000000045,2.1200000000000045,0,0,1,64.51333333333332,220
+            L 44.75333333333334,220
+            A 2.1200000000000045,2.1200000000000045,0,0,1,42.63333333333333,217.88 Z"
+                        fill="var(--color-errors)"
+                        height="4.240000000000009"
+                        radius="4"
+                        width="24"
+                        x="42.63333333333333"
+                        y="215.76"
+                      />
+                    </g>
+                    <g
+                      class="recharts-layer recharts-bar-rectangle"
+                    >
+                      <path
+                        class="recharts-rectangle"
+                        d="M 108.96666666666667,218.58666666666664
+            A 1.413333333333341,1.413333333333341,0,0,1,110.38000000000001,217.17333333333332
+            L 131.55333333333334,217.17333333333332
+            A 1.413333333333341,1.413333333333341,0,0,1,132.96666666666667,218.58666666666664
+            L 132.96666666666667,218.58666666666664
+            A 1.413333333333341,1.413333333333341,0,0,1,131.55333333333334,220
+            L 110.38000000000001,220
+            A 1.413333333333341,1.413333333333341,0,0,1,108.96666666666667,218.58666666666664 Z"
+                        fill="var(--color-errors)"
+                        height="2.826666666666682"
+                        radius="4"
+                        width="24"
+                        x="108.96666666666667"
+                        y="217.17333333333332"
+                      />
+                    </g>
+                    <g
+                      class="recharts-layer recharts-bar-rectangle"
+                    >
+                      <path
+                        class="recharts-rectangle"
+                        d="M 175.29999999999998,217.35
+            A 2.6500000000000057,2.6500000000000057,0,0,1,177.95,214.7
+            L 196.64999999999998,214.7
+            A 2.6500000000000057,2.6500000000000057,0,0,1,199.29999999999998,217.35
+            L 199.29999999999998,217.35
+            A 2.6500000000000057,2.6500000000000057,0,0,1,196.64999999999998,220
+            L 177.95,220
+            A 2.6500000000000057,2.6500000000000057,0,0,1,175.29999999999998,217.35 Z"
+                        fill="var(--color-errors)"
+                        height="5.300000000000011"
+                        radius="4"
+                        width="24"
+                        x="175.29999999999998"
+                        y="214.7"
+                      />
+                    </g>
+                    <g
+                      class="recharts-layer recharts-bar-rectangle"
+                    >
+                      <path
+                        class="recharts-rectangle"
+                        d="M 241.63333333333333,219.11666666666667
+            A 0.8833333333333258,0.8833333333333258,0,0,1,242.51666666666665,218.23333333333335
+            L 264.75,218.23333333333335
+            A 0.8833333333333258,0.8833333333333258,0,0,1,265.6333333333333,219.11666666666667
+            L 265.6333333333333,219.11666666666667
+            A 0.8833333333333258,0.8833333333333258,0,0,1,264.75,220
+            L 242.51666666666665,220
+            A 0.8833333333333258,0.8833333333333258,0,0,1,241.63333333333333,219.11666666666667 Z"
+                        fill="var(--color-errors)"
+                        height="1.7666666666666515"
+                        radius="4"
+                        width="24"
+                        x="241.63333333333333"
+                        y="218.23333333333335"
+                      />
+                    </g>
+                    <g
+                      class="recharts-layer recharts-bar-rectangle"
+                    >
+                      <path
+                        class="recharts-rectangle"
+                        d="M 307.96666666666664,216.11333333333334
+            A 3.8866666666666703,3.8866666666666703,0,0,1,311.8533333333333,212.22666666666666
+            L 328.08,212.22666666666666
+            A 3.8866666666666703,3.8866666666666703,0,0,1,331.96666666666664,216.11333333333334
+            L 331.96666666666664,216.11333333333334
+            A 3.8866666666666703,3.8866666666666703,0,0,1,328.08,220
+            L 311.8533333333333,220
+            A 3.8866666666666703,3.8866666666666703,0,0,1,307.96666666666664,216.11333333333334 Z"
+                        fill="var(--color-errors)"
+                        height="7.7733333333333405"
+                        radius="4"
+                        width="24"
+                        x="307.96666666666664"
+                        y="212.22666666666666"
+                      />
+                    </g>
+                    <g
+                      class="recharts-layer recharts-bar-rectangle"
+                    >
+                      <path
+                        class="recharts-rectangle"
+                        d="M 374.29999999999995,218.41
+            A 1.5900000000000034,1.5900000000000034,0,0,1,375.89,216.82
+            L 396.7099999999999,216.82
+            A 1.5900000000000034,1.5900000000000034,0,0,1,398.29999999999995,218.41
+            L 398.29999999999995,218.41
+            A 1.5900000000000034,1.5900000000000034,0,0,1,396.7099999999999,220
+            L 375.89,220
+            A 1.5900000000000034,1.5900000000000034,0,0,1,374.29999999999995,218.41 Z"
+                        fill="var(--color-errors)"
+                        height="3.180000000000007"
+                        radius="4"
+                        width="24"
+                        x="374.29999999999995"
+                        y="216.82"
+                      />
+                    </g>
+                  </g>
+                  <g
+                    class="recharts-layer"
+                  />
+                </g>
+              </svg>
+              <div
+                class="recharts-legend-wrapper"
+                style="position: absolute; width: 398px; height: auto; left: 8px; bottom: 8px"
+              >
+                <div
+                  class="flex items-center justify-center gap-4 pt-3"
+                >
+                  <div
+                    class="flex items-center gap-1.5 [&>svg]:size-3 [&>svg]:text-muted-foreground"
+                  >
+                    <div
+                      class="size-2 shrink-0 rounded-[2px]"
+                      style="background-color: var(--color-queries)"
+                    />
+                    Queries
+                  </div>
+                  <div
+                    class="flex items-center gap-1.5 [&>svg]:size-3 [&>svg]:text-muted-foreground"
+                  >
+                    <div
+                      class="size-2 shrink-0 rounded-[2px]"
+                      style="background-color: var(--color-errors)"
+                    />
+                    Errors
+                  </div>
+                </div>
+              </div>
+              <div
+                class="recharts-tooltip-wrapper"
+                style="visibility: hidden; pointer-events: none; position: absolute; top: 0px; left: 0px"
+                tabindex="-1"
+              />
+            </div>
+          </div>
+        </div>
+      </figure>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`ui-render-block > chartEmpty 1`] = `
+<div>
+  <div
+    class="group/card relative my-2 rounded-lg outline-none focus-visible:ring-2 focus-visible:ring-ring/30 focus-visible:ring-offset-2"
+    tabindex="0"
+  >
+    <div
+      class="flex items-center justify-between gap-2 absolute top-1 right-1 z-10 rounded-md bg-background/85 px-1 py-0.5 transition-opacity duration-150 group-focus-within/card:opacity-100 group-hover/card:opacity-100 opacity-0"
+    >
+      <div
+        class="flex items-center gap-2 text-xs text-muted-foreground"
+      >
+        <span
+          aria-hidden="true"
+          class="
+      inline-flex items-center gap-1 opacity-0 transition-opacity duration-150
+      group-focus-within/card:opacity-100
+    "
+        >
+          <kbd
+            class="pointer-events-none inline-flex h-5 w-fit min-w-5 items-center justify-center gap-1 rounded-xs bg-muted px-1 font-sans text-[0.625rem] font-medium text-muted-foreground select-none [&_svg:not([class*='size-'])]:size-3"
+            data-slot="kbd"
+          >
+            C
+          </kbd>
+          <span>
+            copy
+          </span>
+          <span
+            class="text-muted-foreground/40"
+          >
+            ·
+          </span>
+          <kbd
+            class="pointer-events-none inline-flex h-5 w-fit min-w-5 items-center justify-center gap-1 rounded-xs bg-muted px-1 font-sans text-[0.625rem] font-medium text-muted-foreground select-none [&_svg:not([class*='size-'])]:size-3"
+            data-slot="kbd"
+          >
+            S
+          </kbd>
+          <span>
+            source
+          </span>
+          <span
+            class="text-muted-foreground/40"
+          >
+            ·
+          </span>
+          <kbd
+            class="pointer-events-none inline-flex h-5 w-fit min-w-5 items-center justify-center gap-1 rounded-xs bg-muted px-1 font-sans text-[0.625rem] font-medium text-muted-foreground select-none [&_svg:not([class*='size-'])]:size-3"
+            data-slot="kbd"
+          >
+            Esc
+          </kbd>
+          <span>
+            collapse
+          </span>
+        </span>
+      </div>
+      <div
+        class="flex items-center gap-1"
+      >
+        <button
+          aria-keyshortcuts="S"
+          aria-label="Show source"
+          aria-pressed="false"
+          class="group/button inline-flex shrink-0 items-center justify-center border border-transparent bg-clip-padding font-medium whitespace-nowrap transition-all duration-150 ease-out outline-none select-none focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-2 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 h-5 gap-1 rounded-sm px-2 text-[0.625rem] has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 [&_svg:not([class*='size-'])]:size-2.5 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50"
+          data-slot="button"
+          tabindex="0"
+          type="button"
+        >
+          <svg
+            aria-hidden="true"
+            class="lucide lucide-code-xml"
+            fill="none"
+            height="24"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="m18 16 4-4-4-4"
+            />
+            <path
+              d="m6 8-4 4 4 4"
+            />
+            <path
+              d="m14.5 4-5 16"
+            />
+          </svg>
+          Source
+        </button>
+        <button
+          aria-expanded="false"
+          aria-haspopup="menu"
+          aria-label="More actions"
+          class="group/button inline-flex shrink-0 items-center justify-center border border-transparent bg-clip-padding text-xs/relaxed font-medium whitespace-nowrap transition-all duration-150 ease-out outline-none select-none focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-2 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 size-5 rounded-sm [&_svg:not([class*='size-'])]:size-2.5 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50"
+          data-slot="dropdown-menu-trigger"
+          id="base-ui-_r_2e_"
+          tabindex="0"
+          type="button"
+        >
+          <svg
+            aria-hidden="true"
+            class="lucide lucide-ellipsis size-3"
+            fill="none"
+            height="24"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <circle
+              cx="12"
+              cy="12"
+              r="1"
+            />
+            <circle
+              cx="19"
+              cy="12"
+              r="1"
+            />
+            <circle
+              cx="5"
+              cy="12"
+              r="1"
+            />
+          </svg>
+        </button>
+      </div>
+    </div>
+    <div
+      class="pt-0"
+    >
+      <figure
+        class="space-y-2 tabular-nums"
+      >
+        <figcaption
+          class="space-y-0.5"
+        >
+          <div
+            class="text-sm font-medium text-foreground"
+          >
+            No data yet
+          </div>
+        </figcaption>
+        <div
+          class="
+      flex h-48 items-center justify-center rounded-md border border-dashed
+      border-border bg-background/40 px-4 text-center text-xs
+      text-muted-foreground
+    "
+        >
+          No rows to chart yet — run the query above, or pass a literal data array.
+        </div>
+      </figure>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`ui-render-block > chartKpiDark 1`] = `
+<div>
+  <div
+    class="dark bg-background p-4 text-foreground"
+  >
+    <div
+      class="group/card relative my-2 rounded-lg outline-none focus-visible:ring-2 focus-visible:ring-ring/30 focus-visible:ring-offset-2"
+      tabindex="0"
+    >
+      <div
+        class="flex items-center justify-between gap-2 absolute top-1 right-1 z-10 rounded-md bg-background/85 px-1 py-0.5 transition-opacity duration-150 group-focus-within/card:opacity-100 group-hover/card:opacity-100 opacity-0"
+      >
+        <div
+          class="flex items-center gap-2 text-xs text-muted-foreground"
+        >
+          <span
+            aria-hidden="true"
+            class="
+      inline-flex items-center gap-1 opacity-0 transition-opacity duration-150
+      group-focus-within/card:opacity-100
+    "
+          >
+            <kbd
+              class="pointer-events-none inline-flex h-5 w-fit min-w-5 items-center justify-center gap-1 rounded-xs bg-muted px-1 font-sans text-[0.625rem] font-medium text-muted-foreground select-none [&_svg:not([class*='size-'])]:size-3"
+              data-slot="kbd"
+            >
+              C
+            </kbd>
+            <span>
+              copy
+            </span>
+            <span
+              class="text-muted-foreground/40"
+            >
+              ·
+            </span>
+            <kbd
+              class="pointer-events-none inline-flex h-5 w-fit min-w-5 items-center justify-center gap-1 rounded-xs bg-muted px-1 font-sans text-[0.625rem] font-medium text-muted-foreground select-none [&_svg:not([class*='size-'])]:size-3"
+              data-slot="kbd"
+            >
+              S
+            </kbd>
+            <span>
+              source
+            </span>
+            <span
+              class="text-muted-foreground/40"
+            >
+              ·
+            </span>
+            <kbd
+              class="pointer-events-none inline-flex h-5 w-fit min-w-5 items-center justify-center gap-1 rounded-xs bg-muted px-1 font-sans text-[0.625rem] font-medium text-muted-foreground select-none [&_svg:not([class*='size-'])]:size-3"
+              data-slot="kbd"
+            >
+              Esc
+            </kbd>
+            <span>
+              collapse
+            </span>
+          </span>
+        </div>
+        <div
+          class="flex items-center gap-1"
+        >
+          <button
+            aria-keyshortcuts="S"
+            aria-label="Show source"
+            aria-pressed="false"
+            class="group/button inline-flex shrink-0 items-center justify-center border border-transparent bg-clip-padding font-medium whitespace-nowrap transition-all duration-150 ease-out outline-none select-none focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-2 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 h-5 gap-1 rounded-sm px-2 text-[0.625rem] has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 [&_svg:not([class*='size-'])]:size-2.5 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50"
+            data-slot="button"
+            tabindex="0"
+            type="button"
+          >
+            <svg
+              aria-hidden="true"
+              class="lucide lucide-code-xml"
+              fill="none"
+              height="24"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+              width="24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="m18 16 4-4-4-4"
+              />
+              <path
+                d="m6 8-4 4 4 4"
+              />
+              <path
+                d="m14.5 4-5 16"
+              />
+            </svg>
+            Source
+          </button>
+          <button
+            aria-expanded="false"
+            aria-haspopup="menu"
+            aria-label="More actions"
+            class="group/button inline-flex shrink-0 items-center justify-center border border-transparent bg-clip-padding text-xs/relaxed font-medium whitespace-nowrap transition-all duration-150 ease-out outline-none select-none focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-2 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 size-5 rounded-sm [&_svg:not([class*='size-'])]:size-2.5 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50"
+            data-slot="dropdown-menu-trigger"
+            id="base-ui-_r_28_"
+            tabindex="0"
+            type="button"
+          >
+            <svg
+              aria-hidden="true"
+              class="lucide lucide-ellipsis size-3"
+              fill="none"
+              height="24"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+              width="24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <circle
+                cx="12"
+                cy="12"
+                r="1"
+              />
+              <circle
+                cx="19"
+                cy="12"
+                r="1"
+              />
+              <circle
+                cx="5"
+                cy="12"
+                r="1"
+              />
+            </svg>
+          </button>
+        </div>
+      </div>
+      <div
+        class="pt-0"
+      >
+        <figure
+          class="space-y-2 tabular-nums"
+        >
+          <div
+            class="flex flex-col gap-1 tabular-nums"
+          >
+            <span
+              class="text-xs tracking-wide text-muted-foreground uppercase"
+            >
+              Active users
+            </span>
+            <span
+              class="text-data text-3xl font-semibold text-foreground"
+            >
+              1,248
+            </span>
+            <span
+              aria-label="increased by 128 vs last week"
+              class="text-xs font-medium text-(--color-success)"
+            >
+              <span
+                aria-hidden="true"
+              >
+                ▲ 
+                +
+                128
+              </span>
+              <span
+                aria-hidden="true"
+                class="ml-1 text-muted-foreground"
+              >
+                vs last week
+              </span>
+            </span>
+            <span
+              class="text-xs text-muted-foreground"
+            >
+              Distinct users who ran at least one query.
+            </span>
+          </div>
+        </figure>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`ui-render-block > chartKpiExample 1`] = `
+<div>
+  <div
+    class="group/card relative my-2 rounded-lg outline-none focus-visible:ring-2 focus-visible:ring-ring/30 focus-visible:ring-offset-2"
+    tabindex="0"
+  >
+    <div
+      class="flex items-center justify-between gap-2 absolute top-1 right-1 z-10 rounded-md bg-background/85 px-1 py-0.5 transition-opacity duration-150 group-focus-within/card:opacity-100 group-hover/card:opacity-100 opacity-0"
+    >
+      <div
+        class="flex items-center gap-2 text-xs text-muted-foreground"
+      >
+        <span
+          aria-hidden="true"
+          class="
+      inline-flex items-center gap-1 opacity-0 transition-opacity duration-150
+      group-focus-within/card:opacity-100
+    "
+        >
+          <kbd
+            class="pointer-events-none inline-flex h-5 w-fit min-w-5 items-center justify-center gap-1 rounded-xs bg-muted px-1 font-sans text-[0.625rem] font-medium text-muted-foreground select-none [&_svg:not([class*='size-'])]:size-3"
+            data-slot="kbd"
+          >
+            C
+          </kbd>
+          <span>
+            copy
+          </span>
+          <span
+            class="text-muted-foreground/40"
+          >
+            ·
+          </span>
+          <kbd
+            class="pointer-events-none inline-flex h-5 w-fit min-w-5 items-center justify-center gap-1 rounded-xs bg-muted px-1 font-sans text-[0.625rem] font-medium text-muted-foreground select-none [&_svg:not([class*='size-'])]:size-3"
+            data-slot="kbd"
+          >
+            S
+          </kbd>
+          <span>
+            source
+          </span>
+          <span
+            class="text-muted-foreground/40"
+          >
+            ·
+          </span>
+          <kbd
+            class="pointer-events-none inline-flex h-5 w-fit min-w-5 items-center justify-center gap-1 rounded-xs bg-muted px-1 font-sans text-[0.625rem] font-medium text-muted-foreground select-none [&_svg:not([class*='size-'])]:size-3"
+            data-slot="kbd"
+          >
+            Esc
+          </kbd>
+          <span>
+            collapse
+          </span>
+        </span>
+      </div>
+      <div
+        class="flex items-center gap-1"
+      >
+        <button
+          aria-keyshortcuts="S"
+          aria-label="Show source"
+          aria-pressed="false"
+          class="group/button inline-flex shrink-0 items-center justify-center border border-transparent bg-clip-padding font-medium whitespace-nowrap transition-all duration-150 ease-out outline-none select-none focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-2 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 h-5 gap-1 rounded-sm px-2 text-[0.625rem] has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 [&_svg:not([class*='size-'])]:size-2.5 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50"
+          data-slot="button"
+          tabindex="0"
+          type="button"
+        >
+          <svg
+            aria-hidden="true"
+            class="lucide lucide-code-xml"
+            fill="none"
+            height="24"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="m18 16 4-4-4-4"
+            />
+            <path
+              d="m6 8-4 4 4 4"
+            />
+            <path
+              d="m14.5 4-5 16"
+            />
+          </svg>
+          Source
+        </button>
+        <button
+          aria-expanded="false"
+          aria-haspopup="menu"
+          aria-label="More actions"
+          class="group/button inline-flex shrink-0 items-center justify-center border border-transparent bg-clip-padding text-xs/relaxed font-medium whitespace-nowrap transition-all duration-150 ease-out outline-none select-none focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-2 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 size-5 rounded-sm [&_svg:not([class*='size-'])]:size-2.5 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50"
+          data-slot="dropdown-menu-trigger"
+          id="base-ui-_r_1s_"
+          tabindex="0"
+          type="button"
+        >
+          <svg
+            aria-hidden="true"
+            class="lucide lucide-ellipsis size-3"
+            fill="none"
+            height="24"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <circle
+              cx="12"
+              cy="12"
+              r="1"
+            />
+            <circle
+              cx="19"
+              cy="12"
+              r="1"
+            />
+            <circle
+              cx="5"
+              cy="12"
+              r="1"
+            />
+          </svg>
+        </button>
+      </div>
+    </div>
+    <div
+      class="pt-0"
+    >
+      <figure
+        class="space-y-2 tabular-nums"
+      >
+        <div
+          class="flex flex-col gap-1 tabular-nums"
+        >
+          <span
+            class="text-xs tracking-wide text-muted-foreground uppercase"
+          >
+            Active users
+          </span>
+          <span
+            class="text-data text-3xl font-semibold text-foreground"
+          >
+            1,248
+          </span>
+          <span
+            aria-label="increased by 128 vs last week"
+            class="text-xs font-medium text-(--color-success)"
+          >
+            <span
+              aria-hidden="true"
+            >
+              ▲ 
+              +
+              128
+            </span>
+            <span
+              aria-hidden="true"
+              class="ml-1 text-muted-foreground"
+            >
+              vs last week
+            </span>
+          </span>
+          <span
+            class="text-xs text-muted-foreground"
+          >
+            Distinct users who ran at least one query.
+          </span>
+        </div>
+      </figure>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`ui-render-block > chartKpiNegative 1`] = `
+<div>
+  <div
+    class="group/card relative my-2 rounded-lg outline-none focus-visible:ring-2 focus-visible:ring-ring/30 focus-visible:ring-offset-2"
+    tabindex="0"
+  >
+    <div
+      class="flex items-center justify-between gap-2 absolute top-1 right-1 z-10 rounded-md bg-background/85 px-1 py-0.5 transition-opacity duration-150 group-focus-within/card:opacity-100 group-hover/card:opacity-100 opacity-0"
+    >
+      <div
+        class="flex items-center gap-2 text-xs text-muted-foreground"
+      >
+        <span
+          aria-hidden="true"
+          class="
+      inline-flex items-center gap-1 opacity-0 transition-opacity duration-150
+      group-focus-within/card:opacity-100
+    "
+        >
+          <kbd
+            class="pointer-events-none inline-flex h-5 w-fit min-w-5 items-center justify-center gap-1 rounded-xs bg-muted px-1 font-sans text-[0.625rem] font-medium text-muted-foreground select-none [&_svg:not([class*='size-'])]:size-3"
+            data-slot="kbd"
+          >
+            C
+          </kbd>
+          <span>
+            copy
+          </span>
+          <span
+            class="text-muted-foreground/40"
+          >
+            ·
+          </span>
+          <kbd
+            class="pointer-events-none inline-flex h-5 w-fit min-w-5 items-center justify-center gap-1 rounded-xs bg-muted px-1 font-sans text-[0.625rem] font-medium text-muted-foreground select-none [&_svg:not([class*='size-'])]:size-3"
+            data-slot="kbd"
+          >
+            S
+          </kbd>
+          <span>
+            source
+          </span>
+          <span
+            class="text-muted-foreground/40"
+          >
+            ·
+          </span>
+          <kbd
+            class="pointer-events-none inline-flex h-5 w-fit min-w-5 items-center justify-center gap-1 rounded-xs bg-muted px-1 font-sans text-[0.625rem] font-medium text-muted-foreground select-none [&_svg:not([class*='size-'])]:size-3"
+            data-slot="kbd"
+          >
+            Esc
+          </kbd>
+          <span>
+            collapse
+          </span>
+        </span>
+      </div>
+      <div
+        class="flex items-center gap-1"
+      >
+        <button
+          aria-keyshortcuts="S"
+          aria-label="Show source"
+          aria-pressed="false"
+          class="group/button inline-flex shrink-0 items-center justify-center border border-transparent bg-clip-padding font-medium whitespace-nowrap transition-all duration-150 ease-out outline-none select-none focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-2 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 h-5 gap-1 rounded-sm px-2 text-[0.625rem] has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 [&_svg:not([class*='size-'])]:size-2.5 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50"
+          data-slot="button"
+          tabindex="0"
+          type="button"
+        >
+          <svg
+            aria-hidden="true"
+            class="lucide lucide-code-xml"
+            fill="none"
+            height="24"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="m18 16 4-4-4-4"
+            />
+            <path
+              d="m6 8-4 4 4 4"
+            />
+            <path
+              d="m14.5 4-5 16"
+            />
+          </svg>
+          Source
+        </button>
+        <button
+          aria-expanded="false"
+          aria-haspopup="menu"
+          aria-label="More actions"
+          class="group/button inline-flex shrink-0 items-center justify-center border border-transparent bg-clip-padding text-xs/relaxed font-medium whitespace-nowrap transition-all duration-150 ease-out outline-none select-none focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-2 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 size-5 rounded-sm [&_svg:not([class*='size-'])]:size-2.5 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50"
+          data-slot="dropdown-menu-trigger"
+          id="base-ui-_r_22_"
+          tabindex="0"
+          type="button"
+        >
+          <svg
+            aria-hidden="true"
+            class="lucide lucide-ellipsis size-3"
+            fill="none"
+            height="24"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <circle
+              cx="12"
+              cy="12"
+              r="1"
+            />
+            <circle
+              cx="19"
+              cy="12"
+              r="1"
+            />
+            <circle
+              cx="5"
+              cy="12"
+              r="1"
+            />
+          </svg>
+        </button>
+      </div>
+    </div>
+    <div
+      class="pt-0"
+    >
+      <figure
+        class="space-y-2 tabular-nums"
+      >
+        <div
+          class="flex flex-col gap-1 tabular-nums"
+        >
+          <span
+            class="text-xs tracking-wide text-muted-foreground uppercase"
+          >
+            Revenue today
+          </span>
+          <span
+            class="text-data text-3xl font-semibold text-foreground"
+          >
+            $48,250.00
+          </span>
+          <span
+            aria-label="decreased by -4.0% vs yesterday"
+            class="text-xs font-medium text-(--color-destructive)"
+          >
+            <span
+              aria-hidden="true"
+            >
+              ▼ 
+              -4.0%
+            </span>
+            <span
+              aria-hidden="true"
+              class="ml-1 text-muted-foreground"
+            >
+              vs yesterday
+            </span>
+          </span>
+          <span
+            class="text-xs text-muted-foreground"
+          >
+            Revenue trend for the current billing window.
+          </span>
+        </div>
+      </figure>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`ui-render-block > chartLineDark 1`] = `
+<div>
+  <div
+    class="dark bg-background p-4 text-foreground"
+  >
+    <div
+      class="group/card relative my-2 rounded-lg outline-none focus-visible:ring-2 focus-visible:ring-ring/30 focus-visible:ring-offset-2"
+      tabindex="0"
+    >
+      <div
+        class="flex items-center justify-between gap-2 absolute top-1 right-1 z-10 rounded-md bg-background/85 px-1 py-0.5 transition-opacity duration-150 group-focus-within/card:opacity-100 group-hover/card:opacity-100 opacity-0"
+      >
+        <div
+          class="flex items-center gap-2 text-xs text-muted-foreground"
+        >
+          <span
+            aria-hidden="true"
+            class="
+      inline-flex items-center gap-1 opacity-0 transition-opacity duration-150
+      group-focus-within/card:opacity-100
+    "
+          >
+            <kbd
+              class="pointer-events-none inline-flex h-5 w-fit min-w-5 items-center justify-center gap-1 rounded-xs bg-muted px-1 font-sans text-[0.625rem] font-medium text-muted-foreground select-none [&_svg:not([class*='size-'])]:size-3"
+              data-slot="kbd"
+            >
+              C
+            </kbd>
+            <span>
+              copy
+            </span>
+            <span
+              class="text-muted-foreground/40"
+            >
+              ·
+            </span>
+            <kbd
+              class="pointer-events-none inline-flex h-5 w-fit min-w-5 items-center justify-center gap-1 rounded-xs bg-muted px-1 font-sans text-[0.625rem] font-medium text-muted-foreground select-none [&_svg:not([class*='size-'])]:size-3"
+              data-slot="kbd"
+            >
+              S
+            </kbd>
+            <span>
+              source
+            </span>
+            <span
+              class="text-muted-foreground/40"
+            >
+              ·
+            </span>
+            <kbd
+              class="pointer-events-none inline-flex h-5 w-fit min-w-5 items-center justify-center gap-1 rounded-xs bg-muted px-1 font-sans text-[0.625rem] font-medium text-muted-foreground select-none [&_svg:not([class*='size-'])]:size-3"
+              data-slot="kbd"
+            >
+              Esc
+            </kbd>
+            <span>
+              collapse
+            </span>
+          </span>
+        </div>
+        <div
+          class="flex items-center gap-1"
+        >
+          <button
+            aria-keyshortcuts="S"
+            aria-label="Show source"
+            aria-pressed="false"
+            class="group/button inline-flex shrink-0 items-center justify-center border border-transparent bg-clip-padding font-medium whitespace-nowrap transition-all duration-150 ease-out outline-none select-none focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-2 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 h-5 gap-1 rounded-sm px-2 text-[0.625rem] has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 [&_svg:not([class*='size-'])]:size-2.5 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50"
+            data-slot="button"
+            tabindex="0"
+            type="button"
+          >
+            <svg
+              aria-hidden="true"
+              class="lucide lucide-code-xml"
+              fill="none"
+              height="24"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+              width="24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="m18 16 4-4-4-4"
+              />
+              <path
+                d="m6 8-4 4 4 4"
+              />
+              <path
+                d="m14.5 4-5 16"
+              />
+            </svg>
+            Source
+          </button>
+          <button
+            aria-expanded="false"
+            aria-haspopup="menu"
+            aria-label="More actions"
+            class="group/button inline-flex shrink-0 items-center justify-center border border-transparent bg-clip-padding text-xs/relaxed font-medium whitespace-nowrap transition-all duration-150 ease-out outline-none select-none focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-2 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 size-5 rounded-sm [&_svg:not([class*='size-'])]:size-2.5 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50"
+            data-slot="dropdown-menu-trigger"
+            id="base-ui-_r_17_"
+            tabindex="0"
+            type="button"
+          >
+            <svg
+              aria-hidden="true"
+              class="lucide lucide-ellipsis size-3"
+              fill="none"
+              height="24"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+              width="24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <circle
+                cx="12"
+                cy="12"
+                r="1"
+              />
+              <circle
+                cx="19"
+                cy="12"
+                r="1"
+              />
+              <circle
+                cx="5"
+                cy="12"
+                r="1"
+              />
+            </svg>
+          </button>
+        </div>
+      </div>
+      <div
+        class="pt-0"
+      >
+        <figure
+          class="space-y-2 tabular-nums"
+        >
+          <figcaption
+            class="space-y-0.5"
+          >
+            <div
+              class="text-sm font-medium text-foreground"
+            >
+              Latency over the day
+            </div>
+          </figcaption>
+          <div
+            class="flex aspect-video justify-center text-xs [&_.recharts-cartesian-axis-tick_text]:fill-muted-foreground [&_.recharts-cartesian-grid_line[stroke='#ccc']]:stroke-border/50 [&_.recharts-curve.recharts-tooltip-cursor]:stroke-border [&_.recharts-dot[stroke='#fff']]:stroke-transparent [&_.recharts-layer]:outline-hidden [&_.recharts-polar-grid_[stroke='#ccc']]:stroke-border [&_.recharts-radial-bar-background-sector]:fill-muted [&_.recharts-rectangle.recharts-tooltip-cursor]:fill-muted [&_.recharts-reference-line_[stroke='#ccc']]:stroke-border [&_.recharts-sector]:outline-hidden [&_.recharts-sector[stroke='#fff']]:stroke-transparent [&_.recharts-surface]:outline-hidden h-64 w-full"
+            data-chart="chart-_r_19_"
+            data-slot="chart"
+          >
+            <style>
+              
+.dark [data-chart=chart-_r_19_] {
+  --color-latency: var(--chart-1);
+}
+
+
+ [data-chart=chart-_r_19_] {
+  --color-latency: var(--chart-1);
+}
+
+            </style>
+            <div
+              class="recharts-responsive-container"
+              style="width: 100%; height: 100%; min-width: 0px"
+            >
+              <div
+                class="recharts-wrapper"
+                style="position: relative; cursor: default; width: 100%; height: 100%; max-height: 256px; max-width: 382px"
+              >
+                <svg
+                  class="recharts-surface"
+                  height="256"
+                  role="application"
+                  style="width: 100%; height: 100%"
+                  tabindex="0"
+                  viewBox="0 0 382 256"
+                  width="382"
+                >
+                  <title />
+                  <desc />
+                  <defs>
+                    <clippath
+                      id="recharts18-clip"
+                    >
+                      <rect
+                        height="210"
+                        width="330"
+                        x="44"
+                        y="8"
+                      />
+                    </clippath>
+                  </defs>
+                  <g
+                    class="recharts-cartesian-grid"
+                  >
+                    <g
+                      class="recharts-cartesian-grid-horizontal"
+                    >
+                      <line
+                        fill="none"
+                        height="210"
+                        stroke="#ccc"
+                        width="330"
+                        x="44"
+                        x1="44"
+                        x2="374"
+                        y="8"
+                        y1="218"
+                        y2="218"
+                      />
+                      <line
+                        fill="none"
+                        height="210"
+                        stroke="#ccc"
+                        width="330"
+                        x="44"
+                        x1="44"
+                        x2="374"
+                        y="8"
+                        y1="165.5"
+                        y2="165.5"
+                      />
+                      <line
+                        fill="none"
+                        height="210"
+                        stroke="#ccc"
+                        width="330"
+                        x="44"
+                        x1="44"
+                        x2="374"
+                        y="8"
+                        y1="113"
+                        y2="113"
+                      />
+                      <line
+                        fill="none"
+                        height="210"
+                        stroke="#ccc"
+                        width="330"
+                        x="44"
+                        x1="44"
+                        x2="374"
+                        y="8"
+                        y1="60.5"
+                        y2="60.5"
+                      />
+                      <line
+                        fill="none"
+                        height="210"
+                        stroke="#ccc"
+                        width="330"
+                        x="44"
+                        x1="44"
+                        x2="374"
+                        y="8"
+                        y1="8"
+                        y2="8"
+                      />
+                    </g>
+                  </g>
+                  <g
+                    class="recharts-layer recharts-cartesian-axis recharts-xAxis xAxis"
+                  >
+                    <g
+                      class="recharts-cartesian-axis-ticks"
+                    >
+                      <g
+                        class="recharts-layer recharts-cartesian-axis-tick"
+                      >
+                        <text
+                          class="recharts-text recharts-cartesian-axis-tick-value"
+                          fill="#666"
+                          height="30"
+                          orientation="bottom"
+                          stroke="none"
+                          text-anchor="middle"
+                          width="330"
+                        >
+                          <tspan>
+                            00:00
+                          </tspan>
+                        </text>
+                      </g>
+                      <g
+                        class="recharts-layer recharts-cartesian-axis-tick"
+                      >
+                        <text
+                          class="recharts-text recharts-cartesian-axis-tick-value"
+                          fill="#666"
+                          height="30"
+                          orientation="bottom"
+                          stroke="none"
+                          text-anchor="middle"
+                          width="330"
+                        >
+                          <tspan>
+                            04:00
+                          </tspan>
+                        </text>
+                      </g>
+                      <g
+                        class="recharts-layer recharts-cartesian-axis-tick"
+                      >
+                        <text
+                          class="recharts-text recharts-cartesian-axis-tick-value"
+                          fill="#666"
+                          height="30"
+                          orientation="bottom"
+                          stroke="none"
+                          text-anchor="middle"
+                          width="330"
+                        >
+                          <tspan>
+                            08:00
+                          </tspan>
+                        </text>
+                      </g>
+                      <g
+                        class="recharts-layer recharts-cartesian-axis-tick"
+                      >
+                        <text
+                          class="recharts-text recharts-cartesian-axis-tick-value"
+                          fill="#666"
+                          height="30"
+                          orientation="bottom"
+                          stroke="none"
+                          text-anchor="middle"
+                          width="330"
+                        >
+                          <tspan>
+                            12:00
+                          </tspan>
+                        </text>
+                      </g>
+                      <g
+                        class="recharts-layer recharts-cartesian-axis-tick"
+                      >
+                        <text
+                          class="recharts-text recharts-cartesian-axis-tick-value"
+                          fill="#666"
+                          height="30"
+                          orientation="bottom"
+                          stroke="none"
+                          text-anchor="middle"
+                          width="330"
+                        >
+                          <tspan>
+                            16:00
+                          </tspan>
+                        </text>
+                      </g>
+                      <g
+                        class="recharts-layer recharts-cartesian-axis-tick"
+                      >
+                        <text
+                          class="recharts-text recharts-cartesian-axis-tick-value"
+                          fill="#666"
+                          height="30"
+                          orientation="bottom"
+                          stroke="none"
+                          text-anchor="middle"
+                          width="330"
+                        >
+                          <tspan>
+                            20:00
+                          </tspan>
+                        </text>
+                      </g>
+                    </g>
+                  </g>
+                  <g
+                    class="recharts-layer recharts-cartesian-axis recharts-yAxis yAxis"
+                  >
+                    <g
+                      class="recharts-cartesian-axis-ticks"
+                    >
+                      <g
+                        class="recharts-layer recharts-cartesian-axis-tick"
+                      >
+                        <text
+                          class="recharts-text recharts-cartesian-axis-tick-value"
+                          fill="#666"
+                          height="210"
+                          orientation="left"
+                          stroke="none"
+                          text-anchor="end"
+                          width="36"
+                        >
+                          <tspan>
+                            25
+                          </tspan>
+                        </text>
+                      </g>
+                      <g
+                        class="recharts-layer recharts-cartesian-axis-tick"
+                      >
+                        <text
+                          class="recharts-text recharts-cartesian-axis-tick-value"
+                          fill="#666"
+                          height="210"
+                          orientation="left"
+                          stroke="none"
+                          text-anchor="end"
+                          width="36"
+                        >
+                          <tspan>
+                            50
+                          </tspan>
+                        </text>
+                      </g>
+                      <g
+                        class="recharts-layer recharts-cartesian-axis-tick"
+                      >
+                        <text
+                          class="recharts-text recharts-cartesian-axis-tick-value"
+                          fill="#666"
+                          height="210"
+                          orientation="left"
+                          stroke="none"
+                          text-anchor="end"
+                          width="36"
+                        >
+                          <tspan>
+                            75
+                          </tspan>
+                        </text>
+                      </g>
+                      <g
+                        class="recharts-layer recharts-cartesian-axis-tick"
+                      >
+                        <text
+                          class="recharts-text recharts-cartesian-axis-tick-value"
+                          fill="#666"
+                          height="210"
+                          orientation="left"
+                          stroke="none"
+                          text-anchor="end"
+                          width="36"
+                        >
+                          <tspan>
+                            100
+                          </tspan>
+                        </text>
+                      </g>
+                      <g
+                        class="recharts-layer recharts-cartesian-axis-tick"
+                      >
+                        <text
+                          class="recharts-text recharts-cartesian-axis-tick-value"
+                          fill="#666"
+                          height="210"
+                          orientation="left"
+                          stroke="none"
+                          text-anchor="end"
+                          width="36"
+                        >
+                          <tspan>
+                            125
+                          </tspan>
+                        </text>
+                      </g>
+                    </g>
+                  </g>
+                  <g
+                    class="recharts-layer recharts-line"
+                  >
+                    <path
+                      class="recharts-curve recharts-line-curve"
+                      d="M44,176C66,189.65,88,203.3,110,203.3C132,203.3,154,160.6,176,129.8C198,99,220,18.5,242,18.5C264,18.5,286,68.2,308,92C330,115.8,352,138.55,374,161.3"
+                      fill="none"
+                      height="210"
+                      stroke="var(--color-latency)"
+                      stroke-width="2"
+                      width="330"
+                    />
+                    <g
+                      class="recharts-layer"
+                    />
+                  </g>
+                </svg>
+                <div
+                  class="recharts-tooltip-wrapper"
+                  style="visibility: hidden; pointer-events: none; position: absolute; top: 0px; left: 0px"
+                  tabindex="-1"
+                />
+              </div>
+            </div>
+          </div>
+        </figure>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`ui-render-block > chartLineExample 1`] = `
+<div>
+  <div
+    class="group/card relative my-2 rounded-lg outline-none focus-visible:ring-2 focus-visible:ring-ring/30 focus-visible:ring-offset-2"
+    tabindex="0"
+  >
+    <div
+      class="flex items-center justify-between gap-2 absolute top-1 right-1 z-10 rounded-md bg-background/85 px-1 py-0.5 transition-opacity duration-150 group-focus-within/card:opacity-100 group-hover/card:opacity-100 opacity-0"
+    >
+      <div
+        class="flex items-center gap-2 text-xs text-muted-foreground"
+      >
+        <span
+          aria-hidden="true"
+          class="
+      inline-flex items-center gap-1 opacity-0 transition-opacity duration-150
+      group-focus-within/card:opacity-100
+    "
+        >
+          <kbd
+            class="pointer-events-none inline-flex h-5 w-fit min-w-5 items-center justify-center gap-1 rounded-xs bg-muted px-1 font-sans text-[0.625rem] font-medium text-muted-foreground select-none [&_svg:not([class*='size-'])]:size-3"
+            data-slot="kbd"
+          >
+            C
+          </kbd>
+          <span>
+            copy
+          </span>
+          <span
+            class="text-muted-foreground/40"
+          >
+            ·
+          </span>
+          <kbd
+            class="pointer-events-none inline-flex h-5 w-fit min-w-5 items-center justify-center gap-1 rounded-xs bg-muted px-1 font-sans text-[0.625rem] font-medium text-muted-foreground select-none [&_svg:not([class*='size-'])]:size-3"
+            data-slot="kbd"
+          >
+            S
+          </kbd>
+          <span>
+            source
+          </span>
+          <span
+            class="text-muted-foreground/40"
+          >
+            ·
+          </span>
+          <kbd
+            class="pointer-events-none inline-flex h-5 w-fit min-w-5 items-center justify-center gap-1 rounded-xs bg-muted px-1 font-sans text-[0.625rem] font-medium text-muted-foreground select-none [&_svg:not([class*='size-'])]:size-3"
+            data-slot="kbd"
+          >
+            Esc
+          </kbd>
+          <span>
+            collapse
+          </span>
+        </span>
+      </div>
+      <div
+        class="flex items-center gap-1"
+      >
+        <button
+          aria-keyshortcuts="S"
+          aria-label="Show source"
+          aria-pressed="false"
+          class="group/button inline-flex shrink-0 items-center justify-center border border-transparent bg-clip-padding font-medium whitespace-nowrap transition-all duration-150 ease-out outline-none select-none focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-2 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 h-5 gap-1 rounded-sm px-2 text-[0.625rem] has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 [&_svg:not([class*='size-'])]:size-2.5 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50"
+          data-slot="button"
+          tabindex="0"
+          type="button"
+        >
+          <svg
+            aria-hidden="true"
+            class="lucide lucide-code-xml"
+            fill="none"
+            height="24"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="m18 16 4-4-4-4"
+            />
+            <path
+              d="m6 8-4 4 4 4"
+            />
+            <path
+              d="m14.5 4-5 16"
+            />
+          </svg>
+          Source
+        </button>
+        <button
+          aria-expanded="false"
+          aria-haspopup="menu"
+          aria-label="More actions"
+          class="group/button inline-flex shrink-0 items-center justify-center border border-transparent bg-clip-padding text-xs/relaxed font-medium whitespace-nowrap transition-all duration-150 ease-out outline-none select-none focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-2 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 size-5 rounded-sm [&_svg:not([class*='size-'])]:size-2.5 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50"
+          data-slot="dropdown-menu-trigger"
+          id="base-ui-_r_10_"
+          tabindex="0"
+          type="button"
+        >
+          <svg
+            aria-hidden="true"
+            class="lucide lucide-ellipsis size-3"
+            fill="none"
+            height="24"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <circle
+              cx="12"
+              cy="12"
+              r="1"
+            />
+            <circle
+              cx="19"
+              cy="12"
+              r="1"
+            />
+            <circle
+              cx="5"
+              cy="12"
+              r="1"
+            />
+          </svg>
+        </button>
+      </div>
+    </div>
+    <div
+      class="pt-0"
+    >
+      <figure
+        class="space-y-2 tabular-nums"
+      >
+        <figcaption
+          class="space-y-0.5"
+        >
+          <div
+            class="text-sm font-medium text-foreground"
+          >
+            Latency over the day
+          </div>
+        </figcaption>
+        <div
+          class="flex aspect-video justify-center text-xs [&_.recharts-cartesian-axis-tick_text]:fill-muted-foreground [&_.recharts-cartesian-grid_line[stroke='#ccc']]:stroke-border/50 [&_.recharts-curve.recharts-tooltip-cursor]:stroke-border [&_.recharts-dot[stroke='#fff']]:stroke-transparent [&_.recharts-layer]:outline-hidden [&_.recharts-polar-grid_[stroke='#ccc']]:stroke-border [&_.recharts-radial-bar-background-sector]:fill-muted [&_.recharts-rectangle.recharts-tooltip-cursor]:fill-muted [&_.recharts-reference-line_[stroke='#ccc']]:stroke-border [&_.recharts-sector]:outline-hidden [&_.recharts-sector[stroke='#fff']]:stroke-transparent [&_.recharts-surface]:outline-hidden h-64 w-full"
+          data-chart="chart-_r_12_"
+          data-slot="chart"
+        >
+          <style>
+            
+.dark [data-chart=chart-_r_12_] {
+  --color-latency: var(--chart-1);
+}
+
+
+ [data-chart=chart-_r_12_] {
+  --color-latency: var(--chart-1);
+}
+
+          </style>
+          <div
+            class="recharts-responsive-container"
+            style="width: 100%; height: 100%; min-width: 0px"
+          >
+            <div
+              class="recharts-wrapper"
+              style="position: relative; cursor: default; width: 100%; height: 100%; max-height: 256px; max-width: 414px"
+            >
+              <svg
+                class="recharts-surface"
+                height="256"
+                role="application"
+                style="width: 100%; height: 100%"
+                tabindex="0"
+                viewBox="0 0 414 256"
+                width="414"
+              >
+                <title />
+                <desc />
+                <defs>
+                  <clippath
+                    id="recharts15-clip"
+                  >
+                    <rect
+                      height="210"
+                      width="362"
+                      x="44"
+                      y="8"
+                    />
+                  </clippath>
+                </defs>
+                <g
+                  class="recharts-cartesian-grid"
+                >
+                  <g
+                    class="recharts-cartesian-grid-horizontal"
+                  >
+                    <line
+                      fill="none"
+                      height="210"
+                      stroke="#ccc"
+                      width="362"
+                      x="44"
+                      x1="44"
+                      x2="406"
+                      y="8"
+                      y1="218"
+                      y2="218"
+                    />
+                    <line
+                      fill="none"
+                      height="210"
+                      stroke="#ccc"
+                      width="362"
+                      x="44"
+                      x1="44"
+                      x2="406"
+                      y="8"
+                      y1="165.5"
+                      y2="165.5"
+                    />
+                    <line
+                      fill="none"
+                      height="210"
+                      stroke="#ccc"
+                      width="362"
+                      x="44"
+                      x1="44"
+                      x2="406"
+                      y="8"
+                      y1="113"
+                      y2="113"
+                    />
+                    <line
+                      fill="none"
+                      height="210"
+                      stroke="#ccc"
+                      width="362"
+                      x="44"
+                      x1="44"
+                      x2="406"
+                      y="8"
+                      y1="60.5"
+                      y2="60.5"
+                    />
+                    <line
+                      fill="none"
+                      height="210"
+                      stroke="#ccc"
+                      width="362"
+                      x="44"
+                      x1="44"
+                      x2="406"
+                      y="8"
+                      y1="8"
+                      y2="8"
+                    />
+                  </g>
+                </g>
+                <g
+                  class="recharts-layer recharts-cartesian-axis recharts-xAxis xAxis"
+                >
+                  <g
+                    class="recharts-cartesian-axis-ticks"
+                  >
+                    <g
+                      class="recharts-layer recharts-cartesian-axis-tick"
+                    >
+                      <text
+                        class="recharts-text recharts-cartesian-axis-tick-value"
+                        fill="#666"
+                        height="30"
+                        orientation="bottom"
+                        stroke="none"
+                        text-anchor="middle"
+                        width="362"
+                      >
+                        <tspan>
+                          00:00
+                        </tspan>
+                      </text>
+                    </g>
+                    <g
+                      class="recharts-layer recharts-cartesian-axis-tick"
+                    >
+                      <text
+                        class="recharts-text recharts-cartesian-axis-tick-value"
+                        fill="#666"
+                        height="30"
+                        orientation="bottom"
+                        stroke="none"
+                        text-anchor="middle"
+                        width="362"
+                      >
+                        <tspan>
+                          04:00
+                        </tspan>
+                      </text>
+                    </g>
+                    <g
+                      class="recharts-layer recharts-cartesian-axis-tick"
+                    >
+                      <text
+                        class="recharts-text recharts-cartesian-axis-tick-value"
+                        fill="#666"
+                        height="30"
+                        orientation="bottom"
+                        stroke="none"
+                        text-anchor="middle"
+                        width="362"
+                      >
+                        <tspan>
+                          08:00
+                        </tspan>
+                      </text>
+                    </g>
+                    <g
+                      class="recharts-layer recharts-cartesian-axis-tick"
+                    >
+                      <text
+                        class="recharts-text recharts-cartesian-axis-tick-value"
+                        fill="#666"
+                        height="30"
+                        orientation="bottom"
+                        stroke="none"
+                        text-anchor="middle"
+                        width="362"
+                      >
+                        <tspan>
+                          12:00
+                        </tspan>
+                      </text>
+                    </g>
+                    <g
+                      class="recharts-layer recharts-cartesian-axis-tick"
+                    >
+                      <text
+                        class="recharts-text recharts-cartesian-axis-tick-value"
+                        fill="#666"
+                        height="30"
+                        orientation="bottom"
+                        stroke="none"
+                        text-anchor="middle"
+                        width="362"
+                      >
+                        <tspan>
+                          16:00
+                        </tspan>
+                      </text>
+                    </g>
+                    <g
+                      class="recharts-layer recharts-cartesian-axis-tick"
+                    >
+                      <text
+                        class="recharts-text recharts-cartesian-axis-tick-value"
+                        fill="#666"
+                        height="30"
+                        orientation="bottom"
+                        stroke="none"
+                        text-anchor="middle"
+                        width="362"
+                      >
+                        <tspan>
+                          20:00
+                        </tspan>
+                      </text>
+                    </g>
+                  </g>
+                </g>
+                <g
+                  class="recharts-layer recharts-cartesian-axis recharts-yAxis yAxis"
+                >
+                  <g
+                    class="recharts-cartesian-axis-ticks"
+                  >
+                    <g
+                      class="recharts-layer recharts-cartesian-axis-tick"
+                    >
+                      <text
+                        class="recharts-text recharts-cartesian-axis-tick-value"
+                        fill="#666"
+                        height="210"
+                        orientation="left"
+                        stroke="none"
+                        text-anchor="end"
+                        width="36"
+                      >
+                        <tspan>
+                          25
+                        </tspan>
+                      </text>
+                    </g>
+                    <g
+                      class="recharts-layer recharts-cartesian-axis-tick"
+                    >
+                      <text
+                        class="recharts-text recharts-cartesian-axis-tick-value"
+                        fill="#666"
+                        height="210"
+                        orientation="left"
+                        stroke="none"
+                        text-anchor="end"
+                        width="36"
+                      >
+                        <tspan>
+                          50
+                        </tspan>
+                      </text>
+                    </g>
+                    <g
+                      class="recharts-layer recharts-cartesian-axis-tick"
+                    >
+                      <text
+                        class="recharts-text recharts-cartesian-axis-tick-value"
+                        fill="#666"
+                        height="210"
+                        orientation="left"
+                        stroke="none"
+                        text-anchor="end"
+                        width="36"
+                      >
+                        <tspan>
+                          75
+                        </tspan>
+                      </text>
+                    </g>
+                    <g
+                      class="recharts-layer recharts-cartesian-axis-tick"
+                    >
+                      <text
+                        class="recharts-text recharts-cartesian-axis-tick-value"
+                        fill="#666"
+                        height="210"
+                        orientation="left"
+                        stroke="none"
+                        text-anchor="end"
+                        width="36"
+                      >
+                        <tspan>
+                          100
+                        </tspan>
+                      </text>
+                    </g>
+                    <g
+                      class="recharts-layer recharts-cartesian-axis-tick"
+                    >
+                      <text
+                        class="recharts-text recharts-cartesian-axis-tick-value"
+                        fill="#666"
+                        height="210"
+                        orientation="left"
+                        stroke="none"
+                        text-anchor="end"
+                        width="36"
+                      >
+                        <tspan>
+                          125
+                        </tspan>
+                      </text>
+                    </g>
+                  </g>
+                </g>
+                <g
+                  class="recharts-layer recharts-line"
+                >
+                  <path
+                    class="recharts-curve recharts-line-curve"
+                    d="M44,176C68.133,189.65,92.267,203.3,116.4,203.3C140.533,203.3,164.667,160.6,188.8,129.8C212.933,99,237.067,18.5,261.2,18.5C285.333,18.5,309.467,68.2,333.6,92C357.733,115.8,381.867,138.55,406,161.3"
+                    fill="none"
+                    height="210"
+                    stroke="var(--color-latency)"
+                    stroke-width="2"
+                    width="362"
+                  />
+                  <g
+                    class="recharts-layer"
+                  />
+                </g>
+              </svg>
+              <div
+                class="recharts-tooltip-wrapper"
+                style="visibility: hidden; pointer-events: none; position: absolute; top: 0px; left: 0px"
+                tabindex="-1"
+              />
+            </div>
+          </div>
+        </div>
+      </figure>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`ui-render-block > chartNonNumericSeries 1`] = `
+<div>
+  <div
+    class="group/card relative my-2 rounded-lg outline-none focus-visible:ring-2 focus-visible:ring-ring/30 focus-visible:ring-offset-2"
+    tabindex="0"
+  >
+    <div
+      class="flex items-center justify-between gap-2 absolute top-1 right-1 z-10 rounded-md bg-background/85 px-1 py-0.5 transition-opacity duration-150 group-focus-within/card:opacity-100 group-hover/card:opacity-100 opacity-0"
+    >
+      <div
+        class="flex items-center gap-2 text-xs text-muted-foreground"
+      >
+        <span
+          aria-hidden="true"
+          class="
+      inline-flex items-center gap-1 opacity-0 transition-opacity duration-150
+      group-focus-within/card:opacity-100
+    "
+        >
+          <kbd
+            class="pointer-events-none inline-flex h-5 w-fit min-w-5 items-center justify-center gap-1 rounded-xs bg-muted px-1 font-sans text-[0.625rem] font-medium text-muted-foreground select-none [&_svg:not([class*='size-'])]:size-3"
+            data-slot="kbd"
+          >
+            C
+          </kbd>
+          <span>
+            copy
+          </span>
+          <span
+            class="text-muted-foreground/40"
+          >
+            ·
+          </span>
+          <kbd
+            class="pointer-events-none inline-flex h-5 w-fit min-w-5 items-center justify-center gap-1 rounded-xs bg-muted px-1 font-sans text-[0.625rem] font-medium text-muted-foreground select-none [&_svg:not([class*='size-'])]:size-3"
+            data-slot="kbd"
+          >
+            S
+          </kbd>
+          <span>
+            source
+          </span>
+          <span
+            class="text-muted-foreground/40"
+          >
+            ·
+          </span>
+          <kbd
+            class="pointer-events-none inline-flex h-5 w-fit min-w-5 items-center justify-center gap-1 rounded-xs bg-muted px-1 font-sans text-[0.625rem] font-medium text-muted-foreground select-none [&_svg:not([class*='size-'])]:size-3"
+            data-slot="kbd"
+          >
+            Esc
+          </kbd>
+          <span>
+            collapse
+          </span>
+        </span>
+      </div>
+      <div
+        class="flex items-center gap-1"
+      >
+        <button
+          aria-keyshortcuts="S"
+          aria-label="Show source"
+          aria-pressed="false"
+          class="group/button inline-flex shrink-0 items-center justify-center border border-transparent bg-clip-padding font-medium whitespace-nowrap transition-all duration-150 ease-out outline-none select-none focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-2 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 h-5 gap-1 rounded-sm px-2 text-[0.625rem] has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 [&_svg:not([class*='size-'])]:size-2.5 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50"
+          data-slot="button"
+          tabindex="0"
+          type="button"
+        >
+          <svg
+            aria-hidden="true"
+            class="lucide lucide-code-xml"
+            fill="none"
+            height="24"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="m18 16 4-4-4-4"
+            />
+            <path
+              d="m6 8-4 4 4 4"
+            />
+            <path
+              d="m14.5 4-5 16"
+            />
+          </svg>
+          Source
+        </button>
+        <button
+          aria-expanded="false"
+          aria-haspopup="menu"
+          aria-label="More actions"
+          class="group/button inline-flex shrink-0 items-center justify-center border border-transparent bg-clip-padding text-xs/relaxed font-medium whitespace-nowrap transition-all duration-150 ease-out outline-none select-none focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-2 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 size-5 rounded-sm [&_svg:not([class*='size-'])]:size-2.5 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50"
+          data-slot="dropdown-menu-trigger"
+          id="base-ui-_r_2r_"
+          tabindex="0"
+          type="button"
+        >
+          <svg
+            aria-hidden="true"
+            class="lucide lucide-ellipsis size-3"
+            fill="none"
+            height="24"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <circle
+              cx="12"
+              cy="12"
+              r="1"
+            />
+            <circle
+              cx="19"
+              cy="12"
+              r="1"
+            />
+            <circle
+              cx="5"
+              cy="12"
+              r="1"
+            />
+          </svg>
+        </button>
+      </div>
+    </div>
+    <div
+      class="pt-0"
+    >
+      <figure
+        class="space-y-2 tabular-nums"
+      >
+        <figcaption
+          class="space-y-0.5"
+        >
+          <div
+            class="text-sm font-medium text-foreground"
+          >
+            Bad series
+          </div>
+        </figcaption>
+        <div
+          class="
+      flex h-48 items-center justify-center rounded-md border border-dashed
+      border-border bg-background/40 px-4 text-center text-xs
+      text-muted-foreground
+    "
+        >
+          None of the selected columns are numeric. Try count, avg, or a cast.
+        </div>
+      </figure>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`ui-render-block > chartPieDark 1`] = `
+<div>
+  <div
+    class="dark bg-background p-4 text-foreground"
+  >
+    <div
+      class="group/card relative my-2 rounded-lg outline-none focus-visible:ring-2 focus-visible:ring-ring/30 focus-visible:ring-offset-2"
+      tabindex="0"
+    >
+      <div
+        class="flex items-center justify-between gap-2 absolute top-1 right-1 z-10 rounded-md bg-background/85 px-1 py-0.5 transition-opacity duration-150 group-focus-within/card:opacity-100 group-hover/card:opacity-100 opacity-0"
+      >
+        <div
+          class="flex items-center gap-2 text-xs text-muted-foreground"
+        >
+          <span
+            aria-hidden="true"
+            class="
+      inline-flex items-center gap-1 opacity-0 transition-opacity duration-150
+      group-focus-within/card:opacity-100
+    "
+          >
+            <kbd
+              class="pointer-events-none inline-flex h-5 w-fit min-w-5 items-center justify-center gap-1 rounded-xs bg-muted px-1 font-sans text-[0.625rem] font-medium text-muted-foreground select-none [&_svg:not([class*='size-'])]:size-3"
+              data-slot="kbd"
+            >
+              C
+            </kbd>
+            <span>
+              copy
+            </span>
+            <span
+              class="text-muted-foreground/40"
+            >
+              ·
+            </span>
+            <kbd
+              class="pointer-events-none inline-flex h-5 w-fit min-w-5 items-center justify-center gap-1 rounded-xs bg-muted px-1 font-sans text-[0.625rem] font-medium text-muted-foreground select-none [&_svg:not([class*='size-'])]:size-3"
+              data-slot="kbd"
+            >
+              S
+            </kbd>
+            <span>
+              source
+            </span>
+            <span
+              class="text-muted-foreground/40"
+            >
+              ·
+            </span>
+            <kbd
+              class="pointer-events-none inline-flex h-5 w-fit min-w-5 items-center justify-center gap-1 rounded-xs bg-muted px-1 font-sans text-[0.625rem] font-medium text-muted-foreground select-none [&_svg:not([class*='size-'])]:size-3"
+              data-slot="kbd"
+            >
+              Esc
+            </kbd>
+            <span>
+              collapse
+            </span>
+          </span>
+        </div>
+        <div
+          class="flex items-center gap-1"
+        >
+          <button
+            aria-keyshortcuts="S"
+            aria-label="Show source"
+            aria-pressed="false"
+            class="group/button inline-flex shrink-0 items-center justify-center border border-transparent bg-clip-padding font-medium whitespace-nowrap transition-all duration-150 ease-out outline-none select-none focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-2 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 h-5 gap-1 rounded-sm px-2 text-[0.625rem] has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 [&_svg:not([class*='size-'])]:size-2.5 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50"
+            data-slot="button"
+            tabindex="0"
+            type="button"
+          >
+            <svg
+              aria-hidden="true"
+              class="lucide lucide-code-xml"
+              fill="none"
+              height="24"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+              width="24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="m18 16 4-4-4-4"
+              />
+              <path
+                d="m6 8-4 4 4 4"
+              />
+              <path
+                d="m14.5 4-5 16"
+              />
+            </svg>
+            Source
+          </button>
+          <button
+            aria-expanded="false"
+            aria-haspopup="menu"
+            aria-label="More actions"
+            class="group/button inline-flex shrink-0 items-center justify-center border border-transparent bg-clip-padding text-xs/relaxed font-medium whitespace-nowrap transition-all duration-150 ease-out outline-none select-none focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-2 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 size-5 rounded-sm [&_svg:not([class*='size-'])]:size-2.5 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50"
+            data-slot="dropdown-menu-trigger"
+            id="base-ui-_r_1l_"
+            tabindex="0"
+            type="button"
+          >
+            <svg
+              aria-hidden="true"
+              class="lucide lucide-ellipsis size-3"
+              fill="none"
+              height="24"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+              width="24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <circle
+                cx="12"
+                cy="12"
+                r="1"
+              />
+              <circle
+                cx="19"
+                cy="12"
+                r="1"
+              />
+              <circle
+                cx="5"
+                cy="12"
+                r="1"
+              />
+            </svg>
+          </button>
+        </div>
+      </div>
+      <div
+        class="pt-0"
+      >
+        <figure
+          class="space-y-2 tabular-nums"
+        >
+          <figcaption
+            class="space-y-0.5"
+          >
+            <div
+              class="text-sm font-medium text-foreground"
+            >
+              Request outcomes
+            </div>
+          </figcaption>
+          <div
+            class="flex aspect-video justify-center text-xs [&_.recharts-cartesian-axis-tick_text]:fill-muted-foreground [&_.recharts-cartesian-grid_line[stroke='#ccc']]:stroke-border/50 [&_.recharts-curve.recharts-tooltip-cursor]:stroke-border [&_.recharts-dot[stroke='#fff']]:stroke-transparent [&_.recharts-layer]:outline-hidden [&_.recharts-polar-grid_[stroke='#ccc']]:stroke-border [&_.recharts-radial-bar-background-sector]:fill-muted [&_.recharts-rectangle.recharts-tooltip-cursor]:fill-muted [&_.recharts-reference-line_[stroke='#ccc']]:stroke-border [&_.recharts-sector]:outline-hidden [&_.recharts-sector[stroke='#fff']]:stroke-transparent [&_.recharts-surface]:outline-hidden h-64 w-full"
+            data-chart="chart-_r_1n_"
+            data-slot="chart"
+          >
+            <style>
+              
+.dark [data-chart=chart-_r_1n_] {
+  --color-ok: var(--chart-1);
+  --color-error: var(--chart-2);
+  --color-timeout: var(--chart-3);
+}
+
+
+ [data-chart=chart-_r_1n_] {
+  --color-ok: var(--chart-1);
+  --color-error: var(--chart-2);
+  --color-timeout: var(--chart-3);
+}
+
+            </style>
+            <div
+              class="recharts-responsive-container"
+              style="width: 100%; height: 100%; min-width: 0px"
+            >
+              <div
+                class="recharts-wrapper"
+                style="position: relative; cursor: default; width: 100%; height: 100%; max-height: 256px; max-width: 382px"
+              >
+                <svg
+                  class="recharts-surface"
+                  cx="50%"
+                  cy="50%"
+                  height="256"
+                  style="width: 100%; height: 100%"
+                  viewBox="0 0 382 256"
+                  width="382"
+                >
+                  <title />
+                  <desc />
+                  <defs>
+                    <clippath
+                      id="recharts23-clip"
+                    >
+                      <rect
+                        height="218"
+                        width="372"
+                        x="5"
+                        y="5"
+                      />
+                    </clippath>
+                  </defs>
+                  <g
+                    class="recharts-layer recharts-pie"
+                    tabindex="0"
+                  >
+                    <g
+                      class="recharts-layer recharts-pie-sector"
+                      tabindex="-1"
+                    >
+                      <path
+                        aria-label="ok: 42"
+                        class="recharts-sector"
+                        cx="191"
+                        cy="114"
+                        d="M 278.2,114
+    A 87.2,87.2,0,
+    1,0,
+    213.98480088122272,198.11622274240887
+  L 206.80205060584063,171.82990313540608
+            A 59.95,59.95,0,
+            1,1,
+            250.95,114 Z"
+                        fill="var(--color-ok)"
+                        name="ok"
+                        role="img"
+                        stroke="var(--background)"
+                        stroke-width="2"
+                        tabindex="-1"
+                      />
+                    </g>
+                    <g
+                      class="recharts-layer recharts-pie-sector"
+                      tabindex="-1"
+                    >
+                      <path
+                        aria-label="error: 8"
+                        class="recharts-sector"
+                        cx="191"
+                        cy="114"
+                        d="M 213.98480088122272,198.11622274240887
+    A 87.2,87.2,0,
+    0,0,
+    272.74299445089537,144.36318260987954
+  L 247.19830868499056,134.87468804429218
+            A 59.95,59.95,0,
+            0,1,
+            206.80205060584063,171.82990313540608 Z"
+                        fill="var(--color-error)"
+                        name="error"
+                        role="img"
+                        stroke="var(--background)"
+                        stroke-width="2"
+                        tabindex="-1"
+                      />
+                    </g>
+                    <g
+                      class="recharts-layer recharts-pie-sector"
+                      tabindex="-1"
+                    >
+                      <path
+                        aria-label="timeout: 3"
+                        class="recharts-sector"
+                        cx="191"
+                        cy="114"
+                        d="M 272.74299445089537,144.36318260987954
+    A 87.2,87.2,0,
+    0,0,
+    278.2,113.99999999999994
+  L 250.95,113.99999999999996
+            A 59.95,59.95,0,
+            0,1,
+            247.19830868499056,134.87468804429218 Z"
+                        fill="var(--color-timeout)"
+                        name="timeout"
+                        role="img"
+                        stroke="var(--background)"
+                        stroke-width="2"
+                        tabindex="-1"
+                      />
+                    </g>
+                    <text
+                      dominant-baseline="middle"
+                      text-anchor="middle"
+                    >
+                      <tspan
+                        class="fill-muted-foreground text-[10px] tracking-wide uppercase"
+                      >
+                        Total
+                      </tspan>
+                      <tspan
+                        class="fill-foreground text-lg font-semibold"
+                      >
+                        53
+                      </tspan>
+                    </text>
+                  </g>
+                </svg>
+                <div
+                  class="recharts-legend-wrapper"
+                  style="position: absolute; width: 372px; height: auto; left: 5px; bottom: 5px"
+                >
+                  <div
+                    class="flex items-center justify-center gap-4 pt-3"
+                  >
+                    <div
+                      class="flex items-center gap-1.5 [&>svg]:size-3 [&>svg]:text-muted-foreground"
+                    >
+                      <div
+                        class="size-2 shrink-0 rounded-[2px]"
+                        style="background-color: var(--color-ok)"
+                      />
+                      ok
+                    </div>
+                    <div
+                      class="flex items-center gap-1.5 [&>svg]:size-3 [&>svg]:text-muted-foreground"
+                    >
+                      <div
+                        class="size-2 shrink-0 rounded-[2px]"
+                        style="background-color: var(--color-error)"
+                      />
+                      error
+                    </div>
+                    <div
+                      class="flex items-center gap-1.5 [&>svg]:size-3 [&>svg]:text-muted-foreground"
+                    >
+                      <div
+                        class="size-2 shrink-0 rounded-[2px]"
+                        style="background-color: var(--color-timeout)"
+                      />
+                      timeout
+                    </div>
+                  </div>
+                </div>
+                <div
+                  class="recharts-tooltip-wrapper"
+                  style="visibility: hidden; pointer-events: none; position: absolute; top: 0px; left: 0px"
+                  tabindex="-1"
+                />
+              </div>
+            </div>
+          </div>
+        </figure>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`ui-render-block > chartPieExample 1`] = `
+<div>
+  <div
+    class="group/card relative my-2 rounded-lg outline-none focus-visible:ring-2 focus-visible:ring-ring/30 focus-visible:ring-offset-2"
+    tabindex="0"
+  >
+    <div
+      class="flex items-center justify-between gap-2 absolute top-1 right-1 z-10 rounded-md bg-background/85 px-1 py-0.5 transition-opacity duration-150 group-focus-within/card:opacity-100 group-hover/card:opacity-100 opacity-0"
+    >
+      <div
+        class="flex items-center gap-2 text-xs text-muted-foreground"
+      >
+        <span
+          aria-hidden="true"
+          class="
+      inline-flex items-center gap-1 opacity-0 transition-opacity duration-150
+      group-focus-within/card:opacity-100
+    "
+        >
+          <kbd
+            class="pointer-events-none inline-flex h-5 w-fit min-w-5 items-center justify-center gap-1 rounded-xs bg-muted px-1 font-sans text-[0.625rem] font-medium text-muted-foreground select-none [&_svg:not([class*='size-'])]:size-3"
+            data-slot="kbd"
+          >
+            C
+          </kbd>
+          <span>
+            copy
+          </span>
+          <span
+            class="text-muted-foreground/40"
+          >
+            ·
+          </span>
+          <kbd
+            class="pointer-events-none inline-flex h-5 w-fit min-w-5 items-center justify-center gap-1 rounded-xs bg-muted px-1 font-sans text-[0.625rem] font-medium text-muted-foreground select-none [&_svg:not([class*='size-'])]:size-3"
+            data-slot="kbd"
+          >
+            S
+          </kbd>
+          <span>
+            source
+          </span>
+          <span
+            class="text-muted-foreground/40"
+          >
+            ·
+          </span>
+          <kbd
+            class="pointer-events-none inline-flex h-5 w-fit min-w-5 items-center justify-center gap-1 rounded-xs bg-muted px-1 font-sans text-[0.625rem] font-medium text-muted-foreground select-none [&_svg:not([class*='size-'])]:size-3"
+            data-slot="kbd"
+          >
+            Esc
+          </kbd>
+          <span>
+            collapse
+          </span>
+        </span>
+      </div>
+      <div
+        class="flex items-center gap-1"
+      >
+        <button
+          aria-keyshortcuts="S"
+          aria-label="Show source"
+          aria-pressed="false"
+          class="group/button inline-flex shrink-0 items-center justify-center border border-transparent bg-clip-padding font-medium whitespace-nowrap transition-all duration-150 ease-out outline-none select-none focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-2 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 h-5 gap-1 rounded-sm px-2 text-[0.625rem] has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 [&_svg:not([class*='size-'])]:size-2.5 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50"
+          data-slot="button"
+          tabindex="0"
+          type="button"
+        >
+          <svg
+            aria-hidden="true"
+            class="lucide lucide-code-xml"
+            fill="none"
+            height="24"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="m18 16 4-4-4-4"
+            />
+            <path
+              d="m6 8-4 4 4 4"
+            />
+            <path
+              d="m14.5 4-5 16"
+            />
+          </svg>
+          Source
+        </button>
+        <button
+          aria-expanded="false"
+          aria-haspopup="menu"
+          aria-label="More actions"
+          class="group/button inline-flex shrink-0 items-center justify-center border border-transparent bg-clip-padding text-xs/relaxed font-medium whitespace-nowrap transition-all duration-150 ease-out outline-none select-none focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-2 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 size-5 rounded-sm [&_svg:not([class*='size-'])]:size-2.5 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50"
+          data-slot="dropdown-menu-trigger"
+          id="base-ui-_r_1e_"
+          tabindex="0"
+          type="button"
+        >
+          <svg
+            aria-hidden="true"
+            class="lucide lucide-ellipsis size-3"
+            fill="none"
+            height="24"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <circle
+              cx="12"
+              cy="12"
+              r="1"
+            />
+            <circle
+              cx="19"
+              cy="12"
+              r="1"
+            />
+            <circle
+              cx="5"
+              cy="12"
+              r="1"
+            />
+          </svg>
+        </button>
+      </div>
+    </div>
+    <div
+      class="pt-0"
+    >
+      <figure
+        class="space-y-2 tabular-nums"
+      >
+        <figcaption
+          class="space-y-0.5"
+        >
+          <div
+            class="text-sm font-medium text-foreground"
+          >
+            Request outcomes
+          </div>
+        </figcaption>
+        <div
+          class="flex aspect-video justify-center text-xs [&_.recharts-cartesian-axis-tick_text]:fill-muted-foreground [&_.recharts-cartesian-grid_line[stroke='#ccc']]:stroke-border/50 [&_.recharts-curve.recharts-tooltip-cursor]:stroke-border [&_.recharts-dot[stroke='#fff']]:stroke-transparent [&_.recharts-layer]:outline-hidden [&_.recharts-polar-grid_[stroke='#ccc']]:stroke-border [&_.recharts-radial-bar-background-sector]:fill-muted [&_.recharts-rectangle.recharts-tooltip-cursor]:fill-muted [&_.recharts-reference-line_[stroke='#ccc']]:stroke-border [&_.recharts-sector]:outline-hidden [&_.recharts-sector[stroke='#fff']]:stroke-transparent [&_.recharts-surface]:outline-hidden h-64 w-full"
+          data-chart="chart-_r_1g_"
+          data-slot="chart"
+        >
+          <style>
+            
+.dark [data-chart=chart-_r_1g_] {
+  --color-ok: var(--chart-1);
+  --color-error: var(--chart-2);
+  --color-timeout: var(--chart-3);
+}
+
+
+ [data-chart=chart-_r_1g_] {
+  --color-ok: var(--chart-1);
+  --color-error: var(--chart-2);
+  --color-timeout: var(--chart-3);
+}
+
+          </style>
+          <div
+            class="recharts-responsive-container"
+            style="width: 100%; height: 100%; min-width: 0px"
+          >
+            <div
+              class="recharts-wrapper"
+              style="position: relative; cursor: default; width: 100%; height: 100%; max-height: 256px; max-width: 414px"
+            >
+              <svg
+                class="recharts-surface"
+                cx="50%"
+                cy="50%"
+                height="256"
+                style="width: 100%; height: 100%"
+                viewBox="0 0 414 256"
+                width="414"
+              >
+                <title />
+                <desc />
+                <defs>
+                  <clippath
+                    id="recharts21-clip"
+                  >
+                    <rect
+                      height="218"
+                      width="404"
+                      x="5"
+                      y="5"
+                    />
+                  </clippath>
+                </defs>
+                <g
+                  class="recharts-layer recharts-pie"
+                  tabindex="0"
+                >
+                  <g
+                    class="recharts-layer recharts-pie-sector"
+                    tabindex="-1"
+                  >
+                    <path
+                      aria-label="ok: 42"
+                      class="recharts-sector"
+                      cx="207"
+                      cy="114"
+                      d="M 294.2,114
+    A 87.2,87.2,0,
+    1,0,
+    229.98480088122272,198.11622274240887
+  L 222.80205060584063,171.82990313540608
+            A 59.95,59.95,0,
+            1,1,
+            266.95,114 Z"
+                      fill="var(--color-ok)"
+                      name="ok"
+                      role="img"
+                      stroke="var(--background)"
+                      stroke-width="2"
+                      tabindex="-1"
+                    />
+                  </g>
+                  <g
+                    class="recharts-layer recharts-pie-sector"
+                    tabindex="-1"
+                  >
+                    <path
+                      aria-label="error: 8"
+                      class="recharts-sector"
+                      cx="207"
+                      cy="114"
+                      d="M 229.98480088122272,198.11622274240887
+    A 87.2,87.2,0,
+    0,0,
+    288.74299445089537,144.36318260987954
+  L 263.19830868499054,134.87468804429218
+            A 59.95,59.95,0,
+            0,1,
+            222.80205060584063,171.82990313540608 Z"
+                      fill="var(--color-error)"
+                      name="error"
+                      role="img"
+                      stroke="var(--background)"
+                      stroke-width="2"
+                      tabindex="-1"
+                    />
+                  </g>
+                  <g
+                    class="recharts-layer recharts-pie-sector"
+                    tabindex="-1"
+                  >
+                    <path
+                      aria-label="timeout: 3"
+                      class="recharts-sector"
+                      cx="207"
+                      cy="114"
+                      d="M 288.74299445089537,144.36318260987954
+    A 87.2,87.2,0,
+    0,0,
+    294.2,113.99999999999994
+  L 266.95,113.99999999999996
+            A 59.95,59.95,0,
+            0,1,
+            263.19830868499054,134.87468804429218 Z"
+                      fill="var(--color-timeout)"
+                      name="timeout"
+                      role="img"
+                      stroke="var(--background)"
+                      stroke-width="2"
+                      tabindex="-1"
+                    />
+                  </g>
+                  <text
+                    dominant-baseline="middle"
+                    text-anchor="middle"
+                  >
+                    <tspan
+                      class="fill-muted-foreground text-[10px] tracking-wide uppercase"
+                    >
+                      Total
+                    </tspan>
+                    <tspan
+                      class="fill-foreground text-lg font-semibold"
+                    >
+                      53
+                    </tspan>
+                  </text>
+                </g>
+              </svg>
+              <div
+                class="recharts-legend-wrapper"
+                style="position: absolute; width: 404px; height: auto; left: 5px; bottom: 5px"
+              >
+                <div
+                  class="flex items-center justify-center gap-4 pt-3"
+                >
+                  <div
+                    class="flex items-center gap-1.5 [&>svg]:size-3 [&>svg]:text-muted-foreground"
+                  >
+                    <div
+                      class="size-2 shrink-0 rounded-[2px]"
+                      style="background-color: var(--color-ok)"
+                    />
+                    ok
+                  </div>
+                  <div
+                    class="flex items-center gap-1.5 [&>svg]:size-3 [&>svg]:text-muted-foreground"
+                  >
+                    <div
+                      class="size-2 shrink-0 rounded-[2px]"
+                      style="background-color: var(--color-error)"
+                    />
+                    error
+                  </div>
+                  <div
+                    class="flex items-center gap-1.5 [&>svg]:size-3 [&>svg]:text-muted-foreground"
+                  >
+                    <div
+                      class="size-2 shrink-0 rounded-[2px]"
+                      style="background-color: var(--color-timeout)"
+                    />
+                    timeout
+                  </div>
+                </div>
+              </div>
+              <div
+                class="recharts-tooltip-wrapper"
+                style="visibility: hidden; pointer-events: none; position: absolute; top: 0px; left: 0px"
+                tabindex="-1"
+              />
+            </div>
+          </div>
+        </div>
+      </figure>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`ui-render-block > inlineBadge 1`] = `
+<div>
+  <span
+    class="my-1 inline-flex items-center gap-1.5 align-middle"
+  >
+    <span
+      class="inline-flex items-center justify-center rounded-full border border-transparent px-2 py-0.5 text-xs font-medium w-fit whitespace-nowrap shrink-0 [&>svg]:size-3 gap-1 [&>svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive transition-[color,box-shadow] overflow-hidden bg-secondary text-secondary-foreground [a&]:hover:bg-secondary/90"
+      data-slot="badge"
+      data-variant="secondary"
+    >
+      12 rows
+    </span>
+    <button
+      aria-label="Copy"
+      class="group/button inline-flex shrink-0 items-center justify-center border border-transparent bg-clip-padding text-xs/relaxed font-medium whitespace-nowrap transition-all duration-150 ease-out outline-none select-none focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-2 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 size-5 rounded-sm [&_svg:not([class*='size-'])]:size-2.5 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50"
+      data-slot="tooltip-trigger"
+      id="base-ui-_r_7_"
+      tabindex="0"
+      type="button"
+    >
+      <svg
+        aria-hidden="true"
+        class="lucide lucide-copy size-3 opacity-60"
+        fill="none"
+        height="24"
+        stroke="currentColor"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        viewBox="0 0 24 24"
+        width="24"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <rect
+          height="14"
+          rx="2"
+          ry="2"
+          width="14"
+          x="8"
+          y="8"
+        />
+        <path
+          d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"
+        />
+      </svg>
+    </button>
+  </span>
+</div>
+`;
+
+exports[`ui-render-block > keyboardActions 1`] = `
+<div>
+  <div
+    class="group/card relative my-2 rounded-lg outline-none focus-visible:ring-2 focus-visible:ring-ring/30 overflow-hidden border bg-secondary/30 focus-visible:border-ring"
+    tabindex="0"
+  >
+    <div
+      class="flex items-center justify-between gap-2 px-3 py-1"
+    >
+      <div
+        class="flex items-center gap-2 text-xs text-muted-foreground"
+      >
+        <span
+          aria-hidden="true"
+          class="
+      inline-flex items-center gap-1 opacity-0 transition-opacity duration-150
+      group-focus-within/card:opacity-100
+    "
+        >
+          <kbd
+            class="pointer-events-none inline-flex h-5 w-fit min-w-5 items-center justify-center gap-1 rounded-xs bg-muted px-1 font-sans text-[0.625rem] font-medium text-muted-foreground select-none [&_svg:not([class*='size-'])]:size-3"
+            data-slot="kbd"
+          >
+            C
+          </kbd>
+          <span>
+            copy
+          </span>
+          <span
+            class="text-muted-foreground/40"
+          >
+            ·
+          </span>
+          <kbd
+            class="pointer-events-none inline-flex h-5 w-fit min-w-5 items-center justify-center gap-1 rounded-xs bg-muted px-1 font-sans text-[0.625rem] font-medium text-muted-foreground select-none [&_svg:not([class*='size-'])]:size-3"
+            data-slot="kbd"
+          >
+            S
+          </kbd>
+          <span>
+            source
+          </span>
+          <span
+            class="text-muted-foreground/40"
+          >
+            ·
+          </span>
+          <kbd
+            class="pointer-events-none inline-flex h-5 w-fit min-w-5 items-center justify-center gap-1 rounded-xs bg-muted px-1 font-sans text-[0.625rem] font-medium text-muted-foreground select-none [&_svg:not([class*='size-'])]:size-3"
+            data-slot="kbd"
+          >
+            Esc
+          </kbd>
+          <span>
+            collapse
+          </span>
+        </span>
+      </div>
+      <div
+        class="flex items-center gap-1"
+      >
+        <button
+          aria-keyshortcuts="S"
+          aria-label="Show source"
+          aria-pressed="false"
+          class="group/button inline-flex shrink-0 items-center justify-center border border-transparent bg-clip-padding font-medium whitespace-nowrap transition-all duration-150 ease-out outline-none select-none focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-2 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 h-5 gap-1 rounded-sm px-2 text-[0.625rem] has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 [&_svg:not([class*='size-'])]:size-2.5 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50"
+          data-slot="button"
+          tabindex="0"
+          type="button"
+        >
+          <svg
+            aria-hidden="true"
+            class="lucide lucide-code-xml"
+            fill="none"
+            height="24"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="m18 16 4-4-4-4"
+            />
+            <path
+              d="m6 8-4 4 4 4"
+            />
+            <path
+              d="m14.5 4-5 16"
+            />
+          </svg>
+          Source
+        </button>
+        <button
+          aria-expanded="false"
+          aria-haspopup="menu"
+          aria-label="More actions"
+          class="group/button inline-flex shrink-0 items-center justify-center border border-transparent bg-clip-padding text-xs/relaxed font-medium whitespace-nowrap transition-all duration-150 ease-out outline-none select-none focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-2 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 size-5 rounded-sm [&_svg:not([class*='size-'])]:size-2.5 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50"
+          data-slot="dropdown-menu-trigger"
+          id="base-ui-_r_31_"
+          tabindex="0"
+          type="button"
+        >
+          <svg
+            aria-hidden="true"
+            class="lucide lucide-ellipsis size-3"
+            fill="none"
+            height="24"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <circle
+              cx="12"
+              cy="12"
+              r="1"
+            />
+            <circle
+              cx="19"
+              cy="12"
+              r="1"
+            />
+            <circle
+              cx="5"
+              cy="12"
+              r="1"
+            />
+          </svg>
+        </button>
+      </div>
+    </div>
+    <div
+      class="p-3"
+    >
+      <div
+        class="bg-card text-card-foreground flex flex-col gap-6 rounded-xl border py-6 shadow-sm w-full"
+        data-slot="card"
+      >
+        <div
+          class="@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-2 px-6 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-6"
+          data-slot="card-header"
+        >
+          <div
+            class="leading-none font-semibold"
+            data-slot="card-title"
+          >
+            System status
+          </div>
+          <div
+            class="text-muted-foreground text-sm"
+            data-slot="card-description"
+          >
+            All systems operational.
+          </div>
+        </div>
+        <div
+          class="px-6 flex flex-col gap-3"
+          data-slot="card-content"
+        >
+          <div
+            class="flex flex-col gap-3 items-start "
+          >
+            <h2
+              class="text-lg font-semibold text-left"
+            >
+              Status
+            </h2>
+            <p
+              class="text-sm text-left"
+            >
+              Database is healthy.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`ui-render-block > missingChild 1`] = `
+<div>
+  <div
+    class="
+        my-2 overflow-hidden rounded-lg border border-destructive/30
+        bg-destructive/5
+      "
+  >
+    <div
+      class="flex items-start gap-2 px-3 py-2 text-sm text-destructive"
+    >
+      <svg
+        aria-hidden="true"
+        class="lucide lucide-circle-alert mt-0.5 size-3.5 shrink-0"
+        fill="none"
+        height="24"
+        stroke="currentColor"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        viewBox="0 0 24 24"
+        width="24"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <circle
+          cx="12"
+          cy="12"
+          r="10"
+        />
+        <line
+          x1="12"
+          x2="12"
+          y1="8"
+          y2="12"
+        />
+        <line
+          x1="12"
+          x2="12.01"
+          y1="16"
+          y2="16"
+        />
+      </svg>
+      <div
+        class="flex-1 space-y-1"
+      >
+        <p
+          class="font-medium"
+        >
+          Couldn't render this UI
+        </p>
+        <p
+          class="text-xs text-destructive/80"
+        >
+          The assistant generated something we don't know how to draw.
+        </p>
+        <ul
+          class="
+              list-disc space-y-0.5 pl-4 text-xs text-destructive/80
+            "
+        >
+          <li>
+            main: 
+            Element "main" references child "ghost" which does not exist in the elements map.
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div
+      class="border-t border-destructive/20"
+    >
+      <button
+        class="
+            flex w-full items-center justify-between px-3 py-1.5 text-xs
+            text-destructive/80
+            hover:bg-destructive/10
+          "
+        type="button"
+      >
+        <span>
+          Hide source
+        </span>
+        <svg
+          aria-hidden="true"
+          class="lucide lucide-chevron-up size-3"
+          fill="none"
+          height="24"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+          width="24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="m18 15-6-6-6 6"
+          />
+        </svg>
+      </button>
+      <pre
+        class="
+              max-h-64 overflow-auto border-t border-destructive/20
+              bg-background/40 p-3 text-xs
+            "
+      >
+        <code>
+          {"elements":{"main":{"children":["ghost"],"props":{"title":"Broken card"},"type":"Card"}},"root":"main"}
+        </code>
+      </pre>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`ui-render-block > partialStream 1`] = `
+<div>
+  <div
+    class="space-y-2 rounded-lg border bg-secondary/30 p-4"
+  >
+    <div
+      class="h-4 w-3/4 animate-pulse rounded-sm bg-muted-foreground/10"
+    />
+    <div
+      class="h-4 w-1/2 animate-pulse rounded-sm bg-muted-foreground/10"
+    />
+    <div
+      class="h-20 w-full animate-pulse rounded-sm bg-muted-foreground/10"
+    />
+  </div>
+</div>
+`;
+
+exports[`ui-render-block > toggleViewSpec 1`] = `
+<div>
+  <div
+    class="group/card relative my-2 rounded-lg outline-none focus-visible:ring-2 focus-visible:ring-ring/30 overflow-hidden border bg-secondary/30 focus-visible:border-ring"
+    tabindex="0"
+  >
+    <div
+      class="flex items-center justify-between gap-2 px-3 py-1"
+    >
+      <div
+        class="flex items-center gap-2 text-xs text-muted-foreground"
+      >
+        <span
+          aria-hidden="true"
+          class="
+      inline-flex items-center gap-1 opacity-0 transition-opacity duration-150
+      group-focus-within/card:opacity-100
+    "
+        >
+          <kbd
+            class="pointer-events-none inline-flex h-5 w-fit min-w-5 items-center justify-center gap-1 rounded-xs bg-muted px-1 font-sans text-[0.625rem] font-medium text-muted-foreground select-none [&_svg:not([class*='size-'])]:size-3"
+            data-slot="kbd"
+          >
+            C
+          </kbd>
+          <span>
+            copy
+          </span>
+          <span
+            class="text-muted-foreground/40"
+          >
+            ·
+          </span>
+          <kbd
+            class="pointer-events-none inline-flex h-5 w-fit min-w-5 items-center justify-center gap-1 rounded-xs bg-muted px-1 font-sans text-[0.625rem] font-medium text-muted-foreground select-none [&_svg:not([class*='size-'])]:size-3"
+            data-slot="kbd"
+          >
+            S
+          </kbd>
+          <span>
+            source
+          </span>
+          <span
+            class="text-muted-foreground/40"
+          >
+            ·
+          </span>
+          <kbd
+            class="pointer-events-none inline-flex h-5 w-fit min-w-5 items-center justify-center gap-1 rounded-xs bg-muted px-1 font-sans text-[0.625rem] font-medium text-muted-foreground select-none [&_svg:not([class*='size-'])]:size-3"
+            data-slot="kbd"
+          >
+            Esc
+          </kbd>
+          <span>
+            collapse
+          </span>
+        </span>
+      </div>
+      <div
+        class="flex items-center gap-1"
+      >
+        <button
+          aria-keyshortcuts="S"
+          aria-label="Show preview"
+          aria-pressed="true"
+          class="group/button inline-flex shrink-0 items-center justify-center border border-transparent bg-clip-padding font-medium whitespace-nowrap transition-all duration-150 ease-out outline-none select-none focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-2 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 h-5 gap-1 rounded-sm px-2 text-[0.625rem] has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 [&_svg:not([class*='size-'])]:size-2.5 bg-secondary text-secondary-foreground hover:bg-secondary/80 aria-expanded:bg-secondary aria-expanded:text-secondary-foreground"
+          data-slot="button"
+          tabindex="0"
+          type="button"
+        >
+          <svg
+            aria-hidden="true"
+            class="lucide lucide-eye"
+            fill="none"
+            height="24"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0"
+            />
+            <circle
+              cx="12"
+              cy="12"
+              r="3"
+            />
+          </svg>
+          Preview
+        </button>
+        <button
+          aria-expanded="false"
+          aria-haspopup="menu"
+          aria-label="More actions"
+          class="group/button inline-flex shrink-0 items-center justify-center border border-transparent bg-clip-padding text-xs/relaxed font-medium whitespace-nowrap transition-all duration-150 ease-out outline-none select-none focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-2 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 size-5 rounded-sm [&_svg:not([class*='size-'])]:size-2.5 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50"
+          data-slot="dropdown-menu-trigger"
+          id="base-ui-_r_c_"
+          tabindex="0"
+          type="button"
+        >
+          <svg
+            aria-hidden="true"
+            class="lucide lucide-ellipsis size-3"
+            fill="none"
+            height="24"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <circle
+              cx="12"
+              cy="12"
+              r="1"
+            />
+            <circle
+              cx="19"
+              cy="12"
+              r="1"
+            />
+            <circle
+              cx="5"
+              cy="12"
+              r="1"
+            />
+          </svg>
+        </button>
+      </div>
+    </div>
+    <div
+      class="p-0"
+    >
+      <pre
+        class="max-h-96 overflow-auto bg-background/40 p-3 text-xs"
+      >
+        <code>
+          {
+  "elements": {
+    "body": {
+      "props": {
+        "text": "Database is healthy."
+      },
+      "type": "Text"
+    },
+    "heading": {
+      "props": {
+        "level": 3,
+        "text": "Status"
+      },
+      "type": "Heading"
+    },
+    "root": {
+      "children": [
+        "stack"
+      ],
+      "props": {
+        "description": "All systems operational.",
+        "title": "System status"
+      },
+      "type": "Card"
+    },
+    "stack": {
+      "children": [
+        "heading",
+        "body"
+      ],
+      "props": {
+        "direction": "vertical",
+        "gap": 2
+      },
+      "type": "Stack"
+    }
+  },
+  "root": "root"
+}
+        </code>
+      </pre>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`ui-render-block > unknownComponent 1`] = `
+<div>
+  <div
+    class="
+        my-2 overflow-hidden rounded-lg border border-destructive/30
+        bg-destructive/5
+      "
+  >
+    <div
+      class="flex items-start gap-2 px-3 py-2 text-sm text-destructive"
+    >
+      <svg
+        aria-hidden="true"
+        class="lucide lucide-circle-alert mt-0.5 size-3.5 shrink-0"
+        fill="none"
+        height="24"
+        stroke="currentColor"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        viewBox="0 0 24 24"
+        width="24"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <circle
+          cx="12"
+          cy="12"
+          r="10"
+        />
+        <line
+          x1="12"
+          x2="12"
+          y1="8"
+          y2="12"
+        />
+        <line
+          x1="12"
+          x2="12.01"
+          y1="16"
+          y2="16"
+        />
+      </svg>
+      <div
+        class="flex-1 space-y-1"
+      >
+        <p
+          class="font-medium"
+        >
+          Couldn't render this UI
+        </p>
+        <p
+          class="text-xs text-destructive/80"
+        >
+          The assistant generated something we don't know how to draw.
+        </p>
+        <ul
+          class="
+              list-disc space-y-0.5 pl-4 text-xs text-destructive/80
+            "
+        >
+          <li>
+            main: 
+            Unknown component "Button". Use one of: Accordion, Alert, Avatar, Badge, Card, ChartBar, ChartKpi, ChartLine, ChartPie, Collapsible, Grid, Heading, Image, Progress, Separator, Stack, Table, Tabs, Text.
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div
+      class="border-t border-destructive/20"
+    >
+      <button
+        class="
+            flex w-full items-center justify-between px-3 py-1.5 text-xs
+            text-destructive/80
+            hover:bg-destructive/10
+          "
+        type="button"
+      >
+        <span>
+          Show source
+        </span>
+        <svg
+          aria-hidden="true"
+          class="lucide lucide-chevron-down size-3"
+          fill="none"
+          height="24"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+          width="24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="m6 9 6 6 6-6"
+          />
+        </svg>
+      </button>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`ui-render-block > validCard 1`] = `
+<div>
+  <div
+    class="group/card relative my-2 rounded-lg outline-none focus-visible:ring-2 focus-visible:ring-ring/30 overflow-hidden border bg-secondary/30 focus-visible:border-ring"
+    tabindex="0"
+  >
+    <div
+      class="flex items-center justify-between gap-2 px-3 py-1"
+    >
+      <div
+        class="flex items-center gap-2 text-xs text-muted-foreground"
+      >
+        <span
+          aria-hidden="true"
+          class="
+      inline-flex items-center gap-1 opacity-0 transition-opacity duration-150
+      group-focus-within/card:opacity-100
+    "
+        >
+          <kbd
+            class="pointer-events-none inline-flex h-5 w-fit min-w-5 items-center justify-center gap-1 rounded-xs bg-muted px-1 font-sans text-[0.625rem] font-medium text-muted-foreground select-none [&_svg:not([class*='size-'])]:size-3"
+            data-slot="kbd"
+          >
+            C
+          </kbd>
+          <span>
+            copy
+          </span>
+          <span
+            class="text-muted-foreground/40"
+          >
+            ·
+          </span>
+          <kbd
+            class="pointer-events-none inline-flex h-5 w-fit min-w-5 items-center justify-center gap-1 rounded-xs bg-muted px-1 font-sans text-[0.625rem] font-medium text-muted-foreground select-none [&_svg:not([class*='size-'])]:size-3"
+            data-slot="kbd"
+          >
+            S
+          </kbd>
+          <span>
+            source
+          </span>
+          <span
+            class="text-muted-foreground/40"
+          >
+            ·
+          </span>
+          <kbd
+            class="pointer-events-none inline-flex h-5 w-fit min-w-5 items-center justify-center gap-1 rounded-xs bg-muted px-1 font-sans text-[0.625rem] font-medium text-muted-foreground select-none [&_svg:not([class*='size-'])]:size-3"
+            data-slot="kbd"
+          >
+            Esc
+          </kbd>
+          <span>
+            collapse
+          </span>
+        </span>
+      </div>
+      <div
+        class="flex items-center gap-1"
+      >
+        <button
+          aria-keyshortcuts="S"
+          aria-label="Show source"
+          aria-pressed="false"
+          class="group/button inline-flex shrink-0 items-center justify-center border border-transparent bg-clip-padding font-medium whitespace-nowrap transition-all duration-150 ease-out outline-none select-none focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-2 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 h-5 gap-1 rounded-sm px-2 text-[0.625rem] has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 [&_svg:not([class*='size-'])]:size-2.5 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50"
+          data-slot="button"
+          tabindex="0"
+          type="button"
+        >
+          <svg
+            aria-hidden="true"
+            class="lucide lucide-code-xml"
+            fill="none"
+            height="24"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="m18 16 4-4-4-4"
+            />
+            <path
+              d="m6 8-4 4 4 4"
+            />
+            <path
+              d="m14.5 4-5 16"
+            />
+          </svg>
+          Source
+        </button>
+        <button
+          aria-expanded="false"
+          aria-haspopup="menu"
+          aria-label="More actions"
+          class="group/button inline-flex shrink-0 items-center justify-center border border-transparent bg-clip-padding text-xs/relaxed font-medium whitespace-nowrap transition-all duration-150 ease-out outline-none select-none focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-2 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 size-5 rounded-sm [&_svg:not([class*='size-'])]:size-2.5 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50"
+          data-slot="dropdown-menu-trigger"
+          id="base-ui-_r_4_"
+          tabindex="0"
+          type="button"
+        >
+          <svg
+            aria-hidden="true"
+            class="lucide lucide-ellipsis size-3"
+            fill="none"
+            height="24"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <circle
+              cx="12"
+              cy="12"
+              r="1"
+            />
+            <circle
+              cx="19"
+              cy="12"
+              r="1"
+            />
+            <circle
+              cx="5"
+              cy="12"
+              r="1"
+            />
+          </svg>
+        </button>
+      </div>
+    </div>
+    <div
+      class="p-3"
+    >
+      <div
+        class="bg-card text-card-foreground flex flex-col gap-6 rounded-xl border py-6 shadow-sm w-full"
+        data-slot="card"
+      >
+        <div
+          class="@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-2 px-6 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-6"
+          data-slot="card-header"
+        >
+          <div
+            class="leading-none font-semibold"
+            data-slot="card-title"
+          >
+            System status
+          </div>
+          <div
+            class="text-muted-foreground text-sm"
+            data-slot="card-description"
+          >
+            All systems operational.
+          </div>
+        </div>
+        <div
+          class="px-6 flex flex-col gap-3"
+          data-slot="card-content"
+        >
+          <div
+            class="flex flex-col gap-3 items-start "
+          >
+            <h2
+              class="text-lg font-semibold text-left"
+            >
+              Status
+            </h2>
+            <p
+              class="text-sm text-left"
+            >
+              Database is healthy.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;

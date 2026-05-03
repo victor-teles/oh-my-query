@@ -29,7 +29,7 @@ const formatRows = (rows: number | null): string => {
 export const PlanNodeDetails = ({ node }: { node: PlanNode }) => (
   <div className="flex flex-col gap-3">
     <div>
-      <div className="font-semibold text-foreground text-xs tracking-wide">
+      <div className="text-xs font-semibold tracking-wide text-foreground">
         {node.label}
       </div>
       <div className="mt-0.5 font-mono text-[10px] text-muted-foreground">
@@ -57,7 +57,12 @@ export const PlanNodeDetails = ({ node }: { node: PlanNode }) => (
     </div>
 
     {node.warnings.length > 0 && (
-      <div className="flex flex-col gap-1 rounded-md border border-warning/30 bg-warning/5 p-2 text-[11px]">
+      <div
+        className="
+          flex flex-col gap-1 rounded-md border border-warning/30 bg-warning/5
+          p-2 text-[11px]
+        "
+      >
         {node.warnings.map((warning) => (
           <div className="flex items-start gap-1.5 text-warning" key={warning}>
             <span aria-hidden="true">•</span>
@@ -68,13 +73,20 @@ export const PlanNodeDetails = ({ node }: { node: PlanNode }) => (
     )}
 
     {node.details.length > 0 && (
-      <dl className="flex flex-col gap-1 border-border/50 border-t pt-2 font-mono text-[10px]">
+      <dl
+        className="
+          flex flex-col gap-1 border-t border-border/50 pt-2 font-mono
+          text-[10px]
+        "
+      >
         {node.details.map(([key, value]) => (
           <div className="flex items-start gap-2" key={key}>
             <dt className="w-1/3 shrink-0 truncate text-muted-foreground">
               {key}
             </dt>
-            <dd className="flex-1 break-words text-foreground/80">{value}</dd>
+            <dd className="flex-1 wrap-break-word text-foreground/80">
+              {value}
+            </dd>
           </div>
         ))}
       </dl>

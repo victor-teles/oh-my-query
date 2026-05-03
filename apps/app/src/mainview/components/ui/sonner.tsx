@@ -1,3 +1,7 @@
+// Reserved for the connection-delete undo affordance. Do not add new toast
+// call sites — surface other feedback inline (in the Dynamic Island, in forms,
+// or silently). See `routes/_default/-hooks/use-connections.ts` for the only
+// allowed usage.
 "use client";
 
 import type { ToasterProps } from "sonner";
