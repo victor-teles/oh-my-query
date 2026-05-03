@@ -5,7 +5,7 @@ import { page } from "vitest/browser";
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "./hover-card";
 
 describe("hover-card", () => {
-  it("default", async () => {
+  it("default", () => {
     render(
       <HoverCard defaultOpen>
         <HoverCardTrigger
@@ -28,7 +28,7 @@ describe("hover-card", () => {
         </HoverCardContent>
       </HoverCard>
     );
-    await expect.element(page.getByText("public.users")).toBeInTheDocument();
-    await expect.element(page.getByText("public.users")).toMatchScreenshot();
+    expect(page.getByText("public.users")).toBeInTheDocument();
+    expect(page.getByText("public.users").element()).toMatchSnapshot();
   });
 });

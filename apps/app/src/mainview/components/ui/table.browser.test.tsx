@@ -42,13 +42,13 @@ describe("table", () => {
         </TableBody>
       </Table>
     );
-    await expect.element(screen.getByText("Alice Johnson")).toBeVisible();
-    await expect.element(screen.getByText("bob@example.com")).toBeVisible();
+    expect(screen.getByText("Alice Johnson")).toBeVisible();
+    await expect(screen.getByText("bob@example.com")).toBeVisible();
     expect(screen.container.querySelectorAll("tr")).toHaveLength(5);
-    await expect.element(screen.container).toMatchScreenshot();
+    expect(screen.container).toMatchSnapshot();
   });
 
-  it("withCaption", async () => {
+  it("withCaption", () => {
     const screen = render(
       <Table>
         <TableCaption>Query results — 4 rows returned</TableCaption>
@@ -70,13 +70,11 @@ describe("table", () => {
         </TableBody>
       </Table>
     );
-    await expect
-      .element(screen.getByText("Query results — 4 rows returned"))
-      .toBeVisible();
-    await expect.element(screen.container).toMatchScreenshot();
+    expect(screen.getByText("Query results — 4 rows returned")).toBeVisible();
+    expect(screen.container).toMatchSnapshot();
   });
 
-  it("empty", async () => {
+  it("empty", () => {
     const screen = render(
       <Table>
         <TableHeader>
@@ -98,7 +96,7 @@ describe("table", () => {
         </TableBody>
       </Table>
     );
-    await expect.element(screen.getByText("No results.")).toBeVisible();
-    await expect.element(screen.container).toMatchScreenshot();
+    expect(screen.getByText("No results.")).toBeVisible();
+    expect(screen.container).toMatchSnapshot();
   });
 });

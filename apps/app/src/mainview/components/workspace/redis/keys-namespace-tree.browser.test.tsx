@@ -48,10 +48,10 @@ describe("keys-namespace-tree", () => {
         root={sampleRoot}
       />
     );
-    await expect.element(screen.getByText("user")).toBeVisible();
-    await expect.element(screen.getByText("session")).toBeVisible();
-    await expect.element(screen.getByTitle("cache:warmup")).toBeVisible();
-    await expect.element(screen.container).toMatchScreenshot();
+    expect(screen.getByText("user")).toBeVisible();
+    await expect(screen.getByText("session")).toBeVisible();
+    expect(screen.getByTitle("cache:warmup")).toBeVisible();
+    expect(screen.container).toMatchSnapshot();
   });
 
   it("allCollapsed", async () => {
@@ -67,10 +67,10 @@ describe("keys-namespace-tree", () => {
         root={sampleRoot}
       />
     );
-    await expect.element(screen.getByText("user")).toBeVisible();
+    expect(screen.getByText("user")).toBeVisible();
     await screen.getByText("user").click();
     expect(onToggle).toHaveBeenCalledWith("user");
-    await expect.element(screen.container).toMatchScreenshot();
+    expect(screen.container).toMatchSnapshot();
   });
 
   it("keyActivation", async () => {
@@ -88,10 +88,10 @@ describe("keys-namespace-tree", () => {
     );
     await screen.getByTitle("cache:warmup").click();
     expect(onActivateKey).toHaveBeenCalledWith("cache:warmup");
-    await expect.element(screen.container).toMatchScreenshot();
+    expect(screen.container).toMatchSnapshot();
   });
 
-  it("highlightsActiveRow", async () => {
+  it("highlightsActiveRow", () => {
     const onActivateKey = vi.fn();
     const onToggle = vi.fn();
     const screen = render(
@@ -104,7 +104,7 @@ describe("keys-namespace-tree", () => {
         root={sampleRoot}
       />
     );
-    await expect.element(screen.getByTitle("cache:warmup")).toBeVisible();
-    await expect.element(screen.container).toMatchScreenshot();
+    expect(screen.getByTitle("cache:warmup")).toBeVisible();
+    expect(screen.container).toMatchSnapshot();
   });
 });

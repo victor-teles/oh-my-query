@@ -1,0 +1,119 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`input > default 1`] = `
+<input
+  autocapitalize="off"
+  autocomplete="off"
+  autocorrect="off"
+  class="h-7 w-full min-w-0 rounded-md border border-input bg-input/20 px-2 py-0.5 text-sm transition-all duration-150 ease-out outline-none file:inline-flex file:h-6 file:border-0 file:bg-transparent file:text-xs/relaxed file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-2 aria-invalid:ring-destructive/20 md:text-xs/relaxed dark:bg-input/30 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40"
+  data-1p-ignore="true"
+  data-form-type="other"
+  data-lpignore="true"
+  data-slot="input"
+  id="base-ui-_r_0_"
+  placeholder="Type something..."
+  spellcheck="false"
+/>
+`;
+
+exports[`input > disabled 1`] = `
+<input
+  autocapitalize="off"
+  autocomplete="off"
+  autocorrect="off"
+  class="h-7 w-full min-w-0 rounded-md border border-input bg-input/20 px-2 py-0.5 text-sm transition-all duration-150 ease-out outline-none file:inline-flex file:h-6 file:border-0 file:bg-transparent file:text-xs/relaxed file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-2 aria-invalid:ring-destructive/20 md:text-xs/relaxed dark:bg-input/30 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40"
+  data-1p-ignore="true"
+  data-disabled=""
+  data-form-type="other"
+  data-lpignore="true"
+  data-slot="input"
+  disabled=""
+  id="base-ui-_r_3_"
+  placeholder="Type something..."
+  spellcheck="false"
+  value="Disabled input"
+/>
+`;
+
+exports[`input > file 1`] = `
+<div>
+  <input
+    autocapitalize="off"
+    autocomplete="off"
+    autocorrect="off"
+    class="h-7 w-full min-w-0 rounded-md border border-input bg-input/20 px-2 py-0.5 text-sm transition-all duration-150 ease-out outline-none file:inline-flex file:h-6 file:border-0 file:bg-transparent file:text-xs/relaxed file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-2 aria-invalid:ring-destructive/20 md:text-xs/relaxed dark:bg-input/30 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40"
+    data-1p-ignore="true"
+    data-form-type="other"
+    data-lpignore="true"
+    data-slot="input"
+    id="base-ui-_r_5_"
+    spellcheck="false"
+    type="file"
+  />
+</div>
+`;
+
+exports[`input > invalid 1`] = `
+<input
+  aria-invalid="true"
+  autocapitalize="off"
+  autocomplete="off"
+  autocorrect="off"
+  class="h-7 w-full min-w-0 rounded-md border border-input bg-input/20 px-2 py-0.5 text-sm transition-all duration-150 ease-out outline-none file:inline-flex file:h-6 file:border-0 file:bg-transparent file:text-xs/relaxed file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-2 aria-invalid:ring-destructive/20 md:text-xs/relaxed dark:bg-input/30 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40"
+  data-1p-ignore="true"
+  data-form-type="other"
+  data-lpignore="true"
+  data-slot="input"
+  id="base-ui-_r_4_"
+  placeholder="Type something..."
+  spellcheck="false"
+  value="Bad value"
+/>
+`;
+
+exports[`input > password 1`] = `
+<input
+  autocapitalize="off"
+  autocomplete="off"
+  autocorrect="off"
+  class="h-7 w-full min-w-0 rounded-md border border-input bg-input/20 px-2 py-0.5 text-sm transition-all duration-150 ease-out outline-none file:inline-flex file:h-6 file:border-0 file:bg-transparent file:text-xs/relaxed file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-2 aria-invalid:ring-destructive/20 md:text-xs/relaxed dark:bg-input/30 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40"
+  data-1p-ignore="true"
+  data-form-type="other"
+  data-lpignore="true"
+  data-slot="input"
+  id="base-ui-_r_2_"
+  placeholder="Enter password"
+  spellcheck="false"
+  type="password"
+/>
+`;
+
+exports[`input > withLabel 1`] = `
+<div>
+  <div
+    class="grid gap-1.5"
+  >
+    <label
+      class="flex items-center gap-2 text-xs/relaxed leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50"
+      data-slot="label"
+      for="email"
+    >
+      Email
+    </label>
+    <input
+      autocapitalize="off"
+      autocomplete="off"
+      autocorrect="off"
+      class="h-7 w-full min-w-0 rounded-md border border-input bg-input/20 px-2 py-0.5 text-sm transition-all duration-150 ease-out outline-none file:inline-flex file:h-6 file:border-0 file:bg-transparent file:text-xs/relaxed file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-2 aria-invalid:ring-destructive/20 md:text-xs/relaxed dark:bg-input/30 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40"
+      data-1p-ignore="true"
+      data-form-type="other"
+      data-lpignore="true"
+      data-slot="input"
+      id="email"
+      placeholder="you@example.com"
+      spellcheck="false"
+      type="email"
+    />
+  </div>
+</div>
+`;

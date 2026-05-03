@@ -6,12 +6,12 @@ import { Input } from "./input";
 import { Label } from "./label";
 
 describe("label", () => {
-  it("default", async () => {
+  it("default", () => {
     const screen = render(<Label>Email address</Label>);
     const label = screen.getByText("Email address");
-    await expect.element(label).toBeVisible();
+    expect(label).toBeVisible();
     expect(label.element().tagName).toBe("LABEL");
-    await expect.element(label).toMatchScreenshot();
+    expect(label.element()).toMatchSnapshot();
   });
 
   it("withCheckbox", async () => {
@@ -22,11 +22,11 @@ describe("label", () => {
       </Label>
     );
     const checkbox = screen.getByRole("checkbox");
-    await expect.element(checkbox).not.toBeChecked();
+    expect(checkbox).not.toBeChecked();
     const label = screen.getByText("Accept terms and conditions");
     await label.click();
-    await expect.element(checkbox).toBeChecked();
-    await expect.element(screen.container).toMatchScreenshot();
+    await expect(checkbox).toBeChecked();
+    expect(screen.container).toMatchSnapshot();
   });
 
   it("withInput", async () => {
@@ -37,9 +37,9 @@ describe("label", () => {
       </div>
     );
     const input = screen.getByLabelText("Full name");
-    await expect.element(input).toBeVisible();
+    expect(input).toBeVisible();
     await screen.getByText("Full name").click();
-    await expect.element(input).toHaveFocus();
-    await expect.element(screen.container).toMatchScreenshot();
+    await expect(input).toHaveFocus();
+    expect(screen.container).toMatchSnapshot();
   });
 });

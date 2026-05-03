@@ -27,12 +27,12 @@ describe("resizable", () => {
         </ResizablePanel>
       </ResizablePanelGroup>
     );
-    await expect.element(screen.getByText("Sidebar")).toBeVisible();
-    await expect.element(screen.getByText("Content")).toBeVisible();
-    await expect.element(screen.container).toMatchScreenshot();
+    expect(screen.getByText("Sidebar")).toBeVisible();
+    await expect(screen.getByText("Content")).toBeVisible();
+    expect(screen.container).toMatchSnapshot();
   });
 
-  it("vertical", async () => {
+  it("vertical", () => {
     const screen = render(
       <ResizablePanelGroup
         className="min-h-64 max-w-lg rounded-lg border"
@@ -51,10 +51,10 @@ describe("resizable", () => {
         </ResizablePanel>
       </ResizablePanelGroup>
     );
-    await expect.element(screen.container).toMatchScreenshot();
+    expect(screen.container).toMatchSnapshot();
   });
 
-  it("withHandle", async () => {
+  it("withHandle", () => {
     const screen = render(
       <ResizablePanelGroup
         className="min-h-48 max-w-lg rounded-lg border"
@@ -73,10 +73,10 @@ describe("resizable", () => {
         </ResizablePanel>
       </ResizablePanelGroup>
     );
-    await expect.element(screen.container).toMatchScreenshot();
+    expect(screen.container).toMatchSnapshot();
   });
 
-  it("threePanels", async () => {
+  it("threePanels", () => {
     const screen = render(
       <ResizablePanelGroup
         className="min-h-48 max-w-lg rounded-lg border"
@@ -101,6 +101,6 @@ describe("resizable", () => {
         </ResizablePanel>
       </ResizablePanelGroup>
     );
-    await expect.element(screen.container).toMatchScreenshot();
+    expect(screen.container).toMatchSnapshot();
   });
 });

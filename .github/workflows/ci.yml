@@ -82,14 +82,6 @@ jobs:
           path: apps/app/coverage/
           if-no-files-found: ignore
 
-      - name: Upload visual regression diffs
-        if: failure()
-        uses: actions/upload-artifact@v4
-        with:
-          name: visual-regression-diffs
-          path: apps/app/src/**/__screenshots__/**
-          if-no-files-found: ignore
-
       - name: Lint & format
         run: bun run check
 

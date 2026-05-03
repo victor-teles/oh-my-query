@@ -1,0 +1,1882 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`dynamic-island > allStates 1`] = `
+<div>
+  <div
+    class="dark flex flex-col gap-3"
+  >
+    <div
+      class="flex items-center gap-4"
+    >
+      <span
+        class="
+                text-data w-36 text-right text-[10px] text-muted-foreground/50
+              "
+      >
+        welcome
+      </span>
+      <div
+        class="
+                flex h-6 items-center gap-1.5 rounded-full border border-border/60
+                bg-background/85 px-2.5 shadow-sm backdrop-blur-xl
+                backdrop-saturate-200
+              "
+      >
+        <span
+          aria-hidden="true"
+          class="size-1.5 shrink-0 rounded-full bg-primary"
+        />
+        <span
+          class="text-xs font-medium tracking-tight text-muted-foreground"
+        >
+          Welcome
+        </span>
+      </div>
+    </div>
+    <div
+      class="flex items-center gap-4"
+    >
+      <span
+        class="
+                text-data w-36 text-right text-[10px] text-muted-foreground/50
+              "
+      >
+        ambient
+      </span>
+      <div
+        class="
+                flex h-6 items-center gap-1.5 rounded-full border border-border/60
+                bg-background/85 px-2.5 shadow-sm backdrop-blur-xl
+                backdrop-saturate-200
+              "
+      >
+        <span
+          aria-hidden="true"
+          class="size-1 shrink-0 rounded-full bg-muted-foreground/40"
+        />
+        <span
+          class="sr-only"
+        >
+          Database: 
+        </span>
+        <span
+          class="
+        max-w-60 truncate text-xs font-medium tracking-tight
+        text-muted-foreground
+      "
+        >
+          local-dev
+        </span>
+      </div>
+    </div>
+    <div
+      class="flex items-center gap-4"
+    >
+      <span
+        class="
+                text-data w-36 text-right text-[10px] text-muted-foreground/50
+              "
+      >
+        connecting
+      </span>
+      <div
+        class="
+                flex h-6 items-center gap-1.5 rounded-full border border-border/60
+                bg-background/85 px-2.5 shadow-sm backdrop-blur-xl
+                backdrop-saturate-200
+              "
+      >
+        <div
+          aria-hidden="true"
+          class="flex items-center gap-0.5"
+        >
+          <span
+            class="size-1 rounded-full bg-muted-foreground"
+          />
+          <span
+            class="size-1 rounded-full bg-muted-foreground"
+          />
+          <span
+            class="size-1 rounded-full bg-muted-foreground"
+          />
+        </div>
+        <span
+          class="sr-only"
+        >
+          Connecting to 
+        </span>
+        <span
+          class="max-w-60 truncate text-xs font-medium tracking-tight text-muted-foreground"
+        >
+          production-pg
+        </span>
+      </div>
+    </div>
+    <div
+      class="flex items-center gap-4"
+    >
+      <span
+        class="
+                text-data w-36 text-right text-[10px] text-muted-foreground/50
+              "
+      >
+        reconnecting
+      </span>
+      <div
+        class="
+                flex h-6 items-center gap-1.5 rounded-full border border-border/60
+                bg-background/85 px-2.5 shadow-sm backdrop-blur-xl
+                backdrop-saturate-200
+              "
+      >
+        <div
+          aria-hidden="true"
+          class="flex items-center gap-0.5"
+        >
+          <span
+            class="size-1 rounded-full bg-warning"
+          />
+          <span
+            class="size-1 rounded-full bg-warning"
+          />
+          <span
+            class="size-1 rounded-full bg-warning"
+          />
+        </div>
+        <span
+          class="max-w-65 truncate text-xs font-medium tracking-tight text-warning"
+        >
+          Reconnecting to 
+          staging-pg
+        </span>
+      </div>
+    </div>
+    <div
+      class="flex items-center gap-4"
+    >
+      <span
+        class="
+                text-data w-36 text-right text-[10px] text-muted-foreground/50
+              "
+      >
+        connection-error
+      </span>
+      <div
+        class="
+                flex h-6 items-center gap-1.5 rounded-full border border-border/60
+                bg-background/85 px-2.5 shadow-sm backdrop-blur-xl
+                backdrop-saturate-200
+              "
+      >
+        <svg
+          aria-hidden="true"
+          class="lucide lucide-circle-alert size-3 shrink-0 text-destructive"
+          fill="none"
+          height="24"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+          width="24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <circle
+            cx="12"
+            cy="12"
+            r="10"
+          />
+          <line
+            x1="12"
+            x2="12"
+            y1="8"
+            y2="12"
+          />
+          <line
+            x1="12"
+            x2="12.01"
+            y1="16"
+            y2="16"
+          />
+        </svg>
+        <button
+          aria-label="Show full error. Current error: ECONNREFUSED at 127.0.0.1:5432"
+          class="
+              text-xs font-medium tracking-tight
+              max-w-[280px]
+              cursor-pointer truncate rounded-sm text-left text-destructive
+              transition-opacity duration-150 ease-out
+              hover:opacity-80
+              focus-visible:ring-2 focus-visible:ring-ring/50
+              focus-visible:outline-none
+            "
+          data-slot="hover-card-trigger"
+          id="base-ui-_r_l_"
+          title="ECONNREFUSED at 127.0.0.1:5432"
+          type="button"
+        >
+          ECONNREFUSED at 127.0.0.1:5432
+        </button>
+        <button
+          aria-label="Retry connection"
+          class="
+        cursor-pointer rounded-sm text-xs font-medium tracking-tight
+        text-destructive underline underline-offset-2 transition-opacity
+        duration-150 ease-out
+        hover:opacity-70
+        focus-visible:ring-2 focus-visible:ring-ring/50
+        focus-visible:outline-none
+        active:opacity-50
+      "
+          type="button"
+        >
+          Retry
+        </button>
+      </div>
+    </div>
+    <div
+      class="flex items-center gap-4"
+    >
+      <span
+        class="
+                text-data w-36 text-right text-[10px] text-muted-foreground/50
+              "
+      >
+        connected-idle
+      </span>
+      <div
+        class="
+                flex h-6 items-center gap-1.5 rounded-full border border-border/60
+                bg-background/85 px-2.5 shadow-sm backdrop-blur-xl
+                backdrop-saturate-200
+              "
+      >
+        <button
+          aria-label="Connected to analytics-db (prod) — admin@analytics on 16.2. Open connection details."
+          class="
+              flex items-center gap-1.5 rounded-full transition-opacity
+              duration-150 ease-out
+              hover:opacity-75
+              focus-visible:ring-2 focus-visible:ring-ring/50
+              focus-visible:outline-none
+            "
+          data-slot="hover-card-trigger"
+          id="base-ui-_r_n_"
+          type="button"
+        >
+          <span
+            aria-hidden="true"
+            class="relative flex size-2 shrink-0"
+          >
+            <span
+              class="absolute inline-flex size-full rounded-full bg-[var(--conn-honey)]"
+            />
+            <span
+              class="relative inline-flex size-2 rounded-full bg-[var(--conn-honey)]"
+            />
+          </span>
+          <span
+            class="group/badge inline-flex w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-full border py-0.5 font-medium whitespace-nowrap transition-all duration-150 ease-out focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50 has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&>svg]:pointer-events-none [&>svg]:size-2.5! dark:bg-input/30 [a]:hover:bg-muted [a]:hover:text-muted-foreground h-4 px-1.5 text-[10px] border-transparent bg-destructive/90 text-destructive-foreground"
+            data-slot="badge"
+            data-variant="outline"
+          >
+            prod
+          </span>
+          <span
+            aria-hidden="true"
+            class="text-xs leading-none font-medium tracking-tight"
+          >
+            🐝
+          </span>
+          <span
+            aria-hidden="true"
+            class="
+                max-w-40 truncate text-xs font-medium tracking-tight
+                text-muted-foreground
+              "
+          >
+            analytics-db
+          </span>
+          <span
+            aria-hidden="true"
+            class="
+                  text-xs font-medium tracking-tight text-muted-foreground
+                  tabular-nums
+                "
+          >
+            16.2
+          </span>
+          <span
+            aria-hidden="true"
+            class="
+                text-xs font-medium tracking-tight text-muted-foreground/30
+              "
+          >
+            ·
+          </span>
+          <span
+            aria-hidden="true"
+            class="
+                text-xs font-medium tracking-tight text-muted-foreground
+              "
+          >
+            admin
+            @
+            analytics
+          </span>
+        </button>
+      </div>
+    </div>
+    <div
+      class="flex items-center gap-4"
+    >
+      <span
+        class="
+                text-data w-36 text-right text-[10px] text-muted-foreground/50
+              "
+      >
+        query-running
+      </span>
+      <div
+        class="
+                flex h-6 items-center gap-1.5 rounded-full border border-border/60
+                bg-background/85 px-2.5 shadow-sm backdrop-blur-xl
+                backdrop-saturate-200
+              "
+      >
+        <button
+          aria-expanded="false"
+          aria-haspopup="listbox"
+          aria-label="Show running query (Top users)"
+          class="
+              flex cursor-pointer items-center gap-1.5 rounded-full
+              transition-opacity duration-150 ease-out
+              hover:opacity-75
+              focus-visible:ring-2 focus-visible:ring-ring/50
+              focus-visible:outline-none
+              active:opacity-55
+            "
+          data-base-ui-click-trigger=""
+          id="base-ui-_r_q_"
+          tabindex="0"
+          type="button"
+        >
+          <span
+            aria-hidden="true"
+            class="size-1.5 shrink-0 rounded-full bg-primary"
+          />
+          <span
+            class="sr-only"
+          >
+            Executing query
+          </span>
+          <span
+            aria-hidden="true"
+            class="text-xs font-medium tracking-tight text-muted-foreground"
+          >
+            Running
+          </span>
+          <span
+            aria-hidden="true"
+            class="
+            text-xs font-medium tracking-tight text-muted-foreground/70
+            tabular-nums
+          "
+          >
+            2.4s
+          </span>
+          <svg
+            aria-hidden="true"
+            class="lucide lucide-x ml-0.5 size-2.5 shrink-0 text-muted-foreground/70"
+            fill="none"
+            height="24"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M18 6 6 18"
+            />
+            <path
+              d="m6 6 12 12"
+            />
+          </svg>
+        </button>
+      </div>
+    </div>
+    <div
+      class="flex items-center gap-4"
+    >
+      <span
+        class="
+                text-data w-36 text-right text-[10px] text-muted-foreground/50
+              "
+      >
+        query-streaming
+      </span>
+      <div
+        class="
+                flex h-6 items-center gap-1.5 rounded-full border border-border/60
+                bg-background/85 px-2.5 shadow-sm backdrop-blur-xl
+                backdrop-saturate-200
+              "
+      >
+        <div
+          aria-hidden="true"
+          class="flex items-end gap-px"
+          style="height: 10px"
+        >
+          <span
+            class="w-0.5 origin-bottom rounded-full bg-muted-foreground"
+            style="height: 10px"
+          />
+          <span
+            class="w-0.5 origin-bottom rounded-full bg-muted-foreground"
+            style="height: 10px"
+          />
+          <span
+            class="w-0.5 origin-bottom rounded-full bg-muted-foreground"
+            style="height: 10px"
+          />
+        </div>
+        <span
+          class="sr-only"
+        >
+          Streaming AI response
+        </span>
+        <span
+          aria-hidden="true"
+          class="flex items-baseline gap-1 text-xs font-medium tracking-tight text-muted-foreground"
+        >
+          <span>
+            Streaming
+          </span>
+          <span
+            class="text-muted-foreground/50 tabular-nums"
+          >
+            · 
+            128
+             
+            tokens
+          </span>
+        </span>
+        <button
+          aria-keyshortcuts="Escape"
+          aria-label="Stop generating"
+          class="
+      -mr-1 ml-0.5 flex size-4 shrink-0 cursor-pointer items-center
+      justify-center rounded-full text-muted-foreground/70 transition-colors
+      duration-150 ease-out
+      hover:bg-destructive/15 hover:text-destructive
+      focus-visible:bg-destructive/15 focus-visible:text-destructive
+      focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:outline-none
+    "
+          tabindex="0"
+          title="Stop generating (Escape)"
+          type="button"
+        >
+          <svg
+            aria-hidden="true"
+            class="lucide lucide-x size-2.5"
+            fill="none"
+            height="24"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M18 6 6 18"
+            />
+            <path
+              d="m6 6 12 12"
+            />
+          </svg>
+        </button>
+      </div>
+    </div>
+    <div
+      class="flex items-center gap-4"
+    >
+      <span
+        class="
+                text-data w-36 text-right text-[10px] text-muted-foreground/50
+              "
+      >
+        query-planning
+      </span>
+      <div
+        class="
+                flex h-6 items-center gap-1.5 rounded-full border border-border/60
+                bg-background/85 px-2.5 shadow-sm backdrop-blur-xl
+                backdrop-saturate-200
+              "
+      >
+        <span
+          aria-hidden="true"
+          class="size-1.5 shrink-0 rounded-full bg-muted-foreground"
+        />
+        <span
+          class="sr-only"
+        >
+          AI planning query
+        </span>
+        <span
+          aria-hidden="true"
+          class="text-xs font-medium tracking-tight text-muted-foreground"
+        >
+          Planning…
+        </span>
+        <button
+          aria-keyshortcuts="Escape"
+          aria-label="Stop planning"
+          class="
+      -mr-1 ml-0.5 flex size-4 shrink-0 cursor-pointer items-center
+      justify-center rounded-full text-muted-foreground/70 transition-colors
+      duration-150 ease-out
+      hover:bg-destructive/15 hover:text-destructive
+      focus-visible:bg-destructive/15 focus-visible:text-destructive
+      focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:outline-none
+    "
+          tabindex="0"
+          title="Stop planning (Escape)"
+          type="button"
+        >
+          <svg
+            aria-hidden="true"
+            class="lucide lucide-x size-2.5"
+            fill="none"
+            height="24"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M18 6 6 18"
+            />
+            <path
+              d="m6 6 12 12"
+            />
+          </svg>
+        </button>
+      </div>
+    </div>
+    <div
+      class="flex items-center gap-4"
+    >
+      <span
+        class="
+                text-data w-36 text-right text-[10px] text-muted-foreground/50
+              "
+      >
+        query-cancelled
+      </span>
+      <div
+        class="
+                flex h-6 items-center gap-1.5 rounded-full border border-border/60
+                bg-background/85 px-2.5 shadow-sm backdrop-blur-xl
+                backdrop-saturate-200
+              "
+      >
+        <svg
+          aria-hidden="true"
+          class="lucide lucide-x size-3 shrink-0 text-muted-foreground"
+          fill="none"
+          height="24"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+          width="24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M18 6 6 18"
+          />
+          <path
+            d="m6 6 12 12"
+          />
+        </svg>
+        <span
+          class="sr-only"
+        >
+          Query cancelled
+        </span>
+        <span
+          aria-hidden="true"
+          class="text-xs font-medium tracking-tight text-muted-foreground"
+        >
+          Cancelled
+        </span>
+      </div>
+    </div>
+    <div
+      class="flex items-center gap-4"
+    >
+      <span
+        class="
+                text-data w-36 text-right text-[10px] text-muted-foreground/50
+              "
+      >
+        query-success
+      </span>
+      <div
+        class="
+                flex h-6 items-center gap-1.5 rounded-full border border-border/60
+                bg-background/85 px-2.5 shadow-sm backdrop-blur-xl
+                backdrop-saturate-200
+              "
+      >
+        <svg
+          aria-hidden="true"
+          class="lucide lucide-check size-3 shrink-0 text-success"
+          fill="none"
+          height="24"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+          width="24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M20 6 9 17l-5-5"
+          />
+        </svg>
+        <span
+          class="sr-only"
+        >
+          Query returned 
+          2847
+           
+          rows
+           in 
+          142ms
+        </span>
+        <span
+          aria-hidden="true"
+          class="
+          flex items-baseline gap-1 text-xs font-medium tracking-tight
+          text-muted-foreground tabular-nums
+        "
+        >
+          <span
+            class="text-foreground"
+          >
+            2847
+          </span>
+          <span
+            class="text-muted-foreground/70"
+          >
+            rows
+          </span>
+          <span
+            class="text-muted-foreground/40"
+          >
+            ·
+          </span>
+          <span
+            class="text-muted-foreground/70"
+          >
+            142ms
+          </span>
+        </span>
+      </div>
+    </div>
+    <div
+      class="flex items-center gap-4"
+    >
+      <span
+        class="
+                text-data w-36 text-right text-[10px] text-muted-foreground/50
+              "
+      >
+        query-error
+      </span>
+      <div
+        class="
+                flex h-6 items-center gap-1.5 rounded-full border border-border/60
+                bg-background/85 px-2.5 shadow-sm backdrop-blur-xl
+                backdrop-saturate-200
+              "
+      >
+        <svg
+          aria-hidden="true"
+          class="lucide lucide-triangle-alert size-3 shrink-0 text-destructive"
+          fill="none"
+          height="24"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+          width="24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"
+          />
+          <path
+            d="M12 9v4"
+          />
+          <path
+            d="M12 17h.01"
+          />
+        </svg>
+        <span
+          class="sr-only"
+        >
+          Query failed: 
+        </span>
+        <button
+          aria-label="Show full error. Current error: column "user_idz" does not exist"
+          class="
+              text-xs font-medium tracking-tight
+              max-w-[360px]
+              cursor-pointer truncate rounded-sm text-left text-destructive
+              transition-opacity duration-150 ease-out
+              hover:opacity-80
+              focus-visible:ring-2 focus-visible:ring-ring/50
+              focus-visible:outline-none
+            "
+          data-slot="hover-card-trigger"
+          id="base-ui-_r_s_"
+          title="column "user_idz" does not exist"
+          type="button"
+        >
+          column "user_idz" does not exist
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`dynamic-island > ambient 1`] = `
+<div>
+  <div
+    class="dark flex items-center justify-center p-8"
+  >
+    <div
+      class="
+        relative flex h-6 items-center gap-1.5 rounded-full border
+        border-border/60 bg-background/85 px-2.5 shadow-sm backdrop-blur-xl
+        backdrop-saturate-200
+      "
+    >
+      <span
+        aria-hidden="true"
+        class="size-1 shrink-0 rounded-full bg-muted-foreground/40"
+      />
+      <span
+        class="sr-only"
+      >
+        Database: 
+      </span>
+      <span
+        class="
+        max-w-60 truncate text-xs font-medium tracking-tight
+        text-muted-foreground
+      "
+      >
+        my-db
+      </span>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`dynamic-island > connectedIdle 1`] = `
+<div>
+  <div
+    class="dark flex items-center justify-center p-8"
+  >
+    <div
+      class="
+        relative flex h-6 items-center gap-1.5 rounded-full border
+        border-border/60 bg-background/85 px-2.5 shadow-sm backdrop-blur-xl
+        backdrop-saturate-200
+      "
+    >
+      <button
+        aria-label="Connected to analytics-db (prod) — admin@analytics on 16.2. Open connection details."
+        class="
+              flex items-center gap-1.5 rounded-full transition-opacity
+              duration-150 ease-out
+              hover:opacity-75
+              focus-visible:ring-2 focus-visible:ring-ring/50
+              focus-visible:outline-none
+            "
+        data-slot="hover-card-trigger"
+        id="base-ui-_r_3_"
+        type="button"
+      >
+        <span
+          aria-hidden="true"
+          class="relative flex size-2 shrink-0"
+        >
+          <span
+            class="absolute inline-flex size-full rounded-full bg-[var(--conn-honey)]"
+          />
+          <span
+            class="relative inline-flex size-2 rounded-full bg-[var(--conn-honey)]"
+          />
+        </span>
+        <span
+          class="group/badge inline-flex w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-full border py-0.5 font-medium whitespace-nowrap transition-all duration-150 ease-out focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50 has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&>svg]:pointer-events-none [&>svg]:size-2.5! dark:bg-input/30 [a]:hover:bg-muted [a]:hover:text-muted-foreground h-4 px-1.5 text-[10px] border-transparent bg-destructive/90 text-destructive-foreground"
+          data-slot="badge"
+          data-variant="outline"
+        >
+          prod
+        </span>
+        <span
+          aria-hidden="true"
+          class="text-xs leading-none font-medium tracking-tight"
+        >
+          🐝
+        </span>
+        <span
+          aria-hidden="true"
+          class="
+                max-w-40 truncate text-xs font-medium tracking-tight
+                text-muted-foreground
+              "
+        >
+          analytics-db
+        </span>
+        <span
+          aria-hidden="true"
+          class="
+                  text-xs font-medium tracking-tight text-muted-foreground
+                  tabular-nums
+                "
+        >
+          16.2
+        </span>
+        <span
+          aria-hidden="true"
+          class="
+                text-xs font-medium tracking-tight text-muted-foreground/30
+              "
+        >
+          ·
+        </span>
+        <span
+          aria-hidden="true"
+          class="
+                text-xs font-medium tracking-tight text-muted-foreground
+              "
+        >
+          admin
+          @
+          analytics
+        </span>
+      </button>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`dynamic-island > connectedIdleNoEnv 1`] = `
+<div>
+  <div
+    class="dark flex items-center justify-center p-8"
+  >
+    <div
+      class="
+        relative flex h-6 items-center gap-1.5 rounded-full border
+        border-border/60 bg-background/85 px-2.5 shadow-sm backdrop-blur-xl
+        backdrop-saturate-200
+      "
+    >
+      <button
+        aria-label="Connected to local-dev — postgres@myapp_dev. Open connection details."
+        class="
+              flex items-center gap-1.5 rounded-full transition-opacity
+              duration-150 ease-out
+              hover:opacity-75
+              focus-visible:ring-2 focus-visible:ring-ring/50
+              focus-visible:outline-none
+            "
+        data-slot="hover-card-trigger"
+        id="base-ui-_r_5_"
+        type="button"
+      >
+        <span
+          aria-hidden="true"
+          class="relative flex size-2 shrink-0"
+        >
+          <span
+            class="absolute inline-flex size-full rounded-full bg-[var(--conn-denim)]"
+          />
+          <span
+            class="relative inline-flex size-2 rounded-full bg-[var(--conn-denim)]"
+          />
+        </span>
+        <span
+          aria-hidden="true"
+          class="
+                max-w-40 truncate text-xs font-medium tracking-tight
+                text-muted-foreground
+              "
+        >
+          local-dev
+        </span>
+        <span
+          aria-hidden="true"
+          class="
+                text-xs font-medium tracking-tight text-muted-foreground/30
+              "
+        >
+          ·
+        </span>
+        <span
+          aria-hidden="true"
+          class="
+                text-xs font-medium tracking-tight text-muted-foreground
+              "
+        >
+          postgres
+          @
+          myapp_dev
+        </span>
+      </button>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`dynamic-island > connecting 1`] = `
+<div>
+  <div
+    class="dark flex items-center justify-center p-8"
+  >
+    <div
+      class="
+        relative flex h-6 items-center gap-1.5 rounded-full border
+        border-border/60 bg-background/85 px-2.5 shadow-sm backdrop-blur-xl
+        backdrop-saturate-200
+      "
+    >
+      <div
+        aria-hidden="true"
+        class="flex items-center gap-0.5"
+      >
+        <span
+          class="size-1 rounded-full bg-muted-foreground"
+        />
+        <span
+          class="size-1 rounded-full bg-muted-foreground"
+        />
+        <span
+          class="size-1 rounded-full bg-muted-foreground"
+        />
+      </div>
+      <span
+        class="sr-only"
+      >
+        Connecting to 
+      </span>
+      <span
+        class="max-w-60 truncate text-xs font-medium tracking-tight text-muted-foreground"
+      >
+        production-pg
+      </span>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`dynamic-island > connectionError 1`] = `
+<div>
+  <div
+    class="dark flex items-center justify-center p-8"
+  >
+    <div
+      class="
+        relative flex h-6 items-center gap-1.5 rounded-full border
+        border-border/60 bg-background/85 px-2.5 shadow-sm backdrop-blur-xl
+        backdrop-saturate-200
+      "
+    >
+      <svg
+        aria-hidden="true"
+        class="lucide lucide-circle-alert size-3 shrink-0 text-destructive"
+        fill="none"
+        height="24"
+        stroke="currentColor"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        viewBox="0 0 24 24"
+        width="24"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <circle
+          cx="12"
+          cy="12"
+          r="10"
+        />
+        <line
+          x1="12"
+          x2="12"
+          y1="8"
+          y2="12"
+        />
+        <line
+          x1="12"
+          x2="12.01"
+          y1="16"
+          y2="16"
+        />
+      </svg>
+      <button
+        aria-label="Show full error. Current error: ECONNREFUSED: Connection refused at 127.0.0.1:5432"
+        class="
+              text-xs font-medium tracking-tight
+              max-w-[280px]
+              cursor-pointer truncate rounded-sm text-left text-destructive
+              transition-opacity duration-150 ease-out
+              hover:opacity-80
+              focus-visible:ring-2 focus-visible:ring-ring/50
+              focus-visible:outline-none
+            "
+        data-slot="hover-card-trigger"
+        id="base-ui-_r_1_"
+        title="ECONNREFUSED: Connection refused at 127.0.0.1:5432"
+        type="button"
+      >
+        ECONNREFUSED: Connection refused at 127.0.0.1:5432
+      </button>
+      <button
+        aria-label="Retry connection"
+        class="
+        cursor-pointer rounded-sm text-xs font-medium tracking-tight
+        text-destructive underline underline-offset-2 transition-opacity
+        duration-150 ease-out
+        hover:opacity-70
+        focus-visible:ring-2 focus-visible:ring-ring/50
+        focus-visible:outline-none
+        active:opacity-50
+      "
+        type="button"
+      >
+        Retry
+      </button>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`dynamic-island > queryCancelled 1`] = `
+<div>
+  <div
+    class="dark flex items-center justify-center p-8"
+  >
+    <div
+      class="
+        relative flex h-6 items-center gap-1.5 rounded-full border
+        border-border/60 bg-background/85 px-2.5 shadow-sm backdrop-blur-xl
+        backdrop-saturate-200
+      "
+    >
+      <svg
+        aria-hidden="true"
+        class="lucide lucide-x size-3 shrink-0 text-muted-foreground"
+        fill="none"
+        height="24"
+        stroke="currentColor"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        viewBox="0 0 24 24"
+        width="24"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M18 6 6 18"
+        />
+        <path
+          d="m6 6 12 12"
+        />
+      </svg>
+      <span
+        class="sr-only"
+      >
+        Query cancelled
+      </span>
+      <span
+        aria-hidden="true"
+        class="text-xs font-medium tracking-tight text-muted-foreground"
+      >
+        Cancelled
+      </span>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`dynamic-island > queryError 1`] = `
+<div>
+  <div
+    class="dark flex items-center justify-center p-8"
+  >
+    <div
+      class="
+        relative flex h-6 items-center gap-1.5 rounded-full border
+        border-border/60 bg-background/85 px-2.5 shadow-sm backdrop-blur-xl
+        backdrop-saturate-200
+      "
+    >
+      <svg
+        aria-hidden="true"
+        class="lucide lucide-triangle-alert size-3 shrink-0 text-destructive"
+        fill="none"
+        height="24"
+        stroke="currentColor"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        viewBox="0 0 24 24"
+        width="24"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"
+        />
+        <path
+          d="M12 9v4"
+        />
+        <path
+          d="M12 17h.01"
+        />
+      </svg>
+      <span
+        class="sr-only"
+      >
+        Query failed: 
+      </span>
+      <button
+        aria-label="Show full error. Current error: ERROR: column "user_idz" does not exist at character 8 (SQLSTATE 42703)"
+        class="
+              text-xs font-medium tracking-tight
+              max-w-[360px]
+              cursor-pointer truncate rounded-sm text-left text-destructive
+              transition-opacity duration-150 ease-out
+              hover:opacity-80
+              focus-visible:ring-2 focus-visible:ring-ring/50
+              focus-visible:outline-none
+            "
+        data-slot="hover-card-trigger"
+        id="base-ui-_r_j_"
+        title="ERROR: column "user_idz" does not exist at character 8 (SQLSTATE 42703)"
+        type="button"
+      >
+        ERROR: column "user_idz" does not exist at character 8 (SQLSTATE 42703)
+      </button>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`dynamic-island > queryPlanning 1`] = `
+<div>
+  <div
+    class="dark flex items-center justify-center p-8"
+  >
+    <div
+      class="
+        relative flex h-6 items-center gap-1.5 rounded-full border
+        border-border/60 bg-background/85 px-2.5 shadow-sm backdrop-blur-xl
+        backdrop-saturate-200
+      "
+    >
+      <span
+        aria-hidden="true"
+        class="size-1.5 shrink-0 rounded-full bg-muted-foreground"
+      />
+      <span
+        class="sr-only"
+      >
+        AI planning query
+      </span>
+      <span
+        aria-hidden="true"
+        class="text-xs font-medium tracking-tight text-muted-foreground"
+      >
+        Planning…
+      </span>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`dynamic-island > queryRunningOverflow 1`] = `
+<div>
+  <div
+    class="dark flex items-center justify-center p-8"
+  >
+    <div
+      class="
+        relative flex h-6 items-center gap-1.5 rounded-full border
+        border-border/60 bg-background/85 px-2.5 shadow-sm backdrop-blur-xl
+        backdrop-saturate-200
+      "
+    >
+      <button
+        aria-expanded="false"
+        aria-haspopup="listbox"
+        aria-label="Show 6 running queries"
+        class="
+              flex cursor-pointer items-center gap-1.5 rounded-full
+              transition-opacity duration-150 ease-out
+              hover:opacity-75
+              focus-visible:ring-2 focus-visible:ring-ring/50
+              focus-visible:outline-none
+              active:opacity-55
+            "
+        data-base-ui-click-trigger=""
+        id="base-ui-_r_e_"
+        tabindex="0"
+        type="button"
+      >
+        <span
+          aria-hidden="true"
+          class="size-1.5 shrink-0 rounded-full bg-primary"
+        />
+        <span
+          class="sr-only"
+        >
+          Executing query
+        </span>
+        <span
+          aria-hidden="true"
+          class="text-xs font-medium tracking-tight text-muted-foreground"
+        >
+          Running
+        </span>
+        <span
+          aria-hidden="true"
+          class="
+            text-xs font-medium tracking-tight text-muted-foreground/70
+            tabular-nums
+          "
+        >
+          2.3s
+        </span>
+        <span
+          aria-hidden="true"
+          class="
+            rounded-full bg-foreground/10 px-1.5 py-px text-[10px] font-medium
+            text-muted-foreground tabular-nums
+          "
+        >
+          +
+          5
+        </span>
+        <svg
+          aria-hidden="true"
+          class="lucide lucide-x ml-0.5 size-2.5 shrink-0 text-muted-foreground/70"
+          fill="none"
+          height="24"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+          width="24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M18 6 6 18"
+          />
+          <path
+            d="m6 6 12 12"
+          />
+        </svg>
+      </button>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`dynamic-island > queryRunningReducedMotion 1`] = `
+<div>
+  <div
+    class="dark flex items-center justify-center p-8"
+  >
+    <div
+      class="
+        relative flex h-6 items-center gap-1.5 rounded-full border
+        border-border/60 bg-background/85 px-2.5 shadow-sm backdrop-blur-xl
+        backdrop-saturate-200
+      "
+    >
+      <button
+        aria-expanded="false"
+        aria-haspopup="listbox"
+        aria-label="Show 2 running queries"
+        class="
+              flex cursor-pointer items-center gap-1.5 rounded-full
+              transition-opacity duration-150 ease-out
+              hover:opacity-75
+              focus-visible:ring-2 focus-visible:ring-ring/50
+              focus-visible:outline-none
+              active:opacity-55
+            "
+        data-base-ui-click-trigger=""
+        id="base-ui-_r_h_"
+        tabindex="0"
+        type="button"
+      >
+        <span
+          aria-hidden="true"
+          class="size-1.5 shrink-0 rounded-full bg-primary"
+        />
+        <span
+          class="sr-only"
+        >
+          Executing query
+        </span>
+        <span
+          aria-hidden="true"
+          class="text-xs font-medium tracking-tight text-muted-foreground"
+        >
+          Running
+        </span>
+        <span
+          aria-hidden="true"
+          class="
+            text-xs font-medium tracking-tight text-muted-foreground/70
+            tabular-nums
+          "
+        >
+          3.3s
+        </span>
+        <span
+          aria-hidden="true"
+          class="
+            rounded-full bg-foreground/10 px-1.5 py-px text-[10px] font-medium
+            text-muted-foreground tabular-nums
+          "
+        >
+          +
+          1
+        </span>
+        <svg
+          aria-hidden="true"
+          class="lucide lucide-x ml-0.5 size-2.5 shrink-0 text-muted-foreground/70"
+          fill="none"
+          height="24"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+          width="24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M18 6 6 18"
+          />
+          <path
+            d="m6 6 12 12"
+          />
+        </svg>
+      </button>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`dynamic-island > queryRunningSingle 1`] = `
+<div>
+  <div
+    class="dark flex items-center justify-center p-8"
+  >
+    <div
+      class="
+        relative flex h-6 items-center gap-1.5 rounded-full border
+        border-border/60 bg-background/85 px-2.5 shadow-sm backdrop-blur-xl
+        backdrop-saturate-200
+      "
+    >
+      <button
+        aria-expanded="false"
+        aria-haspopup="listbox"
+        aria-label="Show running query (Top users)"
+        class="
+              flex cursor-pointer items-center gap-1.5 rounded-full
+              transition-opacity duration-150 ease-out
+              hover:opacity-75
+              focus-visible:ring-2 focus-visible:ring-ring/50
+              focus-visible:outline-none
+              active:opacity-55
+            "
+        data-base-ui-click-trigger=""
+        id="base-ui-_r_8_"
+        tabindex="0"
+        type="button"
+      >
+        <span
+          aria-hidden="true"
+          class="size-1.5 shrink-0 rounded-full bg-primary"
+        />
+        <span
+          class="sr-only"
+        >
+          Executing query
+        </span>
+        <span
+          aria-hidden="true"
+          class="text-xs font-medium tracking-tight text-muted-foreground"
+        >
+          Running
+        </span>
+        <span
+          aria-hidden="true"
+          class="
+            text-xs font-medium tracking-tight text-muted-foreground/70
+            tabular-nums
+          "
+        >
+          4.2s
+        </span>
+        <svg
+          aria-hidden="true"
+          class="lucide lucide-x ml-0.5 size-2.5 shrink-0 text-muted-foreground/70"
+          fill="none"
+          height="24"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+          width="24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M18 6 6 18"
+          />
+          <path
+            d="m6 6 12 12"
+          />
+        </svg>
+      </button>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`dynamic-island > queryRunningThree 1`] = `
+<div>
+  <div
+    class="dark flex items-center justify-center p-8"
+  >
+    <div
+      class="
+        relative flex h-6 items-center gap-1.5 rounded-full border
+        border-border/60 bg-background/85 px-2.5 shadow-sm backdrop-blur-xl
+        backdrop-saturate-200
+      "
+    >
+      <button
+        aria-expanded="false"
+        aria-haspopup="listbox"
+        aria-label="Show 3 running queries"
+        class="
+              flex cursor-pointer items-center gap-1.5 rounded-full
+              transition-opacity duration-150 ease-out
+              hover:opacity-75
+              focus-visible:ring-2 focus-visible:ring-ring/50
+              focus-visible:outline-none
+              active:opacity-55
+            "
+        data-base-ui-click-trigger=""
+        id="base-ui-_r_b_"
+        tabindex="0"
+        type="button"
+      >
+        <span
+          aria-hidden="true"
+          class="size-1.5 shrink-0 rounded-full bg-primary"
+        />
+        <span
+          class="sr-only"
+        >
+          Executing query
+        </span>
+        <span
+          aria-hidden="true"
+          class="text-xs font-medium tracking-tight text-muted-foreground"
+        >
+          Running
+        </span>
+        <span
+          aria-hidden="true"
+          class="
+            text-xs font-medium tracking-tight text-muted-foreground/70
+            tabular-nums
+          "
+        >
+          12.4s
+        </span>
+        <span
+          aria-hidden="true"
+          class="
+            rounded-full bg-foreground/10 px-1.5 py-px text-[10px] font-medium
+            text-muted-foreground tabular-nums
+          "
+        >
+          +
+          2
+        </span>
+        <svg
+          aria-hidden="true"
+          class="lucide lucide-x ml-0.5 size-2.5 shrink-0 text-muted-foreground/70"
+          fill="none"
+          height="24"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+          width="24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M18 6 6 18"
+          />
+          <path
+            d="m6 6 12 12"
+          />
+        </svg>
+      </button>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`dynamic-island > queryStreaming 1`] = `
+<div>
+  <div
+    class="dark flex items-center justify-center p-8"
+  >
+    <div
+      class="
+        relative flex h-6 items-center gap-1.5 rounded-full border
+        border-border/60 bg-background/85 px-2.5 shadow-sm backdrop-blur-xl
+        backdrop-saturate-200
+      "
+    >
+      <div
+        aria-hidden="true"
+        class="flex items-end gap-px"
+        style="height: 10px"
+      >
+        <span
+          class="w-0.5 origin-bottom rounded-full bg-muted-foreground"
+          style="height: 10px"
+        />
+        <span
+          class="w-0.5 origin-bottom rounded-full bg-muted-foreground"
+          style="height: 10px"
+        />
+        <span
+          class="w-0.5 origin-bottom rounded-full bg-muted-foreground"
+          style="height: 10px"
+        />
+      </div>
+      <span
+        class="sr-only"
+      >
+        Streaming AI response
+      </span>
+      <span
+        aria-hidden="true"
+        class="flex items-baseline gap-1 text-xs font-medium tracking-tight text-muted-foreground"
+      >
+        <span>
+          Streaming
+        </span>
+        <span
+          class="text-muted-foreground/50 tabular-nums"
+        >
+          · 
+          128
+           
+          tokens
+        </span>
+      </span>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`dynamic-island > queryStreamingStart 1`] = `
+<div>
+  <div
+    class="dark flex items-center justify-center p-8"
+  >
+    <div
+      class="
+        relative flex h-6 items-center gap-1.5 rounded-full border
+        border-border/60 bg-background/85 px-2.5 shadow-sm backdrop-blur-xl
+        backdrop-saturate-200
+      "
+    >
+      <div
+        aria-hidden="true"
+        class="flex items-end gap-px"
+        style="height: 10px"
+      >
+        <span
+          class="w-0.5 origin-bottom rounded-full bg-muted-foreground"
+          style="height: 10px"
+        />
+        <span
+          class="w-0.5 origin-bottom rounded-full bg-muted-foreground"
+          style="height: 10px"
+        />
+        <span
+          class="w-0.5 origin-bottom rounded-full bg-muted-foreground"
+          style="height: 10px"
+        />
+      </div>
+      <span
+        class="sr-only"
+      >
+        Streaming AI response
+      </span>
+      <span
+        aria-hidden="true"
+        class="flex items-baseline gap-1 text-xs font-medium tracking-tight text-muted-foreground"
+      >
+        <span>
+          Streaming
+        </span>
+      </span>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`dynamic-island > querySuccess 1`] = `
+<div>
+  <div
+    class="dark flex items-center justify-center p-8"
+  >
+    <div
+      class="
+        relative flex h-6 items-center gap-1.5 rounded-full border
+        border-border/60 bg-background/85 px-2.5 shadow-sm backdrop-blur-xl
+        backdrop-saturate-200
+      "
+    >
+      <svg
+        aria-hidden="true"
+        class="lucide lucide-check size-3 shrink-0 text-success"
+        fill="none"
+        height="24"
+        stroke="currentColor"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        viewBox="0 0 24 24"
+        width="24"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M20 6 9 17l-5-5"
+        />
+      </svg>
+      <span
+        class="sr-only"
+      >
+        Query returned 
+        2847
+         
+        rows
+         in 
+        142ms
+      </span>
+      <span
+        aria-hidden="true"
+        class="
+          flex items-baseline gap-1 text-xs font-medium tracking-tight
+          text-muted-foreground tabular-nums
+        "
+      >
+        <span
+          class="text-foreground"
+        >
+          2847
+        </span>
+        <span
+          class="text-muted-foreground/70"
+        >
+          rows
+        </span>
+        <span
+          class="text-muted-foreground/40"
+        >
+          ·
+        </span>
+        <span
+          class="text-muted-foreground/70"
+        >
+          142ms
+        </span>
+      </span>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`dynamic-island > querySuccessSlow 1`] = `
+<div>
+  <div
+    class="dark flex items-center justify-center p-8"
+  >
+    <div
+      class="
+        relative flex h-6 items-center gap-1.5 rounded-full border
+        border-border/60 bg-background/85 px-2.5 shadow-sm backdrop-blur-xl
+        backdrop-saturate-200
+      "
+    >
+      <svg
+        aria-hidden="true"
+        class="lucide lucide-check size-3 shrink-0 text-success"
+        fill="none"
+        height="24"
+        stroke="currentColor"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        viewBox="0 0 24 24"
+        width="24"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M20 6 9 17l-5-5"
+        />
+      </svg>
+      <span
+        class="sr-only"
+      >
+        Query returned 
+        1
+         
+        row
+         in 
+        3.2s
+      </span>
+      <span
+        aria-hidden="true"
+        class="
+          flex items-baseline gap-1 text-xs font-medium tracking-tight
+          text-muted-foreground tabular-nums
+        "
+      >
+        <span
+          class="text-foreground"
+        >
+          1
+        </span>
+        <span
+          class="text-muted-foreground/70"
+        >
+          row
+        </span>
+        <span
+          class="text-muted-foreground/40"
+        >
+          ·
+        </span>
+        <span
+          class="text-muted-foreground/70"
+        >
+          3.2s
+        </span>
+      </span>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`dynamic-island > reconnecting 1`] = `
+<div>
+  <div
+    class="dark flex items-center justify-center p-8"
+  >
+    <div
+      class="
+        relative flex h-6 items-center gap-1.5 rounded-full border
+        border-border/60 bg-background/85 px-2.5 shadow-sm backdrop-blur-xl
+        backdrop-saturate-200
+      "
+    >
+      <div
+        aria-hidden="true"
+        class="flex items-center gap-0.5"
+      >
+        <span
+          class="size-1 rounded-full bg-warning"
+        />
+        <span
+          class="size-1 rounded-full bg-warning"
+        />
+        <span
+          class="size-1 rounded-full bg-warning"
+        />
+      </div>
+      <span
+        class="max-w-65 truncate text-xs font-medium tracking-tight text-warning"
+      >
+        Reconnecting to 
+        staging-pg
+      </span>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`dynamic-island > welcome 1`] = `
+<div>
+  <div
+    class="dark flex items-center justify-center p-8"
+  >
+    <div
+      class="
+        relative flex h-6 items-center gap-1.5 rounded-full border
+        border-border/60 bg-background/85 px-2.5 shadow-sm backdrop-blur-xl
+        backdrop-saturate-200
+      "
+    >
+      <span
+        aria-hidden="true"
+        class="size-1.5 shrink-0 rounded-full bg-primary"
+      />
+      <span
+        class="text-xs font-medium tracking-tight text-muted-foreground"
+      >
+        Welcome
+      </span>
+    </div>
+  </div>
+</div>
+`;

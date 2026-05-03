@@ -41,7 +41,7 @@ const barConfig = {
 } satisfies ChartConfig;
 
 describe("chart", () => {
-  it("bar Chart", async () => {
+  it("bar Chart", () => {
     const screen = render(
       <ChartContainer className="h-64 w-full max-w-lg" config={barConfig}>
         <BarChart accessibilityLayer data={barData}>
@@ -67,7 +67,7 @@ describe("chart", () => {
     );
     const chart = screen.container.querySelector("[data-slot='chart']");
     expect(chart).toBeTruthy();
-    await expect.element(screen.container).toMatchScreenshot();
+    expect(screen.container).toMatchSnapshot();
   });
 
   const lineData = [
@@ -86,7 +86,7 @@ describe("chart", () => {
     },
   } satisfies ChartConfig;
 
-  it("line Chart", async () => {
+  it("line Chart", () => {
     const screen = render(
       <ChartContainer className="h-64 w-full max-w-lg" config={lineConfig}>
         <LineChart accessibilityLayer data={lineData}>
@@ -107,6 +107,6 @@ describe("chart", () => {
     );
     const chart = screen.container.querySelector("[data-slot='chart']");
     expect(chart).toBeTruthy();
-    await expect.element(screen.container).toMatchScreenshot();
+    expect(screen.container).toMatchSnapshot();
   });
 });

@@ -4,45 +4,45 @@ import { render } from "vitest-browser-react";
 import { Badge } from "./badge";
 
 describe("badge", () => {
-  it("default", async () => {
+  it("default", () => {
     const screen = render(<Badge>Badge</Badge>);
     const badge = screen.getByText("Badge");
-    await expect.element(badge).toBeVisible();
-    await expect.element(badge).toMatchScreenshot();
+    expect(badge).toBeVisible();
+    expect(badge.element()).toMatchSnapshot();
   });
 
-  it("secondary", async () => {
+  it("secondary", () => {
     const screen = render(<Badge variant="secondary">Badge</Badge>);
     const badge = screen.getByText("Badge");
-    await expect.element(badge).toBeVisible();
-    await expect.element(badge).toMatchScreenshot();
+    expect(badge).toBeVisible();
+    expect(badge.element()).toMatchSnapshot();
   });
 
-  it("destructive", async () => {
+  it("destructive", () => {
     const screen = render(<Badge variant="destructive">Badge</Badge>);
     const badge = screen.getByText("Badge");
-    await expect.element(badge).toBeVisible();
-    await expect.element(badge).toMatchScreenshot();
+    expect(badge).toBeVisible();
+    expect(badge.element()).toMatchSnapshot();
   });
 
-  it("outline", async () => {
+  it("outline", () => {
     const screen = render(<Badge variant="outline">Badge</Badge>);
     const badge = screen.getByText("Badge");
-    await expect.element(badge).toBeVisible();
-    await expect.element(badge).toMatchScreenshot();
+    expect(badge).toBeVisible();
+    expect(badge.element()).toMatchSnapshot();
   });
 
-  it("ghost", async () => {
+  it("ghost", () => {
     const screen = render(<Badge variant="ghost">Badge</Badge>);
-    await expect.element(screen.getByText("Badge")).toMatchScreenshot();
+    expect(screen.getByText("Badge").element()).toMatchSnapshot();
   });
 
-  it("link", async () => {
+  it("link", () => {
     const screen = render(<Badge variant="link">Badge</Badge>);
-    await expect.element(screen.getByText("Badge")).toMatchScreenshot();
+    expect(screen.getByText("Badge").element()).toMatchSnapshot();
   });
 
-  it("allVariants", async () => {
+  it("allVariants", () => {
     const screen = render(
       <div className="flex flex-wrap items-center gap-2">
         <Badge variant="default">Default</Badge>
@@ -61,8 +61,8 @@ describe("badge", () => {
       "Ghost",
       "Link",
     ]) {
-      await expect.element(screen.getByText(text)).toBeVisible();
+      expect(screen.getByText(text)).toBeVisible();
     }
-    await expect.element(screen.container).toMatchScreenshot();
+    expect(screen.container).toMatchSnapshot();
   });
 });

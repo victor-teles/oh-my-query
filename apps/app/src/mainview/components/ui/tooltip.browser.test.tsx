@@ -25,12 +25,8 @@ describe("tooltip", () => {
     );
     const trigger = screen.getByRole("button", { name: "Hover me" });
     await trigger.hover();
-    await expect
-      .element(page.getByText("This is a tooltip"))
-      .toBeInTheDocument();
-    await expect
-      .element(page.getByText("This is a tooltip"))
-      .toMatchScreenshot();
+    expect(page.getByText("This is a tooltip")).toBeInTheDocument();
+    expect(page.getByText("This is a tooltip").element()).toMatchSnapshot();
   });
 
   it("onIconButton", async () => {
@@ -50,15 +46,11 @@ describe("tooltip", () => {
     );
     const trigger = screen.getByRole("button", { name: "Add new" });
     await trigger.hover();
-    await expect
-      .element(page.getByText("Add new connection"))
-      .toBeInTheDocument();
-    await expect
-      .element(page.getByText("Add new connection"))
-      .toMatchScreenshot();
+    expect(page.getByText("Add new connection")).toBeInTheDocument();
+    expect(page.getByText("Add new connection").element()).toMatchSnapshot();
   });
 
-  it("bottom", async () => {
+  it("bottom", () => {
     render(
       <TooltipProvider>
         <Tooltip defaultOpen>
@@ -67,11 +59,11 @@ describe("tooltip", () => {
         </Tooltip>
       </TooltipProvider>
     );
-    await expect.element(page.getByText("Tooltip below")).toBeInTheDocument();
-    await expect.element(page.getByText("Tooltip below")).toMatchScreenshot();
+    expect(page.getByText("Tooltip below")).toBeInTheDocument();
+    expect(page.getByText("Tooltip below").element()).toMatchSnapshot();
   });
 
-  it("left", async () => {
+  it("left", () => {
     render(
       <TooltipProvider>
         <div className="ml-40">
@@ -82,15 +74,11 @@ describe("tooltip", () => {
         </div>
       </TooltipProvider>
     );
-    await expect
-      .element(page.getByText("Tooltip on the left"))
-      .toBeInTheDocument();
-    await expect
-      .element(page.getByText("Tooltip on the left"))
-      .toMatchScreenshot();
+    expect(page.getByText("Tooltip on the left")).toBeInTheDocument();
+    expect(page.getByText("Tooltip on the left").element()).toMatchSnapshot();
   });
 
-  it("right", async () => {
+  it("right", () => {
     render(
       <TooltipProvider>
         <Tooltip defaultOpen>
@@ -99,11 +87,7 @@ describe("tooltip", () => {
         </Tooltip>
       </TooltipProvider>
     );
-    await expect
-      .element(page.getByText("Tooltip on the right"))
-      .toBeInTheDocument();
-    await expect
-      .element(page.getByText("Tooltip on the right"))
-      .toMatchScreenshot();
+    expect(page.getByText("Tooltip on the right")).toBeInTheDocument();
+    expect(page.getByText("Tooltip on the right").element()).toMatchSnapshot();
   });
 });

@@ -47,44 +47,40 @@ const IslandShell = ({ snapshot }: { snapshot: IslandSnapshot }) => (
 );
 
 describe("dynamic-island", () => {
-  it("welcome", async () => {
+  it("welcome", () => {
     const screen = render(<IslandShell snapshot={{ kind: "welcome" }} />);
-    await expect.element(screen.getByText("Welcome")).toBeInTheDocument();
-    await expect.element(screen.container).toMatchScreenshot();
+    expect(screen.getByText("Welcome")).toBeInTheDocument();
+    expect(screen.container).toMatchSnapshot();
   });
 
-  it("ambient", async () => {
+  it("ambient", () => {
     const screen = render(
       <IslandShell snapshot={{ connectionName: "my-db", kind: "ambient" }} />
     );
-    await expect.element(screen.container).toMatchScreenshot();
+    expect(screen.container).toMatchSnapshot();
   });
 
-  it("connecting", async () => {
+  it("connecting", () => {
     const screen = render(
       <IslandShell
         snapshot={{ connectionName: "production-pg", kind: "connecting" }}
       />
     );
-    await expect
-      .element(screen.getByText(/production-pg/i))
-      .toBeInTheDocument();
-    await expect.element(screen.container).toMatchScreenshot();
+    expect(screen.getByText(/production-pg/i)).toBeInTheDocument();
+    expect(screen.container).toMatchSnapshot();
   });
 
-  it("reconnecting", async () => {
+  it("reconnecting", () => {
     const screen = render(
       <IslandShell
         snapshot={{ connectionName: "staging-pg", kind: "reconnecting" }}
       />
     );
-    await expect
-      .element(screen.getByText(/Reconnecting to staging-pg/i))
-      .toBeInTheDocument();
-    await expect.element(screen.container).toMatchScreenshot();
+    expect(screen.getByText(/Reconnecting to staging-pg/i)).toBeInTheDocument();
+    expect(screen.container).toMatchSnapshot();
   });
 
-  it("connectionError", async () => {
+  it("connectionError", () => {
     const onReconnect = vi.fn();
     const screen = render(
       <IslandShell
@@ -95,13 +91,11 @@ describe("dynamic-island", () => {
         }}
       />
     );
-    await expect
-      .element(screen.getByRole("button", { name: /retry/i }))
-      .toBeVisible();
-    await expect.element(screen.container).toMatchScreenshot();
+    expect(screen.getByRole("button", { name: /retry/i })).toBeVisible();
+    expect(screen.container).toMatchSnapshot();
   });
 
-  it("connectedIdle", async () => {
+  it("connectedIdle", () => {
     const screen = render(
       <IslandShell
         snapshot={{
@@ -116,15 +110,13 @@ describe("dynamic-island", () => {
         }}
       />
     );
-    await expect
-      .element(
-        screen.getByRole("button", { name: /Connected to analytics-db/i })
-      )
-      .toBeVisible();
-    await expect.element(screen.container).toMatchScreenshot();
+    expect(
+      screen.getByRole("button", { name: /Connected to analytics-db/i })
+    ).toBeVisible();
+    expect(screen.container).toMatchSnapshot();
   });
 
-  it("connectedIdleNoEnv", async () => {
+  it("connectedIdleNoEnv", () => {
     const screen = render(
       <IslandShell
         snapshot={{
@@ -139,10 +131,10 @@ describe("dynamic-island", () => {
         }}
       />
     );
-    await expect.element(screen.container).toMatchScreenshot();
+    expect(screen.container).toMatchSnapshot();
   });
 
-  it("queryRunningSingle", async () => {
+  it("queryRunningSingle", () => {
     const screen = render(
       <IslandShell
         snapshot={makeRunningSnapshot([
@@ -150,11 +142,11 @@ describe("dynamic-island", () => {
         ])}
       />
     );
-    await expect.element(screen.getByText("Running")).toBeInTheDocument();
-    await expect.element(screen.container).toMatchScreenshot();
+    expect(screen.getByText("Running")).toBeInTheDocument();
+    expect(screen.container).toMatchSnapshot();
   });
 
-  it("queryRunningThree", async () => {
+  it("queryRunningThree", () => {
     const screen = render(
       <IslandShell
         snapshot={makeRunningSnapshot([
@@ -183,11 +175,11 @@ describe("dynamic-island", () => {
         ])}
       />
     );
-    await expect.element(screen.getByText("+2")).toBeVisible();
-    await expect.element(screen.container).toMatchScreenshot();
+    expect(screen.getByText("+2")).toBeVisible();
+    expect(screen.container).toMatchSnapshot();
   });
 
-  it("queryRunningOverflow", async () => {
+  it("queryRunningOverflow", () => {
     const screen = render(
       <IslandShell
         snapshot={makeRunningSnapshot(
@@ -202,10 +194,10 @@ describe("dynamic-island", () => {
         )}
       />
     );
-    await expect.element(screen.container).toMatchScreenshot();
+    expect(screen.container).toMatchSnapshot();
   });
 
-  it("queryRunningReducedMotion", async () => {
+  it("queryRunningReducedMotion", () => {
     const screen = render(
       <MotionConfig reducedMotion="always">
         <IslandShell
@@ -216,44 +208,40 @@ describe("dynamic-island", () => {
         />
       </MotionConfig>
     );
-    await expect.element(screen.container).toMatchScreenshot();
+    expect(screen.container).toMatchSnapshot();
   });
 
-  it("queryStreaming", async () => {
+  it("queryStreaming", () => {
     const screen = render(
       <IslandShell
         snapshot={{ kind: "query-streaming", tokensReceived: 128 }}
       />
     );
-    await expect
-      .element(screen.getByText("Streaming", { exact: true }))
-      .toBeInTheDocument();
-    await expect.element(screen.container).toMatchScreenshot();
+    expect(screen.getByText("Streaming", { exact: true })).toBeInTheDocument();
+    expect(screen.container).toMatchSnapshot();
   });
 
-  it("queryStreamingStart", async () => {
+  it("queryStreamingStart", () => {
     const screen = render(
       <IslandShell snapshot={{ kind: "query-streaming", tokensReceived: 0 }} />
     );
-    await expect.element(screen.container).toMatchScreenshot();
+    expect(screen.container).toMatchSnapshot();
   });
 
-  it("queryPlanning", async () => {
+  it("queryPlanning", () => {
     const screen = render(
       <IslandShell snapshot={{ kind: "query-planning" }} />
     );
-    await expect.element(screen.getByText("Planning…")).toBeInTheDocument();
-    await expect.element(screen.container).toMatchScreenshot();
+    expect(screen.getByText("Planning…")).toBeInTheDocument();
+    expect(screen.container).toMatchSnapshot();
   });
 
-  it("queryCancelled", async () => {
+  it("queryCancelled", () => {
     const screen = render(
       <IslandShell snapshot={{ kind: "query-cancelled" }} />
     );
-    await expect
-      .element(screen.getByText("Cancelled", { exact: true }))
-      .toBeInTheDocument();
-    await expect.element(screen.container).toMatchScreenshot();
+    expect(screen.getByText("Cancelled", { exact: true })).toBeInTheDocument();
+    expect(screen.container).toMatchSnapshot();
   });
 
   it("querySuccess", async () => {
@@ -266,25 +254,23 @@ describe("dynamic-island", () => {
         }}
       />
     );
-    await expect
-      .element(screen.getByText("2847", { exact: true }))
-      .toBeInTheDocument();
-    await expect
-      .element(screen.getByText("142ms", { exact: true }))
-      .toBeInTheDocument();
-    await expect.element(screen.container).toMatchScreenshot();
+    expect(screen.getByText("2847", { exact: true })).toBeInTheDocument();
+    await expect(
+      screen.getByText("142ms", { exact: true })
+    ).toBeInTheDocument();
+    expect(screen.container).toMatchSnapshot();
   });
 
-  it("querySuccessSlow", async () => {
+  it("querySuccessSlow", () => {
     const screen = render(
       <IslandShell
         snapshot={{ executionTimeMs: 3200, kind: "query-success", rowCount: 1 }}
       />
     );
-    await expect.element(screen.container).toMatchScreenshot();
+    expect(screen.container).toMatchSnapshot();
   });
 
-  it("queryError", async () => {
+  it("queryError", () => {
     const screen = render(
       <IslandShell
         snapshot={{
@@ -294,11 +280,11 @@ describe("dynamic-island", () => {
         }}
       />
     );
-    await expect.element(screen.getByText("Query failed:")).toBeInTheDocument();
-    await expect.element(screen.container).toMatchScreenshot();
+    expect(screen.getByText("Query failed:")).toBeInTheDocument();
+    expect(screen.container).toMatchSnapshot();
   });
 
-  it("allStates", async () => {
+  it("allStates", () => {
     const onReconnect = vi.fn();
     const onCancelStreaming = vi.fn();
     const onCancelPlanning = vi.fn();
@@ -360,6 +346,6 @@ describe("dynamic-island", () => {
         ))}
       </div>
     );
-    await expect.element(screen.container).toMatchScreenshot();
+    expect(screen.container).toMatchSnapshot();
   });
 });

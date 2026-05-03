@@ -4,7 +4,7 @@ import { render } from "vitest-browser-react";
 import { Separator } from "./separator";
 
 describe("separator", () => {
-  it("inContext", async () => {
+  it("inContext", () => {
     const screen = render(
       <div className="space-y-1 p-4" data-testid="root">
         <div className="text-sm font-medium">oh-my-query</div>
@@ -24,6 +24,6 @@ describe("separator", () => {
     expect(
       screen.container.querySelectorAll('[role="separator"]')
     ).toHaveLength(3);
-    await expect.element(screen.getByTestId("root")).toMatchScreenshot();
+    expect(screen.getByTestId("root").element()).toMatchSnapshot();
   });
 });

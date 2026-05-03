@@ -117,18 +117,19 @@ Keep route files thin. A route's job is to orchestrate — wire hooks, render la
 - Don't create a primitive in `components/ui/` for something used once. Keep it local until a second caller appears.
 - Don't split a 30-line component just to hit a line count. Split when there are distinct responsibilities (data, layout, interaction) worth naming.
 
-## Component Tests & Visual Regression
+## Component Tests
 
 Component tests run in Vitest 4 browser mode (Playwright + Chromium). Add or update a `*.browser.test.tsx` next to the component for any UI change; pure-logic tests stay as `*.test.ts` / `*.test.tsx` in jsdom.
 
-- Pattern: `import { render } from "vitest-browser-react"; const screen = await render(<Component … />)`. Use `screen.getByRole(...)` for queries, `await el.click()` for interactions, and `await expect.element(el).toMatchScreenshot()` for visual snapshots.
+- Pattern: `import { render } from "vitest-browser-react"; const screen = render(<Component … />)`. Use `screen.getByRole(...)` for queries, `await el.click()` for interactions, and `expect(el.element()).toMatchSnapshot()` (or `expect(screen.container).toMatchSnapshot()`) for DOM snapshots.
+- Snapshots are committed in `__snapshots__/` next to each test. The setup in `src/mainview/test/setup-browser.ts` strips volatile inline styles (`transform`, `opacity`, etc.) so motion-driven components serialize stably.
 - Run scripts (`apps/app`):
   - `bun run test` — both projects
   - `bun run test:unit` — jsdom logic tests only (`*.test.ts` / `*.test.tsx`)
-  - `bun run test:browser` — browser visual + interaction tests (`*.browser.test.tsx`)
+  - `bun run test:browser` — browser interaction + snapshot tests (`*.browser.test.tsx`)
   - `bun run test:watch` — watch mode for both
   - Scope to one file: append the path, e.g. `bun run test:browser src/mainview/components/ui/button.browser.test.tsx`.
-- Update baselines: `bun run test:browser -- -u`. Baselines are platform-tagged (`*.chromium.darwin.png` vs `*.chromium.linux.png`); CI's Linux baselines are the source of truth.
+- Update snapshots: `bun run test:browser -- -u`. Snapshot files are platform-independent text and live in git; review the diff like any other code change.
 
 ## Design Context
 

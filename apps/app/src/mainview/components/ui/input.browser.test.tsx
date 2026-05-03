@@ -8,12 +8,12 @@ describe("input", () => {
   it("default", async () => {
     const screen = render(<Input placeholder="Type something..." />);
     const input = screen.getByPlaceholder("Type something...");
-    await expect.element(input).toBeVisible();
+    expect(input).toBeVisible();
     await input.click();
-    await expect.element(input).toHaveFocus();
+    expect(input).toHaveFocus();
     await input.fill("Hello world");
-    await expect.element(input).toHaveValue("Hello world");
-    await expect.element(input).toMatchScreenshot();
+    await expect(input).toHaveValue("Hello world");
+    expect(input.element()).toMatchSnapshot();
   });
 
   it("withLabel", async () => {
@@ -24,13 +24,13 @@ describe("input", () => {
       </div>
     );
     const label = screen.getByText("Email");
-    await expect.element(label).toBeVisible();
+    expect(label).toBeVisible();
     const input = screen.getByLabelText("Email");
     await input.click();
-    await expect.element(input).toHaveFocus();
+    expect(input).toHaveFocus();
     await input.fill("user@test.com");
-    await expect.element(input).toHaveValue("user@test.com");
-    await expect.element(screen.container).toMatchScreenshot();
+    await expect(input).toHaveValue("user@test.com");
+    expect(screen.container).toMatchSnapshot();
   });
 
   it("password", async () => {
@@ -39,12 +39,12 @@ describe("input", () => {
     );
     const input = screen.getByPlaceholder("Enter password");
     await input.fill("secret123");
-    await expect.element(input).toHaveValue("secret123");
-    await expect.element(input).toHaveAttribute("type", "password");
-    await expect.element(input).toMatchScreenshot();
+    expect(input).toHaveValue("secret123");
+    await expect(input).toHaveAttribute("type", "password");
+    expect(input.element()).toMatchSnapshot();
   });
 
-  it("disabled", async () => {
+  it("disabled", () => {
     const screen = render(
       <Input
         defaultValue="Disabled input"
@@ -53,11 +53,11 @@ describe("input", () => {
       />
     );
     const input = screen.getByPlaceholder("Type something...");
-    await expect.element(input).toBeDisabled();
-    await expect.element(input).toMatchScreenshot();
+    expect(input).toBeDisabled();
+    expect(input.element()).toMatchSnapshot();
   });
 
-  it("invalid", async () => {
+  it("invalid", () => {
     const screen = render(
       <Input
         aria-invalid
@@ -66,14 +66,14 @@ describe("input", () => {
       />
     );
     const input = screen.getByPlaceholder("Type something...");
-    await expect.element(input).toHaveAttribute("aria-invalid", "true");
-    await expect.element(input).toMatchScreenshot();
+    expect(input).toHaveAttribute("aria-invalid", "true");
+    expect(input.element()).toMatchSnapshot();
   });
 
-  it("file", async () => {
+  it("file", () => {
     const screen = render(<Input type="file" />);
     const input = screen.container.querySelector("input[type='file']");
     expect(input).toBeTruthy();
-    await expect.element(screen.container).toMatchScreenshot();
+    expect(screen.container).toMatchSnapshot();
   });
 });

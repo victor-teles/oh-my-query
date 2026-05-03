@@ -52,10 +52,10 @@ describe("dropdown-menu", () => {
       </DropdownMenu>
     );
     const trigger = screen.getByRole("button", { name: "Open Menu" });
-    await expect.element(trigger).toBeVisible();
+    expect(trigger).toBeVisible();
     await trigger.click();
-    await expect.element(page.getByRole("menu")).toBeVisible();
-    await expect.element(page.getByRole("menu")).toMatchScreenshot();
+    expect(page.getByRole("menu")).toBeVisible();
+    await expect(page.getByRole("menu").element()).toMatchSnapshot();
   });
 
   it("withActions", async () => {
@@ -82,7 +82,7 @@ describe("dropdown-menu", () => {
       </DropdownMenu>
     );
     await screen.getByRole("button", { name: "Actions" }).click();
-    await expect.element(page.getByRole("menu")).toBeVisible();
-    await expect.element(page.getByRole("menu")).toMatchScreenshot();
+    expect(page.getByRole("menu")).toBeVisible();
+    expect(page.getByRole("menu").element()).toMatchSnapshot();
   });
 });

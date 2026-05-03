@@ -12,7 +12,7 @@ import {
 } from "./context-menu";
 
 describe("context-menu", () => {
-  it("default", async () => {
+  it("default", () => {
     const screen = render(
       <ContextMenu>
         <ContextMenuTrigger
@@ -41,7 +41,7 @@ describe("context-menu", () => {
         </ContextMenuContent>
       </ContextMenu>
     );
-    await expect.element(screen.getByText("Right click here")).toBeVisible();
-    await expect.element(screen.container).toMatchScreenshot();
+    expect(screen.getByText("Right click here")).toBeVisible();
+    expect(screen.container).toMatchSnapshot();
   });
 });

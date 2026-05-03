@@ -1,0 +1,369 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`tabs > default 1`] = `
+<div>
+  <div
+    class="group/tabs flex gap-2 data-horizontal:flex-col"
+    data-activation-direction="left"
+    data-orientation="horizontal"
+    data-slot="tabs"
+  >
+    <div
+      class="group/tabs-list inline-flex w-fit items-center justify-center rounded-lg p-[3px] text-muted-foreground group-data-horizontal/tabs:h-7 group-data-vertical/tabs:h-fit group-data-vertical/tabs:flex-col data-[variant=line]:rounded-none bg-muted"
+      data-activation-direction="left"
+      data-orientation="horizontal"
+      data-slot="tabs-list"
+      data-variant="default"
+      role="tablist"
+    >
+      <button
+        aria-controls="base-ui-_r_3_"
+        aria-disabled="false"
+        aria-selected="true"
+        class="relative inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center gap-1.5 rounded-md border border-transparent px-1.5 py-0.5 text-xs font-medium whitespace-nowrap text-foreground/60 transition-all duration-150 ease-out outline-none group-data-vertical/tabs:w-full group-data-vertical/tabs:justify-start group-data-vertical/tabs:py-[calc(--spacing(1.25))] hover:text-foreground focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 dark:text-muted-foreground dark:hover:text-foreground [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-3.5 group-data-[variant=line]/tabs-list:bg-transparent group-data-[variant=line]/tabs-list:data-active:bg-transparent dark:group-data-[variant=line]/tabs-list:data-active:border-transparent dark:group-data-[variant=line]/tabs-list:data-active:bg-transparent data-active:bg-background data-active:text-foreground dark:data-active:border-input dark:data-active:bg-input/30 dark:data-active:text-foreground after:absolute after:bg-foreground after:opacity-0 after:transition-opacity group-data-horizontal/tabs:after:inset-x-0 group-data-horizontal/tabs:after:bottom-[-5px] group-data-horizontal/tabs:after:h-0.5 group-data-vertical/tabs:after:inset-y-0 group-data-vertical/tabs:after:-right-1 group-data-vertical/tabs:after:w-0.5 group-data-[variant=line]/tabs-list:data-active:after:opacity-100 group-data-[variant=segment]/tabs-list:rounded-sm group-data-[variant=segment]/tabs-list:border-transparent group-data-[variant=segment]/tabs-list:bg-transparent group-data-[variant=segment]/tabs-list:px-3 group-data-[variant=segment]/tabs-list:py-1.5 group-data-[variant=segment]/tabs-list:text-xs group-data-[variant=segment]/tabs-list:text-muted-foreground group-data-[variant=segment]/tabs-list:after:hidden group-data-[variant=segment]/tabs-list:hover:text-foreground/80 group-data-[variant=segment]/tabs-list:data-active:bg-background group-data-[variant=segment]/tabs-list:data-active:text-foreground group-data-[variant=segment]/tabs-list:data-active:shadow-sm"
+        data-active=""
+        data-composite-item-active=""
+        data-orientation="horizontal"
+        data-slot="tabs-trigger"
+        id="base-ui-_r_0_"
+        role="tab"
+        tabindex="0"
+        type="button"
+      >
+        Query
+      </button>
+      <button
+        aria-disabled="false"
+        aria-selected="false"
+        class="relative inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center gap-1.5 rounded-md border border-transparent px-1.5 py-0.5 text-xs font-medium whitespace-nowrap text-foreground/60 transition-all duration-150 ease-out outline-none group-data-vertical/tabs:w-full group-data-vertical/tabs:justify-start group-data-vertical/tabs:py-[calc(--spacing(1.25))] hover:text-foreground focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 dark:text-muted-foreground dark:hover:text-foreground [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-3.5 group-data-[variant=line]/tabs-list:bg-transparent group-data-[variant=line]/tabs-list:data-active:bg-transparent dark:group-data-[variant=line]/tabs-list:data-active:border-transparent dark:group-data-[variant=line]/tabs-list:data-active:bg-transparent data-active:bg-background data-active:text-foreground dark:data-active:border-input dark:data-active:bg-input/30 dark:data-active:text-foreground after:absolute after:bg-foreground after:opacity-0 after:transition-opacity group-data-horizontal/tabs:after:inset-x-0 group-data-horizontal/tabs:after:bottom-[-5px] group-data-horizontal/tabs:after:h-0.5 group-data-vertical/tabs:after:inset-y-0 group-data-vertical/tabs:after:-right-1 group-data-vertical/tabs:after:w-0.5 group-data-[variant=line]/tabs-list:data-active:after:opacity-100 group-data-[variant=segment]/tabs-list:rounded-sm group-data-[variant=segment]/tabs-list:border-transparent group-data-[variant=segment]/tabs-list:bg-transparent group-data-[variant=segment]/tabs-list:px-3 group-data-[variant=segment]/tabs-list:py-1.5 group-data-[variant=segment]/tabs-list:text-xs group-data-[variant=segment]/tabs-list:text-muted-foreground group-data-[variant=segment]/tabs-list:after:hidden group-data-[variant=segment]/tabs-list:hover:text-foreground/80 group-data-[variant=segment]/tabs-list:data-active:bg-background group-data-[variant=segment]/tabs-list:data-active:text-foreground group-data-[variant=segment]/tabs-list:data-active:shadow-sm"
+        data-orientation="horizontal"
+        data-slot="tabs-trigger"
+        id="base-ui-_r_1_"
+        role="tab"
+        tabindex="-1"
+        type="button"
+      >
+        Results
+      </button>
+      <button
+        aria-disabled="false"
+        aria-selected="false"
+        class="relative inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center gap-1.5 rounded-md border border-transparent px-1.5 py-0.5 text-xs font-medium whitespace-nowrap text-foreground/60 transition-all duration-150 ease-out outline-none group-data-vertical/tabs:w-full group-data-vertical/tabs:justify-start group-data-vertical/tabs:py-[calc(--spacing(1.25))] hover:text-foreground focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 dark:text-muted-foreground dark:hover:text-foreground [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-3.5 group-data-[variant=line]/tabs-list:bg-transparent group-data-[variant=line]/tabs-list:data-active:bg-transparent dark:group-data-[variant=line]/tabs-list:data-active:border-transparent dark:group-data-[variant=line]/tabs-list:data-active:bg-transparent data-active:bg-background data-active:text-foreground dark:data-active:border-input dark:data-active:bg-input/30 dark:data-active:text-foreground after:absolute after:bg-foreground after:opacity-0 after:transition-opacity group-data-horizontal/tabs:after:inset-x-0 group-data-horizontal/tabs:after:bottom-[-5px] group-data-horizontal/tabs:after:h-0.5 group-data-vertical/tabs:after:inset-y-0 group-data-vertical/tabs:after:-right-1 group-data-vertical/tabs:after:w-0.5 group-data-[variant=line]/tabs-list:data-active:after:opacity-100 group-data-[variant=segment]/tabs-list:rounded-sm group-data-[variant=segment]/tabs-list:border-transparent group-data-[variant=segment]/tabs-list:bg-transparent group-data-[variant=segment]/tabs-list:px-3 group-data-[variant=segment]/tabs-list:py-1.5 group-data-[variant=segment]/tabs-list:text-xs group-data-[variant=segment]/tabs-list:text-muted-foreground group-data-[variant=segment]/tabs-list:after:hidden group-data-[variant=segment]/tabs-list:hover:text-foreground/80 group-data-[variant=segment]/tabs-list:data-active:bg-background group-data-[variant=segment]/tabs-list:data-active:text-foreground group-data-[variant=segment]/tabs-list:data-active:shadow-sm"
+        data-orientation="horizontal"
+        data-slot="tabs-trigger"
+        id="base-ui-_r_2_"
+        role="tab"
+        tabindex="-1"
+        type="button"
+      >
+        History
+      </button>
+    </div>
+    <div
+      aria-labelledby="base-ui-_r_0_"
+      class="flex-1 text-xs/relaxed outline-none"
+      data-activation-direction="left"
+      data-index="0"
+      data-orientation="horizontal"
+      data-slot="tabs-content"
+      id="base-ui-_r_3_"
+      role="tabpanel"
+      tabindex="0"
+    >
+      Write your SQL here.
+    </div>
+  </div>
+</div>
+`;
+
+exports[`tabs > line 1`] = `
+<div>
+  <div
+    class="group/tabs flex gap-2 data-horizontal:flex-col"
+    data-activation-direction="right"
+    data-orientation="horizontal"
+    data-slot="tabs"
+  >
+    <div
+      class="group/tabs-list inline-flex w-fit items-center justify-center rounded-lg p-[3px] text-muted-foreground group-data-horizontal/tabs:h-7 group-data-vertical/tabs:h-fit group-data-vertical/tabs:flex-col data-[variant=line]:rounded-none gap-1 bg-transparent"
+      data-activation-direction="right"
+      data-orientation="horizontal"
+      data-slot="tabs-list"
+      data-variant="line"
+      role="tablist"
+    >
+      <button
+        aria-disabled="false"
+        aria-selected="false"
+        class="relative inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center gap-1.5 rounded-md border border-transparent px-1.5 py-0.5 text-xs font-medium whitespace-nowrap text-foreground/60 transition-all duration-150 ease-out outline-none group-data-vertical/tabs:w-full group-data-vertical/tabs:justify-start group-data-vertical/tabs:py-[calc(--spacing(1.25))] hover:text-foreground focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 dark:text-muted-foreground dark:hover:text-foreground [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-3.5 group-data-[variant=line]/tabs-list:bg-transparent group-data-[variant=line]/tabs-list:data-active:bg-transparent dark:group-data-[variant=line]/tabs-list:data-active:border-transparent dark:group-data-[variant=line]/tabs-list:data-active:bg-transparent data-active:bg-background data-active:text-foreground dark:data-active:border-input dark:data-active:bg-input/30 dark:data-active:text-foreground after:absolute after:bg-foreground after:opacity-0 after:transition-opacity group-data-horizontal/tabs:after:inset-x-0 group-data-horizontal/tabs:after:bottom-[-5px] group-data-horizontal/tabs:after:h-0.5 group-data-vertical/tabs:after:inset-y-0 group-data-vertical/tabs:after:-right-1 group-data-vertical/tabs:after:w-0.5 group-data-[variant=line]/tabs-list:data-active:after:opacity-100 group-data-[variant=segment]/tabs-list:rounded-sm group-data-[variant=segment]/tabs-list:border-transparent group-data-[variant=segment]/tabs-list:bg-transparent group-data-[variant=segment]/tabs-list:px-3 group-data-[variant=segment]/tabs-list:py-1.5 group-data-[variant=segment]/tabs-list:text-xs group-data-[variant=segment]/tabs-list:text-muted-foreground group-data-[variant=segment]/tabs-list:after:hidden group-data-[variant=segment]/tabs-list:hover:text-foreground/80 group-data-[variant=segment]/tabs-list:data-active:bg-background group-data-[variant=segment]/tabs-list:data-active:text-foreground group-data-[variant=segment]/tabs-list:data-active:shadow-sm"
+        data-orientation="horizontal"
+        data-slot="tabs-trigger"
+        id="base-ui-_r_6_"
+        role="tab"
+        tabindex="-1"
+        type="button"
+      >
+        Overview
+      </button>
+      <button
+        aria-controls="base-ui-_r_a_"
+        aria-disabled="false"
+        aria-selected="true"
+        class="relative inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center gap-1.5 rounded-md border border-transparent px-1.5 py-0.5 text-xs font-medium whitespace-nowrap text-foreground/60 transition-all duration-150 ease-out outline-none group-data-vertical/tabs:w-full group-data-vertical/tabs:justify-start group-data-vertical/tabs:py-[calc(--spacing(1.25))] hover:text-foreground focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 dark:text-muted-foreground dark:hover:text-foreground [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-3.5 group-data-[variant=line]/tabs-list:bg-transparent group-data-[variant=line]/tabs-list:data-active:bg-transparent dark:group-data-[variant=line]/tabs-list:data-active:border-transparent dark:group-data-[variant=line]/tabs-list:data-active:bg-transparent data-active:bg-background data-active:text-foreground dark:data-active:border-input dark:data-active:bg-input/30 dark:data-active:text-foreground after:absolute after:bg-foreground after:opacity-0 after:transition-opacity group-data-horizontal/tabs:after:inset-x-0 group-data-horizontal/tabs:after:bottom-[-5px] group-data-horizontal/tabs:after:h-0.5 group-data-vertical/tabs:after:inset-y-0 group-data-vertical/tabs:after:-right-1 group-data-vertical/tabs:after:w-0.5 group-data-[variant=line]/tabs-list:data-active:after:opacity-100 group-data-[variant=segment]/tabs-list:rounded-sm group-data-[variant=segment]/tabs-list:border-transparent group-data-[variant=segment]/tabs-list:bg-transparent group-data-[variant=segment]/tabs-list:px-3 group-data-[variant=segment]/tabs-list:py-1.5 group-data-[variant=segment]/tabs-list:text-xs group-data-[variant=segment]/tabs-list:text-muted-foreground group-data-[variant=segment]/tabs-list:after:hidden group-data-[variant=segment]/tabs-list:hover:text-foreground/80 group-data-[variant=segment]/tabs-list:data-active:bg-background group-data-[variant=segment]/tabs-list:data-active:text-foreground group-data-[variant=segment]/tabs-list:data-active:shadow-sm"
+        data-active=""
+        data-composite-item-active=""
+        data-orientation="horizontal"
+        data-slot="tabs-trigger"
+        id="base-ui-_r_7_"
+        role="tab"
+        tabindex="0"
+        type="button"
+      >
+        Structure
+      </button>
+      <button
+        aria-disabled="false"
+        aria-selected="false"
+        class="relative inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center gap-1.5 rounded-md border border-transparent px-1.5 py-0.5 text-xs font-medium whitespace-nowrap text-foreground/60 transition-all duration-150 ease-out outline-none group-data-vertical/tabs:w-full group-data-vertical/tabs:justify-start group-data-vertical/tabs:py-[calc(--spacing(1.25))] hover:text-foreground focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 dark:text-muted-foreground dark:hover:text-foreground [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-3.5 group-data-[variant=line]/tabs-list:bg-transparent group-data-[variant=line]/tabs-list:data-active:bg-transparent dark:group-data-[variant=line]/tabs-list:data-active:border-transparent dark:group-data-[variant=line]/tabs-list:data-active:bg-transparent data-active:bg-background data-active:text-foreground dark:data-active:border-input dark:data-active:bg-input/30 dark:data-active:text-foreground after:absolute after:bg-foreground after:opacity-0 after:transition-opacity group-data-horizontal/tabs:after:inset-x-0 group-data-horizontal/tabs:after:bottom-[-5px] group-data-horizontal/tabs:after:h-0.5 group-data-vertical/tabs:after:inset-y-0 group-data-vertical/tabs:after:-right-1 group-data-vertical/tabs:after:w-0.5 group-data-[variant=line]/tabs-list:data-active:after:opacity-100 group-data-[variant=segment]/tabs-list:rounded-sm group-data-[variant=segment]/tabs-list:border-transparent group-data-[variant=segment]/tabs-list:bg-transparent group-data-[variant=segment]/tabs-list:px-3 group-data-[variant=segment]/tabs-list:py-1.5 group-data-[variant=segment]/tabs-list:text-xs group-data-[variant=segment]/tabs-list:text-muted-foreground group-data-[variant=segment]/tabs-list:after:hidden group-data-[variant=segment]/tabs-list:hover:text-foreground/80 group-data-[variant=segment]/tabs-list:data-active:bg-background group-data-[variant=segment]/tabs-list:data-active:text-foreground group-data-[variant=segment]/tabs-list:data-active:shadow-sm"
+        data-orientation="horizontal"
+        data-slot="tabs-trigger"
+        id="base-ui-_r_8_"
+        role="tab"
+        tabindex="-1"
+        type="button"
+      >
+        Indexes
+      </button>
+    </div>
+    <div
+      aria-labelledby="base-ui-_r_7_"
+      class="flex-1 text-xs/relaxed outline-none"
+      data-activation-direction="right"
+      data-index="-1"
+      data-orientation="horizontal"
+      data-slot="tabs-content"
+      id="base-ui-_r_a_"
+      role="tabpanel"
+      tabindex="0"
+    >
+      Column definitions.
+    </div>
+  </div>
+</div>
+`;
+
+exports[`tabs > segment 1`] = `
+<div>
+  <div
+    class="group/tabs flex gap-2 data-horizontal:flex-col"
+    data-activation-direction="right"
+    data-orientation="horizontal"
+    data-slot="tabs"
+  >
+    <div
+      class="group/tabs-list inline-flex w-fit items-center justify-center text-muted-foreground group-data-vertical/tabs:h-fit group-data-vertical/tabs:flex-col data-[variant=line]:rounded-none gap-0 rounded-none bg-muted/30 p-0 group-data-horizontal/tabs:h-auto"
+      data-activation-direction="right"
+      data-orientation="horizontal"
+      data-slot="tabs-list"
+      data-variant="segment"
+      role="tablist"
+    >
+      <button
+        aria-disabled="false"
+        aria-selected="false"
+        class="relative inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center gap-1.5 rounded-md border border-transparent px-1.5 py-0.5 text-xs font-medium whitespace-nowrap text-foreground/60 transition-all duration-150 ease-out outline-none group-data-vertical/tabs:w-full group-data-vertical/tabs:justify-start group-data-vertical/tabs:py-[calc(--spacing(1.25))] hover:text-foreground focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 dark:text-muted-foreground dark:hover:text-foreground [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-3.5 group-data-[variant=line]/tabs-list:bg-transparent group-data-[variant=line]/tabs-list:data-active:bg-transparent dark:group-data-[variant=line]/tabs-list:data-active:border-transparent dark:group-data-[variant=line]/tabs-list:data-active:bg-transparent data-active:bg-background data-active:text-foreground dark:data-active:border-input dark:data-active:bg-input/30 dark:data-active:text-foreground after:absolute after:bg-foreground after:opacity-0 after:transition-opacity group-data-horizontal/tabs:after:inset-x-0 group-data-horizontal/tabs:after:bottom-[-5px] group-data-horizontal/tabs:after:h-0.5 group-data-vertical/tabs:after:inset-y-0 group-data-vertical/tabs:after:-right-1 group-data-vertical/tabs:after:w-0.5 group-data-[variant=line]/tabs-list:data-active:after:opacity-100 group-data-[variant=segment]/tabs-list:rounded-sm group-data-[variant=segment]/tabs-list:border-transparent group-data-[variant=segment]/tabs-list:bg-transparent group-data-[variant=segment]/tabs-list:px-3 group-data-[variant=segment]/tabs-list:py-1.5 group-data-[variant=segment]/tabs-list:text-xs group-data-[variant=segment]/tabs-list:text-muted-foreground group-data-[variant=segment]/tabs-list:after:hidden group-data-[variant=segment]/tabs-list:hover:text-foreground/80 group-data-[variant=segment]/tabs-list:data-active:bg-background group-data-[variant=segment]/tabs-list:data-active:text-foreground group-data-[variant=segment]/tabs-list:data-active:shadow-sm"
+        data-orientation="horizontal"
+        data-slot="tabs-trigger"
+        id="base-ui-_r_c_"
+        role="tab"
+        tabindex="-1"
+        type="button"
+      >
+        Table
+      </button>
+      <button
+        aria-disabled="false"
+        aria-selected="false"
+        class="relative inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center gap-1.5 rounded-md border border-transparent px-1.5 py-0.5 text-xs font-medium whitespace-nowrap text-foreground/60 transition-all duration-150 ease-out outline-none group-data-vertical/tabs:w-full group-data-vertical/tabs:justify-start group-data-vertical/tabs:py-[calc(--spacing(1.25))] hover:text-foreground focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 dark:text-muted-foreground dark:hover:text-foreground [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-3.5 group-data-[variant=line]/tabs-list:bg-transparent group-data-[variant=line]/tabs-list:data-active:bg-transparent dark:group-data-[variant=line]/tabs-list:data-active:border-transparent dark:group-data-[variant=line]/tabs-list:data-active:bg-transparent data-active:bg-background data-active:text-foreground dark:data-active:border-input dark:data-active:bg-input/30 dark:data-active:text-foreground after:absolute after:bg-foreground after:opacity-0 after:transition-opacity group-data-horizontal/tabs:after:inset-x-0 group-data-horizontal/tabs:after:bottom-[-5px] group-data-horizontal/tabs:after:h-0.5 group-data-vertical/tabs:after:inset-y-0 group-data-vertical/tabs:after:-right-1 group-data-vertical/tabs:after:w-0.5 group-data-[variant=line]/tabs-list:data-active:after:opacity-100 group-data-[variant=segment]/tabs-list:rounded-sm group-data-[variant=segment]/tabs-list:border-transparent group-data-[variant=segment]/tabs-list:bg-transparent group-data-[variant=segment]/tabs-list:px-3 group-data-[variant=segment]/tabs-list:py-1.5 group-data-[variant=segment]/tabs-list:text-xs group-data-[variant=segment]/tabs-list:text-muted-foreground group-data-[variant=segment]/tabs-list:after:hidden group-data-[variant=segment]/tabs-list:hover:text-foreground/80 group-data-[variant=segment]/tabs-list:data-active:bg-background group-data-[variant=segment]/tabs-list:data-active:text-foreground group-data-[variant=segment]/tabs-list:data-active:shadow-sm"
+        data-orientation="horizontal"
+        data-slot="tabs-trigger"
+        id="base-ui-_r_d_"
+        role="tab"
+        tabindex="-1"
+        type="button"
+      >
+        JSON
+      </button>
+      <button
+        aria-controls="base-ui-_r_h_"
+        aria-disabled="false"
+        aria-selected="true"
+        class="relative inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center gap-1.5 rounded-md border border-transparent px-1.5 py-0.5 text-xs font-medium whitespace-nowrap text-foreground/60 transition-all duration-150 ease-out outline-none group-data-vertical/tabs:w-full group-data-vertical/tabs:justify-start group-data-vertical/tabs:py-[calc(--spacing(1.25))] hover:text-foreground focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 dark:text-muted-foreground dark:hover:text-foreground [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-3.5 group-data-[variant=line]/tabs-list:bg-transparent group-data-[variant=line]/tabs-list:data-active:bg-transparent dark:group-data-[variant=line]/tabs-list:data-active:border-transparent dark:group-data-[variant=line]/tabs-list:data-active:bg-transparent data-active:bg-background data-active:text-foreground dark:data-active:border-input dark:data-active:bg-input/30 dark:data-active:text-foreground after:absolute after:bg-foreground after:opacity-0 after:transition-opacity group-data-horizontal/tabs:after:inset-x-0 group-data-horizontal/tabs:after:bottom-[-5px] group-data-horizontal/tabs:after:h-0.5 group-data-vertical/tabs:after:inset-y-0 group-data-vertical/tabs:after:-right-1 group-data-vertical/tabs:after:w-0.5 group-data-[variant=line]/tabs-list:data-active:after:opacity-100 group-data-[variant=segment]/tabs-list:rounded-sm group-data-[variant=segment]/tabs-list:border-transparent group-data-[variant=segment]/tabs-list:bg-transparent group-data-[variant=segment]/tabs-list:px-3 group-data-[variant=segment]/tabs-list:py-1.5 group-data-[variant=segment]/tabs-list:text-xs group-data-[variant=segment]/tabs-list:text-muted-foreground group-data-[variant=segment]/tabs-list:after:hidden group-data-[variant=segment]/tabs-list:hover:text-foreground/80 group-data-[variant=segment]/tabs-list:data-active:bg-background group-data-[variant=segment]/tabs-list:data-active:text-foreground group-data-[variant=segment]/tabs-list:data-active:shadow-sm"
+        data-active=""
+        data-composite-item-active=""
+        data-orientation="horizontal"
+        data-slot="tabs-trigger"
+        id="base-ui-_r_e_"
+        role="tab"
+        tabindex="0"
+        type="button"
+      >
+        Chart
+      </button>
+    </div>
+    <div
+      aria-labelledby="base-ui-_r_e_"
+      class="flex-1 text-xs/relaxed outline-none"
+      data-activation-direction="right"
+      data-index="-1"
+      data-orientation="horizontal"
+      data-slot="tabs-content"
+      id="base-ui-_r_h_"
+      role="tabpanel"
+      tabindex="0"
+    >
+      Chart visualization.
+    </div>
+  </div>
+</div>
+`;
+
+exports[`tabs > vertical 1`] = `
+<div>
+  <div
+    class="group/tabs flex gap-2 data-horizontal:flex-col"
+    data-activation-direction="none"
+    data-orientation="vertical"
+    data-slot="tabs"
+  >
+    <div
+      class="group/tabs-list inline-flex w-fit items-center justify-center rounded-lg p-[3px] text-muted-foreground group-data-horizontal/tabs:h-7 group-data-vertical/tabs:h-fit group-data-vertical/tabs:flex-col data-[variant=line]:rounded-none bg-muted"
+      data-activation-direction="none"
+      data-orientation="horizontal"
+      data-slot="tabs-list"
+      data-variant="default"
+      role="tablist"
+    >
+      <button
+        aria-disabled="false"
+        aria-selected="false"
+        class="relative inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center gap-1.5 rounded-md border border-transparent px-1.5 py-0.5 text-xs font-medium whitespace-nowrap text-foreground/60 transition-all duration-150 ease-out outline-none group-data-vertical/tabs:w-full group-data-vertical/tabs:justify-start group-data-vertical/tabs:py-[calc(--spacing(1.25))] hover:text-foreground focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 dark:text-muted-foreground dark:hover:text-foreground [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-3.5 group-data-[variant=line]/tabs-list:bg-transparent group-data-[variant=line]/tabs-list:data-active:bg-transparent dark:group-data-[variant=line]/tabs-list:data-active:border-transparent dark:group-data-[variant=line]/tabs-list:data-active:bg-transparent data-active:bg-background data-active:text-foreground dark:data-active:border-input dark:data-active:bg-input/30 dark:data-active:text-foreground after:absolute after:bg-foreground after:opacity-0 after:transition-opacity group-data-horizontal/tabs:after:inset-x-0 group-data-horizontal/tabs:after:bottom-[-5px] group-data-horizontal/tabs:after:h-0.5 group-data-vertical/tabs:after:inset-y-0 group-data-vertical/tabs:after:-right-1 group-data-vertical/tabs:after:w-0.5 group-data-[variant=line]/tabs-list:data-active:after:opacity-100 group-data-[variant=segment]/tabs-list:rounded-sm group-data-[variant=segment]/tabs-list:border-transparent group-data-[variant=segment]/tabs-list:bg-transparent group-data-[variant=segment]/tabs-list:px-3 group-data-[variant=segment]/tabs-list:py-1.5 group-data-[variant=segment]/tabs-list:text-xs group-data-[variant=segment]/tabs-list:text-muted-foreground group-data-[variant=segment]/tabs-list:after:hidden group-data-[variant=segment]/tabs-list:hover:text-foreground/80 group-data-[variant=segment]/tabs-list:data-active:bg-background group-data-[variant=segment]/tabs-list:data-active:text-foreground group-data-[variant=segment]/tabs-list:data-active:shadow-sm"
+        data-orientation="horizontal"
+        data-slot="tabs-trigger"
+        id="base-ui-_r_i_"
+        role="tab"
+        tabindex="-1"
+        type="button"
+      >
+        General
+      </button>
+      <button
+        aria-disabled="false"
+        aria-selected="false"
+        class="relative inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center gap-1.5 rounded-md border border-transparent px-1.5 py-0.5 text-xs font-medium whitespace-nowrap text-foreground/60 transition-all duration-150 ease-out outline-none group-data-vertical/tabs:w-full group-data-vertical/tabs:justify-start group-data-vertical/tabs:py-[calc(--spacing(1.25))] hover:text-foreground focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 dark:text-muted-foreground dark:hover:text-foreground [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-3.5 group-data-[variant=line]/tabs-list:bg-transparent group-data-[variant=line]/tabs-list:data-active:bg-transparent dark:group-data-[variant=line]/tabs-list:data-active:border-transparent dark:group-data-[variant=line]/tabs-list:data-active:bg-transparent data-active:bg-background data-active:text-foreground dark:data-active:border-input dark:data-active:bg-input/30 dark:data-active:text-foreground after:absolute after:bg-foreground after:opacity-0 after:transition-opacity group-data-horizontal/tabs:after:inset-x-0 group-data-horizontal/tabs:after:bottom-[-5px] group-data-horizontal/tabs:after:h-0.5 group-data-vertical/tabs:after:inset-y-0 group-data-vertical/tabs:after:-right-1 group-data-vertical/tabs:after:w-0.5 group-data-[variant=line]/tabs-list:data-active:after:opacity-100 group-data-[variant=segment]/tabs-list:rounded-sm group-data-[variant=segment]/tabs-list:border-transparent group-data-[variant=segment]/tabs-list:bg-transparent group-data-[variant=segment]/tabs-list:px-3 group-data-[variant=segment]/tabs-list:py-1.5 group-data-[variant=segment]/tabs-list:text-xs group-data-[variant=segment]/tabs-list:text-muted-foreground group-data-[variant=segment]/tabs-list:after:hidden group-data-[variant=segment]/tabs-list:hover:text-foreground/80 group-data-[variant=segment]/tabs-list:data-active:bg-background group-data-[variant=segment]/tabs-list:data-active:text-foreground group-data-[variant=segment]/tabs-list:data-active:shadow-sm"
+        data-orientation="horizontal"
+        data-slot="tabs-trigger"
+        id="base-ui-_r_j_"
+        role="tab"
+        tabindex="-1"
+        type="button"
+      >
+        Editor
+      </button>
+      <button
+        aria-controls="base-ui-_r_n_"
+        aria-disabled="false"
+        aria-selected="true"
+        class="relative inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center gap-1.5 rounded-md border border-transparent px-1.5 py-0.5 text-xs font-medium whitespace-nowrap text-foreground/60 transition-all duration-150 ease-out outline-none group-data-vertical/tabs:w-full group-data-vertical/tabs:justify-start group-data-vertical/tabs:py-[calc(--spacing(1.25))] hover:text-foreground focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 dark:text-muted-foreground dark:hover:text-foreground [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-3.5 group-data-[variant=line]/tabs-list:bg-transparent group-data-[variant=line]/tabs-list:data-active:bg-transparent dark:group-data-[variant=line]/tabs-list:data-active:border-transparent dark:group-data-[variant=line]/tabs-list:data-active:bg-transparent data-active:bg-background data-active:text-foreground dark:data-active:border-input dark:data-active:bg-input/30 dark:data-active:text-foreground after:absolute after:bg-foreground after:opacity-0 after:transition-opacity group-data-horizontal/tabs:after:inset-x-0 group-data-horizontal/tabs:after:bottom-[-5px] group-data-horizontal/tabs:after:h-0.5 group-data-vertical/tabs:after:inset-y-0 group-data-vertical/tabs:after:-right-1 group-data-vertical/tabs:after:w-0.5 group-data-[variant=line]/tabs-list:data-active:after:opacity-100 group-data-[variant=segment]/tabs-list:rounded-sm group-data-[variant=segment]/tabs-list:border-transparent group-data-[variant=segment]/tabs-list:bg-transparent group-data-[variant=segment]/tabs-list:px-3 group-data-[variant=segment]/tabs-list:py-1.5 group-data-[variant=segment]/tabs-list:text-xs group-data-[variant=segment]/tabs-list:text-muted-foreground group-data-[variant=segment]/tabs-list:after:hidden group-data-[variant=segment]/tabs-list:hover:text-foreground/80 group-data-[variant=segment]/tabs-list:data-active:bg-background group-data-[variant=segment]/tabs-list:data-active:text-foreground group-data-[variant=segment]/tabs-list:data-active:shadow-sm"
+        data-active=""
+        data-composite-item-active=""
+        data-orientation="horizontal"
+        data-slot="tabs-trigger"
+        id="base-ui-_r_k_"
+        role="tab"
+        tabindex="0"
+        type="button"
+      >
+        AI
+      </button>
+    </div>
+    <div
+      aria-labelledby="base-ui-_r_k_"
+      class="flex-1 text-xs/relaxed outline-none"
+      data-activation-direction="none"
+      data-index="-1"
+      data-orientation="horizontal"
+      data-slot="tabs-content"
+      id="base-ui-_r_n_"
+      role="tabpanel"
+      tabindex="0"
+    >
+      AI configuration.
+    </div>
+  </div>
+</div>
+`;
+
+exports[`tabs > withDisabledTab 1`] = `
+<div>
+  <div
+    class="group/tabs flex gap-2 data-horizontal:flex-col"
+    data-activation-direction="none"
+    data-orientation="horizontal"
+    data-slot="tabs"
+  >
+    <div
+      class="group/tabs-list inline-flex w-fit items-center justify-center rounded-lg p-[3px] text-muted-foreground group-data-horizontal/tabs:h-7 group-data-vertical/tabs:h-fit group-data-vertical/tabs:flex-col data-[variant=line]:rounded-none bg-muted"
+      data-activation-direction="none"
+      data-orientation="horizontal"
+      data-slot="tabs-list"
+      data-variant="default"
+      role="tablist"
+    >
+      <button
+        aria-controls="base-ui-_r_q_"
+        aria-disabled="false"
+        aria-selected="true"
+        class="relative inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center gap-1.5 rounded-md border border-transparent px-1.5 py-0.5 text-xs font-medium whitespace-nowrap text-foreground/60 transition-all duration-150 ease-out outline-none group-data-vertical/tabs:w-full group-data-vertical/tabs:justify-start group-data-vertical/tabs:py-[calc(--spacing(1.25))] hover:text-foreground focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 dark:text-muted-foreground dark:hover:text-foreground [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-3.5 group-data-[variant=line]/tabs-list:bg-transparent group-data-[variant=line]/tabs-list:data-active:bg-transparent dark:group-data-[variant=line]/tabs-list:data-active:border-transparent dark:group-data-[variant=line]/tabs-list:data-active:bg-transparent data-active:bg-background data-active:text-foreground dark:data-active:border-input dark:data-active:bg-input/30 dark:data-active:text-foreground after:absolute after:bg-foreground after:opacity-0 after:transition-opacity group-data-horizontal/tabs:after:inset-x-0 group-data-horizontal/tabs:after:bottom-[-5px] group-data-horizontal/tabs:after:h-0.5 group-data-vertical/tabs:after:inset-y-0 group-data-vertical/tabs:after:-right-1 group-data-vertical/tabs:after:w-0.5 group-data-[variant=line]/tabs-list:data-active:after:opacity-100 group-data-[variant=segment]/tabs-list:rounded-sm group-data-[variant=segment]/tabs-list:border-transparent group-data-[variant=segment]/tabs-list:bg-transparent group-data-[variant=segment]/tabs-list:px-3 group-data-[variant=segment]/tabs-list:py-1.5 group-data-[variant=segment]/tabs-list:text-xs group-data-[variant=segment]/tabs-list:text-muted-foreground group-data-[variant=segment]/tabs-list:after:hidden group-data-[variant=segment]/tabs-list:hover:text-foreground/80 group-data-[variant=segment]/tabs-list:data-active:bg-background group-data-[variant=segment]/tabs-list:data-active:text-foreground group-data-[variant=segment]/tabs-list:data-active:shadow-sm"
+        data-active=""
+        data-composite-item-active=""
+        data-orientation="horizontal"
+        data-slot="tabs-trigger"
+        id="base-ui-_r_o_"
+        role="tab"
+        tabindex="0"
+        type="button"
+      >
+        Query
+      </button>
+      <button
+        aria-disabled="true"
+        aria-selected="false"
+        class="relative inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center gap-1.5 rounded-md border border-transparent px-1.5 py-0.5 text-xs font-medium whitespace-nowrap text-foreground/60 transition-all duration-150 ease-out outline-none group-data-vertical/tabs:w-full group-data-vertical/tabs:justify-start group-data-vertical/tabs:py-[calc(--spacing(1.25))] hover:text-foreground focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 dark:text-muted-foreground dark:hover:text-foreground [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-3.5 group-data-[variant=line]/tabs-list:bg-transparent group-data-[variant=line]/tabs-list:data-active:bg-transparent dark:group-data-[variant=line]/tabs-list:data-active:border-transparent dark:group-data-[variant=line]/tabs-list:data-active:bg-transparent data-active:bg-background data-active:text-foreground dark:data-active:border-input dark:data-active:bg-input/30 dark:data-active:text-foreground after:absolute after:bg-foreground after:opacity-0 after:transition-opacity group-data-horizontal/tabs:after:inset-x-0 group-data-horizontal/tabs:after:bottom-[-5px] group-data-horizontal/tabs:after:h-0.5 group-data-vertical/tabs:after:inset-y-0 group-data-vertical/tabs:after:-right-1 group-data-vertical/tabs:after:w-0.5 group-data-[variant=line]/tabs-list:data-active:after:opacity-100 group-data-[variant=segment]/tabs-list:rounded-sm group-data-[variant=segment]/tabs-list:border-transparent group-data-[variant=segment]/tabs-list:bg-transparent group-data-[variant=segment]/tabs-list:px-3 group-data-[variant=segment]/tabs-list:py-1.5 group-data-[variant=segment]/tabs-list:text-xs group-data-[variant=segment]/tabs-list:text-muted-foreground group-data-[variant=segment]/tabs-list:after:hidden group-data-[variant=segment]/tabs-list:hover:text-foreground/80 group-data-[variant=segment]/tabs-list:data-active:bg-background group-data-[variant=segment]/tabs-list:data-active:text-foreground group-data-[variant=segment]/tabs-list:data-active:shadow-sm"
+        data-disabled=""
+        data-orientation="horizontal"
+        data-slot="tabs-trigger"
+        id="base-ui-_r_p_"
+        role="tab"
+        tabindex="-1"
+        type="button"
+      >
+        Results
+      </button>
+    </div>
+    <div
+      aria-labelledby="base-ui-_r_o_"
+      class="flex-1 text-xs/relaxed outline-none"
+      data-activation-direction="none"
+      data-index="0"
+      data-orientation="horizontal"
+      data-slot="tabs-content"
+      id="base-ui-_r_q_"
+      role="tabpanel"
+      tabindex="0"
+    >
+      Run a query first.
+    </div>
+  </div>
+</div>
+`;

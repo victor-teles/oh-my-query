@@ -22,11 +22,11 @@ describe("input-group", () => {
     );
     const input = screen.getByPlaceholder("Search tables...");
     await input.fill("users");
-    await expect.element(input).toHaveValue("users");
-    await expect.element(screen.container).toMatchScreenshot();
+    expect(input).toHaveValue("users");
+    expect(screen.container).toMatchSnapshot();
   });
 
-  it("withButton", async () => {
+  it("withButton", () => {
     const screen = render(
       <InputGroup className="w-64">
         <InputGroupInput placeholder="Password" type="password" />
@@ -38,11 +38,11 @@ describe("input-group", () => {
       </InputGroup>
     );
     const input = screen.getByPlaceholder("Password");
-    await expect.element(input).toHaveAttribute("type", "password");
-    await expect.element(screen.container).toMatchScreenshot();
+    expect(input).toHaveAttribute("type", "password");
+    expect(screen.container).toMatchSnapshot();
   });
 
-  it("withKbd", async () => {
+  it("withKbd", () => {
     const screen = render(
       <InputGroup className="w-72">
         <InputGroupAddon>
@@ -54,10 +54,10 @@ describe("input-group", () => {
         </InputGroupAddon>
       </InputGroup>
     );
-    await expect.element(screen.container).toMatchScreenshot();
+    expect(screen.container).toMatchSnapshot();
   });
 
-  it("withTrailingButton", async () => {
+  it("withTrailingButton", () => {
     const screen = render(
       <InputGroup className="w-72">
         <InputGroupInput placeholder="Connection string" />
@@ -68,6 +68,6 @@ describe("input-group", () => {
         </InputGroupAddon>
       </InputGroup>
     );
-    await expect.element(screen.container).toMatchScreenshot();
+    expect(screen.container).toMatchSnapshot();
   });
 });

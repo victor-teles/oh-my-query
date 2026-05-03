@@ -9,21 +9,21 @@ describe("checkbox", () => {
     const onCheckedChange = vi.fn();
     const screen = render(<Checkbox onCheckedChange={onCheckedChange} />);
     const checkbox = screen.getByRole("checkbox");
-    await expect.element(checkbox).toBeVisible();
-    await expect.element(checkbox).not.toBeChecked();
+    expect(checkbox).toBeVisible();
+    expect(checkbox).not.toBeChecked();
     await checkbox.click();
     expect(onCheckedChange).toHaveBeenCalledOnce();
-    await expect.element(checkbox).toMatchScreenshot();
+    await expect(checkbox.element()).toMatchSnapshot();
   });
 
-  it("checked", async () => {
+  it("checked", () => {
     const onCheckedChange = vi.fn();
     const screen = render(
       <Checkbox defaultChecked onCheckedChange={onCheckedChange} />
     );
     const checkbox = screen.getByRole("checkbox");
-    await expect.element(checkbox).toBeChecked();
-    await expect.element(checkbox).toMatchScreenshot();
+    expect(checkbox).toBeChecked();
+    expect(checkbox.element()).toMatchSnapshot();
   });
 
   it("withLabel", async () => {
@@ -35,11 +35,11 @@ describe("checkbox", () => {
       </Label>
     );
     const checkbox = screen.getByRole("checkbox");
-    await expect.element(checkbox).not.toBeChecked();
+    expect(checkbox).not.toBeChecked();
     const label = screen.getByText("Remember me");
     await label.click();
     expect(onCheckedChange).toHaveBeenCalledOnce();
-    await expect.element(screen.container).toMatchScreenshot();
+    expect(screen.container).toMatchSnapshot();
   });
 
   it("disabled", async () => {
@@ -48,8 +48,8 @@ describe("checkbox", () => {
       <Checkbox disabled onCheckedChange={onCheckedChange} />
     );
     const checkbox = screen.getByRole("checkbox");
-    await expect.element(checkbox).toHaveAttribute("aria-disabled", "true");
-    await expect.element(checkbox).toMatchScreenshot();
+    expect(checkbox).toHaveAttribute("aria-disabled", "true");
+    await expect(checkbox.element()).toMatchSnapshot();
   });
 
   it("disabledChecked", async () => {
@@ -58,8 +58,8 @@ describe("checkbox", () => {
       <Checkbox defaultChecked disabled onCheckedChange={onCheckedChange} />
     );
     const checkbox = screen.getByRole("checkbox");
-    await expect.element(checkbox).toHaveAttribute("aria-disabled", "true");
-    await expect.element(checkbox).toBeChecked();
-    await expect.element(checkbox).toMatchScreenshot();
+    expect(checkbox).toHaveAttribute("aria-disabled", "true");
+    expect(checkbox).toBeChecked();
+    await expect(checkbox.element()).toMatchSnapshot();
   });
 });

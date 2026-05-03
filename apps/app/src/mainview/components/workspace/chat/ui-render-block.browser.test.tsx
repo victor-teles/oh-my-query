@@ -229,174 +229,154 @@ const chartNonNumericSpec = JSON.stringify({
 describe("ui-render-block", () => {
   it("validCard", async () => {
     const screen = render(<UIRenderBlock code={validCardSpec} />);
-    await expect
-      .element(screen.getByRole("heading", { name: "Status" }))
-      .toBeVisible();
-    await expect
-      .element(screen.getByText("Database is healthy."))
-      .toBeVisible();
-    await expect
-      .element(screen.getByRole("button", { name: "Show source" }))
-      .toBeInTheDocument();
-    await expect.element(screen.container).toMatchScreenshot();
+    expect(screen.getByRole("heading", { name: "Status" })).toBeVisible();
+    await expect(screen.getByText("Database is healthy.")).toBeVisible();
+    expect(
+      screen.getByRole("button", { name: "Show source" })
+    ).toBeInTheDocument();
+    expect(screen.container).toMatchSnapshot();
   });
 
-  it("inlineBadge", async () => {
+  it("inlineBadge", () => {
     const screen = render(<UIRenderBlock code={inlineBadgeSpec} />);
-    await expect.element(screen.getByText("12 rows")).toBeVisible();
-    await expect.element(screen.container).toMatchScreenshot();
+    expect(screen.getByText("12 rows")).toBeVisible();
+    expect(screen.container).toMatchSnapshot();
   });
 
   it("toggleViewSpec", async () => {
     const screen = render(<UIRenderBlock code={validCardSpec} />);
     const toggle = screen.getByRole("button", { name: "Show source" });
     await toggle.click();
-    await expect.element(screen.getByText(/"root": "root"/)).toBeVisible();
-    await expect.element(screen.container).toMatchScreenshot();
+    expect(screen.getByText(/"root": "root"/)).toBeVisible();
+    expect(screen.container).toMatchSnapshot();
   });
 
   it("missingChild", async () => {
     const screen = render(<UIRenderBlock code={missingChildSpec} />);
-    await expect
-      .element(screen.getByText("Couldn't render this UI"))
-      .toBeVisible();
+    expect(screen.getByText("Couldn't render this UI")).toBeVisible();
     const reveal = screen.getByRole("button", { name: "Show source" });
     await reveal.click();
-    await expect.element(screen.getByText(/Broken card/)).toBeVisible();
-    await expect.element(screen.container).toMatchScreenshot();
+    await expect(screen.getByText(/Broken card/)).toBeVisible();
+    expect(screen.container).toMatchSnapshot();
   });
 
   it("unknownComponent", async () => {
     const screen = render(<UIRenderBlock code={unknownComponentSpec} />);
-    await expect
-      .element(screen.getByText("Couldn't render this UI"))
-      .toBeVisible();
-    await expect
-      .element(screen.getByText(/Unknown component "Button"/))
-      .toBeVisible();
-    await expect.element(screen.container).toMatchScreenshot();
+    expect(screen.getByText("Couldn't render this UI")).toBeVisible();
+    await expect(screen.getByText(/Unknown component "Button"/)).toBeVisible();
+    expect(screen.container).toMatchSnapshot();
   });
 
-  it("partialStream", async () => {
+  it("partialStream", () => {
     const screen = render(<UIRenderBlock code={partiallyStreamedSpec} />);
     expect(screen.container.textContent).not.toMatch(/error/i);
-    await expect.element(screen.container).toMatchScreenshot();
+    expect(screen.container).toMatchSnapshot();
   });
 
   it("chartBarExample", async () => {
     const screen = render(<UIRenderBlock code={chartBarSpec} />);
-    await expect
-      .element(screen.getByText("Query volume", { exact: true }))
-      .toBeVisible();
-    await expect
-      .element(
-        screen.getByText(
-          "Monthly query volume and errors for the last six months."
-        )
+    expect(screen.getByText("Query volume", { exact: true })).toBeVisible();
+    await expect(
+      screen.getByText(
+        "Monthly query volume and errors for the last six months."
       )
-      .toBeVisible();
-    await expect.element(screen.container).toMatchScreenshot();
+    ).toBeVisible();
+    expect(screen.container).toMatchSnapshot();
   });
 
-  it("chartBarDark", async () => {
+  it("chartBarDark", () => {
     const screen = render(
       <DarkFrame>
         <UIRenderBlock code={chartBarSpec} />
       </DarkFrame>
     );
-    await expect
-      .element(screen.getByText("Query volume", { exact: true }))
-      .toBeVisible();
-    await expect.element(screen.container).toMatchScreenshot();
+    expect(screen.getByText("Query volume", { exact: true })).toBeVisible();
+    expect(screen.container).toMatchSnapshot();
   });
 
-  it("chartLineExample", async () => {
+  it("chartLineExample", () => {
     const screen = render(<UIRenderBlock code={chartLineSpec} />);
-    await expect
-      .element(screen.getByText("Latency over the day"))
-      .toBeVisible();
-    await expect.element(screen.container).toMatchScreenshot();
+    expect(screen.getByText("Latency over the day")).toBeVisible();
+    expect(screen.container).toMatchSnapshot();
   });
 
-  it("chartLineDark", async () => {
+  it("chartLineDark", () => {
     const screen = render(
       <DarkFrame>
         <UIRenderBlock code={chartLineSpec} />
       </DarkFrame>
     );
-    await expect
-      .element(screen.getByText("Latency over the day"))
-      .toBeVisible();
-    await expect.element(screen.container).toMatchScreenshot();
+    expect(screen.getByText("Latency over the day")).toBeVisible();
+    expect(screen.container).toMatchSnapshot();
   });
 
   it("chartPieExample", async () => {
     const screen = render(<UIRenderBlock code={chartPieSpec} />);
-    await expect.element(screen.getByText("Request outcomes")).toBeVisible();
-    await expect.element(screen.getByText("ok")).toBeVisible();
-    await expect.element(screen.getByText("Total")).toBeVisible();
-    await expect.element(screen.getByText("53")).toBeVisible();
-    await expect.element(screen.container).toMatchScreenshot();
+    expect(screen.getByText("Request outcomes")).toBeVisible();
+    await expect(screen.getByText("ok")).toBeVisible();
+    expect(screen.getByText("Total")).toBeVisible();
+    await expect(screen.getByText("53")).toBeVisible();
+    expect(screen.container).toMatchSnapshot();
   });
 
-  it("chartPieDark", async () => {
+  it("chartPieDark", () => {
     const screen = render(
       <DarkFrame>
         <UIRenderBlock code={chartPieSpec} />
       </DarkFrame>
     );
-    await expect.element(screen.getByText("Request outcomes")).toBeVisible();
-    await expect.element(screen.container).toMatchScreenshot();
+    expect(screen.getByText("Request outcomes")).toBeVisible();
+    expect(screen.container).toMatchSnapshot();
   });
 
   it("chartKpiExample", async () => {
     const screen = render(<UIRenderBlock code={chartKpiSpec} />);
-    await expect.element(screen.getByText("Active users")).toBeVisible();
-    await expect.element(screen.getByText("1,248")).toBeVisible();
-    await expect.element(screen.getByText(/vs last week/)).toBeVisible();
-    await expect.element(screen.container).toMatchScreenshot();
+    expect(screen.getByText("Active users")).toBeVisible();
+    await expect(screen.getByText("1,248")).toBeVisible();
+    expect(screen.getByText(/vs last week/)).toBeVisible();
+    expect(screen.container).toMatchSnapshot();
   });
 
   it("chartKpiNegative", async () => {
     const screen = render(<UIRenderBlock code={chartKpiNegativeSpec} />);
-    await expect.element(screen.getByText("Revenue today")).toBeVisible();
-    await expect.element(screen.getByText(/-4\.0%/)).toBeVisible();
-    await expect.element(screen.container).toMatchScreenshot();
+    expect(screen.getByText("Revenue today")).toBeVisible();
+    await expect(screen.getByText(/-4\.0%/)).toBeVisible();
+    expect(screen.container).toMatchSnapshot();
   });
 
-  it("chartKpiDark", async () => {
+  it("chartKpiDark", () => {
     const screen = render(
       <DarkFrame>
         <UIRenderBlock code={chartKpiSpec} />
       </DarkFrame>
     );
-    await expect.element(screen.getByText("Active users")).toBeVisible();
-    await expect.element(screen.container).toMatchScreenshot();
+    expect(screen.getByText("Active users")).toBeVisible();
+    expect(screen.container).toMatchSnapshot();
   });
 
   it("chartEmpty", async () => {
     const screen = render(<UIRenderBlock code={chartEmptySpec} />);
-    await expect.element(screen.getByText("No data yet")).toBeVisible();
-    await expect.element(screen.getByText(/run the query above/)).toBeVisible();
-    await expect.element(screen.container).toMatchScreenshot();
+    expect(screen.getByText("No data yet")).toBeVisible();
+    await expect(screen.getByText(/run the query above/)).toBeVisible();
+    expect(screen.container).toMatchSnapshot();
   });
 
   it("chartTruncatedOverLimit", async () => {
     const screen = render(<UIRenderBlock code={chartTruncatedSpec} />);
-    await expect.element(screen.getByText("Large series")).toBeVisible();
-    await expect
-      .element(screen.getByText(/Downsampled to 500 of 750 points/))
-      .toBeVisible();
-    await expect.element(screen.container).toMatchScreenshot();
+    expect(screen.getByText("Large series")).toBeVisible();
+    await expect(
+      screen.getByText(/Downsampled to 500 of 750 points/)
+    ).toBeVisible();
+    expect(screen.container).toMatchSnapshot();
   });
 
   it("chartNonNumericSeries", async () => {
     const screen = render(<UIRenderBlock code={chartNonNumericSpec} />);
-    await expect.element(screen.getByText("Bad series")).toBeVisible();
-    await expect
-      .element(screen.getByText(/None of the selected columns are numeric/))
-      .toBeVisible();
-    await expect.element(screen.container).toMatchScreenshot();
+    expect(screen.getByText("Bad series")).toBeVisible();
+    await expect(
+      screen.getByText(/None of the selected columns are numeric/)
+    ).toBeVisible();
+    expect(screen.container).toMatchSnapshot();
   });
 
   it("keyboardActions", async () => {
@@ -404,11 +384,9 @@ describe("ui-render-block", () => {
     const sourceButton = screen.getByRole("button", { name: "Show source" });
     (sourceButton.element() as HTMLElement).focus();
     await userEvent.keyboard("s");
-    await expect.element(screen.getByText(/"root": "root"/)).toBeVisible();
+    expect(screen.getByText(/"root": "root"/)).toBeVisible();
     await userEvent.keyboard("s");
-    await expect
-      .element(screen.getByText("Database is healthy."))
-      .toBeVisible();
-    await expect.element(screen.container).toMatchScreenshot();
+    await expect(screen.getByText("Database is healthy.")).toBeVisible();
+    expect(screen.container).toMatchSnapshot();
   });
 });

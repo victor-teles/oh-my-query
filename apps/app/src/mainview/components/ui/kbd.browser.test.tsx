@@ -4,18 +4,18 @@ import { render } from "vitest-browser-react";
 import { Kbd, KbdGroup } from "./kbd";
 
 describe("kbd", () => {
-  it("default", async () => {
+  it("default", () => {
     const screen = render(<Kbd>⌘</Kbd>);
     const kbd = screen.getByText("⌘");
-    await expect.element(kbd).toBeVisible();
+    expect(kbd).toBeVisible();
     expect(kbd.element().tagName).toBe("KBD");
-    await expect.element(kbd).toMatchScreenshot();
+    expect(kbd.element()).toMatchSnapshot();
   });
 
-  it("withText", async () => {
+  it("withText", () => {
     const screen = render(<Kbd>Enter</Kbd>);
-    await expect.element(screen.getByText("Enter")).toBeVisible();
-    await expect.element(screen.getByText("Enter")).toMatchScreenshot();
+    expect(screen.getByText("Enter")).toBeVisible();
+    expect(screen.getByText("Enter").element()).toMatchSnapshot();
   });
 
   it("group", async () => {
@@ -25,9 +25,9 @@ describe("kbd", () => {
         <Kbd>K</Kbd>
       </KbdGroup>
     );
-    await expect.element(screen.getByText("⌘")).toBeVisible();
-    await expect.element(screen.getByText("K")).toBeVisible();
-    await expect.element(screen.container).toMatchScreenshot();
+    expect(screen.getByText("⌘")).toBeVisible();
+    await expect(screen.getByText("K")).toBeVisible();
+    expect(screen.container).toMatchSnapshot();
   });
 
   it("commonShortcuts", async () => {
@@ -56,11 +56,11 @@ describe("kbd", () => {
         </div>
       </div>
     );
-    await expect.element(screen.getByText("Save")).toBeVisible();
-    await expect.element(screen.getByText("Run query")).toBeVisible();
-    await expect.element(screen.getByText("Command palette")).toBeVisible();
-    await expect.element(screen.getByText("S")).toBeVisible();
+    expect(screen.getByText("Save")).toBeVisible();
+    await expect(screen.getByText("Run query")).toBeVisible();
+    expect(screen.getByText("Command palette")).toBeVisible();
+    await expect(screen.getByText("S")).toBeVisible();
     await expect.element(screen.getByText("↵")).toBeVisible();
-    await expect.element(screen.container).toMatchScreenshot();
+    expect(screen.container).toMatchSnapshot();
   });
 });

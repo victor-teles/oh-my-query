@@ -17,23 +17,17 @@ describe("tabs", () => {
         <TabsContent value="history">Previous queries.</TabsContent>
       </Tabs>
     );
-    await expect
-      .element(screen.getByText("Write your SQL here."))
-      .toBeVisible();
+    expect(screen.getByText("Write your SQL here.")).toBeVisible();
 
     await screen.getByRole("tab", { name: "Results" }).click();
-    await expect
-      .element(screen.getByText("Query results appear here."))
-      .toBeVisible();
+    await expect(screen.getByText("Query results appear here.")).toBeVisible();
 
     await screen.getByRole("tab", { name: "History" }).click();
-    await expect.element(screen.getByText("Previous queries.")).toBeVisible();
+    expect(screen.getByText("Previous queries.")).toBeVisible();
 
     await screen.getByRole("tab", { name: "Query" }).click();
-    await expect
-      .element(screen.getByText("Write your SQL here."))
-      .toBeVisible();
-    await expect.element(screen.container).toMatchScreenshot();
+    await expect(screen.getByText("Write your SQL here.")).toBeVisible();
+    expect(screen.container).toMatchSnapshot();
   });
 
   it("line", async () => {
@@ -49,10 +43,10 @@ describe("tabs", () => {
         <TabsContent value="indexes">Index list.</TabsContent>
       </Tabs>
     );
-    await expect.element(screen.getByText("Table overview.")).toBeVisible();
+    expect(screen.getByText("Table overview.")).toBeVisible();
     await screen.getByRole("tab", { name: "Structure" }).click();
-    await expect.element(screen.getByText("Column definitions.")).toBeVisible();
-    await expect.element(screen.container).toMatchScreenshot();
+    await expect(screen.getByText("Column definitions.")).toBeVisible();
+    expect(screen.container).toMatchSnapshot();
   });
 
   it("segment", async () => {
@@ -68,14 +62,12 @@ describe("tabs", () => {
         <TabsContent value="chart">Chart visualization.</TabsContent>
       </Tabs>
     );
-    await expect.element(screen.getByText("Table view.")).toBeVisible();
+    expect(screen.getByText("Table view.")).toBeVisible();
     await screen.getByRole("tab", { name: "JSON" }).click();
-    await expect.element(screen.getByText("Raw JSON output.")).toBeVisible();
+    await expect(screen.getByText("Raw JSON output.")).toBeVisible();
     await screen.getByRole("tab", { name: "Chart" }).click();
-    await expect
-      .element(screen.getByText("Chart visualization."))
-      .toBeVisible();
-    await expect.element(screen.container).toMatchScreenshot();
+    expect(screen.getByText("Chart visualization.")).toBeVisible();
+    expect(screen.container).toMatchSnapshot();
   });
 
   it("vertical", async () => {
@@ -91,12 +83,12 @@ describe("tabs", () => {
         <TabsContent value="ai">AI configuration.</TabsContent>
       </Tabs>
     );
-    await expect.element(screen.getByText("General settings.")).toBeVisible();
+    expect(screen.getByText("General settings.")).toBeVisible();
     await screen.getByRole("tab", { name: "Editor" }).click();
-    await expect.element(screen.getByText("Editor preferences.")).toBeVisible();
+    await expect(screen.getByText("Editor preferences.")).toBeVisible();
     await screen.getByRole("tab", { name: "AI" }).click();
-    await expect.element(screen.getByText("AI configuration.")).toBeVisible();
-    await expect.element(screen.container).toMatchScreenshot();
+    expect(screen.getByText("AI configuration.")).toBeVisible();
+    expect(screen.container).toMatchSnapshot();
   });
 
   it("withDisabledTab", async () => {
@@ -112,9 +104,9 @@ describe("tabs", () => {
         <TabsContent value="results">No results yet.</TabsContent>
       </Tabs>
     );
-    await expect.element(screen.getByText("Run a query first.")).toBeVisible();
+    expect(screen.getByText("Run a query first.")).toBeVisible();
     const resultsTab = screen.getByRole("tab", { name: "Results" });
-    await expect.element(resultsTab).toHaveAttribute("aria-disabled", "true");
-    await expect.element(screen.container).toMatchScreenshot();
+    await expect(resultsTab).toHaveAttribute("aria-disabled", "true");
+    expect(screen.container).toMatchSnapshot();
   });
 });

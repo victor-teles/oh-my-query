@@ -53,10 +53,10 @@ function ListCursorDemo() {
 describe("list-cursor", () => {
   it("default", async () => {
     const screen = render(<ListCursorDemo />);
-    await expect.element(screen.getByText("users")).toBeVisible();
+    expect(screen.getByText("users")).toBeVisible();
     await screen.getByText("products").click();
-    await expect.element(screen.getByText("products")).toBeVisible();
+    await expect(screen.getByText("products")).toBeVisible();
     await screen.getByText("orders").click();
-    await expect.element(screen.container).toMatchScreenshot();
+    expect(screen.container).toMatchSnapshot();
   });
 });

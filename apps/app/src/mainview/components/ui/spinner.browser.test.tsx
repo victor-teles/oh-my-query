@@ -7,20 +7,20 @@ describe("spinner", () => {
   it("default", async () => {
     const screen = render(<Spinner />);
     const spinner = screen.getByRole("status");
-    await expect.element(spinner).toBeVisible();
-    await expect.element(spinner).toHaveAttribute("aria-label", "Loading");
-    await expect.element(spinner).toMatchScreenshot();
+    expect(spinner).toBeVisible();
+    expect(spinner).toHaveAttribute("aria-label", "Loading");
+    await expect(spinner.element()).toMatchSnapshot();
   });
 
-  it("large", async () => {
+  it("large", () => {
     const screen = render(<Spinner className="size-8" />);
-    await expect.element(screen.getByRole("status")).toBeVisible();
-    await expect.element(screen.getByRole("status")).toMatchScreenshot();
+    expect(screen.getByRole("status")).toBeVisible();
+    expect(screen.getByRole("status").element()).toMatchSnapshot();
   });
 
-  it("small", async () => {
+  it("small", () => {
     const screen = render(<Spinner className="size-3" />);
-    await expect.element(screen.getByRole("status")).toBeVisible();
-    await expect.element(screen.getByRole("status")).toMatchScreenshot();
+    expect(screen.getByRole("status")).toBeVisible();
+    expect(screen.getByRole("status").element()).toMatchSnapshot();
   });
 });

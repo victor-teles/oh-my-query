@@ -9,10 +9,10 @@ describe("button", () => {
     const onClick = vi.fn();
     const screen = render(<Button onClick={onClick}>Button</Button>);
     const btn = screen.getByRole("button", { name: "Button" });
-    await expect.element(btn).toBeVisible();
+    expect(btn).toBeVisible();
     await btn.click();
     expect(onClick).toHaveBeenCalledOnce();
-    await expect.element(btn).toMatchScreenshot();
+    expect(btn.element()).toMatchSnapshot();
   });
 
   it("secondary", async () => {
@@ -25,7 +25,7 @@ describe("button", () => {
     const btn = screen.getByRole("button", { name: "Button" });
     await btn.click();
     expect(onClick).toHaveBeenCalledOnce();
-    await expect.element(btn).toMatchScreenshot();
+    expect(btn.element()).toMatchSnapshot();
   });
 
   it("destructive", async () => {
@@ -38,7 +38,7 @@ describe("button", () => {
     const btn = screen.getByRole("button", { name: "Delete" });
     await btn.click();
     expect(onClick).toHaveBeenCalledOnce();
-    await expect.element(btn).toMatchScreenshot();
+    expect(btn.element()).toMatchSnapshot();
   });
 
   it("ghost", async () => {
@@ -51,7 +51,7 @@ describe("button", () => {
     const btn = screen.getByRole("button", { name: "Button" });
     await btn.click();
     expect(onClick).toHaveBeenCalledOnce();
-    await expect.element(btn).toMatchScreenshot();
+    expect(btn.element()).toMatchSnapshot();
   });
 
   it("outline", async () => {
@@ -64,7 +64,7 @@ describe("button", () => {
     const btn = screen.getByRole("button", { name: "Button" });
     await btn.click();
     expect(onClick).toHaveBeenCalledOnce();
-    await expect.element(btn).toMatchScreenshot();
+    expect(btn.element()).toMatchSnapshot();
   });
 
   it("link", async () => {
@@ -77,7 +77,7 @@ describe("button", () => {
     const btn = screen.getByRole("button", { name: "Button" });
     await btn.click();
     expect(onClick).toHaveBeenCalledOnce();
-    await expect.element(btn).toMatchScreenshot();
+    expect(btn.element()).toMatchSnapshot();
   });
 
   it("toolbar", async () => {
@@ -90,28 +90,28 @@ describe("button", () => {
     const btn = screen.getByRole("button", { name: "Button" });
     await btn.click();
     expect(onClick).toHaveBeenCalledOnce();
-    await expect.element(btn).toMatchScreenshot();
+    expect(btn.element()).toMatchSnapshot();
   });
 
-  it("small", async () => {
+  it("small", () => {
     const screen = render(<Button size="sm">Button</Button>);
-    await expect
-      .element(screen.getByRole("button", { name: "Button" }))
-      .toMatchScreenshot();
+    expect(
+      screen.getByRole("button", { name: "Button" }).element()
+    ).toMatchSnapshot();
   });
 
-  it("extraSmall", async () => {
+  it("extraSmall", () => {
     const screen = render(<Button size="xs">Button</Button>);
-    await expect
-      .element(screen.getByRole("button", { name: "Button" }))
-      .toMatchScreenshot();
+    expect(
+      screen.getByRole("button", { name: "Button" }).element()
+    ).toMatchSnapshot();
   });
 
-  it("large", async () => {
+  it("large", () => {
     const screen = render(<Button size="lg">Button</Button>);
-    await expect
-      .element(screen.getByRole("button", { name: "Button" }))
-      .toMatchScreenshot();
+    expect(
+      screen.getByRole("button", { name: "Button" }).element()
+    ).toMatchSnapshot();
   });
 
   it("icon", async () => {
@@ -124,18 +124,18 @@ describe("button", () => {
     const btn = screen.getByRole("button", { name: "Add" });
     await btn.click();
     expect(onClick).toHaveBeenCalledOnce();
-    await expect.element(btn).toMatchScreenshot();
+    expect(btn.element()).toMatchSnapshot();
   });
 
-  it("iconSmall", async () => {
+  it("iconSmall", () => {
     const screen = render(
       <Button aria-label="Add" size="icon-sm">
         <PlusIcon />
       </Button>
     );
-    await expect
-      .element(screen.getByRole("button", { name: "Add" }))
-      .toMatchScreenshot();
+    expect(
+      screen.getByRole("button", { name: "Add" }).element()
+    ).toMatchSnapshot();
   });
 
   it("withIcon", async () => {
@@ -149,29 +149,29 @@ describe("button", () => {
     const btn = screen.getByRole("button", { name: "Archive" });
     await btn.click();
     expect(onClick).toHaveBeenCalledOnce();
-    await expect.element(btn).toMatchScreenshot();
+    expect(btn.element()).toMatchSnapshot();
   });
 
-  it("destructiveWithIcon", async () => {
+  it("destructiveWithIcon", () => {
     const screen = render(
       <Button variant="destructive">
         <TrashIcon data-icon="inline-start" />
         Delete
       </Button>
     );
-    await expect
-      .element(screen.getByRole("button", { name: "Delete" }))
-      .toMatchScreenshot();
+    expect(
+      screen.getByRole("button", { name: "Delete" }).element()
+    ).toMatchSnapshot();
   });
 
-  it("disabled", async () => {
+  it("disabled", () => {
     const screen = render(<Button disabled>Button</Button>);
     const btn = screen.getByRole("button", { name: "Button" });
-    await expect.element(btn).toBeDisabled();
-    await expect.element(btn).toMatchScreenshot();
+    expect(btn).toBeDisabled();
+    expect(btn.element()).toMatchSnapshot();
   });
 
-  it("allVariants", async () => {
+  it("allVariants", () => {
     const screen = render(
       <div className="flex flex-wrap items-center gap-2">
         <Button variant="default">Default</Button>
@@ -192,9 +192,9 @@ describe("button", () => {
       "Link",
       "Toolbar",
     ]) {
-      await expect.element(screen.getByRole("button", { name })).toBeVisible();
+      expect(screen.getByRole("button", { name })).toBeVisible();
     }
-    await expect.element(screen.container).toMatchScreenshot();
+    expect(screen.container).toMatchSnapshot();
   });
 
   it("allSizes", async () => {
@@ -209,15 +209,9 @@ describe("button", () => {
         </Button>
       </div>
     );
-    await expect
-      .element(screen.getByRole("button", { name: "Extra Small" }))
-      .toBeVisible();
-    await expect
-      .element(screen.getByRole("button", { name: "Large" }))
-      .toBeVisible();
-    await expect
-      .element(screen.getByRole("button", { name: "Add" }))
-      .toBeVisible();
-    await expect.element(screen.container).toMatchScreenshot();
+    expect(screen.getByRole("button", { name: "Extra Small" })).toBeVisible();
+    await expect(screen.getByRole("button", { name: "Large" })).toBeVisible();
+    expect(screen.getByRole("button", { name: "Add" })).toBeVisible();
+    expect(screen.container).toMatchSnapshot();
   });
 });

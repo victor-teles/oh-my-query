@@ -14,17 +14,13 @@ describe("button-group", () => {
         <Button variant="outline">Right</Button>
       </ButtonGroup>
     );
-    await expect.element(screen.getByRole("group")).toBeVisible();
-    await expect
-      .element(screen.getByRole("button", { name: "Left" }))
-      .toBeVisible();
-    await expect
-      .element(screen.getByRole("button", { name: "Right" }))
-      .toBeVisible();
-    await expect.element(screen.container).toMatchScreenshot();
+    expect(screen.getByRole("group")).toBeVisible();
+    await expect(screen.getByRole("button", { name: "Left" })).toBeVisible();
+    expect(screen.getByRole("button", { name: "Right" })).toBeVisible();
+    expect(screen.container).toMatchSnapshot();
   });
 
-  it("withIcons", async () => {
+  it("withIcons", () => {
     const screen = render(
       <ButtonGroup>
         <Button variant="outline" size="icon" aria-label="Bold">
@@ -38,13 +34,11 @@ describe("button-group", () => {
         </Button>
       </ButtonGroup>
     );
-    await expect
-      .element(screen.getByRole("button", { name: "Bold" }))
-      .toBeVisible();
-    await expect.element(screen.container).toMatchScreenshot();
+    expect(screen.getByRole("button", { name: "Bold" })).toBeVisible();
+    expect(screen.container).toMatchSnapshot();
   });
 
-  it("withSeparator", async () => {
+  it("withSeparator", () => {
     const screen = render(
       <ButtonGroup>
         <Button variant="outline">Copy</Button>
@@ -52,10 +46,10 @@ describe("button-group", () => {
         <Button variant="outline">Paste</Button>
       </ButtonGroup>
     );
-    await expect.element(screen.container).toMatchScreenshot();
+    expect(screen.container).toMatchSnapshot();
   });
 
-  it("vertical", async () => {
+  it("vertical", () => {
     const screen = render(
       <ButtonGroup orientation="vertical">
         <Button variant="outline">Top</Button>
@@ -65,6 +59,6 @@ describe("button-group", () => {
     );
     const group = screen.container.querySelector("[data-slot='button-group']");
     expect(group).toHaveAttribute("data-orientation", "vertical");
-    await expect.element(screen.container).toMatchScreenshot();
+    expect(screen.container).toMatchSnapshot();
   });
 });

@@ -22,13 +22,9 @@ describe("query-error-display", () => {
         sql="SELCT * FROM users"
       />
     );
-    await expect
-      .element(screen.getByText("Syntax", { exact: true }))
-      .toBeVisible();
-    await expect
-      .element(screen.getByRole("button", { name: /retry/i }))
-      .toBeVisible();
-    await expect.element(screen.container).toMatchScreenshot();
+    expect(screen.getByText("Syntax", { exact: true })).toBeVisible();
+    await expect(screen.getByRole("button", { name: /retry/i })).toBeVisible();
+    expect(screen.container).toMatchSnapshot();
   });
 
   it("connectionError", async () => {
@@ -47,13 +43,11 @@ describe("query-error-display", () => {
         sql="SELECT 1"
       />
     );
-    await expect
-      .element(screen.getByText("Connection", { exact: true }))
-      .toBeVisible();
-    await expect
-      .element(screen.getByRole("button", { name: /reconnect/i }))
-      .toBeVisible();
-    await expect.element(screen.container).toMatchScreenshot();
+    expect(screen.getByText("Connection", { exact: true })).toBeVisible();
+    await expect(
+      screen.getByRole("button", { name: /reconnect/i })
+    ).toBeVisible();
+    expect(screen.container).toMatchSnapshot();
   });
 
   it("constraintError", async () => {
@@ -72,11 +66,9 @@ describe("query-error-display", () => {
         sql="INSERT INTO users (id) VALUES (1)"
       />
     );
-    await expect
-      .element(screen.getByText("Constraint", { exact: true }))
-      .toBeVisible();
-    await expect.element(screen.getByText("23505")).toBeVisible();
-    await expect.element(screen.container).toMatchScreenshot();
+    expect(screen.getByText("Constraint", { exact: true })).toBeVisible();
+    await expect(screen.getByText("23505")).toBeVisible();
+    expect(screen.container).toMatchSnapshot();
   });
 
   it("retryFires", async () => {
@@ -96,6 +88,6 @@ describe("query-error-display", () => {
     );
     await screen.getByRole("button", { name: /retry/i }).click();
     expect(onRetry).toHaveBeenCalledOnce();
-    await expect.element(screen.container).toMatchScreenshot();
+    expect(screen.container).toMatchSnapshot();
   });
 });

@@ -97,29 +97,13 @@ export default defineConfig({
         test: {
           browser: {
             enabled: true,
-            expect: {
-              toMatchScreenshot: {
-                comparatorName: "pixelmatch",
-                comparatorOptions: {
-                  allowedMismatchedPixelRatio: 0.02,
-                  threshold: 0.2,
-                },
-              },
-            },
             headless: true,
             instances: [{ browser: "chromium" }],
-            provider: playwright({
-              launchOptions: {
-                args: ["--font-render-hinting=none", "--disable-lcd-text"],
-              },
-            }),
+            provider: playwright(),
           },
-          fileParallelism: false,
           include: ["src/**/*.browser.test.tsx"],
           name: "browser",
-          retry: 2,
           setupFiles: ["./src/mainview/test/setup-browser.ts"],
-          testTimeout: 30_000,
         },
       },
     ],

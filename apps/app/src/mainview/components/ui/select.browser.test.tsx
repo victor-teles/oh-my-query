@@ -31,11 +31,11 @@ describe("select", () => {
     );
     const trigger = screen.getByRole("combobox");
     await trigger.click();
-    await expect.element(page.getByText("MySQL")).toBeInTheDocument();
-    await expect.element(page.getByRole("listbox")).toMatchScreenshot();
+    expect(page.getByText("MySQL")).toBeInTheDocument();
+    expect(page.getByRole("listbox").element()).toMatchSnapshot();
   });
 
-  it("withLabel", async () => {
+  it("withLabel", () => {
     const screen = render(
       <div className="grid gap-1.5">
         <Label>Database Type</Label>
@@ -51,8 +51,8 @@ describe("select", () => {
         </Select>
       </div>
     );
-    await expect.element(screen.getByText("Database Type")).toBeVisible();
-    await expect.element(screen.container).toMatchScreenshot();
+    expect(screen.getByText("Database Type")).toBeVisible();
+    expect(screen.container).toMatchSnapshot();
   });
 
   it("withGroups", async () => {
@@ -78,16 +78,12 @@ describe("select", () => {
       </Select>
     );
     await screen.getByRole("combobox").click();
-    await expect
-      .element(page.getByText("SQL", { exact: true }))
-      .toBeInTheDocument();
-    await expect
-      .element(page.getByText("NoSQL", { exact: true }))
-      .toBeInTheDocument();
-    await expect.element(page.getByRole("listbox")).toMatchScreenshot();
+    expect(page.getByText("SQL", { exact: true })).toBeInTheDocument();
+    await expect(page.getByText("NoSQL", { exact: true })).toBeInTheDocument();
+    expect(page.getByRole("listbox").element()).toMatchSnapshot();
   });
 
-  it("small", async () => {
+  it("small", () => {
     const screen = render(
       <Select defaultValue="50">
         <SelectTrigger size="sm" className="w-24">
@@ -101,7 +97,7 @@ describe("select", () => {
         </SelectContent>
       </Select>
     );
-    await expect.element(screen.getByRole("combobox")).toBeVisible();
-    await expect.element(screen.container).toMatchScreenshot();
+    expect(screen.getByRole("combobox")).toBeVisible();
+    expect(screen.container).toMatchSnapshot();
   });
 });

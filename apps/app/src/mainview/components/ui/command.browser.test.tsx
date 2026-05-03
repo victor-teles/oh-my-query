@@ -52,15 +52,15 @@ describe("command", () => {
         </CommandList>
       </Command>
     );
-    await expect.element(screen.getByText("New Connection")).toBeVisible();
-    await expect.element(screen.getByText("Settings")).toBeVisible();
+    expect(screen.getByText("New Connection")).toBeVisible();
+    await expect(screen.getByText("Settings")).toBeVisible();
     const input = screen.getByPlaceholder("Type a command or search...");
     await input.fill("settings");
-    await expect.element(screen.getByText("Settings")).toBeVisible();
-    await expect.element(screen.container).toMatchScreenshot();
+    expect(screen.getByText("Settings")).toBeVisible();
+    expect(screen.container).toMatchSnapshot();
   });
 
-  it("empty", async () => {
+  it("empty", () => {
     const screen = render(
       <Command className="w-80 rounded-lg border shadow-md">
         <CommandInput placeholder="Search..." />
@@ -69,7 +69,7 @@ describe("command", () => {
         </CommandList>
       </Command>
     );
-    await expect.element(screen.getByText("No results found.")).toBeVisible();
-    await expect.element(screen.container).toMatchScreenshot();
+    expect(screen.getByText("No results found.")).toBeVisible();
+    expect(screen.container).toMatchSnapshot();
   });
 });

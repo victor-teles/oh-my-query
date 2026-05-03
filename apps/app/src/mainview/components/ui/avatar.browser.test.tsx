@@ -22,36 +22,36 @@ describe("avatar", () => {
     expect(avatar).toBeTruthy();
   });
 
-  it("fallback", async () => {
+  it("fallback", () => {
     const screen = render(
       <Avatar>
         <AvatarImage src="/broken-image.png" alt="User" />
         <AvatarFallback>VM</AvatarFallback>
       </Avatar>
     );
-    await expect.element(screen.getByText("VM")).toBeVisible();
-    await expect.element(screen.container).toMatchScreenshot();
+    expect(screen.getByText("VM")).toBeVisible();
+    expect(screen.container).toMatchSnapshot();
   });
 
-  it("small", async () => {
+  it("small", () => {
     const screen = render(
       <Avatar size="sm">
         <AvatarFallback>SM</AvatarFallback>
       </Avatar>
     );
-    await expect.element(screen.container).toMatchScreenshot();
+    expect(screen.container).toMatchSnapshot();
   });
 
-  it("large", async () => {
+  it("large", () => {
     const screen = render(
       <Avatar size="lg">
         <AvatarFallback>LG</AvatarFallback>
       </Avatar>
     );
-    await expect.element(screen.container).toMatchScreenshot();
+    expect(screen.container).toMatchSnapshot();
   });
 
-  it("withBadge", async () => {
+  it("withBadge", () => {
     const screen = render(
       <Avatar>
         <AvatarFallback>VM</AvatarFallback>
@@ -60,7 +60,7 @@ describe("avatar", () => {
     );
     const badge = screen.container.querySelector("[data-slot='avatar-badge']");
     expect(badge).toBeTruthy();
-    await expect.element(screen.container).toMatchScreenshot();
+    expect(screen.container).toMatchSnapshot();
   });
 
   it("group", async () => {
@@ -78,8 +78,8 @@ describe("avatar", () => {
         <AvatarGroupCount>+3</AvatarGroupCount>
       </AvatarGroup>
     );
-    await expect.element(screen.getByText("A")).toBeVisible();
-    await expect.element(screen.getByText("+3")).toBeVisible();
-    await expect.element(screen.container).toMatchScreenshot();
+    expect(screen.getByText("A")).toBeVisible();
+    await expect(screen.getByText("+3")).toBeVisible();
+    expect(screen.container).toMatchSnapshot();
   });
 });

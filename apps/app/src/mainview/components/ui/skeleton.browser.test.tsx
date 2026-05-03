@@ -4,19 +4,19 @@ import { render } from "vitest-browser-react";
 import { Skeleton } from "./skeleton";
 
 describe("skeleton", () => {
-  it("default", async () => {
+  it("default", () => {
     const screen = render(<Skeleton className="h-4 w-48" />);
     const skeleton = screen.container.querySelector("[data-slot='skeleton']");
     expect(skeleton).toBeTruthy();
-    await expect.element(screen.container).toMatchScreenshot();
+    expect(screen.container).toMatchSnapshot();
   });
 
-  it("circle", async () => {
+  it("circle", () => {
     const screen = render(<Skeleton className="size-10 rounded-full" />);
-    await expect.element(screen.container).toMatchScreenshot();
+    expect(screen.container).toMatchSnapshot();
   });
 
-  it("cardPlaceholder", async () => {
+  it("cardPlaceholder", () => {
     const screen = render(
       <div className="flex items-center gap-3">
         <Skeleton className="size-10 rounded-full" />
@@ -26,6 +26,6 @@ describe("skeleton", () => {
         </div>
       </div>
     );
-    await expect.element(screen.container).toMatchScreenshot();
+    expect(screen.container).toMatchSnapshot();
   });
 });

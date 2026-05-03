@@ -34,12 +34,12 @@ describe("scroll-area", () => {
         </div>
       </ScrollArea>
     );
-    await expect.element(screen.getByText("Tables")).toBeVisible();
-    await expect.element(screen.getByText("users")).toBeVisible();
-    await expect.element(screen.container).toMatchScreenshot();
+    expect(screen.getByText("Tables")).toBeVisible();
+    await expect(screen.getByText("users")).toBeVisible();
+    expect(screen.container).toMatchSnapshot();
   });
 
-  it("horizontal", async () => {
+  it("horizontal", () => {
     const screen = render(
       <ScrollArea className="w-72 rounded-md border">
         <div className="flex gap-3 p-3">
@@ -57,6 +57,6 @@ describe("scroll-area", () => {
         </div>
       </ScrollArea>
     );
-    await expect.element(screen.container).toMatchScreenshot();
+    expect(screen.container).toMatchSnapshot();
   });
 });

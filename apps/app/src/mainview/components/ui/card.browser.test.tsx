@@ -30,19 +30,13 @@ describe("card", () => {
         </CardFooter>
       </Card>
     );
-    await expect
-      .element(screen.getByText("Connection", { exact: true }))
-      .toBeVisible();
-    await expect
-      .element(screen.getByText("Configure your database connection."))
-      .toBeVisible();
-    await expect
-      .element(screen.getByText("PostgreSQL on localhost:5432"))
-      .toBeVisible();
-    await expect
-      .element(screen.getByRole("button", { name: "Connect" }))
-      .toBeVisible();
-    await expect.element(screen.container).toMatchScreenshot();
+    expect(screen.getByText("Connection", { exact: true })).toBeVisible();
+    await expect(
+      screen.getByText("Configure your database connection.")
+    ).toBeVisible();
+    expect(screen.getByText("PostgreSQL on localhost:5432")).toBeVisible();
+    await expect(screen.getByRole("button", { name: "Connect" })).toBeVisible();
+    expect(screen.container).toMatchSnapshot();
   });
 
   it("small", async () => {
@@ -57,9 +51,9 @@ describe("card", () => {
         </CardContent>
       </Card>
     );
-    await expect.element(screen.getByText("Quick query")).toBeVisible();
-    await expect.element(screen.getByText("SELECT * FROM users")).toBeVisible();
-    await expect.element(screen.container).toMatchScreenshot();
+    expect(screen.getByText("Quick query")).toBeVisible();
+    await expect(screen.getByText("SELECT * FROM users")).toBeVisible();
+    expect(screen.container).toMatchSnapshot();
   });
 
   it("withAction", async () => {
@@ -80,10 +74,10 @@ describe("card", () => {
         </CardContent>
       </Card>
     );
-    await expect.element(screen.getByText("Query history")).toBeVisible();
+    expect(screen.getByText("Query history")).toBeVisible();
     const clearButton = screen.getByRole("button", { name: "Clear" });
-    await expect.element(clearButton).toBeVisible();
+    await expect(clearButton).toBeVisible();
     await clearButton.click();
-    await expect.element(screen.container).toMatchScreenshot();
+    expect(screen.container).toMatchSnapshot();
   });
 });

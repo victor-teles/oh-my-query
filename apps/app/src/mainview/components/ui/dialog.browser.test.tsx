@@ -46,13 +46,11 @@ describe("dialog", () => {
       </Dialog>
     );
     await screen.getByRole("button", { name: "Open Dialog" }).click();
-    await expect.element(page.getByText("New Connection")).toBeInTheDocument();
-    await expect
-      .element(
-        page.getByText("Add a new database connection to your workspace.")
-      )
-      .toBeInTheDocument();
-    await expect.element(page.getByRole("dialog")).toMatchScreenshot();
+    expect(page.getByText("New Connection")).toBeInTheDocument();
+    expect(
+      page.getByText("Add a new database connection to your workspace.")
+    ).toBeInTheDocument();
+    await expect(page.getByRole("dialog").element()).toMatchSnapshot();
   });
 
   it("withFooterClose", async () => {
@@ -76,8 +74,8 @@ describe("dialog", () => {
       </Dialog>
     );
     await screen.getByRole("button", { name: "Confirm Action" }).click();
-    await expect.element(page.getByRole("dialog")).toBeVisible();
-    await expect.element(page.getByRole("dialog")).toMatchScreenshot();
+    expect(page.getByRole("dialog")).toBeVisible();
+    expect(page.getByRole("dialog").element()).toMatchSnapshot();
   });
 
   it("withoutCloseButton", async () => {
@@ -97,7 +95,7 @@ describe("dialog", () => {
       </Dialog>
     );
     await screen.getByRole("button", { name: "Minimal Dialog" }).click();
-    await expect.element(page.getByRole("dialog")).toBeVisible();
-    await expect.element(page.getByRole("dialog")).toMatchScreenshot();
+    expect(page.getByRole("dialog")).toBeVisible();
+    expect(page.getByRole("dialog").element()).toMatchSnapshot();
   });
 });

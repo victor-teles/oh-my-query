@@ -8,12 +8,12 @@ describe("textarea", () => {
   it("default", async () => {
     const screen = render(<Textarea placeholder="Type your message..." />);
     const textarea = screen.getByPlaceholder("Type your message...");
-    await expect.element(textarea).toBeVisible();
+    expect(textarea).toBeVisible();
     await textarea.click();
-    await expect.element(textarea).toHaveFocus();
+    expect(textarea).toHaveFocus();
     await textarea.fill("SELECT * FROM users;");
-    await expect.element(textarea).toHaveValue("SELECT * FROM users;");
-    await expect.element(textarea).toMatchScreenshot();
+    await expect(textarea).toHaveValue("SELECT * FROM users;");
+    expect(textarea.element()).toMatchSnapshot();
   });
 
   it("withLabel", async () => {
@@ -25,10 +25,10 @@ describe("textarea", () => {
     );
     const textarea = screen.getByLabelText("Message");
     await textarea.click();
-    await expect.element(textarea).toHaveFocus();
+    expect(textarea).toHaveFocus();
     await textarea.fill("A multi-line\ntext input");
-    await expect.element(textarea).toHaveValue("A multi-line\ntext input");
-    await expect.element(screen.container).toMatchScreenshot();
+    expect(textarea).toHaveValue("A multi-line\ntext input");
+    expect(screen.container).toMatchSnapshot();
   });
 
   it("disabled", async () => {
@@ -40,11 +40,11 @@ describe("textarea", () => {
       />
     );
     const textarea = screen.getByPlaceholder("Type your message...");
-    await expect.element(textarea).toBeDisabled();
-    await expect.element(textarea).toMatchScreenshot();
+    expect(textarea).toBeDisabled();
+    await expect(textarea.element()).toMatchSnapshot();
   });
 
-  it("invalid", async () => {
+  it("invalid", () => {
     const screen = render(
       <Textarea
         aria-invalid
@@ -53,7 +53,7 @@ describe("textarea", () => {
       />
     );
     const textarea = screen.getByPlaceholder("Type your message...");
-    await expect.element(textarea).toHaveAttribute("aria-invalid", "true");
-    await expect.element(textarea).toMatchScreenshot();
+    expect(textarea).toHaveAttribute("aria-invalid", "true");
+    expect(textarea.element()).toMatchSnapshot();
   });
 });

@@ -1,0 +1,12 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`context-menu > default 1`] = `
+<div>
+  <div
+    class="select-none flex h-32 w-72 items-center justify-center rounded-md border border-dashed text-xs text-muted-foreground"
+    data-slot="context-menu-trigger"
+  >
+    Right click here
+  </div>
+</div>
+`;

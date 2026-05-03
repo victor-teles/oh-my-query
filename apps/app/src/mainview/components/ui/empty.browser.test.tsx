@@ -27,15 +27,13 @@ describe("empty", () => {
         </EmptyHeader>
       </Empty>
     );
-    await expect.element(screen.getByText("No results")).toBeVisible();
-    await expect
-      .element(
-        screen.getByText(
-          "Your query returned no rows. Try adjusting the filters."
-        )
+    expect(screen.getByText("No results")).toBeVisible();
+    await expect(
+      screen.getByText(
+        "Your query returned no rows. Try adjusting the filters."
       )
-      .toBeVisible();
-    await expect.element(screen.container).toMatchScreenshot();
+    ).toBeVisible();
+    expect(screen.container).toMatchSnapshot();
   });
 
   it("withAction", async () => {
@@ -55,14 +53,14 @@ describe("empty", () => {
         </EmptyContent>
       </Empty>
     );
-    await expect.element(screen.getByText("No connections")).toBeVisible();
-    await expect
-      .element(screen.getByRole("button", { name: "Add Connection" }))
-      .toBeVisible();
-    await expect.element(screen.container).toMatchScreenshot();
+    expect(screen.getByText("No connections")).toBeVisible();
+    await expect(
+      screen.getByRole("button", { name: "Add Connection" })
+    ).toBeVisible();
+    expect(screen.container).toMatchSnapshot();
   });
 
-  it("searchEmpty", async () => {
+  it("searchEmpty", () => {
     const screen = render(
       <Empty>
         <EmptyHeader>
@@ -76,7 +74,7 @@ describe("empty", () => {
         </EmptyHeader>
       </Empty>
     );
-    await expect.element(screen.getByText("No matches found")).toBeVisible();
-    await expect.element(screen.container).toMatchScreenshot();
+    expect(screen.getByText("No matches found")).toBeVisible();
+    expect(screen.container).toMatchSnapshot();
   });
 });

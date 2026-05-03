@@ -36,10 +36,8 @@ describe("sonner", () => {
       </ThemeProvider>
     );
     await screen.getByRole("button", { name: "Delete connection" }).click();
-    await expect.element(page.getByText('"Production" deleted')).toBeVisible();
-    await expect
-      .element(page.getByRole("button", { name: "Undo" }))
-      .toBeVisible();
-    await expect.element(screen.container).toMatchScreenshot();
+    expect(page.getByText('"Production" deleted')).toBeVisible();
+    await expect(page.getByRole("button", { name: "Undo" })).toBeVisible();
+    expect(screen.container).toMatchSnapshot();
   });
 });

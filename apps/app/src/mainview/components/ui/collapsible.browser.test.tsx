@@ -30,15 +30,15 @@ describe("collapsible", () => {
         </CollapsibleContent>
       </Collapsible>
     );
-    await expect.element(screen.getByText("users")).toBeVisible();
+    expect(screen.getByText("users")).toBeVisible();
 
     const toggle = screen.getByRole("button", { name: "Toggle" });
     await toggle.click();
-    await expect.element(screen.getByText("orders")).toBeVisible();
-    await expect.element(screen.getByText("products")).toBeVisible();
+    await expect(screen.getByText("orders")).toBeVisible();
+    expect(screen.getByText("products")).toBeVisible();
 
     await toggle.click();
-    await expect.element(screen.container).toMatchScreenshot();
+    expect(screen.container).toMatchSnapshot();
   });
 
   it("defaultOpen", async () => {
@@ -65,8 +65,8 @@ describe("collapsible", () => {
         </CollapsibleContent>
       </Collapsible>
     );
-    await expect.element(screen.getByText("name")).toBeVisible();
-    await expect.element(screen.getByText("email")).toBeVisible();
-    await expect.element(screen.container).toMatchScreenshot();
+    expect(screen.getByText("name")).toBeVisible();
+    await expect(screen.getByText("email")).toBeVisible();
+    expect(screen.container).toMatchSnapshot();
   });
 });
