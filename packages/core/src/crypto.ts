@@ -21,7 +21,7 @@ function importKey(raw: Uint8Array): Promise<CryptoKey> {
   }
   return crypto.subtle.importKey(
     "raw",
-    raw as BufferSource,
+    raw as NodeJS.BufferSource,
     { name: "AES-GCM" },
     false,
     ["encrypt", "decrypt"]
@@ -152,9 +152,9 @@ export async function encryptLine(plaintext: string): Promise<string> {
   let cipher: ArrayBuffer;
   try {
     cipher = await crypto.subtle.encrypt(
-      { iv: nonce as BufferSource, name: "AES-GCM" },
+      { iv: nonce as NodeJS.BufferSource, name: "AES-GCM" },
       key,
-      data as BufferSource
+      data as NodeJS.BufferSource
     );
   } catch {
     throw new CryptoError("ENCRYPT_FAILED", "encryption failed");
@@ -181,9 +181,9 @@ export async function decryptLine(encoded: string): Promise<string> {
   let plain: ArrayBuffer;
   try {
     plain = await crypto.subtle.decrypt(
-      { iv: nonce as BufferSource, name: "AES-GCM" },
+      { iv: nonce as NodeJS.BufferSource, name: "AES-GCM" },
       key,
-      cipher as BufferSource
+      cipher as NodeJS.BufferSource
     );
   } catch {
     throw new CryptoError("DECRYPT_FAILED", "decryption failed");

@@ -7,6 +7,7 @@
     ".": "./src/index.ts"
   },
   "scripts": {
+    "check-types": "tsgo --noEmit",
     "test": "vitest run --passWithNoTests",
     "test:watch": "vitest"
   },
@@ -17,6 +18,7 @@
   "devDependencies": {
     "@oh-my-query/config": "workspace:*",
     "@types/mssql": "^9.1.5",
+    "@types/node": "^25.6.0",
     "@typescript/native-preview": "catalog:",
     "vitest": "catalog:"
   }

@@ -8,6 +8,7 @@
     "./client": "./src/client.ts"
   },
   "scripts": {
+    "check-types": "tsgo --noEmit",
     "test": "vitest run --passWithNoTests",
     "test:watch": "vitest"
   },

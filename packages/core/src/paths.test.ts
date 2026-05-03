@@ -2,7 +2,7 @@ import type * as NodeOs from "node:os";
 
 import { describe, expect, it, vi } from "vitest";
 
-vi.mock<typeof NodeOs>("node:os", async () => {
+vi.mock<typeof NodeOs>(import("node:os"), async () => {
   const actual = await vi.importActual<typeof NodeOs>("node:os");
   return {
     ...actual,

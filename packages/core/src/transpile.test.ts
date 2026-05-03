@@ -36,7 +36,7 @@ describe("transpileSql", () => {
 
   it("throws UNSUPPORTED_DIALECT for an unknown source dialect", () => {
     const err = captureThrow(() =>
-      transpileSql("SELECT 1", "fakedb", "postgres")
+      transpileSql("SELECT 1", "fakedb", "postgresql")
     );
     expect(err).toBeInstanceOf(DbError);
     expect((err as DbError).code).toBe("UNSUPPORTED_DIALECT");
