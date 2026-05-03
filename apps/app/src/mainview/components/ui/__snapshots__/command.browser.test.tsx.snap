@@ -77,7 +77,6 @@ exports[`command > default 1`] = `
       data-slot="command-list"
       id="radix-_r_0_"
       role="listbox"
-      style="--cmdk-list-height: 68.0px"
       tabindex="-1"
     >
       <div

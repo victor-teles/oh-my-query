@@ -10,6 +10,7 @@ const VOLATILE_STYLE_PROPS = new Set([
   "--front-toast-height",
   "--initial-height",
   "--offset",
+  "--cmdk-list-height",
 ]);
 
 const VOLATILE_SVG_TEXT_ATTRS = ["x", "y", "dx", "dy"];
