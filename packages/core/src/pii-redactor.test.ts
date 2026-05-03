@@ -73,6 +73,28 @@ describe("redactPii — credit card", () => {
     const { count } = redactPii("amex 378282246310005");
     expect(count).toBe(1);
   });
+
+  it("redacts a Visa card with hyphen separators", () => {
+    const { text, count } = redactPii("card: 4111-1111-1111-1111");
+    expect(text).toBe("card: [REDACTED]");
+    expect(count).toBe(1);
+  });
+
+  it("redacts a Visa card with space separators", () => {
+    const { text, count } = redactPii("card: 4111 1111 1111 1111");
+    expect(text).toBe("card: [REDACTED]");
+    expect(count).toBe(1);
+  });
+
+  it("redacts a MasterCard with hyphen separators", () => {
+    const { count } = redactPii("mc 5500-0000-0000-0004");
+    expect(count).toBe(1);
+  });
+
+  it("redacts an Amex card with hyphen separators (4-6-5)", () => {
+    const { count } = redactPii("amex 3782-822463-10005");
+    expect(count).toBe(1);
+  });
 });
 
 describe("redactPii — JWT", () => {

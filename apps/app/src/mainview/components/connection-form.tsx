@@ -419,7 +419,7 @@ const AiContextSection = ({
       <CollapsibleTrigger
         render={
           <button
-            className="flex w-full items-center gap-1.5 text-section-label hover:text-foreground"
+            className="text-section-label flex w-full items-center gap-1.5 hover:text-foreground"
             type="button"
           >
             <ChevronDown
@@ -627,7 +627,10 @@ const buildConnection = (form: FormState): DatabaseConnection => {
   const hasHost = NEEDS_HOST.has(form.type);
   const hasUsername = NEEDS_USERNAME.has(form.type);
   const emoji = form.emoji.trim();
-  const customPiiPatterns = form.piiRedaction
+  const customPiiPatterns = effectivePiiEnabled(
+    form.piiRedaction,
+    form.environment
+  )
     ? parseCustomPiiPatterns(form.customPiiPatterns)
     : undefined;
   return {

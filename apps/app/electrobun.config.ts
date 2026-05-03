@@ -1,5 +1,16 @@
 import type { ElectrobunConfig } from "electrobun";
 
+import { nativeBunModules } from "./scripts/native-bun-assets.ts";
+
+const bunExternals = nativeBunModules.flatMap((m) => [...m.externals]);
+const bunAssetCopy = Object.fromEntries(
+  nativeBunModules.flatMap((m) =>
+    m.assets.map(
+      (a) => [`assets/bun/${a.fileName}`, `bun/${a.fileName}`] as const
+    )
+  )
+);
+
 export default {
   app: {
     identifier: "dev.ohmyquery.app",
@@ -7,8 +18,11 @@ export default {
     version: "0.0.10",
   },
   build: {
+    bun: {
+      external: bunExternals,
+    },
     copy: {
-      "assets/bun/polyglot_sql_wasm_bg.wasm": "bun/polyglot_sql_wasm_bg.wasm",
+      ...bunAssetCopy,
       "dist/**/*": "views/mainview/",
     },
     linux: {

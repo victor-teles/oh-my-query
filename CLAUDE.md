@@ -1,144 +1,154 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+Guidance for Claude Code working in this repo. Keep it short, keep it true.
 
-## Project Overview
+## What this is
 
-**oh-my-query** is a desktop application built for querying databases with IA. It's a Turborepo monorepo with a React renderer (Vite) packaged as a native desktop app via Electrobun. The bun-side process lives in `apps/app/src/bun/` and exposes RPC handlers consumed by the renderer through `electrobun/view`.
+**oh-my-query** — desktop SQL/AI client. Turborepo monorepo. React 19 renderer (Vite) packaged as a native desktop app via Electrobun. The bun-side process in `apps/app/src/bun/` exposes RPC handlers consumed by the renderer through `electrobun/view`.
 
 ## Commands
 
 ```bash
-# Install dependencies
-bun install
-
-# Development
-bun run dev          # Start all apps via Turborepo
-bun run dev:web      # Start only the renderer (http://localhost:3001)
-
-# Electrobun desktop app (run from apps/app)
-cd apps/app && bun run desktop:dev    # Dev mode (concurrent vite + electrobun watcher)
-cd apps/app && bun run desktop:build  # Production build
-
-# Build & type-check
-bun run build        # Build all apps
-bun run check-types  # TypeScript type-check across all workspaces
-
-# Linting & formatting (Ultracite = Oxlint + Oxfmt)
-bun run check        # Check for lint/format issues
-bun run fix          # Auto-fix lint/format issues
+bun install                              # deps
+bun run dev                              # all apps (Turborepo)
+bun run dev:web                          # renderer only — http://localhost:3001
+bun run --cwd apps/app desktop:dev       # Electrobun dev (vite + watcher)
+bun run --cwd apps/app desktop:build     # production desktop build
+bun run check-types                      # tsc across workspaces
+bun run check                            # lint + format check (Ultracite)
+bun run fix                              # auto-fix lint + format
+bun run --cwd apps/app test              # all tests — REQUIRED before declaring done
 ```
 
 ## Development Guidelines
 
-- Always run type-check, lint, and tests after multi-file changes before declaring work complete.
-- Do not stop mid-implementation. If a plan has multiple tasks, execute all of them sequentially and only pause for explicit user questions.
-- When fixing CI failures, address the root cause — never loosen thresholds or disable checks to make them pass.
-- Before implementing a GitHub issue, verify the current git branch and create a feature branch if on main.
-- **Always write tests for new implementations.** When you add a new component, hook, or module, colocate a `*.test.tsx` / `*.test.ts` file next to it (Vitest + `@testing-library/react`, jsdom). Cover rendering, primary interactions, and conditional branches — at minimum, the behavior a reviewer would otherwise manually re-verify. Run `bun run --cwd apps/app test` before declaring the task complete. CI gates Vitest and Playwright e2e at 40% line coverage — see `TESTING.md` for the full story.
+- Run type-check, lint, and tests after multi-file changes, before declaring done.
+- Do not stop mid-implementation. Execute all tasks of a plan sequentially; pause only for explicit user questions.
+- Fix CI failures at the root cause. Never loosen thresholds or disable checks.
+- Before implementing a GitHub issue, verify the branch and create a feature branch if on `main`.
+- Always write tests for new code. Colocate `*.browser.test.tsx` (UI/hooks) or `*.test.ts` (pure logic) next to the unit. Cover rendering, primary interactions, and conditional branches. CI gates Vitest + Playwright at 80% line coverage.
 
-## Monorepo Structure
+## Monorepo
 
-- **`apps/app/`** — Desktop app (React 19 renderer in `src/mainview/`, bun-side process in `src/bun/`, Electrobun, TanStack Router, Vite, Tailwind v4)
-- **`packages/config/`** — Shared TypeScript config (`tsconfig.base.json`)
-- **`packages/env/`** — Type-safe environment variables via `@t3-oss/env-core`
+- `apps/app/` — desktop app: React 19 in `src/mainview/`, bun process in `src/bun/`, Electrobun, TanStack Router, Vite, Tailwind v4.
+- `packages/config/` — shared `tsconfig.base.json`.
+- `packages/env/` — type-safe env vars (`@t3-oss/env-core`, Zod) in `packages/env/src/web.ts`. Web vars must be prefixed `VITE_`.
+- Workspace packages: `@oh-my-query/*` via `workspace:*`. Shared deps via bun's `catalog:` in root `package.json`.
 
-Workspace packages are prefixed `@oh-my-query/` and use `workspace:*` protocol. Shared dependencies use bun's `catalog:` protocol (defined in root `package.json`).
+## Architecture (`apps/app`)
 
-## Architecture
+- **Routing**: TanStack Router, file-based in `src/mainview/routes/`. `routeTree.gen.ts` is generated — don't edit.
+- **Path alias**: `@/` → `apps/app/src/mainview/` (configured in `vite.config.ts` and `tsconfig.json`).
+- **Styling**: Tailwind v4 via `@tailwindcss/vite`. CSS entry `src/mainview/index.css`. CSS vars in `oklch` for light/dark. Glass: `backdrop-blur-xl backdrop-saturate-200` + `bg-secondary/50`.
+- **UI**: shadcn/ui (base-mira, non-RSC) in `src/mainview/components/ui/`. Add via `bunx shadcn@latest add <component>` from `apps/app/`.
+- **Theming**: `next-themes`, dark default, class-based.
+- **Desktop runtime**: Electrobun. Vite bundles the renderer into `dist/`, copied to `views/mainview/` inside the `.app`. The bun-side bundles from `src/bun/index.ts`.
+  - RPC: `Electroview.defineRPC` (renderer, `src/mainview/lib/ipc.ts`) ↔ `defineElectrobunRPC` (bun, `src/bun/rpc.ts`).
+  - DB drivers + persistence: `@oh-my-query/core`, `@oh-my-query/drivers`, `@oh-my-query/drivers-redis`. Consumed by `src/bun/rpc.ts`.
+  - `@polyglot-sql/sdk` WASM is copied next to bundled bun code via `apps/app/scripts/copy-bun-assets.ts` (runs before `electrobun dev`/`build`).
+  - Vite must use `base: "./"` so `dist/index.html` uses relative asset paths.
+- **State**: Custom hooks centralize logic (`useQueryTabs`, `useConnectionLifecycle`). React Context (`QueryExecutionContext`) for cross-tree sharing.
+- **Animation**: `motion` (Framer Motion v12+). `layout` for morphing, `AnimatePresence` for enter/exit. Spring `{ type: "spring", stiffness: 400, damping: 30 }`. CSS `@keyframes` for trivial cases. Always respect `prefers-reduced-motion`.
+- **Titlebar**: slot props `leading` / `center` / `children`. `center` is absolutely positioned (Dynamic Island overlay).
+- **SQL editor**: CodeMirror (`@uiw/react-codemirror` + `@codemirror/lang-sql`), GitHub Dark theme. Override with `!bg-background` on `.cm-editor`, `.cm-gutters`, `.cm-activeLineGutter`.
 
-### Desktop App (`apps/app/`)
+## Conventions
 
-- **Routing**: TanStack Router with file-based routing in `src/mainview/routes/`. Route tree is auto-generated (`routeTree.gen.ts`).
-- **Styling**: Tailwind CSS v4 via `@tailwindcss/vite` plugin. CSS entry point is `src/mainview/index.css`. Theme uses CSS variables with `oklch` color format for light/dark modes. Glassmorphism effects use `backdrop-blur-xl backdrop-saturate-200` with semi-transparent backgrounds (e.g., `bg-secondary/50`).
-- **UI Components**: shadcn/ui (base-mira style, non-RSC mode). Components live in `src/mainview/components/ui/`. Add new components with `bunx shadcn@latest add <component>` from the `apps/app/` directory.
-- **Path alias**: `@/` maps to `apps/app/src/mainview/` (configured in both `vite.config.ts` and `tsconfig.json`).
-- **Theming**: `next-themes` with dark mode default, class-based strategy.
-- **Desktop runtime**: Electrobun. Renderer code is bundled by Vite into `dist/` and copied into the `.app` at `views/mainview/`. The bun-side process is bundled from `src/bun/` (entry `src/bun/index.ts`).
-  - Renderer ↔ bun communication uses Electrobun RPC (`Electroview.defineRPC` on the renderer side in `src/mainview/lib/ipc.ts`; `defineElectrobunRPC` on the bun side in `src/bun/rpc.ts`).
-  - Database drivers and persistence helpers live in TypeScript packages (`@oh-my-query/core`, `@oh-my-query/drivers`, `@oh-my-query/drivers-redis`) consumed by `src/bun/rpc.ts`.
-  - The `@polyglot-sql/sdk` WASM blob is copied next to the bundled bun code via `apps/app/scripts/copy-bun-assets.ts` (run before `electrobun dev` and `electrobun build`).
-  - Vite must use `base: "./"` so `dist/index.html` references assets via relative paths — Electrobun's bundler resolves them from the dist root.
-- **Animations**: `motion` (Framer Motion v12+) for complex animations. Use `layout` props for morphing transitions and `AnimatePresence` for enter/exit animations. Spring config `{ type: "spring", stiffness: 400, damping: 30 }` for iOS-like snappiness. Simple animations can use CSS `@keyframes`.
-- **State Management**: Custom React hooks (e.g., `useQueryTabs`, `useConnectionLifecycle`) centralize state logic. React Context (e.g., `QueryExecutionContext`) for cross-component state sharing between disconnected parts of the component tree.
-- **Titlebar**: Uses `leading`, `center`, and `children` slot props. The `center` slot uses absolute positioning to overlay content (like the Dynamic Island) without disrupting the flex layout.
-- **SQL Editor**: CodeMirror (`@uiw/react-codemirror` + `@codemirror/lang-sql`) with GitHub Dark theme. Override backgrounds with Tailwind `!bg-background` on `.cm-editor`, `.cm-gutters`, `.cm-activeLineGutter` for transparency.
-
-### Environment Variables
-
-Defined in `packages/env/src/web.ts` using Zod schemas. Web-specific env vars must be prefixed with `VITE_`.
+- **Bun** v1.3.9. **Turborepo** for builds.
+- **Formatting** (Oxfmt): double quotes, semicolons, 2-space indent, ES5 trailing commas, sorted imports.
+- **Linting** (Oxlint + Ultracite core/React presets).
+- **TypeScript**: strict, `noUncheckedIndexedAccess`, `verbatimModuleSyntax`. No `any`, no unsafe casts, no `// @ts-expect-error` without a one-line _why_.
+- **React 19**: ref as a prop. Never `forwardRef`.
+- **No code comments by default.** Don't narrate code, restate identifiers, or leave change-log breadcrumbs ("added X", "now uses Y", "removed Z"). Rename, restructure, or push the explanation into the commit/PR. Comment only when the _why_ is non-obvious — a hidden constraint, subtle invariant, or specific-bug workaround — and keep it to one short line.
 
 ## Skills
 
-When working with React/TypeScript frontend code, activate these skills:
+Activate on React/TypeScript work:
 
 - `vercel-composition-patterns`
 - `vercel-react-best-practices`
 - `web-design-guidelines`
 
-## Key Conventions
+## Code quality bar
 
-- **Package manager**: bun (v1.3.9)
-- **Build orchestration**: Turborepo
-- **Formatting**: Oxfmt — double quotes, semicolons, 2-space indent, trailing commas (ES5), sorted imports
-- **Linting**: Oxlint with Ultracite's core + React presets
-- **React 19**: Use ref as a prop directly, no `forwardRef`
-- **TypeScript**: Strict mode with `noUncheckedIndexedAccess`, `verbatimModuleSyntax`
-- **No code comments by default.** Do not narrate what the code does, restate identifiers in prose, or leave breadcrumbs about recent changes ("added X", "now uses Y", "removed Z"). Rename variables, restructure code, or push the explanation into the commit/PR description instead. Only write a comment when the _why_ is genuinely non-obvious — a hidden constraint, a subtle invariant, or a workaround for a specific bug — and even then keep it to one short line. If removing the comment wouldn't confuse a future reader, don't write it.
+Every change is held to a senior bar.
 
-## Component & Route Composition
+- **Clean.** Self-explanatory names. One thing per function at one level of abstraction. No dead code, commented-out blocks, or stray `console.log`. Early returns over nested branches. Pure where possible; isolate side effects at the edges.
+- **Modular.** Small units with a single reason to change. Co-locate component + hook + types + test. Cross module boundaries only through public surfaces. No circular imports.
+- **Extensible, not speculative.** Compose over inherit. Data + behavior over flags. Generalize on the second caller, not the first.
+- **SOLID with judgment.** SRP per module/component/hook. Extend via composition (children, slots, render props, hook factories), not prop explosion. Depend on the narrowest interface that does the job.
+- **Errors at the right boundary.** Don't bury, swallow, or rethrow generically. Validate at system edges (user input, RPC, drivers). Trust internal contracts.
+- **Tested.** Unit test pure logic. Render + interaction test components and hooks. Snapshot critical UI states (empty, loading, error, populated). 80%+ line coverage required; no critical paths untested.
 
-Keep route files thin. A route's job is to orchestrate — wire hooks, render layout slots, route between panels — not to implement. If a route file is growing past ~100 lines, extract.
+### React rules
 
-**File placement**
+- **Small components.** > ~150 lines, or > 1 distinct responsibility (data + layout + interaction) → split.
+- **One component per file.** File name matches the export (`connection-form.tsx` → `ConnectionForm`). Tiny private subcomponents may share the file; reused ones move out.
+- **Clean props.**
+  - Cap ~6 props. More → split, or accept a typed object (`config`, `connection`).
+  - No boolean prop proliferation. Use `variant` / `size` / `state` enums or compose. See `vercel-composition-patterns`.
+  - Props say _what_, not _how_. Prefer `children`/slots over `renderXxx` props.
+  - Type precisely. No `any`, no `Record<string, unknown>` escapes. Discriminated unions for variant shapes.
+- **State.**
+  - Live at the lowest component that needs it. Lift only when siblings genuinely share it.
+  - Derive in render (or `useMemo` if measurably costly). Never store derived state and sync via `useEffect`.
+  - Group fields that always change together (`useReducer` when transitions matter).
+  - Async/server data uses project hooks (`useConnections`, `useQueryTabs`), not `useState` + `useEffect`.
+  - If you need global state, use zustand or React Context — but prefer colocation and prop drilling.
+- **Hooks.**
+  - Top level only. Names start with `use`.
+  - `useEffect` syncs with external systems — it's not "after render." Derive what you can; handle events in handlers.
+  - Exhaustive dep arrays. Never silence the lint rule — fix the design.
+  - Clean up subscriptions/timers/listeners in the same effect.
+  - Extract reusable stateful logic into custom hooks (one purpose, stable shape).
+  - `useCallback` / `useMemo` only for real referential-stability or cost reasons. Don't sprinkle prophylactically.
+  - Use React 19: `use`, ref-as-prop, Actions, `useId`, `useSyncExternalStore`. See `vercel-react-best-practices`.
 
-- Reusable primitives (buttons, inputs, popovers, etc.): `apps/app/src/mainview/components/ui/`
-- Cross-screen feature components: `apps/app/src/mainview/components/<feature>/`
-- Screen-specific components: `<route>/-components/` (TanStack Router ignores `-`-prefixed dirs)
-- Screen-specific hooks: `<route>/-hooks/`
-- App-wide hooks: `apps/app/src/mainview/hooks/`
+## Component & route composition
 
-**Extraction patterns**
+Routes orchestrate; they don't implement. > ~100 lines → extract.
 
-- Prefer many small, single-purpose components over one large one — even if a piece is used only once. Readability wins.
-- Each extracted panel/tab/section should own the hooks and handlers it needs (e.g., a tab that edits editor settings calls `useEditorSettings` itself instead of receiving props from the page). Don't thread state through the route when the child can own it.
-- Group related state + effects into purpose-named hooks (`useConnections`, `useConnectionSelection`, `useHomeIslandSync`, `useHomeHotkeys`) rather than piling `useState`/`useEffect` into the route component.
-- Extract titlebar actions, empty states, and populated states as separate components. Routes switch between them via `AnimatePresence` — they don't inline the JSX.
-- Hotkey wiring belongs in a dedicated `useXxxHotkeys` hook, not inline in the route.
+**Where things live**
 
-**What stays in the route**
+- Reusable primitives (buttons, inputs, popovers): `apps/app/src/mainview/components/ui/`.
+- Cross-screen feature components: `apps/app/src/mainview/components/<feature>/`.
+- Screen-specific components: `<route>/-components/` (the `-` prefix is ignored by TanStack Router).
+- Screen-specific hooks: `<route>/-hooks/`.
+- App-wide hooks: `apps/app/src/mainview/hooks/`.
 
-- `useState` for cross-cutting flow that spans multiple extracted pieces (e.g., welcome/glow timers coordinating with the island + dialog state).
-- Dialog mounts (`<AddConnectionDialog>`, `<EditConnectionDialog>`) — they're siblings of the main view, so the route owns their open state.
-- The top-level layout scaffold: `<Titlebar>`, scroll container, `AnimatePresence` switcher.
+**Patterns**
+
+- Many small single-purpose components beat one large one — even for one-time uses.
+- Children own the hooks/handlers they need. Don't thread state through routes when the child can own it.
+- Group related state + effects into purpose-named hooks (`useConnections`, `useConnectionSelection`, `useHomeIslandSync`, `useHomeHotkeys`).
+- Titlebar actions, empty states, populated states — separate components, switched via `AnimatePresence`.
+- Hotkey wiring lives in a `useXxxHotkeys` hook, never inline.
+
+**Stays in the route**
+
+- Cross-cutting flow `useState` (welcome/glow timers coordinating island + dialog state).
+- Dialog mounts (`<AddConnectionDialog>`, `<EditConnectionDialog>`) — siblings of the main view.
+- Top-level layout: `<Titlebar>`, scroll container, `AnimatePresence` switcher.
 
 **Don't over-engineer**
 
-- Don't create a primitive in `components/ui/` for something used once. Keep it local until a second caller appears.
-- Don't split a 30-line component just to hit a line count. Split when there are distinct responsibilities (data, layout, interaction) worth naming.
+- No `components/ui/` primitive for a single use site. Wait for caller #2.
+- Don't split a 30-line component to hit a count. Split when responsibilities (data / layout / interaction) earn names.
 
-## Component Tests
+## Tests
 
-Every React test — components and hooks alike — runs in Vitest 4 browser mode (Playwright + Chromium) via `vitest-browser-react`. Add or update a `*.browser.test.tsx` next to the unit under test for any UI or hook change. Only pure-logic tests (no JSX, no DOM) stay as `*.test.ts(x)` in the jsdom `unit` project.
+Vitest 4 browser mode (Playwright + Chromium) via `vitest-browser-react` for all React tests — components and hooks alike. Pure-logic, no-DOM tests stay as `*.test.ts(x)` in the jsdom `unit` project.
 
-- Pattern: `import { render } from "vitest-browser-react"; const screen = render(<Component … />)`. Use `screen.getByRole(...)` for queries, `await el.click()` for interactions, and `expect(el.element()).toMatchSnapshot()` (or `expect(screen.container).toMatchSnapshot()`) for DOM snapshots. For negative assertions, `screen.getBy*(...).query()` returns `null` when absent.
-- For hooks, use the local helper: `import { renderHook, waitFor } from "@/test/render-hook"`. Same shape as the historical `@testing-library/react` API (`{ result, rerender, unmount }`, `renderHook(cb, { initialProps })`).
-- Snapshots are committed in `__snapshots__/` next to each test. The setup in `src/mainview/test/setup-browser.ts` strips volatile inline styles (`transform`, `opacity`, etc.) so motion-driven components serialize stably.
-- Run scripts (`apps/app`):
-  - `bun run test` — both projects
-  - `bun run test:unit` — jsdom logic-only tests (`*.test.ts` / `*.test.tsx`)
-  - `bun run test:browser` — browser interaction + snapshot tests (`*.browser.test.tsx`)
-  - `bun run test:watch` — watch mode for both
-  - Scope to one file: append the path, e.g. `bun run test:browser src/mainview/components/ui/button.browser.test.tsx`.
-- Update snapshots: `bun run test:browser -- -u`. Snapshot files are platform-independent text and live in git; review the diff like any other code change.
-
-## Design Context
-
-### Users
-
-Backend and full-stack developers who live in terminals and IDEs and treat oh-my-query as a daily driver alongside their editor. Keyboard-first, long sessions debugging and exploring data, running on macOS as a native Tauri app alongside a code editor. Connecting to PostgreSQL, MySQL, SQLite, MongoDB, Redis, or ClickHouse.
-
-**Job to be done**: "Give me a fast, beautiful, trustworthy place to talk to my databases — with an AI that helps without getting in the way."
+- Pattern: `import { render } from "vitest-browser-react"; const screen = render(<Component … />)`. Query with `screen.getByRole(...)`. Interact with `await el.click()`. Snapshot with `expect(el.element()).toMatchSnapshot()` or `expect(screen.container).toMatchSnapshot()`. Negative assert: `screen.getBy*(...).query()` returns `null`.
+- Hooks: `import { renderHook, waitFor } from "@/test/render-hook"` — same shape as the historical `@testing-library/react` API (`{ result, rerender, unmount }`, `renderHook(cb, { initialProps })`).
+- Snapshots committed in `__snapshots__/` next to each test. `src/mainview/test/setup-browser.ts` strips volatile inline styles (`transform`, `opacity`) so motion-driven components serialize stably.
+- Scripts (from `apps/app`):
+  - `bun run test` — both projects.
+  - `bun run test:unit` — jsdom logic-only (`*.test.ts(x)`).
+  - `bun run test:browser` — interaction + snapshot (`*.browser.test.tsx`).
+  - `bun run test:watch` — watch mode for both.
+  - Scope: append a path, e.g. `bun run test:browser src/mainview/components/ui/button.browser.test.tsx`.
+- Update snapshots: `bun run test:browser -- -u`. Review the diff like code.
 
 ### Brand Personality
 

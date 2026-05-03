@@ -111,28 +111,32 @@ export const togglePinConnection = async (id: string): Promise<void> => {
 
 export const markConnectionUsed = async (id: string): Promise<void> => {
   const current = await getConnections();
-  const connections = current.map((c) =>
-    c.id === id ? { ...c, lastConnectedAt: new Date().toISOString() } : c
+  const connections = current.map((connection) =>
+    connection.id === id
+      ? { ...connection, lastConnectedAt: new Date().toISOString() }
+      : connection
   );
   await writeConnections(connections);
 };
 
-export const isPiiRedactionEnabled = (c: DatabaseConnection): boolean => {
-  if (c.piiRedaction !== undefined) {
-    return c.piiRedaction;
+export const isPiiRedactionEnabled = (
+  connection: DatabaseConnection
+): boolean => {
+  if (connection.piiRedaction !== undefined) {
+    return connection.piiRedaction;
   }
-  return c.environment === "prod";
+  return connection.environment === "prod";
 };
 
-export const connectionIdentityKey = (c: DatabaseConnection): string =>
+export const connectionIdentityKey = (connection: DatabaseConnection): string =>
   JSON.stringify([
-    c.id,
-    c.type,
-    c.host,
-    c.port,
-    c.database,
-    c.username,
-    c.password,
-    c.authSource ?? null,
-    c.trustServerCertificate ?? null,
+    connection.id,
+    connection.type,
+    connection.host,
+    connection.port,
+    connection.database,
+    connection.username,
+    connection.password,
+    connection.authSource ?? null,
+    connection.trustServerCertificate ?? null,
   ]);

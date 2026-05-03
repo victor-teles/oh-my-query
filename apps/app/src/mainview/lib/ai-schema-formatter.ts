@@ -1,4 +1,4 @@
-import { redactPii } from "@oh-my-query/core";
+import { redactPii } from "@oh-my-query/core/client";
 
 import type { RedisKey, RedisKeyKind, SchemaInfo } from "@/lib/tauri";
 
