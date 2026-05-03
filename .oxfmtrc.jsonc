@@ -20,5 +20,10 @@
     "newlinesBetween": true,
     "order": "asc",
   },
+  "experimentalTailwindcss": {
+    "stylesheet": "./apps/app/src/mainview/index.css",
+    "functions": ["clsx", "cn"],
+    "preserveWhitespace": true,
+  },
   "ignorePatterns": ["**/*.gen.ts", ".agents/**", ".claude/**"],
 }

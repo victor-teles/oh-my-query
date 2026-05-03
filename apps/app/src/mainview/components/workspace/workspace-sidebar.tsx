@@ -103,7 +103,7 @@ const DatabaseSelector = ({
   );
 
   return (
-    <div className="border-t border-sidebar-border px-2 py-2">
+    <div className="border-t border-sidebar-border p-2">
       <Select value={selected} onValueChange={handleChange}>
         <SelectTrigger size="sm" className="w-full">
           <Database className="size-3 text-muted-foreground" />
@@ -144,7 +144,7 @@ const SchemaTabContent = ({
 }: SchemaTabContentProps) => (
   <>
     {schema && (
-      <div className="px-2 py-2">
+      <div className="p-2">
         <InputGroup>
           <InputGroupAddon>
             <InputGroupText>

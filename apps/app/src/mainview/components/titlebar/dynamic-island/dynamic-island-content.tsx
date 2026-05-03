@@ -1,9 +1,6 @@
-import type { Transition, Variants } from "motion/react";
-
-import { AnimatePresence, motion } from "motion/react";
-
 import type { IslandSnapshot } from "@/contexts/island-context";
 
+import { QueryPlanningStatus, QueryStreamingStatus } from "./island-ai-status";
 import {
   AmbientStatus,
   ConnectedIdleStatus,
@@ -13,6 +10,7 @@ import {
   WelcomeStatus,
 } from "./island-connection-status";
 import {
+  QueryCancelledStatus,
   QueryErrorStatus,
   QueryRunningStatus,
   QuerySuccessStatus,
@@ -22,78 +20,83 @@ interface DynamicIslandContentProps {
   snapshot: IslandSnapshot;
 }
 
-const CONTAINER_VARIANTS: Variants = {
-  hidden: {
-    transition: { staggerChildren: 0.02 },
-  },
-  visible: {
-    transition: { delayChildren: 0.02, staggerChildren: 0.04 },
-  },
-};
-
-const LAYOUT_TRANSITION: Transition = {
-  damping: 38,
-  mass: 0.7,
-  stiffness: 450,
-  type: "spring",
-};
-
 export const DynamicIslandContent = ({
   snapshot,
 }: DynamicIslandContentProps) => {
-  const handleReconnect =
-    snapshot.kind === "connection-error" ? snapshot.onReconnect : undefined;
-
-  return (
-    <AnimatePresence initial={false} mode="popLayout">
-      <motion.div
-        animate="visible"
-        className="flex items-center gap-1.5"
-        exit="hidden"
-        initial="hidden"
-        key={snapshot.kind}
-        layout
-        transition={LAYOUT_TRANSITION}
-        variants={CONTAINER_VARIANTS}
-      >
-        {snapshot.kind === "welcome" && <WelcomeStatus />}
-        {snapshot.kind === "ambient" && (
-          <AmbientStatus connectionName={snapshot.connectionName} />
-        )}
-        {snapshot.kind === "connecting" && (
-          <ConnectingStatus connectionName={snapshot.connectionName} />
-        )}
-        {snapshot.kind === "reconnecting" && (
-          <ReconnectingStatus connectionName={snapshot.connectionName} />
-        )}
-        {snapshot.kind === "connection-error" && handleReconnect && (
-          <ConnectionErrorStatus
-            error={snapshot.error}
-            onReconnect={handleReconnect}
-          />
-        )}
-        {snapshot.kind === "connected-idle" && (
-          <ConnectedIdleStatus
-            color={snapshot.color}
-            connectionName={snapshot.connectionName}
-            database={snapshot.database}
-            emoji={snapshot.emoji}
-            environment={snapshot.environment}
-            serverVersion={snapshot.serverVersion}
-            username={snapshot.username}
-          />
-        )}
-        {snapshot.kind === "query-running" && <QueryRunningStatus />}
-        {snapshot.kind === "query-success" && (
-          <QuerySuccessStatus
-            executionTimeMs={snapshot.executionTimeMs}
-            rowCount={snapshot.rowCount}
-          />
-        )}
-        {snapshot.kind === "query-error" && (
-          <QueryErrorStatus error={snapshot.error} />
-        )}
-      </motion.div>
-    </AnimatePresence>
-  );
+  switch (snapshot.kind) {
+    case "welcome": {
+      return <WelcomeStatus />;
+    }
+    case "ambient": {
+      return <AmbientStatus connectionName={snapshot.connectionName} />;
+    }
+    case "connecting": {
+      return <ConnectingStatus connectionName={snapshot.connectionName} />;
+    }
+    case "reconnecting": {
+      return <ReconnectingStatus connectionName={snapshot.connectionName} />;
+    }
+    case "connection-error": {
+      const handleReconnect = snapshot.onReconnect;
+      return (
+        <ConnectionErrorStatus
+          error={snapshot.error}
+          onReconnect={handleReconnect}
+        />
+      );
+    }
+    case "connected-idle": {
+      return (
+        <ConnectedIdleStatus
+          color={snapshot.color}
+          connectionName={snapshot.connectionName}
+          database={snapshot.database}
+          emoji={snapshot.emoji}
+          environment={snapshot.environment}
+          serverVersion={snapshot.serverVersion}
+          username={snapshot.username}
+        />
+      );
+    }
+    case "query-running": {
+      const handleCancelAll = snapshot.onCancelAll;
+      return (
+        <QueryRunningStatus
+          headlineTabId={snapshot.headlineTabId}
+          onCancelAll={handleCancelAll}
+          runners={snapshot.runners}
+        />
+      );
+    }
+    case "query-streaming": {
+      const handleCancel = snapshot.onCancel;
+      return (
+        <QueryStreamingStatus
+          onCancel={handleCancel}
+          tokensReceived={snapshot.tokensReceived}
+        />
+      );
+    }
+    case "query-planning": {
+      const handleCancel = snapshot.onCancel;
+      return <QueryPlanningStatus onCancel={handleCancel} />;
+    }
+    case "query-cancelled": {
+      return <QueryCancelledStatus />;
+    }
+    case "query-success": {
+      return (
+        <QuerySuccessStatus
+          executionTimeMs={snapshot.executionTimeMs}
+          rowCount={snapshot.rowCount}
+        />
+      );
+    }
+    case "query-error": {
+      return <QueryErrorStatus error={snapshot.error} />;
+    }
+    default: {
+      return null;
+    }
+  }
 };

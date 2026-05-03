@@ -41,7 +41,10 @@ export const QueryStatusBar = ({
   return (
     <div
       aria-live="polite"
-      className="text-data flex items-center gap-3 border-t bg-muted/30 px-3 py-1 text-foreground text-xs"
+      className="
+        text-data flex items-center gap-3 border-t bg-muted/30 px-3 py-1 text-xs
+        text-foreground
+      "
       role="status"
     >
       <span>
@@ -60,7 +63,12 @@ export const QueryStatusBar = ({
             <HoverCardTrigger
               render={
                 <button
-                  className="inline-flex items-center gap-1 rounded border border-border/70 bg-background/50 px-1.5 py-0.5 font-sans text-[11px] text-foreground transition-colors hover:border-border hover:bg-accent"
+                  className="
+                    inline-flex items-center gap-1 rounded-sm border
+                    border-border/70 bg-background/50 px-1.5 py-0.5 font-sans
+                    text-[11px] text-foreground transition-colors
+                    hover:border-border hover:bg-accent
+                  "
                   type="button"
                 >
                   <FileCode className="size-3 text-muted-foreground" />
@@ -72,7 +80,13 @@ export const QueryStatusBar = ({
               align="end"
               className="w-[min(32rem,calc(100vw-2rem))] p-0"
             >
-              <pre className="max-h-64 overflow-auto whitespace-pre-wrap break-words rounded-lg p-3 font-mono text-[11px] text-muted-foreground leading-relaxed">
+              <pre
+                className="
+                  max-h-64 overflow-auto rounded-lg p-3 font-mono text-[11px]
+                  leading-relaxed wrap-break-word whitespace-pre-wrap
+                  text-muted-foreground
+                "
+              >
                 {executedSql}
               </pre>
             </HoverCardContent>

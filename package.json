@@ -9,7 +9,8 @@
     "catalog": {
       "dotenv": "^17.2.2",
       "zod": "^4.1.13",
-      "@typescript/native-preview": "beta"
+      "@typescript/native-preview": "beta",
+      "vitest": "^4.1.5"
     }
   },
   "type": "module",
@@ -24,7 +25,9 @@
     "fix": "ultracite fix",
     "fixtures:up": "docker compose -f infra/docker-compose.yaml up -d postgres",
     "fixtures:down": "docker compose -f infra/docker-compose.yaml stop postgres",
-    "prepare": "lefthook install"
+    "prepare": "lefthook install",
+    "test": "turbo test",
+    "test:watch": "turbo test:watch"
   },
   "dependencies": {
     "@oh-my-query/env": "workspace:*",

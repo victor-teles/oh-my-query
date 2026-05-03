@@ -1,6 +1,8 @@
 {
   "extends": "@oh-my-query/config/tsconfig.base.json",
   "compilerOptions": {
-    "strictNullChecks": true
-  }
+    "strictNullChecks": true,
+    "types": ["node", "vite/client"]
+  },
+  "include": ["src/**/*"]
 }

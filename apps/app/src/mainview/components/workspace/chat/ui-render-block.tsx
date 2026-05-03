@@ -116,9 +116,9 @@ class RendererErrorBoundary extends Component<
 
 const Skeleton = () => (
   <div className="space-y-2 rounded-lg border bg-secondary/30 p-4">
-    <div className="h-4 w-3/4 animate-pulse rounded bg-muted-foreground/10" />
-    <div className="h-4 w-1/2 animate-pulse rounded bg-muted-foreground/10" />
-    <div className="h-20 w-full animate-pulse rounded bg-muted-foreground/10" />
+    <div className="h-4 w-3/4 animate-pulse rounded-sm bg-muted-foreground/10" />
+    <div className="h-4 w-1/2 animate-pulse rounded-sm bg-muted-foreground/10" />
+    <div className="h-20 w-full animate-pulse rounded-sm bg-muted-foreground/10" />
   </div>
 );
 
@@ -136,7 +136,12 @@ const ErrorPanel = ({ title, detail, rawCode, issues }: ErrorPanelProps) => {
   }, []);
 
   return (
-    <div className="my-2 overflow-hidden rounded-lg border border-destructive/30 bg-destructive/5">
+    <div
+      className="
+        my-2 overflow-hidden rounded-lg border border-destructive/30
+        bg-destructive/5
+      "
+    >
       <div className="flex items-start gap-2 px-3 py-2 text-sm text-destructive">
         <AlertCircle className="mt-0.5 size-3.5 shrink-0" />
         <div className="flex-1 space-y-1">
@@ -145,7 +150,11 @@ const ErrorPanel = ({ title, detail, rawCode, issues }: ErrorPanelProps) => {
             <p className="text-xs text-destructive/80">{detail}</p>
           ) : null}
           {issues && issues.length > 0 ? (
-            <ul className="list-disc space-y-0.5 pl-4 text-xs text-destructive/80">
+            <ul
+              className="
+              list-disc space-y-0.5 pl-4 text-xs text-destructive/80
+            "
+            >
               {issues.map((issue) => (
                 <li key={issueKey(issue)}>
                   {issue.elementKey ? `${issue.elementKey}: ` : ""}
@@ -160,7 +169,11 @@ const ErrorPanel = ({ title, detail, rawCode, issues }: ErrorPanelProps) => {
         <button
           type="button"
           onClick={toggleSpec}
-          className="flex w-full items-center justify-between px-3 py-1.5 text-xs text-destructive/80 hover:bg-destructive/10"
+          className="
+            flex w-full items-center justify-between px-3 py-1.5 text-xs
+            text-destructive/80
+            hover:bg-destructive/10
+          "
         >
           <span>{showSpec ? "Hide source" : "Show source"}</span>
           {showSpec ? (
@@ -170,7 +183,12 @@ const ErrorPanel = ({ title, detail, rawCode, issues }: ErrorPanelProps) => {
           )}
         </button>
         {showSpec ? (
-          <pre className="max-h-64 overflow-auto border-t border-destructive/20 bg-background/40 p-3 text-xs">
+          <pre
+            className="
+              max-h-64 overflow-auto border-t border-destructive/20
+              bg-background/40 p-3 text-xs
+            "
+          >
             <code>{rawCode}</code>
           </pre>
         ) : null}
@@ -255,7 +273,12 @@ const RenderedSpec = ({ spec }: { spec: Spec }) => {
 };
 
 const renderInlineErrorFallback = (err: Error): ReactNode => (
-  <span className="inline-flex items-center gap-1 rounded-md border border-destructive/30 bg-destructive/5 px-2 py-0.5 text-xs text-destructive">
+  <span
+    className="
+      inline-flex items-center gap-1 rounded-md border border-destructive/30
+      bg-destructive/5 px-2 py-0.5 text-xs text-destructive
+    "
+  >
     <AlertCircle className="size-3" />
     {err.message || "Couldn't render"}
   </span>
@@ -431,7 +454,10 @@ const HeaderOverflowMenu = ({
 const HeaderKbdHints = ({ hasDataToggle }: { hasDataToggle: boolean }) => (
   <span
     aria-hidden
-    className="inline-flex items-center gap-1 opacity-0 transition-opacity duration-150 group-focus-within/card:opacity-100"
+    className="
+      inline-flex items-center gap-1 opacity-0 transition-opacity duration-150
+      group-focus-within/card:opacity-100
+    "
   >
     <Kbd>C</Kbd>
     <span>copy</span>
@@ -468,15 +494,23 @@ const CardSpecHeader = ({
     className={cn(
       "flex items-center justify-between gap-2 px-3 py-1",
       !isBare && hasRepairPill && "border-b",
-      isBare &&
-        "absolute right-1 top-1 z-10 rounded-md bg-background/60 px-1 py-0.5 backdrop-blur-sm transition-opacity duration-150 group-hover/card:opacity-100 group-focus-within/card:opacity-100",
+      isBare && `
+          absolute top-1 right-1 z-10 rounded-md bg-background/85 px-1 py-0.5
+          transition-opacity duration-150
+          group-focus-within/card:opacity-100
+          group-hover/card:opacity-100
+        `,
       isBare && (hasDataToggle ? "opacity-60" : "opacity-0")
     )}
   >
     <div className="flex items-center gap-2 text-xs text-muted-foreground">
       {hasRepairPill ? (
         <span
-          className="rounded bg-amber-500/15 px-1.5 py-0.5 text-[10px] font-medium text-amber-600 dark:text-amber-400"
+          className="
+            rounded-sm bg-amber-500/15 px-1.5 py-0.5 text-[10px] font-medium
+            text-amber-600
+            dark:text-amber-400
+          "
           title={appliedFixes.join("\n")}
         >
           auto-repaired
@@ -589,16 +623,13 @@ const CardSpec = ({
       : null;
 
   return (
-    <div
-      className={cn(
-        "group/card relative my-2 rounded-lg outline-none focus-visible:ring-2 focus-visible:ring-ring/30",
-        isBare
-          ? "focus-visible:ring-offset-2"
-          : "overflow-hidden border bg-secondary/30 focus-visible:border-ring"
-      )}
-      ref={cardRef}
-      tabIndex={0}
-    >
+    <div className={cn(`
+          group/card relative my-2 rounded-lg outline-none
+          focus-visible:ring-2 focus-visible:ring-ring/30
+        `, isBare ? "focus-visible:ring-offset-2" : `
+            overflow-hidden border bg-secondary/30
+            focus-visible:border-ring
+          `)} ref={cardRef} tabIndex={0}>
       <CardSpecHeader
         appliedFixes={appliedFixes}
         collapsed={collapsed}
@@ -618,15 +649,27 @@ const CardSpec = ({
             <RendererErrorBoundary fallback={renderCardErrorFallback}>
               <RenderedSpec spec={spec} />
               {trustStamp ? (
-                <p className="mt-1 text-[10px] tracking-wide text-muted-foreground">
+                <p
+                  className="
+                    mt-1 text-[10px] tracking-wide text-muted-foreground
+                  "
+                >
                   {trustStamp}
                 </p>
               ) : null}
               {warnings.length > 0 ? (
-                <ul className="mt-3 space-y-1 border-t pt-2 text-xs text-muted-foreground">
+                <ul
+                  className="
+                    mt-3 space-y-1 border-t pt-2 text-xs text-muted-foreground
+                  "
+                >
                   {warnings.map((w) => (
                     <li className="flex items-start gap-1.5" key={issueKey(w)}>
-                      <AlertCircle className="mt-0.5 size-3 shrink-0 text-amber-500" />
+                      <AlertCircle
+                        className="
+                        mt-0.5 size-3 shrink-0 text-amber-500
+                      "
+                      />
                       <span>
                         {w.elementKey ? `${w.elementKey}: ` : ""}
                         {w.message}

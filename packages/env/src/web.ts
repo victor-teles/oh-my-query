@@ -6,4 +6,5 @@ export const env = createEnv({
     NEXT_PUBLIC_API_URL: z.string().url(),
   },
   clientPrefix: "NEXT_PUBLIC_",
+  runtimeEnv: import.meta.env,
 });

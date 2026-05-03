@@ -13,6 +13,7 @@
   ],
   "plugins": ["unicorn", "typescript", "react", "import", "promise"],
   "rules": {
+    "jest/no-hooks": "off",
     "func-style": "off",
     "no-danger": "off",
     "max-statements": "off",

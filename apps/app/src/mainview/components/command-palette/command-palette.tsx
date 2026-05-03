@@ -1,6 +1,5 @@
 import { Command as CommandPrimitive } from "cmdk";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { toast } from "sonner";
 
 import type {
   CommandAction,
@@ -112,9 +111,7 @@ export const CommandPalette = () => {
         try {
           await action.perform();
         } catch (error) {
-          toast.error(`${action.label} failed`, {
-            description: error instanceof Error ? error.message : undefined,
-          });
+          console.warn(`Command "${action.label}" failed`, error);
         }
       });
     },
@@ -130,7 +127,10 @@ export const CommandPalette = () => {
       title="Command palette"
     >
       <CommandPrimitive
-        className="bg-popover text-popover-foreground flex size-full flex-col overflow-hidden rounded-xl p-1"
+        className="
+          flex size-full flex-col overflow-hidden rounded-xl bg-popover p-1
+          text-popover-foreground
+        "
         label="Command palette"
       >
         <CommandInput
@@ -142,10 +142,10 @@ export const CommandPalette = () => {
         <CommandList className="max-h-96!">
           <CommandEmpty>
             <div className="flex flex-col items-center gap-1 py-1">
-              <span className="text-muted-foreground text-xs">
+              <span className="text-xs text-muted-foreground">
                 No match for &ldquo;{search}&rdquo;
               </span>
-              <span className="text-muted-foreground/60 text-[0.6875rem]">
+              <span className="text-[0.6875rem] text-muted-foreground/60">
                 Try a table, action, or connection name.
               </span>
             </div>
@@ -245,7 +245,7 @@ const ActionTrailingIndicator = ({
 }: ActionTrailingIndicatorProps) => {
   if (awaitingConfirm) {
     return (
-      <span className="ml-auto whitespace-nowrap text-[0.6875rem] text-destructive">
+      <span className="ml-auto text-[0.6875rem] whitespace-nowrap text-destructive">
         Press ↵ again to confirm
       </span>
     );
@@ -281,11 +281,11 @@ const ActionItem = ({
 
   return (
     <CommandItem
-      className={cn(
-        "min-h-8 gap-2.5 py-1.5 text-[0.8125rem]",
-        destructive &&
-          "text-destructive data-selected:bg-destructive/10 data-selected:text-destructive data-selected:*:[svg]:text-destructive"
-      )}
+      className={cn("min-h-8 gap-2.5 py-1.5 text-[0.8125rem]", destructive && `
+            text-destructive
+            data-selected:bg-destructive/10 data-selected:text-destructive
+            data-selected:*:[svg]:text-destructive
+          `)}
       keywords={keywords}
       onSelect={handleSelect}
       value={value}

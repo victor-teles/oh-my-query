@@ -1,0 +1,44 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`skeleton > cardPlaceholder 1`] = `
+<div>
+  <div
+    class="flex items-center gap-3"
+  >
+    <div
+      class="animate-pulse bg-muted size-10 rounded-full"
+      data-slot="skeleton"
+    />
+    <div
+      class="space-y-2"
+    >
+      <div
+        class="animate-pulse rounded-md bg-muted h-4 w-40"
+        data-slot="skeleton"
+      />
+      <div
+        class="animate-pulse rounded-md bg-muted h-3 w-28"
+        data-slot="skeleton"
+      />
+    </div>
+  </div>
+</div>
+`;
+
+exports[`skeleton > circle 1`] = `
+<div>
+  <div
+    class="animate-pulse bg-muted size-10 rounded-full"
+    data-slot="skeleton"
+  />
+</div>
+`;
+
+exports[`skeleton > default 1`] = `
+<div>
+  <div
+    class="animate-pulse rounded-md bg-muted h-4 w-48"
+    data-slot="skeleton"
+  />
+</div>
+`;

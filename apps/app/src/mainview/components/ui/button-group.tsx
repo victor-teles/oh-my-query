@@ -8,17 +8,33 @@ import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 
 const buttonGroupVariants = cva(
-  "has-[>[data-slot=button-group]]:gap-2 has-[select[aria-hidden=true]:last-child]:[&>[data-slot=select-trigger]:last-of-type]:rounded-r-md flex w-fit items-stretch *:focus-visible:z-10 *:focus-visible:relative [&>[data-slot=select-trigger]:not([class*='w-'])]:w-fit [&>input]:flex-1",
+  `
+    flex w-fit items-stretch
+    *:focus-visible:relative *:focus-visible:z-10
+    has-[>[data-slot=button-group]]:gap-2
+    has-[select[aria-hidden=true]:last-child]:[&>[data-slot=select-trigger]:last-of-type]:rounded-r-md
+    [&>[data-slot=select-trigger]:not([class*='w-'])]:w-fit
+    [&>input]:flex-1
+  `,
   {
     defaultVariants: {
       orientation: "horizontal",
     },
     variants: {
       orientation: {
-        horizontal:
-          "[&>[data-slot]:not(:has(~[data-slot]))]:rounded-r-md! [&>[data-slot]~[data-slot]]:rounded-l-none [&>[data-slot]~[data-slot]]:border-l-0 *:data-slot:rounded-r-none",
-        vertical:
-          "[&>[data-slot]:not(:has(~[data-slot]))]:rounded-b-md! flex-col [&>[data-slot]~[data-slot]]:rounded-t-none [&>[data-slot]~[data-slot]]:border-t-0 *:data-slot:rounded-b-none",
+        horizontal: `
+          *:data-slot:rounded-r-none
+          [&>[data-slot]:not(:has(~[data-slot]))]:rounded-r-md!
+          [&>[data-slot]~[data-slot]]:rounded-l-none
+          [&>[data-slot]~[data-slot]]:border-l-0
+        `,
+        vertical: `
+          flex-col
+          *:data-slot:rounded-b-none
+          [&>[data-slot]:not(:has(~[data-slot]))]:rounded-b-md!
+          [&>[data-slot]~[data-slot]]:rounded-t-none
+          [&>[data-slot]~[data-slot]]:border-t-0
+        `,
       },
     },
   }
@@ -49,10 +65,12 @@ function ButtonGroupText({
     defaultTagName: "div",
     props: mergeProps<"div">(
       {
-        className: cn(
-          "bg-muted gap-2 rounded-md border px-2.5 text-xs/relaxed font-medium [&_svg:not([class*='size-'])]:size-4 flex items-center [&_svg]:pointer-events-none",
-          className
-        ),
+        className: cn(`
+            flex items-center gap-2 rounded-md border bg-muted px-2.5
+            text-xs/relaxed font-medium
+            [&_svg]:pointer-events-none
+            [&_svg:not([class*='size-'])]:size-4
+          `, className),
       },
       props
     ),
@@ -72,10 +90,11 @@ function ButtonGroupSeparator({
     <Separator
       data-slot="button-group-separator"
       orientation={orientation}
-      className={cn(
-        "bg-input relative self-stretch data-horizontal:mx-px data-horizontal:w-auto data-vertical:my-px data-vertical:h-auto",
-        className
-      )}
+      className={cn(`
+          relative self-stretch bg-input
+          data-horizontal:mx-px data-horizontal:w-auto
+          data-vertical:my-px data-vertical:h-auto
+        `, className)}
       {...props}
     />
   );

@@ -36,13 +36,25 @@ const TabularPreview = ({
 
   return (
     <div className="my-2 overflow-hidden rounded-lg border bg-secondary/30">
-      <div className="flex items-center justify-between border-b px-3 py-1.5 text-xs text-muted-foreground">
+      <div
+        className="
+          flex items-center justify-between border-b px-3 py-1.5 text-xs
+          text-muted-foreground
+        "
+      >
         <span>
           {result.rowCount.toLocaleString()} {rowLabel} ·{" "}
           {formatMs(result.executionTimeMs)}
         </span>
         {result.isTruncated ? (
-          <span className="text-amber-600 dark:text-amber-400">Truncated</span>
+          <span
+            className="
+              text-amber-600
+              dark:text-amber-400
+            "
+          >
+            Truncated
+          </span>
         ) : null}
       </div>
       <div className="overflow-x-auto">
@@ -51,7 +63,9 @@ const TabularPreview = ({
             <tr>
               {result.columns.map((col) => (
                 <th
-                  className="px-3 py-1.5 text-left font-medium whitespace-nowrap"
+                  className="
+                    px-3 py-1.5 text-left font-medium whitespace-nowrap
+                  "
                   key={col.name}
                 >
                   {col.name}
@@ -61,11 +75,19 @@ const TabularPreview = ({
           </thead>
           <tbody>
             {rowsToShow.map((row, rowIdx) => (
-              // eslint-disable-next-line react/no-array-index-key -- result rows have no stable id
-              <tr className="border-t last:border-b-0" key={rowIdx}>
+              <tr
+                className="
+                  border-t
+                  last:border-b-0
+                "
+                // eslint-disable-next-line react/no-array-index-key -- result rows have no stable id
+                key={rowIdx}
+              >
                 {result.columns.map((col, cellIdx) => (
                   <td
-                    className="max-w-xs truncate px-3 py-1.5 align-top whitespace-nowrap"
+                    className="
+                      max-w-xs truncate px-3 py-1.5 align-top whitespace-nowrap
+                    "
                     key={col.name}
                     title={formatCell(row[cellIdx])}
                   >
@@ -98,13 +120,25 @@ const DocumentsPreview = ({
 
   return (
     <div className="my-2 overflow-hidden rounded-lg border bg-secondary/30">
-      <div className="flex items-center justify-between border-b px-3 py-1.5 text-xs text-muted-foreground">
+      <div
+        className="
+          flex items-center justify-between border-b px-3 py-1.5 text-xs
+          text-muted-foreground
+        "
+      >
         <span>
           {result.count.toLocaleString()} {docLabel} ·{" "}
           {formatMs(result.executionTimeMs)}
         </span>
         {result.isTruncated ? (
-          <span className="text-amber-600 dark:text-amber-400">Truncated</span>
+          <span
+            className="
+              text-amber-600
+              dark:text-amber-400
+            "
+          >
+            Truncated
+          </span>
         ) : null}
       </div>
       <pre className="max-h-64 overflow-auto p-3 text-xs">
@@ -130,14 +164,24 @@ export const InlineQueryResult = ({ result }: { result: ExecuteResult }) => {
 export const InlineRunningIndicator = ({
   label = "Running…",
 }: { label?: string } = {}) => (
-  <div className="my-2 inline-flex items-center gap-2 rounded-lg border bg-secondary/30 px-3 py-1.5 text-xs text-muted-foreground">
+  <div
+    className="
+      my-2 inline-flex items-center gap-2 rounded-lg border bg-secondary/30 px-3
+      py-1.5 text-xs text-muted-foreground
+    "
+  >
     <Loader2 className="size-3 animate-spin" />
     <span>{label}</span>
   </div>
 );
 
 export const InlineRunError = ({ error }: { error: string }) => (
-  <div className="my-2 flex items-start gap-2 rounded-lg border border-destructive/30 bg-destructive/5 px-3 py-2 text-sm text-destructive">
+  <div
+    className="
+      my-2 flex items-start gap-2 rounded-lg border border-destructive/30
+      bg-destructive/5 px-3 py-2 text-sm text-destructive
+    "
+  >
     <AlertCircle className="mt-0.5 size-3.5 shrink-0" />
     <span className="text-xs">{error}</span>
   </div>

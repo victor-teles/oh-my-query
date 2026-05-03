@@ -223,7 +223,12 @@ export const AISettingsDialog = ({
                 <button
                   type="button"
                   onClick={handleOpenKeyUrl}
-                  className="text-primary underline underline-offset-2 cursor-default focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50 rounded-sm"
+                  className="
+                    cursor-default rounded-sm text-primary underline
+                    underline-offset-2
+                    focus-visible:ring-2 focus-visible:ring-ring/50
+                    focus-visible:outline-none
+                  "
                 >
                   {currentProvider.keyUrlLabel}
                 </button>

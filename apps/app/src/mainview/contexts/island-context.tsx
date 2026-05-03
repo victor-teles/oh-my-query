@@ -4,6 +4,18 @@ import { createContext, use, useCallback, useMemo, useState } from "react";
 
 import type { ConnectionColor, ConnectionEnvironment } from "@/lib/connections";
 
+export interface RunningQueryEntry {
+  tabId: string;
+  tabTitle: string;
+  connectionId: string;
+  connectionLabel: string;
+  connectionEnvironment: ConnectionEnvironment | undefined;
+  connectionColor: ConnectionColor | undefined;
+  connectionEmoji: string | undefined;
+  startedAt: number;
+  onCancel: () => void;
+}
+
 export type IslandSnapshot =
   | { kind: "hidden" }
   | { kind: "ambient"; connectionName: string }
@@ -25,7 +37,20 @@ export type IslandSnapshot =
       emoji: string | undefined;
       environment: ConnectionEnvironment | undefined;
     }
-  | { kind: "query-running" }
+  | {
+      kind: "query-running";
+      runners: RunningQueryEntry[];
+      headlineTabId: string;
+      onCancelHeadline: () => void;
+      onCancelAll: () => void;
+    }
+  | {
+      kind: "query-streaming";
+      tokensReceived: number;
+      onCancel?: () => void;
+    }
+  | { kind: "query-planning"; onCancel?: () => void }
+  | { kind: "query-cancelled" }
   | {
       kind: "query-success";
       rowCount: number;

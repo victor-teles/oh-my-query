@@ -1,6 +1,5 @@
 import { Copy } from "lucide-react";
 import { useCallback } from "react";
-import { toast } from "sonner";
 
 import type { TabularResult } from "@/lib/tauri";
 
@@ -46,7 +45,6 @@ export const RowDetailDialog = ({
       (col, idx) => `${col.name}: ${formatValue(row[idx])}`
     );
     navigator.clipboard.writeText(lines.join("\n"));
-    toast.success("Copied row to clipboard");
   }, [row, result.columns]);
 
   return (
@@ -82,24 +80,40 @@ export const RowDetailDialog = ({
                 const value = row[idx];
                 return (
                   <div
-                    className="flex flex-col gap-0.5 border-border/40 border-b py-2 last:border-b-0"
+                    className="
+                      flex flex-col gap-0.5 border-b border-border/40 py-2
+                      last:border-b-0
+                    "
                     key={col.name}
                   >
                     <dt className="flex items-baseline gap-2">
-                      <span className="font-medium font-mono text-foreground text-xs">
+                      <span
+                        className="
+                          font-mono text-xs font-medium text-foreground
+                        "
+                      >
                         {col.name}
                       </span>
-                      <span className="font-mono text-[10px] text-muted-foreground/70 uppercase tracking-wider">
+                      <span
+                        className="
+                          font-mono text-[10px] tracking-wider
+                          text-muted-foreground/70 uppercase
+                        "
+                      >
                         {col.typeName}
                       </span>
                     </dt>
-                    <dd className="font-mono text-xs leading-relaxed">
+                    <dd className="font-mono text-xs/relaxed">
                       {isNullish(value) ? (
                         <span className="text-muted-foreground italic">
                           NULL
                         </span>
                       ) : (
-                        <pre className="whitespace-pre-wrap break-words text-foreground">
+                        <pre
+                          className="
+                            wrap-break-word whitespace-pre-wrap text-foreground
+                          "
+                        >
                           {formatValue(value)}
                         </pre>
                       )}

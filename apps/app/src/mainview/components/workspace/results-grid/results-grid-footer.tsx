@@ -35,7 +35,12 @@ const LoadMoreButton = ({ rowCount, onLoadMore }: LoadMoreButtonProps) => {
 
   return (
     <button
-      className="ml-2 inline-flex items-center gap-1 rounded-md px-1.5 py-0.5 font-medium text-foreground/80 transition-colors hover:bg-accent/60 hover:text-foreground focus-visible:bg-accent/60 focus-visible:outline-none"
+      className="
+        ml-2 inline-flex items-center gap-1 rounded-md px-1.5 py-0.5 font-medium
+        text-foreground/80 transition-colors
+        hover:bg-accent/60 hover:text-foreground
+        focus-visible:bg-accent/60 focus-visible:outline-none
+      "
       onClick={handleClick}
       type="button"
     >
@@ -52,9 +57,14 @@ export const ResultsGridFooter = ({
 }: ResultsGridFooterProps) => {
   const { rowCount, isTruncated } = result;
   return (
-    <div className="flex items-center justify-between gap-4 border-border/40 border-t px-3 py-1.5 text-muted-foreground text-xs">
+    <div
+      className="
+        flex items-center justify-between gap-4 border-t border-border/40 px-3
+        py-1.5 text-xs text-muted-foreground
+      "
+    >
       <span className="inline-flex items-center">
-        <span className="font-mono tabular-nums text-foreground">
+        <span className="font-mono text-foreground tabular-nums">
           {formatCount(rowCount)}
         </span>
         <span className="ml-1">{rowCount === 1 ? "row" : "rows"}</span>
@@ -70,7 +80,11 @@ export const ResultsGridFooter = ({
       <div className="flex min-w-0 items-center gap-4">
         <span
           aria-hidden="true"
-          className="flex items-center gap-3 text-muted-foreground/70 opacity-0 transition-opacity group-focus-within/results:opacity-100"
+          className="
+            flex items-center gap-3 text-muted-foreground/70 opacity-0
+            transition-opacity
+            group-focus-within/results:opacity-100
+          "
         >
           <Shortcut keys="⌘C" label="Copy" />
           <Shortcut keys="⌘A" label="All" />
@@ -78,7 +92,7 @@ export const ResultsGridFooter = ({
         </span>
         {selectedCount > 0 && (
           <span>
-            <span className="font-mono tabular-nums text-foreground">
+            <span className="font-mono text-foreground tabular-nums">
               {formatCount(selectedCount)}
             </span>{" "}
             selected

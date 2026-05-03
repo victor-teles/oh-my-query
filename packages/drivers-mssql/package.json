@@ -6,6 +6,11 @@
   "exports": {
     ".": "./src/index.ts"
   },
+  "scripts": {
+    "check-types": "tsgo --noEmit",
+    "test": "vitest run --passWithNoTests",
+    "test:watch": "vitest"
+  },
   "dependencies": {
     "@oh-my-query/core": "workspace:*",
     "mssql": "^11.0.1"
@@ -13,6 +18,8 @@
   "devDependencies": {
     "@oh-my-query/config": "workspace:*",
     "@types/mssql": "^9.1.5",
-    "@typescript/native-preview": "catalog:"
+    "@types/node": "^25.6.0",
+    "@typescript/native-preview": "catalog:",
+    "vitest": "catalog:"
   }
 }

@@ -209,12 +209,19 @@ interface ExplainBodyProps {
 const ExplainBody = ({ result, status, error, viewMode }: ExplainBodyProps) => {
   if (status === "running") {
     return (
-      <div className="flex h-full flex-col items-center justify-center gap-2 p-8 text-center">
+      <div
+        className="
+          flex h-full flex-col items-center justify-center gap-2 p-8 text-center
+        "
+      >
         <Loader2
           aria-hidden="true"
-          className="size-5 animate-spin text-muted-foreground motion-reduce:animate-none"
+          className="
+            size-5 animate-spin text-muted-foreground
+            motion-reduce:animate-none
+          "
         />
-        <p className="text-muted-foreground text-xs">Fetching plan…</p>
+        <p className="text-xs text-muted-foreground">Fetching plan…</p>
       </div>
     );
   }
@@ -382,8 +389,17 @@ export const ExplainHeader = ({
   showViewToggle,
   viewMode,
 }: ExplainHeaderProps) => (
-  <div className="flex shrink-0 items-center gap-2 border-b bg-muted/10 px-2 py-1.5">
-    <span className="rounded-sm border border-border/60 bg-background/50 px-1.5 py-0.5 font-mono text-[10px] text-muted-foreground uppercase tracking-wide">
+  <div
+    className="
+      flex shrink-0 items-center gap-2 border-b bg-muted/10 px-2 py-1.5
+    "
+  >
+    <span
+      className="
+        rounded-sm border border-border/60 bg-background/50 px-1.5 py-0.5
+        font-mono text-[10px] tracking-wide text-muted-foreground uppercase
+      "
+    >
       {engine}
     </span>
 
@@ -438,7 +454,11 @@ export const ExplainHeader = ({
     </label>
 
     {analyze && analyzeSupported && (
-      <span className="rounded-sm bg-warning/15 px-1.5 py-0.5 text-[10px] text-warning">
+      <span
+        className="
+          rounded-sm bg-warning/15 px-1.5 py-0.5 text-[10px] text-warning
+        "
+      >
         will execute
       </span>
     )}
@@ -477,9 +497,10 @@ const ViewToggle = ({ viewMode, onViewChange }: ViewToggleProps) => {
         aria-pressed={viewMode === "tree"}
         className={cn(
           "px-2 py-0.5 text-[10px] transition-colors",
-          viewMode === "tree"
-            ? "bg-background text-foreground"
-            : "text-muted-foreground hover:text-foreground"
+          viewMode === "tree" ? "bg-background text-foreground" : `
+              text-muted-foreground
+              hover:text-foreground
+            `
         )}
         onClick={selectTree}
         type="button"
@@ -490,9 +511,10 @@ const ViewToggle = ({ viewMode, onViewChange }: ViewToggleProps) => {
         aria-pressed={viewMode === "raw"}
         className={cn(
           "px-2 py-0.5 text-[10px] transition-colors",
-          viewMode === "raw"
-            ? "bg-background text-foreground"
-            : "text-muted-foreground hover:text-foreground"
+          viewMode === "raw" ? "bg-background text-foreground" : `
+              text-muted-foreground
+              hover:text-foreground
+            `
         )}
         onClick={selectRaw}
         type="button"
@@ -510,7 +532,12 @@ const ExplainSummaryStrip = ({
 }) => {
   const { totalWarnings, hotPath } = usePlanAnalysis(result.root);
   return (
-    <div className="flex shrink-0 items-center gap-4 border-b bg-muted/20 px-3 py-1.5 text-[11px]">
+    <div
+      className="
+        flex shrink-0 items-center gap-4 border-b bg-muted/20 px-3 py-1.5
+        text-[11px]
+      "
+    >
       <div className="flex items-center gap-1.5">
         <span className="text-muted-foreground">
           {result.analyzeRan ? "ANALYZE" : "plan"}
@@ -542,11 +569,21 @@ const ExplainSummaryStrip = ({
       )}
 
       <div className="ml-auto text-[10px] text-muted-foreground">
-        <kbd className="rounded-sm border border-border/60 bg-background/50 px-1 py-px font-mono">
+        <kbd
+          className="
+            rounded-sm border border-border/60 bg-background/50 px-1 py-px
+            font-mono
+          "
+        >
           ↑↓
         </kbd>{" "}
         navigate ·{" "}
-        <kbd className="rounded-sm border border-border/60 bg-background/50 px-1 py-px font-mono">
+        <kbd
+          className="
+            rounded-sm border border-border/60 bg-background/50 px-1 py-px
+            font-mono
+          "
+        >
           ←→
         </kbd>{" "}
         collapse/expand

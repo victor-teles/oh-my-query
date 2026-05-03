@@ -25,7 +25,10 @@ export const SavedIndicator = () => {
         <motion.div
           animate={reduced ? { opacity: 1 } : { opacity: 1, y: 0 }}
           aria-live="polite"
-          className="pointer-events-none absolute top-5 right-6 flex items-center gap-1.5 text-xs font-medium text-primary"
+          className="
+            pointer-events-none absolute top-5 right-6 flex items-center gap-1.5
+            text-xs font-medium text-primary
+          "
           exit={{ opacity: 0 }}
           initial={reduced ? { opacity: 0 } : { opacity: 0, y: -4 }}
           key={lastSavedAt}

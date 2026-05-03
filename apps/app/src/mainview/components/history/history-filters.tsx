@@ -72,15 +72,13 @@ const FilterTrigger = ({
   const active = selection.length > 0;
 
   return (
-    <div
-      className={cn(
-        "group/trigger flex h-7 min-w-0 items-center gap-1.5 rounded-md border px-2 text-xs",
-        "transition-[color,background-color,border-color] duration-150 ease-out",
-        active
-          ? "border-primary/40 bg-primary/10 text-foreground"
-          : "border-input bg-input/20 text-muted-foreground hover:bg-input/40 hover:text-foreground"
-      )}
-    >
+    <div className={cn(`
+          group/trigger flex h-7 min-w-0 items-center gap-1.5 rounded-md border
+          px-2 text-xs
+        `, "transition-[color,background-color,border-color] duration-150 ease-out", active ? "border-primary/40 bg-primary/10 text-foreground" : `
+            border-input bg-input/20 text-muted-foreground
+            hover:bg-input/40 hover:text-foreground
+          `)}>
       {icon ? <span className="shrink-0">{icon}</span> : null}
       <span className="shrink-0 text-muted-foreground/80">{label}</span>
       <span
@@ -91,7 +89,11 @@ const FilterTrigger = ({
       >
         {active ? formatSelection(selection) : placeholder}
       </span>
-      <ChevronDownIcon className="ml-0.5 size-3 shrink-0 text-muted-foreground/60" />
+      <ChevronDownIcon
+        className="
+        ml-0.5 size-3 shrink-0 text-muted-foreground/60
+      "
+      />
     </div>
   );
 };
@@ -104,7 +106,10 @@ interface FilterClearButtonProps {
 const FilterClearButton = ({ label, onClick }: FilterClearButtonProps) => (
   <button
     aria-label={`Clear ${label.toLowerCase()} filter`}
-    className="ml-0.5 shrink-0 rounded-sm p-0.5 text-muted-foreground/80 hover:bg-background/50 hover:text-foreground"
+    className="
+      ml-0.5 shrink-0 rounded-sm p-0.5 text-muted-foreground/80
+      hover:bg-background/50 hover:text-foreground
+    "
     onClick={onClick}
     type="button"
   >
@@ -128,16 +133,10 @@ const ConnectionOption = memo(function ConnectionOption({
     onToggle(connection.id);
   }, [connection.id, onToggle]);
   return (
-    <button
-      aria-pressed={checked}
-      className={cn(
-        "flex w-full items-center gap-2 rounded px-2 py-1.5 text-left text-xs",
-        "hover:bg-accent/50",
-        checked && "text-foreground"
-      )}
-      onClick={handleClick}
-      type="button"
-    >
+    <button aria-pressed={checked} className={cn(`
+          flex w-full items-center gap-2 rounded-sm px-2 py-1.5 text-left
+          text-xs
+        `, "hover:bg-accent/50", checked && "text-foreground")} onClick={handleClick} type="button">
       <Checkbox checked={checked} tabIndex={-1} />
       <Icon className="size-3.5 text-muted-foreground" />
       <span className="truncate">{connection.name}</span>
@@ -161,16 +160,10 @@ const DialectOption = memo(function DialectOption({
     onToggle(dialect);
   }, [dialect, onToggle]);
   return (
-    <button
-      aria-pressed={checked}
-      className={cn(
-        "flex w-full items-center gap-2 rounded px-2 py-1.5 text-left text-xs",
-        "hover:bg-accent/50",
-        checked && "text-foreground"
-      )}
-      onClick={handleClick}
-      type="button"
-    >
+    <button aria-pressed={checked} className={cn(`
+          flex w-full items-center gap-2 rounded-sm px-2 py-1.5 text-left
+          text-xs
+        `, "hover:bg-accent/50", checked && "text-foreground")} onClick={handleClick} type="button">
       <Checkbox checked={checked} tabIndex={-1} />
       <Icon className="size-3.5 text-muted-foreground" />
       <span>{DIALECT_LABELS[dialect]}</span>
@@ -273,7 +266,10 @@ export const HistoryFiltersPanel = ({
             render={
               <button
                 aria-label="Filter by connection"
-                className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50"
+                className="
+                  focus-visible:ring-2 focus-visible:ring-ring/50
+                  focus-visible:outline-none
+                "
                 type="button"
               >
                 <FilterTrigger
@@ -314,7 +310,10 @@ export const HistoryFiltersPanel = ({
             render={
               <button
                 aria-label="Filter by dialect"
-                className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50"
+                className="
+                  focus-visible:ring-2 focus-visible:ring-ring/50
+                  focus-visible:outline-none
+                "
                 type="button"
               >
                 <FilterTrigger
@@ -375,16 +374,16 @@ export const HistoryFiltersPanel = ({
         <span className="text-[10px] text-muted-foreground">ms</span>
       </div>
 
-      <Label
-        className={cn(
-          "flex h-7 cursor-pointer items-center gap-1.5 rounded-md border px-2 text-xs",
-          "transition-[color,background-color,border-color] duration-150 ease-out",
-          filters.erroredOnly === true
-            ? "border-primary/40 bg-primary/10 text-foreground"
-            : "border-input bg-input/20 text-muted-foreground hover:bg-input/40 hover:text-foreground"
-        )}
-        htmlFor={ERRORED_ONLY_ID}
-      >
+      <Label className={cn(`
+            flex h-7 cursor-pointer items-center gap-1.5 rounded-md border px-2
+            text-xs
+          `, `
+            transition-[color,background-color,border-color] duration-150
+            ease-out
+          `, filters.erroredOnly === true ? "border-primary/40 bg-primary/10 text-foreground" : `
+              border-input bg-input/20 text-muted-foreground
+              hover:bg-input/40 hover:text-foreground
+            `)} htmlFor={ERRORED_ONLY_ID}>
         <Checkbox
           checked={filters.erroredOnly === true}
           id={ERRORED_ONLY_ID}

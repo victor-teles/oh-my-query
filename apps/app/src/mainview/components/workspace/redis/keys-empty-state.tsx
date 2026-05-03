@@ -18,9 +18,13 @@ export const KeysEmptyState = ({
       <div className="flex flex-col items-start gap-2 px-4 py-6 text-left">
         <Database className="size-5 text-muted-foreground/70" />
         <p className="text-sm font-medium text-foreground">This DB is empty</p>
-        <p className="text-xs leading-relaxed text-muted-foreground">
+        <p className="text-xs/relaxed text-muted-foreground">
           Try{" "}
-          <code className="rounded bg-sidebar-accent/60 px-1 font-mono text-[11px]">
+          <code
+            className="
+              rounded-sm bg-sidebar-accent/60 px-1 font-mono text-[11px]
+            "
+          >
             SET hello world
           </code>{" "}
           to get started.
@@ -42,13 +46,21 @@ export const KeysEmptyState = ({
   return (
     <div className="flex flex-col items-start gap-1.5 px-4 py-6 text-left">
       <p className="text-sm font-medium text-foreground">No keys match</p>
-      <p className="text-xs leading-relaxed text-muted-foreground">
+      <p className="text-xs/relaxed text-muted-foreground">
         Nothing matches{" "}
-        <code className="rounded bg-sidebar-accent/60 px-1 font-mono text-[11px]">
+        <code
+          className="
+          rounded-sm bg-sidebar-accent/60 px-1 font-mono text-[11px]
+        "
+        >
           {pattern}
         </code>
         . Try a different pattern, or{" "}
-        <code className="rounded bg-sidebar-accent/60 px-1 font-mono text-[11px]">
+        <code
+          className="
+          rounded-sm bg-sidebar-accent/60 px-1 font-mono text-[11px]
+        "
+        >
           *
         </code>
         .

@@ -16,7 +16,10 @@ import {
 import { cn } from "@/lib/utils";
 
 import { IslandErrorMessage } from "./island-error-message";
-import { ISLAND_ITEM_TRANSITION, ISLAND_ITEM_VARIANTS } from "./island-motion";
+import {
+  INDICATOR_DOT_STAGGER_S,
+  INDICATOR_LOOP_TRANSITION,
+} from "./island-motion";
 
 interface ConnectingStatusProps {
   connectionName: string;
@@ -29,36 +32,21 @@ export const ConnectingStatus = ({ connectionName }: ConnectingStatusProps) => {
 
   return (
     <>
-      <motion.div
-        aria-hidden="true"
-        className="flex items-center gap-0.5"
-        transition={ISLAND_ITEM_TRANSITION}
-        variants={ISLAND_ITEM_VARIANTS}
-      >
+      <div aria-hidden="true" className="flex items-center gap-0.5">
         {DOT_IDS.map((id, i) => (
           <motion.span
-            animate={
-              shouldReduceMotion ? undefined : { opacity: [0.3, 1, 0.3] }
-            }
+            animate={shouldReduceMotion ? undefined : { opacity: [0.3, 1] }}
             className="size-1 rounded-full bg-muted-foreground"
             key={id}
-            transition={{
-              delay: i * 0.2,
-              duration: 1.2,
-              ease: "easeInOut",
-              repeat: Infinity,
-            }}
+            transition={INDICATOR_LOOP_TRANSITION(i * INDICATOR_DOT_STAGGER_S)}
           />
         ))}
-      </motion.div>
+      </div>
       <span className="sr-only">Connecting to </span>
-      <motion.span
-        className="text-chrome max-w-60 truncate text-muted-foreground"
-        transition={ISLAND_ITEM_TRANSITION}
-        variants={ISLAND_ITEM_VARIANTS}
-      >
-        {connectionName}
-      </motion.span>
+      <span className={cn(`
+            max-w-60 truncate text-xs font-medium tracking-tight
+            text-muted-foreground
+          `, shouldReduceMotion && "font-semibold")}>{connectionName}</span>
     </>
   );
 };
@@ -70,35 +58,24 @@ export const ReconnectingStatus = ({
 
   return (
     <>
-      <motion.div
-        aria-hidden="true"
-        className="flex items-center gap-0.5"
-        transition={ISLAND_ITEM_TRANSITION}
-        variants={ISLAND_ITEM_VARIANTS}
-      >
+      <div aria-hidden="true" className="flex items-center gap-0.5">
         {DOT_IDS.map((id, i) => (
           <motion.span
-            animate={
-              shouldReduceMotion ? undefined : { opacity: [0.3, 1, 0.3] }
-            }
+            animate={shouldReduceMotion ? undefined : { opacity: [0.3, 1] }}
             className="size-1 rounded-full bg-warning"
             key={id}
-            transition={{
-              delay: i * 0.15,
-              duration: 1,
-              ease: "easeInOut",
-              repeat: Infinity,
-            }}
+            transition={INDICATOR_LOOP_TRANSITION(i * INDICATOR_DOT_STAGGER_S)}
           />
         ))}
-      </motion.div>
-      <motion.span
-        className="text-chrome max-w-65 truncate text-warning"
-        transition={ISLAND_ITEM_TRANSITION}
-        variants={ISLAND_ITEM_VARIANTS}
+      </div>
+      <span
+        className={cn(
+          "max-w-65 truncate text-xs font-medium tracking-tight text-warning",
+          shouldReduceMotion && "font-semibold"
+        )}
       >
         Reconnecting to {connectionName}
-      </motion.span>
+      </span>
     </>
   );
 };
@@ -136,13 +113,16 @@ export const ConnectedIdleStatus = ({
     <HoverCard>
       <HoverCardTrigger
         render={
-          <motion.button
+          <button
             aria-label={srLabel}
-            className="flex items-center gap-1.5 rounded-full transition-all duration-150 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50"
-            transition={ISLAND_ITEM_TRANSITION}
+            className="
+              flex items-center gap-1.5 rounded-full transition-opacity
+              duration-150 ease-out
+              hover:opacity-75
+              focus-visible:ring-2 focus-visible:ring-ring/50
+              focus-visible:outline-none
+            "
             type="button"
-            variants={ISLAND_ITEM_VARIANTS}
-            whileHover={{ opacity: 0.75 }}
           >
             <span aria-hidden="true" className="relative flex size-2 shrink-0">
               {!shouldReduceMotion && (
@@ -172,37 +152,50 @@ export const ConnectedIdleStatus = ({
               </Badge>
             )}
             {emoji && (
-              <span aria-hidden="true" className="text-[11px] leading-none">
+              <span
+                aria-hidden="true"
+                className="text-xs leading-none font-medium tracking-tight"
+              >
                 {emoji}
               </span>
             )}
             <span
               aria-hidden="true"
-              className="text-chrome max-w-40 truncate text-muted-foreground"
+              className="
+                max-w-40 truncate text-xs font-medium tracking-tight
+                text-muted-foreground
+              "
             >
               {connectionName}
             </span>
             {serverVersion && (
               <span
                 aria-hidden="true"
-                className="text-data text-[11px] text-muted-foreground"
+                className="
+                  text-xs font-medium tracking-tight text-muted-foreground
+                  tabular-nums
+                "
               >
                 {serverVersion}
               </span>
             )}
             <span
               aria-hidden="true"
-              className="text-[11px] text-muted-foreground/30"
+              className="
+                text-xs font-medium tracking-tight text-muted-foreground/30
+              "
             >
               ·
             </span>
             <span
               aria-hidden="true"
-              className="text-data text-[11px] text-muted-foreground"
+              className="
+                text-xs font-medium tracking-tight text-muted-foreground
+              "
             >
               {username}@{database}
             </span>
-          </motion.button>
+          </button>
         }
       />
       <HoverCardContent align="center" className="w-64">
@@ -257,26 +250,27 @@ export const ConnectionErrorStatus = ({
   onReconnect,
 }: ConnectionErrorStatusProps) => (
   <>
-    <motion.span
+    <AlertCircle
       aria-hidden="true"
-      transition={ISLAND_ITEM_TRANSITION}
-      variants={ISLAND_ITEM_VARIANTS}
-    >
-      <AlertCircle className="size-3 shrink-0 text-destructive" />
-    </motion.span>
+      className="size-3 shrink-0 text-destructive"
+    />
     <IslandErrorMessage error={error} maxWidthClass="max-w-[280px]" />
-    <motion.button
+    <button
       aria-label="Retry connection"
-      className="text-chrome cursor-pointer rounded-sm text-destructive underline underline-offset-2 transition-all duration-150 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50"
+      className="
+        cursor-pointer rounded-sm text-xs font-medium tracking-tight
+        text-destructive underline underline-offset-2 transition-opacity
+        duration-150 ease-out
+        hover:opacity-70
+        focus-visible:ring-2 focus-visible:ring-ring/50
+        focus-visible:outline-none
+        active:opacity-50
+      "
       onClick={onReconnect}
-      transition={ISLAND_ITEM_TRANSITION}
       type="button"
-      variants={ISLAND_ITEM_VARIANTS}
-      whileHover={{ opacity: 0.7 }}
-      whileTap={{ opacity: 0.5 }}
     >
       Retry
-    </motion.button>
+    </button>
   </>
 );
 
@@ -286,37 +280,30 @@ interface AmbientStatusProps {
 
 export const AmbientStatus = ({ connectionName }: AmbientStatusProps) => (
   <>
-    <motion.span
+    <span
       aria-hidden="true"
       className="size-1 shrink-0 rounded-full bg-muted-foreground/40"
-      transition={ISLAND_ITEM_TRANSITION}
-      variants={ISLAND_ITEM_VARIANTS}
     />
     <span className="sr-only">Database: </span>
-    <motion.span
-      className="text-chrome max-w-60 truncate text-muted-foreground"
-      transition={ISLAND_ITEM_TRANSITION}
-      variants={ISLAND_ITEM_VARIANTS}
+    <span
+      className="
+        max-w-60 truncate text-xs font-medium tracking-tight
+        text-muted-foreground
+      "
     >
       {connectionName}
-    </motion.span>
+    </span>
   </>
 );
 
 export const WelcomeStatus = () => (
   <>
-    <motion.span
+    <span
       aria-hidden="true"
       className="size-1.5 shrink-0 rounded-full bg-primary"
-      transition={ISLAND_ITEM_TRANSITION}
-      variants={ISLAND_ITEM_VARIANTS}
     />
-    <motion.span
-      className="text-chrome text-muted-foreground"
-      transition={ISLAND_ITEM_TRANSITION}
-      variants={ISLAND_ITEM_VARIANTS}
-    >
+    <span className="text-xs font-medium tracking-tight text-muted-foreground">
       Welcome
-    </motion.span>
+    </span>
   </>
 );

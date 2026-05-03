@@ -55,10 +55,12 @@ export const HistoryRow = memo(function HistoryRow({
       aria-selected={selected}
       className={cn(
         "flex w-full flex-col gap-1 rounded-md px-3 py-2 text-left",
-        "outline-none transition-[background-color,color] duration-100",
+        "transition-[background-color,color] duration-100 outline-none",
         "hover:bg-accent/40",
-        focused &&
-          "ring-1 ring-primary/60 ring-inset bg-primary/[0.06] motion-safe:animate-in motion-safe:fade-in-0",
+        focused && `
+            bg-primary/6 ring-1 ring-primary/60 ring-inset
+            motion-safe:animate-in motion-safe:fade-in-0
+          `,
         selected && "bg-primary/10",
         !focused && !selected && "bg-transparent",
         !connectionName && "text-muted-foreground/60"
@@ -72,7 +74,12 @@ export const HistoryRow = memo(function HistoryRow({
       tabIndex={focused ? 0 : -1}
       type="button"
     >
-      <div className="flex items-center justify-between gap-2 text-[10px] text-muted-foreground">
+      <div
+        className="
+          flex items-center justify-between gap-2 text-[10px]
+          text-muted-foreground
+        "
+      >
         <div className="flex min-w-0 items-center gap-2">
           {entry.success ? (
             <CheckCircle2 className="size-3 shrink-0 text-emerald-500" />

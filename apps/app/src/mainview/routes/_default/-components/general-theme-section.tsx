@@ -18,7 +18,12 @@ const ChromePreview = ({ mode }: { mode: "light" | "dark" }) => (
   <div className={cn("flex h-full flex-col", mode)}>
     <div className="h-2 shrink-0 border-b border-sidebar-border bg-sidebar" />
     <div className="flex flex-1 bg-background">
-      <div className="flex w-1/4 flex-col gap-1 border-r border-sidebar-border bg-sidebar p-1.5">
+      <div
+        className="
+          flex w-1/4 flex-col gap-1 border-r border-sidebar-border bg-sidebar
+          p-1.5
+        "
+      >
         <div className="h-0.5 w-3/4 rounded-full bg-foreground/20" />
         <div className="h-0.5 w-1/2 rounded-full bg-foreground/20" />
         <div className="h-0.5 w-2/3 rounded-full bg-foreground/20" />
@@ -27,7 +32,11 @@ const ChromePreview = ({ mode }: { mode: "light" | "dark" }) => (
         <div className="h-0.5 w-1/2 rounded-full bg-foreground/20" />
         <div className="h-0.5 w-2/3 rounded-full bg-foreground/20" />
         <div className="h-0.5 w-1/3 rounded-full bg-foreground/20" />
-        <div className="absolute right-1.5 bottom-1.5 size-1.5 rounded-full bg-primary" />
+        <div
+          className="
+            absolute right-1.5 bottom-1.5 size-1.5 rounded-full bg-primary
+          "
+        />
       </div>
     </div>
   </div>
@@ -67,18 +76,17 @@ const ThemeTile = ({ value, label, isSelected, onSelect }: ThemeTileProps) => {
 
   return (
     <div className="relative">
-      <button
-        aria-pressed={isSelected}
-        className={cn(
-          "group block w-full cursor-pointer overflow-hidden rounded-lg text-left ring-2 transition-colors",
-          "focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sidebar-ring",
-          isSelected
-            ? "ring-primary"
-            : "ring-foreground/10 hover:ring-foreground/25"
-        )}
-        onClick={handleClick}
-        type="button"
-      >
+      <button aria-pressed={isSelected} className={cn(`
+            group block w-full cursor-pointer overflow-hidden rounded-lg
+            text-left ring-2 transition-colors
+          `, `
+            focus:outline-none
+            focus-visible:outline-2 focus-visible:outline-offset-2
+            focus-visible:outline-sidebar-ring
+          `, isSelected ? "ring-primary" : `
+              ring-foreground/10
+              hover:ring-foreground/25
+            `)} onClick={handleClick} type="button">
         <div className="pointer-events-none h-[100px] overflow-hidden">
           {value === "system" ? (
             <SystemPreview />
@@ -89,9 +97,10 @@ const ThemeTile = ({ value, label, isSelected, onSelect }: ThemeTileProps) => {
         <div
           className={cn(
             "border-t px-3 py-2 text-sm font-medium transition-colors",
-            isSelected
-              ? "border-primary/30 text-foreground"
-              : "border-foreground/10 text-muted-foreground group-hover:text-foreground"
+            isSelected ? "border-primary/30 text-foreground" : `
+                border-foreground/10 text-muted-foreground
+                group-hover:text-foreground
+              `
           )}
         >
           {label}
@@ -100,7 +109,9 @@ const ThemeTile = ({ value, label, isSelected, onSelect }: ThemeTileProps) => {
       {pulseKey !== null && (
         <motion.div
           animate={reduced ? { opacity: 0 } : { opacity: 0, scale: 1.05 }}
-          className="pointer-events-none absolute inset-0 rounded-lg ring-2 ring-primary"
+          className="
+            pointer-events-none absolute inset-0 rounded-lg ring-2 ring-primary
+          "
           initial={reduced ? { opacity: 0.6 } : { opacity: 0.9, scale: 1 }}
           key={pulseKey}
           onAnimationComplete={handlePulseComplete}

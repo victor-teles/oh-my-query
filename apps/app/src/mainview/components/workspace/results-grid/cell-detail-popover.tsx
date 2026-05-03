@@ -2,7 +2,6 @@ import type { RefObject } from "react";
 
 import { Copy, Expand } from "lucide-react";
 import { useCallback } from "react";
-import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import { PopoverContent } from "@/components/ui/popover";
@@ -41,7 +40,6 @@ export const CellDetailPopover = ({
 
   const handleCopy = useCallback(() => {
     navigator.clipboard.writeText(formatted);
-    toast.success("Copied value");
   }, [formatted]);
 
   return (
@@ -51,17 +49,32 @@ export const CellDetailPopover = ({
       className="w-96"
       side="bottom"
     >
-      <div className="flex items-baseline justify-between gap-2 border-border/40 border-b pb-2">
-        <span className="truncate font-medium font-mono text-xs text-foreground">
+      <div
+        className="
+          flex items-baseline justify-between gap-2 border-b border-border/40
+          pb-2
+        "
+      >
+        <span className="truncate font-mono text-xs font-medium text-foreground">
           {columnName}
         </span>
-        <span className="shrink-0 font-mono text-[10px] uppercase tracking-wider text-muted-foreground/70">
+        <span
+          className="
+            shrink-0 font-mono text-[10px] tracking-wider
+            text-muted-foreground/70 uppercase
+          "
+        >
           {columnType}
         </span>
       </div>
-      <pre className="mt-2 max-h-[40vh] overflow-auto whitespace-pre-wrap break-words font-mono text-xs leading-relaxed text-foreground">
+      <pre
+        className="
+          mt-2 max-h-[40vh] overflow-auto font-mono text-xs/relaxed
+          wrap-break-word whitespace-pre-wrap text-foreground
+        "
+      >
         {isNull(value) ? (
-          <span className="italic text-muted-foreground">NULL</span>
+          <span className="text-muted-foreground italic">NULL</span>
         ) : (
           formatted
         )}

@@ -37,7 +37,12 @@ const ConnectionsBoard = ({
     initial={{ opacity: 0 }}
     transition={{ duration: 0.2, ease: "easeOut" }}
   >
-    <h1 className="mb-8 px-0.5 text-2xl font-medium leading-[1.1] tracking-tight text-foreground">
+    <h1
+      className="
+        mb-8 px-0.5 text-2xl leading-[1.1] font-medium tracking-tight
+        text-foreground
+      "
+    >
       Your databases
     </h1>
 
@@ -45,7 +50,11 @@ const ConnectionsBoard = ({
       <div
         aria-activedescendant={selectedId ?? undefined}
         aria-label="Database connections"
-        className="flex flex-col gap-9 rounded-md outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+        className="
+          flex flex-col gap-9 rounded-md outline-none
+          focus-visible:ring-2 focus-visible:ring-ring
+          focus-visible:ring-offset-2 focus-visible:ring-offset-background
+        "
         ref={listboxRef}
         role="listbox"
         tabIndex={0}
@@ -53,7 +62,7 @@ const ConnectionsBoard = ({
         {pinned.length > 0 && (
           <section aria-labelledby="connections-pinned-heading">
             <h2
-              className="mb-3 px-0.5 text-section-label"
+              className="text-section-label mb-3 px-0.5"
               id="connections-pinned-heading"
             >
               Pinned
@@ -73,7 +82,7 @@ const ConnectionsBoard = ({
         {unpinned.length > 0 && (
           <section aria-labelledby="connections-recent-heading">
             <h2
-              className="mb-3 px-0.5 text-section-label"
+              className="text-section-label mb-3 px-0.5"
               id="connections-recent-heading"
             >
               Recent

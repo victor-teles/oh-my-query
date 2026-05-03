@@ -1,0 +1,38 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`list-cursor > default 1`] = `
+<div>
+  <nav
+    class="flex flex-col gap-0.5 p-2"
+  >
+    <button
+      class="relative rounded-md px-3 py-1.5 text-left text-xs transition-colors text-muted-foreground hover:text-foreground"
+      type="button"
+    >
+      users
+    </button>
+    <button
+      class="relative rounded-md px-3 py-1.5 text-left text-xs transition-colors text-primary-foreground"
+      type="button"
+    >
+      <span
+        aria-hidden="true"
+        class="absolute rounded-full bg-primary inset-0 -z-10"
+      />
+      orders
+    </button>
+    <button
+      class="relative rounded-md px-3 py-1.5 text-left text-xs transition-colors text-muted-foreground hover:text-foreground"
+      type="button"
+    >
+      products
+    </button>
+    <button
+      class="relative rounded-md px-3 py-1.5 text-left text-xs transition-colors text-muted-foreground hover:text-foreground"
+      type="button"
+    >
+      categories
+    </button>
+  </nav>
+</div>
+`;

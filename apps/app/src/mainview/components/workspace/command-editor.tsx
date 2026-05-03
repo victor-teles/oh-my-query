@@ -54,7 +54,11 @@ export const CommandEditor = ({
       onChange={handleChange}
       readOnly={readOnly}
       placeholder={PLACEHOLDERS[databaseType] ?? "Enter command..."}
-      className="h-full w-full resize-none bg-background p-3 font-mono text-sm text-foreground outline-none placeholder:text-muted-foreground"
+      className="
+        size-full resize-none bg-background p-3 font-mono text-sm
+        text-foreground outline-none
+        placeholder:text-muted-foreground
+      "
       spellCheck={false}
     />
   );
