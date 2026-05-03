@@ -1,0 +1,98 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`suggestion > uses the suggestion as the visible label by default 1`] = `
+<div>
+  <button
+    class="group/button inline-flex shrink-0 items-center justify-center border bg-clip-padding font-medium whitespace-nowrap transition-all duration-150 ease-out outline-none select-none focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-2 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 h-6 gap-1 text-xs/relaxed has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 [&_svg:not([class*='size-'])]:size-3 border-border hover:bg-input/50 hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:bg-input/30 cursor-pointer rounded-full px-4"
+    data-slot="button"
+    tabindex="0"
+    type="button"
+  >
+    Find slow queries
+  </button>
+</div>
+`;
+
+exports[`suggestions > wraps children in a horizontal scroll area 1`] = `
+<div>
+  <div
+    class="relative w-full overflow-x-auto whitespace-nowrap"
+    data-has-overflow-x=""
+    data-has-overflow-y=""
+    data-slot="scroll-area"
+    role="presentation"
+    style="position: relative; --scroll-area-corner-height: 0px; --scroll-area-corner-width: 0px"
+  >
+    <div
+      class="
+          size-full rounded-[inherit] transition-all duration-150 ease-out
+          outline-none
+          focus-visible:ring-2 focus-visible:ring-ring/50
+         base-ui-disable-scrollbar"
+      data-has-overflow-x=""
+      data-has-overflow-y=""
+      data-id="base-ui-_r_0_-viewport"
+      data-slot="scroll-area-viewport"
+      role="presentation"
+      style="overflow: scroll"
+      tabindex="0"
+    >
+      <div
+        class="flex items-center gap-2"
+      >
+        <button
+          class="group/button inline-flex shrink-0 items-center justify-center border bg-clip-padding font-medium whitespace-nowrap transition-all duration-150 ease-out outline-none select-none focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-2 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 h-6 gap-1 text-xs/relaxed has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 [&_svg:not([class*='size-'])]:size-3 border-border hover:bg-input/50 hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:bg-input/30 cursor-pointer rounded-full px-4"
+          data-slot="button"
+          tabindex="0"
+          type="button"
+        >
+          One
+        </button>
+        <button
+          class="group/button inline-flex shrink-0 items-center justify-center border bg-clip-padding font-medium whitespace-nowrap transition-all duration-150 ease-out outline-none select-none focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-2 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 h-6 gap-1 text-xs/relaxed has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 [&_svg:not([class*='size-'])]:size-3 border-border hover:bg-input/50 hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:bg-input/30 cursor-pointer rounded-full px-4"
+          data-slot="button"
+          tabindex="0"
+          type="button"
+        >
+          Two
+        </button>
+      </div>
+      <div
+        class="touch-none p-px transition-colors select-none data-horizontal:h-2.5 data-horizontal:flex-col data-horizontal:border-t data-horizontal:border-t-transparent data-vertical:h-full data-vertical:w-2.5 data-vertical:border-l data-vertical:border-l-transparent hidden"
+        data-has-overflow-x=""
+        data-has-overflow-y=""
+        data-id="base-ui-_r_0_-scrollbar"
+        data-orientation="horizontal"
+        data-slot="scroll-area-scrollbar"
+        style="position: absolute; touch-action: none; user-select: none; inset-inline-start: 0px; inset-inline-end: var(--scroll-area-corner-width); bottom: 0px; --scroll-area-thumb-width: 0px"
+      >
+        <div
+          class="relative flex-1 rounded-full bg-border"
+          data-orientation="horizontal"
+          data-slot="scroll-area-thumb"
+          style="width: var(--scroll-area-thumb-width)"
+        />
+      </div>
+    </div>
+    <div
+      class="flex touch-none p-px transition-colors select-none data-horizontal:h-2.5 data-horizontal:flex-col data-horizontal:border-t data-horizontal:border-t-transparent data-vertical:h-full data-vertical:w-2.5 data-vertical:border-l data-vertical:border-l-transparent"
+      data-has-overflow-x=""
+      data-has-overflow-y=""
+      data-id="base-ui-_r_0_-scrollbar"
+      data-orientation="vertical"
+      data-slot="scroll-area-scrollbar"
+      style="position: absolute; touch-action: none; user-select: none; top: 0px; bottom: var(--scroll-area-corner-height); inset-inline-end: 0px; --scroll-area-thumb-height: 0px"
+    >
+      <div
+        class="relative flex-1 rounded-full bg-border"
+        data-orientation="vertical"
+        data-slot="scroll-area-thumb"
+        style="height: var(--scroll-area-thumb-height)"
+      />
+    </div>
+    <div
+      style="position: absolute; bottom: 0px; inset-inline-end: 0px; width: 0px; height: 0px"
+    />
+  </div>
+</div>
+`;

@@ -1,0 +1,24 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`conversationEmptyState > renders default copy 1`] = `
+<div>
+  <div
+    class="flex size-full flex-col items-center justify-center gap-3 p-8 text-center"
+  >
+    <div
+      class="space-y-1"
+    >
+      <h3
+        class="text-base font-medium"
+      >
+        No messages yet
+      </h3>
+      <p
+        class="text-xs text-muted-foreground"
+      >
+        Start a conversation to see messages here
+      </p>
+    </div>
+  </div>
+</div>
+`;

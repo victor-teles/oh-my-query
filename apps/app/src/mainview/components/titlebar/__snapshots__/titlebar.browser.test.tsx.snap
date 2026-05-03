@@ -1,0 +1,75 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`titlebar > renders the no-sidebar branch with center + trailing children 1`] = `
+<div>
+  <header
+    class="flex h-9.5 shrink-0 items-center select-none border-b border-sidebar-border bg-sidebar/80 electrobun-webkit-app-region-drag"
+  >
+    <div
+      style="width: 0px"
+    />
+    <div
+      class="relative flex-1 electrobun-webkit-app-region-drag"
+    >
+      <div
+        class="electrobun-webkit-app-region-no-drag"
+      >
+        <span>
+          Center slot
+        </span>
+      </div>
+    </div>
+    <div
+      class="flex shrink-0 items-center gap-1 px-2 electrobun-webkit-app-region-no-drag"
+    >
+      <button
+        type="button"
+      >
+        Action
+      </button>
+    </div>
+  </header>
+</div>
+`;
+
+exports[`titlebar > renders the sidebar branch when leading is provided 1`] = `
+<div>
+  <header
+    class="flex h-9.5 shrink-0 items-center select-none electrobun-webkit-app-region-drag"
+  >
+    <div
+      class="flex h-full shrink-0 items-center border-r border-sidebar-border electrobun-webkit-app-region-drag"
+      style="width: 200px"
+    >
+      <div
+        style="width: 0px"
+      />
+      <div
+        class="ml-auto flex items-center electrobun-webkit-app-region-no-drag"
+      >
+        <span>
+          Leading slot
+        </span>
+      </div>
+    </div>
+    <div
+      class="relative flex h-full flex-1 items-center border-b bg-background electrobun-webkit-app-region-drag"
+    >
+      <div
+        class="electrobun-webkit-app-region-no-drag"
+      >
+        <span>
+          Center
+        </span>
+      </div>
+      <div
+        class="ml-auto flex shrink-0 items-center gap-1 px-2 electrobun-webkit-app-region-no-drag"
+      >
+        <span>
+          Trailing
+        </span>
+      </div>
+    </div>
+  </header>
+</div>
+`;
