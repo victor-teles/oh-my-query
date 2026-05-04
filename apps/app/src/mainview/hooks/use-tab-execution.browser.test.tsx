@@ -1,4 +1,4 @@
-import { describe, expect, it, vi } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import type { DatabaseConnection } from "@/lib/connections";
 import type { QueryTab } from "@/lib/query-types";
@@ -6,7 +6,7 @@ import type { QueryTab } from "@/lib/query-types";
 import { renderHook, waitFor } from "@/test/render-hook";
 import { mockTauri } from "@/test/tauri-mock";
 
-const fakeConnection: DatabaseConnection = {
+const baseConnection: DatabaseConnection = {
   createdAt: "2024-01-01T00:00:00.000Z",
   database: "app",
   host: "localhost",
@@ -20,22 +20,30 @@ const fakeConnection: DatabaseConnection = {
   username: "postgres",
 };
 
+// oxlint-disable-next-line prefer-const, jest/require-hook
+let activeConnection: DatabaseConnection = baseConnection;
+
 const confirmMock = vi.fn(async (_sql: string) => {
   await Promise.resolve();
   return true;
 });
 
-vi.mock(import("@/contexts/connection-context"), () => ({
-  useConnection: () => ({
-    connection: fakeConnection,
-    error: null,
-    isConnected: true,
-    isConnecting: false,
-    isReconnecting: false,
-    reconnect: vi.fn(),
-    serverVersion: null,
-  }),
-}));
+vi.mock(import("@/contexts/connection-context"), async () => {
+  const { resolveRunConfig } = await import("@/lib/connections");
+  return {
+    useConnection: () => ({
+      connection: activeConnection,
+      error: null,
+      isConnected: true,
+      isConnecting: false,
+      isReconnecting: false,
+      reconnect: vi.fn(),
+      runConfig: resolveRunConfig(activeConnection),
+      serverVersion: null,
+      setRunConfig: vi.fn(),
+    }),
+  };
+});
 
 vi.mock(import("@/contexts/safe-mode-context"), () => ({
   useSafeMode: () => ({
@@ -87,6 +95,10 @@ const flushSave = vi.fn(async () => {
 });
 
 describe("useTabExecution", () => {
+  beforeEach(() => {
+    activeConnection = baseConnection;
+  });
+
   it("runs a successful query and updates the tab result", async () => {
     mockTauri({
       executeQuery: () => ({
@@ -226,6 +238,109 @@ describe("useTabExecution", () => {
       connectionType: "postgresql",
       environment: undefined,
     });
+  });
+
+  it("forwards connection runConfig to executeQuery", async () => {
+    activeConnection = {
+      ...baseConnection,
+      runConfig: {
+        maxRows: 250,
+        sandbox: true,
+        schemaOverride: "analytics",
+        timeoutSecs: 30,
+      },
+    };
+    const executeHandler = vi.fn((_payload: Record<string, unknown>) => ({
+      columns: [],
+      executionTimeMs: 0,
+      isTruncated: false,
+      resultType: "tabular" as const,
+      rowCount: 0,
+      rows: [],
+    }));
+    mockTauri({ executeQuery: executeHandler });
+
+    const { setTabs } = makeSetTabs([makeTab()]);
+    const { result } = renderHook(() =>
+      useTabExecution({
+        connectionId: "conn-1",
+        flushSave,
+        selectedDatabase: "public",
+        setTabs,
+      })
+    );
+
+    await result.current.execute("tab-1", "SELECT 1");
+
+    const [[payload]] = executeHandler.mock.calls;
+    const params = payload.params as Record<string, unknown>;
+    expect(params.maxRows).toBe(250);
+    expect(params.schema).toBe("analytics");
+    expect(params.timeoutSecs).toBe(30);
+  });
+
+  it("passes null maxRows when connection sandbox is off", async () => {
+    activeConnection = {
+      ...baseConnection,
+      runConfig: { sandbox: false },
+    };
+    const executeHandler = vi.fn((_payload: Record<string, unknown>) => ({
+      columns: [],
+      executionTimeMs: 0,
+      isTruncated: false,
+      resultType: "tabular" as const,
+      rowCount: 0,
+      rows: [],
+    }));
+    mockTauri({ executeQuery: executeHandler });
+
+    const { setTabs } = makeSetTabs([makeTab()]);
+    const { result } = renderHook(() =>
+      useTabExecution({
+        connectionId: "conn-1",
+        flushSave,
+        selectedDatabase: "public",
+        setTabs,
+      })
+    );
+
+    await result.current.execute("tab-1", "SELECT 1");
+
+    const [[payload]] = executeHandler.mock.calls;
+    const params = payload.params as Record<string, unknown>;
+    expect(params.maxRows).toBeNull();
+  });
+
+  it("respects per-call maxRows override", async () => {
+    activeConnection = {
+      ...baseConnection,
+      runConfig: { maxRows: 100, sandbox: true },
+    };
+    const executeHandler = vi.fn((_payload: Record<string, unknown>) => ({
+      columns: [],
+      executionTimeMs: 0,
+      isTruncated: false,
+      resultType: "tabular" as const,
+      rowCount: 0,
+      rows: [],
+    }));
+    mockTauri({ executeQuery: executeHandler });
+
+    const { setTabs } = makeSetTabs([makeTab()]);
+    const { result } = renderHook(() =>
+      useTabExecution({
+        connectionId: "conn-1",
+        flushSave,
+        selectedDatabase: "public",
+        setTabs,
+      })
+    );
+
+    await result.current.execute("tab-1", "SELECT 1", { maxRows: 5000 });
+
+    const [[payload]] = executeHandler.mock.calls;
+    const params = payload.params as Record<string, unknown>;
+    expect(params.maxRows).toBe(5000);
   });
 
   it("forwards cancel() to cancel_query", async () => {

@@ -2,6 +2,8 @@ import { useCallback } from "react";
 
 import type { QueryTab } from "@/lib/query-types";
 
+import { useConnection } from "@/contexts/connection-context";
+import { resolveRunConfig } from "@/lib/connections";
 import { cancelQuery, explainQuery } from "@/lib/tauri";
 
 const isCancellationError = (error: unknown): boolean => {
@@ -42,6 +44,8 @@ export const useTabExplain = ({
   selectedDatabase,
   setTabs,
 }: UseTabExplainParams) => {
+  const { connection } = useConnection();
+
   const explain = useCallback(
     async (
       tabId: string,
@@ -49,6 +53,10 @@ export const useTabExplain = ({
       sourceDialect: string | null,
       analyze: boolean
     ) => {
+      const runConfig = resolveRunConfig(connection);
+      const schema = runConfig.schemaOverride ?? selectedDatabase ?? undefined;
+      const { timeoutSecs } = runConfig;
+
       const queryId = crypto.randomUUID();
       setTabs((prev) =>
         prev.map((t) =>
@@ -69,9 +77,10 @@ export const useTabExplain = ({
           analyze,
           connectionId,
           queryId,
-          schema: selectedDatabase ?? undefined,
+          schema,
           sourceDialect: sourceDialect ?? undefined,
           sql,
+          timeoutSecs,
         });
         setTabs((prev) =>
           prev.map((t) =>
@@ -105,7 +114,7 @@ export const useTabExplain = ({
         );
       }
     },
-    [connectionId, selectedDatabase, setTabs]
+    [connection, connectionId, selectedDatabase, setTabs]
   );
 
   const cancel = useCallback(async (queryId: string) => {

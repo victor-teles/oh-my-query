@@ -4,6 +4,7 @@ import type { QueryTab } from "@/lib/query-types";
 
 import { useConnection } from "@/contexts/connection-context";
 import { useSafeMode } from "@/contexts/safe-mode-context";
+import { resolveRunConfig } from "@/lib/connections";
 import { appendHistory, HISTORY_UPDATED_EVENT } from "@/lib/persistence";
 import { cancelQuery, executeQuery } from "@/lib/tauri";
 
@@ -43,6 +44,11 @@ interface UseTabExecutionParams {
   flushSave: () => Promise<void>;
 }
 
+export interface ExecuteOptions {
+  sourceDialect?: string | null;
+  maxRows?: number | null;
+}
+
 export const useTabExecution = ({
   connectionId,
   selectedDatabase,
@@ -54,12 +60,15 @@ export const useTabExecution = ({
   const { connection } = useConnection();
 
   const execute = useCallback(
-    async (
-      tabId: string,
-      sql: string,
-      sourceDialect?: string | null,
-      maxRows?: number
-    ) => {
+    async (tabId: string, sql: string, options?: ExecuteOptions) => {
+      const sourceDialect = options?.sourceDialect ?? null;
+      const runConfig = resolveRunConfig(connection);
+      const sandboxedMaxRows = runConfig.sandbox ? runConfig.maxRows : null;
+      const maxRows =
+        options?.maxRows === undefined ? sandboxedMaxRows : options.maxRows;
+      const { timeoutSecs } = runConfig;
+      const schema = runConfig.schemaOverride ?? selectedDatabase ?? undefined;
+
       const confirmed = await requestConfirmation(sql, {
         connectionName: connection.name,
         connectionType: connection.type,
@@ -81,7 +90,7 @@ export const useTabExecution = ({
                 executedSql: null,
                 pendingExecution: {
                   database: selectedDatabase,
-                  sourceDialect: sourceDialect ?? null,
+                  sourceDialect,
                   sql,
                   startedAt,
                 },
@@ -104,11 +113,12 @@ export const useTabExecution = ({
       try {
         const result = await executeQuery({
           connectionId,
-          maxRows,
+          maxRows: maxRows ?? null,
           queryId,
-          schema: selectedDatabase ?? undefined,
+          schema,
           sourceDialect: sourceDialect ?? undefined,
           sql,
+          timeoutSecs: timeoutSecs ?? null,
         });
         ({ executionTimeMs } = result);
         success = true;
@@ -176,9 +186,7 @@ export const useTabExecution = ({
       }
     },
     [
-      connection.environment,
-      connection.name,
-      connection.type,
+      connection,
       connectionId,
       selectedDatabase,
       setTabs,

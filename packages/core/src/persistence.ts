@@ -13,6 +13,13 @@ import {
 const MAX_HISTORY_ENTRIES = 10_000;
 const DEFAULT_ALL_HISTORY_LIMIT = 500;
 
+export interface PersistedRunConfig {
+  sandbox?: boolean;
+  maxRows?: number | null;
+  timeoutSecs?: number | null;
+  schemaOverride?: string | null;
+}
+
 export interface PersistedTab {
   id: string;
   title: string;
@@ -67,6 +74,7 @@ export interface DatabaseConnection {
   environment?: string;
   piiRedaction?: boolean;
   customPiiPatterns?: string[];
+  runConfig?: PersistedRunConfig;
 }
 
 const fileLocks = new Map<string, Promise<unknown>>();

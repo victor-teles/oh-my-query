@@ -166,7 +166,9 @@ export const useQueryTabs = (
         );
         continue;
       }
-      execute(tab.id, pending.sql, pending.sourceDialect);
+      execute(tab.id, pending.sql, {
+        sourceDialect: pending.sourceDialect,
+      });
     }
   }, [isRestored, selectedDatabase, execute]);
 
@@ -224,7 +226,7 @@ export const useQueryTabs = (
         tabsRef.current = tabsRef.current.map((t) =>
           t.id === active.id ? replaced : t
         );
-        execute(active.id, sql, active.sourceDialect);
+        execute(active.id, sql, { sourceDialect: active.sourceDialect });
         return;
       }
 
@@ -233,7 +235,7 @@ export const useQueryTabs = (
       setTabs((prev) => [...prev, tab]);
       tabsRef.current = [...tabsRef.current, tab];
       setActiveTabId(tab.id);
-      execute(tab.id, sql, tab.sourceDialect);
+      execute(tab.id, sql, { sourceDialect: tab.sourceDialect });
     },
     [execute]
   );
@@ -309,13 +311,16 @@ export const useQueryTabs = (
   );
 
   const executeTab = useCallback(
-    (tabId: string, sqlOverride?: string, maxRows?: number) => {
+    (tabId: string, sqlOverride?: string, maxRowsOverride?: number) => {
       const tab = tabsRef.current.find((t) => t.id === tabId);
       const sqlToExecute = sqlOverride ?? tab?.sql;
-      if (!sqlToExecute?.trim()) {
+      if (!sqlToExecute?.trim() || !tab) {
         return;
       }
-      execute(tabId, sqlToExecute, tab?.sourceDialect, maxRows);
+      execute(tabId, sqlToExecute, {
+        maxRows: maxRowsOverride,
+        sourceDialect: tab.sourceDialect,
+      });
     },
     [execute]
   );

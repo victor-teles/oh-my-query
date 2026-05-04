@@ -49,6 +49,7 @@ import { QueryErrorDisplay } from "./query-error-display";
 import { QueryStatusBar } from "./query-status-bar";
 import { QueryTabBar } from "./query-tab-bar";
 import { ResultsGrid } from "./results-grid/results-grid";
+import { RunConfigPopover } from "./run-config-popover";
 import { SqlEditor } from "./sql-editor";
 import { SyntaxTreePanel } from "./syntax-tree-panel";
 import { SyntaxTreeToggle } from "./syntax-tree-toggle";
@@ -509,7 +510,7 @@ interface EditorToolbarProps {
   title: string | undefined;
   isSql: boolean;
   sourceDialect: string | null;
-  connectionType: string;
+  connectionType: DatabaseType;
   onDialectChange: (dialect: string) => void;
   isFormatDisabled: boolean;
   onFormat: () => void;
@@ -565,6 +566,7 @@ const EditorToolbar = ({
           )}
         </>
       )}
+      <RunConfigPopover connectionType={connectionType} />
       <ExecuteButton
         isRunning={isRunning}
         disabled={isExecuteDisabled}
