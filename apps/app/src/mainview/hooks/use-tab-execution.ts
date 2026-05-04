@@ -118,7 +118,7 @@ export const useTabExecution = ({
           schema,
           sourceDialect: sourceDialect ?? undefined,
           sql,
-          timeoutSecs: timeoutSecs ?? null,
+          timeoutSecs,
         });
         ({ executionTimeMs } = result);
         success = true;

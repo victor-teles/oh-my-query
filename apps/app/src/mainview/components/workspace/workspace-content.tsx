@@ -566,7 +566,7 @@ const EditorToolbar = ({
           )}
         </>
       )}
-      <RunConfigPopover connectionType={connectionType} />
+      <RunConfigPopover />
       <ExecuteButton
         isRunning={isRunning}
         disabled={isExecuteDisabled}

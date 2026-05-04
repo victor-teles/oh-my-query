@@ -122,15 +122,13 @@ export const markConnectionUsed = async (id: string): Promise<void> => {
   await writeConnections(connections);
 };
 
-export const resolveRunConfig = (
-  connection: DatabaseConnection
-): RunConfig => ({
-  ...DEFAULT_RUN_CONFIG,
-  ...connection.runConfig,
-});
-
-export const supportsSchemaOverride = (type: DatabaseType): boolean =>
-  type !== "mongodb" && type !== "redis";
+export const resolveRunConfig = (connection: DatabaseConnection): RunConfig => {
+  const merged = { ...DEFAULT_RUN_CONFIG, ...connection.runConfig };
+  return {
+    ...merged,
+    timeoutSecs: merged.timeoutSecs ?? DEFAULT_RUN_CONFIG.timeoutSecs,
+  };
+};
 
 export const isPiiRedactionEnabled = (
   connection: DatabaseConnection

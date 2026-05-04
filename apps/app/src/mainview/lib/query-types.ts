@@ -8,7 +8,7 @@ export type ExplainDensity = "comfortable" | "compact";
 export interface RunConfig {
   sandbox: boolean;
   maxRows: number | null;
-  timeoutSecs: number | null;
+  timeoutSecs: number;
   schemaOverride: string | null;
 }
 
@@ -16,7 +16,7 @@ export const DEFAULT_RUN_CONFIG: RunConfig = {
   maxRows: 100,
   sandbox: true,
   schemaOverride: null,
-  timeoutSecs: null,
+  timeoutSecs: 30,
 };
 
 export interface QueryTab {

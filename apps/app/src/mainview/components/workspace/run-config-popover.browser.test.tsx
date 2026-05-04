@@ -46,30 +46,25 @@ describe("runConfigPopover", () => {
   });
 
   it("opens the popover and toggles sandbox", async () => {
-    const screen = render(<RunConfigPopover connectionType="postgresql" />);
+    const screen = render(<RunConfigPopover />);
     await screen.getByLabelText("Run options").click();
     const checkbox = screen.getByRole("checkbox");
     await checkbox.click();
     expect(setRunConfig).toHaveBeenCalledWith({ sandbox: false });
   });
 
-  it("hides the schema field for mongodb", async () => {
-    const screen = render(<RunConfigPopover connectionType="mongodb" />);
-    await screen.getByLabelText("Run options").click();
-    expect(screen.getByLabelText("Default schema").query()).toBeNull();
-  });
-
-  it("shows the schema field for postgres", async () => {
-    const screen = render(<RunConfigPopover connectionType="postgresql" />);
-    await screen.getByLabelText("Run options").click();
-    expect(screen.getByLabelText("Default schema").element()).toBeVisible();
-  });
-
   it("flags an active dot when runConfig deviates from defaults", () => {
-    runConfig = { ...DEFAULT_RUN_CONFIG, timeoutSecs: 30 };
-    const screen = render(<RunConfigPopover connectionType="postgresql" />);
+    runConfig = { ...DEFAULT_RUN_CONFIG, timeoutSecs: 60 };
+    const screen = render(<RunConfigPopover />);
     const trigger = screen.getByLabelText("Run options").element();
-    const dot = trigger.querySelector("[aria-hidden='true']");
+    const dot = trigger.querySelector("span[aria-hidden='true']");
     expect(dot).not.toBeNull();
+  });
+
+  it("does not flag the dot at default values", () => {
+    const screen = render(<RunConfigPopover />);
+    const trigger = screen.getByLabelText("Run options").element();
+    const dot = trigger.querySelector("span[aria-hidden='true']");
+    expect(dot).toBeNull();
   });
 });

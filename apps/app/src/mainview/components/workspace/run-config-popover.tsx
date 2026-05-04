@@ -1,8 +1,6 @@
 import { Settings2 } from "lucide-react";
 import { useCallback } from "react";
 
-import type { DatabaseType } from "@/lib/connections";
-
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
@@ -18,7 +16,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { useConnection } from "@/contexts/connection-context";
-import { supportsSchemaOverride } from "@/lib/connections";
+import { DEFAULT_RUN_CONFIG } from "@/lib/query-types";
 
 const parsePositiveInt = (raw: string): number | null => {
   const trimmed = raw.trim();
@@ -32,18 +30,12 @@ const parsePositiveInt = (raw: string): number | null => {
   return parsed;
 };
 
-interface RunConfigPopoverProps {
-  connectionType: DatabaseType;
-}
-
-export const RunConfigPopover = ({ connectionType }: RunConfigPopoverProps) => {
+export const RunConfigPopover = () => {
   const { runConfig, setRunConfig } = useConnection();
-  const showSchema = supportsSchemaOverride(connectionType);
   const isModified =
-    !runConfig.sandbox ||
-    runConfig.maxRows !== 100 ||
-    runConfig.timeoutSecs !== null ||
-    runConfig.schemaOverride !== null;
+    runConfig.sandbox !== DEFAULT_RUN_CONFIG.sandbox ||
+    runConfig.maxRows !== DEFAULT_RUN_CONFIG.maxRows ||
+    runConfig.timeoutSecs !== DEFAULT_RUN_CONFIG.timeoutSecs;
 
   const onSandboxChange = useCallback(
     (checked: boolean) => {
@@ -55,39 +47,30 @@ export const RunConfigPopover = ({ connectionType }: RunConfigPopoverProps) => {
   const onMaxRowsChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       const value = parsePositiveInt(e.target.value);
-      setRunConfig({ maxRows: value ?? 100 });
+      setRunConfig({ maxRows: value ?? DEFAULT_RUN_CONFIG.maxRows });
     },
     [setRunConfig]
   );
 
   const onTimeoutChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
-      setRunConfig({ timeoutSecs: parsePositiveInt(e.target.value) });
-    },
-    [setRunConfig]
-  );
-
-  const onSchemaChange = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      const trimmed = e.target.value.trim();
-      setRunConfig({ schemaOverride: trimmed.length > 0 ? trimmed : null });
+      const value = parsePositiveInt(e.target.value);
+      setRunConfig({ timeoutSecs: value ?? DEFAULT_RUN_CONFIG.timeoutSecs });
     },
     [setRunConfig]
   );
 
   const onReset = useCallback(() => {
     setRunConfig({
-      maxRows: 100,
-      sandbox: true,
-      schemaOverride: null,
-      timeoutSecs: null,
+      maxRows: DEFAULT_RUN_CONFIG.maxRows,
+      sandbox: DEFAULT_RUN_CONFIG.sandbox,
+      timeoutSecs: DEFAULT_RUN_CONFIG.timeoutSecs,
     });
   }, [setRunConfig]);
 
   const rowCapValue =
     runConfig.maxRows === null ? "" : String(runConfig.maxRows);
-  const timeoutValue =
-    runConfig.timeoutSecs === null ? "" : String(runConfig.timeoutSecs);
+  const timeoutValue = String(runConfig.timeoutSecs);
 
   return (
     <Popover>
@@ -137,19 +120,23 @@ export const RunConfigPopover = ({ connectionType }: RunConfigPopoverProps) => {
           )}
         </div>
 
-        <div className="space-y-1.5">
-          <Label className="flex items-center gap-2 font-normal">
-            <Checkbox
-              checked={runConfig.sandbox}
-              onCheckedChange={onSandboxChange}
-            />
-            Cap rows
-          </Label>
-          {runConfig.sandbox ? (
-            <div className="flex items-center gap-2 pl-6">
+        <div className="space-y-2">
+          <div className="flex items-center justify-between gap-3">
+            <Label
+              className="flex items-center gap-2 font-normal"
+              htmlFor="run-config-max-rows"
+            >
+              <Checkbox
+                checked={runConfig.sandbox}
+                onCheckedChange={onSandboxChange}
+              />
+              Cap rows
+            </Label>
+            <div className="flex items-center gap-1.5">
               <Input
-                aria-label="Row cap"
-                className="h-7 w-24"
+                className="h-7 w-20 text-right"
+                disabled={!runConfig.sandbox}
+                id="run-config-max-rows"
                 inputMode="numeric"
                 min={1}
                 onChange={onMaxRowsChange}
@@ -157,48 +144,39 @@ export const RunConfigPopover = ({ connectionType }: RunConfigPopoverProps) => {
                 type="number"
                 value={rowCapValue}
               />
-              <span className="text-[11px] text-muted-foreground">rows</span>
+              <span className="w-14 text-[11px] text-muted-foreground">
+                rows
+              </span>
             </div>
-          ) : (
-            <p className="pl-6 text-[11px] text-warning">
+          </div>
+
+          <div className="flex items-center justify-between gap-3">
+            <Label className="font-normal" htmlFor="run-config-timeout">
+              Statement timeout
+            </Label>
+            <div className="flex items-center gap-1.5">
+              <Input
+                className="h-7 w-20 text-right"
+                id="run-config-timeout"
+                inputMode="numeric"
+                min={1}
+                onChange={onTimeoutChange}
+                placeholder="30"
+                type="number"
+                value={timeoutValue}
+              />
+              <span className="w-14 text-[11px] text-muted-foreground">
+                seconds
+              </span>
+            </div>
+          </div>
+
+          {!runConfig.sandbox && (
+            <p className="text-[11px] text-warning">
               Queries will run uncapped on this connection.
             </p>
           )}
         </div>
-
-        <div className="space-y-1.5">
-          <Label className="font-normal" htmlFor="run-config-timeout">
-            Statement timeout
-          </Label>
-          <div className="flex items-center gap-2">
-            <Input
-              className="h-7 w-24"
-              id="run-config-timeout"
-              inputMode="numeric"
-              min={1}
-              onChange={onTimeoutChange}
-              placeholder="No limit"
-              type="number"
-              value={timeoutValue}
-            />
-            <span className="text-[11px] text-muted-foreground">seconds</span>
-          </div>
-        </div>
-
-        {showSchema && (
-          <div className="space-y-1.5">
-            <Label className="font-normal" htmlFor="run-config-schema">
-              Default schema
-            </Label>
-            <Input
-              className="h-7"
-              id="run-config-schema"
-              onChange={onSchemaChange}
-              placeholder="Inherit from database"
-              value={runConfig.schemaOverride ?? ""}
-            />
-          </div>
-        )}
       </PopoverContent>
     </Popover>
   );
