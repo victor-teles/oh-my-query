@@ -31,6 +31,7 @@ export type {
   DatabaseConnection,
   HistoryEntry,
   HistoryFilters,
+  PersistedRunConfig,
   PersistedTab,
   TabState,
 } from "./persistence.ts";

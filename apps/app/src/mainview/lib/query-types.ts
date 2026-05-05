@@ -5,6 +5,18 @@ export type TabStatus = "idle" | "running" | "success" | "error";
 
 export type ExplainDensity = "comfortable" | "compact";
 
+export interface RunConfig {
+  sandbox: boolean;
+  maxRows: number | null;
+  timeoutSecs: number;
+}
+
+export const DEFAULT_RUN_CONFIG: RunConfig = {
+  maxRows: 100,
+  sandbox: true,
+  timeoutSecs: 30,
+};
+
 export interface QueryTab {
   id: string;
   title: string;

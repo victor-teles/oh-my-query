@@ -132,6 +132,7 @@ export const useConnectionForm = (
           id: connection.id,
           lastConnectedAt: connection.lastConnectedAt,
           pinned: connection.pinned,
+          runConfig: connection.runConfig,
         };
         await updateConnection(updated);
         onSuccess?.(updated);

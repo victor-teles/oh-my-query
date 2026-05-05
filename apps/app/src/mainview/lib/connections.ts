@@ -1,9 +1,11 @@
 import type { DatabaseConnection as IpcDatabaseConnection } from "@/lib/ipc";
+import type { RunConfig } from "@/lib/query-types";
 
 import {
   getConnections as ipcGetConnections,
   saveConnections as ipcSaveConnections,
 } from "@/lib/ipc";
+import { DEFAULT_RUN_CONFIG } from "@/lib/query-types";
 
 export type DatabaseType =
   | "postgresql"
@@ -34,6 +36,7 @@ export interface DatabaseConnection extends Omit<
   environment?: ConnectionEnvironment;
   piiRedaction?: boolean;
   customPiiPatterns?: string[];
+  runConfig?: Partial<RunConfig>;
 }
 
 export const DEFAULT_PORTS: Record<DatabaseType, number> = {
@@ -117,6 +120,14 @@ export const markConnectionUsed = async (id: string): Promise<void> => {
       : connection
   );
   await writeConnections(connections);
+};
+
+export const resolveRunConfig = (connection: DatabaseConnection): RunConfig => {
+  const merged = { ...DEFAULT_RUN_CONFIG, ...connection.runConfig };
+  return {
+    ...merged,
+    timeoutSecs: merged.timeoutSecs ?? DEFAULT_RUN_CONFIG.timeoutSecs,
+  };
 };
 
 export const isPiiRedactionEnabled = (

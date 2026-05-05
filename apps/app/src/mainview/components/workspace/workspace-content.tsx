@@ -49,6 +49,7 @@ import { QueryErrorDisplay } from "./query-error-display";
 import { QueryStatusBar } from "./query-status-bar";
 import { QueryTabBar } from "./query-tab-bar";
 import { ResultsGrid } from "./results-grid/results-grid";
+import { RunConfigPopover } from "./run-config-popover";
 import { SqlEditor } from "./sql-editor";
 import { SyntaxTreePanel } from "./syntax-tree-panel";
 import { SyntaxTreeToggle } from "./syntax-tree-toggle";
@@ -219,7 +220,6 @@ const getResultsPanelProps = (
   executedSql: activeTab?.executedSql ?? null,
   isSql,
   result: activeTab?.result ?? null,
-  runningSql: activeTab?.pendingExecution?.sql ?? null,
   status: activeTab?.status,
 });
 
@@ -470,7 +470,6 @@ const ConnectedWorkspace = ({
 
         <ResizablePanel defaultSize="60%" minSize="20%">
           <EditorToolbar
-            title={activeTab?.title}
             isSql={isSql}
             sourceDialect={activeTab?.sourceDialect ?? null}
             connectionType={connection.type}
@@ -506,10 +505,9 @@ const ConnectedWorkspace = ({
 };
 
 interface EditorToolbarProps {
-  title: string | undefined;
   isSql: boolean;
   sourceDialect: string | null;
-  connectionType: string;
+  connectionType: DatabaseType;
   onDialectChange: (dialect: string) => void;
   isFormatDisabled: boolean;
   onFormat: () => void;
@@ -525,7 +523,6 @@ interface EditorToolbarProps {
 }
 
 const EditorToolbar = ({
-  title,
   isSql,
   sourceDialect,
   connectionType,
@@ -544,7 +541,6 @@ const EditorToolbar = ({
 }: EditorToolbarProps) => (
   <div className="flex items-center justify-between border-b px-2 py-1">
     <div className="flex items-center gap-2">
-      <span className="text-xs text-muted-foreground">{title}</span>
       {isSql && (
         <DialectSelector
           value={sourceDialect ?? connectionType}
@@ -565,6 +561,7 @@ const EditorToolbar = ({
           )}
         </>
       )}
+      <RunConfigPopover />
       <ExecuteButton
         isRunning={isRunning}
         disabled={isExecuteDisabled}
@@ -606,68 +603,57 @@ const SPRING_TRANSITION = {
 } as const;
 const REDUCED_MOTION_TRANSITION = { duration: 0 } as const;
 
-const RunningSqlPreview = ({ sql }: { sql: string }) => (
-  <pre
-    aria-hidden="true"
-    className="
-      max-h-48 max-w-2xl overflow-hidden text-center font-mono text-xs/relaxed
-      wrap-break-word whitespace-pre-wrap text-muted-foreground/60
-    "
-    style={{
-      WebkitMaskImage:
-        "linear-gradient(to bottom, black 55%, transparent 100%)",
-      maskImage: "linear-gradient(to bottom, black 55%, transparent 100%)",
-    }}
-  >
-    {sql.trim()}
-  </pre>
-);
-
-interface RunningStatusBarProps {
+interface RunningQueryViewProps {
   onCancel?: () => void;
 }
 
-const RunningStatusBar = ({ onCancel }: RunningStatusBarProps) => {
+const RunningQueryView = ({ onCancel }: RunningQueryViewProps) => {
   const elapsed = useElapsedMs(true);
   return (
     <div
       aria-live="polite"
       className="
-        relative flex items-center gap-2 overflow-hidden border-t bg-muted/30
-        px-3 py-1.5 text-xs text-muted-foreground
+        flex h-full flex-col items-center justify-center gap-4 px-6 py-8
       "
       role="status"
     >
-      <span
+      <span className="text-sm font-medium text-foreground">Running…</span>
+      <div
         aria-hidden="true"
         className="
-          pointer-events-none absolute inset-y-0 left-0 w-1/3 -translate-x-full
-          bg-linear-to-r from-transparent via-primary/20 to-transparent
-          motion-safe:animate-[query-shimmer_1.8s_ease-in-out_infinite]
+          relative h-px w-24 overflow-hidden rounded-full bg-border/40
           motion-reduce:hidden
         "
-      />
-      <span
-        className="
-          relative inline-flex size-1.5 rounded-full bg-primary
-          motion-safe:animate-pulse
-        "
-      />
-      <span className="relative font-medium text-foreground">Running…</span>
-      <span className="relative tabular-nums">{formatDuration(elapsed)}</span>
-      {onCancel && (
-        <button
+      >
+        <span
           className="
-            relative ml-auto rounded-sm px-2 py-0.5 text-xs
-            text-muted-foreground transition-colors
-            hover:bg-accent hover:text-foreground
+            absolute inset-y-0 left-0 w-1/2 -translate-x-full bg-linear-to-r
+            from-transparent via-primary/70 to-transparent
+            motion-safe:animate-[query-shimmer_1.6s_ease-in-out_infinite]
           "
-          onClick={onCancel}
-          type="button"
-        >
-          Cancel
-        </button>
-      )}
+        />
+      </div>
+      <div
+        className="
+          flex items-center gap-2 text-xs text-muted-foreground
+        "
+      >
+        <span className="tabular-nums">{formatDuration(elapsed)}</span>
+        {onCancel && (
+          <>
+            <span aria-hidden="true">·</span>
+            <button
+              className="
+                rounded-sm transition-colors hover:text-foreground
+              "
+              onClick={onCancel}
+              type="button"
+            >
+              Cancel
+            </button>
+          </>
+        )}
+      </div>
     </div>
   );
 };
@@ -676,7 +662,6 @@ interface ResultsPanelProps {
   status: string | undefined;
   result: ExecuteResult | null;
   executedSql: string | null;
-  runningSql: string | null;
   error: string | null;
   errorCode: string | null;
   isSql: boolean;
@@ -687,7 +672,6 @@ const ResultsPanel = ({
   status,
   result,
   executedSql,
-  runningSql,
   error,
   errorCode,
   isSql,
@@ -743,7 +727,6 @@ const ResultsPanel = ({
     jumpTo,
     onAiFix,
     result,
-    runningSql,
     status,
   });
 
@@ -775,7 +758,6 @@ interface RenderResultsStateArgs {
   jumpTo: ReturnType<typeof useEditorInsert>["jumpTo"];
   onAiFix?: () => void;
   result: ExecuteResult | null;
-  runningSql: string | null;
   status: string | undefined;
 }
 
@@ -791,23 +773,11 @@ const renderResultsState = ({
   jumpTo,
   onAiFix,
   result,
-  runningSql,
   status,
 }: RenderResultsStateArgs): { stateKey: string; content: React.ReactNode } => {
   if (status === "running") {
     return {
-      content: (
-        <div className="flex h-full flex-col">
-          <div
-            className="
-              flex flex-1 items-center justify-center overflow-hidden p-6
-            "
-          >
-            {runningSql && <RunningSqlPreview sql={runningSql} />}
-          </div>
-          <RunningStatusBar onCancel={handleCancel} />
-        </div>
-      ),
+      content: <RunningQueryView onCancel={handleCancel} />,
       stateKey: "running",
     };
   }
@@ -922,7 +892,7 @@ const BottomPanel = ({
     >
       <TabsList variant="segment" className="shrink-0">
         <TabsTrigger value="results">Results</TabsTrigger>
-        {showExplainTab && <TabsTrigger value="explain">EXPLAIN</TabsTrigger>}
+        {showExplainTab && <TabsTrigger value="explain">Explain</TabsTrigger>}
         {isSyntaxTreeOpen && (
           <TabsTrigger value="syntaxTree">Syntax Tree</TabsTrigger>
         )}
