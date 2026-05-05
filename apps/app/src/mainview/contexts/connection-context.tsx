@@ -29,9 +29,15 @@ export const ConnectionProvider = ({
   connection: DatabaseConnection;
   children: ReactNode;
 }) => {
+  const [storedConnectionId, setStoredConnectionId] = useState(connection.id);
   const [runConfig, setRunConfigState] = useState<RunConfig>(() =>
     resolveRunConfig(connection)
   );
+
+  if (storedConnectionId !== connection.id) {
+    setStoredConnectionId(connection.id);
+    setRunConfigState(resolveRunConfig(connection));
+  }
 
   const liveConnection = useMemo<DatabaseConnection>(
     () => ({ ...connection, runConfig }),

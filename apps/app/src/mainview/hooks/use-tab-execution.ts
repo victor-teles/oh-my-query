@@ -67,7 +67,7 @@ export const useTabExecution = ({
       const maxRows =
         options?.maxRows === undefined ? sandboxedMaxRows : options.maxRows;
       const { timeoutSecs } = runConfig;
-      const schema = runConfig.schemaOverride ?? selectedDatabase ?? undefined;
+      const schema = selectedDatabase ?? undefined;
 
       const confirmed = await requestConfirmation(sql, {
         connectionName: connection.name,

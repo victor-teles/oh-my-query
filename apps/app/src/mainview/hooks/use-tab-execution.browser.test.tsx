@@ -246,7 +246,6 @@ describe("useTabExecution", () => {
       runConfig: {
         maxRows: 250,
         sandbox: true,
-        schemaOverride: "analytics",
         timeoutSecs: 30,
       },
     };
@@ -275,7 +274,7 @@ describe("useTabExecution", () => {
     const [[payload]] = executeHandler.mock.calls;
     const params = payload.params as Record<string, unknown>;
     expect(params.maxRows).toBe(250);
-    expect(params.schema).toBe("analytics");
+    expect(params.schema).toBe("public");
     expect(params.timeoutSecs).toBe(30);
   });
 

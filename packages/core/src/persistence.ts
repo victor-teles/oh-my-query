@@ -17,7 +17,6 @@ export interface PersistedRunConfig {
   sandbox?: boolean;
   maxRows?: number | null;
   timeoutSecs?: number | null;
-  schemaOverride?: string | null;
 }
 
 export interface PersistedTab {

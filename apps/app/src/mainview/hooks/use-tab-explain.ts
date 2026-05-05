@@ -54,7 +54,7 @@ export const useTabExplain = ({
       analyze: boolean
     ) => {
       const runConfig = resolveRunConfig(connection);
-      const schema = runConfig.schemaOverride ?? selectedDatabase ?? undefined;
+      const schema = selectedDatabase ?? undefined;
       const { timeoutSecs } = runConfig;
 
       const queryId = crypto.randomUUID();
