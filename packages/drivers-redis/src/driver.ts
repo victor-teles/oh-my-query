@@ -65,6 +65,7 @@ export class RedisDriver implements Driver {
     const start = performance.now();
     const client = openClient(params, this.dbType);
     try {
+      await client.connect();
       await client.ping();
       return {
         latencyMs: Math.round(performance.now() - start),
@@ -81,6 +82,7 @@ export class RedisDriver implements Driver {
   async connect(_id: string, params: ConnectionParams): Promise<Pool> {
     const client = openClient(params, this.dbType);
     try {
+      await client.connect();
       await client.ping();
     } catch (error) {
       await safeQuit(client);
