@@ -7,6 +7,7 @@ import {
   deleteRedisKey,
   isRedisPool,
   mapRedisError,
+  parseRedisCommands,
   redisDbInfo,
   RedisPool,
   scanRedisKeys,
@@ -66,6 +67,7 @@ interface FakeClient {
   dbsize: ReturnType<typeof vi.fn>;
   scan: ReturnType<typeof vi.fn>;
   del: ReturnType<typeof vi.fn>;
+  call: ReturnType<typeof vi.fn>;
   pipeline: ReturnType<typeof vi.fn>;
   pendingPipelines: FakePipeline[];
 }
@@ -73,6 +75,7 @@ interface FakeClient {
 const buildFakeClient = (): FakeClient => {
   const pendingPipelines: FakePipeline[] = [];
   return {
+    call: vi.fn(),
     config: vi.fn(),
     dbsize: vi.fn(),
     del: vi.fn(),
@@ -210,23 +213,270 @@ describe("redisPool > fetchSchema", () => {
   });
 });
 
-describe("redisPool > execute / explain", () => {
-  it("execute rejects with UNSUPPORTED", async () => {
-    const { pool } = buildPool();
-    const err = await pool
-      .execute("KEYS *", 100, null, new AbortController().signal)
-      .catch((error: unknown) => error);
-    expect(err).toBeInstanceOf(DbError);
-    expect((err as DbError).code).toBe("UNSUPPORTED");
+describe("redisPool > execute", () => {
+  it("runs a single command via client.call and returns one document", async () => {
+    const { client, pool } = buildPool();
+    client.call.mockResolvedValueOnce("hello");
+    const result = await pool.execute(
+      "GET greeting",
+      100,
+      null,
+      new AbortController().signal
+    );
+    expect(client.call).toHaveBeenCalledWith("GET", "greeting");
+    expect(result).toStrictEqual({
+      count: 1,
+      documents: [{ command: "GET greeting", reply: "hello" }],
+      executionTimeMs: 0,
+      isTruncated: false,
+      resultType: "documents",
+    });
   });
 
-  it("explain rejects with UNSUPPORTED", async () => {
+  it("runs multi-line input as separate commands in order", async () => {
+    const { client, pool } = buildPool();
+    client.call
+      .mockResolvedValueOnce("OK")
+      .mockResolvedValueOnce("1")
+      .mockResolvedValueOnce(2);
+    const result = await pool.execute(
+      "SET a 1\nGET a\nINCR counter",
+      100,
+      null,
+      new AbortController().signal
+    );
+    expect(client.call.mock.calls).toStrictEqual([
+      ["SET", "a", "1"],
+      ["GET", "a"],
+      ["INCR", "counter"],
+    ]);
+    expect(result).toStrictEqual({
+      count: 3,
+      documents: [
+        { command: "SET a 1", reply: "OK" },
+        { command: "GET a", reply: "1" },
+        { command: "INCR counter", reply: 2 },
+      ],
+      executionTimeMs: 0,
+      isTruncated: false,
+      resultType: "documents",
+    });
+  });
+
+  it("preserves quoted args containing whitespace", async () => {
+    const { client, pool } = buildPool();
+    client.call.mockResolvedValueOnce("OK");
+    await pool.execute(
+      'SET "user:1" "John Doe"',
+      100,
+      null,
+      new AbortController().signal
+    );
+    expect(client.call).toHaveBeenCalledWith("SET", "user:1", "John Doe");
+  });
+
+  it("supports escape sequences inside double quotes", async () => {
+    const { client, pool } = buildPool();
+    client.call.mockResolvedValueOnce("OK");
+    await pool.execute(
+      'SET key "line1\\nline2"',
+      100,
+      null,
+      new AbortController().signal
+    );
+    expect(client.call).toHaveBeenCalledWith("SET", "key", "line1\nline2");
+  });
+
+  it("ignores blank lines and # / // comment lines", async () => {
+    const { client, pool } = buildPool();
+    client.call.mockResolvedValueOnce("hello");
+    await pool.execute(
+      "# header\n\n// note\nGET greeting",
+      100,
+      null,
+      new AbortController().signal
+    );
+    expect(client.call).toHaveBeenCalledOnce();
+    expect(client.call).toHaveBeenCalledWith("GET", "greeting");
+  });
+
+  it("rejects empty / comment-only input with INVALID_COMMAND", async () => {
+    const { pool } = buildPool();
+    const err = await pool
+      .execute(
+        "  \n# only a comment\n",
+        100,
+        null,
+        new AbortController().signal
+      )
+      .catch((error: unknown) => error);
+    expect(err).toBeInstanceOf(DbError);
+    expect((err as DbError).code).toBe("INVALID_COMMAND");
+  });
+
+  it("decodes Buffer replies to UTF-8 strings", async () => {
+    const { client, pool } = buildPool();
+    client.call.mockResolvedValueOnce(Buffer.from("héllo", "utf8"));
+    const result = await pool.execute(
+      "GET k",
+      100,
+      null,
+      new AbortController().signal
+    );
+    expect(result).toStrictEqual({
+      count: 1,
+      documents: [{ command: "GET k", reply: "héllo" }],
+      executionTimeMs: 0,
+      isTruncated: false,
+      resultType: "documents",
+    });
+  });
+
+  it("decodes nested Buffer replies inside arrays", async () => {
+    const { client, pool } = buildPool();
+    client.call.mockResolvedValueOnce([
+      Buffer.from("a", "utf8"),
+      Buffer.from("b", "utf8"),
+    ]);
+    const result = await pool.execute(
+      "LRANGE list 0 -1",
+      100,
+      null,
+      new AbortController().signal
+    );
+    expect(result).toStrictEqual({
+      count: 1,
+      documents: [{ command: "LRANGE list 0 -1", reply: ["a", "b"] }],
+      executionTimeMs: 0,
+      isTruncated: false,
+      resultType: "documents",
+    });
+  });
+
+  it("calls SELECT once when schema differs from defaultDb", async () => {
+    const { client, pool } = buildPool();
+    client.call.mockResolvedValueOnce("OK").mockResolvedValueOnce("OK");
+    await pool.execute(
+      "SET a 1\nSET b 2",
+      100,
+      "3",
+      new AbortController().signal
+    );
+    expect(client.select).toHaveBeenCalledWith(3);
+    expect(client.select).toHaveBeenCalledOnce();
+  });
+
+  it("does not call SELECT when schema matches defaultDb", async () => {
+    const { client, pool } = buildPool();
+    client.call.mockResolvedValueOnce("OK");
+    await pool.execute("SET a 1", 100, "0", new AbortController().signal);
+    expect(client.select).not.toHaveBeenCalled();
+  });
+
+  it("does not call SELECT when schema is null", async () => {
+    const { client, pool } = buildPool();
+    client.call.mockResolvedValueOnce("OK");
+    await pool.execute("SET a 1", 100, null, new AbortController().signal);
+    expect(client.select).not.toHaveBeenCalled();
+  });
+
+  it("truncates to maxRows commands when more are provided", async () => {
+    const { client, pool } = buildPool();
+    client.call.mockResolvedValue("OK");
+    const result = await pool.execute(
+      "SET a 1\nSET b 2\nSET c 3",
+      1,
+      null,
+      new AbortController().signal
+    );
+    expect(client.call).toHaveBeenCalledOnce();
+    expect(result).toStrictEqual({
+      count: 1,
+      documents: [{ command: "SET a 1", reply: "OK" }],
+      executionTimeMs: 0,
+      isTruncated: true,
+      resultType: "documents",
+    });
+  });
+
+  it("wraps native errors from client.call in DbError", async () => {
+    const { client, pool } = buildPool();
+    client.call.mockRejectedValueOnce(
+      new Error("ERR wrong number of arguments for 'set' command")
+    );
+    const err = await pool
+      .execute("SET k", 100, null, new AbortController().signal)
+      .catch((error: unknown) => error);
+    expect(err).toBeInstanceOf(DbError);
+    expect((err as DbError).message).toBe(
+      "ERR wrong number of arguments for 'set' command"
+    );
+  });
+
+  it("aborts before issuing the next command when signal fires mid-batch", async () => {
+    const { client, pool } = buildPool();
+    const controller = new AbortController();
+    client.call.mockImplementationOnce(async () => {
+      await Promise.resolve();
+      controller.abort();
+      return "OK";
+    });
+    const err = await pool
+      .execute("SET a 1\nSET b 2", 100, null, controller.signal)
+      .catch((error: unknown) => error);
+    expect(err).toBeInstanceOf(DbError);
+    expect((err as DbError).code).toBe("QUERY_CANCELLED");
+    expect(client.call).toHaveBeenCalledOnce();
+  });
+
+  it("rejects with POOL_CLOSED when pool is closed", async () => {
+    const { pool } = buildPool();
+    await pool.close();
+    const err = await pool
+      .execute("GET x", 100, null, new AbortController().signal)
+      .catch((error: unknown) => error);
+    expect(err).toBeInstanceOf(DbError);
+    expect((err as DbError).code).toBe("POOL_CLOSED");
+  });
+});
+
+describe("redisPool > explain", () => {
+  it("rejects with UNSUPPORTED", async () => {
     const { pool } = buildPool();
     const err = await pool
       .explain("KEYS *", false, null, new AbortController().signal)
       .catch((error: unknown) => error);
     expect(err).toBeInstanceOf(DbError);
     expect((err as DbError).code).toBe("UNSUPPORTED");
+  });
+});
+
+describe("parseRedisCommands", () => {
+  it("splits on newlines and tokenizes by whitespace", () => {
+    expect(parseRedisCommands("GET a\nSET b 1")).toStrictEqual([
+      { args: ["a"], name: "GET", raw: "GET a" },
+      { args: ["b", "1"], name: "SET", raw: "SET b 1" },
+    ]);
+  });
+
+  it("treats a double-quoted string as one token", () => {
+    expect(parseRedisCommands('SET "user 1" hello')).toStrictEqual([
+      { args: ["user 1", "hello"], name: "SET", raw: 'SET "user 1" hello' },
+    ]);
+  });
+
+  it("treats a single-quoted string as one token without escapes", () => {
+    expect(parseRedisCommands("SET 'a\\nb' v")).toStrictEqual([
+      { args: ["a\\nb", "v"], name: "SET", raw: "SET 'a\\nb' v" },
+    ]);
+  });
+
+  it("throws INVALID_COMMAND on unterminated quotes", () => {
+    expect(() => parseRedisCommands('GET "missing')).toThrow(DbError);
+  });
+
+  it("throws INVALID_COMMAND when input has no commands", () => {
+    expect(() => parseRedisCommands("\n# only\n")).toThrow(DbError);
   });
 });
 
