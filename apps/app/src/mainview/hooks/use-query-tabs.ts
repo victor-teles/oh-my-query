@@ -301,6 +301,24 @@ export const useQueryTabs = (
     setTabs((prev) => prev.map((t) => (t.id === tabId ? { ...t, sql } : t)));
   }, []);
 
+  const reorderTabs = useCallback((orderedIds: string[]) => {
+    setTabs((prev) => {
+      if (orderedIds.length !== prev.length) {
+        return prev;
+      }
+      const byId = new Map(prev.map((t) => [t.id, t]));
+      const next: QueryTab[] = [];
+      for (const id of orderedIds) {
+        const tab = byId.get(id);
+        if (!tab) {
+          return prev;
+        }
+        next.push(tab);
+      }
+      return next;
+    });
+  }, []);
+
   const updateTabDialect = useCallback(
     (tabId: string, dialect: string | null) => {
       setTabs((prev) =>
@@ -404,6 +422,7 @@ export const useQueryTabs = (
     onCancelClose,
     onConfirmClose,
     reopenTab,
+    reorderTabs,
     setActiveTabId,
     setExplainAnalyze,
     setExplainDensity,
