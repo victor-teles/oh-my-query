@@ -17,13 +17,19 @@ const Harness = ({ setMode }: { setMode: (m: WorkspaceMode) => void }) => {
   return null;
 };
 
+const isMacPlatform =
+  typeof navigator !== "undefined" &&
+  (navigator.platform.toLowerCase().includes("mac") ||
+    navigator.userAgent.toLowerCase().includes("mac"));
+
 const fireMeta = (key: string, shift = true) => {
   document.body.dispatchEvent(
     new KeyboardEvent("keydown", {
       bubbles: true,
       cancelable: true,
+      ctrlKey: !isMacPlatform,
       key,
-      metaKey: true,
+      metaKey: isMacPlatform,
       shiftKey: shift,
     })
   );

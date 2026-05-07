@@ -28,12 +28,18 @@ const Harness = (props: Props) => {
   return <div data-testid="harness" />;
 };
 
+const isMacPlatform =
+  typeof navigator !== "undefined" &&
+  (navigator.platform.toLowerCase().includes("mac") ||
+    navigator.userAgent.toLowerCase().includes("mac"));
+
 const fireKey = (key: string, options: KeyboardEventInit = {}) => {
   const event = new KeyboardEvent("keydown", {
     bubbles: true,
     cancelable: true,
+    ctrlKey: !isMacPlatform,
     key,
-    metaKey: true,
+    metaKey: isMacPlatform,
     ...options,
   });
   document.body.dispatchEvent(event);
