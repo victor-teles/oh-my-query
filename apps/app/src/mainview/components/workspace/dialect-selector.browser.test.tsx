@@ -1,5 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
 import { render } from "vitest-browser-react";
+import { page } from "vitest/browser";
 
 import { DialectSelector } from "./dialect-selector";
 
@@ -16,7 +17,7 @@ describe("dialect-selector", () => {
     expect(screen.getByText(/Transpiling to/).query()).toBeNull();
   });
 
-  it("shows transpile chip with display name when source dialect differs", async () => {
+  it("shows the transpile badge with the target dialect label", async () => {
     const screen = render(
       <DialectSelector
         connectionDialect="postgresql"
@@ -24,9 +25,16 @@ describe("dialect-selector", () => {
         value="mysql"
       />
     );
+    // The badge wraps a lucide icon; hovering it opens the tooltip whose
+    // content names the *target* (connection) dialect, not the SELECT value.
+    const badge = screen.container.querySelector(
+      "span.text-amber-500"
+    ) as HTMLElement | null;
+    expect(badge).not.toBeNull();
+    await page.elementLocator(badge as HTMLElement).hover();
     await expect
-      .poll(() => screen.getByRole("combobox").element().textContent)
-      .toMatch(/MySQL/i);
+      .poll(() => page.getByText("Transpiling to PostgreSQL").query() !== null)
+      .toBe(true);
   });
 
   it("calls onChange when the user picks another dialect", async () => {

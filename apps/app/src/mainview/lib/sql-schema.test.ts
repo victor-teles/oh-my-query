@@ -173,16 +173,20 @@ describe("createTableCompletionSource", () => {
 });
 
 describe("createColumnCompletionSource", () => {
-  it("offers columns from referenced tables", () => {
+  it("scopes columns to the table referenced by FROM", () => {
     const source = createColumnCompletionSource(schema);
+    // Cursor sits in the SELECT projection; getReferencedTables still walks the
+    // whole statement and picks up `users`, so completions are scoped to it.
     const sqlText = "SELECT  FROM users";
-    // Cursor placed after the SELECT token (column position)
     const result = source(
       buildContext(sqlText, "SELECT ".length) as never
     ) as SyncCompletionResult;
     expect(result).not.toBeNull();
     const labels = result.options.map((o) => o.label);
     expect(labels).toStrictEqual(expect.arrayContaining(["id", "email"]));
+    // Columns from unreferenced tables/views must not leak in.
+    expect(labels).not.toContain("user_id");
+    expect(labels).not.toContain("total");
   });
 
   it("returns null inside FROM/JOIN clause", () => {

@@ -2,9 +2,35 @@ import { describe, expect, it, vi } from "vitest";
 
 import type { DatabaseConnection } from "@/lib/connections";
 import type { QueryTab } from "@/lib/query-types";
+import type { ExplainResult, PlanNode } from "@/lib/tauri";
 
 import { renderHook, waitFor } from "@/test/render-hook";
 import { mockTauri } from "@/test/tauri-mock";
+
+const makePlanNode = (overrides: Partial<PlanNode> = {}): PlanNode => ({
+  children: [],
+  cost: { actualTotalMs: null, selfMs: null, startup: null, total: null },
+  details: [],
+  id: "n0",
+  label: "Seq Scan on users",
+  nodeType: "Seq Scan",
+  rows: { actual: null, estimated: null },
+  timing: { actualTotalMs: null, loops: null, startupMs: null },
+  warnings: [],
+  ...overrides,
+});
+
+const makeExplainResult = (
+  overrides: Partial<ExplainResult> = {}
+): ExplainResult => ({
+  analyzeRan: false,
+  engine: "postgresql",
+  executionTimeMs: 0,
+  raw: "",
+  root: makePlanNode(),
+  supportsAnalyze: true,
+  ...overrides,
+});
 
 const baseConnection: DatabaseConnection = {
   createdAt: "2024-01-01T00:00:00.000Z",
@@ -76,26 +102,9 @@ const makeSetTabs = (initial: QueryTab[]) => {
 
 describe("useTabExplain", () => {
   it("captures a successful EXPLAIN result", async () => {
-    const planNode = {
-      actualRows: null,
-      children: [],
-      cost: null,
-      cost_pct: null,
-      hot_path: false,
-      kind: "Seq Scan",
-      object: "users",
-      planRows: null,
-      properties: {},
-      timing: null,
-    };
     mockTauri({
-      explainQuery: () => ({
-        analyze: false,
-        engine: "postgres",
-        executionTimeMs: 1,
-        plan: planNode,
-        rawText: null,
-      }),
+      explainQuery: () =>
+        makeExplainResult({ executionTimeMs: 1, raw: "Seq Scan on users" }),
     });
 
     const { setTabs, state } = makeSetTabs([makeTab()]);
@@ -184,24 +193,10 @@ describe("useTabExplain", () => {
     mockTauri({
       explainQuery: (payload) => {
         calls.push(payload);
-        return {
-          analyze: true,
-          engine: "postgres",
-          executionTimeMs: 0,
-          plan: {
-            actualRows: null,
-            children: [],
-            cost: null,
-            cost_pct: null,
-            hot_path: false,
-            kind: "Result",
-            object: null,
-            planRows: null,
-            properties: {},
-            timing: null,
-          },
-          rawText: null,
-        };
+        return makeExplainResult({
+          analyzeRan: true,
+          root: makePlanNode({ id: "n0", label: "Result", nodeType: "Result" }),
+        });
       },
     });
 
