@@ -240,6 +240,7 @@ const ConnectedWorkspace = ({
     closeTab,
     explainTab,
     reopenTab,
+    reorderTabs,
     setActiveTabId,
     updateTabDialect,
     updateTabSql,
@@ -443,6 +444,7 @@ const ConnectedWorkspace = ({
         onSelectTab={setActiveTabId}
         onCloseTab={closeTab}
         onAddTab={addTab}
+        onReorderTabs={reorderTabs}
       />
 
       <ResizablePanelGroup className="min-h-0 flex-1" orientation="vertical">

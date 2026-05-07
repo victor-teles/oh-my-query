@@ -5,6 +5,7 @@ import type { RedisKey } from "@/lib/tauri";
 
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useConnection } from "@/contexts/connection-context";
 import { useEditorInsert } from "@/contexts/editor-insert-context";
 import {
   redisInspectCommand,
@@ -61,6 +62,7 @@ export const KeysPanel = ({
   isActiveTab,
 }: KeysPanelProps) => {
   const { openQueryAndRun } = useEditorInsert();
+  const { isConnected } = useConnection();
 
   const {
     dbInfo,
@@ -78,7 +80,7 @@ export const KeysPanel = ({
   } = useRedisKeyspace({
     connectionId: connection.id,
     dbIndex,
-    isConnected: true,
+    isConnected,
   });
 
   const [activeRowId, setActiveRowId] = useState<string | null>(null);

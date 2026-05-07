@@ -7,19 +7,9 @@ import type {
 
 import Redis from "ioredis";
 
-import { mapRedisError, RedisPool } from "./pool";
+import { mapRedisError, parseDbIndex, RedisPool } from "./pool";
 
-export function parseDbIndex(database: string | undefined): number {
-  const trimmed = database?.trim();
-  if (!trimmed) {
-    return 0;
-  }
-  const parsed = Number.parseInt(trimmed, 10);
-  if (!Number.isFinite(parsed) || parsed < 0) {
-    return 0;
-  }
-  return parsed;
-}
+export { parseDbIndex } from "./pool.ts";
 
 function createClient(params: ConnectionParams, connectionName: string): Redis {
   const db = parseDbIndex(params.database);
@@ -65,6 +55,7 @@ export class RedisDriver implements Driver {
     const start = performance.now();
     const client = openClient(params, this.dbType);
     try {
+      await client.connect();
       await client.ping();
       return {
         latencyMs: Math.round(performance.now() - start),
@@ -81,6 +72,7 @@ export class RedisDriver implements Driver {
   async connect(_id: string, params: ConnectionParams): Promise<Pool> {
     const client = openClient(params, this.dbType);
     try {
+      await client.connect();
       await client.ping();
     } catch (error) {
       await safeQuit(client);

@@ -35,6 +35,7 @@ const renderBar = (
       activeTabId={overrides.activeTabId ?? "t1"}
       onAddTab={overrides.onAddTab ?? vi.fn()}
       onCloseTab={overrides.onCloseTab ?? vi.fn()}
+      onReorderTabs={overrides.onReorderTabs ?? vi.fn()}
       onSelectTab={overrides.onSelectTab ?? vi.fn()}
       tabs={
         overrides.tabs ?? [
@@ -99,6 +100,7 @@ describe("query-tab-bar", () => {
           activeTabId="t1"
           onAddTab={vi.fn()}
           onCloseTab={vi.fn()}
+          onReorderTabs={vi.fn()}
           onSelectTab={vi.fn()}
           tabs={[tab({ status })]}
         />

@@ -30,6 +30,7 @@ const params = (overrides: Partial<ConnectionParams> = {}): ConnectionParams =>
   }) as ConnectionParams;
 
 interface FakeClient {
+  connect: ReturnType<typeof vi.fn>;
   ping: ReturnType<typeof vi.fn>;
   quit: ReturnType<typeof vi.fn>;
   disconnect: ReturnType<typeof vi.fn>;
@@ -43,6 +44,9 @@ const defaultPing = async () => {
 const buildFakeClient = (
   pingImpl: () => Promise<unknown> = defaultPing
 ): FakeClient => ({
+  connect: vi.fn(async () => {
+    await Promise.resolve();
+  }),
   disconnect: vi.fn(),
   ping: vi.fn(pingImpl),
   quit: vi.fn(async () => {
@@ -136,7 +140,25 @@ describe("redisDriver.testConnection", () => {
     expect(result.success).toBeTruthy();
     expect(result.latencyMs).toBeGreaterThanOrEqual(0);
     expect(result.message.toLowerCase()).toContain("redis");
+    expect(fake.connect).toHaveBeenCalledOnce();
     expect(fake.ping).toHaveBeenCalledOnce();
+  });
+
+  it("rejects with DbError and tears down the client when connect fails", async () => {
+    const fake = buildFakeClient();
+    fake.connect.mockRejectedValueOnce(new Error("ECONNREFUSED"));
+    RedisMock.mockImplementation(stubReturn(fake));
+
+    let caught: unknown;
+    try {
+      await new RedisDriver().testConnection(params());
+    } catch (error) {
+      caught = error;
+    }
+    expect(caught).toBeInstanceOf(DbError);
+    expect((caught as DbError).message).toBe("ECONNREFUSED");
+    expect(fake.ping).not.toHaveBeenCalled();
+    expect(fake.quit).toHaveBeenCalledWith();
   });
 
   it("quits the client after a successful probe", async () => {
@@ -198,8 +220,26 @@ describe("redisDriver.connect", () => {
 
     const pool = await new RedisDriver().connect("conn-1", params());
     expect(pool).toBeInstanceOf(RedisPool);
+    expect(fake.connect).toHaveBeenCalledOnce();
     expect(fake.ping).toHaveBeenCalledOnce();
     expect(fake.quit).not.toHaveBeenCalled();
+  });
+
+  it("rejects with DbError and tears down the client when connect fails", async () => {
+    const fake = buildFakeClient();
+    fake.connect.mockRejectedValueOnce(new Error("ECONNREFUSED"));
+    RedisMock.mockImplementation(stubReturn(fake));
+
+    let caught: unknown;
+    try {
+      await new RedisDriver().connect("conn-1", params());
+    } catch (error) {
+      caught = error;
+    }
+    expect(caught).toBeInstanceOf(DbError);
+    expect((caught as DbError).message).toBe("ECONNREFUSED");
+    expect(fake.ping).not.toHaveBeenCalled();
+    expect(fake.quit).toHaveBeenCalledWith();
   });
 
   it("rejects with DbError and tears down the client when the probe fails", async () => {

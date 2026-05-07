@@ -1,4 +1,5 @@
 import type {
+  DocumentResult,
   ExecuteResult,
   ExplainResult,
   Pool,
@@ -83,6 +84,137 @@ export function mapRedisError(err: unknown): DbError {
 
 const POOL_CLOSED = new DbError("POOL_CLOSED", "Redis pool is closed");
 
+export function parseDbIndex(database: string | undefined | null): number {
+  const trimmed = database?.trim();
+  if (!trimmed) {
+    return 0;
+  }
+  const parsed = Number.parseInt(trimmed, 10);
+  if (!Number.isFinite(parsed) || parsed < 0) {
+    return 0;
+  }
+  return parsed;
+}
+
+export interface RedisCommand {
+  name: string;
+  args: string[];
+  raw: string;
+}
+
+const ESCAPE_MAP: Record<string, string> = {
+  '"': '"',
+  "'": "'",
+  "\\": "\\",
+  n: "\n",
+  r: "\r",
+  t: "\t",
+};
+
+function tokenizeLine(line: string, lineNumber: number): string[] {
+  const tokens: string[] = [];
+  let i = 0;
+  while (i < line.length) {
+    const ch = line[i] ?? "";
+    if (ch === " " || ch === "\t") {
+      i += 1;
+      continue;
+    }
+    if (ch === '"' || ch === "'") {
+      const quote = ch;
+      let value = "";
+      i += 1;
+      while (i < line.length) {
+        const c = line[i] ?? "";
+        if (c === "\\" && quote === '"') {
+          const next = line[i + 1];
+          if (next !== undefined && next in ESCAPE_MAP) {
+            value += ESCAPE_MAP[next];
+            i += 2;
+            continue;
+          }
+        }
+        if (c === quote) {
+          i += 1;
+          tokens.push(value);
+          break;
+        }
+        value += c;
+        i += 1;
+        if (i >= line.length) {
+          throw new DbError(
+            "INVALID_COMMAND",
+            `Unterminated ${quote === '"' ? "double" : "single"}-quoted string on line ${lineNumber}`
+          );
+        }
+      }
+      continue;
+    }
+    let value = "";
+    while (i < line.length) {
+      const c = line[i] ?? "";
+      if (c === " " || c === "\t") {
+        break;
+      }
+      value += c;
+      i += 1;
+    }
+    tokens.push(value);
+  }
+  return tokens;
+}
+
+export function parseRedisCommands(input: string): RedisCommand[] {
+  const commands: RedisCommand[] = [];
+  const lines = input.split(/\r?\n/);
+  for (let idx = 0; idx < lines.length; idx += 1) {
+    const raw = lines[idx] ?? "";
+    const trimmed = raw.trim();
+    if (
+      trimmed.length === 0 ||
+      trimmed.startsWith("#") ||
+      trimmed.startsWith("//")
+    ) {
+      continue;
+    }
+    const tokens = tokenizeLine(raw, idx + 1);
+    const [name, ...args] = tokens;
+    if (!name) {
+      continue;
+    }
+    commands.push({ args, name, raw: trimmed });
+  }
+  if (commands.length === 0) {
+    throw new DbError("INVALID_COMMAND", "No Redis command to run");
+  }
+  return commands;
+}
+
+function decodeReply(reply: unknown): unknown {
+  if (reply === null || reply === undefined) {
+    return null;
+  }
+  if (typeof reply === "string" || typeof reply === "number") {
+    return reply;
+  }
+  if (Buffer.isBuffer(reply)) {
+    return reply.toString("utf8");
+  }
+  if (Array.isArray(reply)) {
+    return reply.map(decodeReply);
+  }
+  if (typeof reply === "object") {
+    const out: Record<string, unknown> = {};
+    for (const [key, value] of Object.entries(
+      reply as Record<string, unknown>
+    )) {
+      out[key] = decodeReply(value);
+    }
+    return out;
+  }
+  return String(reply);
+}
+
 export class RedisPool implements Pool {
   readonly dialect = null;
   readonly supportsExplain = false;
@@ -141,15 +273,44 @@ export class RedisPool implements Pool {
     });
   }
 
-  execute(
-    _sql: string,
-    _maxRows: number,
-    _schema: string | null,
-    _signal: AbortSignal
+  async execute(
+    sql: string,
+    maxRows: number,
+    schema: string | null,
+    signal: AbortSignal
   ): Promise<ExecuteResult> {
-    return Promise.reject(
-      new DbError("UNSUPPORTED", `${this.kind} does not support SQL execution`)
-    );
+    const client = this.#requireClient();
+    const commands = parseRedisCommands(sql);
+    const targetDb = parseDbIndex(schema);
+    const limit = Math.max(1, maxRows);
+    const isTruncated = commands.length > limit;
+    const toRun = isTruncated ? commands.slice(0, limit) : commands;
+    const documents: unknown[] = [];
+    try {
+      if (schema && targetDb !== this.#defaultDb) {
+        await client.select(targetDb);
+      }
+      for (const command of toRun) {
+        if (signal.aborted) {
+          throw new DbError("QUERY_CANCELLED", "Query cancelled");
+        }
+        const reply = await client.call(command.name, ...command.args);
+        documents.push({
+          command: command.raw,
+          reply: decodeReply(reply),
+        });
+      }
+    } catch (error) {
+      throw mapRedisError(error);
+    }
+    const result: DocumentResult = {
+      count: documents.length,
+      documents,
+      executionTimeMs: 0,
+      isTruncated,
+      resultType: "documents",
+    };
+    return result;
   }
 
   explain(
