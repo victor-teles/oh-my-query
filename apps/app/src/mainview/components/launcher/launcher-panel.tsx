@@ -1,4 +1,4 @@
-import { AnimatePresence, motion } from "motion/react";
+import { AnimatePresence } from "motion/react";
 import {
   useCallback,
   useEffect,
@@ -31,6 +31,7 @@ import { ConnectionsProvider } from "./connections/connections-provider";
 import { LauncherSurface } from "./launcher-surface";
 import { renderView } from "./render-launcher-view";
 import { stackVariants } from "./stack-variants";
+import { StackViewFrame } from "./stack-view-frame";
 import { useLauncherAccelerator } from "./use-launcher-accelerator";
 import { useLauncherAsk } from "./use-launcher-ask";
 import { useLauncherHotkeys } from "./use-launcher-hotkeys";
@@ -213,14 +214,9 @@ function LauncherStackView() {
         initial={false}
         mode="popLayout"
       >
-        <motion.div
-          animate="center"
-          className="flex min-h-0 flex-col"
-          custom={stack.direction}
-          exit="exit"
-          initial="enter"
+        <StackViewFrame
+          direction={stack.direction}
           key={stack.current.kind}
-          layout="position"
           variants={viewVariants}
         >
           {renderView(stack.current, {
@@ -259,7 +255,7 @@ function LauncherStackView() {
               />
             ),
           })}
-        </motion.div>
+        </StackViewFrame>
       </AnimatePresence>
     </LauncherSurface>
   );
