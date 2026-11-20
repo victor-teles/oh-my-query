@@ -1,0 +1,353 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`history motion with full motion > keeps a slow load's skeleton up until the asks arrive 1`] = `
+<div
+  aria-hidden="true"
+  class="flex flex-col gap-1 px-2 pt-7 pb-2"
+  data-testid="history-skeleton"
+>
+  <div
+    class="flex h-10 items-center gap-3 px-2.5"
+  >
+    <span
+      class="size-6 rounded-[7px] bg-foreground/[0.06]"
+    />
+    <span
+      class="h-3 rounded-full bg-foreground/[0.06]"
+      style="width: 62%"
+    />
+  </div>
+  <div
+    class="flex h-10 items-center gap-3 px-2.5"
+  >
+    <span
+      class="size-6 rounded-[7px] bg-foreground/[0.06]"
+    />
+    <span
+      class="h-3 rounded-full bg-foreground/[0.06]"
+      style="width: 48%"
+    />
+  </div>
+  <div
+    class="flex h-10 items-center gap-3 px-2.5"
+  >
+    <span
+      class="size-6 rounded-[7px] bg-foreground/[0.06]"
+    />
+    <span
+      class="h-3 rounded-full bg-foreground/[0.06]"
+      style="width: 70%"
+    />
+  </div>
+</div>
+`;
+
+exports[`history motion with reduced motion > keeps a slow load's skeleton up until the asks arrive 1`] = `
+<div
+  aria-hidden="true"
+  class="flex flex-col gap-1 px-2 pt-7 pb-2"
+  data-testid="history-skeleton"
+>
+  <div
+    class="flex h-10 items-center gap-3 px-2.5"
+  >
+    <span
+      class="size-6 rounded-[7px] bg-foreground/[0.06]"
+    />
+    <span
+      class="h-3 rounded-full bg-foreground/[0.06]"
+      style="width: 62%"
+    />
+  </div>
+  <div
+    class="flex h-10 items-center gap-3 px-2.5"
+  >
+    <span
+      class="size-6 rounded-[7px] bg-foreground/[0.06]"
+    />
+    <span
+      class="h-3 rounded-full bg-foreground/[0.06]"
+      style="width: 48%"
+    />
+  </div>
+  <div
+    class="flex h-10 items-center gap-3 px-2.5"
+  >
+    <span
+      class="size-6 rounded-[7px] bg-foreground/[0.06]"
+    />
+    <span
+      class="h-3 rounded-full bg-foreground/[0.06]"
+      style="width: 70%"
+    />
+  </div>
+</div>
+`;
+
+exports[`historyView > asks for every stored ask and groups them by day 1`] = `
+<div
+  aria-label="Past asks"
+  class="relative flex flex-col gap-1 px-2 pb-2"
+  id="launcher-history-list"
+  role="listbox"
+>
+  <div>
+    <div
+      aria-labelledby="_r_id_"
+      role="group"
+    >
+      <div
+        class="px-2.5 pt-1 pb-1.5 type-micro text-panel-muted"
+        id="_r_id_"
+      >
+        Today
+      </div>
+      <div
+        data-motion="stagger"
+      >
+        <div
+          aria-selected="true"
+          class="relative flex h-10 cursor-default items-center gap-3 px-2.5"
+          data-tone="default"
+          id="launcher-option-a-signups"
+          role="option"
+          tabindex="0"
+        >
+          <div
+            class="absolute inset-0 rounded-[10px] bg-row-active"
+          />
+          <span
+            class="relative grid size-6 place-items-center rounded-[7px] bg-row-hover text-panel-muted"
+          >
+            <svg
+              aria-hidden="true"
+              class="lucide lucide-history size-3.5"
+              fill="none"
+              height="24"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+              width="24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"
+              />
+              <path
+                d="M3 3v5h5"
+              />
+              <path
+                d="M12 7v5l4 2"
+              />
+            </svg>
+          </span>
+          <span
+            class="relative flex min-w-0 flex-1 items-baseline gap-2"
+          >
+            <span
+              class="min-w-0 flex-1 truncate type-body text-foreground"
+            >
+              Signups by plan, EU only
+            </span>
+            <span
+              class="max-w-[55%] min-w-0 truncate type-meta text-panel-muted"
+            >
+              <span>
+                analytics
+              </span>
+               · Signups by plan · 14:05
+            </span>
+          </span>
+        </div>
+      </div>
+      <div
+        data-motion="stagger"
+      >
+        <div
+          aria-selected="false"
+          class="relative flex h-10 cursor-default items-center gap-3 px-2.5"
+          data-tone="default"
+          id="launcher-option-a-revenue"
+          role="option"
+          tabindex="0"
+        >
+          <span
+            class="relative grid size-6 place-items-center rounded-[7px] bg-row-hover text-panel-muted"
+          >
+            <svg
+              aria-hidden="true"
+              class="lucide lucide-history size-3.5"
+              fill="none"
+              height="24"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+              width="24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"
+              />
+              <path
+                d="M3 3v5h5"
+              />
+              <path
+                d="M12 7v5l4 2"
+              />
+            </svg>
+          </span>
+          <span
+            class="relative flex min-w-0 flex-1 items-baseline gap-2"
+          >
+            <span
+              class="min-w-0 flex-1 truncate type-body text-foreground"
+            >
+              Revenue for Europe
+            </span>
+            <span
+              class="max-w-[55%] min-w-0 truncate type-meta text-panel-muted"
+            >
+              <span>
+                analytics
+              </span>
+               · Monthly recurring revenue in Europe · 09:30
+            </span>
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div>
+    <div
+      aria-labelledby="_r_id_"
+      role="group"
+    >
+      <div
+        class="px-2.5 pt-1 pb-1.5 type-micro text-panel-muted"
+        id="_r_id_"
+      >
+        Yesterday
+      </div>
+      <div
+        data-motion="stagger"
+      >
+        <div
+          aria-selected="false"
+          class="relative flex h-10 cursor-default items-center gap-3 px-2.5"
+          data-tone="default"
+          id="launcher-option-a-churn"
+          role="option"
+          tabindex="0"
+        >
+          <span
+            class="relative grid size-6 place-items-center rounded-[7px] bg-row-hover text-panel-muted"
+          >
+            <svg
+              aria-hidden="true"
+              class="lucide lucide-history size-3.5"
+              fill="none"
+              height="24"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+              width="24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"
+              />
+              <path
+                d="M3 3v5h5"
+              />
+              <path
+                d="M12 7v5l4 2"
+              />
+            </svg>
+          </span>
+          <span
+            class="relative flex min-w-0 flex-1 items-baseline gap-2"
+          >
+            <span
+              class="min-w-0 flex-1 truncate type-body text-foreground"
+            >
+              Churned accounts last month
+            </span>
+            <span
+              class="max-w-[55%] min-w-0 truncate type-meta text-panel-muted"
+            >
+              <span
+                class="italic"
+              >
+                connection removed
+              </span>
+               · Monthly recurring revenue in Europe · 18 Nov
+            </span>
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`historyView > says when nothing matches 1`] = `
+<div
+  class="flex flex-col items-center gap-1 px-6 pt-5 pb-6 text-center"
+>
+  <p
+    class="type-body text-foreground"
+    role="status"
+  >
+    Nothing matches “zzzz”
+  </p>
+  <p
+    class="type-meta text-panel-muted"
+  >
+    Try another word from the question, the card title or the SQL.
+  </p>
+</div>
+`;
+
+exports[`historyView > says when there is no history yet 1`] = `
+<div
+  class="flex flex-col items-center gap-1 px-6 pt-5 pb-6 text-center"
+>
+  <p
+    class="type-body text-foreground"
+    role="status"
+  >
+    No asks yet.
+  </p>
+  <p
+    class="type-meta text-panel-muted"
+  >
+    Ask a question from the launcher and it shows up here.
+  </p>
+</div>
+`;
+
+exports[`historyView > shows an error with Retry 1`] = `
+<div
+  class="flex flex-col items-center gap-2 px-6 pt-5 pb-6 text-center"
+>
+  <p
+    class="type-body text-foreground"
+    role="alert"
+  >
+    History couldn’t load.
+  </p>
+  <button
+    class="rounded-[7px] bg-row-hover px-2.5 py-1 type-meta text-foreground focus-visible:ring-1 focus-visible:ring-primary/60 focus-visible:outline-none"
+    tabindex="0"
+    type="button"
+  >
+    Retry
+  </button>
+</div>
+`;

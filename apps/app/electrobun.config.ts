@@ -19,11 +19,13 @@ export default {
   },
   build: {
     bun: {
+      entrypoint: "src/bun/index.ts",
       external: bunExternals,
     },
     copy: {
       ...bunAssetCopy,
-      "dist/**/*": "views/mainview/",
+      "assets/tray-template.png": "views/assets/tray-template.png",
+      dist: "views/mainview",
     },
     linux: {
       bundleCEF: false,
@@ -37,11 +39,7 @@ export default {
         process.env.ELECTROBUN_APPLEID !== undefined ||
         process.env.ELECTROBUN_APPLEAPIKEY !== undefined,
     },
-    views: {
-      mainview: {
-        entrypoint: "dist/index.html",
-      },
-    },
+    mainProcess: "bun",
     win: {
       bundleCEF: false,
       icon: "assets/icon.ico",

@@ -1,0 +1,2198 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`widgetRunView actions > lists the shared export actions before the widget's own 1`] = `
+<div
+  aria-activedescendant="launcher-action-copy-sql"
+  aria-label="Actions for Revenue by region"
+  class="absolute right-3 bottom-3 z-10 w-64 rounded-[12px] popover-material p-1.5 outline-none"
+  role="menu"
+  tabindex="-1"
+>
+  <div
+    aria-hidden="true"
+    class="flex h-7 items-center truncate px-2.5 type-micro text-panel-muted"
+  >
+    Revenue by region
+  </div>
+  <div
+    aria-disabled="false"
+    class="relative flex h-8 cursor-default items-center gap-2.5 px-2.5 type-body text-foreground"
+    id="launcher-action-copy-sql"
+    role="menuitem"
+    tabindex="0"
+  >
+    <span
+      class="absolute inset-0 rounded-[8px] bg-row-active"
+    />
+    <svg
+      aria-hidden="true"
+      class="lucide lucide-clipboard-copy relative size-3.5 shrink-0 opacity-80"
+      fill="none"
+      height="24"
+      stroke="currentColor"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      stroke-width="2"
+      viewBox="0 0 24 24"
+      width="24"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <rect
+        height="4"
+        rx="1"
+        ry="1"
+        width="8"
+        x="8"
+        y="2"
+      />
+      <path
+        d="M8 4H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"
+      />
+      <path
+        d="M16 4h2a2 2 0 0 1 2 2v4"
+      />
+      <path
+        d="M21 14H11"
+      />
+      <path
+        d="m15 10-4 4 4 4"
+      />
+    </svg>
+    <span
+      class="relative min-w-0 flex-1 truncate"
+      data-slot="swap-text"
+    >
+      <span
+        class="inline-block"
+      >
+        Copy SQL
+      </span>
+    </span>
+    <kbd
+      aria-label="⌘ C"
+      class="inline-flex items-center gap-0.5 relative shrink-0"
+      data-slot="kbd-group"
+    >
+      <kbd
+        class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+        data-slot="kbd"
+      >
+        ⌘
+      </kbd>
+      <kbd
+        class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+        data-slot="kbd"
+      >
+        C
+      </kbd>
+    </kbd>
+  </div>
+  <div
+    aria-disabled="false"
+    class="relative flex h-8 cursor-default items-center gap-2.5 px-2.5 type-body text-foreground"
+    id="launcher-action-copy-csv"
+    role="menuitem"
+    tabindex="0"
+  >
+    <svg
+      aria-hidden="true"
+      class="lucide lucide-file-spreadsheet relative size-3.5 shrink-0 opacity-80"
+      fill="none"
+      height="24"
+      stroke="currentColor"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      stroke-width="2"
+      viewBox="0 0 24 24"
+      width="24"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z"
+      />
+      <path
+        d="M14 2v5a1 1 0 0 0 1 1h5"
+      />
+      <path
+        d="M8 13h2"
+      />
+      <path
+        d="M14 13h2"
+      />
+      <path
+        d="M8 17h2"
+      />
+      <path
+        d="M14 17h2"
+      />
+    </svg>
+    <span
+      class="relative min-w-0 flex-1 truncate"
+      data-slot="swap-text"
+    >
+      <span
+        class="inline-block"
+      >
+        Copy as CSV
+      </span>
+    </span>
+  </div>
+  <div
+    aria-disabled="false"
+    class="relative flex h-8 cursor-default items-center gap-2.5 px-2.5 type-body text-foreground"
+    id="launcher-action-copy-tsv"
+    role="menuitem"
+    tabindex="0"
+  >
+    <svg
+      aria-hidden="true"
+      class="lucide lucide-table relative size-3.5 shrink-0 opacity-80"
+      fill="none"
+      height="24"
+      stroke="currentColor"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      stroke-width="2"
+      viewBox="0 0 24 24"
+      width="24"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M12 3v18"
+      />
+      <rect
+        height="18"
+        rx="2"
+        width="18"
+        x="3"
+        y="3"
+      />
+      <path
+        d="M3 9h18"
+      />
+      <path
+        d="M3 15h18"
+      />
+    </svg>
+    <span
+      class="relative min-w-0 flex-1 truncate"
+      data-slot="swap-text"
+    >
+      <span
+        class="inline-block"
+      >
+        Copy as TSV
+      </span>
+    </span>
+  </div>
+  <div
+    aria-disabled="false"
+    class="relative flex h-8 cursor-default items-center gap-2.5 px-2.5 type-body text-foreground"
+    id="launcher-action-copy-markdown"
+    role="menuitem"
+    tabindex="0"
+  >
+    <svg
+      aria-hidden="true"
+      class="lucide lucide-file-text relative size-3.5 shrink-0 opacity-80"
+      fill="none"
+      height="24"
+      stroke="currentColor"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      stroke-width="2"
+      viewBox="0 0 24 24"
+      width="24"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z"
+      />
+      <path
+        d="M14 2v5a1 1 0 0 0 1 1h5"
+      />
+      <path
+        d="M10 9H8"
+      />
+      <path
+        d="M16 13H8"
+      />
+      <path
+        d="M16 17H8"
+      />
+    </svg>
+    <span
+      class="relative min-w-0 flex-1 truncate"
+      data-slot="swap-text"
+    >
+      <span
+        class="inline-block"
+      >
+        Copy as Markdown
+      </span>
+    </span>
+  </div>
+  <div
+    aria-disabled="false"
+    class="relative flex h-8 cursor-default items-center gap-2.5 px-2.5 type-body text-foreground"
+    id="launcher-action-copy-png"
+    role="menuitem"
+    tabindex="0"
+  >
+    <svg
+      aria-hidden="true"
+      class="lucide lucide-image relative size-3.5 shrink-0 opacity-80"
+      fill="none"
+      height="24"
+      stroke="currentColor"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      stroke-width="2"
+      viewBox="0 0 24 24"
+      width="24"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <rect
+        height="18"
+        rx="2"
+        ry="2"
+        width="18"
+        x="3"
+        y="3"
+      />
+      <circle
+        cx="9"
+        cy="9"
+        r="2"
+      />
+      <path
+        d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"
+      />
+    </svg>
+    <span
+      class="relative min-w-0 flex-1 truncate"
+      data-slot="swap-text"
+    >
+      <span
+        class="inline-block"
+      >
+        Copy Chart as PNG
+      </span>
+    </span>
+  </div>
+  <div
+    aria-disabled="false"
+    class="relative flex h-8 cursor-default items-center gap-2.5 px-2.5 type-body text-foreground"
+    id="launcher-action-save-csv"
+    role="menuitem"
+    tabindex="0"
+  >
+    <svg
+      aria-hidden="true"
+      class="lucide lucide-download relative size-3.5 shrink-0 opacity-80"
+      fill="none"
+      height="24"
+      stroke="currentColor"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      stroke-width="2"
+      viewBox="0 0 24 24"
+      width="24"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M12 15V3"
+      />
+      <path
+        d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"
+      />
+      <path
+        d="m7 10 5 5 5-5"
+      />
+    </svg>
+    <span
+      class="relative min-w-0 flex-1 truncate"
+      data-slot="swap-text"
+    >
+      <span
+        class="inline-block"
+      >
+        Save CSV to Downloads
+      </span>
+    </span>
+  </div>
+  <div
+    class="relative flex h-8 cursor-default items-center gap-2.5 px-2.5 type-body text-foreground"
+    id="launcher-action-edit-inputs"
+    role="menuitem"
+    tabindex="0"
+  >
+    <svg
+      aria-hidden="true"
+      class="lucide lucide-sliders-horizontal relative size-3.5 shrink-0 opacity-80"
+      fill="none"
+      height="24"
+      stroke="currentColor"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      stroke-width="2"
+      viewBox="0 0 24 24"
+      width="24"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M10 5H3"
+      />
+      <path
+        d="M12 19H3"
+      />
+      <path
+        d="M14 3v4"
+      />
+      <path
+        d="M16 17v4"
+      />
+      <path
+        d="M21 12h-9"
+      />
+      <path
+        d="M21 19h-5"
+      />
+      <path
+        d="M21 5h-7"
+      />
+      <path
+        d="M8 10v4"
+      />
+      <path
+        d="M8 12H3"
+      />
+    </svg>
+    <span
+      class="relative min-w-0 flex-1 truncate"
+      data-slot="swap-text"
+    >
+      <span
+        class="inline-block"
+      >
+        Edit Inputs
+      </span>
+    </span>
+  </div>
+  <div
+    class="relative flex h-8 cursor-default items-center gap-2.5 px-2.5 type-body text-foreground"
+    id="launcher-action-rename"
+    role="menuitem"
+    tabindex="0"
+  >
+    <svg
+      aria-hidden="true"
+      class="lucide lucide-pencil relative size-3.5 shrink-0 opacity-80"
+      fill="none"
+      height="24"
+      stroke="currentColor"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      stroke-width="2"
+      viewBox="0 0 24 24"
+      width="24"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"
+      />
+      <path
+        d="m15 5 4 4"
+      />
+    </svg>
+    <span
+      class="relative min-w-0 flex-1 truncate"
+      data-slot="swap-text"
+    >
+      <span
+        class="inline-block"
+      >
+        Rename
+      </span>
+    </span>
+  </div>
+  <div
+    class="relative flex h-8 cursor-default items-center gap-2.5 px-2.5 type-body text-foreground"
+    id="launcher-action-duplicate"
+    role="menuitem"
+    tabindex="0"
+  >
+    <svg
+      aria-hidden="true"
+      class="lucide lucide-copy-plus relative size-3.5 shrink-0 opacity-80"
+      fill="none"
+      height="24"
+      stroke="currentColor"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      stroke-width="2"
+      viewBox="0 0 24 24"
+      width="24"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <line
+        x1="15"
+        x2="15"
+        y1="12"
+        y2="18"
+      />
+      <line
+        x1="12"
+        x2="18"
+        y1="15"
+        y2="15"
+      />
+      <rect
+        height="14"
+        rx="2"
+        ry="2"
+        width="14"
+        x="8"
+        y="8"
+      />
+      <path
+        d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"
+      />
+    </svg>
+    <span
+      class="relative min-w-0 flex-1 truncate"
+      data-slot="swap-text"
+    >
+      <span
+        class="inline-block"
+      >
+        Duplicate
+      </span>
+    </span>
+  </div>
+  <div
+    class="relative flex h-8 cursor-default items-center gap-2.5 px-2.5 type-body text-foreground"
+    id="launcher-action-add-to-board"
+    role="menuitem"
+    tabindex="0"
+  >
+    <svg
+      aria-hidden="true"
+      class="lucide lucide-layout-grid relative size-3.5 shrink-0 opacity-80"
+      fill="none"
+      height="24"
+      stroke="currentColor"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      stroke-width="2"
+      viewBox="0 0 24 24"
+      width="24"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <rect
+        height="7"
+        rx="1"
+        width="7"
+        x="3"
+        y="3"
+      />
+      <rect
+        height="7"
+        rx="1"
+        width="7"
+        x="14"
+        y="3"
+      />
+      <rect
+        height="7"
+        rx="1"
+        width="7"
+        x="14"
+        y="14"
+      />
+      <rect
+        height="7"
+        rx="1"
+        width="7"
+        x="3"
+        y="14"
+      />
+    </svg>
+    <span
+      class="relative min-w-0 flex-1 truncate"
+      data-slot="swap-text"
+    >
+      <span
+        class="inline-block"
+      >
+        Add to Board
+      </span>
+    </span>
+  </div>
+  <div
+    class="relative flex h-8 cursor-default items-center gap-2.5 px-2.5 type-body text-danger-ink"
+    id="launcher-action-delete"
+    role="menuitem"
+    tabindex="0"
+  >
+    <svg
+      aria-hidden="true"
+      class="lucide lucide-trash2 lucide-trash-2 relative size-3.5 shrink-0 opacity-80"
+      fill="none"
+      height="24"
+      stroke="currentColor"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      stroke-width="2"
+      viewBox="0 0 24 24"
+      width="24"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M10 11v6"
+      />
+      <path
+        d="M14 11v6"
+      />
+      <path
+        d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"
+      />
+      <path
+        d="M3 6h18"
+      />
+      <path
+        d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"
+      />
+    </svg>
+    <span
+      class="relative min-w-0 flex-1 truncate"
+      data-slot="swap-text"
+    >
+      <span
+        class="inline-block"
+      >
+        Delete
+      </span>
+    </span>
+  </div>
+</div>
+`;
+
+exports[`widgetRunView states > explains an empty result 1`] = `
+<div
+  data-testid="run-harness"
+  style="width: 760px"
+>
+  <div
+    aria-label="Revenue by region"
+    class="flex min-h-0 flex-col outline-none has-[[data-active=true]]:min-h-[356px]"
+    role="group"
+    tabindex="-1"
+  >
+    <div
+      id="widget-run-header"
+    >
+      <div
+        class="relative z-20 flex h-14 shrink-0 items-center gap-2.5 px-4"
+      >
+        <div
+          class="flex min-w-0 flex-1 items-center"
+        >
+          <div
+            class="flex min-w-0 flex-1 items-center gap-2.5"
+          >
+            <h2
+              class="max-w-[40%] shrink-0 truncate type-input text-foreground"
+            >
+              Revenue by region
+            </h2>
+            <div
+              aria-label="Revenue by region inputs"
+              class="flex min-w-0 items-center gap-1.5"
+              role="group"
+            >
+              <span
+                class="relative inline-flex h-7 shrink-0 items-center gap-1.5 rounded-[8px] bg-row-hover px-2"
+                data-active="false"
+              >
+                <span
+                  aria-hidden="true"
+                  class="relative type-micro text-panel-muted"
+                >
+                  Region
+                </span>
+                <span
+                  class="relative flex min-w-0 items-center"
+                >
+                  <input
+                    aria-autocomplete="list"
+                    aria-controls="arg-options-region"
+                    aria-expanded="false"
+                    aria-label="Region"
+                    autocomplete="off"
+                    class="max-w-48 min-w-[3ch] bg-transparent type-body text-foreground outline-none focus-visible:outline-none"
+                    role="combobox"
+                    size="6"
+                    spellcheck="false"
+                    value="Europe"
+                  />
+                </span>
+              </span>
+              <span
+                class="relative inline-flex h-7 shrink-0 items-center gap-1.5 rounded-[8px] bg-row-hover px-2"
+                data-active="false"
+              >
+                <span
+                  aria-hidden="true"
+                  class="relative type-micro text-panel-muted"
+                >
+                  Period
+                </span>
+                <span
+                  class="relative flex min-w-0 items-center"
+                >
+                  <button
+                    aria-controls="arg-presets-period"
+                    aria-expanded="false"
+                    aria-haspopup="listbox"
+                    aria-label="Period: Last quarter"
+                    class="flex items-center gap-1 type-body text-foreground outline-none focus-visible:outline-none"
+                    type="button"
+                  >
+                    <span
+                      class="max-w-56 truncate"
+                    >
+                      Last quarter
+                    </span>
+                    <svg
+                      aria-hidden="true"
+                      class="lucide lucide-chevron-down size-3 text-panel-muted"
+                      fill="none"
+                      height="24"
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      viewBox="0 0 24 24"
+                      width="24"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="m6 9 6 6 6-6"
+                      />
+                    </svg>
+                  </button>
+                </span>
+              </span>
+            </div>
+          </div>
+        </div>
+        <button
+          aria-label="Run"
+          class="grid size-7 shrink-0 place-items-center bg-row-hover text-panel-muted hover:text-foreground"
+          style="border-radius: 8px"
+          tabindex="0"
+          type="button"
+        >
+          <span
+            class="grid place-items-center"
+          >
+            <svg
+              aria-hidden="true"
+              class="lucide lucide-corner-down-left size-3.5"
+              fill="none"
+              height="24"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+              width="24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M20 4v7a4 4 0 0 1-4 4H4"
+              />
+              <path
+                d="m9 10-5 5 5 5"
+              />
+            </svg>
+          </span>
+        </button>
+      </div>
+    </div>
+    <div
+      class="relative flex min-h-0 flex-1 flex-col overflow-y-auto border-t border-panel-border"
+      style="min-height: 0px"
+    >
+      <div
+        class="flex h-8 shrink-0 items-center gap-2 px-4 type-meta text-panel-muted tabular-nums"
+      >
+        <span
+          aria-hidden="true"
+          class="grid place-items-center bg-row-hover size-4 rounded-[5px] text-[10px]"
+        >
+          🐘
+        </span>
+        <span
+          class="truncate"
+        >
+          analytics
+        </span>
+        <span
+          aria-hidden="true"
+        >
+          ·
+        </span>
+        <span
+          data-slot="swap-text"
+        >
+          <span
+            class="inline-block"
+          >
+            0 rows · 386 ms
+          </span>
+        </span>
+      </div>
+      <div
+        class="relative"
+      >
+        <div
+          class="flex flex-col gap-1 px-4 pt-3 pb-6"
+        >
+          <p
+            class="type-body text-foreground"
+            role="status"
+          >
+            No rows for these inputs.
+          </p>
+          <p
+            class="type-meta text-panel-muted"
+          >
+            Try a wider date range or another value.
+          </p>
+        </div>
+      </div>
+    </div>
+    <footer
+      class="flex h-9 shrink-0 items-center justify-between gap-3 border-t border-panel-border px-4 type-meta text-panel-muted"
+    >
+      <div
+        class="flex min-w-0 items-center gap-2"
+      />
+      <div
+        class="flex shrink-0 items-center gap-3"
+      >
+        <div
+          class="flex items-center gap-2"
+        >
+          <span
+            class="text-foreground"
+            data-slot="swap-text"
+          >
+            <span
+              class="inline-block"
+            >
+              Run
+            </span>
+          </span>
+          <kbd
+            aria-label="↩"
+            class="inline-flex items-center gap-0.5"
+            data-slot="kbd-group"
+          >
+            <kbd
+              class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+              data-slot="kbd"
+            >
+              ↩
+            </kbd>
+          </kbd>
+        </div>
+        <div
+          class="flex items-center gap-2 border-l border-panel-border pl-3"
+        >
+          <span>
+            Actions
+          </span>
+          <kbd
+            aria-label="⌘ K"
+            class="inline-flex items-center gap-0.5"
+            data-slot="kbd-group"
+          >
+            <kbd
+              class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+              data-slot="kbd"
+            >
+              ⌘
+            </kbd>
+            <kbd
+              class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+              data-slot="kbd"
+            >
+              K
+            </kbd>
+          </kbd>
+        </div>
+        <div
+          class="flex items-center gap-2 border-l border-panel-border pl-3"
+        >
+          <span>
+            Copy SQL
+          </span>
+          <kbd
+            aria-label="⌘ C"
+            class="inline-flex items-center gap-0.5"
+            data-slot="kbd-group"
+          >
+            <kbd
+              class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+              data-slot="kbd"
+            >
+              ⌘
+            </kbd>
+            <kbd
+              class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+              data-slot="kbd"
+            >
+              C
+            </kbd>
+          </kbd>
+        </div>
+      </div>
+    </footer>
+  </div>
+</div>
+`;
+
+exports[`widgetRunView states > maps a database error and retries 1`] = `
+<div
+  data-testid="run-harness"
+  style="width: 760px"
+>
+  <div
+    aria-label="Revenue by region"
+    class="flex min-h-0 flex-col outline-none has-[[data-active=true]]:min-h-[356px]"
+    role="group"
+    tabindex="-1"
+  >
+    <div
+      id="widget-run-header"
+    >
+      <div
+        class="relative z-20 flex h-14 shrink-0 items-center gap-2.5 px-4"
+      >
+        <div
+          class="flex min-w-0 flex-1 items-center"
+        >
+          <div
+            class="flex min-w-0 flex-1 items-center gap-2.5"
+          >
+            <h2
+              class="max-w-[40%] shrink-0 truncate type-input text-foreground"
+            >
+              Revenue by region
+            </h2>
+            <div
+              aria-label="Revenue by region inputs"
+              class="flex min-w-0 items-center gap-1.5"
+              role="group"
+            >
+              <span
+                class="relative inline-flex h-7 shrink-0 items-center gap-1.5 rounded-[8px] bg-row-hover px-2"
+                data-active="false"
+              >
+                <span
+                  aria-hidden="true"
+                  class="relative type-micro text-panel-muted"
+                >
+                  Region
+                </span>
+                <span
+                  class="relative flex min-w-0 items-center"
+                >
+                  <input
+                    aria-autocomplete="list"
+                    aria-controls="arg-options-region"
+                    aria-expanded="false"
+                    aria-label="Region"
+                    autocomplete="off"
+                    class="max-w-48 min-w-[3ch] bg-transparent type-body text-foreground outline-none focus-visible:outline-none"
+                    role="combobox"
+                    size="6"
+                    spellcheck="false"
+                    value="Europe"
+                  />
+                </span>
+              </span>
+              <span
+                class="relative inline-flex h-7 shrink-0 items-center gap-1.5 rounded-[8px] bg-row-hover px-2"
+                data-active="false"
+              >
+                <span
+                  aria-hidden="true"
+                  class="relative type-micro text-panel-muted"
+                >
+                  Period
+                </span>
+                <span
+                  class="relative flex min-w-0 items-center"
+                >
+                  <button
+                    aria-controls="arg-presets-period"
+                    aria-expanded="false"
+                    aria-haspopup="listbox"
+                    aria-label="Period: Last quarter"
+                    class="flex items-center gap-1 type-body text-foreground outline-none focus-visible:outline-none"
+                    type="button"
+                  >
+                    <span
+                      class="max-w-56 truncate"
+                    >
+                      Last quarter
+                    </span>
+                    <svg
+                      aria-hidden="true"
+                      class="lucide lucide-chevron-down size-3 text-panel-muted"
+                      fill="none"
+                      height="24"
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      viewBox="0 0 24 24"
+                      width="24"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="m6 9 6 6 6-6"
+                      />
+                    </svg>
+                  </button>
+                </span>
+              </span>
+            </div>
+          </div>
+        </div>
+        <button
+          aria-label="Run"
+          class="grid size-7 shrink-0 place-items-center bg-row-hover text-panel-muted hover:text-foreground"
+          style="border-radius: 8px"
+          tabindex="0"
+          type="button"
+        >
+          <span
+            class="grid place-items-center"
+          >
+            <svg
+              aria-hidden="true"
+              class="lucide lucide-corner-down-left size-3.5"
+              fill="none"
+              height="24"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+              width="24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M20 4v7a4 4 0 0 1-4 4H4"
+              />
+              <path
+                d="m9 10-5 5 5 5"
+              />
+            </svg>
+          </span>
+        </button>
+      </div>
+    </div>
+    <div
+      class="relative flex min-h-0 flex-1 flex-col overflow-y-auto border-t border-panel-border"
+      style="min-height: 0px"
+    >
+      <div
+        class="flex h-8 shrink-0 items-center gap-2 px-4 type-meta text-panel-muted tabular-nums"
+      >
+        <span
+          aria-hidden="true"
+          class="grid place-items-center bg-row-hover size-4 rounded-[5px] text-[10px]"
+        >
+          🐘
+        </span>
+        <span
+          class="truncate"
+        >
+          analytics
+        </span>
+      </div>
+      <div
+        class="px-4 pt-1 pb-4"
+      >
+        <div
+          class="flex gap-3 rounded-[10px] border border-danger-ink/25 bg-destructive/[0.07] px-3 py-2.5"
+          role="alert"
+        >
+          <svg
+            aria-hidden="true"
+            class="lucide lucide-circle-alert mt-0.5 size-4 shrink-0 text-danger-ink"
+            fill="none"
+            height="24"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <circle
+              cx="12"
+              cy="12"
+              r="10"
+            />
+            <line
+              x1="12"
+              x2="12"
+              y1="8"
+              y2="12"
+            />
+            <line
+              x1="12"
+              x2="12.01"
+              y1="16"
+              y2="16"
+            />
+          </svg>
+          <div
+            class="flex min-w-0 flex-1 flex-col gap-1"
+          >
+            <p
+              class="type-body text-foreground"
+            >
+              The query failed.
+            </p>
+            <p
+              class="type-meta break-words text-panel-muted"
+            >
+              relation "revenue" does not exist
+            </p>
+          </div>
+          <button
+            class="h-7 shrink-0 self-start rounded-[7px] bg-row-hover px-2.5 type-meta text-foreground hover:bg-row-active"
+            tabindex="0"
+            type="button"
+          >
+            Retry
+          </button>
+        </div>
+      </div>
+    </div>
+    <footer
+      class="flex h-9 shrink-0 items-center justify-between gap-3 border-t border-panel-border px-4 type-meta text-panel-muted"
+    >
+      <div
+        class="flex min-w-0 items-center gap-2"
+      />
+      <div
+        class="flex shrink-0 items-center gap-3"
+      >
+        <div
+          class="flex items-center gap-2"
+        >
+          <span
+            class="text-foreground"
+            data-slot="swap-text"
+          >
+            <span
+              class="inline-block"
+            >
+              Run
+            </span>
+          </span>
+          <kbd
+            aria-label="↩"
+            class="inline-flex items-center gap-0.5"
+            data-slot="kbd-group"
+          >
+            <kbd
+              class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+              data-slot="kbd"
+            >
+              ↩
+            </kbd>
+          </kbd>
+        </div>
+        <div
+          class="flex items-center gap-2 border-l border-panel-border pl-3"
+        >
+          <span>
+            Actions
+          </span>
+          <kbd
+            aria-label="⌘ K"
+            class="inline-flex items-center gap-0.5"
+            data-slot="kbd-group"
+          >
+            <kbd
+              class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+              data-slot="kbd"
+            >
+              ⌘
+            </kbd>
+            <kbd
+              class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+              data-slot="kbd"
+            >
+              K
+            </kbd>
+          </kbd>
+        </div>
+        <div
+          class="flex items-center gap-2 border-l border-panel-border pl-3"
+        >
+          <span>
+            Copy SQL
+          </span>
+          <kbd
+            aria-label="⌘ C"
+            class="inline-flex items-center gap-0.5"
+            data-slot="kbd-group"
+          >
+            <kbd
+              class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+              data-slot="kbd"
+            >
+              ⌘
+            </kbd>
+            <kbd
+              class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+              data-slot="kbd"
+            >
+              C
+            </kbd>
+          </kbd>
+        </div>
+      </div>
+    </footer>
+  </div>
+</div>
+`;
+
+exports[`widgetRunView states > matches the snapshot for a populated run 1`] = `
+<div
+  data-testid="run-harness"
+  style="width: 760px"
+>
+  <div
+    aria-label="Revenue by region"
+    class="flex min-h-0 flex-col outline-none has-[[data-active=true]]:min-h-[356px]"
+    role="group"
+    tabindex="-1"
+  >
+    <div
+      id="widget-run-header"
+    >
+      <div
+        class="relative z-20 flex h-14 shrink-0 items-center gap-2.5 px-4"
+      >
+        <div
+          class="flex min-w-0 flex-1 items-center"
+        >
+          <div
+            class="flex min-w-0 flex-1 items-center gap-2.5"
+          >
+            <h2
+              class="max-w-[40%] shrink-0 truncate type-input text-foreground"
+            >
+              Revenue by region
+            </h2>
+            <div
+              aria-label="Revenue by region inputs"
+              class="flex min-w-0 items-center gap-1.5"
+              role="group"
+            >
+              <span
+                class="relative inline-flex h-7 shrink-0 items-center gap-1.5 rounded-[8px] bg-row-hover px-2"
+                data-active="false"
+              >
+                <span
+                  aria-hidden="true"
+                  class="relative type-micro text-panel-muted"
+                >
+                  Region
+                </span>
+                <span
+                  class="relative flex min-w-0 items-center"
+                >
+                  <input
+                    aria-autocomplete="list"
+                    aria-controls="arg-options-region"
+                    aria-expanded="false"
+                    aria-label="Region"
+                    autocomplete="off"
+                    class="max-w-48 min-w-[3ch] bg-transparent type-body text-foreground outline-none focus-visible:outline-none"
+                    role="combobox"
+                    size="6"
+                    spellcheck="false"
+                    value="Europe"
+                  />
+                </span>
+              </span>
+              <span
+                class="relative inline-flex h-7 shrink-0 items-center gap-1.5 rounded-[8px] bg-row-hover px-2"
+                data-active="false"
+              >
+                <span
+                  aria-hidden="true"
+                  class="relative type-micro text-panel-muted"
+                >
+                  Period
+                </span>
+                <span
+                  class="relative flex min-w-0 items-center"
+                >
+                  <button
+                    aria-controls="arg-presets-period"
+                    aria-expanded="false"
+                    aria-haspopup="listbox"
+                    aria-label="Period: Last quarter"
+                    class="flex items-center gap-1 type-body text-foreground outline-none focus-visible:outline-none"
+                    type="button"
+                  >
+                    <span
+                      class="max-w-56 truncate"
+                    >
+                      Last quarter
+                    </span>
+                    <svg
+                      aria-hidden="true"
+                      class="lucide lucide-chevron-down size-3 text-panel-muted"
+                      fill="none"
+                      height="24"
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      viewBox="0 0 24 24"
+                      width="24"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="m6 9 6 6 6-6"
+                      />
+                    </svg>
+                  </button>
+                </span>
+              </span>
+            </div>
+          </div>
+        </div>
+        <button
+          aria-label="Run"
+          class="grid size-7 shrink-0 place-items-center bg-row-hover text-panel-muted hover:text-foreground"
+          style="border-radius: 8px"
+          tabindex="0"
+          type="button"
+        >
+          <span
+            class="grid place-items-center"
+          >
+            <svg
+              aria-hidden="true"
+              class="lucide lucide-corner-down-left size-3.5"
+              fill="none"
+              height="24"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+              width="24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M20 4v7a4 4 0 0 1-4 4H4"
+              />
+              <path
+                d="m9 10-5 5 5 5"
+              />
+            </svg>
+          </span>
+        </button>
+      </div>
+    </div>
+    <div
+      class="relative flex min-h-0 flex-1 flex-col overflow-y-auto border-t border-panel-border"
+      style="min-height: 0px"
+    >
+      <div
+        class="flex h-8 shrink-0 items-center gap-2 px-4 type-meta text-panel-muted tabular-nums"
+      >
+        <span
+          aria-hidden="true"
+          class="grid place-items-center bg-row-hover size-4 rounded-[5px] text-[10px]"
+        >
+          🐘
+        </span>
+        <span
+          class="truncate"
+        >
+          analytics
+        </span>
+        <span
+          aria-hidden="true"
+        >
+          ·
+        </span>
+        <span
+          data-slot="swap-text"
+        >
+          <span
+            class="inline-block"
+          >
+            3 rows · 386 ms
+          </span>
+        </span>
+      </div>
+      <div
+        class="relative"
+      >
+        <div
+          aria-busy="false"
+        >
+          <section
+            aria-label="Revenue by region"
+            class="relative flex flex-col"
+          >
+            <div
+              class="flex flex-wrap items-start justify-between gap-x-4 gap-y-2 px-4 pt-3 pb-3"
+            >
+              <div
+                class="flex min-w-[9rem] flex-1 flex-col gap-0.5"
+              >
+                <h3
+                  class="truncate type-title text-foreground"
+                >
+                  <span
+                    data-slot="swap-text"
+                  >
+                    <span
+                      class="inline-block"
+                    >
+                      Revenue by region
+                    </span>
+                  </span>
+                </h3>
+                <p
+                  class="truncate type-meta text-panel-muted"
+                >
+                  <span
+                    data-slot="swap-text"
+                  >
+                    <span
+                      class="inline-block"
+                    >
+                      Europe · Last quarter
+                    </span>
+                  </span>
+                </p>
+              </div>
+              <div
+                class="flex shrink-0 items-center gap-1"
+              >
+                <div
+                  aria-label="Chart view"
+                  class="flex rounded-[9px] bg-row-hover p-0.5"
+                  role="radiogroup"
+                >
+                  <button
+                    aria-checked="false"
+                    class="relative h-7 rounded-[7px] px-3 type-meta text-panel-muted"
+                    data-segment="bar"
+                    role="radio"
+                    tabindex="-1"
+                    type="button"
+                  >
+                    <span
+                      class="relative"
+                    >
+                      Bar
+                    </span>
+                  </button>
+                  <button
+                    aria-checked="true"
+                    class="relative h-7 rounded-[7px] px-3 type-meta text-foreground"
+                    data-segment="line"
+                    role="radio"
+                    tabindex="0"
+                    type="button"
+                  >
+                    <span
+                      class="absolute inset-0 rounded-[7px] bg-control-thumb shadow-sm"
+                    />
+                    <span
+                      class="relative"
+                    >
+                      Line
+                    </span>
+                  </button>
+                  <button
+                    aria-checked="false"
+                    class="relative h-7 rounded-[7px] px-3 type-meta text-panel-muted"
+                    data-segment="table"
+                    role="radio"
+                    tabindex="-1"
+                    type="button"
+                  >
+                    <span
+                      class="relative"
+                    >
+                      Table
+                    </span>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div>
+              <ul
+                aria-label="Latest values"
+                class="flex flex-wrap gap-x-4 gap-y-1 px-4 pb-2"
+              >
+                <li
+                  class="flex items-center gap-1.5 type-meta"
+                >
+                  <span
+                    aria-hidden="true"
+                    class="size-2 shrink-0 rounded-full"
+                    style="background-color: var(--chart-1)"
+                  />
+                  <span
+                    class="text-panel-muted"
+                  >
+                    Mrr
+                  </span>
+                  <span
+                    class="text-foreground tabular-nums"
+                    data-slot="swap-text"
+                  >
+                    <span
+                      class="inline-block"
+                    >
+                      $123k
+                    </span>
+                  </span>
+                </li>
+              </ul>
+              <figure
+                aria-label="Line chart: Revenue by region. Series: Mrr."
+                class="px-2"
+                role="img"
+              >
+                <div
+                  class="flex justify-center text-xs [&_.recharts-cartesian-axis-tick_text]:fill-muted-foreground [&_.recharts-cartesian-grid_line[stroke='#ccc']]:stroke-border/50 [&_.recharts-curve.recharts-tooltip-cursor]:stroke-border [&_.recharts-dot[stroke='#fff']]:stroke-transparent [&_.recharts-layer]:outline-hidden [&_.recharts-polar-grid_[stroke='#ccc']]:stroke-border [&_.recharts-radial-bar-background-sector]:fill-muted [&_.recharts-rectangle.recharts-tooltip-cursor]:fill-muted [&_.recharts-reference-line_[stroke='#ccc']]:stroke-border [&_.recharts-sector]:outline-hidden [&_.recharts-sector[stroke='#fff']]:stroke-transparent [&_.recharts-surface]:outline-hidden aspect-auto w-full"
+                  data-chart="chart-_r_id_"
+                  data-slot="chart"
+                  style="height: 200px"
+                >
+                  <style>
+                    
+.dark [data-chart=chart-_r_id_] {
+  --color-s0: var(--chart-1);
+}
+
+
+ [data-chart=chart-_r_id_] {
+  --color-s0: var(--chart-1);
+}
+
+                  </style>
+                  <div
+                    class="recharts-responsive-container"
+                    style="width: 100%; height: 100%; min-width: 0px"
+                  >
+                    <div
+                      class="recharts-wrapper"
+                      style="position: relative; cursor: default; width: 100%; height: 100%; max-height: 200px; max-width: 744px"
+                    >
+                      <svg
+                        class="recharts-surface"
+                        height="200"
+                        role="application"
+                        style="width: 100%; height: 100%"
+                        tabindex="0"
+                        viewBox="0 0 744 200"
+                        width="744"
+                      >
+                        <title />
+                        <desc />
+                        <defs>
+                          <clippath
+                            id="rechartsN-clip"
+                          >
+                            <rect
+                              height="162"
+                              width="684"
+                              x="52"
+                              y="8"
+                            />
+                          </clippath>
+                        </defs>
+                        <g
+                          class="recharts-cartesian-grid"
+                        >
+                          <g
+                            class="recharts-cartesian-grid-horizontal"
+                          >
+                            <line
+                              class="text-foreground"
+                              fill="none"
+                              height="162"
+                              stroke="currentColor"
+                              stroke-opacity="0.07"
+                              width="684"
+                              x="52"
+                              x1="52"
+                              x2="736"
+                              y="8"
+                              y1="170"
+                              y2="170"
+                            />
+                            <line
+                              class="text-foreground"
+                              fill="none"
+                              height="162"
+                              stroke="currentColor"
+                              stroke-opacity="0.07"
+                              width="684"
+                              x="52"
+                              x1="52"
+                              x2="736"
+                              y="8"
+                              y1="116.00000000000001"
+                              y2="116.00000000000001"
+                            />
+                            <line
+                              class="text-foreground"
+                              fill="none"
+                              height="162"
+                              stroke="currentColor"
+                              stroke-opacity="0.07"
+                              width="684"
+                              x="52"
+                              x1="52"
+                              x2="736"
+                              y="8"
+                              y1="62.00000000000001"
+                              y2="62.00000000000001"
+                            />
+                            <line
+                              class="text-foreground"
+                              fill="none"
+                              height="162"
+                              stroke="currentColor"
+                              stroke-opacity="0.07"
+                              width="684"
+                              x="52"
+                              x1="52"
+                              x2="736"
+                              y="8"
+                              y1="8"
+                              y2="8"
+                            />
+                          </g>
+                        </g>
+                        <g
+                          class="recharts-layer recharts-cartesian-axis recharts-xAxis xAxis"
+                        >
+                          <g
+                            class="recharts-cartesian-axis-ticks"
+                          >
+                            <g
+                              class="recharts-layer recharts-cartesian-axis-tick"
+                            >
+                              <text
+                                class="recharts-text recharts-cartesian-axis-tick-value"
+                                fill="#666"
+                                height="30"
+                                orientation="bottom"
+                                stroke="none"
+                                text-anchor="middle"
+                                width="684"
+                              >
+                                <tspan>
+                                  Jul
+                                </tspan>
+                              </text>
+                            </g>
+                            <g
+                              class="recharts-layer recharts-cartesian-axis-tick"
+                            >
+                              <text
+                                class="recharts-text recharts-cartesian-axis-tick-value"
+                                fill="#666"
+                                height="30"
+                                orientation="bottom"
+                                stroke="none"
+                                text-anchor="middle"
+                                width="684"
+                              >
+                                <tspan>
+                                  Aug
+                                </tspan>
+                              </text>
+                            </g>
+                            <g
+                              class="recharts-layer recharts-cartesian-axis-tick"
+                            >
+                              <text
+                                class="recharts-text recharts-cartesian-axis-tick-value"
+                                fill="#666"
+                                height="30"
+                                orientation="bottom"
+                                stroke="none"
+                                text-anchor="middle"
+                                width="684"
+                              >
+                                <tspan>
+                                  Sep
+                                </tspan>
+                              </text>
+                            </g>
+                          </g>
+                        </g>
+                        <g
+                          class="recharts-layer recharts-cartesian-axis recharts-yAxis yAxis"
+                        >
+                          <g
+                            class="recharts-cartesian-axis-ticks"
+                          >
+                            <g
+                              class="recharts-layer recharts-cartesian-axis-tick"
+                            >
+                              <text
+                                class="recharts-text recharts-cartesian-axis-tick-value"
+                                fill="#666"
+                                height="162"
+                                orientation="left"
+                                stroke="none"
+                                text-anchor="end"
+                                width="48"
+                              >
+                                <tspan>
+                                  $0
+                                </tspan>
+                              </text>
+                            </g>
+                            <g
+                              class="recharts-layer recharts-cartesian-axis-tick"
+                            >
+                              <text
+                                class="recharts-text recharts-cartesian-axis-tick-value"
+                                fill="#666"
+                                height="162"
+                                orientation="left"
+                                stroke="none"
+                                text-anchor="end"
+                                width="48"
+                              >
+                                <tspan>
+                                  $45k
+                                </tspan>
+                              </text>
+                            </g>
+                            <g
+                              class="recharts-layer recharts-cartesian-axis-tick"
+                            >
+                              <text
+                                class="recharts-text recharts-cartesian-axis-tick-value"
+                                fill="#666"
+                                height="162"
+                                orientation="left"
+                                stroke="none"
+                                text-anchor="end"
+                                width="48"
+                              >
+                                <tspan>
+                                  $90k
+                                </tspan>
+                              </text>
+                            </g>
+                            <g
+                              class="recharts-layer recharts-cartesian-axis-tick"
+                            >
+                              <text
+                                class="recharts-text recharts-cartesian-axis-tick-value"
+                                fill="#666"
+                                height="162"
+                                orientation="left"
+                                stroke="none"
+                                text-anchor="end"
+                                width="48"
+                              >
+                                <tspan>
+                                  $135k
+                                </tspan>
+                              </text>
+                            </g>
+                          </g>
+                        </g>
+                        <g
+                          class="recharts-layer recharts-line"
+                        >
+                          <path
+                            class="recharts-curve recharts-line-curve"
+                            d="M52,38C166,35.1,280,32.2,394,29.6C508,27,622,24.7,736,22.4"
+                            fill="none"
+                            height="162"
+                            name="Mrr"
+                            stroke="var(--chart-1)"
+                            stroke-width="2"
+                            width="684"
+                          />
+                          <g
+                            class="recharts-layer"
+                          />
+                        </g>
+                      </svg>
+                      <div
+                        class="recharts-tooltip-wrapper"
+                        style="visibility: hidden; pointer-events: none; position: absolute; top: 0px; left: 0px"
+                        tabindex="-1"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </figure>
+            </div>
+            <div
+              class="h-3"
+            />
+          </section>
+        </div>
+      </div>
+    </div>
+    <footer
+      class="flex h-9 shrink-0 items-center justify-between gap-3 border-t border-panel-border px-4 type-meta text-panel-muted"
+    >
+      <div
+        class="flex min-w-0 items-center gap-2"
+      />
+      <div
+        class="flex shrink-0 items-center gap-3"
+      >
+        <div
+          class="flex items-center gap-2"
+        >
+          <span
+            class="text-foreground"
+            data-slot="swap-text"
+          >
+            <span
+              class="inline-block"
+            >
+              Run
+            </span>
+          </span>
+          <kbd
+            aria-label="↩"
+            class="inline-flex items-center gap-0.5"
+            data-slot="kbd-group"
+          >
+            <kbd
+              class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+              data-slot="kbd"
+            >
+              ↩
+            </kbd>
+          </kbd>
+        </div>
+        <div
+          class="flex items-center gap-2 border-l border-panel-border pl-3"
+        >
+          <span>
+            Actions
+          </span>
+          <kbd
+            aria-label="⌘ K"
+            class="inline-flex items-center gap-0.5"
+            data-slot="kbd-group"
+          >
+            <kbd
+              class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+              data-slot="kbd"
+            >
+              ⌘
+            </kbd>
+            <kbd
+              class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+              data-slot="kbd"
+            >
+              K
+            </kbd>
+          </kbd>
+        </div>
+        <div
+          class="flex items-center gap-2 border-l border-panel-border pl-3"
+        >
+          <span>
+            Copy SQL
+          </span>
+          <kbd
+            aria-label="⌘ C"
+            class="inline-flex items-center gap-0.5"
+            data-slot="kbd-group"
+          >
+            <kbd
+              class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+              data-slot="kbd"
+            >
+              ⌘
+            </kbd>
+            <kbd
+              class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+              data-slot="kbd"
+            >
+              C
+            </kbd>
+          </kbd>
+        </div>
+      </div>
+    </footer>
+  </div>
+</div>
+`;
+
+exports[`widgetRunView states > shows a skeleton only when the first run takes longer than 150ms 1`] = `
+<div
+  data-testid="run-harness"
+  style="width: 760px"
+>
+  <div
+    aria-label="Revenue by region"
+    class="flex min-h-0 flex-col outline-none has-[[data-active=true]]:min-h-[356px]"
+    role="group"
+    tabindex="-1"
+  >
+    <div
+      id="widget-run-header"
+    >
+      <div
+        class="relative z-20 flex h-14 shrink-0 items-center gap-2.5 px-4"
+      >
+        <div
+          class="flex min-w-0 flex-1 items-center"
+        >
+          <div
+            class="flex min-w-0 flex-1 items-center gap-2.5"
+          >
+            <h2
+              class="max-w-[40%] shrink-0 truncate type-input text-foreground"
+            >
+              Revenue by region
+            </h2>
+            <div
+              aria-label="Revenue by region inputs"
+              class="flex min-w-0 items-center gap-1.5"
+              role="group"
+            >
+              <span
+                class="relative inline-flex h-7 shrink-0 items-center gap-1.5 rounded-[8px] bg-row-hover px-2"
+                data-active="false"
+              >
+                <span
+                  aria-hidden="true"
+                  class="relative type-micro text-panel-muted"
+                >
+                  Region
+                </span>
+                <span
+                  class="relative flex min-w-0 items-center"
+                >
+                  <input
+                    aria-autocomplete="list"
+                    aria-controls="arg-options-region"
+                    aria-expanded="false"
+                    aria-label="Region"
+                    autocomplete="off"
+                    class="max-w-48 min-w-[3ch] bg-transparent type-body text-foreground outline-none focus-visible:outline-none"
+                    role="combobox"
+                    size="6"
+                    spellcheck="false"
+                    value="Europe"
+                  />
+                </span>
+              </span>
+              <span
+                class="relative inline-flex h-7 shrink-0 items-center gap-1.5 rounded-[8px] bg-row-hover px-2"
+                data-active="false"
+              >
+                <span
+                  aria-hidden="true"
+                  class="relative type-micro text-panel-muted"
+                >
+                  Period
+                </span>
+                <span
+                  class="relative flex min-w-0 items-center"
+                >
+                  <button
+                    aria-controls="arg-presets-period"
+                    aria-expanded="false"
+                    aria-haspopup="listbox"
+                    aria-label="Period: Last quarter"
+                    class="flex items-center gap-1 type-body text-foreground outline-none focus-visible:outline-none"
+                    type="button"
+                  >
+                    <span
+                      class="max-w-56 truncate"
+                    >
+                      Last quarter
+                    </span>
+                    <svg
+                      aria-hidden="true"
+                      class="lucide lucide-chevron-down size-3 text-panel-muted"
+                      fill="none"
+                      height="24"
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      viewBox="0 0 24 24"
+                      width="24"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="m6 9 6 6 6-6"
+                      />
+                    </svg>
+                  </button>
+                </span>
+              </span>
+            </div>
+          </div>
+        </div>
+        <button
+          aria-label="Stop"
+          class="grid size-7 shrink-0 place-items-center bg-row-hover text-panel-muted hover:text-foreground"
+          style="border-radius: 6px"
+          tabindex="0"
+          type="button"
+        >
+          <span
+            class="grid place-items-center"
+          >
+            <svg
+              aria-hidden="true"
+              class="lucide lucide-square size-3 fill-current"
+              fill="none"
+              height="24"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+              width="24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <rect
+                height="18"
+                rx="2"
+                width="18"
+                x="3"
+                y="3"
+              />
+            </svg>
+          </span>
+        </button>
+      </div>
+    </div>
+    <div
+      class="relative flex min-h-0 flex-1 flex-col overflow-y-auto border-t border-panel-border"
+      style="min-height: 0px"
+    >
+      <div
+        class="flex h-8 shrink-0 items-center gap-2 px-4 type-meta text-panel-muted tabular-nums"
+      >
+        <span
+          aria-hidden="true"
+          class="grid place-items-center bg-row-hover size-4 rounded-[5px] text-[10px]"
+        >
+          🐘
+        </span>
+        <span
+          class="truncate"
+        >
+          analytics
+        </span>
+      </div>
+      <div
+        aria-hidden="true"
+        class="px-4 pb-4 ask-shimmer"
+        data-testid="ask-skeleton"
+      >
+        <div
+          class="flex gap-3 pt-1 pb-3"
+        >
+          <span
+            class="h-3 rounded-full bg-foreground/[0.06]"
+            style="width: 56px"
+          />
+          <span
+            class="h-3 rounded-full bg-foreground/[0.06]"
+            style="width: 72px"
+          />
+          <span
+            class="h-3 rounded-full bg-foreground/[0.06]"
+            style="width: 48px"
+          />
+        </div>
+        <div
+          class="flex items-end gap-2 border-b border-foreground/[0.06]"
+          style="height: 200px"
+        >
+          <span
+            class="flex-1 rounded-t-[3px] bg-foreground/[0.06]"
+            style="height: 38%"
+          />
+          <span
+            class="flex-1 rounded-t-[3px] bg-foreground/[0.06]"
+            style="height: 52%"
+          />
+          <span
+            class="flex-1 rounded-t-[3px] bg-foreground/[0.06]"
+            style="height: 46%"
+          />
+          <span
+            class="flex-1 rounded-t-[3px] bg-foreground/[0.06]"
+            style="height: 61%"
+          />
+          <span
+            class="flex-1 rounded-t-[3px] bg-foreground/[0.06]"
+            style="height: 57%"
+          />
+          <span
+            class="flex-1 rounded-t-[3px] bg-foreground/[0.06]"
+            style="height: 70%"
+          />
+          <span
+            class="flex-1 rounded-t-[3px] bg-foreground/[0.06]"
+            style="height: 64%"
+          />
+          <span
+            class="flex-1 rounded-t-[3px] bg-foreground/[0.06]"
+            style="height: 73%"
+          />
+          <span
+            class="flex-1 rounded-t-[3px] bg-foreground/[0.06]"
+            style="height: 69%"
+          />
+          <span
+            class="flex-1 rounded-t-[3px] bg-foreground/[0.06]"
+            style="height: 82%"
+          />
+          <span
+            class="flex-1 rounded-t-[3px] bg-foreground/[0.06]"
+            style="height: 78%"
+          />
+          <span
+            class="flex-1 rounded-t-[3px] bg-foreground/[0.06]"
+            style="height: 88%"
+          />
+        </div>
+        <span
+          class="mt-3 block h-3 w-2/3 rounded-full bg-foreground/[0.06]"
+        />
+      </div>
+    </div>
+    <footer
+      class="flex h-9 shrink-0 items-center justify-between gap-3 border-t border-panel-border px-4 type-meta text-panel-muted"
+    >
+      <div
+        class="flex min-w-0 items-center gap-2"
+      />
+      <div
+        class="flex shrink-0 items-center gap-3"
+      >
+        <div
+          class="flex items-center gap-2"
+        >
+          <span
+            class="text-foreground"
+            data-slot="swap-text"
+          >
+            <span
+              class="inline-block"
+            >
+              Running
+            </span>
+          </span>
+          <kbd
+            aria-label="↩"
+            class="inline-flex items-center gap-0.5"
+            data-slot="kbd-group"
+          >
+            <kbd
+              class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+              data-slot="kbd"
+            >
+              ↩
+            </kbd>
+          </kbd>
+        </div>
+        <div
+          class="flex items-center gap-2 border-l border-panel-border pl-3"
+        >
+          <span>
+            Actions
+          </span>
+          <kbd
+            aria-label="⌘ K"
+            class="inline-flex items-center gap-0.5"
+            data-slot="kbd-group"
+          >
+            <kbd
+              class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+              data-slot="kbd"
+            >
+              ⌘
+            </kbd>
+            <kbd
+              class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+              data-slot="kbd"
+            >
+              K
+            </kbd>
+          </kbd>
+        </div>
+        <div
+          class="flex items-center gap-2 border-l border-panel-border pl-3"
+        >
+          <span>
+            Copy SQL
+          </span>
+          <kbd
+            aria-label="⌘ C"
+            class="inline-flex items-center gap-0.5"
+            data-slot="kbd-group"
+          >
+            <kbd
+              class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+              data-slot="kbd"
+            >
+              ⌘
+            </kbd>
+            <kbd
+              class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+              data-slot="kbd"
+            >
+              C
+            </kbd>
+          </kbd>
+        </div>
+      </div>
+    </footer>
+  </div>
+</div>
+`;

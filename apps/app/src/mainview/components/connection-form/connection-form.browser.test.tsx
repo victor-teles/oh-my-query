@@ -28,7 +28,7 @@ const mockTestConnection = vi.fn();
 const mockSaveConnection = vi.fn<(c: DatabaseConnection) => Promise<void>>();
 const mockUpdateConnection = vi.fn<(c: DatabaseConnection) => Promise<void>>();
 
-vi.mock(import("@/lib/tauri"), async (importOriginal) => {
+vi.mock(import("@/lib/ipc"), async (importOriginal) => {
   const original = await importOriginal();
   return {
     ...original,
@@ -171,8 +171,9 @@ describe("connectionForm test-connection flow", () => {
     await screen.getByRole("button", { name: "Test connection" }).click();
 
     await expect
-      .element(screen.getByText(/Connected \(12ms\)/))
-      .toBeInTheDocument();
+      .element(screen.getByRole("status"))
+      .toHaveTextContent("Connected");
+    await expect.element(screen.getByText("12 ms")).toBeVisible();
     expect(mockTestConnection).toHaveBeenCalledOnce();
   });
 

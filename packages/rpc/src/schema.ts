@@ -1,19 +1,45 @@
 import type {
-  AppConfig,
   ConnectionParams,
   DatabaseConnection,
+  DialectType,
   ExecuteResult,
-  ExplainParams,
-  ExplainResult,
   HistoryEntry,
   HistoryFilters,
   QueryParams,
-  RedisDbInfo,
-  RedisScanPage,
   SchemaInfo,
-  TabState,
   TestConnectionResult,
 } from "@oh-my-query/core";
+import type { LookupValue } from "@oh-my-query/core/client";
+
+import type {
+  ActiveConnection,
+  AiSettingsInput,
+  AiTestResult,
+  RedactedAiSettings,
+} from "./ai-providers.ts";
+import type { AskEventMessage, AskParams } from "./ask.ts";
+import type { SqlAssumptions } from "./assumptions.ts";
+import type { Board, BoardDraft } from "./board.ts";
+import type { LookupEventMessage, LookupRequest } from "./lookup.ts";
+import type { RunSqlParams, SchemaPeek } from "./sql-run.ts";
+import type {
+  ProposeParamsRequest,
+  ProposeParamsResult,
+  RecentAsk,
+  RunWidgetRequest,
+  Widget,
+  WidgetDraft,
+  WidgetRunResult,
+} from "./widget.ts";
+
+export type LauncherNavigateView =
+  | "root"
+  | "settings"
+  | { kind: "widget-run"; widgetId: string };
+
+export const DEFAULT_LAUNCHER_HOTKEY = "Option+Shift+Space";
+
+export const DEFAULT_CLIPBOARD_LOOKUPS = false;
 
 export type UpdateChannel = "stable" | "beta" | "nightly";
 
@@ -22,20 +48,6 @@ export interface AvailableUpdate {
   currentVersion: string;
   notes: string | null;
   date: string | null;
-}
-
-export interface ScanRedisKeysParams {
-  connectionId: string;
-  dbIndex: number;
-  pattern?: string | null;
-  cursor?: string | null;
-  count?: number | null;
-}
-
-export interface DeleteRedisKeyParams {
-  connectionId: string;
-  dbIndex: number;
-  name: string;
 }
 
 export interface RpcSchema {
@@ -72,10 +84,6 @@ export interface RpcSchema {
       params: { params: QueryParams };
       response: ExecuteResult;
     };
-    explainQuery: {
-      params: { params: ExplainParams };
-      response: ExplainResult;
-    };
     cancelQuery: {
       params: { queryId: string };
       response: boolean;
@@ -84,30 +92,31 @@ export interface RpcSchema {
       params: { sql: string; dialect: string };
       response: string;
     };
-
-    redisDbInfo: {
-      params: { connectionId: string; dbIndex: number };
-      response: RedisDbInfo;
-    };
-    scanRedisKeys: {
-      params: ScanRedisKeysParams;
-      response: RedisScanPage;
-    };
-    deleteRedisKey: {
-      params: DeleteRedisKeyParams;
-      response: number;
+    describeSql: {
+      params: { sql: string; dialect: DialectType };
+      response: SqlAssumptions | null;
     };
 
-    getConfig: { params: Record<string, never>; response: AppConfig };
-    saveConfig: { params: { config: AppConfig }; response: void };
-    getTabs: {
-      params: { connectionId: string };
-      response: TabState | null;
+    getAiSettings: {
+      params: Record<string, never>;
+      response: RedactedAiSettings | null;
     };
-    saveTabs: {
-      params: { connectionId: string; state: TabState };
+    saveAiSettings: { params: AiSettingsInput; response: RedactedAiSettings };
+    clearAiKey: {
+      params: Record<string, never>;
+      response: RedactedAiSettings | null;
+    };
+    testAiSettings: { params: AiSettingsInput; response: AiTestResult };
+    getActiveConnection: {
+      params: Record<string, never>;
+      response: ActiveConnection | null;
+    };
+    setActiveConnection: {
+      params: { active: ActiveConnection | null };
       response: void;
     };
+    getLauncherHotkey: { params: Record<string, never>; response: string };
+    getAppVersion: { params: Record<string, never>; response: string };
     appendHistory: { params: { entry: HistoryEntry }; response: void };
     getHistory: {
       params: {
@@ -149,19 +158,75 @@ export interface RpcSchema {
     installUpdate: { params: Record<string, never>; response: boolean };
 
     openExternal: { params: { url: string }; response: void };
-
-    toggleWindowMaximize: {
-      params: Record<string, never>;
-      response: boolean;
+    copyImage: { params: { pngBase64: string }; response: void };
+    saveToDownloads: {
+      params: { baseName: string; extension: "csv"; content: string };
+      response: { fileName: string; savedId: string };
     };
+    revealSaved: { params: { savedId: string }; response: void };
+
+    resizeLauncher: { params: { height: number }; response: void };
+    hideLauncher: { params: Record<string, never>; response: void };
 
     rendererReady: {
       params: Record<string, never>;
       response: void;
     };
+
+    ask: { params: AskParams; response: void };
+    runSql: { params: RunSqlParams; response: void };
+    peekSchema: { params: { connectionId: string }; response: SchemaPeek };
+    cancelAsk: { params: { askId: string }; response: void };
+    lookup: { params: LookupRequest; response: void };
+    cancelLookup: { params: { lookupId: string }; response: void };
+    getClipboardLookups: {
+      params: Record<string, never>;
+      response: { enabled: boolean };
+    };
+    setClipboardLookups: {
+      params: { enabled: boolean };
+      response: { enabled: boolean };
+    };
+
+    listWidgets: { params: Record<string, never>; response: Widget[] };
+    saveWidget: { params: { widget: WidgetDraft }; response: Widget };
+    deleteWidget: { params: { widgetId: string }; response: void };
+    listRecentAsks: { params: { limit?: number }; response: RecentAsk[] };
+    deleteRecentAsk: { params: { askId: string }; response: void };
+    clearRecentAsks: { params: Record<string, never>; response: void };
+    proposeWidgetParams: {
+      params: ProposeParamsRequest;
+      response: ProposeParamsResult;
+    };
+    runWidget: { params: RunWidgetRequest; response: WidgetRunResult };
+    cancelWidgetRun: { params: { runId: string }; response: void };
+    listBoards: { params: Record<string, never>; response: Board[] };
+    getBoard: { params: { boardId: string }; response: Board | null };
+    saveBoard: { params: { board: BoardDraft }; response: Board };
+    deleteBoard: { params: { boardId: string }; response: void };
+    addBoardTile: {
+      params: { boardId: string; widgetId: string };
+      response: Board;
+    };
+    openBoard: { params: { boardId: string }; response: void };
+    toggleLauncher: {
+      params: { fromBoardId: string | null };
+      response: void;
+    };
+    openWidgetInLauncher: { params: { widgetId: string }; response: void };
+    loadParamOptions: {
+      params: { widgetId: string; paramName: string };
+      response: string[];
+    };
   };
   messages: {
-    menuNavigate: { route: string };
+    launcherShown: { clipboard: LookupValue | null };
+    launcherToggle: Record<string, never>;
+    launcherDismiss: Record<string, never>;
+    launcherNavigate: { view: LauncherNavigateView };
     updateProgress: { percent: number; downloaded: number; total: number };
+    askEvent: AskEventMessage;
+    lookupEvent: LookupEventMessage;
+    boardChanged: { boardId: string };
   };
 }

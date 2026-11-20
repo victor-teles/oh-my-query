@@ -1,0 +1,54 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`ask view for raw SQL > explains a refused write in launcher terms 1`] = `
+<div
+  class="flex gap-3 rounded-[10px] border border-danger-ink/25 bg-destructive/[0.07] px-3 py-2.5"
+  role="alert"
+>
+  <svg
+    aria-hidden="true"
+    class="lucide lucide-circle-alert mt-0.5 size-4 shrink-0 text-danger-ink"
+    fill="none"
+    height="24"
+    stroke="currentColor"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    stroke-width="2"
+    viewBox="0 0 24 24"
+    width="24"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <circle
+      cx="12"
+      cy="12"
+      r="10"
+    />
+    <line
+      x1="12"
+      x2="12"
+      y1="8"
+      y2="12"
+    />
+    <line
+      x1="12"
+      x2="12.01"
+      y1="16"
+      y2="16"
+    />
+  </svg>
+  <div
+    class="flex min-w-0 flex-1 flex-col gap-1"
+  >
+    <p
+      class="type-body text-foreground"
+    >
+      This would change data. The launcher only runs read-only queries.
+    </p>
+    <p
+      class="type-meta break-words text-panel-muted"
+    >
+      Only read-only queries can run here, not DELETE.
+    </p>
+  </div>
+</div>
+`;

@@ -2,7 +2,11 @@ import type * as ElectrobunView from "electrobun/view";
 
 import { afterEach, vi } from "vitest";
 
-import { ipcHandlerRegistry, resetIpcHandlers } from "./ipc-handler-registry";
+import {
+  ipcHandlerRegistry,
+  ipcMessageHandlers,
+  resetIpcHandlers,
+} from "./ipc-handler-registry";
 
 const noopStub = () => {
   /* no-op */
@@ -26,7 +30,7 @@ const dispatchToRegistry =
       }
       return Promise.reject(
         new Error(
-          `Unexpected RPC command: ${method}. Register it via mockTauri()/mockIpc().`
+          `Unexpected RPC command: ${method}. Register it via mockIpc().`
         )
       );
     }
@@ -44,6 +48,10 @@ vi.mock<typeof ElectrobunView>(import("electrobun/view"), () => {
       }),
     };
     static defineRPC<T>(config: T): T {
+      const handlers = (
+        config as { handlers?: { messages?: Record<string, never> } }
+      ).handlers?.messages;
+      ipcMessageHandlers.current = handlers ?? {};
       return config;
     }
   }

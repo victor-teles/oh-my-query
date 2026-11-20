@@ -1,0 +1,39 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`saving an answer with full motion > names and saves a widget with ⌘S, then runs it with ⌥⏎ 1`] = `
+<label
+  class="flex items-center gap-3 px-4 py-2"
+>
+  <span
+    class="shrink-0 type-meta text-panel-muted"
+  >
+    Widget name
+  </span>
+  <input
+    aria-label="Widget name"
+    class="h-8 min-w-0 flex-1 rounded-[8px] bg-row-hover px-2.5 type-body text-foreground outline-none focus-visible:ring-1 focus-visible:ring-primary/60"
+    maxlength="60"
+    spellcheck="false"
+    value="Monthly recurring revenue by region"
+  />
+</label>
+`;
+
+exports[`saving an answer with reduced motion > names and saves a widget with ⌘S, then runs it with ⌥⏎ 1`] = `
+<label
+  class="flex items-center gap-3 px-4 py-2"
+>
+  <span
+    class="shrink-0 type-meta text-panel-muted"
+  >
+    Widget name
+  </span>
+  <input
+    aria-label="Widget name"
+    class="h-8 min-w-0 flex-1 rounded-[8px] bg-row-hover px-2.5 type-body text-foreground outline-none focus-visible:ring-1 focus-visible:ring-primary/60"
+    maxlength="60"
+    spellcheck="false"
+    value="Monthly recurring revenue by region"
+  />
+</label>
+`;

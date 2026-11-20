@@ -1,0 +1,1528 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`lookupView states > renders doneEmpty > doneEmpty 1`] = `
+<div
+  data-testid="lookup-harness"
+  style="width: 760px"
+>
+  <div
+    class="flex min-h-0 flex-col"
+  >
+    <div
+      class="relative z-20 flex h-14 shrink-0 items-center gap-2.5 px-4"
+    >
+      <span
+        aria-label="Active connection: analytics"
+        class="relative flex h-8 max-w-56 shrink-0 items-center pr-2.5 pl-1"
+        data-tone="active"
+        role="img"
+      >
+        <span
+          class="absolute inset-0 rounded-[9px] bg-row-hover"
+        />
+        <span
+          class="relative flex min-w-0 items-center gap-3"
+        >
+          <span
+            aria-hidden="true"
+            class="grid size-6 place-items-center rounded-[7px] text-[13px] leading-none bg-row-hover"
+          >
+            🐘
+          </span>
+          <span
+            class="truncate type-body text-foreground"
+          >
+            analytics
+          </span>
+        </span>
+      </span>
+      <div
+        class="flex min-w-0 flex-1 items-center"
+      >
+        <input
+          aria-controls="lookup-results"
+          aria-expanded="false"
+          aria-label="Looking up UUID"
+          class="h-7 max-w-full min-w-0 truncate rounded-[7px] bg-row-hover px-2.5 font-mono text-[13px] text-foreground outline-none focus-visible:ring-2 focus-visible:ring-ring/50"
+          readonly=""
+          role="combobox"
+          size="36"
+          value="3f2a1b4c-9d8e-4f7a-b6c5-d4e3f2a1c91e"
+        />
+      </div>
+      <button
+        aria-label="Run"
+        class="grid size-7 shrink-0 place-items-center bg-row-hover text-panel-muted hover:text-foreground"
+        style="border-radius: 8px"
+        tabindex="0"
+        type="button"
+      >
+        <span
+          class="grid place-items-center"
+        >
+          <svg
+            aria-hidden="true"
+            class="lucide lucide-corner-down-left size-3.5"
+            fill="none"
+            height="24"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M20 4v7a4 4 0 0 1-4 4H4"
+            />
+            <path
+              d="m9 10-5 5 5 5"
+            />
+          </svg>
+        </span>
+      </button>
+    </div>
+    <div
+      class="relative flex min-h-0 flex-1 flex-col overflow-y-auto border-t border-panel-border"
+    >
+      <div
+        class="relative px-4 pt-3 pb-1.5"
+      >
+        <div
+          aria-hidden="true"
+          class="flex min-h-5 flex-col gap-0.5"
+        >
+          <span
+            class="type-body text-foreground"
+            data-slot="swap-text"
+          >
+            <span
+              class="inline-block"
+            >
+              No matches · 96ms
+            </span>
+          </span>
+        </div>
+        <span
+          aria-live="polite"
+          class="sr-only"
+        >
+          No matches in 14 tables
+        </span>
+      </div>
+      <div
+        class="flex flex-col gap-1 px-4 pt-2 pb-5"
+      >
+        <p
+          class="type-body text-foreground"
+          role="status"
+        >
+          No rows match 3f2a1b…c91e in 14 tables.
+        </p>
+        <p
+          class="type-meta text-panel-muted"
+        >
+          Exact match only.
+        </p>
+        <p
+          class="type-meta text-panel-muted"
+        >
+          Skipped 3 large tables without an index on the column.
+        </p>
+      </div>
+    </div>
+    <footer
+      class="flex h-9 shrink-0 items-center justify-between gap-3 border-t border-panel-border px-4 type-meta text-panel-muted"
+    >
+      <div
+        class="flex min-w-0 items-center gap-2"
+      >
+        <span
+          aria-hidden="true"
+          class="size-1.5 shrink-0 rounded-full bg-panel-muted opacity-60"
+        />
+        <span
+          class="min-w-0 truncate"
+          data-slot="swap-text"
+        >
+          <span
+            class="inline-block"
+          >
+            analytics
+          </span>
+        </span>
+      </div>
+      <div
+        class="flex shrink-0 items-center gap-3"
+      >
+        <div
+          class="flex items-center gap-2 border-l border-panel-border pl-3"
+        >
+          <span>
+            Back
+          </span>
+          <kbd
+            aria-label="esc"
+            class="inline-flex items-center gap-0.5"
+            data-slot="kbd-group"
+          >
+            <kbd
+              class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+              data-slot="kbd"
+            >
+              esc
+            </kbd>
+          </kbd>
+        </div>
+        <div
+          class="flex items-center gap-2 border-l border-panel-border pl-3"
+        >
+          <span>
+            Copy value
+          </span>
+          <kbd
+            aria-label="⌘ C"
+            class="inline-flex items-center gap-0.5"
+            data-slot="kbd-group"
+          >
+            <kbd
+              class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+              data-slot="kbd"
+            >
+              ⌘
+            </kbd>
+            <kbd
+              class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+              data-slot="kbd"
+            >
+              C
+            </kbd>
+          </kbd>
+        </div>
+      </div>
+    </footer>
+  </div>
+</div>
+`;
+
+exports[`lookupView states > renders doneHits > doneHits 1`] = `
+<div
+  data-testid="lookup-harness"
+  style="width: 760px"
+>
+  <div
+    class="flex min-h-0 flex-col"
+  >
+    <div
+      class="relative z-20 flex h-14 shrink-0 items-center gap-2.5 px-4"
+    >
+      <span
+        aria-label="Active connection: analytics"
+        class="relative flex h-8 max-w-56 shrink-0 items-center pr-2.5 pl-1"
+        data-tone="active"
+        role="img"
+      >
+        <span
+          class="absolute inset-0 rounded-[9px] bg-row-hover"
+        />
+        <span
+          class="relative flex min-w-0 items-center gap-3"
+        >
+          <span
+            aria-hidden="true"
+            class="grid size-6 place-items-center rounded-[7px] text-[13px] leading-none bg-row-hover"
+          >
+            🐘
+          </span>
+          <span
+            class="truncate type-body text-foreground"
+          >
+            analytics
+          </span>
+        </span>
+      </span>
+      <div
+        class="flex min-w-0 flex-1 items-center"
+      >
+        <input
+          aria-activedescendant="launcher-option-lookup-hit-0"
+          aria-controls="lookup-results"
+          aria-expanded="true"
+          aria-label="Looking up UUID"
+          class="h-7 max-w-full min-w-0 truncate rounded-[7px] bg-row-hover px-2.5 font-mono text-[13px] text-foreground outline-none focus-visible:ring-2 focus-visible:ring-ring/50"
+          readonly=""
+          role="combobox"
+          size="36"
+          value="3f2a1b4c-9d8e-4f7a-b6c5-d4e3f2a1c91e"
+        />
+      </div>
+      <button
+        aria-label="Run"
+        class="grid size-7 shrink-0 place-items-center bg-row-hover text-panel-muted hover:text-foreground"
+        style="border-radius: 8px"
+        tabindex="0"
+        type="button"
+      >
+        <span
+          class="grid place-items-center"
+        >
+          <svg
+            aria-hidden="true"
+            class="lucide lucide-corner-down-left size-3.5"
+            fill="none"
+            height="24"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M20 4v7a4 4 0 0 1-4 4H4"
+            />
+            <path
+              d="m9 10-5 5 5 5"
+            />
+          </svg>
+        </span>
+      </button>
+    </div>
+    <div
+      class="relative flex min-h-0 flex-1 flex-col overflow-y-auto border-t border-panel-border"
+    >
+      <div
+        class="relative px-4 pt-3 pb-1.5"
+      >
+        <div
+          aria-hidden="true"
+          class="flex min-h-5 flex-col gap-0.5"
+        >
+          <span
+            class="type-body text-foreground"
+            data-slot="swap-text"
+          >
+            <span
+              class="inline-block"
+            >
+              Found in 3 tables · 412ms
+            </span>
+          </span>
+          <span
+            class="type-meta text-panel-muted"
+          >
+            1 column didn't answer in time.
+          </span>
+        </div>
+        <span
+          aria-live="polite"
+          class="sr-only"
+        >
+          Found in users, orders, and events
+        </span>
+      </div>
+      <div
+        aria-label="Tables holding the value"
+        class="flex flex-col px-2 pb-2"
+        id="lookup-results"
+        role="listbox"
+      >
+        <div
+          aria-selected="true"
+          class="relative flex h-10 cursor-default items-center gap-3 px-2.5"
+          data-tone="default"
+          id="launcher-option-lookup-hit-0"
+          role="option"
+          tabindex="0"
+        >
+          <div
+            class="absolute inset-0 rounded-[10px] bg-row-active"
+          />
+          <span
+            class="relative grid size-6 shrink-0 place-items-center rounded-[7px] bg-row-hover text-panel-muted"
+          >
+            <svg
+              aria-hidden="true"
+              class="lucide lucide-table size-3.5"
+              fill="none"
+              height="24"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+              width="24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M12 3v18"
+              />
+              <rect
+                height="18"
+                rx="2"
+                width="18"
+                x="3"
+                y="3"
+              />
+              <path
+                d="M3 9h18"
+              />
+              <path
+                d="M3 15h18"
+              />
+            </svg>
+          </span>
+          <span
+            class="relative flex min-w-0 flex-1 items-baseline gap-2"
+          >
+            <span
+              class="truncate type-body text-foreground"
+            >
+              users
+            </span>
+            <code
+              class="truncate font-mono text-[12px] text-panel-muted"
+            >
+              id
+            </code>
+            <span
+              class="shrink-0 type-micro text-panel-muted"
+            >
+              public
+            </span>
+          </span>
+          <span
+            aria-label="1 row"
+            class="relative shrink-0 type-meta text-foreground tabular-nums"
+          >
+            1
+          </span>
+        </div>
+        <div
+          aria-selected="false"
+          class="relative flex h-10 cursor-default items-center gap-3 px-2.5"
+          data-tone="default"
+          id="launcher-option-lookup-hit-1"
+          role="option"
+          tabindex="0"
+        >
+          <span
+            class="relative grid size-6 shrink-0 place-items-center rounded-[7px] bg-row-hover text-panel-muted"
+          >
+            <svg
+              aria-hidden="true"
+              class="lucide lucide-table size-3.5"
+              fill="none"
+              height="24"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+              width="24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M12 3v18"
+              />
+              <rect
+                height="18"
+                rx="2"
+                width="18"
+                x="3"
+                y="3"
+              />
+              <path
+                d="M3 9h18"
+              />
+              <path
+                d="M3 15h18"
+              />
+            </svg>
+          </span>
+          <span
+            class="relative flex min-w-0 flex-1 items-baseline gap-2"
+          >
+            <span
+              class="truncate type-body text-foreground"
+            >
+              orders
+            </span>
+            <code
+              class="truncate font-mono text-[12px] text-panel-muted"
+            >
+              user_id
+            </code>
+            <span
+              class="shrink-0 type-micro text-panel-muted"
+            >
+              public
+            </span>
+          </span>
+          <span
+            aria-label="12 rows"
+            class="relative shrink-0 type-meta text-foreground tabular-nums"
+          >
+            12
+          </span>
+        </div>
+        <div
+          aria-selected="false"
+          class="relative flex h-10 cursor-default items-center gap-3 px-2.5"
+          data-tone="default"
+          id="launcher-option-lookup-hit-2"
+          role="option"
+          tabindex="0"
+        >
+          <span
+            class="relative grid size-6 shrink-0 place-items-center rounded-[7px] bg-row-hover text-panel-muted"
+          >
+            <svg
+              aria-hidden="true"
+              class="lucide lucide-table size-3.5"
+              fill="none"
+              height="24"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+              width="24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M12 3v18"
+              />
+              <rect
+                height="18"
+                rx="2"
+                width="18"
+                x="3"
+                y="3"
+              />
+              <path
+                d="M3 9h18"
+              />
+              <path
+                d="M3 15h18"
+              />
+            </svg>
+          </span>
+          <span
+            class="relative flex min-w-0 flex-1 items-baseline gap-2"
+          >
+            <span
+              class="truncate type-body text-foreground"
+            >
+              events
+            </span>
+            <code
+              class="truncate font-mono text-[12px] text-panel-muted"
+            >
+              user_id
+            </code>
+            <span
+              class="shrink-0 type-micro text-panel-muted"
+            >
+              public
+            </span>
+          </span>
+          <span
+            aria-label="100 or more rows"
+            class="relative shrink-0 type-meta text-foreground tabular-nums"
+          >
+            100+
+          </span>
+        </div>
+      </div>
+    </div>
+    <footer
+      class="flex h-9 shrink-0 items-center justify-between gap-3 border-t border-panel-border px-4 type-meta text-panel-muted"
+    >
+      <div
+        class="flex min-w-0 items-center gap-2"
+      >
+        <span
+          aria-hidden="true"
+          class="size-1.5 shrink-0 rounded-full bg-panel-muted opacity-60"
+        />
+        <span
+          class="min-w-0 truncate"
+          data-slot="swap-text"
+        >
+          <span
+            class="inline-block"
+          >
+            analytics
+          </span>
+        </span>
+      </div>
+      <div
+        class="flex shrink-0 items-center gap-3"
+      >
+        <div
+          class="flex items-center gap-2"
+        >
+          <span
+            class="text-foreground"
+            data-slot="swap-text"
+          >
+            <span
+              class="inline-block"
+            >
+              Open rows
+            </span>
+          </span>
+          <kbd
+            aria-label="↩"
+            class="inline-flex items-center gap-0.5"
+            data-slot="kbd-group"
+          >
+            <kbd
+              class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+              data-slot="kbd"
+            >
+              ↩
+            </kbd>
+          </kbd>
+        </div>
+        <div
+          class="flex items-center gap-2 border-l border-panel-border pl-3"
+        >
+          <span>
+            Back
+          </span>
+          <kbd
+            aria-label="esc"
+            class="inline-flex items-center gap-0.5"
+            data-slot="kbd-group"
+          >
+            <kbd
+              class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+              data-slot="kbd"
+            >
+              esc
+            </kbd>
+          </kbd>
+        </div>
+        <div
+          class="flex items-center gap-2 border-l border-panel-border pl-3"
+        >
+          <span>
+            Copy value
+          </span>
+          <kbd
+            aria-label="⌘ C"
+            class="inline-flex items-center gap-0.5"
+            data-slot="kbd-group"
+          >
+            <kbd
+              class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+              data-slot="kbd"
+            >
+              ⌘
+            </kbd>
+            <kbd
+              class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+              data-slot="kbd"
+            >
+              C
+            </kbd>
+          </kbd>
+        </div>
+      </div>
+    </footer>
+  </div>
+</div>
+`;
+
+exports[`lookupView states > renders error > error 1`] = `
+<div
+  data-testid="lookup-harness"
+  style="width: 760px"
+>
+  <div
+    class="flex min-h-0 flex-col"
+  >
+    <div
+      class="relative z-20 flex h-14 shrink-0 items-center gap-2.5 px-4"
+    >
+      <span
+        aria-label="Active connection: analytics"
+        class="relative flex h-8 max-w-56 shrink-0 items-center pr-2.5 pl-1"
+        data-tone="active"
+        role="img"
+      >
+        <span
+          class="absolute inset-0 rounded-[9px] bg-row-hover"
+        />
+        <span
+          class="relative flex min-w-0 items-center gap-3"
+        >
+          <span
+            aria-hidden="true"
+            class="grid size-6 place-items-center rounded-[7px] text-[13px] leading-none bg-row-hover"
+          >
+            🐘
+          </span>
+          <span
+            class="truncate type-body text-foreground"
+          >
+            analytics
+          </span>
+        </span>
+      </span>
+      <div
+        class="flex min-w-0 flex-1 items-center"
+      >
+        <input
+          aria-controls="lookup-results"
+          aria-expanded="false"
+          aria-label="Looking up UUID"
+          class="h-7 max-w-full min-w-0 truncate rounded-[7px] bg-row-hover px-2.5 font-mono text-[13px] text-foreground outline-none focus-visible:ring-2 focus-visible:ring-ring/50"
+          readonly=""
+          role="combobox"
+          size="36"
+          value="3f2a1b4c-9d8e-4f7a-b6c5-d4e3f2a1c91e"
+        />
+      </div>
+      <button
+        aria-label="Run"
+        class="grid size-7 shrink-0 place-items-center bg-row-hover text-panel-muted hover:text-foreground"
+        style="border-radius: 8px"
+        tabindex="0"
+        type="button"
+      >
+        <span
+          class="grid place-items-center"
+        >
+          <svg
+            aria-hidden="true"
+            class="lucide lucide-corner-down-left size-3.5"
+            fill="none"
+            height="24"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M20 4v7a4 4 0 0 1-4 4H4"
+            />
+            <path
+              d="m9 10-5 5 5 5"
+            />
+          </svg>
+        </span>
+      </button>
+    </div>
+    <div
+      class="relative flex min-h-0 flex-1 flex-col overflow-y-auto border-t border-panel-border"
+    >
+      <div
+        class="relative px-4 pt-3 pb-1.5"
+      >
+        <div
+          aria-hidden="true"
+          class="flex min-h-5 flex-col gap-0.5"
+        >
+          <span
+            class="type-body text-foreground"
+            data-slot="swap-text"
+          >
+            <span
+              class="inline-block"
+            >
+              Can't search this connection
+            </span>
+          </span>
+        </div>
+        <span
+          aria-live="polite"
+          class="sr-only"
+        >
+          ID lookup isn't available for ClickHouse yet.
+        </span>
+      </div>
+      <div
+        class="flex flex-col gap-1 px-4 pt-2 pb-5"
+      >
+        <p
+          class="type-body text-foreground"
+          role="alert"
+        >
+          ID lookup isn't available for ClickHouse yet.
+        </p>
+      </div>
+    </div>
+    <footer
+      class="flex h-9 shrink-0 items-center justify-between gap-3 border-t border-panel-border px-4 type-meta text-panel-muted"
+    >
+      <div
+        class="flex min-w-0 items-center gap-2"
+      >
+        <span
+          aria-hidden="true"
+          class="size-1.5 shrink-0 rounded-full bg-panel-muted opacity-60"
+        />
+        <span
+          class="min-w-0 truncate"
+          data-slot="swap-text"
+        >
+          <span
+            class="inline-block"
+          >
+            analytics
+          </span>
+        </span>
+      </div>
+      <div
+        class="flex shrink-0 items-center gap-3"
+      >
+        <div
+          class="flex items-center gap-2 border-l border-panel-border pl-3"
+        >
+          <span>
+            Back
+          </span>
+          <kbd
+            aria-label="esc"
+            class="inline-flex items-center gap-0.5"
+            data-slot="kbd-group"
+          >
+            <kbd
+              class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+              data-slot="kbd"
+            >
+              esc
+            </kbd>
+          </kbd>
+        </div>
+        <div
+          class="flex items-center gap-2 border-l border-panel-border pl-3"
+        >
+          <span>
+            Copy value
+          </span>
+          <kbd
+            aria-label="⌘ C"
+            class="inline-flex items-center gap-0.5"
+            data-slot="kbd-group"
+          >
+            <kbd
+              class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+              data-slot="kbd"
+            >
+              ⌘
+            </kbd>
+            <kbd
+              class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+              data-slot="kbd"
+            >
+              C
+            </kbd>
+          </kbd>
+        </div>
+      </div>
+    </footer>
+  </div>
+</div>
+`;
+
+exports[`lookupView states > renders planning > planning 1`] = `
+<div
+  data-testid="lookup-harness"
+  style="width: 760px"
+>
+  <div
+    class="flex min-h-0 flex-col"
+  >
+    <div
+      class="relative z-20 flex h-14 shrink-0 items-center gap-2.5 px-4"
+    >
+      <span
+        aria-label="Active connection: analytics"
+        class="relative flex h-8 max-w-56 shrink-0 items-center pr-2.5 pl-1"
+        data-tone="active"
+        role="img"
+      >
+        <span
+          class="absolute inset-0 rounded-[9px] bg-row-hover"
+        />
+        <span
+          class="relative flex min-w-0 items-center gap-3"
+        >
+          <span
+            aria-hidden="true"
+            class="grid size-6 place-items-center rounded-[7px] text-[13px] leading-none bg-row-hover"
+          >
+            🐘
+          </span>
+          <span
+            class="truncate type-body text-foreground"
+          >
+            analytics
+          </span>
+        </span>
+      </span>
+      <div
+        class="flex min-w-0 flex-1 items-center"
+      >
+        <input
+          aria-controls="lookup-results"
+          aria-expanded="false"
+          aria-label="Looking up UUID"
+          class="h-7 max-w-full min-w-0 truncate rounded-[7px] bg-row-hover px-2.5 font-mono text-[13px] text-foreground outline-none focus-visible:ring-2 focus-visible:ring-ring/50"
+          readonly=""
+          role="combobox"
+          size="36"
+          value="3f2a1b4c-9d8e-4f7a-b6c5-d4e3f2a1c91e"
+        />
+      </div>
+      <button
+        aria-label="Stop"
+        class="grid size-7 shrink-0 place-items-center bg-row-hover text-panel-muted hover:text-foreground"
+        style="border-radius: 6px"
+        tabindex="0"
+        type="button"
+      >
+        <span
+          class="grid place-items-center"
+        >
+          <svg
+            aria-hidden="true"
+            class="lucide lucide-square size-3 fill-current"
+            fill="none"
+            height="24"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <rect
+              height="18"
+              rx="2"
+              width="18"
+              x="3"
+              y="3"
+            />
+          </svg>
+        </span>
+      </button>
+    </div>
+    <div
+      class="relative flex min-h-0 flex-1 flex-col overflow-y-auto border-t border-panel-border"
+    >
+      <div
+        class="relative px-4 pt-3 pb-1.5"
+      >
+        <div
+          aria-label="Search progress"
+          aria-valuemax="0"
+          aria-valuemin="0"
+          aria-valuenow="0"
+          class="absolute inset-x-0 top-0 h-0.5 bg-primary"
+          data-motion="instant"
+          role="progressbar"
+        />
+        <div
+          aria-hidden="true"
+          class="flex min-h-5 flex-col gap-0.5"
+        >
+          <span
+            class="type-body text-foreground"
+            data-slot="swap-text"
+          >
+            <span
+              class="inline-block"
+            >
+              Reading the schema…
+            </span>
+          </span>
+        </div>
+        <span
+          aria-live="polite"
+          class="sr-only"
+        />
+      </div>
+      <div
+        aria-label="Tables holding the value"
+        class="flex flex-col px-2 pb-2"
+        id="lookup-results"
+        role="listbox"
+      />
+    </div>
+    <footer
+      class="flex h-9 shrink-0 items-center justify-between gap-3 border-t border-panel-border px-4 type-meta text-panel-muted"
+    >
+      <div
+        class="flex min-w-0 items-center gap-2"
+      >
+        <span
+          aria-hidden="true"
+          class="size-1.5 shrink-0 rounded-full bg-panel-muted opacity-60"
+        />
+        <span
+          class="min-w-0 truncate"
+          data-slot="swap-text"
+        >
+          <span
+            class="inline-block"
+          >
+            analytics
+          </span>
+        </span>
+      </div>
+      <div
+        class="flex shrink-0 items-center gap-3"
+      >
+        <div
+          class="flex items-center gap-2 border-l border-panel-border pl-3"
+        >
+          <span>
+            Stop
+          </span>
+          <kbd
+            aria-label="esc"
+            class="inline-flex items-center gap-0.5"
+            data-slot="kbd-group"
+          >
+            <kbd
+              class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+              data-slot="kbd"
+            >
+              esc
+            </kbd>
+          </kbd>
+        </div>
+        <div
+          class="flex items-center gap-2 border-l border-panel-border pl-3"
+        >
+          <span>
+            Copy value
+          </span>
+          <kbd
+            aria-label="⌘ C"
+            class="inline-flex items-center gap-0.5"
+            data-slot="kbd-group"
+          >
+            <kbd
+              class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+              data-slot="kbd"
+            >
+              ⌘
+            </kbd>
+            <kbd
+              class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+              data-slot="kbd"
+            >
+              C
+            </kbd>
+          </kbd>
+        </div>
+      </div>
+    </footer>
+  </div>
+</div>
+`;
+
+exports[`lookupView states > renders probing > probing 1`] = `
+<div
+  data-testid="lookup-harness"
+  style="width: 760px"
+>
+  <div
+    class="flex min-h-0 flex-col"
+  >
+    <div
+      class="relative z-20 flex h-14 shrink-0 items-center gap-2.5 px-4"
+    >
+      <span
+        aria-label="Active connection: analytics"
+        class="relative flex h-8 max-w-56 shrink-0 items-center pr-2.5 pl-1"
+        data-tone="active"
+        role="img"
+      >
+        <span
+          class="absolute inset-0 rounded-[9px] bg-row-hover"
+        />
+        <span
+          class="relative flex min-w-0 items-center gap-3"
+        >
+          <span
+            aria-hidden="true"
+            class="grid size-6 place-items-center rounded-[7px] text-[13px] leading-none bg-row-hover"
+          >
+            🐘
+          </span>
+          <span
+            class="truncate type-body text-foreground"
+          >
+            analytics
+          </span>
+        </span>
+      </span>
+      <div
+        class="flex min-w-0 flex-1 items-center"
+      >
+        <input
+          aria-activedescendant="launcher-option-lookup-hit-0"
+          aria-controls="lookup-results"
+          aria-expanded="true"
+          aria-label="Looking up UUID"
+          class="h-7 max-w-full min-w-0 truncate rounded-[7px] bg-row-hover px-2.5 font-mono text-[13px] text-foreground outline-none focus-visible:ring-2 focus-visible:ring-ring/50"
+          readonly=""
+          role="combobox"
+          size="36"
+          value="3f2a1b4c-9d8e-4f7a-b6c5-d4e3f2a1c91e"
+        />
+      </div>
+      <button
+        aria-label="Stop"
+        class="grid size-7 shrink-0 place-items-center bg-row-hover text-panel-muted hover:text-foreground"
+        style="border-radius: 6px"
+        tabindex="0"
+        type="button"
+      >
+        <span
+          class="grid place-items-center"
+        >
+          <svg
+            aria-hidden="true"
+            class="lucide lucide-square size-3 fill-current"
+            fill="none"
+            height="24"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <rect
+              height="18"
+              rx="2"
+              width="18"
+              x="3"
+              y="3"
+            />
+          </svg>
+        </span>
+      </button>
+    </div>
+    <div
+      class="relative flex min-h-0 flex-1 flex-col overflow-y-auto border-t border-panel-border"
+    >
+      <div
+        class="relative px-4 pt-3 pb-1.5"
+      >
+        <div
+          aria-label="Search progress"
+          aria-valuemax="14"
+          aria-valuemin="0"
+          aria-valuenow="4"
+          class="absolute inset-x-0 top-0 h-0.5 bg-primary"
+          data-motion="instant"
+          role="progressbar"
+        />
+        <div
+          aria-hidden="true"
+          class="flex min-h-5 flex-col gap-0.5"
+        >
+          <span
+            class="type-body text-foreground"
+            data-slot="swap-text"
+          >
+            <span
+              class="inline-block"
+            >
+              Searching 14 tables…
+            </span>
+          </span>
+        </div>
+        <span
+          aria-live="polite"
+          class="sr-only"
+        >
+          Found in users
+        </span>
+      </div>
+      <div
+        aria-label="Tables holding the value"
+        class="flex flex-col px-2 pb-2"
+        id="lookup-results"
+        role="listbox"
+      >
+        <div
+          aria-selected="true"
+          class="relative flex h-10 cursor-default items-center gap-3 px-2.5"
+          data-tone="default"
+          id="launcher-option-lookup-hit-0"
+          role="option"
+          tabindex="0"
+        >
+          <div
+            class="absolute inset-0 rounded-[10px] bg-row-active"
+          />
+          <span
+            class="relative grid size-6 shrink-0 place-items-center rounded-[7px] bg-row-hover text-panel-muted"
+          >
+            <svg
+              aria-hidden="true"
+              class="lucide lucide-table size-3.5"
+              fill="none"
+              height="24"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+              width="24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M12 3v18"
+              />
+              <rect
+                height="18"
+                rx="2"
+                width="18"
+                x="3"
+                y="3"
+              />
+              <path
+                d="M3 9h18"
+              />
+              <path
+                d="M3 15h18"
+              />
+            </svg>
+          </span>
+          <span
+            class="relative flex min-w-0 flex-1 items-baseline gap-2"
+          >
+            <span
+              class="truncate type-body text-foreground"
+            >
+              users
+            </span>
+            <code
+              class="truncate font-mono text-[12px] text-panel-muted"
+            >
+              id
+            </code>
+            <span
+              class="shrink-0 type-micro text-panel-muted"
+            >
+              public
+            </span>
+          </span>
+          <span
+            aria-label="1 row"
+            class="relative shrink-0 type-meta text-foreground tabular-nums"
+          >
+            1
+          </span>
+        </div>
+      </div>
+    </div>
+    <footer
+      class="flex h-9 shrink-0 items-center justify-between gap-3 border-t border-panel-border px-4 type-meta text-panel-muted"
+    >
+      <div
+        class="flex min-w-0 items-center gap-2"
+      >
+        <span
+          aria-hidden="true"
+          class="size-1.5 shrink-0 rounded-full bg-panel-muted opacity-60"
+        />
+        <span
+          class="min-w-0 truncate"
+          data-slot="swap-text"
+        >
+          <span
+            class="inline-block"
+          >
+            analytics
+          </span>
+        </span>
+      </div>
+      <div
+        class="flex shrink-0 items-center gap-3"
+      >
+        <div
+          class="flex items-center gap-2"
+        >
+          <span
+            class="text-foreground"
+            data-slot="swap-text"
+          >
+            <span
+              class="inline-block"
+            >
+              Open rows
+            </span>
+          </span>
+          <kbd
+            aria-label="↩"
+            class="inline-flex items-center gap-0.5"
+            data-slot="kbd-group"
+          >
+            <kbd
+              class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+              data-slot="kbd"
+            >
+              ↩
+            </kbd>
+          </kbd>
+        </div>
+        <div
+          class="flex items-center gap-2 border-l border-panel-border pl-3"
+        >
+          <span>
+            Stop
+          </span>
+          <kbd
+            aria-label="esc"
+            class="inline-flex items-center gap-0.5"
+            data-slot="kbd-group"
+          >
+            <kbd
+              class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+              data-slot="kbd"
+            >
+              esc
+            </kbd>
+          </kbd>
+        </div>
+        <div
+          class="flex items-center gap-2 border-l border-panel-border pl-3"
+        >
+          <span>
+            Copy value
+          </span>
+          <kbd
+            aria-label="⌘ C"
+            class="inline-flex items-center gap-0.5"
+            data-slot="kbd-group"
+          >
+            <kbd
+              class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+              data-slot="kbd"
+            >
+              ⌘
+            </kbd>
+            <kbd
+              class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+              data-slot="kbd"
+            >
+              C
+            </kbd>
+          </kbd>
+        </div>
+      </div>
+    </footer>
+  </div>
+</div>
+`;
+
+exports[`lookupView states > renders stopped > stopped 1`] = `
+<div
+  data-testid="lookup-harness"
+  style="width: 760px"
+>
+  <div
+    class="flex min-h-0 flex-col"
+  >
+    <div
+      class="relative z-20 flex h-14 shrink-0 items-center gap-2.5 px-4"
+    >
+      <span
+        aria-label="Active connection: analytics"
+        class="relative flex h-8 max-w-56 shrink-0 items-center pr-2.5 pl-1"
+        data-tone="active"
+        role="img"
+      >
+        <span
+          class="absolute inset-0 rounded-[9px] bg-row-hover"
+        />
+        <span
+          class="relative flex min-w-0 items-center gap-3"
+        >
+          <span
+            aria-hidden="true"
+            class="grid size-6 place-items-center rounded-[7px] text-[13px] leading-none bg-row-hover"
+          >
+            🐘
+          </span>
+          <span
+            class="truncate type-body text-foreground"
+          >
+            analytics
+          </span>
+        </span>
+      </span>
+      <div
+        class="flex min-w-0 flex-1 items-center"
+      >
+        <input
+          aria-controls="lookup-results"
+          aria-expanded="false"
+          aria-label="Looking up UUID"
+          class="h-7 max-w-full min-w-0 truncate rounded-[7px] bg-row-hover px-2.5 font-mono text-[13px] text-foreground outline-none focus-visible:ring-2 focus-visible:ring-ring/50"
+          readonly=""
+          role="combobox"
+          size="36"
+          value="3f2a1b4c-9d8e-4f7a-b6c5-d4e3f2a1c91e"
+        />
+      </div>
+      <button
+        aria-label="Run"
+        class="grid size-7 shrink-0 place-items-center bg-row-hover text-panel-muted hover:text-foreground"
+        style="border-radius: 8px"
+        tabindex="0"
+        type="button"
+      >
+        <span
+          class="grid place-items-center"
+        >
+          <svg
+            aria-hidden="true"
+            class="lucide lucide-corner-down-left size-3.5"
+            fill="none"
+            height="24"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M20 4v7a4 4 0 0 1-4 4H4"
+            />
+            <path
+              d="m9 10-5 5 5 5"
+            />
+          </svg>
+        </span>
+      </button>
+    </div>
+    <div
+      class="relative flex min-h-0 flex-1 flex-col overflow-y-auto border-t border-panel-border"
+    >
+      <div
+        class="relative px-4 pt-3 pb-1.5"
+      >
+        <div
+          aria-hidden="true"
+          class="flex min-h-5 flex-col gap-0.5"
+        >
+          <span
+            class="type-body text-foreground"
+            data-slot="swap-text"
+          >
+            <span
+              class="inline-block"
+            >
+              Stopped · 6 of 14 columns
+            </span>
+          </span>
+        </div>
+        <span
+          aria-live="polite"
+          class="sr-only"
+        >
+          Search stopped
+        </span>
+      </div>
+      <div
+        aria-label="Tables holding the value"
+        class="flex flex-col px-2 pb-2"
+        id="lookup-results"
+        role="listbox"
+      />
+    </div>
+    <footer
+      class="flex h-9 shrink-0 items-center justify-between gap-3 border-t border-panel-border px-4 type-meta text-panel-muted"
+    >
+      <div
+        class="flex min-w-0 items-center gap-2"
+      >
+        <span
+          aria-hidden="true"
+          class="size-1.5 shrink-0 rounded-full bg-panel-muted opacity-60"
+        />
+        <span
+          class="min-w-0 truncate"
+          data-slot="swap-text"
+        >
+          <span
+            class="inline-block"
+          >
+            analytics
+          </span>
+        </span>
+      </div>
+      <div
+        class="flex shrink-0 items-center gap-3"
+      >
+        <div
+          class="flex items-center gap-2 border-l border-panel-border pl-3"
+        >
+          <span>
+            Back
+          </span>
+          <kbd
+            aria-label="esc"
+            class="inline-flex items-center gap-0.5"
+            data-slot="kbd-group"
+          >
+            <kbd
+              class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+              data-slot="kbd"
+            >
+              esc
+            </kbd>
+          </kbd>
+        </div>
+        <div
+          class="flex items-center gap-2 border-l border-panel-border pl-3"
+        >
+          <span>
+            Copy value
+          </span>
+          <kbd
+            aria-label="⌘ C"
+            class="inline-flex items-center gap-0.5"
+            data-slot="kbd-group"
+          >
+            <kbd
+              class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+              data-slot="kbd"
+            >
+              ⌘
+            </kbd>
+            <kbd
+              class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+              data-slot="kbd"
+            >
+              C
+            </kbd>
+          </kbd>
+        </div>
+      </div>
+    </footer>
+  </div>
+</div>
+`;

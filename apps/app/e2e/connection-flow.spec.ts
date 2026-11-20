@@ -1,59 +1,62 @@
+import type { Page } from "@playwright/test";
+
 import { expect, test } from "@playwright/test";
 
-test.describe("add a connection from the empty state", () => {
-  test.beforeEach(async ({ page }) => {
-    await page.addInitScript(() => {
-      window.localStorage.clear();
-      window.localStorage.setItem("om-q:first-connection-seen", "true");
-    });
-  });
+const search = (page: Page) =>
+  page.getByRole("combobox", { name: "Search commands" });
 
-  test("opens the dialog and switches the database type to SQLite", async ({
+const addConnection = async (page: Page, name: string) => {
+  await search(page).press("Enter");
+  await expect(
+    page.getByRole("heading", { name: "New Connection" })
+  ).toBeVisible();
+  await page.getByLabel("Connection name").fill(name);
+  await page.getByLabel("Database", { exact: true }).fill("app");
+  await page.keyboard.press("Meta+Enter");
+  await expect(page.getByText("Saved", { exact: true })).toBeVisible();
+  await expect(search(page)).toBeVisible();
+};
+
+test.describe("connection flow", () => {
+  test("adds a connection, makes it active and keeps it across reloads", async ({
     page,
   }) => {
     await page.goto("/");
+    await expect(page.getByText("No databases yet")).toBeVisible();
 
-    await page
-      .getByRole("button", { name: /^add connection$/i })
-      .first()
-      .click();
+    await addConnection(page, "fixtures");
 
-    const dialog = page.getByRole("dialog", { name: /add a connection/i });
-    await expect(dialog).toBeVisible();
-    await expect(dialog.getByLabel("Connection name")).toBeVisible();
+    const row = page.getByRole("option", { name: /fixtures/ });
+    await expect(row).toHaveAttribute("aria-selected", "true");
+    await expect(page.getByText("PostgreSQL · localhost/app")).toBeVisible();
 
-    await dialog.getByLabel("Database type").click();
-    await page.getByRole("option", { name: /sqlite/i }).click();
+    await search(page).press("Enter");
+    const chip = page.getByRole("img", { name: "Active connection: fixtures" });
+    await expect(chip).toBeVisible();
 
-    await expect(dialog.getByLabel("File path")).toBeVisible();
+    await page.reload();
+    await expect(chip).toBeVisible();
+    await expect(page.getByRole("option", { name: /fixtures/ })).toBeVisible();
   });
 
-  test("persists a saved SQLite connection in localStorage", async ({
+  test("deletes a connection with the two-step confirmation", async ({
     page,
   }) => {
     await page.goto("/");
-    await page
-      .getByRole("button", { name: /^add connection$/i })
-      .first()
-      .click();
+    await addConnection(page, "scratch");
 
-    const dialog = page.getByRole("dialog", { name: /add a connection/i });
-    await dialog.getByLabel("Connection name").fill("Local SQLite");
+    await search(page).press("Meta+k");
+    const menu = page.getByRole("menu", { name: "Actions for scratch" });
+    await expect(menu).toBeFocused();
 
-    await dialog.getByLabel("Database type").click();
-    await page.getByRole("option", { name: /sqlite/i }).click();
+    await page.keyboard.press("ArrowUp");
+    await page.keyboard.press("Enter");
+    await expect(
+      page.getByRole("menuitem", { name: /Press ↵ again to delete/ })
+    ).toBeVisible();
+    await page.keyboard.press("Enter");
 
-    await dialog.getByLabel("File path").fill("/tmp/e2e-test.db");
-
-    await dialog.getByRole("button", { name: /save connection/i }).click();
-
-    await expect(dialog).toBeHidden({ timeout: 5000 });
-
-    const stored = await page.evaluate(() =>
-      window.localStorage.getItem("oh-my-query-connections")
-    );
-    expect(stored).not.toBeNull();
-    expect(stored).toContain("Local SQLite");
-    expect(stored).toContain("sqlite");
+    await expect(page.getByRole("option", { name: /scratch/ })).toHaveCount(0);
+    await expect(page.getByText("No databases yet")).toBeVisible();
   });
 });

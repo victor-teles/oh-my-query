@@ -9,7 +9,8 @@
     "catalog": {
       "dotenv": "^17.2.2",
       "zod": "^4.1.13",
-      "@typescript/native-preview": "beta",
+      "@types/bun": "1.4.4",
+      "@typescript/native-preview": "7.0.0-dev.20260421.2",
       "vitest": "^4.1.5"
     }
   },

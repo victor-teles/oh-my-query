@@ -15,6 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       channel: ${{ steps.parse.outputs.channel }}
+      electrobun_env: ${{ steps.parse.outputs.electrobun_env }}
       version: ${{ steps.parse.outputs.version }}
       prerelease: ${{ steps.parse.outputs.prerelease }}
     steps:
@@ -25,15 +26,18 @@ jobs:
           VERSION="${TAG#v}"
           if [[ "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
             CHANNEL="stable"
+            ELECTROBUN_ENV="stable"
             PRERELEASE="false"
           elif [[ "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+-beta\.[0-9]+$ ]]; then
             CHANNEL="beta"
+            ELECTROBUN_ENV="canary"
             PRERELEASE="true"
           else
             echo "::error::Tag ${TAG} does not match v<X>.<Y>.<Z> (stable) or v<X>.<Y>.<Z>-beta.<N> (beta)"
             exit 1
           fi
           echo "channel=${CHANNEL}" >> "$GITHUB_OUTPUT"
+          echo "electrobun_env=${ELECTROBUN_ENV}" >> "$GITHUB_OUTPUT"
           echo "version=${VERSION}" >> "$GITHUB_OUTPUT"
           echo "prerelease=${PRERELEASE}" >> "$GITHUB_OUTPUT"
 
@@ -76,10 +80,12 @@ jobs:
           - arch: arm64
             label: arm64
             tauri-arch: aarch64
+            runner: macos-latest
           - arch: x64
             label: x64
             tauri-arch: x64
-    runs-on: macos-latest
+            runner: macos-15-intel
+    runs-on: ${{ matrix.runner }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -94,6 +100,12 @@ jobs:
       - uses: oven-sh/setup-bun@v2
         with:
           bun-version: "1.3.9"
+
+      - name: Cache Electrobun toolchain
+        uses: actions/cache@v4
+        with:
+          path: ~/.hutch
+          key: hutch-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('bun.lock') }}
 
       - name: Install dependencies
         run: bun install --frozen-lockfile
@@ -127,7 +139,10 @@ jobs:
           ELECTROBUN_APPLEID: ${{ secrets.APPLE_ID }}
           ELECTROBUN_APPLEIDPASS: ${{ secrets.APPLE_PASSWORD }}
           ELECTROBUN_TEAMID: ${{ secrets.APPLE_TEAM_ID }}
-        run: bun run --cwd apps/app desktop:build
+        working-directory: apps/app
+        run: |
+          bun run desktop:package
+          bunx electrobun build --env=${{ needs.resolve-channel.outputs.electrobun_env }}
 
       - name: Rename and upload artifact
         env:
@@ -137,10 +152,10 @@ jobs:
           BUILD_ARCH: ${{ matrix.arch }}
         run: |
           set -euo pipefail
-          SRC="apps/app/build/stable-macos-${BUILD_ARCH}/oh-my-query.dmg"
-          if [ ! -f "$SRC" ]; then
-            echo "::error::Expected DMG not found at $SRC"
-            ls -la apps/app/build/ || true
+          SRC=$(find apps/app/artifacts -maxdepth 1 -name "*macos-${BUILD_ARCH}*.dmg" | head -n 1)
+          if [ -z "$SRC" ]; then
+            echo "::error::No macOS ${BUILD_ARCH} DMG found in apps/app/artifacts/"
+            ls -la apps/app/artifacts/ || true
             exit 1
           fi
           DEST="oh_my_query_${VERSION}_${ARCH_LABEL}.dmg"
@@ -159,9 +174,11 @@ jobs:
         include:
           - arch: x64
             label: x64
+            runner: windows-latest
           - arch: arm64
             label: arm64
-    runs-on: windows-latest
+            runner: windows-11-arm
+    runs-on: ${{ matrix.runner }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -180,6 +197,12 @@ jobs:
         with:
           bun-version: "1.3.9"
 
+      - name: Cache Electrobun toolchain
+        uses: actions/cache@v4
+        with:
+          path: ~/.hutch
+          key: hutch-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('bun.lock') }}
+
       - name: Install dependencies
         run: bun install --frozen-lockfile
 
@@ -187,7 +210,10 @@ jobs:
         run: bun run build
 
       - name: Build Electrobun app
-        run: bun run --cwd apps/app desktop:build
+        working-directory: apps/app
+        run: |
+          bun run desktop:package
+          bunx electrobun build --env=${{ needs.resolve-channel.outputs.electrobun_env }}
 
       - name: Note unsigned Windows build
         if: vars.WINDOWS_SIGNING_ENABLED != 'true'
@@ -203,14 +229,15 @@ jobs:
           $version = "${{ needs.resolve-channel.outputs.version }}"
           $label = "${{ matrix.label }}"
           $arch = "${{ matrix.arch }}"
-          # Electrobun's Windows build emits a self-extracting zip in apps/app/artifacts/.
-          $candidate = Get-ChildItem -Path "apps/app/artifacts" -Filter "stable-win-${arch}-*.zip" -ErrorAction SilentlyContinue | Select-Object -First 1
+          $candidate = Get-ChildItem -Path "apps/app/artifacts" -ErrorAction SilentlyContinue |
+            Where-Object { $_.Name -like "*win-${arch}*" -and $_.Extension -in @(".zip", ".exe") } |
+            Select-Object -First 1
           if (-not $candidate) {
-            Write-Error "No Electrobun Windows artifact found in apps/app/artifacts/"
+            Write-Error "No Electrobun Windows installer found in apps/app/artifacts/"
             Get-ChildItem -Path "apps/app/artifacts" -ErrorAction SilentlyContinue
             exit 1
           }
-          $dest = "oh_my_query_${version}_${label}_setup.zip"
+          $dest = "oh_my_query_${version}_${label}_setup$($candidate.Extension)"
           Copy-Item $candidate.FullName $dest
           gh release upload "${{ github.ref_name }}" $dest --clobber
 

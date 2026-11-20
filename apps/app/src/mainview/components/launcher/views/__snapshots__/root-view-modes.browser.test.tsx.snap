@@ -1,0 +1,711 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`connection mode > dims the active chip while choosing 1`] = `
+<div
+  aria-label="Results"
+  class="flex flex-col gap-1 px-2 pb-2"
+  id="launcher-root-list"
+  role="listbox"
+>
+  <div
+    aria-labelledby="_r_id_"
+    role="group"
+  >
+    <div
+      class="px-2.5 pt-1 pb-1.5 type-micro text-panel-muted"
+      id="_r_id_"
+    >
+      Switch connection
+    </div>
+    <div
+      aria-selected="true"
+      class="relative flex h-10 cursor-default items-center gap-3 px-2.5"
+      data-tone="default"
+      id="launcher-option-analytics"
+      role="option"
+      tabindex="0"
+    >
+      <div
+        class="absolute inset-0 rounded-[10px] bg-row-active"
+      />
+      <span
+        class="relative flex min-w-0 items-center gap-3 max-w-[45%] shrink-0"
+      >
+        <span
+          aria-hidden="true"
+          class="grid size-6 place-items-center rounded-[7px] text-[13px] leading-none bg-row-hover"
+        >
+          🐘
+        </span>
+        <span
+          class="truncate type-body text-foreground"
+        >
+          analytics
+        </span>
+      </span>
+      <span
+        aria-live="polite"
+        class="relative min-w-0 flex-1 overflow-hidden type-meta whitespace-nowrap text-panel-muted"
+        title="PostgreSQL · localhost/analytics"
+      >
+        <span
+          data-slot="swap-text"
+        >
+          <span
+            class="inline-block"
+          >
+            PostgreSQL · localhost/analytics
+          </span>
+        </span>
+      </span>
+      <span
+        class="relative grid size-4 shrink-0 place-items-center"
+      />
+    </div>
+    <div
+      aria-selected="false"
+      class="relative flex h-10 cursor-default items-center gap-3 px-2.5"
+      data-tone="default"
+      id="launcher-option-billing"
+      role="option"
+      tabindex="0"
+    >
+      <span
+        class="relative flex min-w-0 items-center gap-3 max-w-[45%] shrink-0"
+      >
+        <span
+          aria-hidden="true"
+          class="grid size-6 place-items-center rounded-[7px] text-[13px] leading-none bg-row-hover"
+        >
+          🐘
+        </span>
+        <span
+          class="truncate type-body text-foreground"
+        >
+          billing
+        </span>
+      </span>
+      <span
+        aria-live="polite"
+        class="relative min-w-0 flex-1 overflow-hidden type-meta whitespace-nowrap text-panel-muted"
+        title="PostgreSQL · localhost/analytics"
+      >
+        <span
+          data-slot="swap-text"
+        >
+          <span
+            class="inline-block"
+          >
+            PostgreSQL · localhost/analytics
+          </span>
+        </span>
+      </span>
+      <span
+        class="relative grid size-4 shrink-0 place-items-center"
+      />
+    </div>
+    <div
+      aria-selected="false"
+      class="relative flex h-10 cursor-default items-center gap-3 px-2.5"
+      data-tone="default"
+      id="launcher-option-billing-staging"
+      role="option"
+      tabindex="0"
+    >
+      <span
+        class="relative flex min-w-0 items-center gap-3 max-w-[45%] shrink-0"
+      >
+        <span
+          aria-hidden="true"
+          class="grid size-6 place-items-center rounded-[7px] text-[13px] leading-none bg-row-hover"
+        >
+          🐘
+        </span>
+        <span
+          class="truncate type-body text-foreground"
+        >
+          billing-staging
+        </span>
+      </span>
+      <span
+        aria-live="polite"
+        class="relative min-w-0 flex-1 overflow-hidden type-meta whitespace-nowrap text-panel-muted"
+        title="PostgreSQL · localhost/analytics"
+      >
+        <span
+          data-slot="swap-text"
+        >
+          <span
+            class="inline-block"
+          >
+            PostgreSQL · localhost/analytics
+          </span>
+        </span>
+      </span>
+      <span
+        class="relative grid size-4 shrink-0 place-items-center"
+      />
+    </div>
+    <div
+      aria-selected="false"
+      class="relative flex h-10 cursor-default items-center gap-3 px-2.5"
+      data-tone="default"
+      id="launcher-option-cache"
+      role="option"
+      tabindex="0"
+    >
+      <span
+        class="relative flex min-w-0 items-center gap-3 max-w-[45%] shrink-0"
+      >
+        <span
+          aria-hidden="true"
+          class="grid size-6 place-items-center rounded-[7px] text-[13px] leading-none bg-row-hover"
+        >
+          ⚡️
+        </span>
+        <span
+          class="truncate type-body text-foreground"
+        >
+          cache
+        </span>
+      </span>
+      <span
+        aria-live="polite"
+        class="relative min-w-0 flex-1 overflow-hidden type-meta whitespace-nowrap text-panel-muted"
+        title="Redis · localhost/analytics"
+      >
+        <span
+          data-slot="swap-text"
+        >
+          <span
+            class="inline-block"
+          >
+            Redis · localhost/analytics
+          </span>
+        </span>
+      </span>
+      <span
+        class="relative grid size-4 shrink-0 place-items-center"
+      />
+    </div>
+  </div>
+</div>
+`;
+
+exports[`sQL mode > explains what to type before there is any SQL 1`] = `
+<p
+  class="type-body text-foreground"
+  role="status"
+>
+  Type a read-only query. ↵ runs it on analytics.
+</p>
+`;
+
+exports[`sQL mode > offers one read-only SQL row and runs it without the model 1`] = `
+<div
+  aria-label="Results"
+  class="flex flex-col gap-1 px-2 pb-2"
+  id="launcher-root-list"
+  role="listbox"
+>
+  <div
+    aria-labelledby="_r_id_"
+    role="group"
+  >
+    <div
+      class="px-2.5 pt-1 pb-1.5 type-micro text-panel-muted"
+      id="_r_id_"
+    >
+      Run SQL
+    </div>
+    <div
+      aria-selected="true"
+      class="relative flex h-10 cursor-default items-center gap-3 px-2.5"
+      data-tone="default"
+      id="launcher-option-sql"
+      role="option"
+      tabindex="0"
+    >
+      <div
+        class="absolute inset-0 rounded-[10px] bg-row-active"
+      />
+      <span
+        class="relative grid size-6 shrink-0 place-items-center rounded-[7px] bg-row-hover text-panel-muted"
+      >
+        <svg
+          aria-hidden="true"
+          class="lucide lucide-square-terminal size-3.5"
+          fill="none"
+          height="24"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+          width="24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="m7 11 2-2-2-2"
+          />
+          <path
+            d="M11 13h4"
+          />
+          <rect
+            height="18"
+            rx="2"
+            ry="2"
+            width="18"
+            x="3"
+            y="3"
+          />
+        </svg>
+      </span>
+      <span
+        class="relative flex min-w-0 flex-1 items-baseline gap-2.5"
+      >
+        <code
+          class="min-w-0 truncate font-mono text-[12px]"
+        >
+          <span
+            class="text-chart-1"
+          >
+            select
+          </span>
+          <span
+            class="text-foreground"
+          >
+             
+          </span>
+          <span
+            class="text-chart-2"
+          >
+            1
+          </span>
+          <span
+            class="text-foreground"
+          >
+             
+          </span>
+          <span
+            class="text-chart-1"
+          >
+            as
+          </span>
+          <span
+            class="text-foreground"
+          >
+             
+          </span>
+          <span
+            class="text-foreground"
+          >
+            one
+          </span>
+        </code>
+        <span
+          class="shrink-0 type-meta text-panel-muted"
+        >
+          Run on 
+          analytics
+           · read only
+        </span>
+      </span>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`table mode > lists tables and shows the selected one's columns 1`] = `
+<div
+  class="grid h-full min-h-0 grid-cols-[2fr_3fr]"
+>
+  <div
+    class="min-h-0 overflow-y-auto border-r border-panel-border pt-2"
+  >
+    <div
+      aria-label="Tables"
+      class="flex flex-col gap-1 px-2 pb-2"
+      id="launcher-root-list"
+      role="listbox"
+    >
+      <div
+        aria-describedby="launcher-table-summary"
+        aria-selected="true"
+        class="relative flex h-10 cursor-default items-center gap-3 px-2.5"
+        data-tone="default"
+        id="launcher-option-table-public.orders"
+        role="option"
+        tabindex="0"
+      >
+        <div
+          class="absolute inset-0 rounded-[10px] bg-row-active"
+        />
+        <svg
+          aria-hidden="true"
+          class="lucide lucide-table relative size-3.5 shrink-0 text-panel-muted"
+          fill="none"
+          height="24"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+          width="24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M12 3v18"
+          />
+          <rect
+            height="18"
+            rx="2"
+            width="18"
+            x="3"
+            y="3"
+          />
+          <path
+            d="M3 9h18"
+          />
+          <path
+            d="M3 15h18"
+          />
+        </svg>
+        <span
+          class="relative flex min-w-0 flex-1 flex-col"
+        >
+          <span
+            class="truncate font-mono text-[12px] text-foreground"
+          >
+            orders
+          </span>
+          <span
+            class="truncate type-micro text-panel-muted"
+          >
+            public
+             · 
+            ~1.2M rows
+          </span>
+        </span>
+      </div>
+    </div>
+  </div>
+  <div
+    class="min-h-0"
+  >
+    <div
+      aria-label="Columns of orders"
+      class="h-full overflow-y-auto outline-none focus-visible:ring-2 focus-visible:ring-ring/60 focus-visible:ring-inset"
+      role="region"
+      tabindex="0"
+    >
+      <div
+        data-testid="table-detail"
+      >
+        <div
+          class="flex flex-col gap-3 px-3 pt-2 pb-3"
+        >
+          <div
+            class="flex flex-col gap-0.5"
+          >
+            <h3
+              class="truncate font-mono text-[13px] text-foreground"
+            >
+              orders
+            </h3>
+            <p
+              class="flex gap-1.5 type-meta text-panel-muted tabular-nums"
+            >
+              <span>
+                public
+              </span>
+              <span
+                aria-hidden="true"
+              >
+                ·
+              </span>
+              <span
+                data-slot="swap-text"
+              >
+                <span
+                  class="inline-block"
+                >
+                  ~1.2M rows
+                </span>
+              </span>
+              <span
+                aria-hidden="true"
+              >
+                ·
+              </span>
+              <span>
+                5 columns
+              </span>
+            </p>
+          </div>
+          <ul
+            aria-label="Columns"
+            class="flex flex-col"
+          >
+            <li
+              class="flex h-6 items-center gap-2 font-mono text-[12px]"
+            >
+              <span
+                class="flex w-3.5 shrink-0 justify-center"
+              >
+                <svg
+                  aria-label="primary key"
+                  class="lucide lucide-key-round size-3 text-primary"
+                  fill="none"
+                  height="24"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  viewBox="0 0 24 24"
+                  width="24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M2.586 17.414A2 2 0 0 0 2 18.828V21a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h1a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h.172a2 2 0 0 0 1.414-.586l.814-.814a6.5 6.5 0 1 0-4-4z"
+                  />
+                  <circle
+                    cx="16.5"
+                    cy="7.5"
+                    fill="currentColor"
+                    r=".5"
+                  />
+                </svg>
+              </span>
+              <span
+                class="min-w-0 truncate text-foreground"
+              >
+                id
+              </span>
+              <span
+                class="shrink-0 text-panel-muted"
+              >
+                int8
+              </span>
+            </li>
+            <li
+              class="flex h-6 items-center gap-2 font-mono text-[12px]"
+            >
+              <span
+                class="flex w-3.5 shrink-0 justify-center"
+              />
+              <span
+                class="min-w-0 truncate text-foreground"
+              >
+                customer_id
+              </span>
+              <span
+                class="shrink-0 text-panel-muted"
+              >
+                int8
+              </span>
+              <span
+                class="ml-auto shrink-0 truncate text-panel-muted"
+              >
+                → 
+                customers.id
+              </span>
+            </li>
+            <li
+              class="flex h-6 items-center gap-2 font-mono text-[12px]"
+            >
+              <span
+                class="flex w-3.5 shrink-0 justify-center"
+              />
+              <span
+                class="min-w-0 truncate text-foreground"
+              >
+                status
+              </span>
+              <span
+                class="shrink-0 text-panel-muted"
+              >
+                text
+              </span>
+            </li>
+            <li
+              class="flex h-6 items-center gap-2 font-mono text-[12px]"
+            >
+              <span
+                class="flex w-3.5 shrink-0 justify-center"
+              />
+              <span
+                class="min-w-0 truncate text-foreground"
+              >
+                total
+              </span>
+              <span
+                class="shrink-0 text-panel-muted"
+              >
+                numeric(12,2)
+              </span>
+            </li>
+            <li
+              class="flex h-6 items-center gap-2 font-mono text-[12px]"
+            >
+              <span
+                class="flex w-3.5 shrink-0 justify-center"
+              />
+              <span
+                class="min-w-0 truncate text-foreground"
+              >
+                created_at
+              </span>
+              <span
+                class="shrink-0 text-panel-muted"
+              >
+                timestamptz
+              </span>
+            </li>
+          </ul>
+          <ul
+            aria-label="Indexes"
+            class="flex flex-col gap-1"
+          >
+            <li
+              class="flex items-center gap-2 type-meta"
+            >
+              <span
+                class="truncate font-mono text-[12px] text-foreground"
+              >
+                orders_pkey
+              </span>
+              <span
+                class="truncate font-mono text-[12px] text-panel-muted"
+              >
+                (
+                id
+                )
+              </span>
+              <span
+                class="shrink-0 rounded-[5px] bg-row-hover px-1.5 type-micro text-panel-muted"
+              >
+                unique
+              </span>
+            </li>
+            <li
+              class="flex items-center gap-2 type-meta"
+            >
+              <span
+                class="truncate font-mono text-[12px] text-foreground"
+              >
+                orders_customer_created_idx
+              </span>
+              <span
+                class="truncate font-mono text-[12px] text-panel-muted"
+              >
+                (
+                customer_id, created_at
+                )
+              </span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <span
+    class="sr-only"
+    id="launcher-table-summary"
+  >
+    orders, 5 columns, about 1.2 million rows, primary key id
+  </span>
+</div>
+`;
+
+exports[`table mode > reports a failed peek and tries again 1`] = `
+<div
+  class="flex h-full flex-col items-center justify-center gap-2 px-6 text-center"
+>
+  <p
+    class="type-body text-foreground"
+    role="alert"
+  >
+    The database refused the connection.
+  </p>
+  <button
+    class="rounded-[7px] bg-row-hover px-2.5 py-1 type-meta text-foreground hover:bg-row-active"
+    tabindex="0"
+    type="button"
+  >
+    Try again
+  </button>
+</div>
+`;
+
+exports[`table mode > shows a skeleton only when the schema is slow 1`] = `
+<div
+  aria-label="Loading tables"
+  class="grid h-full grid-cols-[2fr_3fr]"
+  role="status"
+>
+  <div
+    aria-hidden="true"
+    class="flex flex-col gap-4 px-4 pt-3"
+    data-testid="table-skeleton"
+  >
+    <span
+      class="block h-2.5 rounded-full bg-row-hover"
+      style="width: 70%"
+    />
+    <span
+      class="block h-2.5 rounded-full bg-row-hover"
+      style="width: 55%"
+    />
+    <span
+      class="block h-2.5 rounded-full bg-row-hover"
+      style="width: 80%"
+    />
+    <span
+      class="block h-2.5 rounded-full bg-row-hover"
+      style="width: 50%"
+    />
+    <span
+      class="block h-2.5 rounded-full bg-row-hover"
+      style="width: 65%"
+    />
+    <span
+      class="block h-2.5 rounded-full bg-row-hover"
+      style="width: 60%"
+    />
+  </div>
+  <div
+    aria-hidden="true"
+    class="flex flex-col gap-3 px-3 pt-3"
+  >
+    <span
+      class="block h-2.5 rounded-full bg-row-hover"
+      style="width: 50%"
+    />
+    <span
+      class="block h-2.5 rounded-full bg-row-hover"
+      style="width: 75%"
+    />
+    <span
+      class="block h-2.5 rounded-full bg-row-hover"
+      style="width: 60%"
+    />
+    <span
+      class="block h-2.5 rounded-full bg-row-hover"
+      style="width: 70%"
+    />
+    <span
+      class="block h-2.5 rounded-full bg-row-hover"
+      style="width: 45%"
+    />
+    <span
+      class="block h-2.5 rounded-full bg-row-hover"
+      style="width: 65%"
+    />
+    <span
+      class="block h-2.5 rounded-full bg-row-hover"
+      style="width: 55%"
+    />
+  </div>
+</div>
+`;

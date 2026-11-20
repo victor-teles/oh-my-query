@@ -1,7 +1,9 @@
 import type {
+  BindValue,
   ColumnDetail,
   ColumnInfo,
   DialectType,
+  ExecuteOptions,
   ExecuteResult,
   ExplainResult,
   ForeignKeyItem,
@@ -9,7 +11,13 @@ import type {
   Pool,
   SchemaInfo,
 } from "@oh-my-query/core";
-import type { FieldDef, Pool as PgPoolType, PoolClient } from "pg";
+import type {
+  FieldDef,
+  Pool as PgPoolType,
+  PoolClient,
+  QueryArrayConfig,
+  QueryArrayResult,
+} from "pg";
 
 import {
   DbError,
@@ -100,7 +108,8 @@ export class PostgresPool implements Pool {
     sql: string,
     maxRows: number,
     schema: string | null,
-    signal: AbortSignal
+    signal: AbortSignal,
+    options: ExecuteOptions = {}
   ): Promise<ExecuteResult> {
     const client = await this.#pool.connect();
     const release = bindAbort(client, signal);
@@ -113,7 +122,10 @@ export class PostgresPool implements Pool {
       let columns: ColumnInfo[];
       let isTruncated = false;
       try {
-        const result = await client.query({ rowMode: "array", text: sql });
+        const query = toArrayQuery(sql, options.params);
+        const result = options.readOnly
+          ? await queryReadOnly(client, query, signal)
+          : await client.query(query);
         if (Array.isArray(result.rows) && result.rows.length > maxRows) {
           rows = result.rows.slice(0, maxRows) as unknown[][];
           isTruncated = true;
@@ -216,6 +228,32 @@ export class PostgresPool implements Pool {
       await this.#pool.end();
     } catch {
       // pool may already be ending
+    }
+  }
+}
+
+function toArrayQuery(sql: string, params?: BindValue[]): QueryArrayConfig {
+  if (!params || params.length === 0) {
+    return { rowMode: "array", text: sql };
+  }
+  return { rowMode: "array", text: sql, values: params };
+}
+
+async function queryReadOnly(
+  client: PoolClient,
+  query: QueryArrayConfig,
+  signal: AbortSignal
+): Promise<QueryArrayResult> {
+  await client.query("BEGIN READ ONLY");
+  try {
+    return await client.query(query);
+  } finally {
+    if (!signal.aborted) {
+      try {
+        await client.query("ROLLBACK");
+      } catch {
+        // best-effort
+      }
     }
   }
 }

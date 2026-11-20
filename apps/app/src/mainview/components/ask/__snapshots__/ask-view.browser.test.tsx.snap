@@ -1,0 +1,5775 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`askView designed states > matches the snapshot for running 1`] = `
+<div
+  data-testid="ask-harness"
+  style="width: 760px"
+>
+  <div
+    class="flex min-h-0 flex-col"
+  >
+    <div
+      class="relative z-20 flex h-14 shrink-0 items-center gap-2.5 px-4"
+    >
+      <span
+        aria-label="Active connection: analytics"
+        class="relative flex h-8 max-w-56 shrink-0 items-center pr-2.5 pl-1"
+        data-tone="active"
+        role="img"
+      >
+        <span
+          class="absolute inset-0 rounded-[9px] bg-row-hover"
+        />
+        <span
+          class="relative flex min-w-0 items-center gap-3"
+        >
+          <span
+            aria-hidden="true"
+            class="grid size-6 place-items-center rounded-[7px] text-[13px] leading-none bg-row-hover"
+          >
+            🐘
+          </span>
+          <span
+            class="truncate type-body text-foreground"
+          >
+            analytics
+          </span>
+        </span>
+      </span>
+      <div
+        class="flex min-w-0 flex-1 items-center"
+      >
+        <div
+          class="relative flex min-w-0 flex-1 items-center"
+        >
+          <input
+            aria-label="Ask a question"
+            aria-placeholder="Ask about your data…"
+            autocomplete="off"
+            class="min-w-0 flex-1 bg-transparent type-input text-foreground outline-none placeholder:text-panel-muted placeholder:opacity-80 focus-visible:outline-none"
+            spellcheck="false"
+            type="text"
+            value="Revenue by region"
+          />
+          <div
+            aria-hidden="true"
+            class="pointer-events-none absolute inset-0 flex items-center overflow-hidden type-input"
+          />
+        </div>
+      </div>
+      <button
+        aria-label="Stop"
+        class="grid size-7 shrink-0 place-items-center bg-row-hover text-panel-muted hover:text-foreground"
+        style="border-radius: 6px"
+        tabindex="0"
+        type="button"
+      >
+        <span
+          class="grid place-items-center"
+        >
+          <svg
+            aria-hidden="true"
+            class="lucide lucide-square size-3 fill-current"
+            fill="none"
+            height="24"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <rect
+              height="18"
+              rx="2"
+              width="18"
+              x="3"
+              y="3"
+            />
+          </svg>
+        </span>
+      </button>
+    </div>
+    <div
+      class="relative flex min-h-0 flex-1 flex-col overflow-y-auto border-t border-panel-border"
+      style="min-height: 0px"
+    >
+      <div
+        class="flex h-9 shrink-0 items-center gap-2 px-4"
+      >
+        <svg
+          aria-hidden="true"
+          class="lucide lucide-database size-3.5 shrink-0 text-panel-muted"
+          fill="none"
+          height="24"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+          width="24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <ellipse
+            cx="12"
+            cy="5"
+            rx="9"
+            ry="3"
+          />
+          <path
+            d="M3 5V19A9 3 0 0 0 21 19V5"
+          />
+          <path
+            d="M3 12A9 3 0 0 0 21 12"
+          />
+        </svg>
+        <h2
+          class="type-meta font-semibold text-foreground"
+        >
+          Generated SQL
+        </h2>
+        <p
+          class="flex min-w-0 items-center gap-1.5 truncate type-meta text-panel-muted tabular-nums"
+        >
+          <span
+            aria-hidden="true"
+          >
+            ·
+          </span>
+          <span
+            data-slot="swap-text"
+          >
+            <span
+              class="inline-block"
+            >
+              PostgreSQL
+            </span>
+          </span>
+          <span
+            aria-hidden="true"
+          >
+            ·
+          </span>
+          <span
+            data-slot="swap-text"
+          >
+            <span
+              class="inline-block"
+            >
+              12 lines
+            </span>
+          </span>
+        </p>
+        <div
+          class="ml-auto flex items-center gap-0.5"
+        >
+          <span
+            class="grid size-5 place-items-center"
+          >
+            <span
+              class="grid place-items-center"
+            >
+              <span
+                aria-label="Working"
+                class="block size-1.5 rounded-full bg-panel-muted"
+                role="img"
+              />
+            </span>
+          </span>
+          <button
+            aria-label="Copy SQL"
+            class="grid size-6 place-items-center rounded-[6px] text-panel-muted hover:bg-row-hover hover:text-foreground disabled:opacity-40"
+            tabindex="0"
+            type="button"
+          >
+            <span>
+              <svg
+                aria-hidden="true"
+                class="lucide lucide-copy size-3.5"
+                fill="none"
+                height="24"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+                width="24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <rect
+                  height="14"
+                  rx="2"
+                  ry="2"
+                  width="14"
+                  x="8"
+                  y="8"
+                />
+                <path
+                  d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"
+                />
+              </svg>
+            </span>
+          </button>
+          <span
+            aria-live="polite"
+            class="sr-only"
+          />
+          <button
+            aria-expanded="true"
+            aria-label="Hide SQL"
+            class="grid size-6 place-items-center rounded-[6px] text-panel-muted hover:bg-row-hover hover:text-foreground disabled:opacity-40"
+            tabindex="0"
+            type="button"
+          >
+            <span
+              class="grid place-items-center"
+            >
+              <svg
+                aria-hidden="true"
+                class="lucide lucide-chevron-down size-3.5"
+                fill="none"
+                height="24"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+                width="24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="m6 9 6 6 6-6"
+                />
+              </svg>
+            </span>
+          </button>
+        </div>
+      </div>
+      <div>
+        <div
+          aria-label="Generated SQL"
+          class="max-h-[220px] overflow-y-auto px-2 py-2 font-mono text-[12px] leading-[19px] outline-none focus-visible:ring-2 focus-visible:ring-ring/60"
+          data-state="settled"
+          role="region"
+          tabindex="0"
+        >
+          <div
+            class="relative flex"
+          >
+            <span
+              aria-hidden="true"
+              class="w-9 shrink-0 pr-3 text-right text-panel-muted tabular-nums select-none"
+            >
+              1
+            </span>
+            <code
+              class="min-w-0 flex-1 break-words whitespace-pre-wrap"
+            >
+              <span
+                class="text-panel-muted italic"
+              >
+                -- Monthly recurring revenue by region in 2026
+              </span>
+            </code>
+          </div>
+          <div
+            class="relative flex"
+          >
+            <span
+              aria-hidden="true"
+              class="w-9 shrink-0 pr-3 text-right text-panel-muted tabular-nums select-none"
+            >
+              2
+            </span>
+            <code
+              class="min-w-0 flex-1 break-words whitespace-pre-wrap"
+            >
+              <span
+                class="text-chart-1"
+              >
+                select
+              </span>
+              <span
+                class="text-foreground"
+              >
+                 
+              </span>
+              <span
+                class="text-chart-4"
+              >
+                date_trunc
+              </span>
+              <span
+                class="text-panel-muted"
+              >
+                (
+              </span>
+              <span
+                class="text-chart-5"
+              >
+                'month'
+              </span>
+              <span
+                class="text-panel-muted"
+              >
+                ,
+              </span>
+              <span
+                class="text-foreground"
+              >
+                 
+              </span>
+              <span
+                class="text-foreground"
+              >
+                s
+              </span>
+              <span
+                class="text-panel-muted"
+              >
+                .
+              </span>
+              <span
+                class="text-foreground"
+              >
+                billed_at
+              </span>
+              <span
+                class="text-panel-muted"
+              >
+                )
+              </span>
+              <span
+                class="text-panel-muted"
+              >
+                ::
+              </span>
+              <span
+                class="text-chart-1"
+              >
+                date
+              </span>
+              <span
+                class="text-foreground"
+              >
+                 
+              </span>
+              <span
+                class="text-chart-1"
+              >
+                as
+              </span>
+              <span
+                class="text-foreground"
+              >
+                 
+              </span>
+              <span
+                class="text-foreground"
+              >
+                month
+              </span>
+              <span
+                class="text-panel-muted"
+              >
+                ,
+              </span>
+            </code>
+          </div>
+          <div
+            class="relative flex"
+          >
+            <span
+              aria-hidden="true"
+              class="w-9 shrink-0 pr-3 text-right text-panel-muted tabular-nums select-none"
+            >
+              3
+            </span>
+            <code
+              class="min-w-0 flex-1 break-words whitespace-pre-wrap"
+            >
+              <span
+                class="text-foreground"
+              >
+                       
+              </span>
+              <span
+                class="text-foreground"
+              >
+                r
+              </span>
+              <span
+                class="text-panel-muted"
+              >
+                .
+              </span>
+              <span
+                class="text-foreground"
+              >
+                name
+              </span>
+              <span
+                class="text-foreground"
+              >
+                 
+              </span>
+              <span
+                class="text-chart-1"
+              >
+                as
+              </span>
+              <span
+                class="text-foreground"
+              >
+                 
+              </span>
+              <span
+                class="text-foreground"
+              >
+                region
+              </span>
+              <span
+                class="text-panel-muted"
+              >
+                ,
+              </span>
+            </code>
+          </div>
+          <div
+            class="relative flex"
+          >
+            <span
+              aria-hidden="true"
+              class="w-9 shrink-0 pr-3 text-right text-panel-muted tabular-nums select-none"
+            >
+              4
+            </span>
+            <code
+              class="min-w-0 flex-1 break-words whitespace-pre-wrap"
+            >
+              <span
+                class="text-foreground"
+              >
+                       
+              </span>
+              <span
+                class="text-chart-4"
+              >
+                sum
+              </span>
+              <span
+                class="text-panel-muted"
+              >
+                (
+              </span>
+              <span
+                class="text-foreground"
+              >
+                s
+              </span>
+              <span
+                class="text-panel-muted"
+              >
+                .
+              </span>
+              <span
+                class="text-foreground"
+              >
+                amount_cents
+              </span>
+              <span
+                class="text-panel-muted"
+              >
+                )
+              </span>
+              <span
+                class="text-foreground"
+              >
+                 
+              </span>
+              <span
+                class="text-panel-muted"
+              >
+                /
+              </span>
+              <span
+                class="text-foreground"
+              >
+                 
+              </span>
+              <span
+                class="text-chart-2"
+              >
+                100.0
+              </span>
+              <span
+                class="text-foreground"
+              >
+                 
+              </span>
+              <span
+                class="text-chart-1"
+              >
+                as
+              </span>
+              <span
+                class="text-foreground"
+              >
+                 
+              </span>
+              <span
+                class="text-foreground"
+              >
+                mrr
+              </span>
+            </code>
+          </div>
+          <div
+            class="relative flex"
+          >
+            <span
+              aria-hidden="true"
+              class="w-9 shrink-0 pr-3 text-right text-panel-muted tabular-nums select-none"
+            >
+              5
+            </span>
+            <code
+              class="min-w-0 flex-1 break-words whitespace-pre-wrap"
+            >
+              <span
+                class="text-chart-1"
+              >
+                from
+              </span>
+              <span
+                class="text-foreground"
+              >
+                 
+              </span>
+              <span
+                class="text-foreground"
+              >
+                subscriptions
+              </span>
+              <span
+                class="text-foreground"
+              >
+                 
+              </span>
+              <span
+                class="text-foreground"
+              >
+                s
+              </span>
+            </code>
+          </div>
+          <div
+            class="relative flex"
+          >
+            <span
+              aria-hidden="true"
+              class="w-9 shrink-0 pr-3 text-right text-panel-muted tabular-nums select-none"
+            >
+              6
+            </span>
+            <code
+              class="min-w-0 flex-1 break-words whitespace-pre-wrap"
+            >
+              <span
+                class="text-chart-1"
+              >
+                join
+              </span>
+              <span
+                class="text-foreground"
+              >
+                 
+              </span>
+              <span
+                class="text-foreground"
+              >
+                accounts
+              </span>
+              <span
+                class="text-foreground"
+              >
+                 
+              </span>
+              <span
+                class="text-foreground"
+              >
+                a
+              </span>
+              <span
+                class="text-foreground"
+              >
+                 
+              </span>
+              <span
+                class="text-chart-1"
+              >
+                on
+              </span>
+              <span
+                class="text-foreground"
+              >
+                 
+              </span>
+              <span
+                class="text-foreground"
+              >
+                a
+              </span>
+              <span
+                class="text-panel-muted"
+              >
+                .
+              </span>
+              <span
+                class="text-foreground"
+              >
+                id
+              </span>
+              <span
+                class="text-foreground"
+              >
+                 
+              </span>
+              <span
+                class="text-panel-muted"
+              >
+                =
+              </span>
+              <span
+                class="text-foreground"
+              >
+                 
+              </span>
+              <span
+                class="text-foreground"
+              >
+                s
+              </span>
+              <span
+                class="text-panel-muted"
+              >
+                .
+              </span>
+              <span
+                class="text-foreground"
+              >
+                account_id
+              </span>
+            </code>
+          </div>
+          <div
+            class="relative flex"
+          >
+            <span
+              aria-hidden="true"
+              class="w-9 shrink-0 pr-3 text-right text-panel-muted tabular-nums select-none"
+            >
+              7
+            </span>
+            <code
+              class="min-w-0 flex-1 break-words whitespace-pre-wrap"
+            >
+              <span
+                class="text-chart-1"
+              >
+                join
+              </span>
+              <span
+                class="text-foreground"
+              >
+                 
+              </span>
+              <span
+                class="text-foreground"
+              >
+                regions
+              </span>
+              <span
+                class="text-foreground"
+              >
+                 
+              </span>
+              <span
+                class="text-foreground"
+              >
+                r
+              </span>
+              <span
+                class="text-foreground"
+              >
+                 
+              </span>
+              <span
+                class="text-chart-1"
+              >
+                on
+              </span>
+              <span
+                class="text-foreground"
+              >
+                 
+              </span>
+              <span
+                class="text-foreground"
+              >
+                r
+              </span>
+              <span
+                class="text-panel-muted"
+              >
+                .
+              </span>
+              <span
+                class="text-foreground"
+              >
+                id
+              </span>
+              <span
+                class="text-foreground"
+              >
+                 
+              </span>
+              <span
+                class="text-panel-muted"
+              >
+                =
+              </span>
+              <span
+                class="text-foreground"
+              >
+                 
+              </span>
+              <span
+                class="text-foreground"
+              >
+                a
+              </span>
+              <span
+                class="text-panel-muted"
+              >
+                .
+              </span>
+              <span
+                class="text-foreground"
+              >
+                region_id
+              </span>
+            </code>
+          </div>
+          <div
+            class="relative flex"
+          >
+            <span
+              aria-hidden="true"
+              class="w-9 shrink-0 pr-3 text-right text-panel-muted tabular-nums select-none"
+            >
+              8
+            </span>
+            <code
+              class="min-w-0 flex-1 break-words whitespace-pre-wrap"
+            >
+              <span
+                class="text-chart-1"
+              >
+                where
+              </span>
+              <span
+                class="text-foreground"
+              >
+                 
+              </span>
+              <span
+                class="text-foreground"
+              >
+                s
+              </span>
+              <span
+                class="text-panel-muted"
+              >
+                .
+              </span>
+              <span
+                class="text-foreground"
+              >
+                billed_at
+              </span>
+              <span
+                class="text-foreground"
+              >
+                 
+              </span>
+              <span
+                class="text-panel-muted"
+              >
+                &gt;=
+              </span>
+              <span
+                class="text-foreground"
+              >
+                 
+              </span>
+              <span
+                class="text-chart-1"
+              >
+                date
+              </span>
+              <span
+                class="text-foreground"
+              >
+                 
+              </span>
+              <span
+                class="text-chart-5"
+              >
+                '2026-01-01'
+              </span>
+            </code>
+          </div>
+          <div
+            class="relative flex"
+          >
+            <span
+              aria-hidden="true"
+              class="w-9 shrink-0 pr-3 text-right text-panel-muted tabular-nums select-none"
+            >
+              9
+            </span>
+            <code
+              class="min-w-0 flex-1 break-words whitespace-pre-wrap"
+            >
+              <span
+                class="text-foreground"
+              >
+                  
+              </span>
+              <span
+                class="text-chart-1"
+              >
+                and
+              </span>
+              <span
+                class="text-foreground"
+              >
+                 
+              </span>
+              <span
+                class="text-foreground"
+              >
+                s
+              </span>
+              <span
+                class="text-panel-muted"
+              >
+                .
+              </span>
+              <span
+                class="text-foreground"
+              >
+                status
+              </span>
+              <span
+                class="text-foreground"
+              >
+                 
+              </span>
+              <span
+                class="text-panel-muted"
+              >
+                =
+              </span>
+              <span
+                class="text-foreground"
+              >
+                 
+              </span>
+              <span
+                class="text-chart-5"
+              >
+                'active'
+              </span>
+            </code>
+          </div>
+          <div
+            class="relative flex"
+          >
+            <span
+              aria-hidden="true"
+              class="w-9 shrink-0 pr-3 text-right text-panel-muted tabular-nums select-none"
+            >
+              10
+            </span>
+            <code
+              class="min-w-0 flex-1 break-words whitespace-pre-wrap"
+            >
+              <span
+                class="text-chart-1"
+              >
+                group
+              </span>
+              <span
+                class="text-foreground"
+              >
+                 
+              </span>
+              <span
+                class="text-chart-1"
+              >
+                by
+              </span>
+              <span
+                class="text-foreground"
+              >
+                 
+              </span>
+              <span
+                class="text-chart-2"
+              >
+                1
+              </span>
+              <span
+                class="text-panel-muted"
+              >
+                ,
+              </span>
+              <span
+                class="text-foreground"
+              >
+                 
+              </span>
+              <span
+                class="text-chart-2"
+              >
+                2
+              </span>
+            </code>
+          </div>
+          <div
+            class="relative flex"
+          >
+            <span
+              aria-hidden="true"
+              class="w-9 shrink-0 pr-3 text-right text-panel-muted tabular-nums select-none"
+            >
+              11
+            </span>
+            <code
+              class="min-w-0 flex-1 break-words whitespace-pre-wrap"
+            >
+              <span
+                class="text-chart-1"
+              >
+                order
+              </span>
+              <span
+                class="text-foreground"
+              >
+                 
+              </span>
+              <span
+                class="text-chart-1"
+              >
+                by
+              </span>
+              <span
+                class="text-foreground"
+              >
+                 
+              </span>
+              <span
+                class="text-chart-2"
+              >
+                1
+              </span>
+              <span
+                class="text-panel-muted"
+              >
+                ,
+              </span>
+              <span
+                class="text-foreground"
+              >
+                 
+              </span>
+              <span
+                class="text-chart-2"
+              >
+                2
+              </span>
+            </code>
+          </div>
+          <div
+            class="relative flex"
+          >
+            <span
+              aria-hidden="true"
+              class="w-9 shrink-0 pr-3 text-right text-panel-muted tabular-nums select-none"
+            >
+              12
+            </span>
+            <code
+              class="min-w-0 flex-1 break-words whitespace-pre-wrap"
+            >
+              <span
+                class="text-chart-1"
+              >
+                limit
+              </span>
+              <span
+                class="text-foreground"
+              >
+                 
+              </span>
+              <span
+                class="text-chart-2"
+              >
+                500
+              </span>
+            </code>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div />
+        <div>
+          <div
+            class="flex items-start gap-2.5 px-4 pt-3 pb-2"
+          >
+            <span
+              aria-hidden="true"
+              class="grid h-4 w-3 place-items-center"
+            >
+              <span
+                class="block rounded-full size-1.5 bg-panel-muted"
+                data-testid="status-mark"
+              />
+            </span>
+            <div
+              aria-hidden="true"
+              class="flex min-w-0 flex-col gap-0.5"
+            >
+              <span
+                class="type-body text-foreground"
+                data-slot="swap-text"
+              >
+                <span
+                  class="inline-block"
+                >
+                  Running query
+                </span>
+              </span>
+              <span
+                class="truncate type-meta text-panel-muted"
+                data-slot="swap-text"
+              >
+                <span
+                  class="inline-block"
+                >
+                  Read only on analytics
+                </span>
+              </span>
+            </div>
+            <span
+              aria-live="polite"
+              class="sr-only"
+              role="status"
+            >
+              Running query. Read only on analytics
+            </span>
+          </div>
+          <div
+            aria-hidden="true"
+            class="px-4 pb-4"
+            data-testid="ask-skeleton"
+          >
+            <div
+              class="flex gap-3 pt-1 pb-3"
+            >
+              <span
+                class="h-3 rounded-full bg-foreground/[0.06]"
+                style="width: 56px"
+              />
+              <span
+                class="h-3 rounded-full bg-foreground/[0.06]"
+                style="width: 72px"
+              />
+              <span
+                class="h-3 rounded-full bg-foreground/[0.06]"
+                style="width: 48px"
+              />
+            </div>
+            <div
+              class="flex items-end gap-2 border-b border-foreground/[0.06]"
+              style="height: 200px"
+            >
+              <span
+                class="flex-1 rounded-t-[3px] bg-foreground/[0.06]"
+                style="height: 38%"
+              />
+              <span
+                class="flex-1 rounded-t-[3px] bg-foreground/[0.06]"
+                style="height: 52%"
+              />
+              <span
+                class="flex-1 rounded-t-[3px] bg-foreground/[0.06]"
+                style="height: 46%"
+              />
+              <span
+                class="flex-1 rounded-t-[3px] bg-foreground/[0.06]"
+                style="height: 61%"
+              />
+              <span
+                class="flex-1 rounded-t-[3px] bg-foreground/[0.06]"
+                style="height: 57%"
+              />
+              <span
+                class="flex-1 rounded-t-[3px] bg-foreground/[0.06]"
+                style="height: 70%"
+              />
+              <span
+                class="flex-1 rounded-t-[3px] bg-foreground/[0.06]"
+                style="height: 64%"
+              />
+              <span
+                class="flex-1 rounded-t-[3px] bg-foreground/[0.06]"
+                style="height: 73%"
+              />
+              <span
+                class="flex-1 rounded-t-[3px] bg-foreground/[0.06]"
+                style="height: 69%"
+              />
+              <span
+                class="flex-1 rounded-t-[3px] bg-foreground/[0.06]"
+                style="height: 82%"
+              />
+              <span
+                class="flex-1 rounded-t-[3px] bg-foreground/[0.06]"
+                style="height: 78%"
+              />
+              <span
+                class="flex-1 rounded-t-[3px] bg-foreground/[0.06]"
+                style="height: 88%"
+              />
+            </div>
+            <span
+              class="mt-3 block h-3 w-2/3 rounded-full bg-foreground/[0.06]"
+            />
+          </div>
+        </div>
+      </div>
+      <p
+        aria-live="polite"
+        class="sr-only"
+      />
+    </div>
+    <footer
+      class="flex h-9 shrink-0 items-center justify-between gap-3 border-t border-panel-border px-4 type-meta text-panel-muted"
+    >
+      <div
+        class="flex min-w-0 items-center gap-2"
+      >
+        <span
+          aria-hidden="true"
+          class="size-1.5 shrink-0 rounded-full bg-panel-muted opacity-60"
+        />
+        <span
+          class="min-w-0 truncate"
+          data-slot="swap-text"
+        >
+          <span
+            class="inline-block"
+          >
+            analytics
+          </span>
+        </span>
+      </div>
+      <div
+        class="flex shrink-0 items-center gap-3"
+      >
+        <div
+          class="flex items-center gap-2"
+        >
+          <span
+            class="text-foreground"
+            data-slot="swap-text"
+          >
+            <span
+              class="inline-block"
+            >
+              Ask again
+            </span>
+          </span>
+          <kbd
+            aria-label="↩"
+            class="inline-flex items-center gap-0.5"
+            data-slot="kbd-group"
+          >
+            <kbd
+              class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+              data-slot="kbd"
+            >
+              ↩
+            </kbd>
+          </kbd>
+        </div>
+        <div
+          class="flex items-center gap-2 border-l border-panel-border pl-3"
+        >
+          <span>
+            Stop
+          </span>
+          <kbd
+            aria-label="esc"
+            class="inline-flex items-center gap-0.5"
+            data-slot="kbd-group"
+          >
+            <kbd
+              class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+              data-slot="kbd"
+            >
+              esc
+            </kbd>
+          </kbd>
+        </div>
+      </div>
+    </footer>
+  </div>
+</div>
+`;
+
+exports[`askView designed states > matches the snapshot for the KPI card 1`] = `
+<div
+  data-testid="ask-harness"
+  style="width: 760px"
+>
+  <div
+    class="flex min-h-0 flex-col"
+  >
+    <div
+      class="relative z-20 flex h-14 shrink-0 items-center gap-2.5 px-4"
+    >
+      <span
+        aria-label="Active connection: analytics"
+        class="relative flex h-8 max-w-56 shrink-0 items-center pr-2.5 pl-1"
+        data-tone="active"
+        role="img"
+      >
+        <span
+          class="absolute inset-0 rounded-[9px] bg-row-hover"
+        />
+        <span
+          class="relative flex min-w-0 items-center gap-3"
+        >
+          <span
+            aria-hidden="true"
+            class="grid size-6 place-items-center rounded-[7px] text-[13px] leading-none bg-row-hover"
+          >
+            🐘
+          </span>
+          <span
+            class="truncate type-body text-foreground"
+          >
+            analytics
+          </span>
+        </span>
+      </span>
+      <div
+        class="flex min-w-0 flex-1 items-center"
+      >
+        <div
+          class="relative flex min-w-0 flex-1 items-center"
+        >
+          <input
+            aria-label="Ask a question"
+            aria-placeholder="Refine — by month, only Europe, as a table…"
+            autocomplete="off"
+            class="min-w-0 flex-1 bg-transparent type-input text-foreground outline-none placeholder:text-panel-muted placeholder:opacity-80 focus-visible:outline-none"
+            spellcheck="false"
+            type="text"
+            value=""
+          />
+          <div
+            aria-hidden="true"
+            class="pointer-events-none absolute inset-0 flex items-center overflow-hidden type-input"
+          >
+            <span
+              class="truncate text-panel-muted opacity-80"
+              data-slot="swap-text"
+            >
+              <span
+                class="inline-block"
+              >
+                Refine — by month, only Europe, as a table…
+              </span>
+            </span>
+          </div>
+        </div>
+      </div>
+      <button
+        aria-label="Run"
+        class="grid size-7 shrink-0 place-items-center bg-row-hover text-panel-muted hover:text-foreground"
+        style="border-radius: 8px"
+        tabindex="0"
+        type="button"
+      >
+        <span
+          class="grid place-items-center"
+        >
+          <svg
+            aria-hidden="true"
+            class="lucide lucide-corner-down-left size-3.5"
+            fill="none"
+            height="24"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M20 4v7a4 4 0 0 1-4 4H4"
+            />
+            <path
+              d="m9 10-5 5 5 5"
+            />
+          </svg>
+        </span>
+      </button>
+    </div>
+    <div
+      class="relative flex min-h-0 flex-1 flex-col overflow-y-auto border-t border-panel-border"
+      style="min-height: 0px"
+    >
+      <div
+        class="flex h-9 shrink-0 items-center gap-2 px-4"
+      >
+        <svg
+          aria-hidden="true"
+          class="lucide lucide-database size-3.5 shrink-0 text-panel-muted"
+          fill="none"
+          height="24"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+          width="24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <ellipse
+            cx="12"
+            cy="5"
+            rx="9"
+            ry="3"
+          />
+          <path
+            d="M3 5V19A9 3 0 0 0 21 19V5"
+          />
+          <path
+            d="M3 12A9 3 0 0 0 21 12"
+          />
+        </svg>
+        <h2
+          class="type-meta font-semibold text-foreground"
+        >
+          Generated SQL
+        </h2>
+        <p
+          class="flex min-w-0 items-center gap-1.5 truncate type-meta text-panel-muted tabular-nums"
+        >
+          <span
+            aria-hidden="true"
+          >
+            ·
+          </span>
+          <span
+            data-slot="swap-text"
+          >
+            <span
+              class="inline-block"
+            >
+              PostgreSQL
+            </span>
+          </span>
+          <span
+            aria-hidden="true"
+          >
+            ·
+          </span>
+          <span
+            data-slot="swap-text"
+          >
+            <span
+              class="inline-block"
+            >
+              1 row
+            </span>
+          </span>
+          <span
+            aria-hidden="true"
+          >
+            ·
+          </span>
+          <span
+            data-slot="swap-text"
+          >
+            <span
+              class="inline-block"
+            >
+              12ms
+            </span>
+          </span>
+        </p>
+        <div
+          class="ml-auto flex items-center gap-0.5"
+        >
+          <span
+            class="grid size-5 place-items-center"
+          >
+            <span
+              class="grid place-items-center"
+            >
+              <svg
+                aria-label="Done"
+                class="size-3.5 text-success-ink"
+                fill="none"
+                role="img"
+                viewBox="0 0 16 16"
+              >
+                <path
+                  d="M3.5 8.5 6.5 11.5 12.5 4.5"
+                  pathLength="1"
+                  stroke="currentColor"
+                  stroke-dasharray="1 1"
+                  stroke-dashoffset="0"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="1.75"
+                />
+              </svg>
+            </span>
+          </span>
+          <button
+            aria-label="Copy SQL"
+            class="grid size-6 place-items-center rounded-[6px] text-panel-muted hover:bg-row-hover hover:text-foreground disabled:opacity-40"
+            tabindex="0"
+            type="button"
+          >
+            <span>
+              <svg
+                aria-hidden="true"
+                class="lucide lucide-copy size-3.5"
+                fill="none"
+                height="24"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+                width="24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <rect
+                  height="14"
+                  rx="2"
+                  ry="2"
+                  width="14"
+                  x="8"
+                  y="8"
+                />
+                <path
+                  d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"
+                />
+              </svg>
+            </span>
+          </button>
+          <span
+            aria-live="polite"
+            class="sr-only"
+          />
+          <button
+            aria-expanded="false"
+            aria-label="Show SQL"
+            class="grid size-6 place-items-center rounded-[6px] text-panel-muted hover:bg-row-hover hover:text-foreground disabled:opacity-40"
+            tabindex="0"
+            type="button"
+          >
+            <span
+              class="grid place-items-center"
+            >
+              <svg
+                aria-hidden="true"
+                class="lucide lucide-chevron-down size-3.5"
+                fill="none"
+                height="24"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+                width="24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="m6 9 6 6 6-6"
+                />
+              </svg>
+            </span>
+          </button>
+        </div>
+      </div>
+      <div>
+        <div>
+          <div
+            class="relative"
+          >
+            <div
+              aria-busy="false"
+              data-testid="answer-stage"
+            >
+              <section
+                aria-label="Total MRR"
+                class="relative flex flex-col"
+              >
+                <div
+                  class="flex flex-wrap items-start justify-between gap-x-4 gap-y-2 px-4 pt-3 pb-3"
+                >
+                  <div
+                    class="flex min-w-[9rem] flex-1 flex-col gap-0.5"
+                  >
+                    <h3
+                      class="truncate type-title text-foreground"
+                    >
+                      <span
+                        data-slot="swap-text"
+                      >
+                        <span
+                          class="inline-block"
+                        >
+                          Total MRR
+                        </span>
+                      </span>
+                    </h3>
+                  </div>
+                  <div
+                    class="flex shrink-0 items-center gap-1"
+                  >
+                    <div
+                      aria-label="Chart view"
+                      class="flex rounded-[9px] bg-row-hover p-0.5"
+                      role="radiogroup"
+                    >
+                      <button
+                        aria-checked="true"
+                        class="relative h-7 rounded-[7px] px-3 type-meta text-foreground"
+                        data-segment="kpi"
+                        role="radio"
+                        tabindex="0"
+                        type="button"
+                      >
+                        <span
+                          class="absolute inset-0 rounded-[7px] bg-control-thumb shadow-sm"
+                        />
+                        <span
+                          class="relative"
+                        >
+                          KPI
+                        </span>
+                      </button>
+                      <button
+                        aria-checked="false"
+                        class="relative h-7 rounded-[7px] px-3 type-meta text-panel-muted"
+                        data-segment="table"
+                        role="radio"
+                        tabindex="-1"
+                        type="button"
+                      >
+                        <span
+                          class="relative"
+                        >
+                          Table
+                        </span>
+                      </button>
+                    </div>
+                    <button
+                      aria-expanded="false"
+                      aria-haspopup="menu"
+                      aria-label="Actions"
+                      class="grid size-6 place-items-center rounded-[6px] text-panel-muted hover:bg-row-hover hover:text-foreground aria-expanded:bg-row-active aria-expanded:text-foreground"
+                      id="ask-card-actions"
+                      tabindex="0"
+                      type="button"
+                    >
+                      <svg
+                        aria-hidden="true"
+                        class="lucide lucide-ellipsis size-3.5"
+                        fill="none"
+                        height="24"
+                        stroke="currentColor"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        viewBox="0 0 24 24"
+                        width="24"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <circle
+                          cx="12"
+                          cy="12"
+                          r="1"
+                        />
+                        <circle
+                          cx="19"
+                          cy="12"
+                          r="1"
+                        />
+                        <circle
+                          cx="5"
+                          cy="12"
+                          r="1"
+                        />
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+                <div>
+                  <div
+                    class="flex flex-col gap-1 px-4 pt-2 pb-5"
+                  >
+                    <span
+                      class="type-meta text-panel-muted"
+                    >
+                      MRR in September
+                    </span>
+                    <span
+                      class="text-[40px] leading-[44px] font-semibold tracking-tight text-foreground tabular-nums"
+                      data-testid="kpi-value"
+                    >
+                      $475k
+                    </span>
+                    <span
+                      class="type-meta tabular-nums text-success-ink"
+                    >
+                      +
+                      54%
+                       
+                      <span
+                        class="text-panel-muted"
+                      >
+                        Change pct
+                      </span>
+                    </span>
+                  </div>
+                </div>
+                <div
+                  class="h-3"
+                />
+              </section>
+            </div>
+          </div>
+        </div>
+      </div>
+      <p
+        aria-live="polite"
+        class="sr-only"
+      />
+    </div>
+    <footer
+      class="flex h-9 shrink-0 items-center justify-between gap-3 border-t border-panel-border px-4 type-meta text-panel-muted"
+    >
+      <div
+        class="flex min-w-0 items-center gap-2"
+      >
+        <span
+          aria-hidden="true"
+          class="size-1.5 shrink-0 rounded-full bg-panel-muted opacity-60"
+        />
+        <span
+          class="min-w-0 truncate"
+          data-slot="swap-text"
+        >
+          <span
+            class="inline-block"
+          >
+            analytics
+          </span>
+        </span>
+      </div>
+      <div
+        class="flex shrink-0 items-center gap-3"
+      >
+        <div
+          class="flex items-center gap-2"
+        >
+          <span
+            class="text-foreground"
+            data-slot="swap-text"
+          >
+            <span
+              class="inline-block"
+            >
+              Refine
+            </span>
+          </span>
+          <kbd
+            aria-label="↩"
+            class="inline-flex items-center gap-0.5"
+            data-slot="kbd-group"
+          >
+            <kbd
+              class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+              data-slot="kbd"
+            >
+              ↩
+            </kbd>
+          </kbd>
+        </div>
+        <div
+          class="flex items-center gap-2 border-l border-panel-border pl-3"
+        >
+          <span>
+            New question
+          </span>
+          <kbd
+            aria-label="⌘ ↩"
+            class="inline-flex items-center gap-0.5"
+            data-slot="kbd-group"
+          >
+            <kbd
+              class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+              data-slot="kbd"
+            >
+              ⌘
+            </kbd>
+            <kbd
+              class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+              data-slot="kbd"
+            >
+              ↩
+            </kbd>
+          </kbd>
+        </div>
+        <div
+          class="flex items-center gap-2 border-l border-panel-border pl-3"
+        >
+          <span>
+            Actions
+          </span>
+          <kbd
+            aria-label="⌘ K"
+            class="inline-flex items-center gap-0.5"
+            data-slot="kbd-group"
+          >
+            <kbd
+              class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+              data-slot="kbd"
+            >
+              ⌘
+            </kbd>
+            <kbd
+              class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+              data-slot="kbd"
+            >
+              K
+            </kbd>
+          </kbd>
+        </div>
+        <div
+          class="flex items-center gap-2 border-l border-panel-border pl-3"
+        >
+          <span>
+            Save
+          </span>
+          <kbd
+            aria-label="⌘ S"
+            class="inline-flex items-center gap-0.5"
+            data-slot="kbd-group"
+          >
+            <kbd
+              class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+              data-slot="kbd"
+            >
+              ⌘
+            </kbd>
+            <kbd
+              class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+              data-slot="kbd"
+            >
+              S
+            </kbd>
+          </kbd>
+        </div>
+      </div>
+    </footer>
+  </div>
+</div>
+`;
+
+exports[`askView designed states > matches the snapshot for the NO_AI_SETTINGS error 1`] = `
+<div
+  data-testid="ask-harness"
+  style="width: 760px"
+>
+  <div
+    class="flex min-h-0 flex-col"
+  >
+    <div
+      class="relative z-20 flex h-14 shrink-0 items-center gap-2.5 px-4"
+    >
+      <span
+        aria-label="Active connection: analytics"
+        class="relative flex h-8 max-w-56 shrink-0 items-center pr-2.5 pl-1"
+        data-tone="active"
+        role="img"
+      >
+        <span
+          class="absolute inset-0 rounded-[9px] bg-row-hover"
+        />
+        <span
+          class="relative flex min-w-0 items-center gap-3"
+        >
+          <span
+            aria-hidden="true"
+            class="grid size-6 place-items-center rounded-[7px] text-[13px] leading-none bg-row-hover"
+          >
+            🐘
+          </span>
+          <span
+            class="truncate type-body text-foreground"
+          >
+            analytics
+          </span>
+        </span>
+      </span>
+      <div
+        class="flex min-w-0 flex-1 items-center"
+      >
+        <div
+          class="relative flex min-w-0 flex-1 items-center"
+        >
+          <input
+            aria-label="Ask a question"
+            aria-placeholder="Ask about your data…"
+            autocomplete="off"
+            class="min-w-0 flex-1 bg-transparent type-input text-foreground outline-none placeholder:text-panel-muted placeholder:opacity-80 focus-visible:outline-none"
+            spellcheck="false"
+            type="text"
+            value="Revenue by region"
+          />
+          <div
+            aria-hidden="true"
+            class="pointer-events-none absolute inset-0 flex items-center overflow-hidden type-input"
+          />
+        </div>
+      </div>
+      <button
+        aria-label="Run"
+        class="grid size-7 shrink-0 place-items-center bg-row-hover text-panel-muted hover:text-foreground"
+        style="border-radius: 8px"
+        tabindex="0"
+        type="button"
+      >
+        <span
+          class="grid place-items-center"
+        >
+          <svg
+            aria-hidden="true"
+            class="lucide lucide-corner-down-left size-3.5"
+            fill="none"
+            height="24"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M20 4v7a4 4 0 0 1-4 4H4"
+            />
+            <path
+              d="m9 10-5 5 5 5"
+            />
+          </svg>
+        </span>
+      </button>
+    </div>
+    <div
+      class="relative flex min-h-0 flex-1 flex-col overflow-y-auto border-t border-panel-border"
+      style="min-height: 0px"
+    >
+      <div
+        class="flex h-9 shrink-0 items-center gap-2 px-4"
+      >
+        <svg
+          aria-hidden="true"
+          class="lucide lucide-database size-3.5 shrink-0 text-panel-muted"
+          fill="none"
+          height="24"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+          width="24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <ellipse
+            cx="12"
+            cy="5"
+            rx="9"
+            ry="3"
+          />
+          <path
+            d="M3 5V19A9 3 0 0 0 21 19V5"
+          />
+          <path
+            d="M3 12A9 3 0 0 0 21 12"
+          />
+        </svg>
+        <h2
+          class="type-meta font-semibold text-foreground"
+        >
+          Generated SQL
+        </h2>
+        <p
+          class="flex min-w-0 items-center gap-1.5 truncate type-meta text-panel-muted tabular-nums"
+        >
+          <span
+            aria-hidden="true"
+          >
+            ·
+          </span>
+          <span
+            data-slot="swap-text"
+          >
+            <span
+              class="inline-block"
+            >
+              PostgreSQL
+            </span>
+          </span>
+          <span
+            aria-hidden="true"
+          >
+            ·
+          </span>
+          <span
+            data-slot="swap-text"
+          >
+            <span
+              class="inline-block"
+            >
+              analytics
+            </span>
+          </span>
+        </p>
+        <div
+          class="ml-auto flex items-center gap-0.5"
+        >
+          <span
+            class="grid size-5 place-items-center"
+          >
+            <span
+              class="grid place-items-center"
+            >
+              <svg
+                aria-label="Failed"
+                class="lucide lucide-circle-alert size-3.5 text-danger-ink"
+                fill="none"
+                height="24"
+                role="img"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+                width="24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <circle
+                  cx="12"
+                  cy="12"
+                  r="10"
+                />
+                <line
+                  x1="12"
+                  x2="12"
+                  y1="8"
+                  y2="12"
+                />
+                <line
+                  x1="12"
+                  x2="12.01"
+                  y1="16"
+                  y2="16"
+                />
+              </svg>
+            </span>
+          </span>
+          <button
+            aria-label="Copy SQL"
+            class="grid size-6 place-items-center rounded-[6px] text-panel-muted hover:bg-row-hover hover:text-foreground disabled:opacity-40"
+            disabled=""
+            tabindex="0"
+            type="button"
+          >
+            <span>
+              <svg
+                aria-hidden="true"
+                class="lucide lucide-copy size-3.5"
+                fill="none"
+                height="24"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+                width="24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <rect
+                  height="14"
+                  rx="2"
+                  ry="2"
+                  width="14"
+                  x="8"
+                  y="8"
+                />
+                <path
+                  d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"
+                />
+              </svg>
+            </span>
+          </button>
+          <span
+            aria-live="polite"
+            class="sr-only"
+          />
+          <button
+            aria-expanded="false"
+            aria-label="Show SQL"
+            class="grid size-6 place-items-center rounded-[6px] text-panel-muted hover:bg-row-hover hover:text-foreground disabled:opacity-40"
+            disabled=""
+            tabindex="0"
+            type="button"
+          >
+            <span
+              class="grid place-items-center"
+            >
+              <svg
+                aria-hidden="true"
+                class="lucide lucide-chevron-down size-3.5"
+                fill="none"
+                height="24"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+                width="24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="m6 9 6 6 6-6"
+                />
+              </svg>
+            </span>
+          </button>
+        </div>
+      </div>
+      <div>
+        <div>
+          <div
+            class="px-4 pt-1 pb-4"
+          >
+            <div
+              class="flex gap-3 rounded-[10px] border border-danger-ink/25 bg-destructive/[0.07] px-3 py-2.5"
+              role="alert"
+            >
+              <svg
+                aria-hidden="true"
+                class="lucide lucide-circle-alert mt-0.5 size-4 shrink-0 text-danger-ink"
+                fill="none"
+                height="24"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+                width="24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <circle
+                  cx="12"
+                  cy="12"
+                  r="10"
+                />
+                <line
+                  x1="12"
+                  x2="12"
+                  y1="8"
+                  y2="12"
+                />
+                <line
+                  x1="12"
+                  x2="12.01"
+                  y1="16"
+                  y2="16"
+                />
+              </svg>
+              <div
+                class="flex min-w-0 flex-1 flex-col gap-1"
+              >
+                <p
+                  class="type-body text-foreground"
+                >
+                  Add an AI provider to ask questions.
+                </p>
+              </div>
+              <button
+                class="h-7 shrink-0 self-start rounded-[7px] bg-row-hover px-2.5 type-meta text-foreground hover:bg-row-active"
+                tabindex="0"
+                type="button"
+              >
+                Open Settings
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <p
+        aria-live="polite"
+        class="sr-only"
+      />
+    </div>
+    <footer
+      class="flex h-9 shrink-0 items-center justify-between gap-3 border-t border-panel-border px-4 type-meta text-panel-muted"
+    >
+      <div
+        class="flex min-w-0 items-center gap-2"
+      >
+        <span
+          aria-hidden="true"
+          class="size-1.5 shrink-0 rounded-full bg-panel-muted opacity-60"
+        />
+        <span
+          class="min-w-0 truncate"
+          data-slot="swap-text"
+        >
+          <span
+            class="inline-block"
+          >
+            analytics
+          </span>
+        </span>
+      </div>
+      <div
+        class="flex shrink-0 items-center gap-3"
+      >
+        <div
+          class="flex items-center gap-2"
+        >
+          <span
+            class="text-foreground"
+            data-slot="swap-text"
+          >
+            <span
+              class="inline-block"
+            >
+              Ask again
+            </span>
+          </span>
+          <kbd
+            aria-label="↩"
+            class="inline-flex items-center gap-0.5"
+            data-slot="kbd-group"
+          >
+            <kbd
+              class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+              data-slot="kbd"
+            >
+              ↩
+            </kbd>
+          </kbd>
+        </div>
+        <div
+          class="flex items-center gap-2 border-l border-panel-border pl-3"
+        >
+          <span>
+            Copy SQL
+          </span>
+          <kbd
+            aria-label="⌘ C"
+            class="inline-flex items-center gap-0.5"
+            data-slot="kbd-group"
+          >
+            <kbd
+              class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+              data-slot="kbd"
+            >
+              ⌘
+            </kbd>
+            <kbd
+              class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+              data-slot="kbd"
+            >
+              C
+            </kbd>
+          </kbd>
+        </div>
+        <div
+          class="flex items-center gap-2 border-l border-panel-border pl-3"
+        >
+          <span>
+            SQL
+          </span>
+          <kbd
+            aria-label="⌘ E"
+            class="inline-flex items-center gap-0.5"
+            data-slot="kbd-group"
+          >
+            <kbd
+              class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+              data-slot="kbd"
+            >
+              ⌘
+            </kbd>
+            <kbd
+              class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+              data-slot="kbd"
+            >
+              E
+            </kbd>
+          </kbd>
+        </div>
+      </div>
+    </footer>
+  </div>
+</div>
+`;
+
+exports[`askView designed states > matches the snapshot for the NOT_READ_ONLY error 1`] = `
+<div
+  data-testid="ask-harness"
+  style="width: 760px"
+>
+  <div
+    class="flex min-h-0 flex-col"
+  >
+    <div
+      class="relative z-20 flex h-14 shrink-0 items-center gap-2.5 px-4"
+    >
+      <span
+        aria-label="Active connection: analytics"
+        class="relative flex h-8 max-w-56 shrink-0 items-center pr-2.5 pl-1"
+        data-tone="active"
+        role="img"
+      >
+        <span
+          class="absolute inset-0 rounded-[9px] bg-row-hover"
+        />
+        <span
+          class="relative flex min-w-0 items-center gap-3"
+        >
+          <span
+            aria-hidden="true"
+            class="grid size-6 place-items-center rounded-[7px] text-[13px] leading-none bg-row-hover"
+          >
+            🐘
+          </span>
+          <span
+            class="truncate type-body text-foreground"
+          >
+            analytics
+          </span>
+        </span>
+      </span>
+      <div
+        class="flex min-w-0 flex-1 items-center"
+      >
+        <div
+          class="relative flex min-w-0 flex-1 items-center"
+        >
+          <input
+            aria-label="Ask a question"
+            aria-placeholder="Ask about your data…"
+            autocomplete="off"
+            class="min-w-0 flex-1 bg-transparent type-input text-foreground outline-none placeholder:text-panel-muted placeholder:opacity-80 focus-visible:outline-none"
+            spellcheck="false"
+            type="text"
+            value="delete all users"
+          />
+          <div
+            aria-hidden="true"
+            class="pointer-events-none absolute inset-0 flex items-center overflow-hidden type-input"
+          />
+        </div>
+      </div>
+      <button
+        aria-label="Run"
+        class="grid size-7 shrink-0 place-items-center bg-row-hover text-panel-muted hover:text-foreground"
+        style="border-radius: 8px"
+        tabindex="0"
+        type="button"
+      >
+        <span
+          class="grid place-items-center"
+        >
+          <svg
+            aria-hidden="true"
+            class="lucide lucide-corner-down-left size-3.5"
+            fill="none"
+            height="24"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M20 4v7a4 4 0 0 1-4 4H4"
+            />
+            <path
+              d="m9 10-5 5 5 5"
+            />
+          </svg>
+        </span>
+      </button>
+    </div>
+    <div
+      class="relative flex min-h-0 flex-1 flex-col overflow-y-auto border-t border-panel-border"
+      style="min-height: 0px"
+    >
+      <div
+        class="flex h-9 shrink-0 items-center gap-2 px-4"
+      >
+        <svg
+          aria-hidden="true"
+          class="lucide lucide-database size-3.5 shrink-0 text-panel-muted"
+          fill="none"
+          height="24"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+          width="24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <ellipse
+            cx="12"
+            cy="5"
+            rx="9"
+            ry="3"
+          />
+          <path
+            d="M3 5V19A9 3 0 0 0 21 19V5"
+          />
+          <path
+            d="M3 12A9 3 0 0 0 21 12"
+          />
+        </svg>
+        <h2
+          class="type-meta font-semibold text-foreground"
+        >
+          Generated SQL
+        </h2>
+        <p
+          class="flex min-w-0 items-center gap-1.5 truncate type-meta text-panel-muted tabular-nums"
+        >
+          <span
+            aria-hidden="true"
+          >
+            ·
+          </span>
+          <span
+            data-slot="swap-text"
+          >
+            <span
+              class="inline-block"
+            >
+              PostgreSQL
+            </span>
+          </span>
+          <span
+            aria-hidden="true"
+          >
+            ·
+          </span>
+          <span
+            data-slot="swap-text"
+          >
+            <span
+              class="inline-block"
+            >
+              2 lines
+            </span>
+          </span>
+        </p>
+        <div
+          class="ml-auto flex items-center gap-0.5"
+        >
+          <span
+            class="grid size-5 place-items-center"
+          >
+            <span
+              class="grid place-items-center"
+            >
+              <svg
+                aria-label="Failed"
+                class="lucide lucide-circle-alert size-3.5 text-danger-ink"
+                fill="none"
+                height="24"
+                role="img"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+                width="24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <circle
+                  cx="12"
+                  cy="12"
+                  r="10"
+                />
+                <line
+                  x1="12"
+                  x2="12"
+                  y1="8"
+                  y2="12"
+                />
+                <line
+                  x1="12"
+                  x2="12.01"
+                  y1="16"
+                  y2="16"
+                />
+              </svg>
+            </span>
+          </span>
+          <button
+            aria-label="Copy SQL"
+            class="grid size-6 place-items-center rounded-[6px] text-panel-muted hover:bg-row-hover hover:text-foreground disabled:opacity-40"
+            tabindex="0"
+            type="button"
+          >
+            <span>
+              <svg
+                aria-hidden="true"
+                class="lucide lucide-copy size-3.5"
+                fill="none"
+                height="24"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+                width="24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <rect
+                  height="14"
+                  rx="2"
+                  ry="2"
+                  width="14"
+                  x="8"
+                  y="8"
+                />
+                <path
+                  d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"
+                />
+              </svg>
+            </span>
+          </button>
+          <span
+            aria-live="polite"
+            class="sr-only"
+          />
+          <button
+            aria-expanded="true"
+            aria-label="Hide SQL"
+            class="grid size-6 place-items-center rounded-[6px] text-panel-muted hover:bg-row-hover hover:text-foreground disabled:opacity-40"
+            tabindex="0"
+            type="button"
+          >
+            <span
+              class="grid place-items-center"
+            >
+              <svg
+                aria-hidden="true"
+                class="lucide lucide-chevron-down size-3.5"
+                fill="none"
+                height="24"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+                width="24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="m6 9 6 6 6-6"
+                />
+              </svg>
+            </span>
+          </button>
+        </div>
+      </div>
+      <div>
+        <div
+          aria-label="Generated SQL"
+          class="max-h-[220px] overflow-y-auto px-2 py-2 font-mono text-[12px] leading-[19px] outline-none focus-visible:ring-2 focus-visible:ring-ring/60"
+          data-state="settled"
+          role="region"
+          tabindex="0"
+        >
+          <div
+            class="relative flex"
+          >
+            <span
+              aria-hidden="true"
+              class="w-9 shrink-0 pr-3 text-right text-panel-muted tabular-nums select-none"
+            >
+              1
+            </span>
+            <code
+              class="min-w-0 flex-1 break-words whitespace-pre-wrap"
+            >
+              <span
+                class="text-panel-muted italic"
+              >
+                -- Remove every user
+              </span>
+            </code>
+          </div>
+          <div
+            class="relative flex"
+          >
+            <span
+              aria-hidden="true"
+              class="w-9 shrink-0 pr-3 text-right text-panel-muted tabular-nums select-none"
+            >
+              2
+            </span>
+            <code
+              class="min-w-0 flex-1 break-words whitespace-pre-wrap"
+            >
+              <span
+                class="text-chart-1 underline decoration-danger-ink decoration-2 underline-offset-[3px]"
+              >
+                delete
+              </span>
+              <span
+                class="text-foreground"
+              >
+                 
+              </span>
+              <span
+                class="text-chart-1"
+              >
+                from
+              </span>
+              <span
+                class="text-foreground"
+              >
+                 
+              </span>
+              <span
+                class="text-foreground"
+              >
+                users
+              </span>
+            </code>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div>
+          <div
+            class="px-4 pt-1 pb-4"
+          >
+            <div
+              class="flex gap-3 rounded-[10px] border border-danger-ink/25 bg-destructive/[0.07] px-3 py-2.5"
+              role="alert"
+            >
+              <svg
+                aria-hidden="true"
+                class="lucide lucide-circle-alert mt-0.5 size-4 shrink-0 text-danger-ink"
+                fill="none"
+                height="24"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+                width="24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <circle
+                  cx="12"
+                  cy="12"
+                  r="10"
+                />
+                <line
+                  x1="12"
+                  x2="12"
+                  y1="8"
+                  y2="12"
+                />
+                <line
+                  x1="12"
+                  x2="12.01"
+                  y1="16"
+                  y2="16"
+                />
+              </svg>
+              <div
+                class="flex min-w-0 flex-1 flex-col gap-1"
+              >
+                <p
+                  class="type-body text-foreground"
+                >
+                  This would change data. oh-my-query only runs read-only questions.
+                </p>
+                <p
+                  class="type-meta break-words text-panel-muted"
+                >
+                  Only read-only queries can run here, not DELETE.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <p
+        aria-live="polite"
+        class="sr-only"
+      />
+    </div>
+    <footer
+      class="flex h-9 shrink-0 items-center justify-between gap-3 border-t border-panel-border px-4 type-meta text-panel-muted"
+    >
+      <div
+        class="flex min-w-0 items-center gap-2"
+      >
+        <span
+          aria-hidden="true"
+          class="size-1.5 shrink-0 rounded-full bg-panel-muted opacity-60"
+        />
+        <span
+          class="min-w-0 truncate"
+          data-slot="swap-text"
+        >
+          <span
+            class="inline-block"
+          >
+            analytics
+          </span>
+        </span>
+      </div>
+      <div
+        class="flex shrink-0 items-center gap-3"
+      >
+        <div
+          class="flex items-center gap-2"
+        >
+          <span
+            class="text-foreground"
+            data-slot="swap-text"
+          >
+            <span
+              class="inline-block"
+            >
+              Ask again
+            </span>
+          </span>
+          <kbd
+            aria-label="↩"
+            class="inline-flex items-center gap-0.5"
+            data-slot="kbd-group"
+          >
+            <kbd
+              class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+              data-slot="kbd"
+            >
+              ↩
+            </kbd>
+          </kbd>
+        </div>
+        <div
+          class="flex items-center gap-2 border-l border-panel-border pl-3"
+        >
+          <span>
+            Actions
+          </span>
+          <kbd
+            aria-label="⌘ K"
+            class="inline-flex items-center gap-0.5"
+            data-slot="kbd-group"
+          >
+            <kbd
+              class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+              data-slot="kbd"
+            >
+              ⌘
+            </kbd>
+            <kbd
+              class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+              data-slot="kbd"
+            >
+              K
+            </kbd>
+          </kbd>
+        </div>
+        <div
+          class="flex items-center gap-2 border-l border-panel-border pl-3"
+        >
+          <span>
+            Copy SQL
+          </span>
+          <kbd
+            aria-label="⌘ C"
+            class="inline-flex items-center gap-0.5"
+            data-slot="kbd-group"
+          >
+            <kbd
+              class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+              data-slot="kbd"
+            >
+              ⌘
+            </kbd>
+            <kbd
+              class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+              data-slot="kbd"
+            >
+              C
+            </kbd>
+          </kbd>
+        </div>
+        <div
+          class="flex items-center gap-2 border-l border-panel-border pl-3"
+        >
+          <span>
+            SQL
+          </span>
+          <kbd
+            aria-label="⌘ E"
+            class="inline-flex items-center gap-0.5"
+            data-slot="kbd-group"
+          >
+            <kbd
+              class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+              data-slot="kbd"
+            >
+              ⌘
+            </kbd>
+            <kbd
+              class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+              data-slot="kbd"
+            >
+              E
+            </kbd>
+          </kbd>
+        </div>
+      </div>
+    </footer>
+  </div>
+</div>
+`;
+
+exports[`askView designed states > matches the snapshot for the populated line card 1`] = `
+<div
+  data-testid="ask-harness"
+  style="width: 760px"
+>
+  <div
+    class="flex min-h-0 flex-col"
+  >
+    <div
+      class="relative z-20 flex h-14 shrink-0 items-center gap-2.5 px-4"
+    >
+      <span
+        aria-label="Active connection: analytics"
+        class="relative flex h-8 max-w-56 shrink-0 items-center pr-2.5 pl-1"
+        data-tone="active"
+        role="img"
+      >
+        <span
+          class="absolute inset-0 rounded-[9px] bg-row-hover"
+        />
+        <span
+          class="relative flex min-w-0 items-center gap-3"
+        >
+          <span
+            aria-hidden="true"
+            class="grid size-6 place-items-center rounded-[7px] text-[13px] leading-none bg-row-hover"
+          >
+            🐘
+          </span>
+          <span
+            class="truncate type-body text-foreground"
+          >
+            analytics
+          </span>
+        </span>
+      </span>
+      <div
+        class="flex min-w-0 flex-1 items-center"
+      >
+        <div
+          class="relative flex min-w-0 flex-1 items-center"
+        >
+          <input
+            aria-label="Ask a question"
+            aria-placeholder="Refine — by month, only Europe, as a table…"
+            autocomplete="off"
+            class="min-w-0 flex-1 bg-transparent type-input text-foreground outline-none placeholder:text-panel-muted placeholder:opacity-80 focus-visible:outline-none"
+            spellcheck="false"
+            type="text"
+            value=""
+          />
+          <div
+            aria-hidden="true"
+            class="pointer-events-none absolute inset-0 flex items-center overflow-hidden type-input"
+          >
+            <span
+              class="truncate text-panel-muted opacity-80"
+              data-slot="swap-text"
+            >
+              <span
+                class="inline-block"
+              >
+                Refine — by month, only Europe, as a table…
+              </span>
+            </span>
+          </div>
+        </div>
+      </div>
+      <button
+        aria-label="Run"
+        class="grid size-7 shrink-0 place-items-center bg-row-hover text-panel-muted hover:text-foreground"
+        style="border-radius: 8px"
+        tabindex="0"
+        type="button"
+      >
+        <span
+          class="grid place-items-center"
+        >
+          <svg
+            aria-hidden="true"
+            class="lucide lucide-corner-down-left size-3.5"
+            fill="none"
+            height="24"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M20 4v7a4 4 0 0 1-4 4H4"
+            />
+            <path
+              d="m9 10-5 5 5 5"
+            />
+          </svg>
+        </span>
+      </button>
+    </div>
+    <div
+      class="relative flex min-h-0 flex-1 flex-col overflow-y-auto border-t border-panel-border"
+      style="min-height: 0px"
+    >
+      <div
+        class="flex h-9 shrink-0 items-center gap-2 px-4"
+      >
+        <svg
+          aria-hidden="true"
+          class="lucide lucide-database size-3.5 shrink-0 text-panel-muted"
+          fill="none"
+          height="24"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+          width="24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <ellipse
+            cx="12"
+            cy="5"
+            rx="9"
+            ry="3"
+          />
+          <path
+            d="M3 5V19A9 3 0 0 0 21 19V5"
+          />
+          <path
+            d="M3 12A9 3 0 0 0 21 12"
+          />
+        </svg>
+        <h2
+          class="type-meta font-semibold text-foreground"
+        >
+          Generated SQL
+        </h2>
+        <p
+          class="flex min-w-0 items-center gap-1.5 truncate type-meta text-panel-muted tabular-nums"
+        >
+          <span
+            aria-hidden="true"
+          >
+            ·
+          </span>
+          <span
+            data-slot="swap-text"
+          >
+            <span
+              class="inline-block"
+            >
+              PostgreSQL
+            </span>
+          </span>
+          <span
+            aria-hidden="true"
+          >
+            ·
+          </span>
+          <span
+            data-slot="swap-text"
+          >
+            <span
+              class="inline-block"
+            >
+              27 rows
+            </span>
+          </span>
+          <span
+            aria-hidden="true"
+          >
+            ·
+          </span>
+          <span
+            data-slot="swap-text"
+          >
+            <span
+              class="inline-block"
+            >
+              386ms
+            </span>
+          </span>
+        </p>
+        <div
+          class="ml-auto flex items-center gap-0.5"
+        >
+          <span
+            class="grid size-5 place-items-center"
+          >
+            <span
+              class="grid place-items-center"
+            >
+              <svg
+                aria-label="Done"
+                class="size-3.5 text-success-ink"
+                fill="none"
+                role="img"
+                viewBox="0 0 16 16"
+              >
+                <path
+                  d="M3.5 8.5 6.5 11.5 12.5 4.5"
+                  pathLength="1"
+                  stroke="currentColor"
+                  stroke-dasharray="1 1"
+                  stroke-dashoffset="0"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="1.75"
+                />
+              </svg>
+            </span>
+          </span>
+          <button
+            aria-label="Copy SQL"
+            class="grid size-6 place-items-center rounded-[6px] text-panel-muted hover:bg-row-hover hover:text-foreground disabled:opacity-40"
+            tabindex="0"
+            type="button"
+          >
+            <span>
+              <svg
+                aria-hidden="true"
+                class="lucide lucide-copy size-3.5"
+                fill="none"
+                height="24"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+                width="24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <rect
+                  height="14"
+                  rx="2"
+                  ry="2"
+                  width="14"
+                  x="8"
+                  y="8"
+                />
+                <path
+                  d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"
+                />
+              </svg>
+            </span>
+          </button>
+          <span
+            aria-live="polite"
+            class="sr-only"
+          />
+          <button
+            aria-expanded="false"
+            aria-label="Show SQL"
+            class="grid size-6 place-items-center rounded-[6px] text-panel-muted hover:bg-row-hover hover:text-foreground disabled:opacity-40"
+            tabindex="0"
+            type="button"
+          >
+            <span
+              class="grid place-items-center"
+            >
+              <svg
+                aria-hidden="true"
+                class="lucide lucide-chevron-down size-3.5"
+                fill="none"
+                height="24"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+                width="24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="m6 9 6 6 6-6"
+                />
+              </svg>
+            </span>
+          </button>
+        </div>
+      </div>
+      <div>
+        <div>
+          <div
+            class="relative"
+          >
+            <div
+              aria-busy="false"
+              data-testid="answer-stage"
+            >
+              <section
+                aria-label="Monthly recurring revenue by region"
+                class="relative flex flex-col"
+              >
+                <div
+                  class="flex flex-wrap items-start justify-between gap-x-4 gap-y-2 px-4 pt-3 pb-3"
+                >
+                  <div
+                    class="flex min-w-[9rem] flex-1 flex-col gap-0.5"
+                  >
+                    <h3
+                      class="truncate type-title text-foreground"
+                    >
+                      <span
+                        data-slot="swap-text"
+                      >
+                        <span
+                          class="inline-block"
+                        >
+                          Monthly recurring revenue by region
+                        </span>
+                      </span>
+                    </h3>
+                    <p
+                      class="truncate type-meta text-panel-muted"
+                    >
+                      <span
+                        data-slot="swap-text"
+                      >
+                        <span
+                          class="inline-block"
+                        >
+                          Jan to Sep 2026 · $475k in September
+                        </span>
+                      </span>
+                    </p>
+                  </div>
+                  <div
+                    class="flex shrink-0 items-center gap-1"
+                  >
+                    <div
+                      aria-label="Chart view"
+                      class="flex rounded-[9px] bg-row-hover p-0.5"
+                      role="radiogroup"
+                    >
+                      <button
+                        aria-checked="false"
+                        class="relative h-7 rounded-[7px] px-3 type-meta text-panel-muted"
+                        data-segment="bar"
+                        role="radio"
+                        tabindex="-1"
+                        type="button"
+                      >
+                        <span
+                          class="relative"
+                        >
+                          Bar
+                        </span>
+                      </button>
+                      <button
+                        aria-checked="true"
+                        class="relative h-7 rounded-[7px] px-3 type-meta text-foreground"
+                        data-segment="line"
+                        role="radio"
+                        tabindex="0"
+                        type="button"
+                      >
+                        <span
+                          class="absolute inset-0 rounded-[7px] bg-control-thumb shadow-sm"
+                        />
+                        <span
+                          class="relative"
+                        >
+                          Line
+                        </span>
+                      </button>
+                      <button
+                        aria-checked="false"
+                        class="relative h-7 rounded-[7px] px-3 type-meta text-panel-muted"
+                        data-segment="table"
+                        role="radio"
+                        tabindex="-1"
+                        type="button"
+                      >
+                        <span
+                          class="relative"
+                        >
+                          Table
+                        </span>
+                      </button>
+                    </div>
+                    <button
+                      aria-expanded="false"
+                      aria-haspopup="menu"
+                      aria-label="Actions"
+                      class="grid size-6 place-items-center rounded-[6px] text-panel-muted hover:bg-row-hover hover:text-foreground aria-expanded:bg-row-active aria-expanded:text-foreground"
+                      id="ask-card-actions"
+                      tabindex="0"
+                      type="button"
+                    >
+                      <svg
+                        aria-hidden="true"
+                        class="lucide lucide-ellipsis size-3.5"
+                        fill="none"
+                        height="24"
+                        stroke="currentColor"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        viewBox="0 0 24 24"
+                        width="24"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <circle
+                          cx="12"
+                          cy="12"
+                          r="1"
+                        />
+                        <circle
+                          cx="19"
+                          cy="12"
+                          r="1"
+                        />
+                        <circle
+                          cx="5"
+                          cy="12"
+                          r="1"
+                        />
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+                <div>
+                  <ul
+                    aria-label="Latest values"
+                    class="flex flex-wrap gap-x-4 gap-y-1 px-4 pb-2"
+                  >
+                    <li
+                      class="flex items-center gap-1.5 type-meta"
+                    >
+                      <span
+                        aria-hidden="true"
+                        class="size-2 shrink-0 rounded-full"
+                        style="background-color: var(--chart-1)"
+                      />
+                      <span
+                        class="text-panel-muted"
+                      >
+                        North America
+                      </span>
+                      <span
+                        class="text-foreground tabular-nums"
+                        data-slot="swap-text"
+                      >
+                        <span
+                          class="inline-block"
+                        >
+                          $258k
+                        </span>
+                      </span>
+                    </li>
+                    <li
+                      class="flex items-center gap-1.5 type-meta"
+                    >
+                      <span
+                        aria-hidden="true"
+                        class="size-2 shrink-0 rounded-full"
+                        style="background-color: var(--chart-2)"
+                      />
+                      <span
+                        class="text-panel-muted"
+                      >
+                        Europe
+                      </span>
+                      <span
+                        class="text-foreground tabular-nums"
+                        data-slot="swap-text"
+                      >
+                        <span
+                          class="inline-block"
+                        >
+                          $146k
+                        </span>
+                      </span>
+                    </li>
+                    <li
+                      class="flex items-center gap-1.5 type-meta"
+                    >
+                      <span
+                        aria-hidden="true"
+                        class="size-2 shrink-0 rounded-full"
+                        style="background-color: var(--chart-3)"
+                      />
+                      <span
+                        class="text-panel-muted"
+                      >
+                        Asia Pacific
+                      </span>
+                      <span
+                        class="text-foreground tabular-nums"
+                        data-slot="swap-text"
+                      >
+                        <span
+                          class="inline-block"
+                        >
+                          $71k
+                        </span>
+                      </span>
+                    </li>
+                  </ul>
+                  <figure
+                    aria-label="Line chart: Monthly recurring revenue by region. Series: North America, Europe, Asia Pacific."
+                    class="px-2"
+                    data-drill=""
+                    role="img"
+                  >
+                    <div
+                      class="flex justify-center text-xs [&_.recharts-cartesian-axis-tick_text]:fill-muted-foreground [&_.recharts-cartesian-grid_line[stroke='#ccc']]:stroke-border/50 [&_.recharts-curve.recharts-tooltip-cursor]:stroke-border [&_.recharts-dot[stroke='#fff']]:stroke-transparent [&_.recharts-layer]:outline-hidden [&_.recharts-polar-grid_[stroke='#ccc']]:stroke-border [&_.recharts-radial-bar-background-sector]:fill-muted [&_.recharts-rectangle.recharts-tooltip-cursor]:fill-muted [&_.recharts-reference-line_[stroke='#ccc']]:stroke-border [&_.recharts-sector]:outline-hidden [&_.recharts-sector[stroke='#fff']]:stroke-transparent [&_.recharts-surface]:outline-hidden aspect-auto w-full"
+                      data-chart="chart-_r_id_"
+                      data-slot="chart"
+                      style="height: 200px"
+                    >
+                      <style>
+                        
+.dark [data-chart=chart-_r_id_] {
+  --color-s0: var(--chart-1);
+  --color-s1: var(--chart-2);
+  --color-s2: var(--chart-3);
+}
+
+
+ [data-chart=chart-_r_id_] {
+  --color-s0: var(--chart-1);
+  --color-s1: var(--chart-2);
+  --color-s2: var(--chart-3);
+}
+
+                      </style>
+                      <div
+                        class="recharts-responsive-container"
+                        style="width: 100%; height: 100%; min-width: 0px"
+                      >
+                        <div
+                          class="recharts-wrapper"
+                          style="position: relative; cursor: default; width: 100%; height: 100%; max-height: 200px; max-width: 744px"
+                        >
+                          <svg
+                            class="recharts-surface"
+                            height="200"
+                            role="application"
+                            style="width: 100%; height: 100%"
+                            tabindex="0"
+                            viewBox="0 0 744 200"
+                            width="744"
+                          >
+                            <title />
+                            <desc />
+                            <defs>
+                              <clippath
+                                id="rechartsN-clip"
+                              >
+                                <rect
+                                  height="162"
+                                  width="684"
+                                  x="52"
+                                  y="8"
+                                />
+                              </clippath>
+                            </defs>
+                            <g
+                              class="recharts-cartesian-grid"
+                            >
+                              <g
+                                class="recharts-cartesian-grid-horizontal"
+                              >
+                                <line
+                                  class="text-foreground"
+                                  fill="none"
+                                  height="162"
+                                  stroke="currentColor"
+                                  stroke-opacity="0.07"
+                                  width="684"
+                                  x="52"
+                                  x1="52"
+                                  x2="736"
+                                  y="8"
+                                  y1="170"
+                                  y2="170"
+                                />
+                                <line
+                                  class="text-foreground"
+                                  fill="none"
+                                  height="162"
+                                  stroke="currentColor"
+                                  stroke-opacity="0.07"
+                                  width="684"
+                                  x="52"
+                                  x1="52"
+                                  x2="736"
+                                  y="8"
+                                  y1="116.00000000000001"
+                                  y2="116.00000000000001"
+                                />
+                                <line
+                                  class="text-foreground"
+                                  fill="none"
+                                  height="162"
+                                  stroke="currentColor"
+                                  stroke-opacity="0.07"
+                                  width="684"
+                                  x="52"
+                                  x1="52"
+                                  x2="736"
+                                  y="8"
+                                  y1="62.00000000000001"
+                                  y2="62.00000000000001"
+                                />
+                                <line
+                                  class="text-foreground"
+                                  fill="none"
+                                  height="162"
+                                  stroke="currentColor"
+                                  stroke-opacity="0.07"
+                                  width="684"
+                                  x="52"
+                                  x1="52"
+                                  x2="736"
+                                  y="8"
+                                  y1="8"
+                                  y2="8"
+                                />
+                              </g>
+                            </g>
+                            <g
+                              class="recharts-layer recharts-cartesian-axis recharts-xAxis xAxis"
+                            >
+                              <g
+                                class="recharts-cartesian-axis-ticks"
+                              >
+                                <g
+                                  class="recharts-layer recharts-cartesian-axis-tick"
+                                >
+                                  <text
+                                    class="recharts-text recharts-cartesian-axis-tick-value"
+                                    fill="#666"
+                                    height="30"
+                                    orientation="bottom"
+                                    stroke="none"
+                                    text-anchor="middle"
+                                    width="684"
+                                  >
+                                    <tspan>
+                                      Jan
+                                    </tspan>
+                                  </text>
+                                </g>
+                                <g
+                                  class="recharts-layer recharts-cartesian-axis-tick"
+                                >
+                                  <text
+                                    class="recharts-text recharts-cartesian-axis-tick-value"
+                                    fill="#666"
+                                    height="30"
+                                    orientation="bottom"
+                                    stroke="none"
+                                    text-anchor="middle"
+                                    width="684"
+                                  >
+                                    <tspan>
+                                      Feb
+                                    </tspan>
+                                  </text>
+                                </g>
+                                <g
+                                  class="recharts-layer recharts-cartesian-axis-tick"
+                                >
+                                  <text
+                                    class="recharts-text recharts-cartesian-axis-tick-value"
+                                    fill="#666"
+                                    height="30"
+                                    orientation="bottom"
+                                    stroke="none"
+                                    text-anchor="middle"
+                                    width="684"
+                                  >
+                                    <tspan>
+                                      Mar
+                                    </tspan>
+                                  </text>
+                                </g>
+                                <g
+                                  class="recharts-layer recharts-cartesian-axis-tick"
+                                >
+                                  <text
+                                    class="recharts-text recharts-cartesian-axis-tick-value"
+                                    fill="#666"
+                                    height="30"
+                                    orientation="bottom"
+                                    stroke="none"
+                                    text-anchor="middle"
+                                    width="684"
+                                  >
+                                    <tspan>
+                                      Apr
+                                    </tspan>
+                                  </text>
+                                </g>
+                                <g
+                                  class="recharts-layer recharts-cartesian-axis-tick"
+                                >
+                                  <text
+                                    class="recharts-text recharts-cartesian-axis-tick-value"
+                                    fill="#666"
+                                    height="30"
+                                    orientation="bottom"
+                                    stroke="none"
+                                    text-anchor="middle"
+                                    width="684"
+                                  >
+                                    <tspan>
+                                      May
+                                    </tspan>
+                                  </text>
+                                </g>
+                                <g
+                                  class="recharts-layer recharts-cartesian-axis-tick"
+                                >
+                                  <text
+                                    class="recharts-text recharts-cartesian-axis-tick-value"
+                                    fill="#666"
+                                    height="30"
+                                    orientation="bottom"
+                                    stroke="none"
+                                    text-anchor="middle"
+                                    width="684"
+                                  >
+                                    <tspan>
+                                      Jun
+                                    </tspan>
+                                  </text>
+                                </g>
+                                <g
+                                  class="recharts-layer recharts-cartesian-axis-tick"
+                                >
+                                  <text
+                                    class="recharts-text recharts-cartesian-axis-tick-value"
+                                    fill="#666"
+                                    height="30"
+                                    orientation="bottom"
+                                    stroke="none"
+                                    text-anchor="middle"
+                                    width="684"
+                                  >
+                                    <tspan>
+                                      Jul
+                                    </tspan>
+                                  </text>
+                                </g>
+                                <g
+                                  class="recharts-layer recharts-cartesian-axis-tick"
+                                >
+                                  <text
+                                    class="recharts-text recharts-cartesian-axis-tick-value"
+                                    fill="#666"
+                                    height="30"
+                                    orientation="bottom"
+                                    stroke="none"
+                                    text-anchor="middle"
+                                    width="684"
+                                  >
+                                    <tspan>
+                                      Aug
+                                    </tspan>
+                                  </text>
+                                </g>
+                                <g
+                                  class="recharts-layer recharts-cartesian-axis-tick"
+                                >
+                                  <text
+                                    class="recharts-text recharts-cartesian-axis-tick-value"
+                                    fill="#666"
+                                    height="30"
+                                    orientation="bottom"
+                                    stroke="none"
+                                    text-anchor="middle"
+                                    width="684"
+                                  >
+                                    <tspan>
+                                      Sep
+                                    </tspan>
+                                  </text>
+                                </g>
+                              </g>
+                            </g>
+                            <g
+                              class="recharts-layer recharts-cartesian-axis recharts-yAxis yAxis"
+                            >
+                              <g
+                                class="recharts-cartesian-axis-ticks"
+                              >
+                                <g
+                                  class="recharts-layer recharts-cartesian-axis-tick"
+                                >
+                                  <text
+                                    class="recharts-text recharts-cartesian-axis-tick-value"
+                                    fill="#666"
+                                    height="162"
+                                    orientation="left"
+                                    stroke="none"
+                                    text-anchor="end"
+                                    width="48"
+                                  >
+                                    <tspan>
+                                      $0
+                                    </tspan>
+                                  </text>
+                                </g>
+                                <g
+                                  class="recharts-layer recharts-cartesian-axis-tick"
+                                >
+                                  <text
+                                    class="recharts-text recharts-cartesian-axis-tick-value"
+                                    fill="#666"
+                                    height="162"
+                                    orientation="left"
+                                    stroke="none"
+                                    text-anchor="end"
+                                    width="48"
+                                  >
+                                    <tspan>
+                                      $90k
+                                    </tspan>
+                                  </text>
+                                </g>
+                                <g
+                                  class="recharts-layer recharts-cartesian-axis-tick"
+                                >
+                                  <text
+                                    class="recharts-text recharts-cartesian-axis-tick-value"
+                                    fill="#666"
+                                    height="162"
+                                    orientation="left"
+                                    stroke="none"
+                                    text-anchor="end"
+                                    width="48"
+                                  >
+                                    <tspan>
+                                      $180k
+                                    </tspan>
+                                  </text>
+                                </g>
+                                <g
+                                  class="recharts-layer recharts-cartesian-axis-tick"
+                                >
+                                  <text
+                                    class="recharts-text recharts-cartesian-axis-tick-value"
+                                    fill="#666"
+                                    height="162"
+                                    orientation="left"
+                                    stroke="none"
+                                    text-anchor="end"
+                                    width="48"
+                                  >
+                                    <tspan>
+                                      $270k
+                                    </tspan>
+                                  </text>
+                                </g>
+                              </g>
+                            </g>
+                            <g
+                              class="recharts-layer recharts-line"
+                            >
+                              <path
+                                class="recharts-curve recharts-line-curve"
+                                d="M52,62C80.5,60.95,109,59.9,137.5,58.4C166,56.9,194.5,54.7,223,53C251.5,51.3,280,50.1,308.5,48.2C337,46.3,365.5,43.5,394,41.6C422.5,39.7,451,38.8,479.5,36.8C508,34.8,536.5,32,565,29.6C593.5,27.2,622,24.8,650.5,22.4C679,20,707.5,17.6,736,15.2"
+                                fill="none"
+                                height="162"
+                                name="North America"
+                                stroke="var(--chart-1)"
+                                stroke-width="2"
+                                width="684"
+                              />
+                              <g
+                                class="recharts-layer"
+                              />
+                            </g>
+                            <g
+                              class="recharts-layer recharts-line"
+                            >
+                              <path
+                                class="recharts-curve recharts-line-curve"
+                                d="M52,111.8C80.5,111.05,109,110.3,137.5,109.4C166,108.5,194.5,107.3,223,106.4C251.5,105.5,280,105.1,308.5,104C337,102.9,365.5,101.1,394,99.8C422.5,98.5,451,97.6,479.5,96.2C508,94.8,536.5,93,565,91.4C593.5,89.8,622,88.1,650.5,86.6C679,85.1,707.5,83.75,736,82.4"
+                                fill="none"
+                                height="162"
+                                name="Europe"
+                                stroke="var(--chart-2)"
+                                stroke-width="2"
+                                width="684"
+                              />
+                              <g
+                                class="recharts-layer"
+                              />
+                            </g>
+                            <g
+                              class="recharts-layer recharts-line"
+                            >
+                              <path
+                                class="recharts-curve recharts-line-curve"
+                                d="M52,151.4C80.5,150.85,109,150.3,137.5,149.6C166,148.9,194.5,148,223,147.2C251.5,146.4,280,145.7,308.5,144.8C337,143.9,365.5,142.8,394,141.8C422.5,140.8,451,139.9,479.5,138.8C508,137.7,536.5,136.4,565,135.2C593.5,134,622,132.9,650.5,131.6C679,130.3,707.5,128.85,736,127.4"
+                                fill="none"
+                                height="162"
+                                name="Asia Pacific"
+                                stroke="var(--chart-3)"
+                                stroke-width="2"
+                                width="684"
+                              />
+                              <g
+                                class="recharts-layer"
+                              />
+                            </g>
+                          </svg>
+                          <div
+                            class="recharts-tooltip-wrapper"
+                            style="visibility: hidden; pointer-events: none; position: absolute; top: 0px; left: 0px"
+                            tabindex="-1"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </figure>
+                </div>
+                <div>
+                  <div
+                    class="flex gap-2 px-4 pt-1 pb-4"
+                  >
+                    <svg
+                      aria-hidden="true"
+                      class="lucide lucide-trending-up mt-0.5 size-3.5 shrink-0 text-panel-muted"
+                      fill="none"
+                      height="24"
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      viewBox="0 0 24 24"
+                      width="24"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M16 7h6v6"
+                      />
+                      <path
+                        d="m22 7-8.5 8.5-5-5L2 17"
+                      />
+                    </svg>
+                    <p
+                      class="line-clamp-2 type-body text-panel-muted"
+                    >
+                      Asia Pacific more than doubled this year, from $31k to $71k. Total MRR reached $475k in September, up 54% since January.
+                    </p>
+                  </div>
+                </div>
+              </section>
+            </div>
+          </div>
+        </div>
+      </div>
+      <p
+        aria-live="polite"
+        class="sr-only"
+      />
+    </div>
+    <footer
+      class="flex h-9 shrink-0 items-center justify-between gap-3 border-t border-panel-border px-4 type-meta text-panel-muted"
+    >
+      <div
+        class="flex min-w-0 items-center gap-2"
+      >
+        <span
+          aria-hidden="true"
+          class="size-1.5 shrink-0 rounded-full bg-panel-muted opacity-60"
+        />
+        <span
+          class="min-w-0 truncate"
+          data-slot="swap-text"
+        >
+          <span
+            class="inline-block"
+          >
+            analytics
+          </span>
+        </span>
+      </div>
+      <div
+        class="flex shrink-0 items-center gap-3"
+      >
+        <div
+          class="flex items-center gap-2"
+        >
+          <span
+            class="text-foreground"
+            data-slot="swap-text"
+          >
+            <span
+              class="inline-block"
+            >
+              Refine
+            </span>
+          </span>
+          <kbd
+            aria-label="↩"
+            class="inline-flex items-center gap-0.5"
+            data-slot="kbd-group"
+          >
+            <kbd
+              class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+              data-slot="kbd"
+            >
+              ↩
+            </kbd>
+          </kbd>
+        </div>
+        <div
+          class="flex items-center gap-2 border-l border-panel-border pl-3"
+        >
+          <span>
+            New question
+          </span>
+          <kbd
+            aria-label="⌘ ↩"
+            class="inline-flex items-center gap-0.5"
+            data-slot="kbd-group"
+          >
+            <kbd
+              class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+              data-slot="kbd"
+            >
+              ⌘
+            </kbd>
+            <kbd
+              class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+              data-slot="kbd"
+            >
+              ↩
+            </kbd>
+          </kbd>
+        </div>
+        <div
+          class="flex items-center gap-2 border-l border-panel-border pl-3"
+        >
+          <span>
+            Actions
+          </span>
+          <kbd
+            aria-label="⌘ K"
+            class="inline-flex items-center gap-0.5"
+            data-slot="kbd-group"
+          >
+            <kbd
+              class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+              data-slot="kbd"
+            >
+              ⌘
+            </kbd>
+            <kbd
+              class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+              data-slot="kbd"
+            >
+              K
+            </kbd>
+          </kbd>
+        </div>
+        <div
+          class="flex items-center gap-2 border-l border-panel-border pl-3"
+        >
+          <span>
+            Save
+          </span>
+          <kbd
+            aria-label="⌘ S"
+            class="inline-flex items-center gap-0.5"
+            data-slot="kbd-group"
+          >
+            <kbd
+              class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+              data-slot="kbd"
+            >
+              ⌘
+            </kbd>
+            <kbd
+              class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+              data-slot="kbd"
+            >
+              S
+            </kbd>
+          </kbd>
+        </div>
+      </div>
+    </footer>
+  </div>
+</div>
+`;
+
+exports[`askView designed states > matches the snapshot for the table view 1`] = `
+<div
+  data-testid="ask-harness"
+  style="width: 760px"
+>
+  <div
+    class="flex min-h-0 flex-col"
+  >
+    <div
+      class="relative z-20 flex h-14 shrink-0 items-center gap-2.5 px-4"
+    >
+      <span
+        aria-label="Active connection: analytics"
+        class="relative flex h-8 max-w-56 shrink-0 items-center pr-2.5 pl-1"
+        data-tone="active"
+        role="img"
+      >
+        <span
+          class="absolute inset-0 rounded-[9px] bg-row-hover"
+        />
+        <span
+          class="relative flex min-w-0 items-center gap-3"
+        >
+          <span
+            aria-hidden="true"
+            class="grid size-6 place-items-center rounded-[7px] text-[13px] leading-none bg-row-hover"
+          >
+            🐘
+          </span>
+          <span
+            class="truncate type-body text-foreground"
+          >
+            analytics
+          </span>
+        </span>
+      </span>
+      <div
+        class="flex min-w-0 flex-1 items-center"
+      >
+        <div
+          class="relative flex min-w-0 flex-1 items-center"
+        >
+          <input
+            aria-label="Ask a question"
+            aria-placeholder="Refine — by month, only Europe, as a table…"
+            autocomplete="off"
+            class="min-w-0 flex-1 bg-transparent type-input text-foreground outline-none placeholder:text-panel-muted placeholder:opacity-80 focus-visible:outline-none"
+            spellcheck="false"
+            type="text"
+            value=""
+          />
+          <div
+            aria-hidden="true"
+            class="pointer-events-none absolute inset-0 flex items-center overflow-hidden type-input"
+          >
+            <span
+              class="truncate text-panel-muted opacity-80"
+              data-slot="swap-text"
+            >
+              <span
+                class="inline-block"
+              >
+                Refine — by month, only Europe, as a table…
+              </span>
+            </span>
+          </div>
+        </div>
+      </div>
+      <button
+        aria-label="Run"
+        class="grid size-7 shrink-0 place-items-center bg-row-hover text-panel-muted hover:text-foreground"
+        style="border-radius: 8px"
+        tabindex="0"
+        type="button"
+      >
+        <span
+          class="grid place-items-center"
+        >
+          <svg
+            aria-hidden="true"
+            class="lucide lucide-corner-down-left size-3.5"
+            fill="none"
+            height="24"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M20 4v7a4 4 0 0 1-4 4H4"
+            />
+            <path
+              d="m9 10-5 5 5 5"
+            />
+          </svg>
+        </span>
+      </button>
+    </div>
+    <div
+      class="relative flex min-h-0 flex-1 flex-col overflow-y-auto border-t border-panel-border"
+      style="min-height: 0px"
+    >
+      <div
+        class="flex h-9 shrink-0 items-center gap-2 px-4"
+      >
+        <svg
+          aria-hidden="true"
+          class="lucide lucide-database size-3.5 shrink-0 text-panel-muted"
+          fill="none"
+          height="24"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+          width="24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <ellipse
+            cx="12"
+            cy="5"
+            rx="9"
+            ry="3"
+          />
+          <path
+            d="M3 5V19A9 3 0 0 0 21 19V5"
+          />
+          <path
+            d="M3 12A9 3 0 0 0 21 12"
+          />
+        </svg>
+        <h2
+          class="type-meta font-semibold text-foreground"
+        >
+          Generated SQL
+        </h2>
+        <p
+          class="flex min-w-0 items-center gap-1.5 truncate type-meta text-panel-muted tabular-nums"
+        >
+          <span
+            aria-hidden="true"
+          >
+            ·
+          </span>
+          <span
+            data-slot="swap-text"
+          >
+            <span
+              class="inline-block"
+            >
+              PostgreSQL
+            </span>
+          </span>
+          <span
+            aria-hidden="true"
+          >
+            ·
+          </span>
+          <span
+            data-slot="swap-text"
+          >
+            <span
+              class="inline-block"
+            >
+              27 rows
+            </span>
+          </span>
+          <span
+            aria-hidden="true"
+          >
+            ·
+          </span>
+          <span
+            data-slot="swap-text"
+          >
+            <span
+              class="inline-block"
+            >
+              386ms
+            </span>
+          </span>
+        </p>
+        <div
+          class="ml-auto flex items-center gap-0.5"
+        >
+          <span
+            class="grid size-5 place-items-center"
+          >
+            <span
+              class="grid place-items-center"
+            >
+              <svg
+                aria-label="Done"
+                class="size-3.5 text-success-ink"
+                fill="none"
+                role="img"
+                viewBox="0 0 16 16"
+              >
+                <path
+                  d="M3.5 8.5 6.5 11.5 12.5 4.5"
+                  pathLength="1"
+                  stroke="currentColor"
+                  stroke-dasharray="1 1"
+                  stroke-dashoffset="0"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="1.75"
+                />
+              </svg>
+            </span>
+          </span>
+          <button
+            aria-label="Copy SQL"
+            class="grid size-6 place-items-center rounded-[6px] text-panel-muted hover:bg-row-hover hover:text-foreground disabled:opacity-40"
+            tabindex="0"
+            type="button"
+          >
+            <span>
+              <svg
+                aria-hidden="true"
+                class="lucide lucide-copy size-3.5"
+                fill="none"
+                height="24"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+                width="24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <rect
+                  height="14"
+                  rx="2"
+                  ry="2"
+                  width="14"
+                  x="8"
+                  y="8"
+                />
+                <path
+                  d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"
+                />
+              </svg>
+            </span>
+          </button>
+          <span
+            aria-live="polite"
+            class="sr-only"
+          />
+          <button
+            aria-expanded="false"
+            aria-label="Show SQL"
+            class="grid size-6 place-items-center rounded-[6px] text-panel-muted hover:bg-row-hover hover:text-foreground disabled:opacity-40"
+            tabindex="0"
+            type="button"
+          >
+            <span
+              class="grid place-items-center"
+            >
+              <svg
+                aria-hidden="true"
+                class="lucide lucide-chevron-down size-3.5"
+                fill="none"
+                height="24"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+                width="24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="m6 9 6 6 6-6"
+                />
+              </svg>
+            </span>
+          </button>
+        </div>
+      </div>
+      <div>
+        <div>
+          <div
+            class="relative"
+          >
+            <div
+              aria-busy="false"
+              data-testid="answer-stage"
+            >
+              <section
+                aria-label="Monthly recurring revenue by region"
+                class="relative flex flex-col"
+              >
+                <div
+                  class="flex flex-wrap items-start justify-between gap-x-4 gap-y-2 px-4 pt-3 pb-3"
+                >
+                  <div
+                    class="flex min-w-[9rem] flex-1 flex-col gap-0.5"
+                  >
+                    <h3
+                      class="truncate type-title text-foreground"
+                    >
+                      <span
+                        data-slot="swap-text"
+                      >
+                        <span
+                          class="inline-block"
+                        >
+                          Monthly recurring revenue by region
+                        </span>
+                      </span>
+                    </h3>
+                    <p
+                      class="truncate type-meta text-panel-muted"
+                    >
+                      <span
+                        data-slot="swap-text"
+                      >
+                        <span
+                          class="inline-block"
+                        >
+                          Jan to Sep 2026 · $475k in September
+                        </span>
+                      </span>
+                    </p>
+                  </div>
+                  <div
+                    class="flex shrink-0 items-center gap-1"
+                  >
+                    <div
+                      aria-label="Chart view"
+                      class="flex rounded-[9px] bg-row-hover p-0.5"
+                      role="radiogroup"
+                    >
+                      <button
+                        aria-checked="false"
+                        class="relative h-7 rounded-[7px] px-3 type-meta text-panel-muted"
+                        data-segment="bar"
+                        role="radio"
+                        tabindex="-1"
+                        type="button"
+                      >
+                        <span
+                          class="relative"
+                        >
+                          Bar
+                        </span>
+                      </button>
+                      <button
+                        aria-checked="false"
+                        class="relative h-7 rounded-[7px] px-3 type-meta text-panel-muted"
+                        data-segment="line"
+                        role="radio"
+                        tabindex="-1"
+                        type="button"
+                      >
+                        <span
+                          class="relative"
+                        >
+                          Line
+                        </span>
+                      </button>
+                      <button
+                        aria-checked="true"
+                        class="relative h-7 rounded-[7px] px-3 type-meta text-foreground"
+                        data-segment="table"
+                        role="radio"
+                        tabindex="0"
+                        type="button"
+                      >
+                        <span
+                          class="absolute inset-0 rounded-[7px] bg-control-thumb shadow-sm"
+                        />
+                        <span
+                          class="relative"
+                        >
+                          Table
+                        </span>
+                      </button>
+                    </div>
+                    <button
+                      aria-expanded="false"
+                      aria-haspopup="menu"
+                      aria-label="Actions"
+                      class="grid size-6 place-items-center rounded-[6px] text-panel-muted hover:bg-row-hover hover:text-foreground aria-expanded:bg-row-active aria-expanded:text-foreground"
+                      id="ask-card-actions"
+                      tabindex="0"
+                      type="button"
+                    >
+                      <svg
+                        aria-hidden="true"
+                        class="lucide lucide-ellipsis size-3.5"
+                        fill="none"
+                        height="24"
+                        stroke="currentColor"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        viewBox="0 0 24 24"
+                        width="24"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <circle
+                          cx="12"
+                          cy="12"
+                          r="1"
+                        />
+                        <circle
+                          cx="19"
+                          cy="12"
+                          r="1"
+                        />
+                        <circle
+                          cx="5"
+                          cy="12"
+                          r="1"
+                        />
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+                <div>
+                  <div
+                    class="px-2 pb-2"
+                  >
+                    <div
+                      class="max-h-[248px] overflow-auto rounded-[8px]"
+                    >
+                      <table
+                        class="w-full border-collapse type-meta tabular-nums"
+                      >
+                        <thead
+                          class="sticky top-0 bg-(--panel-solid)"
+                        >
+                          <tr>
+                            <th
+                              class="border-b border-panel-border px-2 py-1.5 font-medium text-panel-muted text-left"
+                              scope="col"
+                            >
+                              month
+                            </th>
+                            <th
+                              class="border-b border-panel-border px-2 py-1.5 font-medium text-panel-muted text-left"
+                              scope="col"
+                            >
+                              region
+                            </th>
+                            <th
+                              class="border-b border-panel-border px-2 py-1.5 font-medium text-panel-muted text-right"
+                              scope="col"
+                            >
+                              mrr
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr
+                            class="hover:bg-row-hover cursor-pointer outline-none focus-visible:bg-row-active active:opacity-85"
+                            tabindex="0"
+                            title="Refine with this row"
+                          >
+                            <td
+                              class="max-w-64 truncate px-2 py-1 text-foreground"
+                            >
+                              Jan 2026
+                            </td>
+                            <td
+                              class="max-w-64 truncate px-2 py-1 text-foreground"
+                            >
+                              North America
+                            </td>
+                            <td
+                              class="max-w-64 truncate px-2 py-1 text-foreground text-right"
+                            >
+                              $180k
+                            </td>
+                          </tr>
+                          <tr
+                            class="hover:bg-row-hover cursor-pointer outline-none focus-visible:bg-row-active active:opacity-85"
+                            tabindex="0"
+                            title="Refine with this row"
+                          >
+                            <td
+                              class="max-w-64 truncate px-2 py-1 text-foreground"
+                            >
+                              Jan 2026
+                            </td>
+                            <td
+                              class="max-w-64 truncate px-2 py-1 text-foreground"
+                            >
+                              Europe
+                            </td>
+                            <td
+                              class="max-w-64 truncate px-2 py-1 text-foreground text-right"
+                            >
+                              $97k
+                            </td>
+                          </tr>
+                          <tr
+                            class="hover:bg-row-hover cursor-pointer outline-none focus-visible:bg-row-active active:opacity-85"
+                            tabindex="0"
+                            title="Refine with this row"
+                          >
+                            <td
+                              class="max-w-64 truncate px-2 py-1 text-foreground"
+                            >
+                              Jan 2026
+                            </td>
+                            <td
+                              class="max-w-64 truncate px-2 py-1 text-foreground"
+                            >
+                              Asia Pacific
+                            </td>
+                            <td
+                              class="max-w-64 truncate px-2 py-1 text-foreground text-right"
+                            >
+                              $31k
+                            </td>
+                          </tr>
+                          <tr
+                            class="hover:bg-row-hover cursor-pointer outline-none focus-visible:bg-row-active active:opacity-85"
+                            tabindex="0"
+                            title="Refine with this row"
+                          >
+                            <td
+                              class="max-w-64 truncate px-2 py-1 text-foreground"
+                            >
+                              Feb 2026
+                            </td>
+                            <td
+                              class="max-w-64 truncate px-2 py-1 text-foreground"
+                            >
+                              North America
+                            </td>
+                            <td
+                              class="max-w-64 truncate px-2 py-1 text-foreground text-right"
+                            >
+                              $186k
+                            </td>
+                          </tr>
+                          <tr
+                            class="hover:bg-row-hover cursor-pointer outline-none focus-visible:bg-row-active active:opacity-85"
+                            tabindex="0"
+                            title="Refine with this row"
+                          >
+                            <td
+                              class="max-w-64 truncate px-2 py-1 text-foreground"
+                            >
+                              Feb 2026
+                            </td>
+                            <td
+                              class="max-w-64 truncate px-2 py-1 text-foreground"
+                            >
+                              Europe
+                            </td>
+                            <td
+                              class="max-w-64 truncate px-2 py-1 text-foreground text-right"
+                            >
+                              $101k
+                            </td>
+                          </tr>
+                          <tr
+                            class="hover:bg-row-hover cursor-pointer outline-none focus-visible:bg-row-active active:opacity-85"
+                            tabindex="0"
+                            title="Refine with this row"
+                          >
+                            <td
+                              class="max-w-64 truncate px-2 py-1 text-foreground"
+                            >
+                              Feb 2026
+                            </td>
+                            <td
+                              class="max-w-64 truncate px-2 py-1 text-foreground"
+                            >
+                              Asia Pacific
+                            </td>
+                            <td
+                              class="max-w-64 truncate px-2 py-1 text-foreground text-right"
+                            >
+                              $34k
+                            </td>
+                          </tr>
+                          <tr
+                            class="hover:bg-row-hover cursor-pointer outline-none focus-visible:bg-row-active active:opacity-85"
+                            tabindex="0"
+                            title="Refine with this row"
+                          >
+                            <td
+                              class="max-w-64 truncate px-2 py-1 text-foreground"
+                            >
+                              Mar 2026
+                            </td>
+                            <td
+                              class="max-w-64 truncate px-2 py-1 text-foreground"
+                            >
+                              North America
+                            </td>
+                            <td
+                              class="max-w-64 truncate px-2 py-1 text-foreground text-right"
+                            >
+                              $195k
+                            </td>
+                          </tr>
+                          <tr
+                            class="hover:bg-row-hover cursor-pointer outline-none focus-visible:bg-row-active active:opacity-85"
+                            tabindex="0"
+                            title="Refine with this row"
+                          >
+                            <td
+                              class="max-w-64 truncate px-2 py-1 text-foreground"
+                            >
+                              Mar 2026
+                            </td>
+                            <td
+                              class="max-w-64 truncate px-2 py-1 text-foreground"
+                            >
+                              Europe
+                            </td>
+                            <td
+                              class="max-w-64 truncate px-2 py-1 text-foreground text-right"
+                            >
+                              $106k
+                            </td>
+                          </tr>
+                          <tr
+                            class="hover:bg-row-hover cursor-pointer outline-none focus-visible:bg-row-active active:opacity-85"
+                            tabindex="0"
+                            title="Refine with this row"
+                          >
+                            <td
+                              class="max-w-64 truncate px-2 py-1 text-foreground"
+                            >
+                              Mar 2026
+                            </td>
+                            <td
+                              class="max-w-64 truncate px-2 py-1 text-foreground"
+                            >
+                              Asia Pacific
+                            </td>
+                            <td
+                              class="max-w-64 truncate px-2 py-1 text-foreground text-right"
+                            >
+                              $38k
+                            </td>
+                          </tr>
+                          <tr
+                            class="hover:bg-row-hover cursor-pointer outline-none focus-visible:bg-row-active active:opacity-85"
+                            tabindex="0"
+                            title="Refine with this row"
+                          >
+                            <td
+                              class="max-w-64 truncate px-2 py-1 text-foreground"
+                            >
+                              Apr 2026
+                            </td>
+                            <td
+                              class="max-w-64 truncate px-2 py-1 text-foreground"
+                            >
+                              North America
+                            </td>
+                            <td
+                              class="max-w-64 truncate px-2 py-1 text-foreground text-right"
+                            >
+                              $203k
+                            </td>
+                          </tr>
+                          <tr
+                            class="hover:bg-row-hover cursor-pointer outline-none focus-visible:bg-row-active active:opacity-85"
+                            tabindex="0"
+                            title="Refine with this row"
+                          >
+                            <td
+                              class="max-w-64 truncate px-2 py-1 text-foreground"
+                            >
+                              Apr 2026
+                            </td>
+                            <td
+                              class="max-w-64 truncate px-2 py-1 text-foreground"
+                            >
+                              Europe
+                            </td>
+                            <td
+                              class="max-w-64 truncate px-2 py-1 text-foreground text-right"
+                            >
+                              $110k
+                            </td>
+                          </tr>
+                          <tr
+                            class="hover:bg-row-hover cursor-pointer outline-none focus-visible:bg-row-active active:opacity-85"
+                            tabindex="0"
+                            title="Refine with this row"
+                          >
+                            <td
+                              class="max-w-64 truncate px-2 py-1 text-foreground"
+                            >
+                              Apr 2026
+                            </td>
+                            <td
+                              class="max-w-64 truncate px-2 py-1 text-foreground"
+                            >
+                              Asia Pacific
+                            </td>
+                            <td
+                              class="max-w-64 truncate px-2 py-1 text-foreground text-right"
+                            >
+                              $42k
+                            </td>
+                          </tr>
+                          <tr
+                            class="hover:bg-row-hover cursor-pointer outline-none focus-visible:bg-row-active active:opacity-85"
+                            tabindex="0"
+                            title="Refine with this row"
+                          >
+                            <td
+                              class="max-w-64 truncate px-2 py-1 text-foreground"
+                            >
+                              May 2026
+                            </td>
+                            <td
+                              class="max-w-64 truncate px-2 py-1 text-foreground"
+                            >
+                              North America
+                            </td>
+                            <td
+                              class="max-w-64 truncate px-2 py-1 text-foreground text-right"
+                            >
+                              $214k
+                            </td>
+                          </tr>
+                          <tr
+                            class="hover:bg-row-hover cursor-pointer outline-none focus-visible:bg-row-active active:opacity-85"
+                            tabindex="0"
+                            title="Refine with this row"
+                          >
+                            <td
+                              class="max-w-64 truncate px-2 py-1 text-foreground"
+                            >
+                              May 2026
+                            </td>
+                            <td
+                              class="max-w-64 truncate px-2 py-1 text-foreground"
+                            >
+                              Europe
+                            </td>
+                            <td
+                              class="max-w-64 truncate px-2 py-1 text-foreground text-right"
+                            >
+                              $117k
+                            </td>
+                          </tr>
+                          <tr
+                            class="hover:bg-row-hover cursor-pointer outline-none focus-visible:bg-row-active active:opacity-85"
+                            tabindex="0"
+                            title="Refine with this row"
+                          >
+                            <td
+                              class="max-w-64 truncate px-2 py-1 text-foreground"
+                            >
+                              May 2026
+                            </td>
+                            <td
+                              class="max-w-64 truncate px-2 py-1 text-foreground"
+                            >
+                              Asia Pacific
+                            </td>
+                            <td
+                              class="max-w-64 truncate px-2 py-1 text-foreground text-right"
+                            >
+                              $47k
+                            </td>
+                          </tr>
+                          <tr
+                            class="hover:bg-row-hover cursor-pointer outline-none focus-visible:bg-row-active active:opacity-85"
+                            tabindex="0"
+                            title="Refine with this row"
+                          >
+                            <td
+                              class="max-w-64 truncate px-2 py-1 text-foreground"
+                            >
+                              Jun 2026
+                            </td>
+                            <td
+                              class="max-w-64 truncate px-2 py-1 text-foreground"
+                            >
+                              North America
+                            </td>
+                            <td
+                              class="max-w-64 truncate px-2 py-1 text-foreground text-right"
+                            >
+                              $222k
+                            </td>
+                          </tr>
+                          <tr
+                            class="hover:bg-row-hover cursor-pointer outline-none focus-visible:bg-row-active active:opacity-85"
+                            tabindex="0"
+                            title="Refine with this row"
+                          >
+                            <td
+                              class="max-w-64 truncate px-2 py-1 text-foreground"
+                            >
+                              Jun 2026
+                            </td>
+                            <td
+                              class="max-w-64 truncate px-2 py-1 text-foreground"
+                            >
+                              Europe
+                            </td>
+                            <td
+                              class="max-w-64 truncate px-2 py-1 text-foreground text-right"
+                            >
+                              $123k
+                            </td>
+                          </tr>
+                          <tr
+                            class="hover:bg-row-hover cursor-pointer outline-none focus-visible:bg-row-active active:opacity-85"
+                            tabindex="0"
+                            title="Refine with this row"
+                          >
+                            <td
+                              class="max-w-64 truncate px-2 py-1 text-foreground"
+                            >
+                              Jun 2026
+                            </td>
+                            <td
+                              class="max-w-64 truncate px-2 py-1 text-foreground"
+                            >
+                              Asia Pacific
+                            </td>
+                            <td
+                              class="max-w-64 truncate px-2 py-1 text-foreground text-right"
+                            >
+                              $52k
+                            </td>
+                          </tr>
+                          <tr
+                            class="hover:bg-row-hover cursor-pointer outline-none focus-visible:bg-row-active active:opacity-85"
+                            tabindex="0"
+                            title="Refine with this row"
+                          >
+                            <td
+                              class="max-w-64 truncate px-2 py-1 text-foreground"
+                            >
+                              Jul 2026
+                            </td>
+                            <td
+                              class="max-w-64 truncate px-2 py-1 text-foreground"
+                            >
+                              North America
+                            </td>
+                            <td
+                              class="max-w-64 truncate px-2 py-1 text-foreground text-right"
+                            >
+                              $234k
+                            </td>
+                          </tr>
+                          <tr
+                            class="hover:bg-row-hover cursor-pointer outline-none focus-visible:bg-row-active active:opacity-85"
+                            tabindex="0"
+                            title="Refine with this row"
+                          >
+                            <td
+                              class="max-w-64 truncate px-2 py-1 text-foreground"
+                            >
+                              Jul 2026
+                            </td>
+                            <td
+                              class="max-w-64 truncate px-2 py-1 text-foreground"
+                            >
+                              Europe
+                            </td>
+                            <td
+                              class="max-w-64 truncate px-2 py-1 text-foreground text-right"
+                            >
+                              $131k
+                            </td>
+                          </tr>
+                          <tr
+                            class="hover:bg-row-hover cursor-pointer outline-none focus-visible:bg-row-active active:opacity-85"
+                            tabindex="0"
+                            title="Refine with this row"
+                          >
+                            <td
+                              class="max-w-64 truncate px-2 py-1 text-foreground"
+                            >
+                              Jul 2026
+                            </td>
+                            <td
+                              class="max-w-64 truncate px-2 py-1 text-foreground"
+                            >
+                              Asia Pacific
+                            </td>
+                            <td
+                              class="max-w-64 truncate px-2 py-1 text-foreground text-right"
+                            >
+                              $58k
+                            </td>
+                          </tr>
+                          <tr
+                            class="hover:bg-row-hover cursor-pointer outline-none focus-visible:bg-row-active active:opacity-85"
+                            tabindex="0"
+                            title="Refine with this row"
+                          >
+                            <td
+                              class="max-w-64 truncate px-2 py-1 text-foreground"
+                            >
+                              Aug 2026
+                            </td>
+                            <td
+                              class="max-w-64 truncate px-2 py-1 text-foreground"
+                            >
+                              North America
+                            </td>
+                            <td
+                              class="max-w-64 truncate px-2 py-1 text-foreground text-right"
+                            >
+                              $246k
+                            </td>
+                          </tr>
+                          <tr
+                            class="hover:bg-row-hover cursor-pointer outline-none focus-visible:bg-row-active active:opacity-85"
+                            tabindex="0"
+                            title="Refine with this row"
+                          >
+                            <td
+                              class="max-w-64 truncate px-2 py-1 text-foreground"
+                            >
+                              Aug 2026
+                            </td>
+                            <td
+                              class="max-w-64 truncate px-2 py-1 text-foreground"
+                            >
+                              Europe
+                            </td>
+                            <td
+                              class="max-w-64 truncate px-2 py-1 text-foreground text-right"
+                            >
+                              $139k
+                            </td>
+                          </tr>
+                          <tr
+                            class="hover:bg-row-hover cursor-pointer outline-none focus-visible:bg-row-active active:opacity-85"
+                            tabindex="0"
+                            title="Refine with this row"
+                          >
+                            <td
+                              class="max-w-64 truncate px-2 py-1 text-foreground"
+                            >
+                              Aug 2026
+                            </td>
+                            <td
+                              class="max-w-64 truncate px-2 py-1 text-foreground"
+                            >
+                              Asia Pacific
+                            </td>
+                            <td
+                              class="max-w-64 truncate px-2 py-1 text-foreground text-right"
+                            >
+                              $64k
+                            </td>
+                          </tr>
+                          <tr
+                            class="hover:bg-row-hover cursor-pointer outline-none focus-visible:bg-row-active active:opacity-85"
+                            tabindex="0"
+                            title="Refine with this row"
+                          >
+                            <td
+                              class="max-w-64 truncate px-2 py-1 text-foreground"
+                            >
+                              Sep 2026
+                            </td>
+                            <td
+                              class="max-w-64 truncate px-2 py-1 text-foreground"
+                            >
+                              North America
+                            </td>
+                            <td
+                              class="max-w-64 truncate px-2 py-1 text-foreground text-right"
+                            >
+                              $258k
+                            </td>
+                          </tr>
+                          <tr
+                            class="hover:bg-row-hover cursor-pointer outline-none focus-visible:bg-row-active active:opacity-85"
+                            tabindex="0"
+                            title="Refine with this row"
+                          >
+                            <td
+                              class="max-w-64 truncate px-2 py-1 text-foreground"
+                            >
+                              Sep 2026
+                            </td>
+                            <td
+                              class="max-w-64 truncate px-2 py-1 text-foreground"
+                            >
+                              Europe
+                            </td>
+                            <td
+                              class="max-w-64 truncate px-2 py-1 text-foreground text-right"
+                            >
+                              $146k
+                            </td>
+                          </tr>
+                          <tr
+                            class="hover:bg-row-hover cursor-pointer outline-none focus-visible:bg-row-active active:opacity-85"
+                            tabindex="0"
+                            title="Refine with this row"
+                          >
+                            <td
+                              class="max-w-64 truncate px-2 py-1 text-foreground"
+                            >
+                              Sep 2026
+                            </td>
+                            <td
+                              class="max-w-64 truncate px-2 py-1 text-foreground"
+                            >
+                              Asia Pacific
+                            </td>
+                            <td
+                              class="max-w-64 truncate px-2 py-1 text-foreground text-right"
+                            >
+                              $71k
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <div
+                    class="flex gap-2 px-4 pt-1 pb-4"
+                  >
+                    <svg
+                      aria-hidden="true"
+                      class="lucide lucide-dot mt-0.5 size-3.5 shrink-0 text-panel-muted"
+                      fill="none"
+                      height="24"
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      viewBox="0 0 24 24"
+                      width="24"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <circle
+                        cx="12.1"
+                        cy="12.1"
+                        r="1"
+                      />
+                    </svg>
+                    <p
+                      class="line-clamp-2 type-body text-panel-muted"
+                    >
+                      Asia Pacific more than doubled this year, from $31k to $71k. Total MRR reached $475k in September, up 54% since January.
+                    </p>
+                  </div>
+                </div>
+              </section>
+            </div>
+          </div>
+        </div>
+      </div>
+      <p
+        aria-live="polite"
+        class="sr-only"
+      />
+    </div>
+    <footer
+      class="flex h-9 shrink-0 items-center justify-between gap-3 border-t border-panel-border px-4 type-meta text-panel-muted"
+    >
+      <div
+        class="flex min-w-0 items-center gap-2"
+      >
+        <span
+          aria-hidden="true"
+          class="size-1.5 shrink-0 rounded-full bg-panel-muted opacity-60"
+        />
+        <span
+          class="min-w-0 truncate"
+          data-slot="swap-text"
+        >
+          <span
+            class="inline-block"
+          >
+            analytics
+          </span>
+        </span>
+      </div>
+      <div
+        class="flex shrink-0 items-center gap-3"
+      >
+        <div
+          class="flex items-center gap-2"
+        >
+          <span
+            class="text-foreground"
+            data-slot="swap-text"
+          >
+            <span
+              class="inline-block"
+            >
+              Refine
+            </span>
+          </span>
+          <kbd
+            aria-label="↩"
+            class="inline-flex items-center gap-0.5"
+            data-slot="kbd-group"
+          >
+            <kbd
+              class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+              data-slot="kbd"
+            >
+              ↩
+            </kbd>
+          </kbd>
+        </div>
+        <div
+          class="flex items-center gap-2 border-l border-panel-border pl-3"
+        >
+          <span>
+            New question
+          </span>
+          <kbd
+            aria-label="⌘ ↩"
+            class="inline-flex items-center gap-0.5"
+            data-slot="kbd-group"
+          >
+            <kbd
+              class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+              data-slot="kbd"
+            >
+              ⌘
+            </kbd>
+            <kbd
+              class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+              data-slot="kbd"
+            >
+              ↩
+            </kbd>
+          </kbd>
+        </div>
+        <div
+          class="flex items-center gap-2 border-l border-panel-border pl-3"
+        >
+          <span>
+            Actions
+          </span>
+          <kbd
+            aria-label="⌘ K"
+            class="inline-flex items-center gap-0.5"
+            data-slot="kbd-group"
+          >
+            <kbd
+              class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+              data-slot="kbd"
+            >
+              ⌘
+            </kbd>
+            <kbd
+              class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+              data-slot="kbd"
+            >
+              K
+            </kbd>
+          </kbd>
+        </div>
+        <div
+          class="flex items-center gap-2 border-l border-panel-border pl-3"
+        >
+          <span>
+            Save
+          </span>
+          <kbd
+            aria-label="⌘ S"
+            class="inline-flex items-center gap-0.5"
+            data-slot="kbd-group"
+          >
+            <kbd
+              class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+              data-slot="kbd"
+            >
+              ⌘
+            </kbd>
+            <kbd
+              class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+              data-slot="kbd"
+            >
+              S
+            </kbd>
+          </kbd>
+        </div>
+      </div>
+    </footer>
+  </div>
+</div>
+`;
+
+exports[`askView designed states > matches the snapshot for writing SQL 1`] = `
+<div
+  data-testid="ask-harness"
+  style="width: 760px"
+>
+  <div
+    class="flex min-h-0 flex-col"
+  >
+    <div
+      class="relative z-20 flex h-14 shrink-0 items-center gap-2.5 px-4"
+    >
+      <span
+        aria-label="Active connection: analytics"
+        class="relative flex h-8 max-w-56 shrink-0 items-center pr-2.5 pl-1"
+        data-tone="active"
+        role="img"
+      >
+        <span
+          class="absolute inset-0 rounded-[9px] bg-row-hover"
+        />
+        <span
+          class="relative flex min-w-0 items-center gap-3"
+        >
+          <span
+            aria-hidden="true"
+            class="grid size-6 place-items-center rounded-[7px] text-[13px] leading-none bg-row-hover"
+          >
+            🐘
+          </span>
+          <span
+            class="truncate type-body text-foreground"
+          >
+            analytics
+          </span>
+        </span>
+      </span>
+      <div
+        class="flex min-w-0 flex-1 items-center"
+      >
+        <div
+          class="relative flex min-w-0 flex-1 items-center"
+        >
+          <input
+            aria-label="Ask a question"
+            aria-placeholder="Ask about your data…"
+            autocomplete="off"
+            class="min-w-0 flex-1 bg-transparent type-input text-foreground outline-none placeholder:text-panel-muted placeholder:opacity-80 focus-visible:outline-none"
+            spellcheck="false"
+            type="text"
+            value="Revenue by region"
+          />
+          <div
+            aria-hidden="true"
+            class="pointer-events-none absolute inset-0 flex items-center overflow-hidden type-input"
+          />
+        </div>
+      </div>
+      <button
+        aria-label="Stop"
+        class="grid size-7 shrink-0 place-items-center bg-row-hover text-panel-muted hover:text-foreground"
+        style="border-radius: 6px"
+        tabindex="0"
+        type="button"
+      >
+        <span
+          class="grid place-items-center"
+        >
+          <svg
+            aria-hidden="true"
+            class="lucide lucide-square size-3 fill-current"
+            fill="none"
+            height="24"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <rect
+              height="18"
+              rx="2"
+              width="18"
+              x="3"
+              y="3"
+            />
+          </svg>
+        </span>
+      </button>
+    </div>
+    <div
+      class="relative flex min-h-0 flex-1 flex-col overflow-y-auto border-t border-panel-border"
+      style="min-height: 0px"
+    >
+      <div
+        class="flex h-9 shrink-0 items-center gap-2 px-4"
+      >
+        <svg
+          aria-hidden="true"
+          class="lucide lucide-database size-3.5 shrink-0 text-panel-muted"
+          fill="none"
+          height="24"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+          width="24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <ellipse
+            cx="12"
+            cy="5"
+            rx="9"
+            ry="3"
+          />
+          <path
+            d="M3 5V19A9 3 0 0 0 21 19V5"
+          />
+          <path
+            d="M3 12A9 3 0 0 0 21 12"
+          />
+        </svg>
+        <h2
+          class="type-meta font-semibold text-foreground"
+        >
+          Generated SQL
+        </h2>
+        <p
+          class="flex min-w-0 items-center gap-1.5 truncate type-meta text-panel-muted tabular-nums"
+        >
+          <span
+            aria-hidden="true"
+          >
+            ·
+          </span>
+          <span
+            data-slot="swap-text"
+          >
+            <span
+              class="inline-block"
+            >
+              PostgreSQL
+            </span>
+          </span>
+          <span
+            aria-hidden="true"
+          >
+            ·
+          </span>
+          <span
+            data-slot="swap-text"
+          >
+            <span
+              class="inline-block"
+            >
+              analytics
+            </span>
+          </span>
+        </p>
+        <div
+          class="ml-auto flex items-center gap-0.5"
+        >
+          <span
+            class="grid size-5 place-items-center"
+          >
+            <span
+              class="grid place-items-center"
+            >
+              <span
+                aria-label="Working"
+                class="block size-1.5 rounded-full bg-panel-muted"
+                role="img"
+              />
+            </span>
+          </span>
+          <button
+            aria-label="Copy SQL"
+            class="grid size-6 place-items-center rounded-[6px] text-panel-muted hover:bg-row-hover hover:text-foreground disabled:opacity-40"
+            tabindex="0"
+            type="button"
+          >
+            <span>
+              <svg
+                aria-hidden="true"
+                class="lucide lucide-copy size-3.5"
+                fill="none"
+                height="24"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+                width="24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <rect
+                  height="14"
+                  rx="2"
+                  ry="2"
+                  width="14"
+                  x="8"
+                  y="8"
+                />
+                <path
+                  d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"
+                />
+              </svg>
+            </span>
+          </button>
+          <span
+            aria-live="polite"
+            class="sr-only"
+          />
+          <button
+            aria-expanded="true"
+            aria-label="Hide SQL"
+            class="grid size-6 place-items-center rounded-[6px] text-panel-muted hover:bg-row-hover hover:text-foreground disabled:opacity-40"
+            tabindex="0"
+            type="button"
+          >
+            <span
+              class="grid place-items-center"
+            >
+              <svg
+                aria-hidden="true"
+                class="lucide lucide-chevron-down size-3.5"
+                fill="none"
+                height="24"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+                width="24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="m6 9 6 6 6-6"
+                />
+              </svg>
+            </span>
+          </button>
+        </div>
+      </div>
+      <div>
+        <div
+          aria-label="Generated SQL"
+          class="max-h-[220px] overflow-y-auto px-2 py-2 font-mono text-[12px] leading-[19px] outline-none focus-visible:ring-2 focus-visible:ring-ring/60 h-[220px]"
+          data-state="streaming"
+          role="region"
+          tabindex="0"
+        >
+          <div
+            class="relative flex"
+          >
+            <span
+              aria-hidden="true"
+              class="w-9 shrink-0 pr-3 text-right text-panel-muted tabular-nums select-none"
+            >
+              1
+            </span>
+            <code
+              class="min-w-0 flex-1 break-words whitespace-pre-wrap"
+            >
+              <span
+                class="text-panel-muted italic"
+              >
+                -- Monthly recurring revenue by region in 2026
+              </span>
+            </code>
+          </div>
+          <div
+            class="relative flex"
+          >
+            <span
+              aria-hidden="true"
+              class="w-9 shrink-0 pr-3 text-right text-panel-muted tabular-nums select-none"
+            >
+              2
+            </span>
+            <code
+              class="min-w-0 flex-1 break-words whitespace-pre-wrap"
+            >
+              <span
+                class="text-chart-1"
+              >
+                select
+              </span>
+              <span
+                class="text-foreground"
+              >
+                 
+              </span>
+              <span
+                class="text-chart-4"
+              >
+                date_trunc
+              </span>
+              <span
+                class="text-panel-muted"
+              >
+                (
+              </span>
+              <span
+                class="text-chart-5"
+              >
+                'month'
+              </span>
+              <span
+                class="text-panel-muted"
+              >
+                ,
+              </span>
+              <span
+                class="text-foreground"
+              >
+                 
+              </span>
+              <span
+                class="text-foreground"
+              >
+                s
+              </span>
+              <span
+                class="text-panel-muted"
+              >
+                .
+              </span>
+              <span
+                class="text-foreground"
+              >
+                billed_at
+              </span>
+              <span
+                class="text-panel-muted"
+              >
+                )
+              </span>
+              <span
+                class="text-panel-muted"
+              >
+                ::
+              </span>
+              <span
+                class="text-chart-1"
+              >
+                date
+              </span>
+              <span
+                class="text-foreground"
+              >
+                 
+              </span>
+              <span
+                class="text-chart-1"
+              >
+                as
+              </span>
+              <span
+                class="text-foreground"
+              >
+                 
+              </span>
+              <span
+                class="text-foreground"
+              >
+                month
+              </span>
+              <span
+                class="text-panel-muted"
+              >
+                ,
+              </span>
+            </code>
+          </div>
+          <div
+            class="relative flex"
+          >
+            <span
+              aria-hidden="true"
+              class="w-9 shrink-0 pr-3 text-right text-panel-muted tabular-nums select-none"
+            >
+              3
+            </span>
+            <code
+              class="min-w-0 flex-1 break-words whitespace-pre-wrap"
+            >
+              <span
+                class="text-foreground"
+              >
+                       
+              </span>
+              <span
+                class="text-foreground"
+              >
+                r
+              </span>
+              <span
+                class="text-panel-muted"
+              >
+                .
+              </span>
+              <span
+                class="text-foreground"
+              >
+                name
+              </span>
+              <span
+                class="text-foreground"
+              >
+                 
+              </span>
+              <span
+                class="text-chart-1"
+              >
+                as
+              </span>
+              <span
+                class="text-foreground"
+              >
+                 
+              </span>
+              <span
+                class="text-foreground"
+              >
+                region
+              </span>
+              <span
+                class="text-panel-muted"
+              >
+                ,
+              </span>
+            </code>
+          </div>
+          <div
+            class="relative flex"
+          >
+            <span
+              aria-hidden="true"
+              class="w-9 shrink-0 pr-3 text-right text-panel-muted tabular-nums select-none"
+            >
+              4
+            </span>
+            <code
+              class="min-w-0 flex-1 break-words whitespace-pre-wrap"
+            >
+              <span
+                class="text-foreground"
+              >
+                       
+              </span>
+              <span
+                class="text-chart-4"
+              >
+                sum
+              </span>
+              <span
+                class="text-panel-muted"
+              >
+                (
+              </span>
+              <span
+                class="text-foreground"
+              >
+                s
+              </span>
+              <span
+                aria-hidden="true"
+                class="ml-px inline-block h-[13px] w-[6px] translate-y-[2px] rounded-[1px] bg-chart-1"
+                data-testid="sql-caret"
+              />
+            </code>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div />
+        <div>
+          <div
+            class="flex items-start gap-2.5 px-4 pt-3 pb-2"
+          >
+            <span
+              aria-hidden="true"
+              class="grid h-4 w-3 place-items-center"
+            >
+              <span
+                class="block rounded-full size-1.5 bg-panel-muted"
+                data-testid="status-mark"
+              />
+            </span>
+            <div
+              aria-hidden="true"
+              class="flex min-w-0 flex-col gap-0.5"
+            >
+              <span
+                class="type-body text-foreground"
+                data-slot="swap-text"
+              >
+                <span
+                  class="inline-block"
+                >
+                  Writing SQL
+                </span>
+              </span>
+              <span
+                class="truncate type-meta text-panel-muted"
+                data-slot="swap-text"
+              >
+                <span
+                  class="inline-block"
+                >
+                  Reading the analytics schema
+                </span>
+              </span>
+            </div>
+            <span
+              aria-live="polite"
+              class="sr-only"
+              role="status"
+            >
+              Writing SQL. Reading the analytics schema
+            </span>
+          </div>
+          <div
+            aria-hidden="true"
+            class="px-4 pb-4"
+            data-testid="ask-skeleton"
+          >
+            <div
+              class="flex gap-3 pt-1 pb-3"
+            >
+              <span
+                class="h-3 rounded-full bg-foreground/[0.06]"
+                style="width: 56px"
+              />
+              <span
+                class="h-3 rounded-full bg-foreground/[0.06]"
+                style="width: 72px"
+              />
+              <span
+                class="h-3 rounded-full bg-foreground/[0.06]"
+                style="width: 48px"
+              />
+            </div>
+            <div
+              class="flex items-end gap-2 border-b border-foreground/[0.06]"
+              style="height: 200px"
+            >
+              <span
+                class="flex-1 rounded-t-[3px] bg-foreground/[0.06]"
+                style="height: 38%"
+              />
+              <span
+                class="flex-1 rounded-t-[3px] bg-foreground/[0.06]"
+                style="height: 52%"
+              />
+              <span
+                class="flex-1 rounded-t-[3px] bg-foreground/[0.06]"
+                style="height: 46%"
+              />
+              <span
+                class="flex-1 rounded-t-[3px] bg-foreground/[0.06]"
+                style="height: 61%"
+              />
+              <span
+                class="flex-1 rounded-t-[3px] bg-foreground/[0.06]"
+                style="height: 57%"
+              />
+              <span
+                class="flex-1 rounded-t-[3px] bg-foreground/[0.06]"
+                style="height: 70%"
+              />
+              <span
+                class="flex-1 rounded-t-[3px] bg-foreground/[0.06]"
+                style="height: 64%"
+              />
+              <span
+                class="flex-1 rounded-t-[3px] bg-foreground/[0.06]"
+                style="height: 73%"
+              />
+              <span
+                class="flex-1 rounded-t-[3px] bg-foreground/[0.06]"
+                style="height: 69%"
+              />
+              <span
+                class="flex-1 rounded-t-[3px] bg-foreground/[0.06]"
+                style="height: 82%"
+              />
+              <span
+                class="flex-1 rounded-t-[3px] bg-foreground/[0.06]"
+                style="height: 78%"
+              />
+              <span
+                class="flex-1 rounded-t-[3px] bg-foreground/[0.06]"
+                style="height: 88%"
+              />
+            </div>
+            <span
+              class="mt-3 block h-3 w-2/3 rounded-full bg-foreground/[0.06]"
+            />
+          </div>
+        </div>
+      </div>
+      <p
+        aria-live="polite"
+        class="sr-only"
+      />
+    </div>
+    <footer
+      class="flex h-9 shrink-0 items-center justify-between gap-3 border-t border-panel-border px-4 type-meta text-panel-muted"
+    >
+      <div
+        class="flex min-w-0 items-center gap-2"
+      >
+        <span
+          aria-hidden="true"
+          class="size-1.5 shrink-0 rounded-full bg-panel-muted opacity-60"
+        />
+        <span
+          class="min-w-0 truncate"
+          data-slot="swap-text"
+        >
+          <span
+            class="inline-block"
+          >
+            analytics
+          </span>
+        </span>
+      </div>
+      <div
+        class="flex shrink-0 items-center gap-3"
+      >
+        <div
+          class="flex items-center gap-2"
+        >
+          <span
+            class="text-foreground"
+            data-slot="swap-text"
+          >
+            <span
+              class="inline-block"
+            >
+              Ask again
+            </span>
+          </span>
+          <kbd
+            aria-label="↩"
+            class="inline-flex items-center gap-0.5"
+            data-slot="kbd-group"
+          >
+            <kbd
+              class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+              data-slot="kbd"
+            >
+              ↩
+            </kbd>
+          </kbd>
+        </div>
+        <div
+          class="flex items-center gap-2 border-l border-panel-border pl-3"
+        >
+          <span>
+            Stop
+          </span>
+          <kbd
+            aria-label="esc"
+            class="inline-flex items-center gap-0.5"
+            data-slot="kbd-group"
+          >
+            <kbd
+              class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+              data-slot="kbd"
+            >
+              esc
+            </kbd>
+          </kbd>
+        </div>
+      </div>
+    </footer>
+  </div>
+</div>
+`;

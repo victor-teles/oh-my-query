@@ -13,7 +13,7 @@ concurrency:
 jobs:
   frontend:
     name: Frontend
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
 
@@ -37,6 +37,12 @@ jobs:
           restore-keys: |
             bun-${{ runner.os }}-
 
+      - name: Cache Electrobun toolchain
+        uses: actions/cache@v4
+        with:
+          path: ~/.hutch
+          key: hutch-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('bun.lock') }}
+
       - name: Install dependencies
         run: bun install --frozen-lockfile
 
@@ -51,10 +57,12 @@ jobs:
 
       - name: Install Playwright browsers
         if: steps.playwright-cache.outputs.cache-hit != 'true'
+        working-directory: apps/app
         run: bunx playwright install --with-deps chromium
 
       - name: Install Playwright system deps
         if: steps.playwright-cache.outputs.cache-hit == 'true'
+        working-directory: apps/app
         run: bunx playwright install-deps chromium
 
       - name: Cache Turborepo
@@ -90,7 +98,7 @@ jobs:
 
   e2e:
     name: E2E
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     needs: frontend
     steps:
       - uses: actions/checkout@v4
@@ -115,6 +123,12 @@ jobs:
           restore-keys: |
             bun-${{ runner.os }}-
 
+      - name: Cache Electrobun toolchain
+        uses: actions/cache@v4
+        with:
+          path: ~/.hutch
+          key: hutch-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('bun.lock') }}
+
       - name: Install dependencies
         run: bun install --frozen-lockfile
 
@@ -129,10 +143,12 @@ jobs:
 
       - name: Install Playwright browsers
         if: steps.playwright-cache.outputs.cache-hit != 'true'
+        working-directory: apps/app
         run: bunx playwright install --with-deps chromium
 
       - name: Install Playwright system deps
         if: steps.playwright-cache.outputs.cache-hit == 'true'
+        working-directory: apps/app
         run: bunx playwright install-deps chromium
 
       - name: Run Playwright

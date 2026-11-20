@@ -8,3 +8,9 @@ export const resetIpcHandlers = (): void => {
     delete ipcHandlerRegistry[key];
   }
 };
+
+type MessageHandler = (payload: unknown) => void;
+
+export const ipcMessageHandlers: { current: Record<string, MessageHandler> } = {
+  current: {},
+};

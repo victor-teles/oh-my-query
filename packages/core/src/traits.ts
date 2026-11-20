@@ -1,6 +1,7 @@
 import type { DbError } from "./error.ts";
 import type { ExplainResult } from "./explain.ts";
 import type {
+  BindValue,
   ConnectionParams,
   DialectType,
   ExecuteResult,
@@ -14,6 +15,11 @@ export interface Driver {
   connect(connectionId: string, params: ConnectionParams): Promise<Pool>;
 }
 
+export interface ExecuteOptions {
+  readOnly?: boolean;
+  params?: BindValue[];
+}
+
 export interface Pool {
   readonly dialect: DialectType | null;
   readonly supportsExplain: boolean;
@@ -24,7 +30,8 @@ export interface Pool {
     sql: string,
     maxRows: number,
     schema: string | null,
-    signal: AbortSignal
+    signal: AbortSignal,
+    options?: ExecuteOptions
   ): Promise<ExecuteResult>;
   explain(
     sql: string,

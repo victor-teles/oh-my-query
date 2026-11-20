@@ -71,7 +71,7 @@ exports[`collapsible > defaultOpen 1`] = `
         Columns
       </span>
       <button
-        aria-controls="base-ui-_r_1_"
+        aria-controls="base-ui-_r_id_"
         aria-disabled="false"
         aria-expanded="true"
         aria-label="Toggle columns"
@@ -112,7 +112,7 @@ exports[`collapsible > defaultOpen 1`] = `
       class="space-y-2"
       data-open=""
       data-slot="collapsible-content"
-      id="base-ui-_r_1_"
+      id="base-ui-_r_id_"
       style="--collapsible-panel-height: auto; --collapsible-panel-width: auto"
     >
       <div

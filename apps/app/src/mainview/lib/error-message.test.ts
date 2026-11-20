@@ -7,7 +7,7 @@ describe("getErrorMessage", () => {
     expect(getErrorMessage(new Error("boom"), "fallback")).toBe("boom");
   });
 
-  it("returns the message field from a Tauri DbError-shaped object", () => {
+  it("returns the message field from a DbError-shaped object", () => {
     expect(
       getErrorMessage({ code: "DB_ERROR", message: "connection lost" }, "fb")
     ).toBe("connection lost");

@@ -1,7 +1,9 @@
 import type {
+  BindValue,
   ColumnDetail,
   ColumnInfo,
   DialectType,
+  ExecuteOptions,
   ExecuteResult,
   ExplainResult,
   ForeignKeyItem,
@@ -162,43 +164,26 @@ export class SqlitePool implements Pool {
     sql: string,
     maxRows: number,
     _schema: string | null,
-    signal: AbortSignal
+    signal: AbortSignal,
+    options: ExecuteOptions = {}
   ): Promise<ExecuteResult> {
     if (signal.aborted) {
       return Promise.reject(
         signal.reason instanceof DbError ? signal.reason : DbError.cancelled()
       );
     }
-    const start = performance.now();
     try {
       const db = this.#requireDb();
-      const stmt = db.query<unknown, []>(sql);
-      const { columnNames } = stmt;
-      if (columnNames.length === 0) {
-        const changes = stmt.run();
-        return Promise.resolve({
-          columns: [],
-          executionTimeMs: Math.round(performance.now() - start),
-          isTruncated: false,
-          resultType: "tabular",
-          rowCount: changes.changes,
-          rows: [],
-        });
+      const params = options.params ?? [];
+      if (!options.readOnly) {
+        return Promise.resolve(runStatement(db, sql, params, maxRows));
       }
-      const allRows = stmt.values() as unknown[][];
-      const { columnTypes } = stmt;
-      const isTruncated = allRows.length > maxRows;
-      const rows = (isTruncated ? allRows.slice(0, maxRows) : allRows).map(
-        (row) => row.map(coerceCell)
-      );
-      return Promise.resolve({
-        columns: rowsToColumns(columnNames, columnTypes),
-        executionTimeMs: Math.round(performance.now() - start),
-        isTruncated,
-        resultType: "tabular",
-        rowCount: rows.length,
-        rows,
-      });
+      db.run("PRAGMA query_only = ON");
+      try {
+        return Promise.resolve(runStatement(db, sql, params, maxRows));
+      } finally {
+        db.run("PRAGMA query_only = OFF");
+      }
     } catch (error) {
       return Promise.reject(mapSqliteError(error));
     }
@@ -237,6 +222,42 @@ export class SqlitePool implements Pool {
   }
 }
 
+function runStatement(
+  db: Database,
+  sql: string,
+  params: BindValue[],
+  maxRows: number
+): ExecuteResult {
+  const start = performance.now();
+  const stmt = db.query<unknown, BindValue[]>(sql);
+  const { columnNames } = stmt;
+  if (columnNames.length === 0) {
+    const changes = stmt.run(...params);
+    return {
+      columns: [],
+      executionTimeMs: Math.round(performance.now() - start),
+      isTruncated: false,
+      resultType: "tabular",
+      rowCount: changes.changes,
+      rows: [],
+    };
+  }
+  const allRows = stmt.values(...params) as unknown[][];
+  const { columnTypes } = stmt;
+  const isTruncated = allRows.length > maxRows;
+  const rows = (isTruncated ? allRows.slice(0, maxRows) : allRows).map((row) =>
+    row.map(coerceCell)
+  );
+  return {
+    columns: rowsToColumns(columnNames, columnTypes),
+    executionTimeMs: Math.round(performance.now() - start),
+    isTruncated,
+    resultType: "tabular",
+    rowCount: rows.length,
+    rows,
+  };
+}
+
 function fetchRelations(db: Database): RelationRow[] {
   const stmt = db.query(
     `SELECT name, type FROM sqlite_master
@@ -248,7 +269,7 @@ function fetchRelations(db: Database): RelationRow[] {
 
 function fetchColumns(db: Database, table: string): ColumnDetail[] {
   const stmt = db.query(
-    `SELECT cid, name, "type" AS type, "notnull" AS notnull, dflt_value, pk
+    `SELECT cid, name, "type" AS type, "notnull" AS "notnull", dflt_value, pk
      FROM pragma_table_info(?) ORDER BY cid`
   ) as Statement<ColumnRow, [string]>;
   const rows = stmt.all(table);

@@ -12,7 +12,7 @@ import {
   togglePinConnection,
   updateConnection,
 } from "@/lib/connections";
-import { mockTauri } from "@/test/tauri-mock";
+import { mockIpc } from "@/test/ipc-mock";
 
 const makeConnection = (
   overrides: Partial<DatabaseConnection> = {}
@@ -35,7 +35,7 @@ const setupStore = (
   initial: DatabaseConnection[] = []
 ): DatabaseConnection[] => {
   const store = initial.map((c) => ({ ...c }));
-  mockTauri({
+  mockIpc({
     getConnections: () => store,
     saveConnections: (payload) => {
       store.length = 0;

@@ -1,7 +1,9 @@
 import type {
+  BindValue,
   ColumnDetail,
   ColumnInfo,
   DialectType,
+  ExecuteOptions,
   ExecuteResult,
   ExplainResult,
   ForeignKeyItem,
@@ -126,7 +128,8 @@ export class MysqlPool implements Pool {
     sql: string,
     maxRows: number,
     schema: string | null,
-    signal: AbortSignal
+    signal: AbortSignal,
+    options: ExecuteOptions = {}
   ): Promise<ExecuteResult> {
     const conn = await this.#pool.getConnection();
     const release = bindAbort(conn, signal);
@@ -139,10 +142,9 @@ export class MysqlPool implements Pool {
       let columns: ColumnInfo[];
       let isTruncated = false;
       try {
-        const [rawRows, fields] = await conn.query<RowDataPacket[]>({
-          rowsAsArray: true,
-          sql,
-        });
+        const [rawRows, fields] = options.readOnly
+          ? await queryReadOnly(conn, sql, options.params, signal)
+          : await runStatement(conn, sql, options.params);
         const rowList = Array.isArray(rawRows) ? rawRows : [];
         if (rowList.length > maxRows) {
           rows = rowList.slice(0, maxRows) as unknown[][];
@@ -280,6 +282,37 @@ function jsonifyValue(v: unknown): unknown {
     return out;
   }
   return v;
+}
+
+function runStatement(
+  conn: PoolConnection,
+  sql: string,
+  params?: BindValue[]
+): Promise<[RowDataPacket[], FieldPacket[]]> {
+  if (!params || params.length === 0) {
+    return conn.query<RowDataPacket[]>({ rowsAsArray: true, sql });
+  }
+  return conn.execute<RowDataPacket[]>({ rowsAsArray: true, sql }, params);
+}
+
+async function queryReadOnly(
+  conn: PoolConnection,
+  sql: string,
+  params: BindValue[] | undefined,
+  signal: AbortSignal
+): Promise<[RowDataPacket[], FieldPacket[]]> {
+  await conn.query("START TRANSACTION READ ONLY");
+  try {
+    return await runStatement(conn, sql, params);
+  } finally {
+    if (!signal.aborted) {
+      try {
+        await conn.query("ROLLBACK");
+      } catch {
+        // best-effort
+      }
+    }
+  }
 }
 
 function bindAbort(conn: PoolConnection, signal: AbortSignal): () => void {

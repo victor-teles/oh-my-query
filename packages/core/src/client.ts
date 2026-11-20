@@ -16,6 +16,46 @@ export type {
   DestructiveKind,
   DestructiveRule,
 } from "./safe-mode.ts";
+export {
+  compileSqlTemplate,
+  DATE_PRESETS,
+  formatIsoDate,
+  maskTemplateInputs,
+  RANGE_PRESETS,
+  resolveDatePreset,
+  resolvePreset,
+  templateInputNames,
+  tokenizeSqlTemplate,
+} from "./sql-template.ts";
+export {
+  classifyLookupValue,
+  LOOKUP_KINDS,
+  MAX_LOOKUP_INPUT,
+} from "./lookup-value.ts";
+export type { LookupKind, LookupValue } from "./lookup-value.ts";
+export type { LookupSkips } from "./lookup-plan.ts";
+export type {
+  SqlAssumption,
+  SqlAssumptions,
+  TimeGrain,
+} from "./sql-assumptions.ts";
+export {
+  limitedSelect,
+  PREVIEW_ROWS,
+  previewSql,
+  qualifiedTable,
+  quoteIdentifier,
+} from "./sql-identifiers.ts";
+export type {
+  CompiledTemplate,
+  DatePreset,
+  IsoRange,
+  RangePart,
+  RangePreset,
+  TemplateSegment,
+  TemplateValue,
+  WeekStart,
+} from "./sql-template.ts";
 export type { AISettings, AppConfig } from "./config.ts";
 export type {
   ExplainEngine,
@@ -36,6 +76,7 @@ export type {
   TabState,
 } from "./persistence.ts";
 export type {
+  BindValue,
   CellValue,
   ColumnDetail,
   ColumnInfo,

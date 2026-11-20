@@ -1,0 +1,20 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "design-system-font",
+        "value": "mona sans variable",
+        "createdAt": "2026-11-20T00:39:49.290Z",
+        "reason": "CLAUDE.md declares Mona Sans Variable as the UI typeface; loaded in src/mainview/index.css"
+      },
+      {
+        "rule": "overused-font",
+        "value": "mona sans",
+        "createdAt": "2026-11-20T01:13:30.303Z",
+        "reason": "Project typeface chosen in CLAUDE.md and .factory/plans/README.md defaults (Mona Sans Variable for UI); the exported chart PNG must match the app's type"
+      }
+    ]
+  }
+}

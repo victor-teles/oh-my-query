@@ -1,6 +1,6 @@
 import fs from "node:fs/promises";
-import path from "node:path";
 
+import { atomicWrite, ensureParentDir } from "./fs-utils.ts";
 import { configPath } from "./paths.ts";
 
 export interface AISettings {
@@ -10,8 +10,17 @@ export interface AISettings {
   baseUrl?: string;
 }
 
+export interface ActiveConnectionConfig {
+  connectionId: string;
+  database: string | null;
+}
+
 export interface AppConfig {
+  /** Legacy plaintext AI settings; migrated to the encrypted ai.enc on read. */
   ai?: AISettings | null;
+  activeConnection?: ActiveConnectionConfig | null;
+  launcherHotkey?: string;
+  clipboardLookups?: boolean;
 }
 
 export async function getConfig(): Promise<AppConfig> {
@@ -29,6 +38,6 @@ export async function getConfig(): Promise<AppConfig> {
 
 export async function saveConfig(config: AppConfig): Promise<void> {
   const filePath = configPath();
-  await fs.mkdir(path.dirname(filePath), { recursive: true });
-  await fs.writeFile(filePath, JSON.stringify(config, null, 2));
+  await ensureParentDir(filePath);
+  await atomicWrite(filePath, JSON.stringify(config, null, 2));
 }

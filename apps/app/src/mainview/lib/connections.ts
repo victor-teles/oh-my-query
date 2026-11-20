@@ -1,11 +1,21 @@
 import type { DatabaseConnection as IpcDatabaseConnection } from "@/lib/ipc";
-import type { RunConfig } from "@/lib/query-types";
 
 import {
   getConnections as ipcGetConnections,
   saveConnections as ipcSaveConnections,
 } from "@/lib/ipc";
-import { DEFAULT_RUN_CONFIG } from "@/lib/query-types";
+
+export interface RunConfig {
+  sandbox: boolean;
+  maxRows: number | null;
+  timeoutSecs: number;
+}
+
+export const DEFAULT_RUN_CONFIG: RunConfig = {
+  maxRows: 100,
+  sandbox: true,
+  timeoutSecs: 30,
+};
 
 export type DatabaseType =
   | "postgresql"

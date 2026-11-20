@@ -1,0 +1,1395 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`root widget interactions > steps through date presets with the arrow keys 1`] = `
+<div
+  aria-label="Period presets"
+  id="arg-presets-period"
+  role="listbox"
+>
+  <div
+    aria-selected="false"
+    class="relative flex h-7 cursor-default items-center px-2 type-body text-foreground"
+    role="option"
+  >
+    <span
+      class="relative"
+    >
+      Last 7 days
+    </span>
+  </div>
+  <div
+    aria-selected="false"
+    class="relative flex h-7 cursor-default items-center px-2 type-body text-foreground"
+    role="option"
+  >
+    <span
+      class="relative"
+    >
+      Last 30 days
+    </span>
+  </div>
+  <div
+    aria-selected="false"
+    class="relative flex h-7 cursor-default items-center px-2 type-body text-foreground"
+    role="option"
+  >
+    <span
+      class="relative"
+    >
+      This month
+    </span>
+  </div>
+  <div
+    aria-selected="false"
+    class="relative flex h-7 cursor-default items-center px-2 type-body text-foreground"
+    role="option"
+  >
+    <span
+      class="relative"
+    >
+      Last month
+    </span>
+  </div>
+  <div
+    aria-selected="false"
+    class="relative flex h-7 cursor-default items-center px-2 type-body text-foreground"
+    role="option"
+  >
+    <span
+      class="relative"
+    >
+      This quarter
+    </span>
+  </div>
+  <div
+    aria-selected="true"
+    class="relative flex h-7 cursor-default items-center px-2 type-body text-foreground"
+    role="option"
+  >
+    <span
+      class="absolute inset-0 rounded-[6px] bg-row-active"
+    />
+    <span
+      class="relative"
+    >
+      Last quarter
+    </span>
+  </div>
+  <div
+    aria-selected="false"
+    class="relative flex h-7 cursor-default items-center px-2 type-body text-foreground"
+    role="option"
+  >
+    <span
+      class="relative"
+    >
+      Year to date
+    </span>
+  </div>
+  <div
+    aria-selected="false"
+    class="relative flex h-7 cursor-default items-center px-2 type-body text-foreground"
+    role="option"
+  >
+    <span
+      class="relative"
+    >
+      Last 12 months
+    </span>
+  </div>
+</div>
+`;
+
+exports[`widgets in the root list with full motion > lists recent asks and widgets with their current inputs 1`] = `
+<div
+  aria-label="Results"
+  class="flex flex-col gap-1 px-2 pb-2"
+  id="launcher-root-list"
+  role="listbox"
+>
+  <div>
+    <div
+      aria-labelledby="_r_id_"
+      role="group"
+    >
+      <div
+        class="px-2.5 pt-1 pb-1.5 type-micro text-panel-muted"
+        id="_r_id_"
+      >
+        Recent
+      </div>
+      <div
+        aria-selected="true"
+        class="relative flex h-10 cursor-default items-center gap-3 px-2.5"
+        data-tone="default"
+        id="launcher-option-recent-ask-1"
+        role="option"
+        tabindex="0"
+      >
+        <div
+          class="absolute inset-0 rounded-[10px] bg-row-active"
+        />
+        <span
+          class="relative grid size-6 place-items-center rounded-[7px] bg-row-hover text-panel-muted"
+        >
+          <svg
+            aria-hidden="true"
+            class="lucide lucide-history size-3.5"
+            fill="none"
+            height="24"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"
+            />
+            <path
+              d="M3 3v5h5"
+            />
+            <path
+              d="M12 7v5l4 2"
+            />
+          </svg>
+        </span>
+        <span
+          class="relative flex min-w-0 flex-1 items-baseline gap-2"
+        >
+          <span
+            class="truncate type-body text-foreground"
+          >
+            Revenue for Europe
+          </span>
+          <span
+            class="truncate type-meta text-panel-muted"
+          >
+            analytics
+          </span>
+        </span>
+      </div>
+    </div>
+  </div>
+  <div
+    aria-labelledby="_r_id_"
+    role="group"
+  >
+    <div
+      class="px-2.5 pt-1 pb-1.5 type-micro text-panel-muted"
+      id="_r_id_"
+    >
+      Widgets
+    </div>
+    <div
+      aria-selected="false"
+      class="relative flex h-10 cursor-default items-center gap-3 px-2.5"
+      data-tone="default"
+      id="launcher-option-widget-w-revenue"
+      role="option"
+      tabindex="0"
+    >
+      <span
+        aria-hidden="true"
+        class="grid size-6 place-items-center rounded-[7px] text-[13px] leading-none bg-row-hover relative"
+      >
+        🐘
+      </span>
+      <span
+        class="relative flex min-w-0 flex-1 items-baseline gap-2"
+      >
+        <span
+          class="truncate type-body text-foreground"
+        >
+          Revenue by region
+        </span>
+        <span
+          class="truncate type-meta text-panel-muted"
+        >
+          Europe · Last quarter
+        </span>
+      </span>
+    </div>
+  </div>
+  <div
+    aria-labelledby="_r_id_"
+    role="group"
+  >
+    <div
+      class="px-2.5 pt-1 pb-1.5 type-micro text-panel-muted"
+      id="_r_id_"
+    >
+      Connections
+    </div>
+    <div
+      aria-selected="false"
+      class="relative flex h-10 cursor-default items-center gap-3 px-2.5"
+      data-tone="default"
+      id="launcher-option-analytics"
+      role="option"
+      tabindex="0"
+    >
+      <span
+        class="relative flex min-w-0 items-center gap-3 max-w-[45%] shrink-0"
+      >
+        <span
+          aria-hidden="true"
+          class="grid size-6 place-items-center rounded-[7px] text-[13px] leading-none bg-row-hover"
+        >
+          🐘
+        </span>
+        <span
+          class="truncate type-body text-foreground"
+        >
+          analytics
+        </span>
+      </span>
+      <span
+        aria-live="polite"
+        class="relative min-w-0 flex-1 overflow-hidden type-meta whitespace-nowrap text-panel-muted"
+        title="PostgreSQL · localhost/analytics"
+      >
+        <span
+          data-slot="swap-text"
+        >
+          <span
+            class="inline-block"
+          >
+            PostgreSQL · localhost/analytics
+          </span>
+        </span>
+      </span>
+      <span
+        class="relative grid size-4 shrink-0 place-items-center"
+      />
+    </div>
+  </div>
+  <div
+    aria-labelledby="_r_id_"
+    role="group"
+  >
+    <div
+      class="px-2.5 pt-1 pb-1.5 type-micro text-panel-muted"
+      id="_r_id_"
+    >
+      Commands
+    </div>
+    <div
+      aria-selected="false"
+      class="relative flex h-10 cursor-default items-center gap-3 px-2.5"
+      data-tone="default"
+      id="launcher-option-add-connection"
+      role="option"
+      tabindex="0"
+    >
+      <span
+        class="relative grid size-6 place-items-center rounded-[7px] bg-row-hover text-panel-muted"
+      >
+        <svg
+          aria-hidden="true"
+          class="lucide lucide-plus size-3.5"
+          fill="none"
+          height="24"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+          width="24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M5 12h14"
+          />
+          <path
+            d="M12 5v14"
+          />
+        </svg>
+      </span>
+      <span
+        class="relative flex min-w-0 flex-1 items-baseline gap-2"
+      >
+        <span
+          class="truncate type-body text-foreground"
+        >
+          Add Connection
+        </span>
+        <span
+          class="truncate type-meta text-panel-muted"
+        >
+          PostgreSQL, MySQL, SQLite and more
+        </span>
+      </span>
+    </div>
+    <div
+      aria-selected="false"
+      class="relative flex h-10 cursor-default items-center gap-3 px-2.5"
+      data-tone="default"
+      id="launcher-option-new-board"
+      role="option"
+      tabindex="0"
+    >
+      <span
+        class="relative grid size-6 place-items-center rounded-[7px] bg-row-hover text-panel-muted"
+      >
+        <svg
+          aria-hidden="true"
+          class="lucide lucide-layout-grid size-3.5"
+          fill="none"
+          height="24"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+          width="24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <rect
+            height="7"
+            rx="1"
+            width="7"
+            x="3"
+            y="3"
+          />
+          <rect
+            height="7"
+            rx="1"
+            width="7"
+            x="14"
+            y="3"
+          />
+          <rect
+            height="7"
+            rx="1"
+            width="7"
+            x="14"
+            y="14"
+          />
+          <rect
+            height="7"
+            rx="1"
+            width="7"
+            x="3"
+            y="14"
+          />
+        </svg>
+      </span>
+      <span
+        class="relative flex min-w-0 flex-1 items-baseline gap-2"
+      >
+        <span
+          class="truncate type-body text-foreground"
+        >
+          New Board
+        </span>
+        <span
+          class="truncate type-meta text-panel-muted"
+        >
+          A live grid of widgets with shared inputs
+        </span>
+      </span>
+    </div>
+    <div
+      aria-selected="false"
+      class="relative flex h-10 cursor-default items-center gap-3 px-2.5"
+      data-tone="default"
+      id="launcher-option-history"
+      role="option"
+      tabindex="0"
+    >
+      <span
+        class="relative grid size-6 place-items-center rounded-[7px] bg-row-hover text-panel-muted"
+      >
+        <svg
+          aria-hidden="true"
+          class="lucide lucide-history size-3.5"
+          fill="none"
+          height="24"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+          width="24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"
+          />
+          <path
+            d="M3 3v5h5"
+          />
+          <path
+            d="M12 7v5l4 2"
+          />
+        </svg>
+      </span>
+      <span
+        class="relative flex min-w-0 flex-1 items-baseline gap-2"
+      >
+        <span
+          class="truncate type-body text-foreground"
+        >
+          Search History
+        </span>
+        <span
+          class="truncate type-meta text-panel-muted"
+        >
+          Every question you've asked
+        </span>
+      </span>
+      <kbd
+        aria-label="⌘ Y"
+        class="inline-flex items-center gap-0.5 relative opacity-70"
+        data-slot="kbd-group"
+      >
+        <kbd
+          class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+          data-slot="kbd"
+        >
+          ⌘
+        </kbd>
+        <kbd
+          class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+          data-slot="kbd"
+        >
+          Y
+        </kbd>
+      </kbd>
+    </div>
+    <div
+      aria-selected="false"
+      class="relative flex h-10 cursor-default items-center gap-3 px-2.5"
+      data-tone="default"
+      id="launcher-option-settings"
+      role="option"
+      tabindex="0"
+    >
+      <span
+        class="relative grid size-6 place-items-center rounded-[7px] bg-row-hover text-panel-muted"
+      >
+        <svg
+          aria-hidden="true"
+          class="lucide lucide-sliders-horizontal size-3.5"
+          fill="none"
+          height="24"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+          width="24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M10 5H3"
+          />
+          <path
+            d="M12 19H3"
+          />
+          <path
+            d="M14 3v4"
+          />
+          <path
+            d="M16 17v4"
+          />
+          <path
+            d="M21 12h-9"
+          />
+          <path
+            d="M21 19h-5"
+          />
+          <path
+            d="M21 5h-7"
+          />
+          <path
+            d="M8 10v4"
+          />
+          <path
+            d="M8 12H3"
+          />
+        </svg>
+      </span>
+      <span
+        class="relative flex min-w-0 flex-1 items-baseline gap-2"
+      >
+        <span
+          class="truncate type-body text-foreground"
+        >
+          Settings
+        </span>
+        <span
+          class="truncate type-meta text-panel-muted"
+        >
+          AI provider, hotkey and appearance
+        </span>
+      </span>
+      <kbd
+        aria-label="⌘ ,"
+        class="inline-flex items-center gap-0.5 relative opacity-70"
+        data-slot="kbd-group"
+      >
+        <kbd
+          class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+          data-slot="kbd"
+        >
+          ⌘
+        </kbd>
+        <kbd
+          class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+          data-slot="kbd"
+        >
+          ,
+        </kbd>
+      </kbd>
+    </div>
+    <div
+      aria-selected="false"
+      class="relative flex h-10 cursor-default items-center gap-3 px-2.5"
+      data-tone="default"
+      id="launcher-option-hide"
+      role="option"
+      tabindex="0"
+    >
+      <span
+        class="relative grid size-6 place-items-center rounded-[7px] bg-row-hover text-panel-muted"
+      >
+        <svg
+          aria-hidden="true"
+          class="lucide lucide-eye-off size-3.5"
+          fill="none"
+          height="24"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+          width="24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M10.733 5.076a10.744 10.744 0 0 1 11.205 6.575 1 1 0 0 1 0 .696 10.747 10.747 0 0 1-1.444 2.49"
+          />
+          <path
+            d="M14.084 14.158a3 3 0 0 1-4.242-4.242"
+          />
+          <path
+            d="M17.479 17.499a10.75 10.75 0 0 1-15.417-5.151 1 1 0 0 1 0-.696 10.75 10.75 0 0 1 4.446-5.143"
+          />
+          <path
+            d="m2 2 20 20"
+          />
+        </svg>
+      </span>
+      <span
+        class="relative flex min-w-0 flex-1 items-baseline gap-2"
+      >
+        <span
+          class="truncate type-body text-foreground"
+        >
+          Hide Launcher
+        </span>
+        <span
+          class="truncate type-meta text-panel-muted"
+        >
+          Return to what you were doing
+        </span>
+      </span>
+      <kbd
+        aria-label="esc"
+        class="inline-flex items-center gap-0.5 relative opacity-70"
+        data-slot="kbd-group"
+      >
+        <kbd
+          class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+          data-slot="kbd"
+        >
+          esc
+        </kbd>
+      </kbd>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`widgets in the root list with full motion > shows argument pills on Tab and cycles them with Tab and ⇧Tab 1`] = `
+<div
+  aria-label="Revenue by region inputs"
+  class="flex min-w-0 items-center gap-1.5"
+  role="group"
+>
+  <span
+    class="relative inline-flex h-7 shrink-0 items-center gap-1.5 rounded-[8px] bg-row-hover px-2"
+    data-active="true"
+  >
+    <span
+      aria-hidden="true"
+      class="absolute inset-0 rounded-[8px] bg-primary/12 ring-1 ring-primary/55"
+    />
+    <span
+      aria-hidden="true"
+      class="relative type-micro text-panel-muted"
+    >
+      Region
+    </span>
+    <span
+      class="relative flex min-w-0 items-center"
+    >
+      <input
+        aria-autocomplete="list"
+        aria-controls="arg-options-region"
+        aria-expanded="true"
+        aria-label="Region"
+        autocomplete="off"
+        class="max-w-48 min-w-[3ch] bg-transparent type-body text-foreground outline-none focus-visible:outline-none"
+        role="combobox"
+        size="6"
+        spellcheck="false"
+        value="Europe"
+      />
+    </span>
+    <div
+      class="absolute top-full left-0 z-30 mt-2 flex w-60 flex-col rounded-[12px] popover-material p-1"
+    >
+      <div
+        aria-label="Region options"
+        id="arg-options-region"
+        role="listbox"
+      >
+        <div
+          aria-selected="false"
+          class="relative flex h-7 cursor-default items-center px-2 type-body text-foreground"
+          role="option"
+        >
+          <span
+            class="relative truncate"
+          >
+            Asia Pacific
+          </span>
+        </div>
+        <div
+          aria-selected="true"
+          class="relative flex h-7 cursor-default items-center px-2 type-body text-foreground"
+          role="option"
+        >
+          <span
+            class="absolute inset-0 rounded-[6px] bg-row-active"
+          />
+          <span
+            class="relative truncate"
+          >
+            Europe
+          </span>
+        </div>
+        <div
+          aria-selected="false"
+          class="relative flex h-7 cursor-default items-center px-2 type-body text-foreground"
+          role="option"
+        >
+          <span
+            class="relative truncate"
+          >
+            North America
+          </span>
+        </div>
+      </div>
+    </div>
+  </span>
+  <span
+    class="relative inline-flex h-7 shrink-0 items-center gap-1.5 rounded-[8px] bg-row-hover px-2"
+    data-active="false"
+  >
+    <span
+      aria-hidden="true"
+      class="relative type-micro text-panel-muted"
+    >
+      Period
+    </span>
+    <span
+      class="relative flex min-w-0 items-center"
+    >
+      <button
+        aria-controls="arg-presets-period"
+        aria-expanded="false"
+        aria-haspopup="listbox"
+        aria-label="Period: Last quarter"
+        class="flex items-center gap-1 type-body text-foreground outline-none focus-visible:outline-none"
+        type="button"
+      >
+        <span
+          class="max-w-56 truncate"
+        >
+          Last quarter
+        </span>
+        <svg
+          aria-hidden="true"
+          class="lucide lucide-chevron-down size-3 text-panel-muted"
+          fill="none"
+          height="24"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+          width="24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="m6 9 6 6 6-6"
+          />
+        </svg>
+      </button>
+    </span>
+  </span>
+</div>
+`;
+
+exports[`widgets in the root list with reduced motion > lists recent asks and widgets with their current inputs 1`] = `
+<div
+  aria-label="Results"
+  class="flex flex-col gap-1 px-2 pb-2"
+  id="launcher-root-list"
+  role="listbox"
+>
+  <div>
+    <div
+      aria-labelledby="_r_id_"
+      role="group"
+    >
+      <div
+        class="px-2.5 pt-1 pb-1.5 type-micro text-panel-muted"
+        id="_r_id_"
+      >
+        Recent
+      </div>
+      <div
+        aria-selected="true"
+        class="relative flex h-10 cursor-default items-center gap-3 px-2.5"
+        data-tone="default"
+        id="launcher-option-recent-ask-1"
+        role="option"
+        tabindex="0"
+      >
+        <div
+          class="absolute inset-0 rounded-[10px] bg-row-active"
+        />
+        <span
+          class="relative grid size-6 place-items-center rounded-[7px] bg-row-hover text-panel-muted"
+        >
+          <svg
+            aria-hidden="true"
+            class="lucide lucide-history size-3.5"
+            fill="none"
+            height="24"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"
+            />
+            <path
+              d="M3 3v5h5"
+            />
+            <path
+              d="M12 7v5l4 2"
+            />
+          </svg>
+        </span>
+        <span
+          class="relative flex min-w-0 flex-1 items-baseline gap-2"
+        >
+          <span
+            class="truncate type-body text-foreground"
+          >
+            Revenue for Europe
+          </span>
+          <span
+            class="truncate type-meta text-panel-muted"
+          >
+            analytics
+          </span>
+        </span>
+      </div>
+    </div>
+  </div>
+  <div
+    aria-labelledby="_r_id_"
+    role="group"
+  >
+    <div
+      class="px-2.5 pt-1 pb-1.5 type-micro text-panel-muted"
+      id="_r_id_"
+    >
+      Widgets
+    </div>
+    <div
+      aria-selected="false"
+      class="relative flex h-10 cursor-default items-center gap-3 px-2.5"
+      data-tone="default"
+      id="launcher-option-widget-w-revenue"
+      role="option"
+      tabindex="0"
+    >
+      <span
+        aria-hidden="true"
+        class="grid size-6 place-items-center rounded-[7px] text-[13px] leading-none bg-row-hover relative"
+      >
+        🐘
+      </span>
+      <span
+        class="relative flex min-w-0 flex-1 items-baseline gap-2"
+      >
+        <span
+          class="truncate type-body text-foreground"
+        >
+          Revenue by region
+        </span>
+        <span
+          class="truncate type-meta text-panel-muted"
+        >
+          Europe · Last quarter
+        </span>
+      </span>
+    </div>
+  </div>
+  <div
+    aria-labelledby="_r_id_"
+    role="group"
+  >
+    <div
+      class="px-2.5 pt-1 pb-1.5 type-micro text-panel-muted"
+      id="_r_id_"
+    >
+      Connections
+    </div>
+    <div
+      aria-selected="false"
+      class="relative flex h-10 cursor-default items-center gap-3 px-2.5"
+      data-tone="default"
+      id="launcher-option-analytics"
+      role="option"
+      tabindex="0"
+    >
+      <span
+        class="relative flex min-w-0 items-center gap-3 max-w-[45%] shrink-0"
+      >
+        <span
+          aria-hidden="true"
+          class="grid size-6 place-items-center rounded-[7px] text-[13px] leading-none bg-row-hover"
+        >
+          🐘
+        </span>
+        <span
+          class="truncate type-body text-foreground"
+        >
+          analytics
+        </span>
+      </span>
+      <span
+        aria-live="polite"
+        class="relative min-w-0 flex-1 overflow-hidden type-meta whitespace-nowrap text-panel-muted"
+        title="PostgreSQL · localhost/analytics"
+      >
+        <span
+          data-slot="swap-text"
+        >
+          <span
+            class="inline-block"
+          >
+            PostgreSQL · localhost/analytics
+          </span>
+        </span>
+      </span>
+      <span
+        class="relative grid size-4 shrink-0 place-items-center"
+      />
+    </div>
+  </div>
+  <div
+    aria-labelledby="_r_id_"
+    role="group"
+  >
+    <div
+      class="px-2.5 pt-1 pb-1.5 type-micro text-panel-muted"
+      id="_r_id_"
+    >
+      Commands
+    </div>
+    <div
+      aria-selected="false"
+      class="relative flex h-10 cursor-default items-center gap-3 px-2.5"
+      data-tone="default"
+      id="launcher-option-add-connection"
+      role="option"
+      tabindex="0"
+    >
+      <span
+        class="relative grid size-6 place-items-center rounded-[7px] bg-row-hover text-panel-muted"
+      >
+        <svg
+          aria-hidden="true"
+          class="lucide lucide-plus size-3.5"
+          fill="none"
+          height="24"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+          width="24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M5 12h14"
+          />
+          <path
+            d="M12 5v14"
+          />
+        </svg>
+      </span>
+      <span
+        class="relative flex min-w-0 flex-1 items-baseline gap-2"
+      >
+        <span
+          class="truncate type-body text-foreground"
+        >
+          Add Connection
+        </span>
+        <span
+          class="truncate type-meta text-panel-muted"
+        >
+          PostgreSQL, MySQL, SQLite and more
+        </span>
+      </span>
+    </div>
+    <div
+      aria-selected="false"
+      class="relative flex h-10 cursor-default items-center gap-3 px-2.5"
+      data-tone="default"
+      id="launcher-option-new-board"
+      role="option"
+      tabindex="0"
+    >
+      <span
+        class="relative grid size-6 place-items-center rounded-[7px] bg-row-hover text-panel-muted"
+      >
+        <svg
+          aria-hidden="true"
+          class="lucide lucide-layout-grid size-3.5"
+          fill="none"
+          height="24"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+          width="24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <rect
+            height="7"
+            rx="1"
+            width="7"
+            x="3"
+            y="3"
+          />
+          <rect
+            height="7"
+            rx="1"
+            width="7"
+            x="14"
+            y="3"
+          />
+          <rect
+            height="7"
+            rx="1"
+            width="7"
+            x="14"
+            y="14"
+          />
+          <rect
+            height="7"
+            rx="1"
+            width="7"
+            x="3"
+            y="14"
+          />
+        </svg>
+      </span>
+      <span
+        class="relative flex min-w-0 flex-1 items-baseline gap-2"
+      >
+        <span
+          class="truncate type-body text-foreground"
+        >
+          New Board
+        </span>
+        <span
+          class="truncate type-meta text-panel-muted"
+        >
+          A live grid of widgets with shared inputs
+        </span>
+      </span>
+    </div>
+    <div
+      aria-selected="false"
+      class="relative flex h-10 cursor-default items-center gap-3 px-2.5"
+      data-tone="default"
+      id="launcher-option-history"
+      role="option"
+      tabindex="0"
+    >
+      <span
+        class="relative grid size-6 place-items-center rounded-[7px] bg-row-hover text-panel-muted"
+      >
+        <svg
+          aria-hidden="true"
+          class="lucide lucide-history size-3.5"
+          fill="none"
+          height="24"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+          width="24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"
+          />
+          <path
+            d="M3 3v5h5"
+          />
+          <path
+            d="M12 7v5l4 2"
+          />
+        </svg>
+      </span>
+      <span
+        class="relative flex min-w-0 flex-1 items-baseline gap-2"
+      >
+        <span
+          class="truncate type-body text-foreground"
+        >
+          Search History
+        </span>
+        <span
+          class="truncate type-meta text-panel-muted"
+        >
+          Every question you've asked
+        </span>
+      </span>
+      <kbd
+        aria-label="⌘ Y"
+        class="inline-flex items-center gap-0.5 relative opacity-70"
+        data-slot="kbd-group"
+      >
+        <kbd
+          class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+          data-slot="kbd"
+        >
+          ⌘
+        </kbd>
+        <kbd
+          class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+          data-slot="kbd"
+        >
+          Y
+        </kbd>
+      </kbd>
+    </div>
+    <div
+      aria-selected="false"
+      class="relative flex h-10 cursor-default items-center gap-3 px-2.5"
+      data-tone="default"
+      id="launcher-option-settings"
+      role="option"
+      tabindex="0"
+    >
+      <span
+        class="relative grid size-6 place-items-center rounded-[7px] bg-row-hover text-panel-muted"
+      >
+        <svg
+          aria-hidden="true"
+          class="lucide lucide-sliders-horizontal size-3.5"
+          fill="none"
+          height="24"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+          width="24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M10 5H3"
+          />
+          <path
+            d="M12 19H3"
+          />
+          <path
+            d="M14 3v4"
+          />
+          <path
+            d="M16 17v4"
+          />
+          <path
+            d="M21 12h-9"
+          />
+          <path
+            d="M21 19h-5"
+          />
+          <path
+            d="M21 5h-7"
+          />
+          <path
+            d="M8 10v4"
+          />
+          <path
+            d="M8 12H3"
+          />
+        </svg>
+      </span>
+      <span
+        class="relative flex min-w-0 flex-1 items-baseline gap-2"
+      >
+        <span
+          class="truncate type-body text-foreground"
+        >
+          Settings
+        </span>
+        <span
+          class="truncate type-meta text-panel-muted"
+        >
+          AI provider, hotkey and appearance
+        </span>
+      </span>
+      <kbd
+        aria-label="⌘ ,"
+        class="inline-flex items-center gap-0.5 relative opacity-70"
+        data-slot="kbd-group"
+      >
+        <kbd
+          class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+          data-slot="kbd"
+        >
+          ⌘
+        </kbd>
+        <kbd
+          class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+          data-slot="kbd"
+        >
+          ,
+        </kbd>
+      </kbd>
+    </div>
+    <div
+      aria-selected="false"
+      class="relative flex h-10 cursor-default items-center gap-3 px-2.5"
+      data-tone="default"
+      id="launcher-option-hide"
+      role="option"
+      tabindex="0"
+    >
+      <span
+        class="relative grid size-6 place-items-center rounded-[7px] bg-row-hover text-panel-muted"
+      >
+        <svg
+          aria-hidden="true"
+          class="lucide lucide-eye-off size-3.5"
+          fill="none"
+          height="24"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+          width="24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M10.733 5.076a10.744 10.744 0 0 1 11.205 6.575 1 1 0 0 1 0 .696 10.747 10.747 0 0 1-1.444 2.49"
+          />
+          <path
+            d="M14.084 14.158a3 3 0 0 1-4.242-4.242"
+          />
+          <path
+            d="M17.479 17.499a10.75 10.75 0 0 1-15.417-5.151 1 1 0 0 1 0-.696 10.75 10.75 0 0 1 4.446-5.143"
+          />
+          <path
+            d="m2 2 20 20"
+          />
+        </svg>
+      </span>
+      <span
+        class="relative flex min-w-0 flex-1 items-baseline gap-2"
+      >
+        <span
+          class="truncate type-body text-foreground"
+        >
+          Hide Launcher
+        </span>
+        <span
+          class="truncate type-meta text-panel-muted"
+        >
+          Return to what you were doing
+        </span>
+      </span>
+      <kbd
+        aria-label="esc"
+        class="inline-flex items-center gap-0.5 relative opacity-70"
+        data-slot="kbd-group"
+      >
+        <kbd
+          class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+          data-slot="kbd"
+        >
+          esc
+        </kbd>
+      </kbd>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`widgets in the root list with reduced motion > shows argument pills on Tab and cycles them with Tab and ⇧Tab 1`] = `
+<div
+  aria-label="Revenue by region inputs"
+  class="flex min-w-0 items-center gap-1.5"
+  role="group"
+>
+  <span
+    class="relative inline-flex h-7 shrink-0 items-center gap-1.5 rounded-[8px] bg-row-hover px-2"
+    data-active="true"
+  >
+    <span
+      aria-hidden="true"
+      class="absolute inset-0 rounded-[8px] bg-primary/12 ring-1 ring-primary/55"
+    />
+    <span
+      aria-hidden="true"
+      class="relative type-micro text-panel-muted"
+    >
+      Region
+    </span>
+    <span
+      class="relative flex min-w-0 items-center"
+    >
+      <input
+        aria-autocomplete="list"
+        aria-controls="arg-options-region"
+        aria-expanded="true"
+        aria-label="Region"
+        autocomplete="off"
+        class="max-w-48 min-w-[3ch] bg-transparent type-body text-foreground outline-none focus-visible:outline-none"
+        role="combobox"
+        size="6"
+        spellcheck="false"
+        value="Europe"
+      />
+    </span>
+    <div
+      class="absolute top-full left-0 z-30 mt-2 flex w-60 flex-col rounded-[12px] popover-material p-1"
+    >
+      <div
+        aria-label="Region options"
+        id="arg-options-region"
+        role="listbox"
+      >
+        <div
+          aria-selected="false"
+          class="relative flex h-7 cursor-default items-center px-2 type-body text-foreground"
+          role="option"
+        >
+          <span
+            class="relative truncate"
+          >
+            Asia Pacific
+          </span>
+        </div>
+        <div
+          aria-selected="true"
+          class="relative flex h-7 cursor-default items-center px-2 type-body text-foreground"
+          role="option"
+        >
+          <span
+            class="absolute inset-0 rounded-[6px] bg-row-active"
+          />
+          <span
+            class="relative truncate"
+          >
+            Europe
+          </span>
+        </div>
+        <div
+          aria-selected="false"
+          class="relative flex h-7 cursor-default items-center px-2 type-body text-foreground"
+          role="option"
+        >
+          <span
+            class="relative truncate"
+          >
+            North America
+          </span>
+        </div>
+      </div>
+    </div>
+  </span>
+  <span
+    class="relative inline-flex h-7 shrink-0 items-center gap-1.5 rounded-[8px] bg-row-hover px-2"
+    data-active="false"
+  >
+    <span
+      aria-hidden="true"
+      class="relative type-micro text-panel-muted"
+    >
+      Period
+    </span>
+    <span
+      class="relative flex min-w-0 items-center"
+    >
+      <button
+        aria-controls="arg-presets-period"
+        aria-expanded="false"
+        aria-haspopup="listbox"
+        aria-label="Period: Last quarter"
+        class="flex items-center gap-1 type-body text-foreground outline-none focus-visible:outline-none"
+        type="button"
+      >
+        <span
+          class="max-w-56 truncate"
+        >
+          Last quarter
+        </span>
+        <svg
+          aria-hidden="true"
+          class="lucide lucide-chevron-down size-3 text-panel-muted"
+          fill="none"
+          height="24"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+          width="24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="m6 9 6 6 6-6"
+          />
+        </svg>
+      </button>
+    </span>
+  </span>
+</div>
+`;

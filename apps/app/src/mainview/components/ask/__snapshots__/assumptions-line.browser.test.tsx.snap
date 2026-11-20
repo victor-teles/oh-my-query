@@ -1,0 +1,119 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`assumptionsLine states > matches the filter only snapshot 1`] = `
+<ul
+  aria-label="Assumptions"
+  class="flex flex-wrap items-center gap-1.5 px-4 pt-1 pb-2"
+>
+  <li
+    class="max-w-full"
+  >
+    <button
+      aria-label="Refine without status = 'paid'"
+      class="relative flex h-6 max-w-full items-center overflow-hidden rounded-[6px] border border-panel-border px-2 type-meta tabular-nums text-foreground outline-none hover:bg-row-hover focus-visible:ring-2 focus-visible:ring-ring/60"
+      tabindex="0"
+      type="button"
+    >
+      <span
+        class="relative truncate"
+        data-slot="swap-text"
+      >
+        <span
+          class="inline-block"
+        >
+          status = 'paid'
+        </span>
+      </span>
+    </button>
+  </li>
+</ul>
+`;
+
+exports[`assumptionsLine states > matches the populated snapshot 1`] = `
+<ul
+  aria-label="Assumptions"
+  class="flex flex-wrap items-center gap-1.5 px-4 pt-1 pb-2"
+>
+  <li
+    class="max-w-full"
+  >
+    <span
+      class="relative flex h-6 max-w-full items-center overflow-hidden rounded-[6px] border border-panel-border px-2 type-meta tabular-nums text-panel-muted"
+    >
+      <span
+        class="relative truncate"
+        data-slot="swap-text"
+      >
+        <span
+          class="inline-block"
+        >
+          orders, regions
+        </span>
+      </span>
+    </span>
+  </li>
+  <li
+    class="max-w-full"
+  >
+    <button
+      aria-label="Group by week instead of month"
+      class="relative flex h-6 max-w-full items-center overflow-hidden rounded-[6px] border border-panel-border px-2 type-meta tabular-nums text-foreground outline-none hover:bg-row-hover focus-visible:ring-2 focus-visible:ring-ring/60"
+      tabindex="0"
+      type="button"
+    >
+      <span
+        class="relative truncate"
+        data-slot="swap-text"
+      >
+        <span
+          class="inline-block"
+        >
+          orders.created_at · by month
+        </span>
+      </span>
+    </button>
+  </li>
+  <li
+    class="max-w-full"
+  >
+    <button
+      aria-label="Refine without status <> 'refunded'"
+      class="relative flex h-6 max-w-full items-center overflow-hidden rounded-[6px] border border-panel-border px-2 type-meta tabular-nums text-foreground outline-none hover:bg-row-hover focus-visible:ring-2 focus-visible:ring-ring/60"
+      tabindex="0"
+      type="button"
+    >
+      <span
+        class="relative truncate"
+        data-slot="swap-text"
+      >
+        <span
+          class="inline-block"
+        >
+          status &lt;&gt; 'refunded'
+        </span>
+      </span>
+    </button>
+  </li>
+  <li
+    class="max-w-full"
+  >
+    <button
+      aria-label="Refine to show all rows"
+      class="relative flex h-6 max-w-full items-center overflow-hidden rounded-[6px] border border-panel-border px-2 type-meta tabular-nums text-foreground outline-none hover:bg-row-hover focus-visible:ring-2 focus-visible:ring-ring/60"
+      tabindex="0"
+      type="button"
+    >
+      <span
+        class="relative truncate"
+        data-slot="swap-text"
+      >
+        <span
+          class="inline-block"
+        >
+          top 500
+        </span>
+      </span>
+    </button>
+  </li>
+</ul>
+`;

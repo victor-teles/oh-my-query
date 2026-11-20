@@ -1,88 +1,136 @@
 import type {
-  AppConfig,
   ColumnDetail,
   ColumnInfo,
   ConnectionParams,
   DatabaseConnection,
+  DialectType,
   DocumentResult,
   ExecuteResult,
-  ExplainParams,
-  ExplainResult,
   ForeignKeyItem,
   HistoryEntry,
   HistoryFilters,
   IndexItem,
-  PersistedTab,
-  PlanCost,
-  PlanNode,
-  PlanRows,
-  PlanTiming,
+  LookupValue,
   QueryParams,
   QueryResult,
-  RedisDbInfo,
   RedisKey,
   RedisKeyKind,
-  RedisScanPage,
-  RedisSizeUnit,
   SchemaInfo,
   SchemaItem,
   TableItem,
-  TabState,
   TabularResult,
   TestConnectionResult,
   ViewItem,
 } from "@oh-my-query/core/client";
 import type {
+  ActiveConnection,
+  AiSettingsInput,
+  AiTestResult,
+  AskErrorCode,
+  AskEvent,
+  AskParams,
+  AskPhase,
   AvailableUpdate,
+  Board,
+  BoardDraft,
+  BoardTile,
+  CardSpec,
+  CardView,
+  ChartView,
+  ColumnFormat,
+  LauncherNavigateView,
+  LookupErrorCode,
+  LookupEvent,
+  LookupHit,
+  ParamDef,
+  ParamType,
+  ParamValue,
+  ParamValues,
+  ProposeParamsResult,
+  RecentAsk,
+  RedactedAiSettings,
+  RefineContext,
+  RefreshInterval,
   RpcSchema,
+  RunSqlParams,
+  SchemaPeek,
+  SqlAssumption,
+  SqlAssumptions,
+  TileSize,
+  TimeGrain,
   UpdateChannel,
+  Widget,
+  WidgetDraft,
+  WidgetRunResult,
 } from "@oh-my-query/rpc";
 
-import {
-  ENGINE_SUPPORTS_ANALYZE,
-  ENGINE_SUPPORTS_EXPLAIN,
-} from "@oh-my-query/core/client";
 import { decodeRpcError } from "@oh-my-query/rpc";
 import { Electroview } from "electrobun/view";
 
+import { createBrowserIpcStub } from "@/lib/browser-ipc-stub";
+
 export type {
-  AppConfig,
+  LookupErrorCode,
+  LookupEvent,
+  LookupHit,
+  LookupValue,
+  RunSqlParams,
+  SchemaPeek,
+  ActiveConnection,
+  AiSettingsInput,
+  AiTestResult,
+  AskErrorCode,
+  AskEvent,
+  AskParams,
+  AskPhase,
   AvailableUpdate,
+  Board,
+  BoardDraft,
+  BoardTile,
+  CardSpec,
+  CardView,
+  ChartView,
   ColumnDetail,
+  ColumnFormat,
   ColumnInfo,
   ConnectionParams,
   DatabaseConnection,
   DocumentResult,
   ExecuteResult,
-  ExplainParams,
-  ExplainResult,
   ForeignKeyItem,
   HistoryEntry,
   HistoryFilters,
   IndexItem,
-  PersistedTab,
-  PlanCost,
-  PlanNode,
-  PlanRows,
-  PlanTiming,
+  LauncherNavigateView,
+  ParamDef,
+  ParamType,
+  ParamValue,
+  ParamValues,
+  ProposeParamsResult,
   QueryParams,
   QueryResult,
-  RedisDbInfo,
+  RecentAsk,
+  RedactedAiSettings,
+  RefineContext,
   RedisKey,
   RedisKeyKind,
-  RedisScanPage,
-  RedisSizeUnit,
   RpcSchema,
   SchemaInfo,
   SchemaItem,
+  SqlAssumption,
+  SqlAssumptions,
   TableItem,
-  TabState,
   TabularResult,
   TestConnectionResult,
+  TimeGrain,
+  RefreshInterval,
+  TileSize,
   UpdateChannel,
   ViewItem,
+  Widget,
+  WidgetDraft,
+  WidgetRunResult,
 };
-export { ENGINE_SUPPORTS_ANALYZE, ENGINE_SUPPORTS_EXPLAIN };
 
 const IOS_UA_RE = /iPhone|iPad|iPod/i;
 const MAC_UA_RE = /Mac/i;
@@ -100,16 +148,41 @@ interface AppRpcSchema {
   webview: { requests: Record<string, never>; messages: RpcSchema["messages"] };
 }
 
-interface MessageHandlers {
-  menuNavigate?: (payload: { route: string }) => void;
-  updateProgress?: (payload: {
-    percent: number;
-    downloaded: number;
-    total: number;
-  }) => void;
-}
+type RpcMessages = RpcSchema["messages"];
+type MessageName = keyof RpcMessages;
+type MessageHandler<M extends MessageName> = (payload: RpcMessages[M]) => void;
 
-const messageHandlers: MessageHandlers = {};
+const messageHandlers: {
+  [M in MessageName]: Set<MessageHandler<M>>;
+} = {
+  askEvent: new Set(),
+  boardChanged: new Set(),
+  launcherDismiss: new Set(),
+  launcherNavigate: new Set(),
+  launcherShown: new Set(),
+  launcherToggle: new Set(),
+  lookupEvent: new Set(),
+  updateProgress: new Set(),
+};
+
+const dispatchMessage = <M extends MessageName>(
+  name: M,
+  payload: RpcMessages[M]
+): void => {
+  for (const handler of messageHandlers[name]) {
+    handler(payload);
+  }
+};
+
+const subscribe = <M extends MessageName>(
+  name: M,
+  handler: MessageHandler<M>
+): (() => void) => {
+  messageHandlers[name].add(handler);
+  return () => {
+    messageHandlers[name].delete(handler);
+  };
+};
 
 const bunReadyHandlers = new Set<() => void>();
 const bunReadyState = { fired: false };
@@ -117,8 +190,15 @@ const bunReadyState = { fired: false };
 const definedRpc = Electroview.defineRPC<AppRpcSchema>({
   handlers: {
     messages: {
-      menuNavigate: (payload) => messageHandlers.menuNavigate?.(payload),
-      updateProgress: (payload) => messageHandlers.updateProgress?.(payload),
+      askEvent: (payload) => dispatchMessage("askEvent", payload),
+      boardChanged: (payload) => dispatchMessage("boardChanged", payload),
+      launcherDismiss: (payload) => dispatchMessage("launcherDismiss", payload),
+      launcherNavigate: (payload) =>
+        dispatchMessage("launcherNavigate", payload),
+      launcherShown: (payload) => dispatchMessage("launcherShown", payload),
+      launcherToggle: (payload) => dispatchMessage("launcherToggle", payload),
+      lookupEvent: (payload) => dispatchMessage("lookupEvent", payload),
+      updateProgress: (payload) => dispatchMessage("updateProgress", payload),
     },
     requests: {},
   },
@@ -126,8 +206,6 @@ const definedRpc = Electroview.defineRPC<AppRpcSchema>({
   // user-driven recovery path for hung calls, not a transport-level timeout.
   maxRequestTime: Number.POSITIVE_INFINITY,
 });
-
-const BROWSER_CONNECTIONS_KEY = "oh-my-query-connections";
 
 const isElectrobunHost = (): boolean => {
   if (typeof window === "undefined") {
@@ -138,97 +216,6 @@ const isElectrobunHost = (): boolean => {
       .__electrobunWebviewId !== undefined
   );
 };
-
-const readBrowserConnections = (): DatabaseConnection[] => {
-  if (typeof localStorage === "undefined") {
-    return [];
-  }
-  const raw = localStorage.getItem(BROWSER_CONNECTIONS_KEY);
-  if (!raw) {
-    return [];
-  }
-  try {
-    const parsed: unknown = JSON.parse(raw);
-    return Array.isArray(parsed) ? (parsed as DatabaseConnection[]) : [];
-  } catch {
-    return [];
-  }
-};
-
-// Browser mode is only used by vite-only dev and Playwright e2e — never the
-// production path. Strip credentials before localStorage so a passing dev
-// session can't accidentally leak passwords to disk.
-const stripBrowserSecrets = (
-  connection: DatabaseConnection
-): DatabaseConnection => ({
-  ...connection,
-  password: "",
-});
-
-const writeBrowserConnections = (connections: DatabaseConnection[]): void => {
-  if (typeof localStorage === "undefined") {
-    return;
-  }
-  const sanitized = connections.map(stripBrowserSecrets);
-  localStorage.setItem(BROWSER_CONNECTIONS_KEY, JSON.stringify(sanitized));
-};
-
-const dispatchBrowserRequest = (prop: string, payload: unknown): unknown => {
-  switch (prop) {
-    case "rendererReady": {
-      return undefined;
-    }
-    case "getConnections": {
-      return readBrowserConnections();
-    }
-    case "saveConnections": {
-      writeBrowserConnections(
-        (payload as { connections: DatabaseConnection[] }).connections
-      );
-      return undefined;
-    }
-    case "getConfig": {
-      return {};
-    }
-    case "saveConfig": {
-      return undefined;
-    }
-    case "getUpdateChannel": {
-      return "stable";
-    }
-    case "getTabs": {
-      return null;
-    }
-    case "getAllHistory":
-    case "getHistory": {
-      return [];
-    }
-    default: {
-      throw new Error(`Browser-mode IPC stub does not implement '${prop}'`);
-    }
-  }
-};
-
-// Used when the renderer runs without an Electrobun host (vite-only dev,
-// Playwright e2e). Persistence drops to localStorage so the shell still boots.
-const createBrowserRequestStub = (): Record<
-  string,
-  (payload?: unknown) => Promise<unknown>
-> =>
-  new Proxy(
-    {},
-    {
-      get:
-        (_target, prop: string) =>
-        (payload?: unknown): Promise<unknown> => {
-          try {
-            return Promise.resolve(dispatchBrowserRequest(prop, payload));
-          } catch (error) {
-            return Promise.reject(error);
-          }
-        },
-    }
-  );
 
 const createElectroview = () => new Electroview({ rpc: definedRpc });
 
@@ -242,7 +229,7 @@ const buildRequest = (): NonNullable<
     }
     return electroview.rpc.request;
   }
-  return createBrowserRequestStub() as never;
+  return createBrowserIpcStub(dispatchMessage) as never;
 };
 
 const request = buildRequest();
@@ -270,12 +257,22 @@ const callRpc = async <T>(call: () => Promise<T>): Promise<T> => {
   }
 };
 
-export function onMenuNavigate(handler: (route: string) => void): () => void {
-  messageHandlers.menuNavigate = (payload) => handler(payload.route);
-  return () => {
-    messageHandlers.menuNavigate = undefined;
-  };
-}
+export type LauncherShown = RpcMessages["launcherShown"];
+
+export const onLauncherShown = (
+  handler: (shown: LauncherShown) => void
+): (() => void) => subscribe("launcherShown", handler);
+
+export const onLauncherToggle = (handler: () => void): (() => void) =>
+  subscribe("launcherToggle", handler);
+
+export const onLauncherDismiss = (handler: () => void): (() => void) =>
+  subscribe("launcherDismiss", handler);
+
+export const onLauncherNavigate = (
+  handler: (view: LauncherNavigateView) => void
+): (() => void) =>
+  subscribe("launcherNavigate", (payload) => handler(payload.view));
 
 export function onBunReady(handler: () => void): () => void {
   bunReadyHandlers.add(handler);
@@ -287,18 +284,34 @@ export function onBunReady(handler: () => void): () => void {
   };
 }
 
-export function onUpdateProgress(
-  handler: (progress: {
-    percent: number;
-    downloaded: number;
-    total: number;
-  }) => void
-): () => void {
-  messageHandlers.updateProgress = handler;
-  return () => {
-    messageHandlers.updateProgress = undefined;
-  };
-}
+export const onAskEvent = (
+  askId: string,
+  handler: (event: AskEvent) => void
+): (() => void) =>
+  subscribe("askEvent", (payload) => {
+    if (payload.askId === askId) {
+      handler(payload.event);
+    }
+  });
+
+export const onLookupEvent = (
+  lookupId: string,
+  handler: (event: LookupEvent) => void
+): (() => void) =>
+  subscribe("lookupEvent", (payload) => {
+    if (payload.lookupId === lookupId) {
+      handler(payload.event);
+    }
+  });
+
+export const onBoardChanged = (
+  handler: (boardId: string) => void
+): (() => void) =>
+  subscribe("boardChanged", (payload) => handler(payload.boardId));
+
+export const onUpdateProgress = (
+  handler: (progress: RpcMessages["updateProgress"]) => void
+): (() => void) => subscribe("updateProgress", handler);
 
 function paramsFor(
   conn: Omit<
@@ -359,42 +372,17 @@ export const getSchema = (
 export const executeQuery = (params: QueryParams): Promise<ExecuteResult> =>
   callRpc(() => request.executeQuery({ params }));
 
-export const explainQuery = (params: ExplainParams): Promise<ExplainResult> =>
-  callRpc(() => request.explainQuery({ params }));
-
 export const cancelQuery = (queryId: string): Promise<boolean> =>
   callRpc(() => request.cancelQuery({ queryId }));
 
 export const formatSql = (sql: string, dialect: string): Promise<string> =>
   callRpc(() => request.formatSql({ dialect, sql }));
 
-export const redisDbInfo = (
-  connectionId: string,
-  dbIndex: number
-): Promise<RedisDbInfo> =>
-  callRpc(() => request.redisDbInfo({ connectionId, dbIndex }));
-
-export const scanRedisKeys = (params: {
-  connectionId: string;
-  dbIndex: number;
-  pattern?: string | null;
-  cursor?: string | null;
-  count?: number | null;
-}): Promise<RedisScanPage> => callRpc(() => request.scanRedisKeys(params));
-
-export const deleteRedisKey = (params: {
-  connectionId: string;
-  dbIndex: number;
-  name: string;
-}): Promise<number> => callRpc(() => request.deleteRedisKey(params));
-
-export const getTabs = (connectionId: string): Promise<TabState | null> =>
-  callRpc(() => request.getTabs({ connectionId }));
-
-export const saveTabs = (
-  connectionId: string,
-  state: TabState
-): Promise<void> => callRpc(() => request.saveTabs({ connectionId, state }));
+export const describeSql = (
+  sql: string,
+  dialect: DialectType
+): Promise<SqlAssumptions | null> =>
+  callRpc(() => request.describeSql({ dialect, sql }));
 
 export const appendHistory = (entry: HistoryEntry): Promise<void> =>
   callRpc(() => request.appendHistory({ entry }));
@@ -420,10 +408,26 @@ export const saveConnections = (
 export const resetSecrets = (): Promise<void> =>
   callRpc(() => request.resetSecrets({} as never));
 
-export const getConfig = () => callRpc(() => request.getConfig({} as never));
-export const saveConfig = (
-  config: Parameters<typeof request.saveConfig>[0]["config"]
-) => callRpc(() => request.saveConfig({ config }));
+export const getAiSettings = (): Promise<RedactedAiSettings | null> =>
+  callRpc(() => request.getAiSettings({} as never));
+export const saveAiSettings = (
+  input: AiSettingsInput
+): Promise<RedactedAiSettings> => callRpc(() => request.saveAiSettings(input));
+export const clearAiKey = (): Promise<RedactedAiSettings | null> =>
+  callRpc(() => request.clearAiKey({} as never));
+export const testAiSettings = (input: AiSettingsInput): Promise<AiTestResult> =>
+  callRpc(() => request.testAiSettings(input));
+
+export const getActiveConnection = (): Promise<ActiveConnection | null> =>
+  callRpc(() => request.getActiveConnection({} as never));
+export const setActiveConnection = (
+  active: ActiveConnection | null
+): Promise<void> => callRpc(() => request.setActiveConnection({ active }));
+
+export const getLauncherHotkey = (): Promise<string> =>
+  callRpc(() => request.getLauncherHotkey({} as never));
+export const getAppVersion = (): Promise<string> =>
+  callRpc(() => request.getAppVersion({} as never));
 
 export const getUpdateChannel = (): Promise<UpdateChannel> =>
   callRpc(() => request.getUpdateChannel({} as never));
@@ -439,7 +443,120 @@ export const installUpdate = (): Promise<boolean> =>
 export const openExternal = (url: string): Promise<void> =>
   callRpc(() => request.openExternal({ url }));
 
-export const toggleWindowMaximize = (): Promise<boolean> =>
-  callRpc(() => request.toggleWindowMaximize({} as never));
+export const copyImage = (pngBase64: string): Promise<void> =>
+  callRpc(() => request.copyImage({ pngBase64 }));
 
-export type ExplainEngine = "postgresql" | "mysql" | "clickhouse" | "duckdb";
+export interface SavedFile {
+  fileName: string;
+  savedId: string;
+}
+
+export const saveCsvToDownloads = (
+  baseName: string,
+  content: string
+): Promise<SavedFile> =>
+  callRpc(() =>
+    request.saveToDownloads({ baseName, content, extension: "csv" })
+  );
+
+export const revealSaved = (savedId: string): Promise<void> =>
+  callRpc(() => request.revealSaved({ savedId }));
+
+export const resizeLauncher = (height: number): Promise<void> =>
+  callRpc(() => request.resizeLauncher({ height }));
+
+export const hideLauncher = (): Promise<void> =>
+  callRpc(() => request.hideLauncher({} as never));
+
+export const ask = (params: AskParams): Promise<void> =>
+  callRpc(() => request.ask(params));
+
+export const runSql = (params: RunSqlParams): Promise<void> =>
+  callRpc(() => request.runSql(params));
+
+export const peekSchema = (connectionId: string): Promise<SchemaPeek> =>
+  callRpc(() => request.peekSchema({ connectionId }));
+
+export const cancelAsk = (askId: string): Promise<void> =>
+  callRpc(() => request.cancelAsk({ askId }));
+
+export const lookup = (
+  params: RpcSchema["requests"]["lookup"]["params"]
+): Promise<void> => callRpc(() => request.lookup(params));
+
+export const cancelLookup = (lookupId: string): Promise<void> =>
+  callRpc(() => request.cancelLookup({ lookupId }));
+
+export const getClipboardLookups = async (): Promise<boolean> => {
+  const setting = await callRpc(() => request.getClipboardLookups({} as never));
+  return setting.enabled;
+};
+
+export const setClipboardLookups = async (
+  enabled: boolean
+): Promise<boolean> => {
+  const setting = await callRpc(() => request.setClipboardLookups({ enabled }));
+  return setting.enabled;
+};
+
+export const listWidgets = (): Promise<Widget[]> =>
+  callRpc(() => request.listWidgets({} as never));
+
+export const saveWidget = (widget: WidgetDraft): Promise<Widget> =>
+  callRpc(() => request.saveWidget({ widget }));
+
+export const deleteWidget = (widgetId: string): Promise<void> =>
+  callRpc(() => request.deleteWidget({ widgetId }));
+
+export const listRecentAsks = (limit?: number): Promise<RecentAsk[]> =>
+  callRpc(() => request.listRecentAsks(limit === undefined ? {} : { limit }));
+
+export const deleteRecentAsk = (askId: string): Promise<void> =>
+  callRpc(() => request.deleteRecentAsk({ askId }));
+
+export const clearRecentAsks = (): Promise<void> =>
+  callRpc(() => request.clearRecentAsks({} as never));
+
+export const proposeWidgetParams = (
+  input: RpcSchema["requests"]["proposeWidgetParams"]["params"]
+): Promise<ProposeParamsResult> =>
+  callRpc(() => request.proposeWidgetParams(input));
+
+export const runWidget = (
+  input: RpcSchema["requests"]["runWidget"]["params"]
+): Promise<WidgetRunResult> => callRpc(() => request.runWidget(input));
+
+export const cancelWidgetRun = (runId: string): Promise<void> =>
+  callRpc(() => request.cancelWidgetRun({ runId }));
+
+export const loadParamOptions = (
+  widgetId: string,
+  paramName: string
+): Promise<string[]> =>
+  callRpc(() => request.loadParamOptions({ paramName, widgetId }));
+
+export const listBoards = (): Promise<Board[]> =>
+  callRpc(() => request.listBoards({} as never));
+
+export const getBoard = (boardId: string): Promise<Board | null> =>
+  callRpc(() => request.getBoard({ boardId }));
+
+export const saveBoard = (board: BoardDraft): Promise<Board> =>
+  callRpc(() => request.saveBoard({ board }));
+
+export const deleteBoard = (boardId: string): Promise<void> =>
+  callRpc(() => request.deleteBoard({ boardId }));
+
+export const addBoardTile = (
+  boardId: string,
+  widgetId: string
+): Promise<Board> => callRpc(() => request.addBoardTile({ boardId, widgetId }));
+
+export const openBoard = (boardId: string): Promise<void> =>
+  callRpc(() => request.openBoard({ boardId }));
+
+export const toggleLauncher = (fromBoardId: string | null): Promise<void> =>
+  callRpc(() => request.toggleLauncher({ fromBoardId }));
+
+export const openWidgetInLauncher = (widgetId: string): Promise<void> =>
+  callRpc(() => request.openWidgetInLauncher({ widgetId }));

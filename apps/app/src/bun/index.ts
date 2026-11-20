@@ -1,33 +1,84 @@
-import { ApplicationMenu, BrowserWindow } from "electrobun/bun";
+// Don't import @oh-my-query/core here: evaluating its WASM top-level await before electrobun/main deadlocks the worker.
+import { ApplicationMenu } from "electrobun/main";
 
-import { APPLICATION_MENU } from "./menu.ts";
-import { createRpc } from "./rpc.ts";
-import { windowOptions } from "./window.ts";
+import type { BoardWindows } from "./board-windows.ts";
+import type { LauncherController } from "./launcher.ts";
 
-interface MenuClickedData {
-  id?: number;
-  action: string;
-  data?: unknown;
-}
+import { createAppActivation } from "./app-hide-native.ts";
+import { createBoardWindows } from "./board-windows.ts";
+import { focusAfterLauncherHides } from "./focus-policy.ts";
+import { readLauncherHotkey } from "./launcher-config.ts";
+import { createLauncher } from "./launcher.ts";
+import { APPLICATION_MENU, MENU_ACTIONS } from "./menu.ts";
+import { createAppRpcs } from "./rpc.ts";
+import { LAUNCHER_URL } from "./window.ts";
 
-function main(): void {
-  let mainWindow: BrowserWindow | null = null;
-  const rpc = createRpc({ getMainWindow: () => mainWindow });
-  mainWindow = new BrowserWindow({
-    ...windowOptions,
-    rpc,
-  } as never);
+const menuActionOf = (event: unknown): string | undefined =>
+  (event as { data?: { action?: string } }).data?.action;
 
-  ApplicationMenu.setApplicationMenu(APPLICATION_MENU);
+async function main(): Promise<void> {
+  let launcher: LauncherController | null = null;
+  let boards: BoardWindows | null = null;
+  let returnBoardId: string | null = null;
+  const activation = createAppActivation();
 
-  ApplicationMenu.on("application-menu-clicked", (event: unknown) => {
-    const { data } = event as { data?: MenuClickedData };
-    if (data?.action === "settings") {
-      rpc.send.menuNavigate({ route: "/settings" });
-    }
+  const rpcs = createAppRpcs({
+    boardWindows: () => boards,
+    launcher: () => launcher,
+    toggleLauncherFrom: (boardId) => {
+      returnBoardId = boardId;
+      launcher?.toggle();
+    },
+  });
+  boards = createBoardWindows({
+    baseUrl: LAUNCHER_URL,
+    createRpc: rpcs.createWindowRpc,
+    releaseRpc: rpcs.releaseWindowRpc,
   });
 
-  console.log(`oh-my-query window started (id: ${mainWindow.id})`);
+  const releaseFocus = () => {
+    const next = boards
+      ? focusAfterLauncherHides(boards.state(returnBoardId))
+      : ({ kind: "hide" } as const);
+    returnBoardId = null;
+    switch (next.kind) {
+      case "activate": {
+        boards?.activate(next.boardId);
+        break;
+      }
+      case "deactivate": {
+        activation?.deactivate();
+        break;
+      }
+      case "hide": {
+        activation?.hide();
+        break;
+      }
+      default: {
+        break;
+      }
+    }
+  };
+
+  try {
+    launcher = createLauncher({
+      hotkey: await readLauncherHotkey(),
+      releaseFocus,
+      rpc: rpcs.launcherRpc,
+      summonOffer: rpcs.summonOffer,
+      url: LAUNCHER_URL,
+    });
+  } catch (error) {
+    console.error("[launcher] failed to start", error);
+    return;
+  }
+
+  ApplicationMenu.setApplicationMenu(APPLICATION_MENU);
+  ApplicationMenu.on("application-menu-clicked", (event) => {
+    if (menuActionOf(event) === MENU_ACTIONS.settings) {
+      launcher?.navigate("settings");
+    }
+  });
 }
 
 // oxlint-disable-next-line jest/require-hook

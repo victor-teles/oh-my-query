@@ -16,45 +16,37 @@ const dirname =
 export default defineConfig({
   base: "./",
   optimizeDeps: {
+    entries: ["index.html"],
     include: [
       "@tanstack/react-router",
-      "@tanstack/react-table",
-      "@tanstack/react-virtual",
       "react-dom/client",
-      "zustand",
-      "zustand/react/shallow",
-      "@codemirror/lang-sql",
-      "@codemirror/language",
-      "@codemirror/state",
-      "@codemirror/view",
-      "@uiw/react-codemirror",
-      "@uiw/codemirror-themes-all",
-      "@uiw/codemirror-theme-github",
-      "date-fns",
-      "ai",
-      "@ai-sdk/anthropic",
-      "@ai-sdk/google",
-      "@ai-sdk/openai",
-      "use-stick-to-bottom",
-      "nanoid",
-      "streamdown",
-      "@streamdown/cjk",
-      "@streamdown/code",
-      "@streamdown/math",
-      "@streamdown/mermaid",
+      "motion/react",
+      "lucide-react",
+      "next-themes",
     ],
   },
   plugins: [
     tailwindcss(),
     tanstackRouter({
+      generatedRouteTree: path.resolve(
+        dirname,
+        "./src/mainview/routeTree.gen.ts"
+      ),
       routesDirectory: path.resolve(dirname, "./src/mainview/routes"),
     }),
     react(),
   ],
   resolve: {
-    alias: {
-      "@": path.resolve(dirname, "./src/mainview"),
-    },
+    alias: [
+      { find: "@", replacement: path.resolve(dirname, "./src/mainview") },
+      {
+        find: /^electrobun\/view$/,
+        replacement: path.resolve(
+          dirname,
+          "./.hutch/devkit/api/browser/index.ts"
+        ),
+      },
+    ],
   },
   server: {
     port: 3001,
@@ -76,6 +68,9 @@ export default defineConfig({
       reporter: ["text", "lcov", "html"],
       reportsDirectory: "./coverage",
     },
+    // Animated browser tests oversubscribe Chromium past ~4 parallel files and
+    // Playwright then sees springs as never-stable; 4 matches the CI runners.
+    maxWorkers: 4,
     projects: [
       {
         extends: true,
@@ -85,6 +80,8 @@ export default defineConfig({
             "e2e/**",
             "node_modules/**",
             "dist/**",
+            "build/**",
+            ".hutch/**",
             "**/*.browser.test.tsx",
           ],
           globals: true,
