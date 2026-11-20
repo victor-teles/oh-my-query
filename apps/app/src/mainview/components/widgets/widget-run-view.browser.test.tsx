@@ -157,6 +157,15 @@ describe("widgetRunView states", () => {
         screen.element().querySelector('[data-slot="swap-text"] > span + span')
       )
       .toBeNull();
+    await expect
+      .poll(
+        () =>
+          screen
+            .getByRole("button", { name: "Stop" })
+            .element()
+            .querySelectorAll("svg").length
+      )
+      .toBe(1);
     expect(page.getByTestId("run-harness").element()).toMatchSnapshot();
     await run.resolveNext(runResult());
   });
