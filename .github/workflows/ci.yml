@@ -57,10 +57,12 @@ jobs:
 
       - name: Install Playwright browsers
         if: steps.playwright-cache.outputs.cache-hit != 'true'
+        working-directory: apps/app
         run: bunx playwright install --with-deps chromium
 
       - name: Install Playwright system deps
         if: steps.playwright-cache.outputs.cache-hit == 'true'
+        working-directory: apps/app
         run: bunx playwright install-deps chromium
 
       - name: Cache Turborepo
@@ -141,10 +143,12 @@ jobs:
 
       - name: Install Playwright browsers
         if: steps.playwright-cache.outputs.cache-hit != 'true'
+        working-directory: apps/app
         run: bunx playwright install --with-deps chromium
 
       - name: Install Playwright system deps
         if: steps.playwright-cache.outputs.cache-hit == 'true'
+        working-directory: apps/app
         run: bunx playwright install-deps chromium
 
       - name: Run Playwright
