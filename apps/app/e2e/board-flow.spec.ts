@@ -15,7 +15,7 @@ const seedWidgets = async (page: Page) => {
     sessionStorage.setItem("seeded", "1");
     const stamp = "2026-11-18T09:00:00.000Z";
     localStorage.setItem(
-      "oh-my-query-connections",
+      "conch-connections",
       JSON.stringify([
         {
           createdAt: stamp,
@@ -64,7 +64,7 @@ const seedWidgets = async (page: Page) => {
       view: "table",
     });
     localStorage.setItem(
-      "oh-my-query-widgets",
+      "conch-widgets",
       JSON.stringify([
         widget("w-orders", "Orders this period", [period]),
         widget("w-refunds", "Refunds this period", [period]),
@@ -87,7 +87,7 @@ const collectErrors = (page: Page): string[] => {
 
 const widgetRuns = (page: Page) =>
   page.evaluate(() =>
-    (globalThis as unknown as { __omqIpcLog: IpcCall[] }).__omqIpcLog
+    (globalThis as unknown as { __conchIpcLog: IpcCall[] }).__conchIpcLog
       .filter((call) => call.name === "runWidget")
       .map((call) => call.payload.widgetId)
   );

@@ -1,4 +1,4 @@
-import type { DatabaseConnection } from "@oh-my-query/core/client";
+import type { DatabaseConnection } from "@conch/core/client";
 import type {
   ActiveConnection,
   AiSettingsInput,
@@ -13,12 +13,9 @@ import type {
   RunWidgetRequest,
   WatchDraft,
   WidgetDraft,
-} from "@oh-my-query/rpc";
+} from "@conch/rpc";
 
-import {
-  DEFAULT_CLIPBOARD_LOOKUPS,
-  DEFAULT_LAUNCHER_HOTKEY,
-} from "@oh-my-query/rpc";
+import { DEFAULT_CLIPBOARD_LOOKUPS, DEFAULT_LAUNCHER_HOTKEY } from "@conch/rpc";
 
 import { createAskEmulator, languageForType } from "@/lib/browser-ask-stub";
 import { createBoardEmulator } from "@/lib/browser-board-stub";
@@ -41,10 +38,10 @@ export type EmitMessage = <M extends keyof RpcMessages>(
 
 type RequestStub = Record<string, (payload?: unknown) => Promise<unknown>>;
 
-const CONNECTIONS_KEY = "oh-my-query-connections";
-const ACTIVE_CONNECTION_KEY = "oh-my-query-active-connection";
-const AI_SETTINGS_KEY = "oh-my-query-ai-settings";
-const CLIPBOARD_LOOKUPS_KEY = "oh-my-query-clipboard-lookups";
+const CONNECTIONS_KEY = "conch-connections";
+const ACTIVE_CONNECTION_KEY = "conch-active-connection";
+const AI_SETTINGS_KEY = "conch-ai-settings";
+const CLIPBOARD_LOOKUPS_KEY = "conch-clipboard-lookups";
 
 const readJson = (key: string): unknown => {
   const raw = localStorage.getItem(key);
@@ -340,7 +337,7 @@ export interface IpcCall {
 // run never asked the model).
 export const createBrowserIpcStub = (emit: EmitMessage): RequestStub => {
   const callLog: IpcCall[] = [];
-  Object.defineProperty(globalThis, "__omqIpcLog", {
+  Object.defineProperty(globalThis, "__conchIpcLog", {
     configurable: true,
     value: callLog,
   });

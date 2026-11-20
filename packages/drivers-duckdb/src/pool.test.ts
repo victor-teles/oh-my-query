@@ -1,7 +1,7 @@
+import type { ExecuteResult, TabularResult } from "@conch/core";
 import type { DuckDBConnection, DuckDBInstance } from "@duckdb/node-api";
-import type { ExecuteResult, TabularResult } from "@oh-my-query/core";
 
-import { DbError } from "@oh-my-query/core";
+import { DbError } from "@conch/core";
 import { access, writeFile } from "node:fs/promises";
 import { describe, expect, it, vi } from "vitest";
 

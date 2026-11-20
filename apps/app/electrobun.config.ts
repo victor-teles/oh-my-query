@@ -13,8 +13,8 @@ const bunAssetCopy = Object.fromEntries(
 
 export default {
   app: {
-    identifier: "dev.ohmyquery.app",
-    name: "oh-my-query",
+    identifier: "dev.conch.app",
+    name: "Conch",
     version: "0.0.10",
   },
   build: {

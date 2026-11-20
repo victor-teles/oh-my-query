@@ -592,7 +592,7 @@ exports[`widgets in the root list with full motion > lists recent asks and widge
         <span
           class="truncate type-meta text-panel-muted"
         >
-          Saves a .omq.json to Downloads
+          Saves a .conch.json to Downloads
         </span>
       </span>
     </div>
@@ -642,7 +642,7 @@ exports[`widgets in the root list with full motion > lists recent asks and widge
         <span
           class="truncate type-meta text-panel-muted"
         >
-          From the clipboard or a .omq.json file
+          From the clipboard or a .conch.json file
         </span>
       </span>
     </div>
@@ -1339,7 +1339,7 @@ exports[`widgets in the root list with reduced motion > lists recent asks and wi
         <span
           class="truncate type-meta text-panel-muted"
         >
-          Saves a .omq.json to Downloads
+          Saves a .conch.json to Downloads
         </span>
       </span>
     </div>
@@ -1389,7 +1389,7 @@ exports[`widgets in the root list with reduced motion > lists recent asks and wi
         <span
           class="truncate type-meta text-panel-muted"
         >
-          From the clipboard or a .omq.json file
+          From the clipboard or a .conch.json file
         </span>
       </span>
     </div>

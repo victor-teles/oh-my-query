@@ -1,4 +1,4 @@
-import { editableParams, formatThreshold, isKpiSpec } from "@oh-my-query/rpc";
+import { editableParams, formatThreshold, isKpiSpec } from "@conch/rpc";
 import { useCallback, useEffect, useReducer, useRef } from "react";
 
 import type {

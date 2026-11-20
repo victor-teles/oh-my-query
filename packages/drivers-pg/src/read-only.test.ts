@@ -1,4 +1,4 @@
-import type { TabularResult } from "@oh-my-query/core";
+import type { TabularResult } from "@conch/core";
 
 import { Pool as PgPool } from "pg";
 import { afterAll, describe, expect, it, vi } from "vitest";
@@ -119,7 +119,7 @@ describe.skipIf(!fixture)(
   () => {
     const raw = fixture as PgPool;
     const pool = new PostgresPool(raw);
-    const table = `omq_read_only_${process.pid}`;
+    const table = `conch_read_only_${process.pid}`;
 
     afterAll(async () => {
       await raw.query(`drop table if exists ${table}`);

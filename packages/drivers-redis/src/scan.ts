@@ -1,7 +1,7 @@
-import type { RedisReadCommand } from "@oh-my-query/core/client";
+import type { RedisReadCommand } from "@conch/core/client";
 import type { Redis } from "ioredis";
 
-import { DbError } from "@oh-my-query/core";
+import { DbError } from "@conch/core";
 
 export const SCAN_MAX_KEYS = 10_000;
 export const SCAN_MAX_ITERATIONS = 50;

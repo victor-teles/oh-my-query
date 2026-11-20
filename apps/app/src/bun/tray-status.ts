@@ -1,6 +1,6 @@
 import type { MenuItemConfig } from "electrobun/main";
 
-import { timeAgo } from "@oh-my-query/rpc";
+import { timeAgo } from "@conch/rpc";
 import { z } from "zod";
 
 export const TRAY_ACTIONS = {
@@ -102,7 +102,7 @@ const BASE_MENU: MenuItemConfig[] = [
   { action: TRAY_ACTIONS.open, label: "Open Launcher", type: "normal" },
   { action: TRAY_ACTIONS.settings, label: "Settings…", type: "normal" },
   { type: "separator" },
-  { action: TRAY_ACTIONS.quit, label: "Quit oh-my-query", type: "normal" },
+  { action: TRAY_ACTIONS.quit, label: "Quit Conch", type: "normal" },
 ];
 
 export const trayMenu = (status: TrayStatus): MenuItemConfig[] => {

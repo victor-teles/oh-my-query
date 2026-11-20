@@ -1,4 +1,4 @@
-import type { ColumnInfo } from "@oh-my-query/core/client";
+import type { ColumnInfo } from "@conch/core/client";
 
 import type { CardSpec, ColumnFormat } from "./card-spec.ts";
 

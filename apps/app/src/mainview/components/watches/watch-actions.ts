@@ -1,4 +1,4 @@
-import { isKpiSpec } from "@oh-my-query/rpc";
+import { isKpiSpec } from "@conch/rpc";
 import { EyeIcon, GaugeIcon } from "lucide-react";
 
 import type { MenuAction } from "@/components/launcher/actions/menu-action";

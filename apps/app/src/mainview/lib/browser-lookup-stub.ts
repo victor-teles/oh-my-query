@@ -1,13 +1,13 @@
-import type { ColumnInfo, LookupValue } from "@oh-my-query/core/client";
+import type { ColumnInfo, LookupValue } from "@conch/core/client";
 import type {
   LookupEvent,
   LookupHit,
   LookupRequest,
   RpcSchema,
   SqlRunSource,
-} from "@oh-my-query/rpc";
+} from "@conch/rpc";
 
-import { classifyLookupValue } from "@oh-my-query/core/client";
+import { classifyLookupValue } from "@conch/core/client";
 
 type EmitLookupEvent = (payload: RpcSchema["messages"]["lookupEvent"]) => void;
 type Step = [delayMs: number, event: LookupEvent];
@@ -177,7 +177,7 @@ export const createLookupEmulator = (emit: EmitLookupEvent) => {
 
 export const createClipboardEmulator = (enabled: () => boolean) => {
   const clipboard = { text: "" };
-  Object.defineProperty(globalThis, "__omqSetClipboard", {
+  Object.defineProperty(globalThis, "__conchSetClipboard", {
     configurable: true,
     value: (text: string) => {
       clipboard.text = text;

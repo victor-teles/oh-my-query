@@ -1,4 +1,4 @@
-import { intervalPhrase, shortIntervalPhrase } from "@oh-my-query/rpc";
+import { intervalPhrase, shortIntervalPhrase } from "@conch/rpc";
 
 import type { Watch, WatchStatus } from "@/lib/ipc";
 

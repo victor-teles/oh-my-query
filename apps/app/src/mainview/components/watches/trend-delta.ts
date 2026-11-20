@@ -1,4 +1,4 @@
-import { formatScalarValue } from "@oh-my-query/rpc";
+import { formatScalarValue } from "@conch/rpc";
 
 import type { CardSpec, WidgetTrend } from "@/lib/ipc";
 

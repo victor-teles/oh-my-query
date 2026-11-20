@@ -1,4 +1,4 @@
-import { CARD_SPEC_VERSION } from "@oh-my-query/rpc";
+import { CARD_SPEC_VERSION } from "@conch/rpc";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { renderHook } from "@/test/render-hook";

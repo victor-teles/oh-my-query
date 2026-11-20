@@ -3,11 +3,11 @@ import type {
   ExecuteOptions,
   SchemaInfo,
   TableItem,
-} from "@oh-my-query/core";
-import type { ConnectionPoolManager } from "@oh-my-query/drivers";
-import type { LookupEvent, LookupEventMessage } from "@oh-my-query/rpc";
+} from "@conch/core";
+import type { ConnectionPoolManager } from "@conch/drivers";
+import type { LookupEvent, LookupEventMessage } from "@conch/rpc";
 
-import { appendHistory, getConnections } from "@oh-my-query/core";
+import { appendHistory, getConnections } from "@conch/core";
 import { describe, expect, it, vi } from "vitest";
 
 import type { LookupTiming } from "./lookup-service.ts";
@@ -15,7 +15,7 @@ import type { SchemaCache } from "./schema-cache.ts";
 
 import { createLookupService } from "./lookup-service.ts";
 
-vi.mock(import("@oh-my-query/core"), async (importOriginal) => ({
+vi.mock(import("@conch/core"), async (importOriginal) => ({
   ...(await importOriginal()),
   appendHistory: vi.fn(),
   getConnections: vi.fn(),
@@ -34,7 +34,7 @@ const connection = (id: string, type = "postgresql"): DatabaseConnection => ({
   pinned: false,
   port: 5432,
   type,
-  username: "omq",
+  username: "conch",
 });
 
 const uuidTable = (name: string, column = "id"): TableItem => ({

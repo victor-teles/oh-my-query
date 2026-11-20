@@ -1,7 +1,7 @@
-import type { ExecuteResult, TabularResult } from "@oh-my-query/core";
+import type { ExecuteResult, TabularResult } from "@conch/core";
 import type { ConnectionPool, IColumnMetadata, IResult } from "mssql";
 
-import { DbError } from "@oh-my-query/core";
+import { DbError } from "@conch/core";
 import { describe, expect, it, vi } from "vitest";
 
 import { mapMssqlError, MssqlPool } from "./pool.ts";

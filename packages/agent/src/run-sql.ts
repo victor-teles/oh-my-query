@@ -1,5 +1,5 @@
-import type { BindValue, DialectType } from "@oh-my-query/core";
-import type { AskEvent } from "@oh-my-query/rpc";
+import type { BindValue, DialectType } from "@conch/core";
+import type { AskEvent } from "@conch/rpc";
 
 import type { AskPorts } from "./ask.ts";
 

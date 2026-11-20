@@ -1,7 +1,7 @@
-import type { ConnectionParams } from "@oh-my-query/core";
+import type { ConnectionParams } from "@conch/core";
 import type * as MongoModule from "mongodb";
 
-import { DbError } from "@oh-my-query/core";
+import { DbError } from "@conch/core";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const MongoClientMock = vi.hoisted(() => vi.fn());

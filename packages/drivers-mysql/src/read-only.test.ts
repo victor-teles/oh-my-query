@@ -1,4 +1,4 @@
-import type { TabularResult } from "@oh-my-query/core";
+import type { TabularResult } from "@conch/core";
 import type { Pool as MysqlPoolType } from "mysql2/promise";
 
 import { createPool } from "mysql2/promise";
@@ -137,7 +137,7 @@ const fixture = await connectFixture();
 describe.skipIf(!fixture)("mysqlPool.execute params (fixture database)", () => {
   const raw = fixture as MysqlPoolType;
   const pool = new MysqlPool(raw, new URL(FIXTURE_URL).pathname.slice(1));
-  const table = `omq_params_${process.pid}`;
+  const table = `conch_params_${process.pid}`;
 
   afterAll(async () => {
     await raw.query(`drop table if exists ${table}`);

@@ -1,5 +1,5 @@
 {
-  "name": "@oh-my-query/drivers-clickhouse",
+  "name": "@conch/drivers-clickhouse",
   "version": "0.0.0",
   "private": true,
   "type": "module",
@@ -14,10 +14,10 @@
   },
   "dependencies": {
     "@clickhouse/client": "^1.10.0",
-    "@oh-my-query/core": "workspace:*"
+    "@conch/core": "workspace:*"
   },
   "devDependencies": {
-    "@oh-my-query/config": "workspace:*",
+    "@conch/config": "workspace:*",
     "@types/node": "^25.6.0",
     "@typescript/native-preview": "catalog:",
     "vitest": "catalog:"

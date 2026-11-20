@@ -1,6 +1,6 @@
 import type { FocusEvent, KeyboardEvent } from "react";
 
-import { editableParams } from "@oh-my-query/rpc";
+import { editableParams } from "@conch/rpc";
 import { useCallback, useEffect, useRef, useState } from "react";
 
 import type { ParamDef, ParamValue, ParamValues, Widget } from "@/lib/ipc";

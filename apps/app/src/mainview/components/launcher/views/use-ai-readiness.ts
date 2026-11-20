@@ -1,4 +1,4 @@
-import { isAiConfigured } from "@oh-my-query/rpc";
+import { isAiConfigured } from "@conch/rpc";
 import { useEffect, useState } from "react";
 
 import { getAiSettings } from "@/lib/ipc";

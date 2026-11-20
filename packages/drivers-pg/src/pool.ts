@@ -10,7 +10,7 @@ import type {
   IndexItem,
   Pool,
   SchemaInfo,
-} from "@oh-my-query/core";
+} from "@conch/core";
 import type {
   FieldDef,
   Pool as PgPoolType,
@@ -24,7 +24,7 @@ import {
   guardDestructive,
   parsePostgres,
   validateSchemaName,
-} from "@oh-my-query/core";
+} from "@conch/core";
 import { types } from "pg";
 
 const OID_TO_NAME = buildOidToName();

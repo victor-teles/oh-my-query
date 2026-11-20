@@ -1,6 +1,6 @@
-import type { CardResult, CardSpec, RunSample } from "@oh-my-query/rpc";
+import type { CardResult, CardSpec, RunSample } from "@conch/rpc";
 
-import { scalarOf } from "@oh-my-query/rpc";
+import { scalarOf } from "@conch/rpc";
 import { createHash } from "node:crypto";
 
 const hex16 = (text: string): string =>

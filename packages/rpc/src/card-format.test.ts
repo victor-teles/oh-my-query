@@ -1,4 +1,4 @@
-import type { ColumnInfo } from "@oh-my-query/core/client";
+import type { ColumnInfo } from "@conch/core/client";
 
 import { describe, expect, it } from "vitest";
 

@@ -1,4 +1,4 @@
-import { alertLabel, hasUnseenAlert } from "@oh-my-query/rpc";
+import { alertLabel, hasUnseenAlert } from "@conch/rpc";
 import { useMemo } from "react";
 
 import type { Watch, Widget } from "@/lib/ipc";

@@ -1,5 +1,5 @@
 {
-  "name": "@oh-my-query/agent",
+  "name": "@conch/agent",
   "version": "0.0.0",
   "private": true,
   "type": "module",
@@ -15,13 +15,13 @@
     "@ai-sdk/anthropic": "^3.0.44",
     "@ai-sdk/google": "^3.0.64",
     "@ai-sdk/openai": "^3.0.29",
-    "@oh-my-query/core": "workspace:*",
-    "@oh-my-query/rpc": "workspace:*",
+    "@conch/core": "workspace:*",
+    "@conch/rpc": "workspace:*",
     "ai": "^6.0.97",
     "zod": "catalog:"
   },
   "devDependencies": {
-    "@oh-my-query/config": "workspace:*",
+    "@conch/config": "workspace:*",
     "@types/bun": "catalog:",
     "@typescript/native-preview": "catalog:",
     "vitest": "catalog:"

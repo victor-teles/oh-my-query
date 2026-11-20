@@ -9,10 +9,10 @@ import type {
   RedisScanPage,
   RedisSizeUnit,
   SchemaInfo,
-} from "@oh-my-query/core";
+} from "@conch/core";
 import type { ChainableCommander, Redis } from "ioredis";
 
-import { DbError } from "@oh-my-query/core";
+import { DbError } from "@conch/core";
 
 import { sampleKeyspace } from "./keyspace-schema.ts";
 import { closeQuietly, openReadClient } from "./scan.ts";

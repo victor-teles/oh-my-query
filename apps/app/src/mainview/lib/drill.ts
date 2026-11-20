@@ -1,7 +1,7 @@
-import type { CardResult } from "@oh-my-query/rpc";
+import type { CardResult } from "@conch/rpc";
 
-import { redactPii } from "@oh-my-query/core/client";
-import { formatFor, formatValue } from "@oh-my-query/rpc";
+import { redactPii } from "@conch/core/client";
+import { formatFor, formatValue } from "@conch/rpc";
 
 import type { CardViewKind, ChartModel, ChartRow } from "@/lib/card-data";
 import type { CardSpec, CardView, ChartView } from "@/lib/ipc";

@@ -47,10 +47,10 @@ describe("importReducer reading", () => {
     const invalid = run(
       INITIAL_IMPORT,
       { source: "clipboard", type: "read" },
-      { message: "The clipboard has no oh-my-query export.", type: "invalid" }
+      { message: "The clipboard has no Conch export.", type: "invalid" }
     );
     expect(invalid).toStrictEqual({
-      message: "The clipboard has no oh-my-query export.",
+      message: "The clipboard has no Conch export.",
       phase: "invalid",
       source: "clipboard",
     });

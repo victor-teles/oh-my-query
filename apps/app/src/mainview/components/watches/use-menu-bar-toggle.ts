@@ -1,4 +1,4 @@
-import { newWatchDraft, watchDraftOf } from "@oh-my-query/rpc";
+import { newWatchDraft, watchDraftOf } from "@conch/rpc";
 import { useCallback } from "react";
 
 import type { Widget } from "@/lib/ipc";

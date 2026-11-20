@@ -25,7 +25,7 @@ export const IMPORT_SOURCES: readonly SourceOption[] = [
     title: "From Clipboard",
   },
   {
-    detail: "A .omq.json file",
+    detail: "A .conch.json file",
     icon: FileJsonIcon,
     source: "file",
     title: "From File…",

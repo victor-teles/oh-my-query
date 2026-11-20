@@ -1,7 +1,4 @@
-import {
-  parseRedisReadPlan,
-  REDIS_READ_COMMANDS,
-} from "@oh-my-query/core/client";
+import { parseRedisReadPlan, REDIS_READ_COMMANDS } from "@conch/core/client";
 
 import type { QueryEngine } from "./query-engine.ts";
 

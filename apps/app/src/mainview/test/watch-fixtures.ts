@@ -1,4 +1,4 @@
-import { INITIAL_ALERT_STATE } from "@oh-my-query/rpc";
+import { INITIAL_ALERT_STATE } from "@conch/rpc";
 
 import type { Watch, WatchStatus, Widget, WidgetTrend } from "@/lib/ipc";
 

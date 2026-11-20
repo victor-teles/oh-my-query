@@ -1,4 +1,4 @@
-import { CARD_SPEC_VERSION } from "@oh-my-query/rpc";
+import { CARD_SPEC_VERSION } from "@conch/rpc";
 import { describe, expect, it, vi } from "vitest";
 import { render } from "vitest-browser-react";
 import { userEvent } from "vitest/browser";

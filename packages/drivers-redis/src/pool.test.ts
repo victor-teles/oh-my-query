@@ -1,6 +1,6 @@
 import type Redis from "ioredis";
 
-import { DbError } from "@oh-my-query/core";
+import { DbError } from "@conch/core";
 import { describe, expect, it, vi } from "vitest";
 
 import { fakeRedis, replyTable } from "./fake-redis.ts";

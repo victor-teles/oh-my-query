@@ -1,6 +1,6 @@
-import type { CardResult } from "@oh-my-query/rpc";
+import type { CardResult } from "@conch/rpc";
 
-import { CARD_SPEC_VERSION } from "@oh-my-query/rpc";
+import { CARD_SPEC_VERSION } from "@conch/rpc";
 
 import type { CardSpec } from "@/lib/ipc";
 

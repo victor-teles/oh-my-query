@@ -37,7 +37,7 @@ const COPY: Record<AskErrorCode, ErrorCopy> = {
   NOT_READ_ONLY: {
     action: null,
     showDetail: true,
-    title: "This would change data. oh-my-query only runs read-only questions.",
+    title: "This would change data. Conch only runs read-only questions.",
   },
   NO_AI_SETTINGS: {
     action: "settings",

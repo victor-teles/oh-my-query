@@ -1,4 +1,4 @@
-import { describeSqlAssumptions } from "@oh-my-query/core";
+import { describeSqlAssumptions } from "@conch/core";
 import { describe, expect, it } from "vitest";
 
 import {

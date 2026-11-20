@@ -1,6 +1,6 @@
-import type { Board, Widget } from "@oh-my-query/rpc";
+import type { Board, Widget } from "@conch/rpc";
 
-import { CARD_SPEC_VERSION } from "@oh-my-query/rpc";
+import { CARD_SPEC_VERSION } from "@conch/rpc";
 import { describe, expect, it, vi } from "vitest";
 
 import type { BoardStore } from "./board-service.ts";

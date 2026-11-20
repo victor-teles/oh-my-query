@@ -1,14 +1,14 @@
 import { homedir } from "node:os";
 import path from "node:path";
 
-const APP_DIR = ".config/oh-my-query";
+const APP_DIR = ".config/conch";
 
 export function appDir(): string {
   return path.join(homedir(), APP_DIR);
 }
 
 export function configPath(): string {
-  return path.join(appDir(), "oh-my-query.json");
+  return path.join(appDir(), "conch.json");
 }
 
 export function connectionsPath(): string {

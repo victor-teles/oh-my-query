@@ -8,9 +8,9 @@ import type {
   ImportResult,
   ImportSource as ImportSourceValue,
   Widget,
-} from "@oh-my-query/rpc";
+} from "@conch/rpc";
 
-import { DbError } from "@oh-my-query/core";
+import { DbError } from "@conch/core";
 import {
   ApplyImportRequest,
   BUNDLE_EXTENSION,
@@ -27,7 +27,7 @@ import {
   planImport,
   readBundleText,
   SKIP_REASONS,
-} from "@oh-my-query/rpc";
+} from "@conch/rpc";
 import { open } from "node:fs/promises";
 import { z } from "zod";
 
@@ -80,7 +80,7 @@ const yyyymmdd = (date: Date): string =>
 
 export const exportBaseName = (label: string, now: Date): string => {
   const slug = slugBaseName(slugBaseName(label).slice(0, NAME_SLUG_LENGTH));
-  return `oh-my-query-${slug || "export"}-${yyyymmdd(now)}`;
+  return `conch-${slug || "export"}-${yyyymmdd(now)}`;
 };
 
 export const readTextUpTo = async (

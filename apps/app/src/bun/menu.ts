@@ -4,7 +4,7 @@ export const MENU_ACTIONS = { settings: "settings" } as const;
 
 export const APPLICATION_MENU: ApplicationMenuItemConfig[] = [
   {
-    label: "oh-my-query",
+    label: "Conch",
     submenu: [
       {
         accelerator: "CmdOrCtrl+,",

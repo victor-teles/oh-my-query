@@ -1,22 +1,22 @@
-import type { LanguageModel } from "@oh-my-query/agent";
-import type { DatabaseConnection, Pool } from "@oh-my-query/core";
-import type { ConnectionPoolManager } from "@oh-my-query/drivers";
+import type { LanguageModel } from "@conch/agent";
+import type { DatabaseConnection, Pool } from "@conch/core";
+import type { ConnectionPoolManager } from "@conch/drivers";
 import type {
   AskEvent,
   AskEventMessage,
   AskParams,
   RecentAsk,
-} from "@oh-my-query/rpc";
+} from "@conch/rpc";
 
-import { appendHistory, getConnections } from "@oh-my-query/core";
-import { CARD_SPEC_VERSION } from "@oh-my-query/rpc";
+import { appendHistory, getConnections } from "@conch/core";
+import { CARD_SPEC_VERSION } from "@conch/rpc";
 import { describe, expect, it, vi } from "vitest";
 
 import type { SchemaCache } from "./schema-cache.ts";
 
 import { createAskService } from "./ask-service.ts";
 
-vi.mock(import("@oh-my-query/core"), async (importOriginal) => ({
+vi.mock(import("@conch/core"), async (importOriginal) => ({
   ...(await importOriginal()),
   appendHistory: vi.fn(),
   getConnections: vi.fn(),
@@ -33,7 +33,7 @@ const connection: DatabaseConnection = {
   pinned: false,
   port: 5432,
   type: "postgresql",
-  username: "omq",
+  username: "conch",
 };
 
 const usage = {

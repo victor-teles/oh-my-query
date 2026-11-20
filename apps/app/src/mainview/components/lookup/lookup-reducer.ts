@@ -1,4 +1,4 @@
-import type { LookupSkips } from "@oh-my-query/core/client";
+import type { LookupSkips } from "@conch/core/client";
 
 import type {
   LookupErrorCode,

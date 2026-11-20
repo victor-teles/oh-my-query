@@ -1,4 +1,4 @@
-import type { ColumnDetail } from "@oh-my-query/core";
+import type { ColumnDetail } from "@conch/core";
 import type { Document } from "mongodb";
 
 import { BSON } from "mongodb";

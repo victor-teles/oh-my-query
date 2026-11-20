@@ -1,4 +1,4 @@
-import type { ColumnDetail, TableItem } from "@oh-my-query/core";
+import type { ColumnDetail, TableItem } from "@conch/core";
 import type { Redis } from "ioredis";
 
 import { groupKeyPatterns } from "./key-patterns.ts";

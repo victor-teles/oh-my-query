@@ -28,13 +28,13 @@
   "dependencies": {
     "@base-ui/react": "^1.0.0",
     "@codemirror/lang-sql": "^6.10.0",
+    "@conch/agent": "workspace:*",
+    "@conch/core": "workspace:*",
+    "@conch/drivers": "workspace:*",
+    "@conch/env": "workspace:*",
+    "@conch/rpc": "workspace:*",
     "@fontsource-variable/jetbrains-mono": "^5.2.8",
     "@fontsource-variable/mona-sans": "5.3.0",
-    "@oh-my-query/agent": "workspace:*",
-    "@oh-my-query/core": "workspace:*",
-    "@oh-my-query/drivers": "workspace:*",
-    "@oh-my-query/env": "workspace:*",
-    "@oh-my-query/rpc": "workspace:*",
     "@tailwindcss/vite": "^4.0.15",
     "@tanstack/react-router": "^1.141.1",
     "class-variance-authority": "^0.7.1",
@@ -53,7 +53,7 @@
     "zod": "catalog:"
   },
   "devDependencies": {
-    "@oh-my-query/config": "workspace:*",
+    "@conch/config": "workspace:*",
     "@playwright/test": "^1.65.1",
     "@tanstack/react-router-devtools": "^1.141.1",
     "@tanstack/router-plugin": "^1.141.1",

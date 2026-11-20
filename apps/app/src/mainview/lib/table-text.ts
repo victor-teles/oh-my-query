@@ -11,7 +11,7 @@ const TABS_AND_BREAKS = /\t|\r\n|\r|\n/g;
 const NON_SLUG = /[^a-z0-9]+/g;
 const EDGE_DASHES = /^-+|-+$/g;
 const MAX_BASE_NAME = 60;
-export const FALLBACK_BASE_NAME = "oh-my-query-result";
+export const FALLBACK_BASE_NAME = "conch-result";
 
 const cellText = (value: unknown): string => {
   if (value === null || value === undefined) {

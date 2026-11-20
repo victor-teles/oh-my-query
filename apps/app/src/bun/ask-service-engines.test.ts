@@ -1,17 +1,17 @@
-import type { LanguageModel } from "@oh-my-query/agent";
-import type { DatabaseConnection, TabularResult } from "@oh-my-query/core";
-import type { ConnectionPoolManager } from "@oh-my-query/drivers";
-import type { AskEventMessage, RecentAsk } from "@oh-my-query/rpc";
+import type { LanguageModel } from "@conch/agent";
+import type { DatabaseConnection, TabularResult } from "@conch/core";
+import type { ConnectionPoolManager } from "@conch/drivers";
+import type { AskEventMessage, RecentAsk } from "@conch/rpc";
 
-import { appendHistory, getConnections } from "@oh-my-query/core";
-import { runMongoReadQuery, runRedisReadPlan } from "@oh-my-query/drivers/read";
+import { appendHistory, getConnections } from "@conch/core";
+import { runMongoReadQuery, runRedisReadPlan } from "@conch/drivers/read";
 import { describe, expect, it, vi } from "vitest";
 
 import type { SchemaCache } from "./schema-cache.ts";
 
 import { createAskService } from "./ask-service.ts";
 
-vi.mock(import("@oh-my-query/core"), async (importOriginal) => ({
+vi.mock(import("@conch/core"), async (importOriginal) => ({
   ...(await importOriginal()),
   appendHistory: vi.fn(),
   getConnections: vi.fn(),
@@ -27,7 +27,7 @@ const { kindOf } = vi.hoisted(() => ({
       : null,
 }));
 
-vi.mock(import("@oh-my-query/drivers/read"), () => ({
+vi.mock(import("@conch/drivers/read"), () => ({
   isMongoPool: (pool: unknown): pool is MongoPool => kindOf(pool) === "mongodb",
   isRedisPool: (pool: unknown): pool is RedisPool => kindOf(pool) === "redis",
   runMongoReadQuery: vi.fn(),

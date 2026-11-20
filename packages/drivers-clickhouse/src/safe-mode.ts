@@ -1,1 +1,1 @@
-export { classifyStandardSql as classifyDestructive } from "@oh-my-query/core/client";
+export { classifyStandardSql as classifyDestructive } from "@conch/core/client";

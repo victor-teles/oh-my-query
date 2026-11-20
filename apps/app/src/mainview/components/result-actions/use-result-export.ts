@@ -1,4 +1,4 @@
-import type { CardResult } from "@oh-my-query/rpc";
+import type { CardResult } from "@conch/rpc";
 import type { RefObject } from "react";
 
 import { useCallback, useEffect, useRef, useState } from "react";

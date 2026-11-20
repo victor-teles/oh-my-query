@@ -1,6 +1,6 @@
 import type { Pool as PgPoolType } from "pg";
 
-import { DbError } from "@oh-my-query/core";
+import { DbError } from "@conch/core";
 import { describe, expect, it, vi } from "vitest";
 
 import { PostgresPool } from "./pool";

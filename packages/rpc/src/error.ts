@@ -1,6 +1,6 @@
-import { DbError } from "@oh-my-query/core/client";
+import { DbError } from "@conch/core/client";
 
-const ENCODED_ERROR_PREFIX = "__omq_err__";
+const ENCODED_ERROR_PREFIX = "__conch_err__";
 
 const stringifySubError = (sub: unknown): string => {
   if (sub instanceof Error) {

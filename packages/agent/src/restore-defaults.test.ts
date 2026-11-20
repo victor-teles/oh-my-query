@@ -1,4 +1,4 @@
-import type { ParamDef } from "@oh-my-query/rpc";
+import type { ParamDef } from "@conch/rpc";
 
 import { describe, expect, it } from "vitest";
 

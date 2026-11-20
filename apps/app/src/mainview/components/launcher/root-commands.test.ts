@@ -31,7 +31,7 @@ describe("rootCommands", () => {
     const byId = new Map(rootCommands(wired).map((c) => [c.id, c]));
     expect(byId.get("export-bundle")).toMatchObject({
       actionLabel: "Export",
-      subtitle: "Saves a .omq.json to Downloads",
+      subtitle: "Saves a .conch.json to Downloads",
       title: "Export Widgets and Boards",
     });
     byId.get("import-bundle")?.run();

@@ -1,7 +1,7 @@
-import type { AiProvider } from "@oh-my-query/rpc";
+import type { AiProvider } from "@conch/rpc";
 import type { ChangeEvent } from "react";
 
-import { AI_PROVIDER_INFO } from "@oh-my-query/rpc";
+import { AI_PROVIDER_INFO } from "@conch/rpc";
 import { useCallback } from "react";
 
 import { Pressable } from "@/components/motion/pressable";

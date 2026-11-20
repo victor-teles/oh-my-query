@@ -1,4 +1,4 @@
-import type { RpcSchema } from "@oh-my-query/rpc";
+import type { RpcSchema } from "@conch/rpc";
 
 import {
   appendHistory,
@@ -15,8 +15,8 @@ import {
   resetSecrets,
   saveConnections,
   transpileSql,
-} from "@oh-my-query/core";
-import { ConnectionPoolManager, getDriver } from "@oh-my-query/drivers";
+} from "@conch/core";
+import { ConnectionPoolManager, getDriver } from "@conch/drivers";
 import {
   Board,
   BUNDLE_EXTENSION,
@@ -25,7 +25,7 @@ import {
   encodeRpcError,
   MAX_REFINE_SQL,
   Watch,
-} from "@oh-my-query/rpc";
+} from "@conch/rpc";
 import { defineElectrobunRPC, Updater, Utils } from "electrobun/main";
 import { z } from "zod";
 

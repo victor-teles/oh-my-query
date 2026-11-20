@@ -1,13 +1,13 @@
-import type { TabularResult } from "@oh-my-query/core";
-import type { RedisReadCommand, RedisReadPlan } from "@oh-my-query/core/client";
+import type { TabularResult } from "@conch/core";
+import type { RedisReadCommand, RedisReadPlan } from "@conch/core/client";
 import type { Redis } from "ioredis";
 
-import { DbError } from "@oh-my-query/core";
+import { DbError } from "@conch/core";
 import {
   flattenRecords,
   parseRedisReadPlan,
   redisCommandShape,
-} from "@oh-my-query/core/client";
+} from "@conch/core/client";
 
 import type { RedisPool } from "./pool.ts";
 

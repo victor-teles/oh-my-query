@@ -1,14 +1,14 @@
-import type { ConnectionParams, Driver } from "@oh-my-query/core";
+import type { ConnectionParams, Driver } from "@conch/core";
 
-import { DbError } from "@oh-my-query/core";
-import { ClickhouseDriver } from "@oh-my-query/drivers-clickhouse";
-import { DuckdbDriver } from "@oh-my-query/drivers-duckdb";
-import { MongoDriver } from "@oh-my-query/drivers-mongo";
-import { MssqlDriver } from "@oh-my-query/drivers-mssql";
-import { MysqlDriver } from "@oh-my-query/drivers-mysql";
-import { PostgresDriver } from "@oh-my-query/drivers-pg";
-import { RedisDriver } from "@oh-my-query/drivers-redis";
-import { SqliteDriver } from "@oh-my-query/drivers-sqlite";
+import { DbError } from "@conch/core";
+import { ClickhouseDriver } from "@conch/drivers-clickhouse";
+import { DuckdbDriver } from "@conch/drivers-duckdb";
+import { MongoDriver } from "@conch/drivers-mongo";
+import { MssqlDriver } from "@conch/drivers-mssql";
+import { MysqlDriver } from "@conch/drivers-mysql";
+import { PostgresDriver } from "@conch/drivers-pg";
+import { RedisDriver } from "@conch/drivers-redis";
+import { SqliteDriver } from "@conch/drivers-sqlite";
 
 const DRIVERS: Record<string, () => Driver> = {
   clickhouse: () => new ClickhouseDriver(),

@@ -1,4 +1,4 @@
-import { boardFramesPath } from "@oh-my-query/core";
+import { boardFramesPath } from "@conch/core";
 import { BrowserWindow, Screen } from "electrobun/main";
 import fs from "node:fs/promises";
 import path from "node:path";

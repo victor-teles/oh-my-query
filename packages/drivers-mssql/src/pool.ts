@@ -12,7 +12,7 @@ import type {
   SchemaInfo,
   TableItem,
   ViewItem,
-} from "@oh-my-query/core";
+} from "@conch/core";
 import type {
   ConnectionPool,
   IColumnMetadata,
@@ -21,7 +21,7 @@ import type {
   Request as MssqlRequest,
 } from "mssql";
 
-import { DbError, validateSchemaName } from "@oh-my-query/core";
+import { DbError, validateSchemaName } from "@conch/core";
 
 const POOL_CLOSED = new DbError("POOL_CLOSED", "MSSQL pool is closed");
 

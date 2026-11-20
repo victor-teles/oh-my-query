@@ -2,7 +2,7 @@
 
 ### Users
 
-**Primary**: Backend and full-stack developers who live in terminals and IDEs and treat oh-my-query as a daily driver alongside their editor. They're keyboard-first, spend long sessions debugging and exploring data, and care about how the tool _feels_ over long stretches — not just first-run impressions.
+**Primary**: Backend and full-stack developers who live in terminals and IDEs and treat Conch as a daily driver alongside their editor. They're keyboard-first, spend long sessions debugging and exploring data, and care about how the tool _feels_ over long stretches — not just first-run impressions.
 
 **Context of use**: A macOS menu-bar app built with Electrobun. A global hotkey summons one translucent launcher panel over whatever the user is doing (usually a code editor or a terminal), and it goes away with Esc. From there they ask a question of PostgreSQL, MySQL, SQL Server, SQLite, DuckDB, ClickHouse, MongoDB, or Redis and read the answer as a chart, a KPI, or a table. Answers they want again become widgets with typed inputs. Widgets they want to watch go on boards: separate windows that stay open beside their work and refresh on a schedule.
 

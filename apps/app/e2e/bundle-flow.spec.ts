@@ -10,7 +10,7 @@ const seedWorkspace = async (page: Page) => {
     sessionStorage.setItem("seeded", "1");
     const stamp = "2026-11-18T09:00:00.000Z";
     localStorage.setItem(
-      "oh-my-query-connections",
+      "conch-connections",
       JSON.stringify([
         {
           createdAt: stamp,
@@ -28,7 +28,7 @@ const seedWorkspace = async (page: Page) => {
       ])
     );
     localStorage.setItem(
-      "oh-my-query-widgets",
+      "conch-widgets",
       JSON.stringify([
         {
           connectionId: "analytics",
@@ -159,8 +159,8 @@ test.describe("bundle flow", () => {
     );
     const exported = await page.evaluate(() =>
       JSON.stringify(
-        (globalThis as unknown as { __omqIpcLog: { name: string }[] })
-          .__omqIpcLog
+        (globalThis as unknown as { __conchIpcLog: { name: string }[] })
+          .__conchIpcLog
       )
     );
     expect(exported).not.toContain("db.internal.example");

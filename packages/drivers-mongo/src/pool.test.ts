@@ -1,7 +1,7 @@
-import type { TableItem } from "@oh-my-query/core";
+import type { TableItem } from "@conch/core";
 import type { MongoClient } from "mongodb";
 
-import { DbError } from "@oh-my-query/core";
+import { DbError } from "@conch/core";
 import { ObjectId } from "mongodb";
 import { describe, expect, it, vi } from "vitest";
 

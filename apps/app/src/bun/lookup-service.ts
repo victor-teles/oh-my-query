@@ -5,15 +5,15 @@ import type {
   LookupValue,
   Pool,
   SchemaInfo,
-} from "@oh-my-query/core";
-import type { ConnectionPoolManager } from "@oh-my-query/drivers";
+} from "@conch/core";
+import type { ConnectionPoolManager } from "@conch/drivers";
 import type {
   LookupErrorCode,
   LookupEvent,
   LookupEventMessage,
-} from "@oh-my-query/rpc";
+} from "@conch/rpc";
 
-import { assertReadOnly } from "@oh-my-query/agent";
+import { assertReadOnly } from "@conch/agent";
 import {
   CancellationRegistry,
   compileSqlTemplate,
@@ -22,8 +22,8 @@ import {
   lookupTemplateValue,
   planLookupProbes,
   raceWithCancel,
-} from "@oh-my-query/core";
-import { LookupRequest } from "@oh-my-query/rpc";
+} from "@conch/core";
+import { LookupRequest } from "@conch/rpc";
 
 import type { SchemaCache } from "./schema-cache.ts";
 

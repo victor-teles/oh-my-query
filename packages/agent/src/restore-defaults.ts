@@ -1,7 +1,7 @@
-import type { DialectType } from "@oh-my-query/core";
+import type { DialectType } from "@conch/core";
 
-import { tokenizeSqlTemplate } from "@oh-my-query/core/client";
-import { ParamDef, RangePreset } from "@oh-my-query/rpc";
+import { tokenizeSqlTemplate } from "@conch/core/client";
+import { ParamDef, RangePreset } from "@conch/rpc";
 
 export const NUMBER_LITERAL =
   /(?<![\w.])\d+(?:\.\d+)?(?:e[+-]?\d+)?(?![\w.])/gi;

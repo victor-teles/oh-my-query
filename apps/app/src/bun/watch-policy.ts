@@ -3,9 +3,9 @@ import type {
   RunSample,
   WatchCondition,
   WatchInterval,
-} from "@oh-my-query/rpc";
+} from "@conch/rpc";
 
-import { WATCH_INTERVAL_MS } from "@oh-my-query/rpc";
+import { WATCH_INTERVAL_MS } from "@conch/rpc";
 
 export type PowerSource = "ac" | "battery";
 

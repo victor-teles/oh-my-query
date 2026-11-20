@@ -1,4 +1,4 @@
-import { newWatchDraft } from "@oh-my-query/rpc";
+import { newWatchDraft } from "@conch/rpc";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import type { Widget } from "@/lib/ipc";

@@ -8,9 +8,9 @@ import type {
   Widget as WidgetRecord,
   WidgetDraft as WidgetDraftRecord,
   WidgetRunResult,
-} from "@oh-my-query/rpc";
+} from "@conch/rpc";
 
-import { compileSqlTemplate } from "@oh-my-query/core/client";
+import { compileSqlTemplate } from "@conch/core/client";
 import {
   chainPrompt,
   paramValueSchema,
@@ -18,7 +18,7 @@ import {
   toTemplateValue,
   Widget,
   WidgetDraft,
-} from "@oh-my-query/rpc";
+} from "@conch/rpc";
 
 import type { RecordedAsk } from "@/lib/browser-ask-stub";
 
@@ -31,8 +31,8 @@ import {
   WEEKLY_SIGNUPS,
 } from "@/lib/browser-ask-stub";
 
-const WIDGETS_KEY = "oh-my-query-widgets";
-const RECENTS_KEY = "oh-my-query-recent-asks";
+const WIDGETS_KEY = "conch-widgets";
+const RECENTS_KEY = "conch-recent-asks";
 const MAX_RECENTS = 200;
 const RUN_MS = 420;
 const PROPOSE_MS = 700;

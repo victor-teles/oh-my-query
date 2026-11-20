@@ -1,5 +1,5 @@
-import type { DialectType } from "@oh-my-query/core";
-import type { ProposeParamsResult } from "@oh-my-query/rpc";
+import type { DialectType } from "@conch/core";
+import type { ProposeParamsResult } from "@conch/rpc";
 import type { LanguageModel, ModelMessage } from "ai";
 
 import {
@@ -9,8 +9,8 @@ import {
   maskTemplateInputs,
   RANGE_PRESETS,
   tokenizeSqlTemplate,
-} from "@oh-my-query/core/client";
-import { ParamDef, RangePreset, toTemplateValue } from "@oh-my-query/rpc";
+} from "@conch/core/client";
+import { ParamDef, RangePreset, toTemplateValue } from "@conch/rpc";
 import { generateText, Output } from "ai";
 import { z } from "zod";
 

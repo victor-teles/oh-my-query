@@ -1,4 +1,4 @@
-import type { createWatchStore } from "@oh-my-query/core";
+import type { createWatchStore } from "@conch/core";
 import type {
   ParamValues,
   RunSample,
@@ -6,9 +6,9 @@ import type {
   WatchDraft as WatchDraftRecord,
   WatchStatus,
   Widget,
-} from "@oh-my-query/rpc";
+} from "@conch/rpc";
 
-import { DbError } from "@oh-my-query/core";
+import { DbError } from "@conch/core";
 import {
   alertLabel,
   editableParams,
@@ -21,7 +21,7 @@ import {
   paramValueSchema,
   Watch,
   WatchDraft,
-} from "@oh-my-query/rpc";
+} from "@conch/rpc";
 import { z } from "zod";
 
 import type { Notification } from "./alert-notifier.ts";

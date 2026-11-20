@@ -1,12 +1,12 @@
-import type { LanguageModel } from "@oh-my-query/agent";
+import type { LanguageModel } from "@conch/agent";
 import type {
   BindValue,
   DatabaseConnection,
   DialectType,
   Pool,
   TemplateValue,
-} from "@oh-my-query/core";
-import type { ConnectionPoolManager } from "@oh-my-query/drivers";
+} from "@conch/core";
+import type { ConnectionPoolManager } from "@conch/drivers";
 import type {
   CardResult,
   ParamDef,
@@ -20,9 +20,9 @@ import type {
   WidgetDraft as WidgetDraftRecord,
   WidgetRunResult,
   WidgetTrend,
-} from "@oh-my-query/rpc";
+} from "@conch/rpc";
 
-import { assertReadOnly, proposeParams } from "@oh-my-query/agent";
+import { assertReadOnly, proposeParams } from "@conch/agent";
 import {
   CancellationRegistry,
   compileSqlTemplate,
@@ -32,7 +32,7 @@ import {
   DbError,
   maskTemplateInputs,
   raceWithCancel,
-} from "@oh-my-query/core";
+} from "@conch/core";
 import {
   Dialect,
   editableParams,
@@ -46,7 +46,7 @@ import {
   trendOfEntry,
   Widget,
   WidgetDraft,
-} from "@oh-my-query/rpc";
+} from "@conch/rpc";
 import { z } from "zod";
 
 import {

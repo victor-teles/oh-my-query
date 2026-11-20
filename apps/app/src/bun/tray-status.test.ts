@@ -68,7 +68,7 @@ describe("trayMenu", () => {
       "Open Launcher",
       "Settings…",
       "—",
-      "Quit oh-my-query",
+      "Quit Conch",
     ]);
   });
 
@@ -96,7 +96,7 @@ describe("trayMenu", () => {
       "Open Launcher",
       "Settings…",
       "—",
-      "Quit oh-my-query",
+      "Quit Conch",
     ]);
     expect(menu[0]).toMatchObject({ enabled: false });
     expect(menu[1]).toMatchObject({

@@ -1,5 +1,5 @@
 {
-  "name": "@oh-my-query/drivers-sqlite",
+  "name": "@conch/drivers-sqlite",
   "version": "0.0.0",
   "private": true,
   "type": "module",
@@ -13,10 +13,10 @@
     "test:watch": "vitest"
   },
   "dependencies": {
-    "@oh-my-query/core": "workspace:*"
+    "@conch/core": "workspace:*"
   },
   "devDependencies": {
-    "@oh-my-query/config": "workspace:*",
+    "@conch/config": "workspace:*",
     "@types/bun": "catalog:",
     "@typescript/native-preview": "catalog:",
     "vitest": "catalog:"

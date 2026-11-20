@@ -1,4 +1,4 @@
-import type { RedactedAiSettings } from "@oh-my-query/rpc";
+import type { RedactedAiSettings } from "@conch/rpc";
 
 import { describe, expect, it } from "vitest";
 

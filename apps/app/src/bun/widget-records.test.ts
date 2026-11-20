@@ -6,7 +6,7 @@ import os from "node:os";
 import path from "node:path";
 import { afterAll, beforeEach, describe, expect, it, vi } from "vitest";
 
-const TMP_HOME = mkdtempSync(path.join(os.tmpdir(), "omq-v1-records-"));
+const TMP_HOME = mkdtempSync(path.join(os.tmpdir(), "conch-v1-records-"));
 
 vi.mock<typeof NodeOs>(import("node:os"), async () => {
   const actual = await vi.importActual<typeof NodeOs>("node:os");
@@ -24,10 +24,10 @@ const {
   resetCryptoCache,
   setLegacyKeyLoader,
   widgetsPath,
-} = await import("@oh-my-query/core");
+} = await import("@conch/core");
 const { defaultRecentAskStore, defaultWidgetStore } =
   await import("./widget-service.ts");
-const { RecentAsk } = await import("@oh-my-query/rpc");
+const { RecentAsk } = await import("@conch/rpc");
 
 const V1_SPEC = {
   formats: { mrr: { currency: "USD", kind: "currency" } },

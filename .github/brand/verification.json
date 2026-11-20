@@ -1,0 +1,115 @@
+{
+  "outputs": [
+    {
+      "path": "apps/app/assets/icon.png",
+      "size": [512, 512],
+      "mode": "RGBA"
+    },
+    {
+      "path": "apps/app/assets/tray-template.png",
+      "size": [36, 36],
+      "mode": "RGBA"
+    },
+    {
+      "path": ".github/brand/icon-1024.png",
+      "size": [1024, 1024],
+      "mode": "RGBA"
+    },
+    {
+      "path": ".github/logo-dark.png",
+      "size": [1200, 360],
+      "mode": "RGBA"
+    },
+    {
+      "path": ".github/logo-light.png",
+      "size": [1200, 360],
+      "mode": "RGBA"
+    },
+    {
+      "path": "apps/app/assets/icon.iconset/icon_128x128.png",
+      "size": [128, 128],
+      "mode": "RGBA"
+    },
+    {
+      "path": "apps/app/assets/icon.iconset/icon_128x128@2x.png",
+      "size": [256, 256],
+      "mode": "RGBA"
+    },
+    {
+      "path": "apps/app/assets/icon.iconset/icon_16x16.png",
+      "size": [16, 16],
+      "mode": "RGBA"
+    },
+    {
+      "path": "apps/app/assets/icon.iconset/icon_16x16@2x.png",
+      "size": [32, 32],
+      "mode": "RGBA"
+    },
+    {
+      "path": "apps/app/assets/icon.iconset/icon_256x256.png",
+      "size": [256, 256],
+      "mode": "RGBA"
+    },
+    {
+      "path": "apps/app/assets/icon.iconset/icon_256x256@2x.png",
+      "size": [512, 512],
+      "mode": "RGBA"
+    },
+    {
+      "path": "apps/app/assets/icon.iconset/icon_32x32.png",
+      "size": [32, 32],
+      "mode": "RGBA"
+    },
+    {
+      "path": "apps/app/assets/icon.iconset/icon_32x32@2x.png",
+      "size": [64, 64],
+      "mode": "RGBA"
+    },
+    {
+      "path": "apps/app/assets/icon.iconset/icon_512x512.png",
+      "size": [512, 512],
+      "mode": "RGBA"
+    },
+    {
+      "path": "apps/app/assets/icon.iconset/icon_512x512@2x.png",
+      "size": [1024, 1024],
+      "mode": "RGBA"
+    },
+    {
+      "path": ".github/brand/concepts/concept-1-whorl.png",
+      "size": [1254, 1254],
+      "mode": "RGBA"
+    },
+    {
+      "path": ".github/brand/concepts/concept-2-spire.png",
+      "size": [1254, 1254],
+      "mode": "RGBA"
+    },
+    {
+      "path": ".github/brand/concepts/concept-3-open-call.png",
+      "size": [1254, 1254],
+      "mode": "RGBA"
+    },
+    {
+      "path": ".github/brand/asset-review.png",
+      "size": [1200, 920],
+      "mode": "RGB"
+    },
+    {
+      "path": "apps/app/assets/icon.ico",
+      "sizes": [
+        [16, 16],
+        [32, 32],
+        [48, 48],
+        [64, 64],
+        [128, 128],
+        [256, 256]
+      ]
+    }
+  ],
+  "tray_all_rgb_black": true,
+  "tray_alpha_range": [0, 255],
+  "svg_viewBox": "0 0 1000 1000",
+  "icon_body_geometry": [100, 100, 924, 924],
+  "visual_review": "asset-review.png inspected; actual macOS Dock/menu-bar integration not run"
+}

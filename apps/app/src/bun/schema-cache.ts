@@ -1,5 +1,5 @@
-import type { SchemaInfo } from "@oh-my-query/core";
-import type { ConnectionPoolManager } from "@oh-my-query/drivers";
+import type { SchemaInfo } from "@conch/core";
+import type { ConnectionPoolManager } from "@conch/drivers";
 
 const SCHEMA_CACHE_TTL_MS = 60_000;
 

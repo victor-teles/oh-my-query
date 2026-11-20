@@ -1,8 +1,8 @@
-import type { TabularResult } from "@oh-my-query/core";
+import type { TabularResult } from "@conch/core";
 import type { Document } from "mongodb";
 
-import { DbError } from "@oh-my-query/core";
-import { flattenRecords, parseMongoReadQuery } from "@oh-my-query/core/client";
+import { DbError } from "@conch/core";
+import { flattenRecords, parseMongoReadQuery } from "@conch/core/client";
 import { BSON } from "mongodb";
 
 import type { MongoPool } from "./pool.ts";
@@ -11,7 +11,7 @@ import { mapMongoError } from "./pool.ts";
 
 export const MONGO_QUERY_TIMEOUT_MS = 30_000;
 export const MONGO_MAX_COLUMNS = 30;
-const QUERY_COMMENT = "oh-my-query ask";
+const QUERY_COMMENT = "conch ask";
 
 const isPlainObject = (value: unknown): value is Record<string, unknown> =>
   typeof value === "object" &&

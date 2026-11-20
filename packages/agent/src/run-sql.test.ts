@@ -1,5 +1,5 @@
-import type { TabularResult } from "@oh-my-query/core";
-import type { AskEvent } from "@oh-my-query/rpc";
+import type { TabularResult } from "@conch/core";
+import type { AskEvent } from "@conch/rpc";
 
 import { afterEach, describe, expect, it, vi } from "vitest";
 

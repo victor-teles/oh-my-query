@@ -1,6 +1,6 @@
-import type { AvailableUpdate, UpdateChannel } from "@oh-my-query/rpc";
+import type { AvailableUpdate, UpdateChannel } from "@conch/rpc";
 
-import { DbError, updateChannelPath } from "@oh-my-query/core";
+import { DbError, updateChannelPath } from "@conch/core";
 import fs from "node:fs/promises";
 import path from "node:path";
 

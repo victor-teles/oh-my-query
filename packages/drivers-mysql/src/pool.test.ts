@@ -1,6 +1,6 @@
 import type { Pool as MysqlPoolType } from "mysql2/promise";
 
-import { DbError } from "@oh-my-query/core";
+import { DbError } from "@conch/core";
 import { describe, expect, it, vi } from "vitest";
 
 import { MysqlDriver } from "./driver";

@@ -2651,7 +2651,7 @@ exports[`importView sources > explains an empty clipboard 1`] = `
                 <span
                   class="truncate type-meta text-panel-muted"
                 >
-                  A .omq.json file
+                  A .conch.json file
                 </span>
               </span>
               <span
@@ -2708,7 +2708,7 @@ exports[`importView sources > explains an empty clipboard 1`] = `
                 <p
                   class="type-meta break-words text-panel-muted"
                 >
-                  The clipboard has no oh-my-query export.
+                  The clipboard has no Conch export.
                 </p>
               </div>
             </div>
@@ -2951,7 +2951,7 @@ exports[`importView sources > names the first invalid field of a file 1`] = `
                 <span
                   class="truncate type-meta text-panel-muted"
                 >
-                  A .omq.json file
+                  A .conch.json file
                 </span>
               </span>
               <span
@@ -3251,7 +3251,7 @@ exports[`importView sources > offers the clipboard and a file, focusing the clip
                 <span
                   class="truncate type-meta text-panel-muted"
                 >
-                  A .omq.json file
+                  A .conch.json file
                 </span>
               </span>
               <span
@@ -3497,7 +3497,7 @@ exports[`importView sources > shows a reading hairline when the read takes a whi
                 <span
                   class="truncate type-meta text-panel-muted"
                 >
-                  A .omq.json file
+                  A .conch.json file
                 </span>
               </span>
               <span

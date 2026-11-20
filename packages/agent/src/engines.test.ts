@@ -1,4 +1,4 @@
-import type { SchemaInfo } from "@oh-my-query/core";
+import type { SchemaInfo } from "@conch/core";
 
 import { describe, expect, it } from "vitest";
 

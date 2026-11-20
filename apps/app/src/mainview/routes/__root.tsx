@@ -6,7 +6,7 @@ import "@/index.css";
 export const Route = createRootRoute({
   component: RootComponent,
   head: () => ({
-    meta: [{ title: "oh-my-query" }],
+    meta: [{ title: "Conch" }],
   }),
 });
 

@@ -1,4 +1,4 @@
-import { emptyBoard } from "@oh-my-query/rpc";
+import { emptyBoard } from "@conch/rpc";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { createBoardEmulator } from "./browser-board-stub";
@@ -91,9 +91,9 @@ describe("createBoardEmulator", () => {
 
   it("ignores corrupt or invalid stored boards", () => {
     const { emulator } = setup();
-    localStorage.setItem("oh-my-query-boards", "{not json");
+    localStorage.setItem("conch-boards", "{not json");
     expect(emulator.listBoards()).toStrictEqual([]);
-    localStorage.setItem("oh-my-query-boards", JSON.stringify([{ id: 1 }]));
+    localStorage.setItem("conch-boards", JSON.stringify([{ id: 1 }]));
     expect(emulator.listBoards()).toStrictEqual([]);
   });
 });

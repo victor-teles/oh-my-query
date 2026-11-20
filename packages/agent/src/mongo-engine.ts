@@ -1,7 +1,4 @@
-import {
-  MONGO_READ_STAGES,
-  parseMongoReadQuery,
-} from "@oh-my-query/core/client";
+import { MONGO_READ_STAGES, parseMongoReadQuery } from "@conch/core/client";
 
 import type { QueryEngine } from "./query-engine.ts";
 

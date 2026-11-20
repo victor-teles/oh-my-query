@@ -1,4 +1,4 @@
-import type { CardResult, FormatContext } from "@oh-my-query/rpc";
+import type { CardResult, FormatContext } from "@conch/rpc";
 
 import {
   columnValues,
@@ -6,7 +6,7 @@ import {
   formatFor,
   isIsoDate,
   toNumber,
-} from "@oh-my-query/rpc";
+} from "@conch/rpc";
 
 import type {
   CardSpec,

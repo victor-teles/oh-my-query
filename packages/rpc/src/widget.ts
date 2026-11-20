@@ -2,14 +2,14 @@ import type {
   DialectType,
   TabularResult,
   TemplateValue,
-} from "@oh-my-query/core/client";
+} from "@conch/core/client";
 
 import {
   DATE_PRESETS,
   RANGE_PRESETS,
   resolveDatePreset,
   resolvePreset,
-} from "@oh-my-query/core/client";
+} from "@conch/core/client";
 import { z } from "zod";
 
 import type { WidgetTrend } from "./watch.ts";

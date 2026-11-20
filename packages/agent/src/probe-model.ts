@@ -1,4 +1,4 @@
-import type { AiTestResult } from "@oh-my-query/rpc";
+import type { AiTestResult } from "@conch/rpc";
 import type { LanguageModel } from "ai";
 
 import { generateText } from "ai";

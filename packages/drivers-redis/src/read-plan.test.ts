@@ -1,4 +1,4 @@
-import { DbError } from "@oh-my-query/core";
+import { DbError } from "@conch/core";
 import Redis from "ioredis";
 import { afterAll, describe, expect, it } from "vitest";
 
@@ -477,7 +477,7 @@ const fixture = await connectFixture();
 
 describe.skipIf(!fixture)("runRedisReadPlan (fixture database)", () => {
   const client = () => fixture as Redis;
-  const prefix = `omq_ask_${process.pid}`;
+  const prefix = `conch_ask_${process.pid}`;
   const pool = () => new RedisPool(client(), 0);
 
   afterAll(async () => {

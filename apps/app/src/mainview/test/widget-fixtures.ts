@@ -1,4 +1,4 @@
-import { CARD_SPEC_VERSION } from "@oh-my-query/rpc";
+import { CARD_SPEC_VERSION } from "@conch/rpc";
 
 import type { RecentAsk, Widget, WidgetRunResult } from "@/lib/ipc";
 

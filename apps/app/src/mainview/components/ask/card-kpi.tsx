@@ -1,4 +1,4 @@
-import type { CardResult } from "@oh-my-query/rpc";
+import type { CardResult } from "@conch/rpc";
 
 import {
   columnValues,
@@ -6,7 +6,7 @@ import {
   formatFor,
   formatValue,
   toNumber,
-} from "@oh-my-query/rpc";
+} from "@conch/rpc";
 
 import type { CardSpec, CardView } from "@/lib/ipc";
 

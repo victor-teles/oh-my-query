@@ -4,7 +4,7 @@ import {
   removeTile,
   resizeTile,
   setTileView,
-} from "@oh-my-query/rpc";
+} from "@conch/rpc";
 import { useCallback, useEffect, useMemo, useState } from "react";
 
 import type { CardViewKind } from "@/lib/card-data";

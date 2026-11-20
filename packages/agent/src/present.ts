@@ -1,13 +1,13 @@
-import type { QueryLanguage } from "@oh-my-query/core";
+import type { QueryLanguage } from "@conch/core";
 import type { LanguageModel } from "ai";
 
-import { isSqlDialect, redactPii } from "@oh-my-query/core/client";
+import { isSqlDialect, redactPii } from "@conch/core/client";
 import {
   CARD_SPEC_VERSION,
   CardSpec,
   CHART_MARKS,
   COLUMN_FORMAT_KINDS,
-} from "@oh-my-query/rpc";
+} from "@conch/rpc";
 import { generateText, Output } from "ai";
 import { z } from "zod";
 

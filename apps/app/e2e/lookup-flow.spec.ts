@@ -31,12 +31,9 @@ const seedWorkspace = async (page: Page) => {
         return;
       }
       sessionStorage.setItem("seeded", "1");
+      localStorage.setItem("conch-connections", JSON.stringify(connections));
       localStorage.setItem(
-        "oh-my-query-connections",
-        JSON.stringify(connections)
-      );
-      localStorage.setItem(
-        "oh-my-query-active-connection",
+        "conch-active-connection",
         JSON.stringify({ connectionId: "analytics", database: null })
       );
     },
@@ -46,7 +43,7 @@ const seedWorkspace = async (page: Page) => {
 
 const requestNames = (page: Page) =>
   page.evaluate(() =>
-    (globalThis as unknown as { __omqIpcLog: IpcCall[] }).__omqIpcLog.map(
+    (globalThis as unknown as { __conchIpcLog: IpcCall[] }).__conchIpcLog.map(
       (call) => call.name
     )
   );
@@ -54,8 +51,8 @@ const requestNames = (page: Page) =>
 const setClipboard = (page: Page, text: string) =>
   page.evaluate((value) => {
     (
-      globalThis as unknown as { __omqSetClipboard: (text: string) => void }
-    ).__omqSetClipboard(value);
+      globalThis as unknown as { __conchSetClipboard: (text: string) => void }
+    ).__conchSetClipboard(value);
   }, text);
 
 const searchBox = (page: Page) =>

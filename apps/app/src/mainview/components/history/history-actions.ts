@@ -1,6 +1,6 @@
-import type { QueryLanguage } from "@oh-my-query/core/client";
+import type { QueryLanguage } from "@conch/core/client";
 
-import { isSqlDialect } from "@oh-my-query/core/client";
+import { isSqlDialect } from "@conch/core/client";
 import {
   BookmarkPlusIcon,
   ClipboardCopyIcon,

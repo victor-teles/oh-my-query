@@ -87,7 +87,7 @@ export const rootCommands = ({
     id: "export-bundle",
     keywords: ["share", "backup", "save", "file", "json"],
     run: exportAll,
-    subtitle: "Saves a .omq.json to Downloads",
+    subtitle: "Saves a .conch.json to Downloads",
     title: "Export Widgets and Boards",
   },
   {
@@ -96,7 +96,7 @@ export const rootCommands = ({
     id: "import-bundle",
     keywords: ["share", "restore", "load", "file", "json", "clipboard"],
     run: openImport,
-    subtitle: "From the clipboard or a .omq.json file",
+    subtitle: "From the clipboard or a .conch.json file",
     title: "Import Widgets and Boards…",
   },
   {

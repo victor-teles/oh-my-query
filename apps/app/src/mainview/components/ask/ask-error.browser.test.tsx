@@ -64,7 +64,7 @@ describe("askError", () => {
     ],
     [
       "NOT_READ_ONLY",
-      "This would change data. oh-my-query only runs read-only questions.",
+      "This would change data. Conch only runs read-only questions.",
     ],
   ])("explains %s with no action", async (code, title) => {
     const screen = render(

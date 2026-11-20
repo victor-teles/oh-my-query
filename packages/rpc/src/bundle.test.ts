@@ -358,19 +358,19 @@ describe("readBundleText", () => {
 
   it("explains an empty clipboard and a file that isn't an export", () => {
     expect(readBundleText(null, "clipboard")).toStrictEqual({
-      message: "The clipboard has no oh-my-query export.",
+      message: "The clipboard has no Conch export.",
       ok: false,
     });
     expect(readBundleText("   ", "clipboard")).toMatchObject({ ok: false });
     expect(readBundleText("{not json", "file")).toStrictEqual({
-      message: "This isn't an oh-my-query export.",
+      message: "This isn't an Conch export.",
       ok: false,
     });
     expect(readBundleText('{"format":"other"}', "file")).toMatchObject({
-      message: "This isn't an oh-my-query export.",
+      message: "This isn't an Conch export.",
     });
     expect(readBundleText("[1,2]", "clipboard")).toMatchObject({
-      message: "The clipboard has no oh-my-query export.",
+      message: "The clipboard has no Conch export.",
     });
   });
 
@@ -378,7 +378,7 @@ describe("readBundleText", () => {
     expect(
       readBundleText(JSON.stringify({ ...sample(), version: 2 }), "file")
     ).toMatchObject({
-      message: "This export is from a newer version of oh-my-query.",
+      message: "This export is from a newer version of Conch.",
     });
   });
 

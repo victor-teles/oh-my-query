@@ -1,4 +1,4 @@
-import { formatValue } from "@oh-my-query/rpc";
+import { formatValue } from "@conch/rpc";
 
 import type { ChartModel } from "@/lib/card-data";
 

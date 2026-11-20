@@ -1,4 +1,4 @@
-import { intervalPhrase, isKpiSpec } from "@oh-my-query/rpc";
+import { intervalPhrase, isKpiSpec } from "@conch/rpc";
 import { motion } from "motion/react";
 import { useCallback } from "react";
 

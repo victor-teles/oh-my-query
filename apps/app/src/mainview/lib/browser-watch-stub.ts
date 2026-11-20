@@ -6,7 +6,7 @@ import type {
   Widget,
   WidgetRunResult,
   WidgetTrend,
-} from "@oh-my-query/rpc";
+} from "@conch/rpc";
 
 import {
   formatScalarValue,
@@ -17,7 +17,7 @@ import {
   Watch,
   WATCH_INTERVAL_MS,
   WatchDraft,
-} from "@oh-my-query/rpc";
+} from "@conch/rpc";
 
 const STUB_VALUES_KEY = "00000000000000aa";
 const SAMPLE_AFTER_SAVE_MS = 900;

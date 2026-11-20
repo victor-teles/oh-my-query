@@ -1,4 +1,4 @@
-import type { DialectType } from "@oh-my-query/core";
+import type { DialectType } from "@conch/core";
 
 import { DIALECT_LABELS } from "./schema-prompt.ts";
 

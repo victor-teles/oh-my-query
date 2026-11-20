@@ -1,5 +1,5 @@
 import type { ClickHouseClient } from "@clickhouse/client";
-import type { TabularResult } from "@oh-my-query/core";
+import type { TabularResult } from "@conch/core";
 
 import { createClient } from "@clickhouse/client";
 import { afterAll, describe, expect, it, vi } from "vitest";
@@ -85,7 +85,7 @@ describe.skipIf(!fixture)(
       defaultClient: client,
       defaultDatabase: "default",
     });
-    const table = `omq_params_${process.pid}`;
+    const table = `conch_params_${process.pid}`;
 
     afterAll(async () => {
       await client.command({ query: `drop table if exists ${table}` });

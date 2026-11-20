@@ -122,7 +122,7 @@ describe("importView sources", () => {
   it("explains an empty clipboard", async () => {
     const { screen } = setup({
       preview: () => ({
-        message: "The clipboard has no oh-my-query export.",
+        message: "The clipboard has no Conch export.",
         status: "invalid",
       }),
     });
@@ -130,7 +130,7 @@ describe("importView sources", () => {
     const alert = screen.getByRole("alert");
     await expect
       .element(alert)
-      .toHaveTextContent("The clipboard has no oh-my-query export.");
+      .toHaveTextContent("The clipboard has no Conch export.");
     expect(screen.container).toMatchSnapshot();
   });
 

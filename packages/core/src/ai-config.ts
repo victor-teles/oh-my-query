@@ -52,7 +52,7 @@ const writeEncrypted = async (
   await atomicWrite(filePath, await encryptLine(JSON.stringify(settings)));
 };
 
-// Older builds stored the key in plaintext oh-my-query.json; move it into
+// Older builds stored the key in plaintext config JSON; move it into
 // ai.enc (unless a newer encrypted copy exists) and strip it from the file.
 const migrateLegacy = async (
   filePath: string,

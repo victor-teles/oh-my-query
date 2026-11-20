@@ -1,13 +1,13 @@
-import type { DatabaseConnection } from "@oh-my-query/core";
-import type { ConnectionPoolManager } from "@oh-my-query/drivers";
+import type { DatabaseConnection } from "@conch/core";
+import type { ConnectionPoolManager } from "@conch/drivers";
 
-import { getConnections } from "@oh-my-query/core";
+import { getConnections } from "@conch/core";
 import { describe, expect, it, vi } from "vitest";
 
 import { createSchemaCache } from "./schema-cache.ts";
 import { createSchemaPeek } from "./schema-peek.ts";
 
-vi.mock(import("@oh-my-query/core"), async (importOriginal) => ({
+vi.mock(import("@conch/core"), async (importOriginal) => ({
   ...(await importOriginal()),
   getConnections: vi.fn(),
 }));
@@ -23,7 +23,7 @@ const connection: DatabaseConnection = {
   pinned: false,
   port: 5432,
   type: "postgresql",
-  username: "omq",
+  username: "conch",
 };
 
 const SCHEMA = { schemas: [{ name: "public", tables: [], views: [] }] };

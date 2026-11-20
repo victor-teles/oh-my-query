@@ -1,5 +1,5 @@
-import type { LookupValue } from "@oh-my-query/core/client";
-import type { LauncherNavigateView } from "@oh-my-query/rpc";
+import type { LookupValue } from "@conch/core/client";
+import type { LauncherNavigateView } from "@conch/rpc";
 
 import Electrobun, {
   BrowserWindow,
@@ -71,7 +71,7 @@ export function createLauncher({
   const window = new BrowserWindow({
     frame: launcherFrame(cursorWorkArea(), contentHeight),
     rpc,
-    title: "oh-my-query",
+    title: "Conch",
     titleBarStyle: "hidden",
     transparent: true,
     url,

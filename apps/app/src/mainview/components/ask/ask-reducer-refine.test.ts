@@ -1,4 +1,4 @@
-import { CARD_SPEC_VERSION } from "@oh-my-query/rpc";
+import { CARD_SPEC_VERSION } from "@conch/rpc";
 import { describe, expect, it } from "vitest";
 
 import type { AskEvent, CardSpec, SqlAssumptions } from "@/lib/ipc";

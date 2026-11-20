@@ -13,10 +13,10 @@ import { Board, MAX_BOARD_TILES, RefreshInterval, TileSize } from "./board.ts";
 import { CardSpec } from "./card-spec.ts";
 import { CardViewKind, Dialect, Widget } from "./widget.ts";
 
-export const BUNDLE_FORMAT = "oh-my-query.bundle";
+export const BUNDLE_FORMAT = "conch.bundle";
 export const BUNDLE_VERSION = 1;
 export const MAX_BUNDLE_BYTES = 2_000_000;
-export const BUNDLE_EXTENSION = "omq.json";
+export const BUNDLE_EXTENSION = "conch.json";
 export const BUNDLE_TOO_LARGE = "The export is larger than 2 MB.";
 export const MAX_BUNDLE_CONNECTIONS = 50;
 export const MAX_BUNDLE_WIDGETS = 200;
@@ -201,8 +201,8 @@ export type BundleRead =
   | { ok: false; message: string };
 
 const NOT_AN_EXPORT: Record<ImportSource, string> = {
-  clipboard: "The clipboard has no oh-my-query export.",
-  file: "This isn't an oh-my-query export.",
+  clipboard: "The clipboard has no Conch export.",
+  file: "This isn't an Conch export.",
 };
 
 export const issuePath = (path: readonly PropertyKey[]): string =>
@@ -253,7 +253,7 @@ export const readBundleText = (
     envelope.version > BUNDLE_VERSION
   ) {
     return {
-      message: "This export is from a newer version of oh-my-query.",
+      message: "This export is from a newer version of Conch.",
       ok: false,
     };
   }

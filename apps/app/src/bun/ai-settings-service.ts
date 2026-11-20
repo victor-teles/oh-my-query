@@ -1,19 +1,19 @@
-import type { LanguageModel } from "@oh-my-query/agent";
+import type { LanguageModel } from "@conch/agent";
 import type {
   AiSettingsInput,
   AiTestResult,
   RedactedAiSettings,
-} from "@oh-my-query/rpc";
+} from "@conch/rpc";
 
-import { createAIModel, probeModel, resolveModelId } from "@oh-my-query/agent";
+import { createAIModel, probeModel, resolveModelId } from "@conch/agent";
 import {
   clearAiKey,
   getAiSettings,
   mergeAiSettings,
   redactAiSettings,
   saveAiSettings,
-} from "@oh-my-query/core";
-import { AI_PROVIDER_INFO, AI_PROVIDERS, isAiProvider } from "@oh-my-query/rpc";
+} from "@conch/core";
+import { AI_PROVIDER_INFO, AI_PROVIDERS, isAiProvider } from "@conch/rpc";
 import { z } from "zod";
 
 export const aiSettingsInputSchema = z.object({

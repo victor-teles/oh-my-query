@@ -1,4 +1,4 @@
-import type { TabularResult } from "@oh-my-query/core";
+import type { TabularResult } from "@conch/core";
 
 import { DuckDBInstance } from "@duckdb/node-api";
 import { describe, expect, it } from "vitest";

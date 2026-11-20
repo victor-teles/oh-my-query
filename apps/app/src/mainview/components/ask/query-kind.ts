@@ -1,4 +1,4 @@
-import type { QueryLanguage } from "@oh-my-query/core/client";
+import type { QueryLanguage } from "@conch/core/client";
 
 import type { DatabaseType } from "@/lib/connections";
 

@@ -1,4 +1,4 @@
-import type { CardResult } from "@oh-my-query/rpc";
+import type { CardResult } from "@conch/rpc";
 import type { ReactNode, Ref } from "react";
 
 import { AnimatePresence, motion } from "motion/react";

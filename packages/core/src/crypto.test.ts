@@ -6,7 +6,7 @@ import os from "node:os";
 import path from "node:path";
 import { afterAll, beforeEach, describe, expect, it, vi } from "vitest";
 
-const TMP_HOME = mkdtempSync(path.join(os.tmpdir(), "omq-core-crypto-"));
+const TMP_HOME = mkdtempSync(path.join(os.tmpdir(), "conch-core-crypto-"));
 
 vi.mock<typeof NodeOs>(import("node:os"), async () => {
   const actual = await vi.importActual<typeof NodeOs>("node:os");

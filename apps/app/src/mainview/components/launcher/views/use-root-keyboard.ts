@@ -1,6 +1,6 @@
 import type { KeyboardEvent } from "react";
 
-import { editableParams } from "@oh-my-query/rpc";
+import { editableParams } from "@conch/rpc";
 import { useCallback } from "react";
 
 import type { InputMode } from "@/components/launcher/input-mode";

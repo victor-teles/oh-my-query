@@ -1,10 +1,10 @@
-import type { LanguageModel } from "@oh-my-query/agent";
-import type { DatabaseConnection } from "@oh-my-query/core";
-import type { ConnectionPoolManager } from "@oh-my-query/drivers";
-import type { RecentAsk, Widget, WidgetDraft } from "@oh-my-query/rpc";
+import type { LanguageModel } from "@conch/agent";
+import type { DatabaseConnection } from "@conch/core";
+import type { ConnectionPoolManager } from "@conch/drivers";
+import type { RecentAsk, Widget, WidgetDraft } from "@conch/rpc";
 
-import { getConnections } from "@oh-my-query/core";
-import { CARD_SPEC_VERSION } from "@oh-my-query/rpc";
+import { getConnections } from "@conch/core";
+import { CARD_SPEC_VERSION } from "@conch/rpc";
 import { describe, expect, it, vi } from "vitest";
 
 import type {
@@ -16,7 +16,7 @@ import type {
 import { valuesKeyOf } from "./run-samples.ts";
 import { createWidgetService } from "./widget-service.ts";
 
-vi.mock(import("@oh-my-query/core"), async (importOriginal) => ({
+vi.mock(import("@conch/core"), async (importOriginal) => ({
   ...(await importOriginal()),
   getConnections: vi.fn(),
 }));
@@ -32,7 +32,7 @@ const connection: DatabaseConnection = {
   pinned: false,
   port: 5432,
   type: "postgresql",
-  username: "omq",
+  username: "conch",
 };
 
 vi.mocked(getConnections).mockResolvedValue([connection]);

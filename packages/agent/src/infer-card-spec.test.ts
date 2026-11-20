@@ -1,6 +1,6 @@
-import type { ColumnInfo } from "@oh-my-query/core";
+import type { ColumnInfo } from "@conch/core";
 
-import { CARD_SPEC_VERSION } from "@oh-my-query/rpc";
+import { CARD_SPEC_VERSION } from "@conch/rpc";
 import { describe, expect, it } from "vitest";
 
 import { checkCardAgainstResult } from "./check-card-spec.ts";

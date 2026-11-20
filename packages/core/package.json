@@ -1,5 +1,5 @@
 {
-  "name": "@oh-my-query/core",
+  "name": "@conch/core",
   "version": "0.0.0",
   "private": true,
   "type": "module",
@@ -18,7 +18,7 @@
     "zod": "catalog:"
   },
   "devDependencies": {
-    "@oh-my-query/config": "workspace:*",
+    "@conch/config": "workspace:*",
     "@types/bun": "catalog:",
     "@typescript/native-preview": "catalog:",
     "vitest": "catalog:"

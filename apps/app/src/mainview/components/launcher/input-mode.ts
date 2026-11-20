@@ -1,6 +1,6 @@
-import type { LookupValue } from "@oh-my-query/core/client";
+import type { LookupValue } from "@conch/core/client";
 
-import { classifyLookupValue } from "@oh-my-query/core/client";
+import { classifyLookupValue } from "@conch/core/client";
 
 export type LauncherInput =
   | { mode: "search"; text: string; lookup: LookupValue | null }

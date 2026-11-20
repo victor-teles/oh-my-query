@@ -7,7 +7,7 @@ describe("separator", () => {
   it("inContext", () => {
     const screen = render(
       <div className="space-y-1 p-4" data-testid="root">
-        <div className="text-sm font-medium">oh-my-query</div>
+        <div className="text-sm font-medium">Conch</div>
         <p className="text-xs text-muted-foreground">
           A desktop app for querying databases.
         </p>

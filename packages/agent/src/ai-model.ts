@@ -1,10 +1,10 @@
-import type { AiProvider } from "@oh-my-query/rpc";
+import type { AiProvider } from "@conch/rpc";
 import type { LanguageModel } from "ai";
 
 import { createAnthropic } from "@ai-sdk/anthropic";
 import { createGoogleGenerativeAI } from "@ai-sdk/google";
 import { createOpenAI } from "@ai-sdk/openai";
-import { AI_PROVIDER_INFO } from "@oh-my-query/rpc";
+import { AI_PROVIDER_INFO } from "@conch/rpc";
 
 const OPENROUTER_BASE_URL = "https://openrouter.ai/api/v1";
 

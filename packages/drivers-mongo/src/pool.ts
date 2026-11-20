@@ -7,10 +7,10 @@ import type {
   SchemaInfo,
   TableItem,
   ViewItem,
-} from "@oh-my-query/core";
+} from "@conch/core";
 import type { Collection, MongoClient } from "mongodb";
 
-import { DbError } from "@oh-my-query/core";
+import { DbError } from "@conch/core";
 
 import {
   SAMPLE_SIZE,

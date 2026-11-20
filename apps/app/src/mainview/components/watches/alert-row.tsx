@@ -1,4 +1,4 @@
-import { timeAgo } from "@oh-my-query/rpc";
+import { timeAgo } from "@conch/rpc";
 import { useCallback, useState } from "react";
 
 import { LauncherRow } from "@/components/launcher/launcher-row";

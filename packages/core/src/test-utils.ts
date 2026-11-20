@@ -3,7 +3,7 @@ import path from "node:path";
 import type { DatabaseConnection, HistoryEntry } from "./persistence.ts";
 
 export function appConfigDir(home: string): string {
-  return path.join(home, ".config/oh-my-query");
+  return path.join(home, ".config/conch");
 }
 
 export function makeHistoryEntry(

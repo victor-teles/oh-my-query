@@ -1,4 +1,4 @@
-import type { Watch, WatchState } from "@oh-my-query/rpc";
+import type { Watch, WatchState } from "@conch/rpc";
 
 import type { PowerSource } from "./watch-policy.ts";
 

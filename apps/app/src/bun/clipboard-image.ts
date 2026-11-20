@@ -1,4 +1,4 @@
-import { DbError } from "@oh-my-query/core";
+import { DbError } from "@conch/core";
 import { z } from "zod";
 
 const MAX_BASE64_LENGTH = 16_000_000;

@@ -11,9 +11,9 @@ import type {
   IndexItem,
   Pool,
   SchemaInfo,
-} from "@oh-my-query/core";
+} from "@conch/core";
 
-import { DbError, validateSchemaName } from "@oh-my-query/core";
+import { DbError, validateSchemaName } from "@conch/core";
 
 const VIEW_ENGINES = new Set(["View", "MaterializedView", "LiveView"]);
 

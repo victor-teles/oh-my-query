@@ -1,13 +1,13 @@
-import type { QueryLanguage } from "@oh-my-query/core/client";
+import type { QueryLanguage } from "@conch/core/client";
 import type {
   AskEvent,
   AskParams,
   CardSpec,
   RpcSchema,
   RunSqlParams,
-} from "@oh-my-query/rpc";
+} from "@conch/rpc";
 
-import { CARD_SPEC_VERSION } from "@oh-my-query/rpc";
+import { CARD_SPEC_VERSION } from "@conch/rpc";
 
 import type { RecordedAsk } from "@/lib/browser-ask-recordings";
 import type { RecordedRefusal } from "@/lib/browser-engine-recordings";

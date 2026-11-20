@@ -16,7 +16,7 @@ export interface TweenTransition {
 export type MotionTransition = SpringTransition | TweenTransition;
 
 const SLOWMO_PARAM = "slowmo";
-const SLOWMO_STORAGE_KEY = "omq:slowmo";
+const SLOWMO_STORAGE_KEY = "conch:slowmo";
 const MAX_SLOWMO = 20;
 
 interface SlowMotionSource {

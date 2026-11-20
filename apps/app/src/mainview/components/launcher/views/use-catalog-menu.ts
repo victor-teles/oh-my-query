@@ -1,4 +1,4 @@
-import { draftOf } from "@oh-my-query/rpc";
+import { draftOf } from "@conch/rpc";
 import { useCallback, useState } from "react";
 
 import type { Board, ExportScope, Widget } from "@/lib/ipc";

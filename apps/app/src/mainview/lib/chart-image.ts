@@ -1,4 +1,4 @@
-import type { CardResult } from "@oh-my-query/rpc";
+import type { CardResult } from "@conch/rpc";
 
 import monaSansUrl from "@fontsource-variable/mona-sans/files/mona-sans-latin-wght-normal.woff2?url";
 

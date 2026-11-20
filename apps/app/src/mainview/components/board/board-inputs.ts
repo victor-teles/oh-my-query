@@ -1,4 +1,4 @@
-import { editableParams, sharedKey } from "@oh-my-query/rpc";
+import { editableParams, sharedKey } from "@conch/rpc";
 
 import type { ArgumentInput } from "@/components/widgets/arguments/argument-pills";
 import type { Board, ParamValues, Widget } from "@/lib/ipc";

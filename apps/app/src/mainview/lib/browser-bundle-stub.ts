@@ -10,7 +10,7 @@ import type {
   ImportSource,
   Widget,
   WidgetDraft,
-} from "@oh-my-query/rpc";
+} from "@conch/rpc";
 
 import {
   ApplyImportRequest,
@@ -21,7 +21,7 @@ import {
   planImport,
   readBundleText,
   SKIP_REASONS,
-} from "@oh-my-query/rpc";
+} from "@conch/rpc";
 
 interface BundleEmulatorDeps {
   listWidgets: () => Widget[];
@@ -144,7 +144,7 @@ export const createBundleEmulator = (deps: BundleEmulatorDeps) => {
       memory.file = content;
       return {
         ...counts,
-        fileName: `oh-my-query-export.${BUNDLE_EXTENSION}`,
+        fileName: `conch-export.${BUNDLE_EXTENSION}`,
         savedId: "stub",
       };
     },

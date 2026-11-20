@@ -1,4 +1,4 @@
-import type { ColumnInfo, QueryLanguage } from "@oh-my-query/core";
+import type { ColumnInfo, QueryLanguage } from "@conch/core";
 
 import type { CardSpec } from "./card-spec.ts";
 import type { RefineContext } from "./refine.ts";

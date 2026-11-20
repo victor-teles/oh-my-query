@@ -1,8 +1,4 @@
-import type {
-  AiProvider,
-  AiTestResult,
-  RedactedAiSettings,
-} from "@oh-my-query/rpc";
+import type { AiProvider, AiTestResult, RedactedAiSettings } from "@conch/rpc";
 
 import type { AiDraft } from "./ai-settings-draft";
 

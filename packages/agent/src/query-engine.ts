@@ -1,4 +1,4 @@
-import type { QueryLanguage, SchemaInfo } from "@oh-my-query/core";
+import type { QueryLanguage, SchemaInfo } from "@conch/core";
 
 import type { EnginePromptInput, PreviousAnswer } from "./prompts.ts";
 import type { ReadOnlyVerdict } from "./read-only-guard.ts";

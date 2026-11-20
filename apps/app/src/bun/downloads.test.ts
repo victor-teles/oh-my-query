@@ -21,7 +21,7 @@ describe("downloads", () => {
   let dir: string;
 
   beforeEach(async () => {
-    dir = await mkdtemp(join(tmpdir(), "omq-downloads-"));
+    dir = await mkdtemp(join(tmpdir(), "conch-downloads-"));
   });
 
   afterEach(async () => {
@@ -71,7 +71,7 @@ describe("downloads", () => {
   it("rejects an extension the caller did not allow", async () => {
     const { downloads } = setup(dir);
     await expect(
-      downloads.save({ ...csv("board"), extension: "omq.json" }, ["csv"])
+      downloads.save({ ...csv("board"), extension: "conch.json" }, ["csv"])
     ).rejects.toMatchObject({ code: "INVALID_FILE" });
   });
 

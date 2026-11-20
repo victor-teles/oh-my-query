@@ -1,4 +1,4 @@
-import { isSqlDialect } from "@oh-my-query/core/client";
+import { isSqlDialect } from "@conch/core/client";
 
 import type { ExportSource } from "@/components/result-actions/use-result-export";
 import type { AnsweredAsk } from "@/components/widgets/widget-draft";

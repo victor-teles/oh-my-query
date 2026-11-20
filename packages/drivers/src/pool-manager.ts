@@ -1,6 +1,6 @@
-import type { ConnectionParams, Pool } from "@oh-my-query/core";
+import type { ConnectionParams, Pool } from "@conch/core";
 
-import { DbError } from "@oh-my-query/core";
+import { DbError } from "@conch/core";
 
 import { getDriver } from "./registry.ts";
 

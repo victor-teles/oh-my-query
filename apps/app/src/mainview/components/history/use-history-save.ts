@@ -1,6 +1,6 @@
-import type { DialectType } from "@oh-my-query/core/client";
+import type { DialectType } from "@conch/core/client";
 
-import { isSqlDialect } from "@oh-my-query/core/client";
+import { isSqlDialect } from "@conch/core/client";
 import { useState } from "react";
 
 import type { RecentAsk, WidgetDraft } from "@/lib/ipc";

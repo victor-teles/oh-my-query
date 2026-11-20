@@ -1,6 +1,6 @@
-import type { ImportCandidate } from "@oh-my-query/rpc";
+import type { ImportCandidate } from "@conch/rpc";
 
-import { buildBundle, planImport } from "@oh-my-query/rpc";
+import { buildBundle, planImport } from "@conch/rpc";
 
 import type { Bundle, ImportPlan, ImportResult } from "@/lib/ipc";
 

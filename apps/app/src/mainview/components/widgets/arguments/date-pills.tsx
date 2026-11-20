@@ -1,7 +1,7 @@
-import type { IsoRange } from "@oh-my-query/core/client";
+import type { IsoRange } from "@conch/core/client";
 import type { ChangeEvent, KeyboardEvent } from "react";
 
-import { DATE_PRESETS, RANGE_PRESETS } from "@oh-my-query/core/client";
+import { DATE_PRESETS, RANGE_PRESETS } from "@conch/core/client";
 import { useCallback, useState } from "react";
 
 import type { ParamValue } from "@/lib/ipc";

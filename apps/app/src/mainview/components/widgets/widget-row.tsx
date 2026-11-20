@@ -1,4 +1,4 @@
-import { editableParams } from "@oh-my-query/rpc";
+import { editableParams } from "@conch/rpc";
 import { LayoutDashboardIcon } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 

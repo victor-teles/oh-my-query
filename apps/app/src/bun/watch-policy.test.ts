@@ -1,6 +1,6 @@
-import type { AlertState, RunSample, WatchCondition } from "@oh-my-query/rpc";
+import type { AlertState, RunSample, WatchCondition } from "@conch/rpc";
 
-import { INITIAL_ALERT_STATE } from "@oh-my-query/rpc";
+import { INITIAL_ALERT_STATE } from "@conch/rpc";
 import { describe, expect, it } from "vitest";
 
 import {

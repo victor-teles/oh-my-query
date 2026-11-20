@@ -15,7 +15,7 @@ const seedKpiWidget = async (page: Page) => {
     sessionStorage.setItem("seeded", "1");
     const stamp = "2026-11-19T09:00:00.000Z";
     localStorage.setItem(
-      "oh-my-query-connections",
+      "conch-connections",
       JSON.stringify([
         {
           createdAt: stamp,
@@ -33,7 +33,7 @@ const seedKpiWidget = async (page: Page) => {
       ])
     );
     localStorage.setItem(
-      "oh-my-query-widgets",
+      "conch-widgets",
       JSON.stringify([
         {
           connectionId: "analytics",
@@ -76,7 +76,8 @@ const ipcCalls = (page: Page, name: string) =>
   page.evaluate(
     (method) =>
       (
-        (globalThis as unknown as { __omqIpcLog: IpcCall[] }).__omqIpcLog ?? []
+        (globalThis as unknown as { __conchIpcLog: IpcCall[] }).__conchIpcLog ??
+        []
       ).filter((call) => call.name === method),
     name
   );

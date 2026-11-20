@@ -1,4 +1,4 @@
-import type { TabularResult } from "@oh-my-query/core";
+import type { TabularResult } from "@conch/core";
 import type { Database } from "bun:sqlite";
 
 import { describe, expect, it, vi } from "vitest";

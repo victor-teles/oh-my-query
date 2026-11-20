@@ -59,7 +59,7 @@ const setup = async (boards: Board[] = [ops, weekly]) => {
     }),
     exportBundle: vi.fn((): unknown => ({
       boards: 1,
-      fileName: "oh-my-query-ops-20261120.omq.json",
+      fileName: "conch-ops-20261120.conch.json",
       savedId: "saved-1",
       widgets: 1,
     })),

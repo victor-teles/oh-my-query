@@ -1,5 +1,5 @@
 {
-  "name": "@oh-my-query/drivers-redis",
+  "name": "@conch/drivers-redis",
   "version": "0.0.0",
   "private": true,
   "type": "module",
@@ -13,11 +13,11 @@
     "test:watch": "vitest"
   },
   "dependencies": {
-    "@oh-my-query/core": "workspace:*",
+    "@conch/core": "workspace:*",
     "ioredis": "^5.4.2"
   },
   "devDependencies": {
-    "@oh-my-query/config": "workspace:*",
+    "@conch/config": "workspace:*",
     "@types/node": "^25.6.0",
     "@typescript/native-preview": "catalog:",
     "vitest": "catalog:"

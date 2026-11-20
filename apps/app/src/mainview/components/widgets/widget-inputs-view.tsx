@@ -1,6 +1,6 @@
 import type { ChangeEvent, KeyboardEvent } from "react";
 
-import { editableParams, ParamDef as ParamDefSchema } from "@oh-my-query/rpc";
+import { editableParams, ParamDef as ParamDefSchema } from "@conch/rpc";
 import { AnimatePresence } from "motion/react";
 import { useCallback, useState } from "react";
 

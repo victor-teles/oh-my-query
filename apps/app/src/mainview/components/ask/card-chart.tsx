@@ -1,6 +1,6 @@
 import type { ReactElement } from "react";
 
-import { formatTick } from "@oh-my-query/rpc";
+import { formatTick } from "@conch/rpc";
 import { useCallback } from "react";
 import {
   Area,

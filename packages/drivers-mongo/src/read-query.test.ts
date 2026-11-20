@@ -1,6 +1,6 @@
 import type { Document } from "mongodb";
 
-import { DbError } from "@oh-my-query/core";
+import { DbError } from "@conch/core";
 import {
   Binary,
   Decimal128,
@@ -66,7 +66,7 @@ describe("runMongoReadQuery", () => {
     expect(pipeline.at(-1)).toStrictEqual({ $limit: 2001 });
     expect(pipeline[0]?.$match.created_at.$gte).toBeInstanceOf(Date);
     expect(options).toStrictEqual({
-      comment: "oh-my-query ask",
+      comment: "conch ask",
       maxTimeMS: 30_000,
       signal: abort,
     });
@@ -214,7 +214,7 @@ describe.skipIf(!fixture)("runMongoReadQuery (fixture database)", () => {
   const client = fixture as MongoClient;
   const pool = new MongoPool(client, "oh_my_query");
   const database = "oh_my_query";
-  const name = `omq_ask_${process.pid}`;
+  const name = `conch_ask_${process.pid}`;
   const target = `${name}_copy`;
   const orders = () => client.db(database).collection(name);
 

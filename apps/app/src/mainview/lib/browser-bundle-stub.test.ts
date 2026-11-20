@@ -1,6 +1,6 @@
-import type { Board, BoardDraft, Widget, WidgetDraft } from "@oh-my-query/rpc";
+import type { Board, BoardDraft, Widget, WidgetDraft } from "@conch/rpc";
 
-import { SKIP_REASONS } from "@oh-my-query/rpc";
+import { SKIP_REASONS } from "@conch/rpc";
 import { describe, expect, it } from "vitest";
 
 import { makeBoard, makeTiles } from "@/test/board-fixtures";
@@ -56,7 +56,7 @@ describe("createBundleEmulator", () => {
       emulator.exportBundle({ destination: "file", scope: { kind: "all" } })
     ).toStrictEqual({
       boards: 1,
-      fileName: "oh-my-query-export.omq.json",
+      fileName: "conch-export.conch.json",
       savedId: "stub",
       widgets: 1,
     });
@@ -115,7 +115,7 @@ describe("createBundleEmulator", () => {
       status: "cancelled",
     });
     expect(emulator.previewImport({ source: "clipboard" })).toStrictEqual({
-      message: "The clipboard has no oh-my-query export.",
+      message: "The clipboard has no Conch export.",
       status: "invalid",
     });
   });

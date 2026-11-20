@@ -1,6 +1,6 @@
-import type { RefineContext } from "@oh-my-query/rpc";
+import type { RefineContext } from "@conch/rpc";
 
-import { CARD_SPEC_VERSION } from "@oh-my-query/rpc";
+import { CARD_SPEC_VERSION } from "@conch/rpc";
 import { describe, expect, it } from "vitest";
 
 import { mongoEngine } from "./mongo-engine.ts";

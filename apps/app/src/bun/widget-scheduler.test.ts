@@ -1,6 +1,6 @@
-import type { Watch } from "@oh-my-query/rpc";
+import type { Watch } from "@conch/rpc";
 
-import { INITIAL_ALERT_STATE } from "@oh-my-query/rpc";
+import { INITIAL_ALERT_STATE } from "@conch/rpc";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import type { SchedulerPorts, WatchReport } from "./widget-scheduler.ts";

@@ -25,7 +25,7 @@ const {
   keyPath,
   resetCryptoCache,
   setLegacyKeyLoader,
-} = await import("@oh-my-query/core");
+} = await import("@conch/core");
 
 const legacyLoader = vi.fn<() => Promise<string | null>>();
 
@@ -35,7 +35,7 @@ describe("crypto file-based key", () => {
   let tmpHome: string;
 
   beforeEach(async () => {
-    tmpHome = await fs.mkdtemp(path.join(os.tmpdir(), "omq-crypto-"));
+    tmpHome = await fs.mkdtemp(path.join(os.tmpdir(), "conch-crypto-"));
     homedirState.value = tmpHome;
     resetCryptoCache();
     legacyLoader.mockReset().mockResolvedValue(null);

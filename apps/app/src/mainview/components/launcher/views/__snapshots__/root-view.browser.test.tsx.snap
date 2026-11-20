@@ -485,7 +485,7 @@ exports[`activating a connection with full motion > shows a failed connection in
               <span
                 class="truncate type-meta text-panel-muted"
               >
-                Saves a .omq.json to Downloads
+                Saves a .conch.json to Downloads
               </span>
             </span>
           </div>
@@ -535,7 +535,7 @@ exports[`activating a connection with full motion > shows a failed connection in
               <span
                 class="truncate type-meta text-panel-muted"
               >
-                From the clipboard or a .omq.json file
+                From the clipboard or a .conch.json file
               </span>
             </span>
           </div>
@@ -1173,7 +1173,7 @@ exports[`activating a connection with reduced motion > shows a failed connection
               <span
                 class="truncate type-meta text-panel-muted"
               >
-                Saves a .omq.json to Downloads
+                Saves a .conch.json to Downloads
               </span>
             </span>
           </div>
@@ -1223,7 +1223,7 @@ exports[`activating a connection with reduced motion > shows a failed connection
               <span
                 class="truncate type-meta text-panel-muted"
               >
-                From the clipboard or a .omq.json file
+                From the clipboard or a .conch.json file
               </span>
             </span>
           </div>
@@ -1849,7 +1849,7 @@ exports[`rootView load states > reports a load failure and retries 1`] = `
               <span
                 class="truncate type-meta text-panel-muted"
               >
-                Saves a .omq.json to Downloads
+                Saves a .conch.json to Downloads
               </span>
             </span>
           </div>
@@ -1899,7 +1899,7 @@ exports[`rootView load states > reports a load failure and retries 1`] = `
               <span
                 class="truncate type-meta text-panel-muted"
               >
-                From the clipboard or a .omq.json file
+                From the clipboard or a .conch.json file
               </span>
             </span>
           </div>
@@ -2485,7 +2485,7 @@ exports[`rootView load states > shows placeholder rows while connections load 1`
               <span
                 class="truncate type-meta text-panel-muted"
               >
-                Saves a .omq.json to Downloads
+                Saves a .conch.json to Downloads
               </span>
             </span>
           </div>
@@ -2535,7 +2535,7 @@ exports[`rootView load states > shows placeholder rows while connections load 1`
               <span
                 class="truncate type-meta text-panel-muted"
               >
-                From the clipboard or a .omq.json file
+                From the clipboard or a .conch.json file
               </span>
             </span>
           </div>
@@ -3190,7 +3190,7 @@ exports[`rootView with connections > lists connections first, most recent first,
               <span
                 class="truncate type-meta text-panel-muted"
               >
-                Saves a .omq.json to Downloads
+                Saves a .conch.json to Downloads
               </span>
             </span>
           </div>
@@ -3240,7 +3240,7 @@ exports[`rootView with connections > lists connections first, most recent first,
               <span
                 class="truncate type-meta text-panel-muted"
               >
-                From the clipboard or a .omq.json file
+                From the clipboard or a .conch.json file
               </span>
             </span>
           </div>
@@ -3839,7 +3839,7 @@ exports[`rootView without connections > leads with a first-run note and Add Conn
               <span
                 class="truncate type-meta text-panel-muted"
               >
-                Saves a .omq.json to Downloads
+                Saves a .conch.json to Downloads
               </span>
             </span>
           </div>
@@ -3889,7 +3889,7 @@ exports[`rootView without connections > leads with a first-run note and Add Conn
               <span
                 class="truncate type-meta text-panel-muted"
               >
-                From the clipboard or a .omq.json file
+                From the clipboard or a .conch.json file
               </span>
             </span>
           </div>

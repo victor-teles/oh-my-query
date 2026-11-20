@@ -1,7 +1,7 @@
-import type { Board, BoardDraft, Widget, WidgetDraft } from "@oh-my-query/rpc";
+import type { Board, BoardDraft, Widget, WidgetDraft } from "@conch/rpc";
 
-import { DbError } from "@oh-my-query/core";
-import { BUNDLE_TOO_LARGE, SKIP_REASONS } from "@oh-my-query/rpc";
+import { DbError } from "@conch/core";
+import { BUNDLE_TOO_LARGE, SKIP_REASONS } from "@conch/rpc";
 import { mkdtemp, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
@@ -147,7 +147,7 @@ const exported = async (ctx: ReturnType<typeof setup>) => {
 };
 
 describe("exportBundle", () => {
-  it("saves everything to Downloads as a dated .omq.json", async () => {
+  it("saves everything to Downloads as a dated .conch.json", async () => {
     const ctx = setup();
     const result = await ctx.service.exportBundle({
       destination: "file",
@@ -155,12 +155,12 @@ describe("exportBundle", () => {
     });
     expect(result).toStrictEqual({
       boards: 1,
-      fileName: "oh-my-query-all-20261120.omq.json",
+      fileName: "conch-all-20261120.conch.json",
       savedId: "saved-file",
       widgets: 3,
     });
     const file = ctx.deps.downloads.save.mock.calls[0]?.[0];
-    expect(file?.extension).toBe("omq.json");
+    expect(file?.extension).toBe("conch.json");
     expect(file?.content).not.toContain("Europe");
     expect(file?.content).not.toContain('"id"');
     expect(file?.content).not.toContain("board-1");
@@ -190,7 +190,7 @@ describe("exportBundle", () => {
     });
     expect(result).toMatchObject({
       boards: 1,
-      fileName: "oh-my-query-weekly-revenue-review-20261120.omq.json",
+      fileName: "conch-weekly-revenue-review-20261120.conch.json",
       widgets: 2,
     });
   });
@@ -257,14 +257,14 @@ describe("previewImport", () => {
   });
 
   it("refuses an oversized or unreadable file", async () => {
-    const big = setup({ fileText: null, picked: "/tmp/big.omq.json" });
+    const big = setup({ fileText: null, picked: "/tmp/big.conch.json" });
     await expect(
       big.service.previewImport({ source: "file" })
     ).resolves.toStrictEqual({
       message: BUNDLE_TOO_LARGE,
       status: "invalid",
     });
-    const broken = setup({ picked: "/tmp/x.omq.json" });
+    const broken = setup({ picked: "/tmp/x.conch.json" });
     broken.deps.readFile.mockRejectedValueOnce(new Error("EACCES"));
     await expect(
       broken.service.previewImport({ source: "file" })
@@ -279,7 +279,7 @@ describe("previewImport", () => {
     await expect(
       json.service.previewImport({ source: "file" })
     ).resolves.toStrictEqual({
-      message: "This isn't an oh-my-query export.",
+      message: "This isn't an Conch export.",
       status: "invalid",
     });
     const bundle = await exported(setup());
@@ -440,16 +440,16 @@ describe("exportBaseName", () => {
   it("slugs and shortens long names but keeps the date", () => {
     expect(
       exportBaseName("A very long board name that keeps on going forever", NOW)
-    ).toBe("oh-my-query-a-very-long-board-name-that-keep-20261120");
-    expect(exportBaseName("📈", NOW)).toBe("oh-my-query-export-20261120");
+    ).toBe("conch-a-very-long-board-name-that-keep-20261120");
+    expect(exportBaseName("📈", NOW)).toBe("conch-export-20261120");
   });
 });
 
 describe("readTextUpTo", () => {
   it("reads a file within the limit and refuses a larger one", async () => {
-    const dir = await mkdtemp(join(tmpdir(), "omq-bundle-"));
+    const dir = await mkdtemp(join(tmpdir(), "conch-bundle-"));
     try {
-      const path = join(dir, "export.omq.json");
+      const path = join(dir, "export.conch.json");
       await writeFile(path, "{}");
       await expect(readTextUpTo(path, 10)).resolves.toBe("{}");
       await expect(readTextUpTo(path, 1)).resolves.toBeNull();

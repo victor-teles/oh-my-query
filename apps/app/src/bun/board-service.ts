@@ -1,12 +1,12 @@
-import type { createBoardStore } from "@oh-my-query/core";
+import type { createBoardStore } from "@conch/core";
 import type {
   Board as BoardRecord,
   BoardDraft as BoardDraftRecord,
   Widget,
-} from "@oh-my-query/rpc";
+} from "@conch/rpc";
 
-import { DbError } from "@oh-my-query/core";
-import { addTile, Board, BoardDraft, sizeForView } from "@oh-my-query/rpc";
+import { DbError } from "@conch/core";
+import { addTile, Board, BoardDraft, sizeForView } from "@conch/rpc";
 import { z } from "zod";
 
 export type BoardStore = ReturnType<typeof createBoardStore<BoardRecord>>;
