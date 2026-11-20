@@ -9,6 +9,7 @@ import {
   LauncherSection,
 } from "@/components/launcher/launcher-list";
 import { LauncherNoResults } from "@/components/launcher/launcher-no-results";
+import { useWidgetWatching } from "@/components/watches/use-widget-watching";
 import { RevealWhenChanged } from "@/components/widgets/reveal-when-changed";
 import { useWidgets } from "@/components/widgets/widgets-provider";
 import { useMotionPreset } from "@/lib/motion";
@@ -42,7 +43,18 @@ function SectionEnter({ children }: { children: ReactNode }) {
   );
 }
 
-const REVEALED_SECTIONS = new Set<RootSection["id"]>(["recent", "clipboard"]);
+const REVEALED_SECTIONS = new Set<RootSection["id"]>([
+  "alerts",
+  "recent",
+  "clipboard",
+]);
+
+const widgetIdsOf = (sections: readonly RootSection[]): string[] =>
+  sections.flatMap((section) =>
+    section.items.flatMap((item) =>
+      item.kind === "widget" ? [item.widget.id] : []
+    )
+  );
 
 const withEntrance = (section: RootSection, group: ReactNode): ReactNode => {
   if (section.id === "lookup") {
@@ -80,6 +92,7 @@ export function RootList({
 }: RootListProps) {
   const { state } = useConnections();
   const { freshId, markFresh } = useWidgets();
+  const watchingFor = useWidgetWatching(widgetIdsOf(sections));
   const connectionById = (id: string) =>
     state.connections.find((connection) => connection.id === id) ?? null;
   const clearFresh = useCallback(() => markFresh(null), [markFresh]);
@@ -96,6 +109,7 @@ export function RootList({
     onPulseDone: clearFresh,
     onRun,
     selectedId,
+    watchingFor,
   };
   const renderItem = (item: RootItem) => (
     <RootItemRow context={context} item={item} key={item.id} />

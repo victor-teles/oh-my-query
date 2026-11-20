@@ -4,6 +4,7 @@ import {
   appendHistory,
   CancellationRegistry,
   createBoardStore,
+  createWatchStore,
   DbError,
   describeSqlAssumptions,
   formatSql as doFormatSql,
@@ -18,10 +19,12 @@ import {
 import { ConnectionPoolManager, getDriver } from "@oh-my-query/drivers";
 import {
   Board,
+  BUNDLE_EXTENSION,
   DEFAULT_CLIPBOARD_LOOKUPS,
   Dialect,
   encodeRpcError,
   MAX_REFINE_SQL,
+  Watch,
 } from "@oh-my-query/rpc";
 import { defineElectrobunRPC, Updater, Utils } from "electrobun/main";
 import { z } from "zod";
@@ -36,20 +39,26 @@ import {
   testAiSettings,
   writeAiSettings,
 } from "./ai-settings-service.ts";
+import { createAlertNotifier } from "./alert-notifier.ts";
 import { createAskService } from "./ask-service.ts";
 import { createBoardService } from "./board-service.ts";
+import { createBundleService, readTextUpTo } from "./bundle-service.ts";
 import { decodePng } from "./clipboard-image.ts";
 import { createClipboardOffer } from "./clipboard-offer.ts";
+import { findConnection } from "./connection-access.ts";
 import { createDownloads, writeExclusive } from "./downloads.ts";
 import {
   readActiveConnection,
   readClipboardLookups,
   readLauncherHotkey,
+  readWatchingPaused,
   writeActiveConnection,
   writeClipboardLookups,
+  writeWatchingPaused,
 } from "./launcher-config.ts";
 import { createLookupService } from "./lookup-service.ts";
 import { createPasteboardTypes } from "./pasteboard-types-native.ts";
+import { createPowerProbe } from "./power-native.ts";
 import { createSchemaCache } from "./schema-cache.ts";
 import { createSchemaPeek } from "./schema-peek.ts";
 import {
@@ -58,9 +67,11 @@ import {
   readChannel as doReadChannel,
   writeChannel as doWriteChannel,
 } from "./updater.ts";
+import { createWatchService } from "./watch-service.ts";
 import {
   createWidgetService,
   defaultRecentAskStore,
+  defaultRunLogStore,
   defaultWidgetStore,
 } from "./widget-service.ts";
 
@@ -173,19 +184,93 @@ export function createAppRpcs(host: AppHost) {
       rpc.send.boardChanged({ boardId });
     }
   };
+  const broadcastWatchesChanged = () => {
+    for (const rpc of live) {
+      rpc.send.watchesChanged({});
+    }
+  };
+  const broadcastWidgetSampled = (widgetId: string, valuesKey: string) => {
+    for (const rpc of live) {
+      rpc.send.widgetSampled({ valuesKey, widgetId });
+    }
+  };
   const widgetStore = defaultWidgetStore();
   const widgets = createWidgetService({
     loadModel: loadAskModel,
     now: () => new Date(),
+    onSampled: broadcastWidgetSampled,
     pools,
     recents: defaultRecentAskStore(),
+    runLog: defaultRunLogStore(),
     widgets: widgetStore,
   });
+  const notifier = createAlertNotifier({
+    clearTimer: clearTimeout,
+    now: () => Date.now(),
+    setTimer: setTimeout,
+    show: (notification) => Utils.showNotification(notification),
+  });
+  const power = createPowerProbe();
+  const watches = createWatchService({
+    broadcast: broadcastWatchesChanged,
+    clearTimer: clearTimeout,
+    connectionName: async (id) => {
+      const connection = await findConnection(id);
+      return connection?.name ?? null;
+    },
+    notify: notifier.notify,
+    now: () => new Date(),
+    power: () => power?.() ?? "ac",
+    readPaused: readWatchingPaused,
+    runner: widgets,
+    setTimer: setTimeout,
+    setTray: (status) => host.launcher()?.setTrayStatus(status),
+    watches: createWatchStore(parseWith(Watch)),
+    widgets: {
+      getWidget: widgetStore.getWidget,
+      listWidgets: widgets.listWidgets,
+    },
+    writePaused: writeWatchingPaused,
+  });
+  const widgetConnectionUsed = async (widgetId: string) => {
+    const widget = await widgetStore.getWidget(widgetId);
+    if (widget) {
+      watches.connectionUsed(widget.connectionId);
+    }
+  };
   const boards = createBoardService({
     boards: createBoardStore(parseWith(Board)),
     getWidget: widgetStore.getWidget,
     now: () => new Date(),
     onChanged: broadcastBoardChanged,
+  });
+  const bundles = createBundleService({
+    boards,
+    clipboard: {
+      readText: () => Utils.clipboardReadText(),
+      writeText: (text) => Utils.clipboardWriteText(text),
+    },
+    connections: async () => {
+      const saved = await getConnections();
+      return saved.map(({ id, name, type }) => ({ id, name, type }));
+    },
+    downloads: { save: (file) => downloads.save(file, [BUNDLE_EXTENSION]) },
+    now: () => new Date(),
+    pickFile: async () => {
+      const pick = () =>
+        Utils.openFileDialog({
+          allowedFileTypes: "json",
+          allowsMultipleSelection: false,
+          canChooseDirectory: false,
+          canChooseFiles: true,
+          startingFolder: Utils.paths.downloads,
+        });
+      const launcher = host.launcher();
+      const paths = await (launcher ? launcher.runModal(pick) : pick());
+      return paths.find((path) => path.length > 0) ?? null;
+    },
+    readFile: readTextUpTo,
+    widgets,
   });
   let launcherRpc: AppRpc | null = null;
   const asks = createAskService({
@@ -216,11 +301,16 @@ export function createAppRpcs(host: AppHost) {
   });
   const getLauncher = host.launcher;
   const handlers = wrapHandlers({
+    acknowledgeAlert: ({ watchId }) => watches.acknowledge(watchId),
     addBoardTile: ({ boardId, widgetId }) => boards.addTile(boardId, widgetId),
     appendHistory: async ({ entry }) => {
       await appendHistory(entry);
     },
-    ask: (params) => asks.startAsk(params),
+    applyImport: (request) => bundles.applyImport(request),
+    ask: (params) => {
+      watches.connectionUsed(params.connectionId);
+      return asks.startAsk(params);
+    },
     cancelAsk: ({ askId }) => asks.cancelAsk(askId),
     cancelLookup: ({ lookupId }) => lookups.cancelLookup(lookupId),
     cancelQuery: ({ queryId }) => cancellation.cancel(queryId),
@@ -231,6 +321,7 @@ export function createAppRpcs(host: AppHost) {
     connectToDatabase: async ({ connectionId, params }) => {
       schemas.invalidate(connectionId);
       await pools.connect(connectionId, params);
+      watches.connectionUsed(connectionId);
     },
     copyImage: ({ pngBase64 }) => {
       Utils.clipboardWriteImage(decodePng(pngBase64));
@@ -240,15 +331,18 @@ export function createAppRpcs(host: AppHost) {
       host.boardWindows()?.close(boardId);
     },
     deleteRecentAsk: ({ askId }) => widgets.deleteRecentAsk(askId),
+    deleteWatch: ({ watchId }) => watches.remove(watchId),
     deleteWidget: async ({ widgetId }) => {
       await widgets.deleteWidget(widgetId);
       await boards.removeWidget(widgetId);
+      await watches.removeForWidget(widgetId);
     },
     describeSql: (params) => {
       const { sql, dialect } = describeSqlParams.parse(params);
       return describeSqlAssumptions(sql, dialect);
     },
     disconnectFromDatabase: async ({ connectionId }) => {
+      watches.pauseConnection(connectionId);
       schemas.invalidate(connectionId);
       await pools.disconnect(connectionId);
     },
@@ -290,6 +384,7 @@ export function createAppRpcs(host: AppHost) {
         }
       }
     },
+    exportBundle: (request) => bundles.exportBundle(request),
     formatSql: ({ sql, dialect }) => doFormatSql(sql, dialect),
     getActiveConnection: () => readActiveConnection(),
     getAiSettings: () => readAiSettings(),
@@ -309,6 +404,7 @@ export function createAppRpcs(host: AppHost) {
     getServerVersion: ({ connectionId }) =>
       pools.getPool(connectionId).fetchVersion(),
     getUpdateChannel: () => doReadChannel(),
+    getWatchingPaused: () => watches.isPaused(),
     hideLauncher: () => {
       getLauncher()?.hide();
     },
@@ -317,6 +413,9 @@ export function createAppRpcs(host: AppHost) {
     listConnectionDatabases: ({ connectionId }) =>
       pools.getPool(connectionId).listDatabases(),
     listRecentAsks: (request) => widgets.listRecentAsks(request),
+    listWatchStatuses: () => watches.statuses(),
+    listWatches: () => watches.list(),
+    listWidgetTrends: ({ widgetIds }) => widgets.listWidgetTrends(widgetIds),
     listWidgets: () => widgets.listWidgets(),
     loadParamOptions: ({ widgetId, paramName }) =>
       widgets.loadParamOptions(widgetId, paramName),
@@ -335,6 +434,7 @@ export function createAppRpcs(host: AppHost) {
       getLauncher()?.navigate({ kind: "widget-run", widgetId });
     },
     peekSchema: (params) => schemaPeek.peek(params),
+    previewImport: (request) => bundles.previewImport(request),
     proposeWidgetParams: (request) => widgets.proposeParams(request),
     rendererReady: () => {
       console.log("[rpc] renderer ready");
@@ -347,8 +447,15 @@ export function createAppRpcs(host: AppHost) {
       getLauncher()?.resize(height);
     },
     revealSaved: ({ savedId }) => downloads.reveal(savedId),
-    runSql: (params) => asks.startSqlRun(params),
-    runWidget: (request) => widgets.runWidget(request),
+    runSql: (params) => {
+      watches.connectionUsed(params.connectionId);
+      return asks.startSqlRun(params);
+    },
+    runWidget: async (request) => {
+      const outcome = await widgets.runWidget(request);
+      await widgetConnectionUsed(request.widgetId);
+      return outcome;
+    },
     saveAiSettings: (input) => writeAiSettings(input),
     saveBoard: async ({ board }) => {
       const saved = await boards.saveBoard(board);
@@ -357,8 +464,10 @@ export function createAppRpcs(host: AppHost) {
     },
     saveConnections: async ({ connections }) => {
       await saveConnections(connections);
+      watches.connectionsChanged();
     },
     saveToDownloads: (params) => downloads.save(params, ["csv"]),
+    saveWatch: ({ watch }) => watches.save(watch),
     saveWidget: ({ widget }) => widgets.saveWidget(widget),
     setActiveConnection: async ({ active }) => {
       await writeActiveConnection(active);
@@ -368,6 +477,7 @@ export function createAppRpcs(host: AppHost) {
       return { enabled: clipboardSetting.enabled };
     },
     setUpdateChannel: ({ channel }) => doWriteChannel(channel),
+    setWatchingPaused: ({ paused }) => watches.setPaused(paused),
     testAiSettings: (input) => testAiSettings(input),
     testConnection: ({ params }) =>
       getDriver(params.type).testConnection(params),
@@ -384,6 +494,20 @@ export function createAppRpcs(host: AppHost) {
   launcherRpc = createWindowRpc();
 
   return {
+    background: {
+      acknowledge: async (watchId: string) => {
+        try {
+          await watches.acknowledge(watchId);
+        } catch (error) {
+          console.error(`[watch] could not acknowledge ${watchId}`, error);
+        }
+      },
+      start: () => watches.start(),
+      stop: () => {
+        watches.stop();
+        notifier.dispose();
+      },
+    },
     createWindowRpc,
     launcherRpc,
     releaseWindowRpc: (rpc: AppRpc) => {

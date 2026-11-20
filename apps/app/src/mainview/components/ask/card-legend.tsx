@@ -1,9 +1,10 @@
+import { formatValue } from "@oh-my-query/rpc";
 import { AnimatePresence, motion } from "motion/react";
 
 import type { ChartModel } from "@/lib/card-data";
 
 import { SwapText } from "@/components/motion/swap-text";
-import { formatValue, latestValues } from "@/lib/card-data";
+import { latestValues } from "@/lib/card-data";
 import { staggerDelay, useMotionPreset } from "@/lib/motion";
 
 interface CardLegendProps {

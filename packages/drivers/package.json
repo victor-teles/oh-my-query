@@ -5,6 +5,7 @@
   "type": "module",
   "exports": {
     ".": "./src/index.ts",
+    "./read": "./src/read.ts",
     "./safe-mode": "./src/safe-mode.ts"
   },
   "scripts": {

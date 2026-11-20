@@ -1,15 +1,13 @@
+import type { CardResult } from "@oh-my-query/rpc";
+
+import { CARD_SPEC_VERSION } from "@oh-my-query/rpc";
 import { describe, expect, it } from "vitest";
 
-import type { CardResult } from "./card-data";
 import type { CardSpec, ChartView, ColumnInfo } from "./ipc";
 
 import {
   alternatesFor,
   chartModelOf,
-  formatContextFor,
-  formatFor,
-  formatTick,
-  formatValue,
   humanize,
   inferView,
   latestValues,
@@ -57,7 +55,7 @@ const mrrView: ChartView = {
 const specOf = (view: CardSpec["view"]): CardSpec => ({
   formats: {},
   title: "t",
-  version: 1,
+  version: CARD_SPEC_VERSION,
   view,
 });
 
@@ -203,46 +201,6 @@ describe("latestValues and trendOf", () => {
   });
 });
 
-describe("formatValue and formatTick", () => {
-  it("formats currency compactly from 10k, and always compactly on ticks", () => {
-    const usd = { currency: "USD", kind: "currency" } as const;
-    expect(formatValue(258_000, usd)).toBe("$258k");
-    expect(formatValue("1200000", usd)).toBe("$1.2M");
-    expect(formatValue(4500.5, usd)).toBe("$4,500.5");
-    expect(formatValue(-12_500, usd)).toBe("-$12.5k");
-    expect(formatTick(300_000, usd)).toBe("$300k");
-  });
-
-  it("formats months and dates in UTC", () => {
-    expect(formatTick("2026-01-01", { kind: "month" })).toBe("Jan");
-    expect(formatValue("2026-01-01T00:00:00.000Z", { kind: "month" })).toBe(
-      "Jan 2026"
-    );
-    expect(formatTick("2026-08-03", { kind: "date" })).toBe("Aug 3");
-    expect(formatValue("2026-08-03", { kind: "date" })).toBe("Aug 3, 2026");
-  });
-
-  it("scales percentages written as fractions", () => {
-    const context = formatContextFor([0.125, 0.5]);
-    expect(formatValue(0.125, { kind: "percent" }, context)).toBe("12.5%");
-    expect(
-      formatValue(12.5, { kind: "percent" }, formatContextFor([12.5, 40]))
-    ).toBe("12.5%");
-  });
-
-  it("formats plain, integer and compact numbers, nulls and text", () => {
-    expect(formatValue(1234.567)).toBe("1,234.57");
-    expect(formatValue("41.6", { kind: "integer" })).toBe("42");
-    expect(formatValue(18_226, { kind: "compact" })).toBe("18.2k");
-  });
-
-  it("formats negative ticks, nulls and text", () => {
-    expect(formatTick(-2500)).toBe("-2.5k");
-    expect(formatValue(null)).toBe("—");
-    expect(formatValue("paid")).toBe("paid");
-  });
-});
-
 describe("chartModelOf", () => {
   it("bundles the series with the x and y formats and the percent scale", () => {
     const model = chartModelOf(mrrView, mrr, {
@@ -275,18 +233,6 @@ describe("chartModelOf", () => {
     );
     expect(chartModelOf(mrrView, mrr, {}).showsLatest).toBeTruthy();
     expect(bar.showsLatest).toBeFalsy();
-  });
-});
-
-describe("formatFor", () => {
-  it("prefers the declared format and otherwise infers month or date", () => {
-    const spec = { formats: { mrr: { kind: "currency" as const } } };
-    expect(formatFor(spec, "mrr", ["1"])).toStrictEqual({ kind: "currency" });
-    expect(formatFor(spec, "month", MONTHS)).toStrictEqual({ kind: "month" });
-    expect(formatFor(spec, "day", ["2026-08-03"])).toStrictEqual({
-      kind: "date",
-    });
-    expect(formatFor(spec, "region", ["Europe"])).toBeUndefined();
   });
 });
 

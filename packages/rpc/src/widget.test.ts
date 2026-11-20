@@ -2,9 +2,11 @@ import { describe, expect, it } from "vitest";
 
 import type { ParamDef } from "./widget.ts";
 
+import { CARD_SPEC_VERSION } from "./card-spec.ts";
 import {
   ParamDef as ParamDefSchema,
   paramValueSchema,
+  RecentAsk,
   toTemplateValue,
   Widget,
 } from "./widget.ts";
@@ -190,11 +192,67 @@ describe("widget", () => {
     ).toBeFalsy();
   });
 
+  it("loads a version 1 widget and upgrades its spec", () => {
+    const parsed = Widget.parse(base);
+    expect(parsed.spec.version).toBe(CARD_SPEC_VERSION);
+    expect(parsed.dialect).toBe("postgresql");
+  });
+
+  it("still rejects a widget on a MongoDB or Redis connection", () => {
+    expect(
+      Widget.safeParse({ ...base, dialect: "mongodb" }).success
+    ).toBeFalsy();
+    expect(Widget.safeParse({ ...base, dialect: "redis" }).success).toBeFalsy();
+  });
+
   it("caps inputs at six", () => {
     const params = Array.from({ length: 7 }, (_, index) => ({
       ...threshold,
       name: `n${index}`,
     }));
     expect(Widget.safeParse({ ...base, params }).success).toBeFalsy();
+  });
+});
+
+describe("recentAsk", () => {
+  const v1Recent = {
+    askedAt: "2026-11-18T09:12:00.000Z",
+    connectionId: "conn-analytics",
+    database: null,
+    dialect: "postgresql",
+    id: "4b0c2f61-8f4e-4a43-9a52-7d0c1d7a0e11",
+    prompt: "Revenue by region",
+    spec: {
+      formats: { mrr: { currency: "USD", kind: "currency" } },
+      title: "Monthly recurring revenue by region",
+      version: 1,
+      view: {
+        groupBy: "region",
+        kind: "chart",
+        mark: "line",
+        stacked: false,
+        x: "month",
+        y: ["mrr"],
+      },
+    },
+    sql: "select month, region, mrr from mrr_by_region order by month",
+  };
+
+  it("loads a version 1 recent ask and upgrades its spec", () => {
+    const parsed = RecentAsk.parse(v1Recent);
+    expect(parsed.spec.version).toBe(CARD_SPEC_VERSION);
+    expect(parsed.dialect).toBe("postgresql");
+  });
+
+  it("accepts MongoDB and Redis recents", () => {
+    for (const dialect of ["mongodb", "redis"]) {
+      expect(RecentAsk.parse({ ...v1Recent, dialect }).dialect).toBe(dialect);
+    }
+  });
+
+  it("rejects an unknown language", () => {
+    expect(
+      RecentAsk.safeParse({ ...v1Recent, dialect: "cassandra" }).success
+    ).toBeFalsy();
   });
 });

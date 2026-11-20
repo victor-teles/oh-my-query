@@ -11,11 +11,16 @@ import type {
   ExportActionId,
   ResultContext,
 } from "@/components/result-actions/result-actions";
+import type {
+  WatchAction,
+  WatchActionId,
+} from "@/components/watches/watch-actions";
 
 import { exportActions } from "@/components/result-actions/result-actions";
 
 export type WidgetActionId =
   | ExportActionId
+  | WatchActionId
   | "edit-inputs"
   | "rename"
   | "duplicate"
@@ -26,7 +31,10 @@ export interface WidgetAction extends MenuAction {
   id: WidgetActionId;
 }
 
-export const widgetActions = (context: ResultContext): WidgetAction[] => [
+export const widgetActions = (
+  context: ResultContext,
+  watching: readonly WatchAction[] = []
+): WidgetAction[] => [
   ...exportActions(context),
   {
     icon: SlidersHorizontalIcon,
@@ -42,5 +50,6 @@ export const widgetActions = (context: ResultContext): WidgetAction[] => [
     label: "Add to Board",
     tone: "default",
   },
+  ...watching,
   { icon: Trash2Icon, id: "delete", label: "Delete", tone: "destructive" },
 ];

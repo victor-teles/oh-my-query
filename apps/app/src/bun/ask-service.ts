@@ -1,15 +1,16 @@
 import type {
   AskPorts,
   LanguageModel,
+  QueryEngine,
   SqlRunInput,
   SqlRunPorts,
 } from "@oh-my-query/agent";
 import type {
-  BindValue,
   DatabaseConnection,
+  DialectType,
   Pool,
+  QueryLanguage,
   SchemaInfo,
-  TabularResult,
 } from "@oh-my-query/core";
 import type { ConnectionPoolManager } from "@oh-my-query/drivers";
 import type {
@@ -22,7 +23,14 @@ import type {
   SqlRunSource,
 } from "@oh-my-query/rpc";
 
-import { ASK_MAX_ROWS, runAsk, runSql } from "@oh-my-query/agent";
+import {
+  ASK_MAX_ROWS,
+  mongoEngine,
+  redisEngine,
+  runAsk,
+  runSql,
+  sqlEngine,
+} from "@oh-my-query/agent";
 import {
   appendHistory,
   CancellationRegistry,
@@ -35,6 +43,12 @@ import {
   qualifiedTable,
   quoteIdentifier,
 } from "@oh-my-query/core";
+import {
+  isMongoPool,
+  isRedisPool,
+  runMongoReadQuery,
+  runRedisReadPlan,
+} from "@oh-my-query/drivers/read";
 import { chainPrompt, RefineContext, RunSqlParams } from "@oh-my-query/rpc";
 import { z } from "zod";
 
@@ -85,10 +99,17 @@ const requireConnection = async (id: string): Promise<DatabaseConnection> => {
   return connection;
 };
 
+interface OpenPool {
+  connection: DatabaseConnection;
+  pool: Pool;
+  database: string;
+}
+
+type RunQuery = AskPorts["execute"];
+
 const recordHistory = async (
-  connection: DatabaseConnection,
-  database: string,
-  pool: Pool,
+  { connection, database }: OpenPool,
+  language: QueryLanguage,
   entry: { sql: string; error: string | null; executionTimeMs: number }
 ): Promise<void> => {
   try {
@@ -96,7 +117,7 @@ const recordHistory = async (
       ...entry,
       connectionId: connection.id,
       database,
-      dialect: pool.dialect,
+      dialect: language,
       success: entry.error === null,
       timestamp: new Date().toISOString(),
     });
@@ -107,9 +128,72 @@ const recordHistory = async (
 
 const shortId = (askId: string): string => askId.slice(0, 8);
 
+const withHistory =
+  (open: OpenPool, language: QueryLanguage, run: RunQuery): RunQuery =>
+  async (sql, signal, params) => {
+    const started = performance.now();
+    const elapsed = () => Math.round(performance.now() - started);
+    try {
+      const result = await run(sql, signal, params);
+      await recordHistory(open, language, {
+        error: null,
+        executionTimeMs: elapsed(),
+        sql,
+      });
+      return result;
+    } catch (error) {
+      await recordHistory(open, language, {
+        error: DbError.fromUnknown(error).message,
+        executionTimeMs: elapsed(),
+        sql,
+      });
+      throw error;
+    }
+  };
+
+const sqlRunner =
+  ({ pool, database }: OpenPool): RunQuery =>
+  async (sql, signal, params) =>
+    tabular(
+      await pool.execute(
+        sql,
+        ASK_MAX_ROWS,
+        database,
+        signal,
+        params ? { params, readOnly: true } : { readOnly: true }
+      )
+    );
+
+interface AskEngine {
+  engine: QueryEngine;
+  run: RunQuery;
+}
+
+const askEngineOf = (open: OpenPool): AskEngine | null => {
+  const { pool, database } = open;
+  if (pool.dialect) {
+    return { engine: sqlEngine(pool.dialect), run: sqlRunner(open) };
+  }
+  if (isMongoPool(pool)) {
+    return {
+      engine: mongoEngine,
+      run: (text, signal) =>
+        runMongoReadQuery(pool, text, database, ASK_MAX_ROWS, signal),
+    };
+  }
+  if (isRedisPool(pool)) {
+    return {
+      engine: redisEngine,
+      run: (text, signal) =>
+        runRedisReadPlan(pool, text, database, ASK_MAX_ROWS, signal),
+    };
+  }
+  return null;
+};
+
 interface QueryTarget {
   connection: DatabaseConnection;
-  dialect: SqlRunPorts["dialect"];
+  dialect: DialectType;
   database: string;
   ports: SqlRunPorts;
 }
@@ -156,64 +240,40 @@ export const createAskService = (deps: AskServiceDeps) => {
   const controllers = new CancellationRegistry();
   const activeByConnection = new Map<string, string>();
 
-  const openTarget = async (
+  const openPool = async (
     connectionId: string,
-    requested: string | null,
-    unsupportedMessage: string
-  ): Promise<QueryTarget> => {
+    requested: string | null
+  ): Promise<OpenPool> => {
     const connection = await requireConnection(connectionId);
     const pool = await ensurePool(deps.pools, connection);
-    const { dialect } = pool;
-    if (!dialect) {
-      throw new SetupFailure("UNSUPPORTED_ENGINE", unsupportedMessage);
-    }
     const database = await resolveSchemaName(pool, requested, connection);
-    const execute = async (
-      sql: string,
-      signal: AbortSignal,
-      params?: BindValue[]
-    ): Promise<TabularResult> => {
-      const started = performance.now();
-      const elapsed = () => Math.round(performance.now() - started);
-      try {
-        const result = tabular(
-          await pool.execute(
-            sql,
-            ASK_MAX_ROWS,
-            database,
-            signal,
-            params ? { params, readOnly: true } : { readOnly: true }
-          )
-        );
-        await recordHistory(connection, database, pool, {
-          error: null,
-          executionTimeMs: elapsed(),
-          sql,
-        });
-        return result;
-      } catch (error) {
-        await recordHistory(connection, database, pool, {
-          error: DbError.fromUnknown(error).message,
-          executionTimeMs: elapsed(),
-          sql,
-        });
-        throw error;
-      }
-    };
+    return { connection, database, pool };
+  };
+
+  const openSqlTarget = async (
+    connectionId: string,
+    requested: string | null
+  ): Promise<QueryTarget> => {
+    const open = await openPool(connectionId, requested);
+    const { dialect } = open.pool;
+    if (!dialect) {
+      throw new SetupFailure("UNSUPPORTED_ENGINE", SQL_RUN_UNSUPPORTED_MESSAGE);
+    }
+    const execute = withHistory(open, dialect, sqlRunner(open));
     return {
-      connection,
-      database,
+      connection: open.connection,
+      database: open.database,
       dialect,
-      ports: { connectionLabel: connection.name, dialect, execute },
+      ports: { connectionLabel: open.connection.name, dialect, execute },
     };
   };
 
   const buildAskPorts = async (params: AskParams): Promise<AskPorts> => {
-    const target = await openTarget(
-      params.connectionId,
-      params.database,
-      UNSUPPORTED_ENGINE_MESSAGE
-    );
+    const open = await openPool(params.connectionId, params.database);
+    const selected = askEngineOf(open);
+    if (!selected) {
+      throw new SetupFailure("UNSUPPORTED_ENGINE", UNSUPPORTED_ENGINE_MESSAGE);
+    }
     const model = await deps.loadModel();
     if (!model) {
       throw new SetupFailure(
@@ -221,9 +281,12 @@ export const createAskService = (deps: AskServiceDeps) => {
         "Add an AI provider in Settings to ask questions."
       );
     }
-    const { connection, database } = target;
+    const { connection, database } = open;
+    const { engine, run } = selected;
     return {
-      ...target.ports,
+      connectionLabel: connection.name,
+      engine,
+      execute: withHistory(open, engine.language, run),
       loadSchema: () => deps.schemas.get(connection.id, database),
       model,
       now: () => new Date(),
@@ -295,7 +358,7 @@ export const createAskService = (deps: AskServiceDeps) => {
           askedAt: new Date().toISOString(),
           connectionId: params.connectionId,
           database: params.database,
-          dialect: ports.dialect,
+          dialect: ports.engine.language,
           id: refine?.chainId ?? params.askId,
           prompt: chainPrompt(refine?.turns ?? [], params.prompt),
           spec: event.spec,
@@ -327,11 +390,7 @@ export const createAskService = (deps: AskServiceDeps) => {
     let target: QueryTarget;
     let input: SqlRunInput;
     try {
-      target = await openTarget(
-        params.connectionId,
-        params.database,
-        SQL_RUN_UNSUPPORTED_MESSAGE
-      );
+      target = await openSqlTarget(params.connectionId, params.database);
       input = await runInputFor(params.source, target);
     } catch (error) {
       forwardSetupError(params.askId, error, "run", signal, started);

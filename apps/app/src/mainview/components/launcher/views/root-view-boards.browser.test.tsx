@@ -8,6 +8,7 @@ import { optionId } from "@/components/launcher/launcher-row";
 import { makeBoard } from "@/test/board-fixtures";
 import { makeConnection } from "@/test/connection-fixture";
 import { mockLauncherIpc, renderWithConnections } from "@/test/launcher-ipc";
+import { checksDrawn } from "@/test/wait";
 import { makeWidget } from "@/test/widget-fixtures";
 
 import type { RootNavigation } from "./root-view";
@@ -22,9 +23,11 @@ const navigation = (): RootNavigation => ({
   newBoard: vi.fn(),
   openBoard: vi.fn(),
   openHistory: vi.fn(),
+  openImport: vi.fn(),
   openSettings: vi.fn(),
   renameBoard: vi.fn(),
   runWidget: vi.fn(),
+  watchWidget: vi.fn(),
 });
 
 function Harness({ navigate }: { navigate: RootNavigation }) {
@@ -54,6 +57,13 @@ const setup = async (boards: Board[] = [ops, weekly]) => {
       stored = stored.filter((board) => board.id !== payload.boardId);
       return null;
     }),
+    exportBundle: vi.fn((): unknown => ({
+      boards: 1,
+      fileName: "oh-my-query-ops-20261120.omq.json",
+      savedId: "saved-1",
+      widgets: 1,
+    })),
+    revealSaved: vi.fn(() => null),
     saveBoard: vi.fn((payload: Record<string, unknown>) => {
       const draft = payload.board as BoardDraft;
       const saved = { ...ops, ...draft, id: draft.id ?? "b-copy" };
@@ -131,6 +141,7 @@ describe("root view boards", () => {
       "Open",
       "Rename",
       "Duplicate",
+      "Export Board",
       "Delete",
     ]);
     await userEvent.keyboard("{ArrowDown}{Enter}");
@@ -171,9 +182,73 @@ describe("root view boards", () => {
     const { navigate, screen } = await setup();
     await selectRow(screen, widgetItemId("w-1"));
     await openActions(screen);
-    expect(menuLabels(screen)).toStrictEqual(["Run", "Add to Board…"]);
+    expect(menuLabels(screen)).toStrictEqual([
+      "Run",
+      "Add to Board…",
+      "Export Widget",
+      "Watch…",
+    ]);
     await userEvent.keyboard("{ArrowDown}{Enter}");
     expect(navigate.addToBoard).toHaveBeenCalledWith("w-1");
+  });
+
+  it("exports a board from its actions with the board scope", async () => {
+    const { ipc, screen } = await setup();
+    await selectRow(screen, boardItemId("b-ops"));
+    await openActions(screen);
+    await screen.getByRole("menuitem", { name: "Export Board" }).click();
+    await expect
+      .element(screen.getByRole("status"))
+      .toHaveTextContent("Exported 1 widget, 1 board");
+    expect(ipc.exportBundle).toHaveBeenCalledWith({
+      destination: "file",
+      scope: { boardId: "b-ops", kind: "board" },
+    });
+  });
+
+  it("exports a widget from its actions with the widget scope", async () => {
+    const { ipc, screen } = await setup();
+    await selectRow(screen, widgetItemId("w-1"));
+    await openActions(screen);
+    await screen.getByRole("menuitem", { name: "Export Widget" }).click();
+    await expect.poll(() => ipc.exportBundle.mock.calls.length).toBe(1);
+    expect(ipc.exportBundle).toHaveBeenCalledWith({
+      destination: "file",
+      scope: { kind: "widget", widgetId: "w-1" },
+    });
+  });
+
+  it("exports everything from the command, then shows the file in Finder", async () => {
+    const { input, ipc, screen } = await setup();
+    await input.fill("export widgets");
+    await userEvent.keyboard("{Enter}");
+    const status = screen.getByRole("status");
+    await expect
+      .element(status)
+      .toHaveTextContent("Exported 1 widget, 1 board");
+    expect(ipc.exportBundle).toHaveBeenCalledWith({
+      destination: "file",
+      scope: { kind: "all" },
+    });
+    await screen.getByRole("button", { name: "Show in Finder" }).click();
+    expect(ipc.revealSaved).toHaveBeenCalledWith({ savedId: "saved-1" });
+    await expect.poll(() => checksDrawn(status.element())).toBe(true);
+    expect(status.element()).toMatchSnapshot();
+  });
+
+  it("explains a failed export in the footer", async () => {
+    const { input, ipc, screen } = await setup();
+    ipc.exportBundle.mockImplementationOnce(() => {
+      throw new Error("There's nothing to export yet.");
+    });
+    await input.fill("export widgets");
+    await userEvent.keyboard("{Enter}");
+    await expect
+      .element(screen.getByRole("status"))
+      .toHaveTextContent("There's nothing to export yet.");
+    expect(
+      screen.getByRole("button", { name: "Show in Finder" }).query()
+    ).toBeNull();
   });
 
   it("starts a new board from the command", async () => {

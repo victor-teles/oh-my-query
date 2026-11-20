@@ -4,10 +4,16 @@ import type { ConnectionPoolManager } from "@oh-my-query/drivers";
 import type { RecentAsk, Widget, WidgetDraft } from "@oh-my-query/rpc";
 
 import { getConnections } from "@oh-my-query/core";
+import { CARD_SPEC_VERSION } from "@oh-my-query/rpc";
 import { describe, expect, it, vi } from "vitest";
 
-import type { RecentAskStore, WidgetStore } from "./widget-service.ts";
+import type {
+  RecentAskStore,
+  RunLogStore,
+  WidgetStore,
+} from "./widget-service.ts";
 
+import { valuesKeyOf } from "./run-samples.ts";
 import { createWidgetService } from "./widget-service.ts";
 
 vi.mock(import("@oh-my-query/core"), async (importOriginal) => ({
@@ -63,7 +69,12 @@ const widgetFixture = (overrides: Partial<Widget> = {}): Widget => ({
     },
   ],
   prompt: "revenue by region",
-  spec: { formats: {}, title: "Revenue", version: 1, view: { kind: "table" } },
+  spec: {
+    formats: {},
+    title: "Revenue",
+    version: CARD_SPEC_VERSION,
+    view: { kind: "table" },
+  },
   sqlTemplate: TEMPLATE,
   updatedAt: "2026-11-01T00:00:00.000Z",
   view: "table",
@@ -164,11 +175,52 @@ const recentAsk = (id: string): RecentAsk => ({
   sql: "select 1",
 });
 
+type Entry = Awaited<ReturnType<RunLogStore["append"]>>;
+
+const memoryRunLog = (): RunLogStore & { entries: Map<string, Entry> } => {
+  const entries = new Map<string, Entry>();
+  return {
+    append: (widgetId, valuesKey, sample) => {
+      const id = `${widgetId}:${valuesKey}`;
+      const entry = {
+        id,
+        samples: [...(entries.get(id)?.samples ?? []), sample],
+        valuesKey,
+        widgetId,
+      };
+      entries.set(id, entry);
+      return Promise.resolve(entry);
+    },
+    entries,
+    entry: (widgetId, valuesKey) => {
+      const found = entries.get(`${widgetId}:${valuesKey}`) ?? null;
+      return Promise.resolve(found);
+    },
+    latestFor: (widgetIds) => {
+      const latest = Object.fromEntries(
+        [...entries.values()]
+          .filter((entry) => widgetIds.includes(entry.widgetId))
+          .map((entry) => [entry.widgetId, entry])
+      );
+      return Promise.resolve(latest);
+    },
+    removeForWidget: (widgetId) => {
+      for (const [id, entry] of entries) {
+        if (entry.widgetId === widgetId) {
+          entries.delete(id);
+        }
+      }
+      return Promise.resolve();
+    },
+  };
+};
+
 const setup = (
   options: {
     widgets?: Widget[];
     pool?: ReturnType<typeof fakePool>;
     model?: LanguageModel | null;
+    runLog?: RunLogStore;
   } = {}
 ) => {
   const pool = options.pool ?? fakePool();
@@ -179,15 +231,19 @@ const setup = (
   };
   const widgets = memoryWidgets(options.widgets ?? [widgetFixture()]);
   const recents = memoryRecents();
+  const runLog = options.runLog ?? memoryRunLog();
+  const onSampled = vi.fn();
   const loadModel = vi.fn().mockResolvedValue(options.model ?? null);
   const service = createWidgetService({
     loadModel,
     now: () => NOW,
+    onSampled,
     pools: pools as unknown as ConnectionPoolManager,
     recents,
+    runLog,
     widgets,
   });
-  return { loadModel, pool, recents, service, widgets };
+  return { loadModel, onSampled, pool, recents, runLog, service, widgets };
 };
 
 const run = (values: Record<string, unknown> = {}) => ({
@@ -351,6 +407,176 @@ describe("runWidget", () => {
     await vi.waitFor(() => expect(pool.execute).toHaveBeenCalledOnce());
     service.cancelRun("r1");
     await expect(pending).rejects.toMatchObject({ code: "QUERY_CANCELLED" });
+  });
+});
+
+const kpiWidget = (overrides: Partial<Widget> = {}): Widget =>
+  widgetFixture({
+    spec: {
+      formats: {},
+      title: "Revenue",
+      version: 1,
+      view: { kind: "kpi", value: "mrr" },
+    },
+    view: "kpi",
+    ...overrides,
+  });
+
+const mrrPool = (mrr: number) => {
+  const pool = fakePool();
+  const kpiRows = {
+    ...tabular([["Europe", mrr]]),
+    columns: [
+      { name: "region", typeName: "TEXT" },
+      { name: "mrr", typeName: "NUMERIC" },
+    ],
+  };
+  const options = tabular([["Europe"], ["North America"]]);
+  pool.execute.mockImplementation((...[sql]: ExecuteArgs) => {
+    const rows = sql.includes("distinct") ? options : kpiRows;
+    return Promise.resolve(rows);
+  });
+  return pool;
+};
+
+describe("samples and trends", () => {
+  it("records a sample per run under the unexpanded preset values", async () => {
+    const { onSampled, runLog, service } = setup({
+      pool: mrrPool(48_200),
+      widgets: [kpiWidget()],
+    });
+    await service.runWidget(run({ period: "last30d" }));
+    const outcome = await service.runWidget(run({ period: "last30d" }));
+
+    const key = valuesKeyOf({ period: "last30d", region: "Europe" });
+    const entry = await runLog.entry("w1", key);
+    expect(entry?.samples).toHaveLength(2);
+    expect(entry?.samples.at(-1)).toMatchObject({
+      at: NOW.toISOString(),
+      rowCount: 1,
+      value: 48_200,
+    });
+    expect(onSampled).toHaveBeenCalledWith("w1", key);
+    expect(outcome.trend).toMatchObject({
+      series: [48_200, 48_200],
+      valuesKey: key,
+    });
+  });
+
+  it("appends nothing when the run fails", async () => {
+    const pool = fakePool();
+    pool.execute.mockRejectedValue(new Error("connection reset"));
+    const { onSampled, runLog, service } = setup({
+      pool,
+      widgets: [widgetFixture({ params: [], sqlTemplate: "select 1" })],
+    });
+    await expect(service.runWidget(run())).rejects.toThrow("connection reset");
+    await expect(runLog.latestFor(["w1"])).resolves.toStrictEqual({});
+    expect(onSampled).not.toHaveBeenCalled();
+  });
+
+  it("still returns the result when the run log can't be written", async () => {
+    const runLog = memoryRunLog();
+    vi.spyOn(runLog, "append").mockRejectedValue(new Error("disk full"));
+    const error = vi.spyOn(console, "error").mockReturnValue();
+    const { service } = setup({ runLog });
+
+    const outcome = await service.runWidget(run());
+    expect(outcome.result.rowCount).toBe(1);
+    expect(outcome.trend).toBeNull();
+    expect(error).toHaveBeenCalledOnce();
+    error.mockRestore();
+  });
+
+  it("lists the latest trend per widget", async () => {
+    const { service } = setup({
+      pool: mrrPool(10),
+      widgets: [kpiWidget()],
+    });
+    await service.runWidget(run());
+    const trends = await service.listWidgetTrends(["w1", "w2"]);
+    expect(Object.keys(trends)).toStrictEqual(["w1"]);
+    expect(trends.w1?.latest?.value).toBe(10);
+    expect(trends.w1?.previous).toBeNull();
+  });
+
+  it("forgets a deleted widget's samples", async () => {
+    const { runLog, service } = setup();
+    await service.runWidget(run());
+    await service.deleteWidget("w1");
+    await expect(runLog.latestFor(["w1"])).resolves.toStrictEqual({});
+  });
+});
+
+const signal = () => new AbortController().signal;
+
+describe("runDetached", () => {
+  it("leaves lastRunAt and lastValues untouched", async () => {
+    const original = kpiWidget({ lastValues: { region: "North America" } });
+    const { loadModel, service, widgets } = setup({
+      pool: mrrPool(48_200),
+      widgets: [original],
+    });
+    const outcome = await service.runDetached(
+      "w1",
+      { period: "last7d" },
+      signal()
+    );
+
+    await expect(widgets.getWidget("w1")).resolves.toStrictEqual(original);
+    expect(outcome.values).toStrictEqual({
+      period: "last7d",
+      region: "Europe",
+    });
+    expect(outcome.sample.value).toBe(48_200);
+    expect(outcome.previous).toBeNull();
+    expect(loadModel).not.toHaveBeenCalled();
+  });
+
+  it("drops inputs the widget no longer has instead of refusing", async () => {
+    const { service } = setup();
+    const outcome = await service.runDetached(
+      "w1",
+      { gone: "x", period: "ytd" },
+      signal()
+    );
+    expect(outcome.values).toStrictEqual({ period: "ytd", region: "Europe" });
+  });
+
+  it("returns the previous sample for the same inputs and finds it again", async () => {
+    const { service } = setup({
+      pool: mrrPool(5),
+      widgets: [kpiWidget()],
+    });
+    await service.runDetached("w1", { period: "last30d" }, signal());
+    const second = await service.runDetached(
+      "w1",
+      { period: "last30d" },
+      signal()
+    );
+    expect(second.previous?.value).toBe(5);
+    expect(second.valuesKey).toBe(
+      valuesKeyOf({ period: "last30d", region: "Europe" })
+    );
+    await expect(
+      service.lastSampleFor("w1", { period: "last30d" })
+    ).resolves.toMatchObject({ value: 5 });
+    await expect(service.lastSampleFor("gone", {})).resolves.toBeNull();
+  });
+
+  it("runs read-only with bound parameters", async () => {
+    const { pool, service } = setup();
+    await service.runDetached("w1", {}, signal());
+    expect(pool.execute.mock.calls.at(-1)?.[4]).toMatchObject({
+      readOnly: true,
+    });
+  });
+
+  it("reports a missing widget", async () => {
+    const { service } = setup({ widgets: [] });
+    await expect(service.runDetached("w1", {}, signal())).rejects.toMatchObject(
+      { code: "WIDGET_NOT_FOUND" }
+    );
   });
 });
 

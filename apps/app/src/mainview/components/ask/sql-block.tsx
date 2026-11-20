@@ -3,9 +3,14 @@ import { useLayoutEffect, useMemo, useRef } from "react";
 
 import type { Token } from "@/lib/sql-highlight";
 
+import { highlightJsonLines } from "@/lib/json-highlight";
 import { staggerDelay, useMotionPreset } from "@/lib/motion";
 import { highlightLines, SQL_TOKEN_CLASSES } from "@/lib/sql-highlight";
 import { cn } from "@/lib/utils";
+
+import type { QueryKind } from "./query-kind";
+
+import { GENERATED_HEADINGS } from "./query-kind";
 
 export type SqlBlockState = "streaming" | "settled" | "stopped";
 
@@ -84,19 +89,26 @@ function SqlLine({ number, tokens, mark, caret, changeOrder }: SqlLineProps) {
 interface SqlBlockProps {
   sql: string;
   state: SqlBlockState;
+  kind?: QueryKind;
   mark?: string | null;
   changed?: ReadonlySet<number>;
+  label?: string;
 }
+
+const highlight = (text: string, kind: QueryKind): Token[][] =>
+  kind === "sql" ? highlightLines(text) : highlightJsonLines(text);
 
 const NO_CHANGES: ReadonlySet<number> = new Set();
 
 export function SqlBlock({
   sql,
   state,
+  kind = "sql",
   mark = null,
   changed = NO_CHANGES,
+  label,
 }: SqlBlockProps) {
-  const lines = useMemo(() => highlightLines(sql), [sql]);
+  const lines = useMemo(() => highlight(sql, kind), [kind, sql]);
   const changeOrder = [...changed].toSorted((a, b) => a - b);
   const scroller = useRef<HTMLDivElement>(null);
 
@@ -109,7 +121,7 @@ export function SqlBlock({
 
   return (
     <div
-      aria-label="Generated SQL"
+      aria-label={label ?? GENERATED_HEADINGS[kind]}
       className={cn(
         "max-h-[220px] overflow-y-auto px-2 py-2 font-mono text-[12px] leading-[19px] outline-none focus-visible:ring-2 focus-visible:ring-ring/60",
         state === "streaming" && "h-[220px]",

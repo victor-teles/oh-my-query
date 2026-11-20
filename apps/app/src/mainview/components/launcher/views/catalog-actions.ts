@@ -1,5 +1,6 @@
 import {
   CopyPlusIcon,
+  DownloadIcon,
   LayoutGridIcon,
   PencilIcon,
   PlayIcon,
@@ -8,6 +9,10 @@ import {
 } from "lucide-react";
 
 import type { MenuAction } from "@/components/launcher/actions/menu-action";
+import type { WatchActionId } from "@/components/watches/watch-actions";
+import type { Watch } from "@/lib/ipc";
+
+import { watchActions } from "@/components/watches/watch-actions";
 
 import type { RootItem } from "./root-items";
 
@@ -17,7 +22,10 @@ export type CatalogActionId =
   | "duplicate-board"
   | "delete-board"
   | "run-widget"
-  | "add-to-board";
+  | "add-to-board"
+  | "export-board"
+  | "export-widget"
+  | WatchActionId;
 
 export interface CatalogAction extends MenuAction {
   id: CatalogActionId;
@@ -28,7 +36,10 @@ export type CatalogItem = Extract<RootItem, { kind: "board" | "widget" }>;
 export const isCatalogItem = (item: RootItem | null): item is CatalogItem =>
   item?.kind === "board" || item?.kind === "widget";
 
-export const catalogActions = (item: CatalogItem): CatalogAction[] =>
+export const catalogActions = (
+  item: CatalogItem,
+  watch: Watch | null = null
+): CatalogAction[] =>
   item.kind === "board"
     ? [
         {
@@ -50,6 +61,12 @@ export const catalogActions = (item: CatalogItem): CatalogAction[] =>
           tone: "default",
         },
         {
+          icon: DownloadIcon,
+          id: "export-board",
+          label: "Export Board",
+          tone: "default",
+        },
+        {
           icon: Trash2Icon,
           id: "delete-board",
           label: "Delete",
@@ -64,6 +81,13 @@ export const catalogActions = (item: CatalogItem): CatalogAction[] =>
           label: "Add to Board…",
           tone: "default",
         },
+        {
+          icon: DownloadIcon,
+          id: "export-widget",
+          label: "Export Widget",
+          tone: "default",
+        },
+        ...watchActions(item.widget, watch),
       ];
 
 export const catalogTitle = (item: CatalogItem): string =>

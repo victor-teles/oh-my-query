@@ -19,4 +19,5 @@ export * from "./traits.ts";
 export * from "./transpile.ts";
 export * from "./widgets.ts";
 export * from "./boards.ts";
+export * from "./watches.ts";
 export * from "./types.ts";

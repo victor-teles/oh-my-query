@@ -7,9 +7,11 @@ import type {
   RedactedAiSettings,
   RpcSchema,
   BoardDraft,
+  ImportSource,
   LookupRequest,
   RunSqlParams,
   RunWidgetRequest,
+  WatchDraft,
   WidgetDraft,
 } from "@oh-my-query/rpc";
 
@@ -18,14 +20,16 @@ import {
   DEFAULT_LAUNCHER_HOTKEY,
 } from "@oh-my-query/rpc";
 
-import { createAskEmulator } from "@/lib/browser-ask-stub";
+import { createAskEmulator, languageForType } from "@/lib/browser-ask-stub";
 import { createBoardEmulator } from "@/lib/browser-board-stub";
+import { createBundleEmulator } from "@/lib/browser-bundle-stub";
 import {
   createClipboardEmulator,
   createLookupEmulator,
 } from "@/lib/browser-lookup-stub";
 import { recordedAssumptions } from "@/lib/browser-refine-stub";
 import { demoSchemaPeek } from "@/lib/browser-schema-stub";
+import { createWatchEmulator } from "@/lib/browser-watch-stub";
 import { createWidgetEmulator } from "@/lib/browser-widget-stub";
 
 type RpcMessages = RpcSchema["messages"];
@@ -187,16 +191,41 @@ const createDispatcher = (emit: EmitMessage) => {
   const lookups = createLookupEmulator((payload) =>
     emit("lookupEvent", payload)
   );
+  const bundles = createBundleEmulator({
+    connections: () =>
+      readConnections().map(({ id, name, type }) => ({ id, name, type })),
+    listBoards: () => boards.listBoards(),
+    listWidgets: () => widgets.listWidgets(),
+    now: () => new Date(),
+    saveBoard: (board) => boards.saveBoard({ board }),
+    saveWidget: (widget) => widgets.saveWidget({ widget }),
+  });
+  const watches = createWatchEmulator({
+    now: () => new Date(),
+    onSampled: (widgetId, valuesKey) =>
+      emit("widgetSampled", { valuesKey, widgetId }),
+    onWatchesChanged: () => emit("watchesChanged", {}),
+    widgetById: (widgetId) =>
+      widgets.listWidgets().find((widget) => widget.id === widgetId) ?? null,
+  });
   const asks = createAskEmulator((payload) => emit("askEvent", payload), {
     labelFor: (connectionId) =>
       readConnections().find((connection) => connection.id === connectionId)
         ?.name ?? "demo",
+    languageFor: (connectionId) =>
+      languageForType(
+        readConnections().find((connection) => connection.id === connectionId)
+          ?.type
+      ),
     onAnswered: widgets.rememberAsk,
   });
 
   const handlers: Record<string, (payload: unknown) => unknown> = {
+    acknowledgeAlert: (payload) =>
+      watches.acknowledgeAlert(payload as { watchId: string }),
     addBoardTile: (payload) =>
       boards.addBoardTile(payload as { boardId: string; widgetId: string }),
+    applyImport: (payload) => bundles.applyImport(payload),
     ask: (payload) => asks.ask(payload as AskParams),
     cancelAsk: (payload) => asks.cancel((payload as { askId: string }).askId),
     cancelLookup: (payload) =>
@@ -210,14 +239,18 @@ const createDispatcher = (emit: EmitMessage) => {
       boards.deleteBoard(payload as { boardId: string }),
     deleteRecentAsk: (payload) =>
       widgets.deleteRecentAsk(payload as { askId: string }),
+    deleteWatch: (payload) =>
+      watches.deleteWatch(payload as { watchId: string }),
     deleteWidget: (payload) => {
       const { widgetId } = payload as { widgetId: string };
       widgets.deleteWidget({ widgetId });
       boards.removeWidget(widgetId);
+      watches.removeWidget(widgetId);
     },
     describeSql: (payload) =>
       recordedAssumptions((payload as { sql: string }).sql),
     disconnectFromDatabase: noop,
+    exportBundle: (payload) => bundles.exportBundle(payload),
     getActiveConnection: () => readActiveConnection(),
     getAiSettings: () => ai.get(),
     getAllHistory: () => [],
@@ -228,10 +261,15 @@ const createDispatcher = (emit: EmitMessage) => {
     getHistory: () => [],
     getLauncherHotkey: () => DEFAULT_LAUNCHER_HOTKEY,
     getUpdateChannel: () => "stable",
+    getWatchingPaused: () => watches.getWatchingPaused(),
     hideLauncher: () => launcher.hide(),
     listBoards: () => boards.listBoards(),
     listRecentAsks: (payload) =>
       widgets.listRecentAsks(payload as { limit?: number }),
+    listWatchStatuses: () => watches.listWatchStatuses(),
+    listWatches: () => watches.listWatches(),
+    listWidgetTrends: (payload) =>
+      watches.listWidgetTrends(payload as { widgetIds: string[] }),
     listWidgets: () => widgets.listWidgets(),
     loadParamOptions: () => widgets.loadParamOptions(),
     lookup: (payload) => lookups.lookup(payload as LookupRequest),
@@ -241,13 +279,19 @@ const createDispatcher = (emit: EmitMessage) => {
     },
     openWidgetInLauncher: noop,
     peekSchema: () => demoSchemaPeek(),
+    previewImport: (payload) =>
+      bundles.previewImport(payload as { source: ImportSource }),
     proposeWidgetParams: (payload) =>
       widgets.proposeWidgetParams(payload as { sql: string }),
     rendererReady: noop,
     resizeLauncher: noop,
     revealSaved: noop,
     runSql: (payload) => asks.runSql(payload as RunSqlParams),
-    runWidget: (payload) => widgets.runWidget(payload as RunWidgetRequest),
+    runWidget: async (payload) => {
+      const request = payload as RunWidgetRequest;
+      const outcome = await widgets.runWidget(request);
+      return watches.decorateRun(request.widgetId, outcome);
+    },
     saveAiSettings: (payload) => ai.save(payload as AiSettingsInput),
     saveBoard: (payload) => boards.saveBoard(payload as { board: BoardDraft }),
     saveConnections: (payload) =>
@@ -258,6 +302,7 @@ const createDispatcher = (emit: EmitMessage) => {
       fileName: `${(payload as { baseName: string }).baseName}.csv`,
       savedId: "stub",
     }),
+    saveWatch: (payload) => watches.saveWatch(payload as { watch: WatchDraft }),
     saveWidget: (payload) =>
       widgets.saveWidget(payload as { widget: WidgetDraft }),
     setActiveConnection: (payload) =>
@@ -266,6 +311,8 @@ const createDispatcher = (emit: EmitMessage) => {
       ),
     setClipboardLookups: (payload) =>
       writeClipboardLookups((payload as { enabled: boolean }).enabled),
+    setWatchingPaused: (payload) =>
+      watches.setWatchingPaused(payload as { paused: boolean }),
     testAiSettings,
     testConnection: () => ({
       latencyMs: 0,

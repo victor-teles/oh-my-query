@@ -530,6 +530,45 @@ exports[`widgetRunView actions > lists the shared export actions before the widg
     </span>
   </div>
   <div
+    class="relative flex h-8 cursor-default items-center gap-2.5 px-2.5 type-body text-foreground"
+    id="launcher-action-watch"
+    role="menuitem"
+    tabindex="0"
+  >
+    <svg
+      aria-hidden="true"
+      class="lucide lucide-eye relative size-3.5 shrink-0 opacity-80"
+      fill="none"
+      height="24"
+      stroke="currentColor"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      stroke-width="2"
+      viewBox="0 0 24 24"
+      width="24"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0"
+      />
+      <circle
+        cx="12"
+        cy="12"
+        r="3"
+      />
+    </svg>
+    <span
+      class="relative min-w-0 flex-1 truncate"
+      data-slot="swap-text"
+    >
+      <span
+        class="inline-block"
+      >
+        Watch…
+      </span>
+    </span>
+  </div>
+  <div
     class="relative flex h-8 cursor-default items-center gap-2.5 px-2.5 type-body text-danger-ink"
     id="launcher-action-delete"
     role="menuitem"

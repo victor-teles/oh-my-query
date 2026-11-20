@@ -1,0 +1,141 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`watchesView > lists each watch with its value and status 1`] = `
+<div
+  aria-activedescendant="launcher-option-watch-mrr"
+  aria-label="Watched widgets"
+  class="flex flex-col gap-1 px-2 py-2 outline-none focus-visible:ring-2 focus-visible:ring-primary/50"
+  id="launcher-watches-list"
+  role="listbox"
+  tabindex="0"
+>
+  <div
+    data-motion="stagger"
+  >
+    <div
+      aria-selected="true"
+      class="relative flex h-10 cursor-default items-center gap-3 px-2.5"
+      data-tone="default"
+      id="launcher-option-watch-mrr"
+      role="option"
+      tabindex="0"
+    >
+      <div
+        class="absolute inset-0 rounded-[10px] bg-row-active"
+      />
+      <span
+        class="relative grid size-6 place-items-center rounded-[7px] bg-row-hover"
+      >
+        <svg
+          aria-label="Shown in the menu bar"
+          class="lucide lucide-gauge size-3 shrink-0 text-panel-muted"
+          fill="none"
+          height="24"
+          role="img"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+          width="24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="m12 14 4-4"
+          />
+          <path
+            d="M3.34 19a10 10 0 1 1 17.32 0"
+          />
+        </svg>
+      </span>
+      <span
+        class="relative flex min-w-0 flex-1 items-baseline gap-2"
+      >
+        <span
+          class="truncate type-body text-foreground"
+        >
+          MRR
+        </span>
+        <span
+          class="truncate type-meta text-panel-muted"
+          data-slot="swap-text"
+        >
+          <span
+            class="inline-block"
+          >
+            Every 5 min · next 9:46 AM
+          </span>
+        </span>
+      </span>
+      <span
+        class="relative shrink-0 type-meta text-foreground tabular-nums"
+      >
+        $48.2k
+      </span>
+      <span
+        class="absolute inset-x-2.5 bottom-0 h-0.5"
+      />
+    </div>
+  </div>
+  <div
+    data-motion="stagger"
+  >
+    <div
+      aria-selected="false"
+      class="relative flex h-10 cursor-default items-center gap-3 px-2.5"
+      data-tone="default"
+      id="launcher-option-watch-revenue"
+      role="option"
+      tabindex="0"
+    >
+      <span
+        class="relative grid size-6 place-items-center rounded-[7px] bg-row-hover"
+      >
+        <svg
+          aria-label="Has an alert"
+          class="lucide lucide-bell size-3 shrink-0 text-panel-muted"
+          fill="none"
+          height="24"
+          role="img"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+          width="24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M10.268 21a2 2 0 0 0 3.464 0"
+          />
+          <path
+            d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326"
+          />
+        </svg>
+      </span>
+      <span
+        class="relative flex min-w-0 flex-1 items-baseline gap-2"
+      >
+        <span
+          class="truncate type-body text-foreground"
+        >
+          Revenue by region
+        </span>
+        <span
+          class="truncate type-meta text-danger-ink"
+          data-slot="swap-text"
+        >
+          <span
+            class="inline-block"
+          >
+            Couldn't refresh: Timed out.
+          </span>
+        </span>
+      </span>
+      <span
+        class="absolute inset-x-2.5 bottom-0 h-0.5"
+      />
+    </div>
+  </div>
+</div>
+`;

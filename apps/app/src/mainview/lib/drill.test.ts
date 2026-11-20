@@ -1,6 +1,8 @@
+import type { CardResult } from "@oh-my-query/rpc";
+
+import { CARD_SPEC_VERSION } from "@oh-my-query/rpc";
 import { describe, expect, it } from "vitest";
 
-import type { CardResult } from "@/lib/card-data";
 import type { CardSpec, ChartView } from "@/lib/ipc";
 
 import { REVENUE_BY_REGION } from "@/lib/browser-ask-recordings";
@@ -172,7 +174,7 @@ describe("drillSegments", () => {
     const pieSpec: CardSpec = {
       formats: {},
       title: "Plans",
-      version: 1,
+      version: CARD_SPEC_VERSION,
       view: { kind: "pie", label: "plan", value: "id" },
     };
     expect(

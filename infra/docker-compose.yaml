@@ -33,6 +33,12 @@ services:
       - "127.0.0.1:${MONGO_PORT:-27017}:27017"
     volumes:
       - mongodb-data:/data/db
+  redis:
+    image: "redis:${REDISVER:-7-alpine}"
+    container_name: redis
+    hostname: redis
+    ports:
+      - "127.0.0.1:${REDIS_PORT:-6379}:6379"
   mariadb:
     image: "mariadb:${MARIADBVER:-11}"
     container_name: mariadb

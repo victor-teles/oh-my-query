@@ -369,7 +369,7 @@ describe.each([
     expect(ipc.clearRecentAsks).not.toHaveBeenCalled();
     await expect.element(clear).toHaveTextContent("Press ↵ again to delete");
     await clear.click();
-    expect(ipc.clearRecentAsks).toHaveBeenCalledOnce();
+    await expect.poll(() => ipc.clearRecentAsks).toHaveBeenCalledOnce();
     await expect.element(screen.getByText("No asks yet.")).toBeVisible();
     await expect.element(page.getByText("History cleared")).toBeVisible();
   });

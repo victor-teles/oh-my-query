@@ -1,8 +1,11 @@
 import { describe, expect, it } from "vitest";
 
-import { CardSpec } from "./card-spec.ts";
+import { CARD_SPEC_VERSION, CardSpec } from "./card-spec.ts";
 
-const base = { title: "Monthly recurring revenue by region", version: 1 };
+const base = {
+  title: "Monthly recurring revenue by region",
+  version: CARD_SPEC_VERSION,
+};
 
 describe("cardSpec", () => {
   it("parses a chart view and applies defaults", () => {
@@ -89,11 +92,22 @@ describe("cardSpec", () => {
     });
     const wrongVersion = CardSpec.safeParse({
       ...base,
-      version: 2,
+      version: 3,
       view: { kind: "table" },
     });
     expect(tooMany.success).toBeFalsy();
     expect(wrongVersion.success).toBeFalsy();
+  });
+
+  it("upgrades a version 1 spec to the current version", () => {
+    const spec = CardSpec.parse({
+      formats: {},
+      title: "Revenue",
+      version: 1,
+      view: { kind: "table" },
+    });
+    expect(CARD_SPEC_VERSION).toBe(2);
+    expect(spec.version).toBe(CARD_SPEC_VERSION);
   });
 
   it("rejects a currency code that is not three letters", () => {

@@ -2,13 +2,16 @@ import type { TableItem } from "@oh-my-query/core";
 import type { MongoClient } from "mongodb";
 
 import { DbError } from "@oh-my-query/core";
+import { ObjectId } from "mongodb";
 import { describe, expect, it, vi } from "vitest";
 
 import { isMongoPool, mapMongoError, MongoPool } from "./pool.ts";
 
 interface FakeCollection {
+  aggregate: ReturnType<typeof vi.fn>;
   indexes: ReturnType<typeof vi.fn>;
   estimatedDocumentCount: ReturnType<typeof vi.fn>;
+  sample: ReturnType<typeof vi.fn>;
 }
 
 interface FakeClient {
@@ -34,9 +37,12 @@ const buildFakeClient = (): FakeClient => {
     if (existing) {
       return existing;
     }
+    const sample = vi.fn().mockResolvedValue([]);
     const created: FakeCollection = {
+      aggregate: vi.fn(() => ({ toArray: sample })),
       estimatedDocumentCount: vi.fn(),
       indexes: vi.fn(),
+      sample,
     };
     collections.set(name, created);
     return created;
@@ -224,6 +230,92 @@ describe("mongoPool > fetchSchema", () => {
     const [{ tables }] = result.schemas as unknown as [{ tables: TableItem[] }];
     const [table] = tables;
     expect(table?.rowEstimate).toBeNull();
+  });
+
+  it("samples documents into field paths without values", async () => {
+    const { client, pool } = buildPool();
+    client.listCollectionsToArray.mockResolvedValue([
+      { name: "orders", type: "collection" },
+    ]);
+    const orders = client.getCollection("orders");
+    orders.indexes.mockResolvedValue([]);
+    orders.estimatedDocumentCount.mockResolvedValue(2);
+    orders.sample.mockResolvedValue([
+      {
+        _id: new ObjectId(),
+        created_at: new Date("2026-01-01T00:00:00Z"),
+        items: [{ qty: 2, sku: "A-1" }],
+        status: "paid",
+        total: 12.5,
+      },
+      { _id: new ObjectId(), status: "pending", total: 4 },
+    ]);
+
+    const result = await pool.fetchSchema("myapp");
+    const columns = result.schemas[0]?.tables[0]?.columns;
+    expect(
+      columns?.map((column) => [column.name, column.dataType])
+    ).toStrictEqual([
+      ["_id", "objectId"],
+      ["created_at", "date"],
+      ["items", "array<object>"],
+      ["items.qty", "number"],
+      ["items.sku", "string"],
+      ["status", "string"],
+      ["total", "number"],
+    ]);
+    expect(JSON.stringify(columns)).not.toContain("paid");
+    expect(orders.aggregate).toHaveBeenCalledWith([{ $sample: { size: 50 } }], {
+      maxTimeMS: 2000,
+    });
+  });
+
+  it("leaves columns empty when a sample fails", async () => {
+    const { client, pool } = buildPool();
+    client.listCollectionsToArray.mockResolvedValue([
+      { name: "events", type: "collection" },
+    ]);
+    const events = client.getCollection("events");
+    events.indexes.mockResolvedValue([]);
+    events.estimatedDocumentCount.mockResolvedValue(1);
+    events.sample.mockRejectedValue(new Error("operation exceeded time limit"));
+
+    const result = await pool.fetchSchema("myapp");
+    expect(result.schemas[0]?.tables[0]?.columns).toStrictEqual([]);
+  });
+
+  it("samples at most 100 collections, four at a time", async () => {
+    const { client, pool } = buildPool();
+    const names = Array.from(
+      { length: 105 },
+      (_, index) => `c${String(index).padStart(3, "0")}`
+    );
+    client.listCollectionsToArray.mockResolvedValue(
+      names.map((name) => ({ name, type: "collection" }))
+    );
+    const load = { inFlight: 0, peak: 0 };
+    const sampleOnce = async () => {
+      load.inFlight += 1;
+      load.peak = Math.max(load.peak, load.inFlight);
+      await Promise.resolve();
+      load.inFlight -= 1;
+      return [{ a: 1 }];
+    };
+    for (const name of names) {
+      const collection = client.getCollection(name);
+      collection.indexes.mockResolvedValue([]);
+      collection.estimatedDocumentCount.mockResolvedValue(0);
+      collection.sample.mockImplementation(sampleOnce);
+    }
+
+    const result = await pool.fetchSchema("myapp");
+    const tables = result.schemas[0]?.tables;
+    expect(tables).toHaveLength(105);
+    expect(tables?.filter((table) => table.columns.length > 0)).toHaveLength(
+      100
+    );
+    expect(tables?.at(-1)?.columns).toStrictEqual([]);
+    expect(load.peak).toBeLessThanOrEqual(4);
   });
 
   it("wraps listCollections errors in DbError", async () => {

@@ -1,4 +1,4 @@
-import type { BindValue } from "@oh-my-query/core";
+import type { BindValue, DialectType } from "@oh-my-query/core";
 import type { AskEvent } from "@oh-my-query/rpc";
 
 import type { AskPorts } from "./ask.ts";
@@ -14,10 +14,9 @@ import {
   throwIfAborted,
 } from "./run-query.ts";
 
-export type SqlRunPorts = Pick<
-  AskPorts,
-  "execute" | "dialect" | "connectionLabel"
->;
+export type SqlRunPorts = Pick<AskPorts, "execute" | "connectionLabel"> & {
+  dialect: DialectType;
+};
 
 export interface SqlRunInput {
   sql: string;

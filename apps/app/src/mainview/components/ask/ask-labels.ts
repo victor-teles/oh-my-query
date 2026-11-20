@@ -1,15 +1,20 @@
 import type { AskIndicatorState } from "./ask-indicator";
 import type { AskSource, AskState } from "./ask-reducer";
 import type { StatusLabel } from "./ask-status";
+import type { QueryKind } from "./query-kind";
 
 import { isRefining, isWorking, lineCount, shownTurn } from "./ask-reducer";
+import { GENERATED_HEADINGS, WRITING_LABELS } from "./query-kind";
 
 const counts = new Intl.NumberFormat("en-US");
 
 const plural = (count: number, word: string): string =>
   `${counts.format(count)} ${word}${count === 1 ? "" : "s"}`;
 
-const refiningSegments = (state: AskState): string[] => {
+const rowsLabel = (rowCount: number, isTruncated: boolean): string =>
+  isTruncated ? `${counts.format(rowCount)}+ rows` : plural(rowCount, "row");
+
+const refiningSegments = (state: AskState, kind: QueryKind): string[] => {
   if (state.status === "run") {
     return ["Running", "read only"];
   }
@@ -17,22 +22,23 @@ const refiningSegments = (state: AskState): string[] => {
   if (state.status === "present" && rows !== undefined) {
     return ["Shaping", plural(rows, "row")];
   }
-  return ["Writing SQL", plural(lineCount(state.sql), "line")];
+  return [WRITING_LABELS[kind], plural(lineCount(state.sql), "line")];
 };
 
 export const headerSegments = (
   state: AskState,
   engine: string,
-  connectionName: string
+  connectionName: string,
+  kind: QueryKind = "sql"
 ): string[] => {
   if (isRefining(state)) {
-    return [engine, ...refiningSegments(state)];
+    return [engine, ...refiningSegments(state, kind)];
   }
   const result = state.answer?.result;
   if (result) {
     return [
       engine,
-      plural(result.rowCount, "row"),
+      rowsLabel(result.rowCount, result.isTruncated),
       `${counts.format(result.executionTimeMs)}ms`,
     ];
   }
@@ -54,7 +60,8 @@ export const indicatorFor = (state: AskState): AskIndicatorState => {
 
 export const statusLabel = (
   state: AskState,
-  connectionName: string
+  connectionName: string,
+  kind: QueryKind = "sql"
 ): StatusLabel => {
   if (state.status === "cancelled") {
     return { primary: "Stopped", secondary: null };
@@ -81,20 +88,23 @@ export const statusLabel = (
         };
       }
       return {
-        primary: "Writing SQL",
+        primary: WRITING_LABELS[kind],
         secondary: state.schemaDetail ?? `Reading the ${connectionName} schema`,
       };
     }
   }
 };
 
-const SQL_HEADINGS: Record<AskSource, string> = {
+const SOURCE_HEADINGS: Record<Exclude<AskSource, "question">, string> = {
   match: "Matching rows",
-  question: "Generated SQL",
   sql: "Your SQL",
 };
 
-export const sqlHeading = (source: AskSource): string => SQL_HEADINGS[source];
+export const sqlHeading = (
+  source: AskSource,
+  kind: QueryKind = "sql"
+): string =>
+  source === "question" ? GENERATED_HEADINGS[kind] : SOURCE_HEADINGS[source];
 
 export const askActionLabel = (source: AskSource, repeat: boolean): string => {
   if (source === "match") {

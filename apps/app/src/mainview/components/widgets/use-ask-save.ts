@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import type { Widget, WidgetDraft } from "@/lib/ipc";
 
@@ -18,18 +18,23 @@ export type SavePhase =
   | { kind: "saving" }
   | { kind: "saved"; widget: Widget }
   | { kind: "finding" }
+  | { kind: "unavailable" }
   | { kind: "failed"; during: "save" | "inputs"; message: string };
 
 const IDLE: SavePhase = { kind: "idle" };
+const UNAVAILABLE: SavePhase = { kind: "unavailable" };
+export const UNAVAILABLE_MS = 2400;
 
 interface UseAskSaveOptions {
   answered: AnsweredAsk | null;
+  unavailable?: boolean;
   onReviewInputs: (draft: WidgetDraft) => void;
   onSavedForBoard: (widgetId: string) => void;
 }
 
 export const useAskSave = ({
   answered,
+  unavailable = false,
   onReviewInputs,
   onSavedForBoard,
 }: UseAskSaveOptions) => {
@@ -43,14 +48,28 @@ export const useAskSave = ({
   }
 
   const busy = phase.kind === "saving" || phase.kind === "finding";
+  const showingUnavailable = phase.kind === "unavailable";
+
+  useEffect(() => {
+    if (!showingUnavailable) {
+      return;
+    }
+    const timer = setTimeout(
+      () => setPhase((current) => (current === UNAVAILABLE ? IDLE : current)),
+      UNAVAILABLE_MS
+    );
+    return () => clearTimeout(timer);
+  }, [showingUnavailable]);
 
   const beginNaming = useCallback(
     (intent: SaveIntent = "save") => {
-      if (answered && !busy) {
+      if (unavailable) {
+        setPhase(UNAVAILABLE);
+      } else if (answered && !busy) {
         setPhase({ intent, kind: "naming" });
       }
     },
-    [answered, busy]
+    [answered, busy, unavailable]
   );
 
   const cancelNaming = useCallback(
@@ -84,6 +103,10 @@ export const useAskSave = ({
   );
 
   const findInputs = useCallback(async () => {
+    if (unavailable) {
+      setPhase(UNAVAILABLE);
+      return;
+    }
     if (!answered || busy) {
       return;
     }
@@ -107,7 +130,7 @@ export const useAskSave = ({
         message: getErrorMessage(error, "Inputs could not be found."),
       });
     }
-  }, [answered, busy, onReviewInputs]);
+  }, [answered, busy, onReviewInputs, unavailable]);
 
   return { beginNaming, cancelNaming, confirmName, findInputs, phase };
 };

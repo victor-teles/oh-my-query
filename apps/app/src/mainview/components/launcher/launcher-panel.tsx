@@ -20,6 +20,7 @@ import type {
 import { AskView } from "@/components/ask/ask-view";
 import { HistoryView } from "@/components/history/history-view";
 import { LookupView } from "@/components/lookup/lookup-view";
+import { WatchesProvider } from "@/components/watches/watches-provider";
 import {
   useWidgets,
   WidgetsProvider,
@@ -43,12 +44,16 @@ import { RootView } from "./views/root-view";
 export const RESET_AFTER_HIDDEN_MS = 60_000;
 const SETTINGS = { kind: "settings" } as const;
 const HISTORY = { kind: "history" } as const;
+const IMPORT = { kind: "import" } as const;
+const WATCHES = { kind: "watches" } as const;
 
 export function LauncherPanel() {
   return (
     <ConnectionsProvider>
       <WidgetsProvider>
-        <LauncherStackView />
+        <WatchesProvider>
+          <LauncherStackView />
+        </WatchesProvider>
       </WidgetsProvider>
     </ConnectionsProvider>
   );
@@ -56,7 +61,7 @@ export function LauncherPanel() {
 
 function LauncherStackView() {
   const stack = useLauncherStack();
-  const { markFresh } = useWidgets();
+  const { markFresh, refresh: refreshWidgets } = useWidgets();
   const [query, setQuery] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
   const preset = useMotionPreset();
@@ -127,6 +132,11 @@ function LauncherStackView() {
     (widgetId: string) => push({ kind: "board-picker", widgetId }),
     [push]
   );
+  const handleWatch = useCallback(
+    (widgetId: string) => push({ kind: "watch", widgetId }),
+    [push]
+  );
+  const handleOpenWatches = useCallback(() => push(WATCHES), [push]);
   const handleNewBoard = useCallback(
     (widgetId: string | null) =>
       push({
@@ -139,6 +149,14 @@ function LauncherStackView() {
     setQuery("");
     reset();
   }, [reset]);
+  const handleImportDone = useCallback(
+    async (firstWidgetId: string | null) => {
+      await refreshWidgets();
+      markFresh(firstWidgetId);
+      handleBoardDone();
+    },
+    [handleBoardDone, markFresh, refreshWidgets]
+  );
   const handleOpenBoard = useCallback(
     async (boardId: string) => {
       try {
@@ -158,6 +176,7 @@ function LauncherStackView() {
       newBoard: () => handleNewBoard(null),
       openBoard: handleOpenBoard,
       openHistory: () => push(HISTORY),
+      openImport: () => push(IMPORT),
       openSettings: handleOpenSettings,
       renameBoard: (board: Board) =>
         push({
@@ -169,6 +188,7 @@ function LauncherStackView() {
           },
         }),
       runWidget: handleRunWidget,
+      watchWidget: handleWatch,
     }),
     [
       dismiss,
@@ -178,6 +198,7 @@ function LauncherStackView() {
       handleOpenBoard,
       handleOpenSettings,
       handleRunWidget,
+      handleWatch,
       push,
     ]
   );
@@ -198,7 +219,9 @@ function LauncherStackView() {
       return;
     }
     stack.reset();
-    if (typeof view === "object") {
+    if (view === "watches") {
+      stack.push(WATCHES);
+    } else if (typeof view === "object") {
       stack.push({ kind: "widget-run", values: {}, widgetId: view.widgetId });
     }
   });
@@ -242,8 +265,11 @@ function LauncherStackView() {
             onBack: handleBack,
             onBoardDone: handleBoardDone,
             onEditInputs: handleEditInputs,
+            onImportDone: handleImportDone,
             onInputsSaved: handleInputsSaved,
             onNewBoard: handleNewBoard,
+            onOpenWatches: handleOpenWatches,
+            onWatch: handleWatch,
             root: (
               <RootView
                 ask={rootAsk}

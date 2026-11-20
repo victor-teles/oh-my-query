@@ -1,13 +1,15 @@
-import type { CardResult } from "@/lib/card-data";
-import type { CardSpec } from "@/lib/ipc";
+import type { CardResult } from "@oh-my-query/rpc";
 
 import {
   columnValues,
   formatContextFor,
   formatFor,
   formatValue,
-  isNumericColumn,
-} from "@/lib/card-data";
+} from "@oh-my-query/rpc";
+
+import type { CardSpec } from "@/lib/ipc";
+
+import { isNumericColumn } from "@/lib/card-data";
 import { segmentOfRow } from "@/lib/drill";
 import { cn } from "@/lib/utils";
 

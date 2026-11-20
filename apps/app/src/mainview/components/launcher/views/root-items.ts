@@ -1,6 +1,7 @@
 import type { LookupValue, TableItem } from "@oh-my-query/core/client";
 
 import type { LauncherCommand } from "@/components/launcher/root-commands";
+import type { RootAlert } from "@/components/watches/use-alerts";
 import type { DatabaseConnection } from "@/lib/connections";
 import type { Board, RecentAsk, Widget } from "@/lib/ipc";
 
@@ -15,6 +16,7 @@ export type RootItem =
   | { kind: "widget"; id: string; widget: Widget }
   | { kind: "recent"; id: string; ask: RecentAsk }
   | { kind: "board"; id: string; board: Board }
+  | { kind: "alert"; id: string; alert: RootAlert }
   | { kind: "sql"; id: string; sql: string; connection: DatabaseConnection }
   | { kind: "table"; id: string; schema: string; table: TableItem }
   | {
@@ -36,6 +38,7 @@ export const RECENTS_SHOWN = 5;
 
 export const widgetItemId = (widgetId: string) => `widget-${widgetId}`;
 export const boardItemId = (boardId: string) => `board-${boardId}`;
+export const alertItemId = (watchId: string) => `alert-${watchId}`;
 const recentItemId = (askId: string) => `recent-${askId}`;
 
 export interface RootSection {
@@ -51,7 +54,8 @@ export interface RootSection {
     | "switch"
     | "pick"
     | "lookup"
-    | "clipboard";
+    | "clipboard"
+    | "alerts";
   label: string;
   items: RootItem[];
 }
@@ -68,6 +72,7 @@ interface BuildRootSectionsInput {
   lookup?: LookupValue | null;
   offer?: LookupValue | null;
   lookupWith?: DatabaseConnection | null;
+  alerts?: readonly RootAlert[];
 }
 
 const matchesBoard = (board: Board, query: string): boolean => {
@@ -91,6 +96,15 @@ const recentItems = (
         ask,
         id: recentItemId(ask.id),
         kind: "recent",
+      }));
+
+const alertItems = (alerts: readonly RootAlert[], query: string): RootItem[] =>
+  query.trim()
+    ? []
+    : alerts.map((alert) => ({
+        alert,
+        id: alertItemId(alert.watchId),
+        kind: "alert",
       }));
 
 const lookupSection = (
@@ -136,6 +150,7 @@ export const buildRootSections = ({
   lookup = null,
   offer = null,
   lookupWith = null,
+  alerts = [],
 }: BuildRootSectionsInput): RootSection[] => {
   const prompt = query.trim();
   const typed = lookupSection("typed", lookup, lookupWith);
@@ -155,6 +170,7 @@ export const buildRootSections = ({
     .map((board) => ({ board, id: boardItemId(board.id), kind: "board" }));
   const commandItems = filterCommands(commands, query).map(commandItem);
   const sections: RootSection[] = [
+    { id: "alerts", items: alertItems(alerts, query), label: "Alerts" },
     { id: "recent", items: recentItems(recents, query), label: "Recent" },
     { id: "widgets", items: widgetItems, label: "Widgets" },
     { id: "boards", items: boardItems, label: "Boards" },
