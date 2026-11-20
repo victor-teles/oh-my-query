@@ -70,6 +70,9 @@ const openReview = async (screen: Screen) => {
   await expect
     .element(screen.getByRole("radiogroup", { name: "analytics · PostgreSQL" }))
     .toHaveFocus();
+  await expect
+    .element(screen.getByRole("group", { name: "Import from" }))
+    .not.toBeInTheDocument();
 };
 
 const widgetBox = (screen: Screen, name: RegExp) =>
