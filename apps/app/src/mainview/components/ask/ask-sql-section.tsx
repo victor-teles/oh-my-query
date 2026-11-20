@@ -4,6 +4,7 @@ import { useMotionPreset } from "@/lib/motion";
 import { changedLines } from "@/lib/sql-diff";
 
 import type { AskState } from "./ask-reducer";
+import type { QueryKind } from "./query-kind";
 import type { SqlBlockState } from "./sql-block";
 
 import { offendingKeyword } from "./ask-error";
@@ -60,6 +61,7 @@ export const blockStateOf = (state: AskState): SqlBlockState => {
 
 interface AskSqlSectionProps {
   state: AskState;
+  kind: QueryKind;
   segments: readonly string[];
   copied: boolean;
   onCopy: () => void;
@@ -68,6 +70,7 @@ interface AskSqlSectionProps {
 
 export function AskSqlSection({
   state,
+  kind,
   segments,
   copied,
   onCopy,
@@ -80,7 +83,7 @@ export function AskSqlSection({
   return (
     <>
       <AskHeader
-        heading={sqlHeading(state.source)}
+        heading={sqlHeading(state.source, kind)}
         indicator={indicatorFor(state)}
         segments={segments}
       >
@@ -102,6 +105,7 @@ export function AskSqlSection({
           >
             <SqlBlock
               changed={shown.changed}
+              kind={kind}
               mark={state.failure ? offendingKeyword(state.failure) : null}
               sql={shown.sql}
               state={shown.state}

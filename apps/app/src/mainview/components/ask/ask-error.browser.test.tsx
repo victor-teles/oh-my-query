@@ -60,7 +60,7 @@ describe("askError", () => {
   it.each<[AskErrorCode, string]>([
     [
       "UNSUPPORTED_ENGINE",
-      "Asking questions works with SQL databases for now.",
+      "Asking questions doesn't work with this database yet.",
     ],
     [
       "NOT_READ_ONLY",

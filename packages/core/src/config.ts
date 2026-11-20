@@ -21,6 +21,7 @@ export interface AppConfig {
   activeConnection?: ActiveConnectionConfig | null;
   launcherHotkey?: string;
   clipboardLookups?: boolean;
+  watchingPaused?: boolean;
 }
 
 export async function getConfig(): Promise<AppConfig> {

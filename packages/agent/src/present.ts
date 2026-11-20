@@ -1,6 +1,7 @@
+import type { QueryLanguage } from "@conch/core";
 import type { LanguageModel } from "ai";
 
-import { redactPii } from "@conch/core/client";
+import { isSqlDialect, redactPii } from "@conch/core/client";
 import {
   CARD_SPEC_VERSION,
   CardSpec,
@@ -105,6 +106,7 @@ const draftToCandidate = (draft: CardDraft): unknown => ({
 
 export interface PresentInput {
   model: LanguageModel;
+  language: QueryLanguage;
   prompt: string;
   sql: string;
   result: TabularData & { rowCount: number };
@@ -122,8 +124,12 @@ const describeResult = (input: PresentInput, stats: ColumnStats[]): string => {
   const previousCard = input.previous
     ? { title: input.previous.title, view: input.previous.view }
     : undefined;
+  const language = isSqlDialect(input.language)
+    ? {}
+    : { language: input.language };
   const payload = JSON.stringify(
     {
+      ...language,
       columns: input.result.columns,
       previousCard,
       question: input.prompt,

@@ -20,8 +20,17 @@ import type {
 import type { AskEventMessage, AskParams } from "./ask.ts";
 import type { SqlAssumptions } from "./assumptions.ts";
 import type { Board, BoardDraft } from "./board.ts";
+import type {
+  ApplyImportRequest,
+  ExportBundleRequest,
+  ExportBundleResult,
+  ImportPreview,
+  ImportResult,
+  ImportSource,
+} from "./bundle.ts";
 import type { LookupEventMessage, LookupRequest } from "./lookup.ts";
 import type { RunSqlParams, SchemaPeek } from "./sql-run.ts";
+import type { Watch, WatchDraft, WatchStatus, WidgetTrend } from "./watch.ts";
 import type {
   ProposeParamsRequest,
   ProposeParamsResult,
@@ -35,7 +44,8 @@ import type {
 export type LauncherNavigateView =
   | "root"
   | "settings"
-  | { kind: "widget-run"; widgetId: string };
+  | { kind: "widget-run"; widgetId: string }
+  | "watches";
 
 export const DEFAULT_LAUNCHER_HOTKEY = "Option+Shift+Space";
 
@@ -218,6 +228,29 @@ export interface RpcSchema {
       params: { widgetId: string; paramName: string };
       response: string[];
     };
+    exportBundle: {
+      params: ExportBundleRequest;
+      response: ExportBundleResult;
+    };
+    previewImport: {
+      params: { source: ImportSource };
+      response: ImportPreview;
+    };
+    applyImport: { params: ApplyImportRequest; response: ImportResult };
+    listWatches: { params: Record<string, never>; response: Watch[] };
+    saveWatch: { params: { watch: WatchDraft }; response: Watch };
+    deleteWatch: { params: { watchId: string }; response: void };
+    listWatchStatuses: {
+      params: Record<string, never>;
+      response: WatchStatus[];
+    };
+    listWidgetTrends: {
+      params: { widgetIds: string[] };
+      response: Record<string, WidgetTrend>;
+    };
+    acknowledgeAlert: { params: { watchId: string }; response: void };
+    setWatchingPaused: { params: { paused: boolean }; response: void };
+    getWatchingPaused: { params: Record<string, never>; response: boolean };
   };
   messages: {
     launcherShown: { clipboard: LookupValue | null };
@@ -228,5 +261,7 @@ export interface RpcSchema {
     askEvent: AskEventMessage;
     lookupEvent: LookupEventMessage;
     boardChanged: { boardId: string };
+    watchesChanged: Record<string, never>;
+    widgetSampled: { widgetId: string; valuesKey: string };
   };
 }

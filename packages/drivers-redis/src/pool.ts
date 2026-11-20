@@ -14,6 +14,9 @@ import type { ChainableCommander, Redis } from "ioredis";
 
 import { DbError } from "@conch/core";
 
+import { sampleKeyspace } from "./keyspace-schema.ts";
+import { closeQuietly, openReadClient } from "./scan.ts";
+
 interface SizeCommand {
   method: keyof Pick<
     ChainableCommander,
@@ -264,13 +267,19 @@ export class RedisPool implements Pool {
     return Array.from({ length: count }, (_, i) => i.toString());
   }
 
-  fetchSchema(db: string): Promise<SchemaInfo> {
-    if (!this.#client) {
-      return Promise.reject(POOL_CLOSED);
+  async fetchSchema(db: string): Promise<SchemaInfo> {
+    const base = this.#requireClient();
+    try {
+      const client = await openReadClient(base, parseDbIndex(db));
+      try {
+        const tables = await sampleKeyspace(client);
+        return { schemas: [{ name: db, tables, views: [] }] };
+      } finally {
+        await closeQuietly(client);
+      }
+    } catch (error) {
+      throw mapRedisError(error);
     }
-    return Promise.resolve({
-      schemas: [{ name: db, tables: [], views: [] }],
-    });
   }
 
   async execute(

@@ -1,3 +1,4 @@
+import type { WidgetWatching } from "@/components/widgets/widget-row";
 import type { DatabaseConnection } from "@/lib/connections";
 
 import { BoardRow } from "@/components/board/board-row";
@@ -7,6 +8,7 @@ import { ConnectionRow } from "@/components/launcher/connections/connection-row"
 import { TableRow } from "@/components/launcher/schema/table-row";
 import { SqlRow } from "@/components/launcher/sql-row";
 import { LookupRow } from "@/components/lookup/lookup-row";
+import { AlertRow } from "@/components/watches/alert-row";
 import { RecentRow } from "@/components/widgets/recent-row";
 import { WidgetRow } from "@/components/widgets/widget-row";
 
@@ -17,6 +19,7 @@ export interface RootRowContext {
   armedId: string | null;
   freshWidgetId: string | null;
   connectionById: (id: string) => DatabaseConnection | null;
+  watchingFor: (widgetId: string) => WidgetWatching;
   onPulseDone: () => void;
   onHover: (id: string) => void;
   onRun: (id: string) => void;
@@ -36,16 +39,29 @@ export function RootItemRow({ item, context }: RootItemRowProps) {
       return (
         <WidgetRow
           connection={context.connectionById(item.widget.connectionId)}
+          events={{
+            onHover,
+            onPulseDone:
+              item.widget.id === context.freshWidgetId
+                ? context.onPulseDone
+                : undefined,
+            onRun,
+          }}
+          id={item.id}
+          selected={selected}
+          watching={context.watchingFor(item.widget.id)}
+          widget={item.widget}
+        />
+      );
+    }
+    case "alert": {
+      return (
+        <AlertRow
+          alert={item.alert}
           id={item.id}
           onHover={onHover}
-          onPulseDone={
-            item.widget.id === context.freshWidgetId
-              ? context.onPulseDone
-              : undefined
-          }
           onRun={onRun}
           selected={selected}
-          widget={item.widget}
         />
       );
     }

@@ -13,7 +13,10 @@ export type LauncherView =
   | { kind: "widget-run"; widgetId: string; values: ParamValues }
   | { kind: "widget-inputs"; draft: WidgetDraft; mode: "create" | "edit" }
   | { kind: "board-picker"; widgetId: string }
-  | { kind: "board-name"; target: BoardNameTarget };
+  | { kind: "board-name"; target: BoardNameTarget }
+  | { kind: "import" }
+  | { kind: "watch"; widgetId: string }
+  | { kind: "watches" };
 
 export type StackDirection = 1 | -1;
 

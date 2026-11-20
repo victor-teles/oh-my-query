@@ -3,7 +3,7 @@
   "configVersion": 1,
   "workspaces": {
     "": {
-      "name": "oh-my-query",
+      "name": "conch",
       "dependencies": {
         "@conch/env": "workspace:*",
         "dotenv": "catalog:",
@@ -102,6 +102,7 @@
       "dependencies": {
         "@polyglot-sql/sdk": "^0.3.2",
         "keytar": "^7.9.0",
+        "zod": "catalog:",
       },
       "devDependencies": {
         "@conch/config": "workspace:*",

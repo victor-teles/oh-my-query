@@ -5,12 +5,14 @@ import { useCallback } from "react";
 
 import type { InputMode } from "@/components/launcher/input-mode";
 import type { FooterHint } from "@/components/launcher/launcher-footer";
+import type { RootAlert } from "@/components/watches/use-alerts";
 
 import type { RootItem } from "./root-items";
 
 const ACTIONS_HINT: FooterHint = { keys: ["⌘", "K"], label: "Actions" };
 const INPUTS_HINT: FooterHint = { keys: ["⇥"], label: "Inputs" };
 const COLUMNS_HINT: FooterHint = { keys: ["⌘", "↓"], label: "Columns" };
+const DISMISS_HINT: FooterHint = { keys: ["⌫"], label: "Dismiss" };
 export const LAST_ANSWER_HINT: FooterHint = {
   keys: ["↑"],
   label: "Last answer",
@@ -39,6 +41,7 @@ interface UseRootKeyboardOptions {
   onOpenInputs: (widgetId: string) => void;
   onReopen: (() => void) | null;
   onOpenHistory: () => void;
+  onDismissAlert: (alert: RootAlert) => void;
   modeKeys: ModeKeys;
 }
 
@@ -48,6 +51,34 @@ const hasInputs = (
   kind: "widget";
 } => item?.kind === "widget" && editableParams(item.widget.params).length > 0;
 
+// Only an empty input dismisses, and holding ⌫ to clear text never does.
+const dismissibleAlert = (
+  event: KeyboardEvent<HTMLInputElement>,
+  selected: RootItem | null
+): RootAlert | null =>
+  event.key === "Backspace" &&
+  !event.repeat &&
+  event.currentTarget.value === "" &&
+  selected?.kind === "alert"
+    ? selected.alert
+    : null;
+
+const runMetaShortcut = (
+  event: KeyboardEvent<HTMLInputElement>,
+  openHistory: () => void,
+  openActions: () => void
+): void => {
+  if (!event.metaKey || (event.key !== "y" && event.key !== "k")) {
+    return;
+  }
+  event.preventDefault();
+  if (event.key === "y") {
+    openHistory();
+  } else {
+    openActions();
+  }
+};
+
 export const useRootKeyboard = ({
   selected,
   move,
@@ -56,11 +87,18 @@ export const useRootKeyboard = ({
   onOpenInputs,
   onReopen,
   onOpenHistory,
+  onDismissAlert,
   modeKeys,
 }: UseRootKeyboardOptions) =>
   useCallback(
     (event: KeyboardEvent<HTMLInputElement>) => {
       const { commit, focusDetail } = modeKeys;
+      const alert = dismissibleAlert(event, selected);
+      if (alert) {
+        event.preventDefault();
+        onDismissAlert(alert);
+        return;
+      }
       if (event.key === "ArrowDown" && event.metaKey && focusDetail) {
         event.preventDefault();
         focusDetail();
@@ -92,21 +130,20 @@ export const useRootKeyboard = ({
         onOpenInputs(selected.widget.id);
         return;
       }
-      if (event.key === "y" && event.metaKey) {
-        event.preventDefault();
-        onOpenHistory();
-        return;
-      }
-      if (event.key === "k" && event.metaKey) {
-        event.preventDefault();
-        if (selected) {
-          onOpenActions(selected);
+      runMetaShortcut(
+        event,
+        () => onOpenHistory(),
+        () => {
+          if (selected) {
+            onOpenActions(selected);
+          }
         }
-      }
+      );
     },
     [
       modeKeys,
       move,
+      onDismissAlert,
       onOpenActions,
       onOpenHistory,
       onOpenInputs,
@@ -149,6 +186,9 @@ export const footerFor = (
   }
   if (selected.kind === "board") {
     return { actionLabel: "Open", hints: [ACTIONS_HINT] };
+  }
+  if (selected.kind === "alert") {
+    return { actionLabel: "Open", hints: [DISMISS_HINT] };
   }
   if (selected.kind === "widget") {
     return {

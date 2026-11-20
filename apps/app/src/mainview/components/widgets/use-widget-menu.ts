@@ -4,6 +4,7 @@ import type { ResultExport } from "@/components/result-actions/use-result-export
 import type { Widget, WidgetDraft, WidgetRunResult } from "@/lib/ipc";
 
 import { runExportAction } from "@/components/result-actions/use-result-export";
+import { useMenuBarToggle } from "@/components/watches/use-menu-bar-toggle";
 import { useArmedConfirm } from "@/hooks/use-armed-confirm";
 import { copyText } from "@/lib/clipboard";
 
@@ -19,6 +20,7 @@ interface UseWidgetMenuOptions {
   onRename: () => void;
   onEditInputs: (draft: WidgetDraft) => void;
   onAddToBoard: (widgetId: string) => void;
+  onWatch: (widgetId: string) => void;
   onDeleted: () => void;
 }
 
@@ -29,9 +31,11 @@ export const useWidgetMenu = ({
   onRename,
   onEditInputs,
   onAddToBoard,
+  onWatch,
   onDeleted,
 }: UseWidgetMenuOptions) => {
   const { save, remove } = useWidgets();
+  const toggleMenuBar = useMenuBarToggle();
   const [open, setOpen] = useState(false);
   const { arm, armed, disarm } = useArmedConfirm();
   const { announce } = exporter;
@@ -69,6 +73,15 @@ export const useWidgetMenu = ({
           onAddToBoard(widget.id);
           break;
         }
+        case "watch": {
+          onWatch(widget.id);
+          break;
+        }
+        case "menu-bar": {
+          const pinned = await toggleMenuBar(widget);
+          announce(pinned ? "In the menu bar" : "Removed from the menu bar");
+          break;
+        }
         case "rename": {
           onRename();
           break;
@@ -99,8 +112,10 @@ export const useWidgetMenu = ({
       onDeleted,
       onEditInputs,
       onRename,
+      onWatch,
       remove,
       save,
+      toggleMenuBar,
       widget,
     ]
   );

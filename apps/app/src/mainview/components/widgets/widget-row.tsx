@@ -1,57 +1,38 @@
 import { editableParams } from "@conch/rpc";
 import { LayoutDashboardIcon } from "lucide-react";
-import { useAnimate } from "motion/react";
-import { useEffect } from "react";
+import { AnimatePresence, motion } from "motion/react";
 
+import type { WatchGlyphKind } from "@/components/watches/watch-glyph";
+import type { TrendFailure } from "@/components/watches/widget-trend";
 import type { DatabaseConnection } from "@/lib/connections";
-import type { Widget } from "@/lib/ipc";
+import type { Widget, WidgetTrend as WidgetTrendData } from "@/lib/ipc";
 
 import { ConnectionGlyph } from "@/components/launcher/connections/connection-glyph";
 import { KeyCombo } from "@/components/launcher/key-combo";
 import { LauncherRow } from "@/components/launcher/launcher-row";
+import { FreshPulse } from "@/components/motion/fresh-pulse";
+import { WatchGlyph } from "@/components/watches/watch-glyph";
+import { WidgetTrend } from "@/components/watches/widget-trend";
 import { useMotionPreset } from "@/lib/motion";
 
 import { valuesSummary } from "./param-labels";
 
-const PULSE_SECONDS = 0.9;
-const PULSE_OPACITY = 0.14;
-
-interface FreshPulseProps {
-  onDone: () => void;
+export interface WidgetWatching {
+  glyph: WatchGlyphKind | null;
+  trend: WidgetTrendData | null;
+  failure: TrendFailure | null;
 }
 
-// Driven imperatively: rows mount inside AnimatePresence initial={false},
-// which would otherwise skip a declarative initial state.
-function FreshPulse({ onDone }: FreshPulseProps) {
-  const { reduced } = useMotionPreset();
-  const [scope, animate] = useAnimate<HTMLSpanElement>();
+export const NOT_WATCHING: WidgetWatching = {
+  failure: null,
+  glyph: null,
+  trend: null,
+};
 
-  useEffect(() => {
-    if (reduced || !scope.current) {
-      onDone();
-      return;
-    }
-    const controls = animate(
-      scope.current,
-      { opacity: [PULSE_OPACITY, 0] },
-      { duration: PULSE_SECONDS, ease: "easeOut" }
-    );
-    const settle = async () => {
-      await controls;
-      onDone();
-    };
-    settle();
-    return () => controls.stop();
-  }, [animate, onDone, reduced, scope]);
-
-  return reduced ? null : (
-    <span
-      aria-hidden
-      className="absolute inset-0 rounded-[10px] bg-primary opacity-0"
-      data-testid="fresh-pulse"
-      ref={scope}
-    />
-  );
+interface WidgetRowEvents {
+  onHover: (id: string) => void;
+  onRun: (id: string) => void;
+  onPulseDone?: () => void;
 }
 
 interface WidgetRowProps {
@@ -59,9 +40,30 @@ interface WidgetRowProps {
   widget: Widget;
   connection: DatabaseConnection | null;
   selected: boolean;
-  onHover: (id: string) => void;
-  onRun: (id: string) => void;
-  onPulseDone?: () => void;
+  events: WidgetRowEvents;
+  watching?: WidgetWatching;
+}
+
+function GlyphSlot({ kind }: { kind: WatchGlyphKind | null }) {
+  const { reduced, fadeIn, fadeOut } = useMotionPreset();
+  const hidden = reduced ? { opacity: 0 } : { opacity: 0, scale: 0.9 };
+  return (
+    <AnimatePresence initial={false} mode="popLayout">
+      {kind ? (
+        <motion.span
+          animate={{ opacity: 1, scale: 1 }}
+          className="relative flex shrink-0 items-center self-center"
+          data-motion={reduced ? "fade" : "pop"}
+          exit={{ ...hidden, transition: fadeOut }}
+          initial={hidden}
+          key={kind}
+          transition={fadeIn}
+        >
+          <WatchGlyph kind={kind} />
+        </motion.span>
+      ) : null}
+    </AnimatePresence>
+  );
 }
 
 export function WidgetRow({
@@ -69,15 +71,24 @@ export function WidgetRow({
   widget,
   connection,
   selected,
-  onHover,
-  onRun,
-  onPulseDone,
+  events,
+  watching = NOT_WATCHING,
 }: WidgetRowProps) {
   const hasInputs = editableParams(widget.params).length > 0;
   const summary = hasInputs ? valuesSummary(widget) : widget.prompt;
+  const {
+    onHover: handleHover,
+    onRun: handleRun,
+    onPulseDone: handlePulseDone,
+  } = events;
   return (
-    <LauncherRow id={id} onHover={onHover} onRun={onRun} selected={selected}>
-      {onPulseDone ? <FreshPulse onDone={onPulseDone} /> : null}
+    <LauncherRow
+      id={id}
+      onHover={handleHover}
+      onRun={handleRun}
+      selected={selected}
+    >
+      {handlePulseDone ? <FreshPulse onDone={handlePulseDone} /> : null}
       {connection ? (
         <ConnectionGlyph className="relative" connection={connection} />
       ) : (
@@ -89,8 +100,15 @@ export function WidgetRow({
         <span className="truncate type-body text-foreground">
           {widget.name}
         </span>
+        <GlyphSlot kind={watching.glyph} />
         <span className="truncate type-meta text-panel-muted">{summary}</span>
       </span>
+      <WidgetTrend
+        failure={watching.failure}
+        spec={widget.spec}
+        trend={watching.trend}
+        widgetId={widget.id}
+      />
       {selected && hasInputs ? (
         <span className="relative flex shrink-0 items-center gap-1.5 type-meta text-panel-muted">
           Inputs

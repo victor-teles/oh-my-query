@@ -1,4 +1,5 @@
 import type {
+  ColumnDetail,
   ExecuteResult,
   ExplainResult,
   IndexItem,
@@ -7,11 +8,19 @@ import type {
   TableItem,
   ViewItem,
 } from "@conch/core";
-import type { MongoClient } from "mongodb";
+import type { Collection, MongoClient } from "mongodb";
 
 import { DbError } from "@conch/core";
 
+import {
+  SAMPLE_SIZE,
+  SAMPLE_TIMEOUT_MS,
+  sampleFields,
+} from "./schema-sample.ts";
+
 const POOL_CLOSED = new DbError("POOL_CLOSED", "MongoDB pool is closed");
+const MAX_SAMPLED_COLLECTIONS = 100;
+const SAMPLE_CONCURRENCY = 4;
 
 interface MongoIndexLike {
   name?: string;
@@ -31,6 +40,57 @@ function toIndexItem(index: MongoIndexLike): IndexItem {
     name: index.name ?? "",
   };
 }
+
+const sampleColumns = async (
+  collection: Collection,
+  sampled: boolean
+): Promise<ColumnDetail[]> => {
+  if (!sampled) {
+    return [];
+  }
+  try {
+    const documents = await collection
+      .aggregate([{ $sample: { size: SAMPLE_SIZE } }], {
+        maxTimeMS: SAMPLE_TIMEOUT_MS,
+      })
+      .toArray();
+    return sampleFields(documents);
+  } catch {
+    return [];
+  }
+};
+
+const describeCollection = async (
+  name: string,
+  collection: Collection,
+  sampled: boolean
+): Promise<TableItem> => {
+  const [indexes, rowEstimate, columns] = await Promise.all([
+    collection.indexes().catch(() => [] as MongoIndexLike[]),
+    collection.estimatedDocumentCount().catch(() => null),
+    sampleColumns(collection, sampled),
+  ]);
+  return {
+    columns,
+    foreignKeys: [],
+    indexes: (indexes as MongoIndexLike[]).map(toIndexItem),
+    name,
+    rowEstimate,
+  };
+};
+
+const mapConcurrent = async <T, R>(
+  items: readonly T[],
+  limit: number,
+  work: (item: T) => Promise<R>
+): Promise<R[]> => {
+  const results: R[] = [];
+  for (let start = 0; start < items.length; start += limit) {
+    const batch = items.slice(start, start + limit);
+    results.push(...(await Promise.all(batch.map(work))));
+  }
+  return results;
+};
 
 export function mapMongoError(err: unknown): DbError {
   if (err instanceof DbError) {
@@ -117,39 +177,19 @@ export class MongoPool implements Pool {
       const collections = (await db
         .listCollections({}, { nameOnly: false })
         .toArray()) as MongoCollectionInfoLike[];
-
-      const tables: TableItem[] = [];
-      const views: ViewItem[] = [];
-
-      await Promise.all(
-        collections.map(async (info) => {
-          if (info.name.startsWith("system.")) {
-            return;
-          }
-          if (info.type === "view") {
-            views.push({ columns: [], name: info.name });
-            return;
-          }
-          const collection = db.collection(info.name);
-          const [indexes, rowEstimate] = await Promise.all([
-            collection.indexes().catch(() => [] as MongoIndexLike[]),
-            collection
-              .estimatedDocumentCount()
-              .catch(() => null as number | null),
-          ]);
-          tables.push({
-            columns: [],
-            foreignKeys: [],
-            indexes: (indexes as MongoIndexLike[]).map(toIndexItem),
-            name: info.name,
-            rowEstimate,
-          });
-        })
+      const visible = collections
+        .filter((info) => !info.name.startsWith("system."))
+        .toSorted((a, b) => a.name.localeCompare(b.name));
+      const views: ViewItem[] = visible
+        .filter((info) => info.type === "view")
+        .map((info) => ({ columns: [], name: info.name }));
+      const names = visible
+        .filter((info) => info.type !== "view")
+        .map((info) => info.name);
+      const sampled = new Set(names.slice(0, MAX_SAMPLED_COLLECTIONS));
+      const tables = await mapConcurrent(names, SAMPLE_CONCURRENCY, (name) =>
+        describeCollection(name, db.collection(name), sampled.has(name))
       );
-
-      tables.sort((a, b) => a.name.localeCompare(b.name));
-      views.sort((a, b) => a.name.localeCompare(b.name));
-
       return { schemas: [{ name: database, tables, views }] };
     } catch (error) {
       throw mapMongoError(error);

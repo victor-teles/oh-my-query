@@ -141,3 +141,117 @@ test.describe("ask flow", () => {
     ).toContainText("delete from users");
   });
 });
+
+const seedEngineWorkspace = async (
+  page: Page,
+  connection: { id: string; name: string; type: string; port: number }
+) => {
+  await page.addInitScript((target) => {
+    localStorage.setItem(
+      "conch-connections",
+      JSON.stringify([
+        {
+          createdAt: "2026-11-01T00:00:00.000Z",
+          database: target.type === "redis" ? "0" : "shop",
+          host: "localhost",
+          lastConnectedAt: null,
+          password: "",
+          pinned: false,
+          username: "",
+          ...target,
+        },
+      ])
+    );
+    localStorage.setItem(
+      "conch-active-connection",
+      JSON.stringify({ connectionId: target.id, database: null })
+    );
+    localStorage.setItem(
+      "conch-ai-settings",
+      JSON.stringify({
+        baseUrl: null,
+        hasKey: true,
+        keyHint: "abcd",
+        model: null,
+        provider: "anthropic",
+      })
+    );
+  }, connection);
+};
+
+const ENGINES = [
+  {
+    answer: "Orders by status",
+    connection: { id: "shop", name: "shop", port: 27_017, type: "mongodb" },
+    heading: "Generated pipeline",
+    offending: "$merge",
+    question: "orders by status",
+    write: "merge every order into the archive",
+  },
+  {
+    answer: "Keys by pattern",
+    connection: {
+      id: "cache",
+      name: "sessions-cache",
+      port: 6379,
+      type: "redis",
+    },
+    heading: "Generated commands",
+    offending: "SET",
+    question: "keys by pattern",
+    write: "set the checkout flag off",
+  },
+] as const;
+
+test.describe("ask flow on MongoDB and Redis", () => {
+  for (const engine of ENGINES) {
+    test(`answers and refuses on ${engine.connection.type}`, async ({
+      page,
+    }) => {
+      const errors = collectErrors(page);
+      await seedEngineWorkspace(page, engine.connection);
+      await page.goto("/");
+
+      const search = page.getByRole("combobox", { name: "Search commands" });
+      await search.fill(engine.question);
+      await search.press("Enter");
+
+      await expect(
+        page.getByRole("heading", { name: engine.heading })
+      ).toBeVisible();
+      await expect(page.getByRole("status").first()).toContainText(
+        `Read only on ${engine.connection.name}`
+      );
+      await expect(
+        page.getByRole("heading", { name: engine.answer })
+      ).toBeVisible();
+      await expect(page.getByRole("radio", { name: "Bar" })).toHaveAttribute(
+        "aria-checked",
+        "true"
+      );
+
+      const input = page.getByRole("textbox", { name: "Ask a question" });
+      await input.press("Meta+s");
+      await expect(
+        page
+          .getByRole("status")
+          .filter({ hasText: "Saving works with SQL databases for now." })
+      ).toBeVisible();
+      expect(await ipcCalls(page, "saveWidget")).toHaveLength(0);
+      expect(await ipcCalls(page, "describeSql")).toHaveLength(0);
+
+      await input.fill(engine.write);
+      await input.press("Meta+Enter");
+      await expect(page.getByRole("alert")).toContainText(
+        "This would change data"
+      );
+      const offending = page
+        .getByRole("region", { name: engine.heading })
+        .getByText(engine.offending, { exact: true });
+      await expect(offending).toHaveClass(/underline/);
+      expect(await ipcCalls(page, "saveWidget")).toHaveLength(0);
+
+      expect(errors).toStrictEqual([]);
+    });
+  }
+});

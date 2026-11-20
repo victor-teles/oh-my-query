@@ -13,6 +13,7 @@ import {
   searchTables,
 } from "@/components/launcher/schema/table-search";
 import { useTableCatalog } from "@/components/launcher/schema/use-table-catalog";
+import { useAlerts } from "@/components/watches/use-alerts";
 import { useWidgets } from "@/components/widgets/widgets-provider";
 import { isSqlDatabase } from "@/lib/connections";
 
@@ -26,8 +27,13 @@ import { useAiReadiness } from "./use-ai-readiness";
 
 type CommandNavigation = Pick<
   RootNavigation,
-  "openSettings" | "openHistory" | "dismiss" | "editConnection" | "newBoard"
->;
+  | "openSettings"
+  | "openHistory"
+  | "dismiss"
+  | "editConnection"
+  | "newBoard"
+  | "openImport"
+> & { exportAll: () => void };
 
 interface UseRootSectionsOptions {
   query: string;
@@ -45,19 +51,37 @@ export const useRootSections = ({
   const { state, activeConnection } = useConnections();
   const aiReady = useAiReadiness();
   const { widgets, recents } = useWidgets();
-  const { openSettings, openHistory, dismiss, editConnection, newBoard } =
-    navigate;
+  const {
+    openSettings,
+    openHistory,
+    dismiss,
+    editConnection,
+    newBoard,
+    openImport,
+    exportAll,
+  } = navigate;
+  const { alerts } = useAlerts();
 
   const commands = useMemo(
     () =>
       rootCommands({
         addConnection: () => editConnection(null),
         dismiss,
+        exportAll,
         newBoard,
         openHistory,
+        openImport,
         openSettings,
       }),
-    [dismiss, editConnection, newBoard, openHistory, openSettings]
+    [
+      dismiss,
+      editConnection,
+      exportAll,
+      newBoard,
+      openHistory,
+      openImport,
+      openSettings,
+    ]
   );
 
   const input = useMemo(() => parseLauncherInput(query), [query]);
@@ -82,6 +106,7 @@ export const useRootSections = ({
           note: null,
           sections: buildRootSections({
             aiSetup: aiReady === false ? aiSetupCommand(openSettings) : null,
+            alerts,
             askWith: aiReady === true ? activeConnection : null,
             boards,
             commands,

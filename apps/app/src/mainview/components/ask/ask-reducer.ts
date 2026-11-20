@@ -1,8 +1,9 @@
-import type { DialectType } from "@conch/core/client";
+import type { QueryLanguage } from "@conch/core/client";
+import type { CardResult } from "@conch/rpc";
 
 import { MAX_ASK_TURNS } from "@conch/rpc";
 
-import type { CardResult, CardViewKind } from "@/lib/card-data";
+import type { CardViewKind } from "@/lib/card-data";
 import type {
   AskErrorCode,
   AskEvent,
@@ -41,7 +42,7 @@ export interface AskAnswer {
 export interface AskTurn {
   prompt: string;
   sql: string;
-  dialect: DialectType | null;
+  dialect: QueryLanguage | null;
   answer: AskAnswer & { spec: CardSpec };
   view: CardViewKind;
   assumptions: SqlAssumptions | null;
@@ -58,7 +59,7 @@ export interface AskState {
   schemaDetail: string | null;
   sql: string;
   sqlComplete: boolean;
-  dialect: DialectType | null;
+  dialect: QueryLanguage | null;
   repairs: number;
   repairReason: string | null;
   answer: AskAnswer | null;

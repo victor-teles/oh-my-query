@@ -1,12 +1,14 @@
 import type { ReactNode } from "react";
 
 import { SwapText } from "@/components/motion/swap-text";
+import { cn } from "@/lib/utils";
 
 import { KeyCombo } from "./key-combo";
 
 export interface FooterHint {
   label: string;
   keys: readonly string[];
+  disabled?: boolean;
 }
 
 interface LauncherFooterProps {
@@ -34,7 +36,11 @@ export function LauncherFooter({
         ) : null}
         {hints.map((hint) => (
           <div
-            className="flex items-center gap-2 border-l border-panel-border pl-3"
+            aria-disabled={hint.disabled || undefined}
+            className={cn(
+              "flex items-center gap-2 border-l border-panel-border pl-3",
+              hint.disabled && "opacity-50"
+            )}
             key={hint.label}
           >
             <span>{hint.label}</span>

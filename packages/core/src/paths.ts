@@ -54,3 +54,11 @@ export function boardsPath(): string {
 export function boardFramesPath(): string {
   return path.join(appDir(), "board-frames.json");
 }
+
+export function watchesPath(): string {
+  return path.join(appDir(), "watches.enc");
+}
+
+export function runLogPath(): string {
+  return path.join(appDir(), "widget-runs.enc");
+}

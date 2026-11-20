@@ -1,4 +1,4 @@
-import type { ColumnInfo, DialectType } from "@conch/core";
+import type { ColumnInfo, QueryLanguage } from "@conch/core";
 
 import type { CardSpec } from "./card-spec.ts";
 import type { RefineContext } from "./refine.ts";
@@ -21,7 +21,7 @@ export type AskEvent =
   | { type: "phase"; phase: AskPhase; detail: string }
   | { type: "sqlDelta"; text: string }
   | { type: "sqlReset"; reason: string }
-  | { type: "sqlDone"; sql: string; dialect: DialectType; lines: number }
+  | { type: "sqlDone"; sql: string; dialect: QueryLanguage; lines: number }
   | {
       type: "result";
       columns: ColumnInfo[];

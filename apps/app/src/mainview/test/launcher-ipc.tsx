@@ -6,6 +6,7 @@ import type { DatabaseConnection } from "@/lib/connections";
 
 import { AppProviders } from "@/components/app-providers";
 import { ConnectionsProvider } from "@/components/launcher/connections/connections-provider";
+import { WatchesProvider } from "@/components/watches/watches-provider";
 import { WidgetsProvider } from "@/components/widgets/widgets-provider";
 
 import type { CommandHandlers } from "./ipc-mock";
@@ -35,9 +36,13 @@ export const mockLauncherIpc = ({
     getConnections: () => store.connections,
     getLauncherHotkey: () => "Option+Shift+Space",
     getUpdateChannel: () => "stable",
+    getWatchingPaused: () => false,
     hideLauncher: () => null,
     listBoards: () => [],
     listRecentAsks: () => [],
+    listWatchStatuses: () => [],
+    listWatches: () => [],
+    listWidgetTrends: () => ({}),
     listWidgets: () => [],
     resizeLauncher: () => null,
     saveConnections: (payload) => {
@@ -58,7 +63,9 @@ export const renderWithConnections = (ui: ReactNode) =>
   render(
     <AppProviders>
       <ConnectionsProvider>
-        <WidgetsProvider>{ui}</WidgetsProvider>
+        <WidgetsProvider>
+          <WatchesProvider>{ui}</WatchesProvider>
+        </WidgetsProvider>
       </ConnectionsProvider>
     </AppProviders>
   );

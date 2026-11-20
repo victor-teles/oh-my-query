@@ -3,6 +3,7 @@ import type { DialectType } from "@conch/core/client";
 import { previewSql } from "@conch/core/client";
 import { useCallback } from "react";
 
+import type { RootAlert } from "@/components/watches/use-alerts";
 import type { DatabaseConnection } from "@/lib/connections";
 import type { LookupValue, ParamValues } from "@/lib/ipc";
 
@@ -21,6 +22,7 @@ interface UseRootRunOptions {
   preview: PreviewTarget | null;
   runWidget: (widgetId: string, values: ParamValues) => void;
   openBoard: (boardId: string) => void;
+  openAlert: (alert: RootAlert) => void;
   onActivate: (connection: DatabaseConnection) => void;
 }
 
@@ -36,6 +38,7 @@ export const useRootRun = ({
   preview,
   runWidget,
   openBoard,
+  openAlert,
   onActivate,
 }: UseRootRunOptions) => {
   const { start, startSql } = ask;
@@ -73,6 +76,10 @@ export const useRootRun = ({
           openBoard(item.board.id);
           return;
         }
+        case "alert": {
+          openAlert(item.alert);
+          return;
+        }
         case "recent": {
           start(
             item.ask.prompt,
@@ -93,7 +100,16 @@ export const useRootRun = ({
         }
       }
     },
-    [onActivate, openBoard, preview, runWidget, start, startLookup, startSql]
+    [
+      onActivate,
+      openAlert,
+      openBoard,
+      preview,
+      runWidget,
+      start,
+      startLookup,
+      startSql,
+    ]
   );
   const runById = useCallback(
     (id: string) => runItem(items.find((item) => item.id === id)),

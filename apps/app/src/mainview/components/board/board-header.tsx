@@ -9,10 +9,10 @@ import type { Board } from "@/lib/ipc";
 import { KeyCombo } from "@/components/launcher/key-combo";
 import { Pressable } from "@/components/motion/pressable";
 import { SwapText } from "@/components/motion/swap-text";
+import { useNow } from "@/hooks/use-now";
 import { cn } from "@/lib/utils";
 
 import { updatedLabel } from "./board-inputs";
-import { useNow } from "./use-now";
 
 const NO_DRAG = "electrobun-webkit-app-region-no-drag";
 const MINUTE = 60_000;

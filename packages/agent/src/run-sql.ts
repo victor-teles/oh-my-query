@@ -1,4 +1,4 @@
-import type { BindValue } from "@conch/core";
+import type { BindValue, DialectType } from "@conch/core";
 import type { AskEvent } from "@conch/rpc";
 
 import type { AskPorts } from "./ask.ts";
@@ -14,10 +14,9 @@ import {
   throwIfAborted,
 } from "./run-query.ts";
 
-export type SqlRunPorts = Pick<
-  AskPorts,
-  "execute" | "dialect" | "connectionLabel"
->;
+export type SqlRunPorts = Pick<AskPorts, "execute" | "connectionLabel"> & {
+  dialect: DialectType;
+};
 
 export interface SqlRunInput {
   sql: string;

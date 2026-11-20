@@ -1,6 +1,6 @@
-import type { ChartModel } from "@/lib/card-data";
+import { formatValue } from "@conch/rpc";
 
-import { formatValue } from "@/lib/card-data";
+import type { ChartModel } from "@/lib/card-data";
 
 interface TooltipEntry {
   dataKey?: string | number;

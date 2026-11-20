@@ -1,9 +1,10 @@
+import type { CardResult } from "@conch/rpc";
 import type { ReactNode, Ref } from "react";
 
 import { AnimatePresence, motion } from "motion/react";
 import { useState } from "react";
 
-import type { CardResult, CardViewKind, ViewOption } from "@/lib/card-data";
+import type { CardViewKind, ViewOption } from "@/lib/card-data";
 import type { CardSpec } from "@/lib/ipc";
 
 import { Reveal } from "@/components/motion/reveal";

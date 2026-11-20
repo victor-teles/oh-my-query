@@ -14,7 +14,8 @@
   },
   "dependencies": {
     "@polyglot-sql/sdk": "^0.3.2",
-    "keytar": "^7.9.0"
+    "keytar": "^7.9.0",
+    "zod": "catalog:"
   },
   "devDependencies": {
     "@conch/config": "workspace:*",

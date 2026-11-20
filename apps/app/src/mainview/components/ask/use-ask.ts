@@ -1,5 +1,6 @@
 import type { DialectType } from "@conch/core/client";
 
+import { isSqlDialect } from "@conch/core/client";
 import { useCallback, useEffect, useReducer, useRef } from "react";
 
 import type { CardViewKind } from "@/lib/card-data";
@@ -85,7 +86,7 @@ export const useAsk = () => {
     async (askId: string, source: AskSource, send: () => Promise<void>) => {
       const unsubscribe = onAskEvent(askId, (event) => {
         dispatch(event);
-        if (event.type === "sqlDone") {
+        if (event.type === "sqlDone" && isSqlDialect(event.dialect)) {
           describeAnswer(event.sql, event.dialect, dispatch);
         }
         if (isTerminal(event)) {

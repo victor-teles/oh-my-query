@@ -5,14 +5,15 @@ import { useCallback, useEffect, useMemo, useRef } from "react";
 
 import type { AskTarget } from "@/components/ask/use-ask";
 import type { ConnectionAction } from "@/components/launcher/connections/connection-actions";
-import type { LookupValue, ParamValues } from "@/lib/ipc";
+import type { RootAlert } from "@/components/watches/use-alerts";
+import type { LookupValue, ParamValues, Watch } from "@/lib/ipc";
 
 import { useBoardList } from "@/components/board/use-board-list";
+import { useExport } from "@/components/bundle/use-export";
 import {
   ActionsMenu,
   actionsMenuHeight,
 } from "@/components/launcher/actions/actions-menu";
-import { ConnectionStatus } from "@/components/launcher/connection-status";
 import { ActiveConnectionChip } from "@/components/launcher/connections/active-connection-chip";
 import { connectionActions } from "@/components/launcher/connections/connection-actions";
 import { ConnectionActionsMenu } from "@/components/launcher/connections/connection-actions-menu";
@@ -23,10 +24,16 @@ import { LauncherInput } from "@/components/launcher/launcher-input";
 import { optionId } from "@/components/launcher/launcher-row";
 import { ModeBadge } from "@/components/launcher/mode-badge";
 import { useListSelection } from "@/components/launcher/use-list-selection";
+import { useAlerts } from "@/components/watches/use-alerts";
+import {
+  useWatches,
+  watchForWidget,
+} from "@/components/watches/watches-provider";
 import { PILL_POPOVER_SPACE } from "@/components/widgets/arguments/pill-popover";
 import { WidgetArgumentsRow } from "@/components/widgets/arguments/widget-arguments-row";
 import { useWidgets } from "@/components/widgets/widgets-provider";
 
+import type { CatalogItem } from "./catalog-actions";
 import type { RootItem } from "./root-items";
 import type { CatalogNavigation } from "./use-catalog-menu";
 
@@ -39,6 +46,7 @@ import {
 import { RootBody } from "./root-body";
 import { widgetItemId } from "./root-items";
 import { ROOT_LIST_ID } from "./root-list";
+import { RootStatus } from "./root-status";
 import { useCatalogMenu } from "./use-catalog-menu";
 import { useConnectionToken } from "./use-connection-token";
 import { useRootArguments } from "./use-root-arguments";
@@ -50,7 +58,17 @@ import {
 import { useRootRun } from "./use-root-run";
 import { useRootSections } from "./use-root-sections";
 
-const STATUS = <ConnectionStatus />;
+const catalogMenuFor = (
+  item: CatalogItem | null,
+  watches: readonly Watch[]
+) => {
+  if (!item) {
+    return [];
+  }
+  const watch =
+    item.kind === "widget" ? watchForWidget(watches, item.widget.id) : null;
+  return catalogActions(item, watch);
+};
 const PLACEHOLDER = "Search or ask… > SQL · # table · @ connection";
 
 export interface RootAskActions {
@@ -64,9 +82,13 @@ export interface RootLookup {
   start: (value: LookupValue, connectionId: string) => void;
 }
 
-export interface RootNavigation extends Omit<CatalogNavigation, "runWidget"> {
+export interface RootNavigation extends Omit<
+  CatalogNavigation,
+  "runWidget" | "exportScope"
+> {
   openSettings: () => void;
   openHistory: () => void;
+  openImport: () => void;
   dismiss: () => void;
   editConnection: (connectionId: string | null) => void;
   runWidget: (widgetId: string, values: ParamValues) => void;
@@ -93,17 +115,28 @@ export function RootView({
   const connections = useConnections();
   const { state, activate } = connections;
   const { widgets, freshId, refresh } = useWidgets();
+  const { watches } = useWatches();
+  const { acknowledge } = useAlerts();
   const { boards, reload: reloadBoards } = useBoardList();
   const args = useRootArguments(widgets);
   const { editConnection: onEditConnection, openBoard, runWidget } = navigate;
+  const {
+    outcome: exportOutcome,
+    reveal: handleReveal,
+    run: exportScope,
+  } = useExport();
 
   useEffect(() => {
     refresh();
   }, [refresh]);
 
+  const commandNavigation = useMemo(
+    () => ({ ...navigate, exportAll: () => exportScope({ kind: "all" }) }),
+    [exportScope, navigate]
+  );
   const view = useRootSections({
     boards,
-    navigate,
+    navigate: commandNavigation,
     offer: lookup.offer,
     query,
   });
@@ -122,9 +155,10 @@ export function RootView({
   const catalogNavigation = useMemo(
     () => ({
       ...navigate,
+      exportScope,
       runWidget: (widgetId: string) => runWidget(widgetId, {}),
     }),
-    [navigate, runWidget]
+    [exportScope, navigate, runWidget]
   );
   const catalog = useCatalogMenu({
     navigate: catalogNavigation,
@@ -154,10 +188,22 @@ export function RootView({
     mode,
     onQueryChange,
   });
+  const dismissAlert = useCallback(
+    (alert: RootAlert) => acknowledge(alert.watchId),
+    [acknowledge]
+  );
+  const openAlert = useCallback(
+    (alert: RootAlert) => {
+      acknowledge(alert.watchId);
+      runWidget(alert.widgetId, {});
+    },
+    [acknowledge, runWidget]
+  );
   const { runById, runItem } = useRootRun({
     ask,
     items,
     onActivate: token.onActivate,
+    openAlert,
     openBoard,
     preview: view.tables?.preview ?? null,
     runWidget,
@@ -185,6 +231,7 @@ export function RootView({
   const handleKeyDown = useRootKeyboard({
     modeKeys,
     move,
+    onDismissAlert: dismissAlert,
     onOpenActions: openActions,
     onOpenHistory: navigate.openHistory,
     onOpenInputs: args.open,
@@ -239,9 +286,10 @@ export function RootView({
     [args.change, argsWidget, exitArguments, runWidget]
   );
   const catalogItem = catalog.item;
+  const catalogMenu = catalogMenuFor(catalogItem, watches);
   const listMinHeight = Math.max(
     menuConnection ? actionsMenuHeight(actions.length) : 0,
-    catalogItem ? actionsMenuHeight(catalogActions(catalogItem).length) : 0,
+    catalogItem ? actionsMenuHeight(catalogMenu.length) : 0,
     argsWidget ? PILL_POPOVER_SPACE : 0
   );
   const armedId = armedRowId(menu, catalog);
@@ -312,7 +360,7 @@ export function RootView({
           ) : null}
           {catalogItem ? (
             <ActionsMenu
-              actions={catalogActions(catalogItem)}
+              actions={catalogMenu}
               anchorId={optionId(catalogItem.id)}
               armedId={catalog.armed ? "delete-board" : null}
               key={catalogItem.id}
@@ -326,7 +374,7 @@ export function RootView({
       <LauncherFooter
         actionLabel={footer.actionLabel}
         hints={reopen ? [...footer.hints, LAST_ANSWER_HINT] : footer.hints}
-        status={STATUS}
+        status={<RootStatus onReveal={handleReveal} outcome={exportOutcome} />}
       />
     </>
   );

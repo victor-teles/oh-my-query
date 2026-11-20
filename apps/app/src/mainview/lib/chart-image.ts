@@ -1,6 +1,8 @@
+import type { CardResult } from "@conch/rpc";
+
 import monaSansUrl from "@fontsource-variable/mona-sans/files/mona-sans-latin-wght-normal.woff2?url";
 
-import type { CardResult, CardViewKind } from "@/lib/card-data";
+import type { CardViewKind } from "@/lib/card-data";
 import type { CardSpec } from "@/lib/ipc";
 
 import type { ChartImageLayout, LegendEntry } from "./chart-image-layout";

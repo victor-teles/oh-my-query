@@ -6,6 +6,7 @@ import { AppProviders } from "@/components/app-providers";
 import { emitIpcMessage } from "@/test/ipc-mock";
 import { mockLauncherIpc } from "@/test/launcher-ipc";
 import { wait } from "@/test/wait";
+import { makeKpiWidget, makeWatch } from "@/test/watch-fixtures";
 
 import { LauncherPanel } from "./launcher-panel";
 
@@ -126,6 +127,27 @@ describe("launcherPanel", () => {
     emitIpcMessage("launcherNavigate", { view: "root" });
     await expect
       .element(screen.getByRole("combobox", { name: "Search commands" }))
+      .toBeVisible();
+  });
+
+  it("opens the watched widgets from the tray and goes on to a watch", async () => {
+    mockLauncherIpc({
+      handlers: {
+        hideLauncher: () => hideLauncher(),
+        listWatches: () => [makeWatch()],
+        listWidgets: () => [makeKpiWidget()],
+        resizeLauncher: (payload) => resizeLauncher(payload),
+      },
+    });
+    const screen = renderLauncher();
+
+    emitIpcMessage("launcherNavigate", { view: "watches" });
+    await expect
+      .element(screen.getByRole("heading", { name: "Watching" }))
+      .toBeVisible();
+    await screen.getByRole("option", { name: /MRR/u }).click();
+    await expect
+      .element(screen.getByRole("heading", { name: "Watch MRR" }))
       .toBeVisible();
   });
 

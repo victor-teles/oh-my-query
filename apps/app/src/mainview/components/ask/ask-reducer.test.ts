@@ -1,3 +1,4 @@
+import { CARD_SPEC_VERSION } from "@conch/rpc";
 import { describe, expect, it } from "vitest";
 
 import type { AskEvent, CardSpec } from "@/lib/ipc";
@@ -14,7 +15,7 @@ import {
 const SPEC: CardSpec = {
   formats: {},
   title: "Revenue by status",
-  version: 1,
+  version: CARD_SPEC_VERSION,
   view: {
     kind: "chart",
     mark: "bar",

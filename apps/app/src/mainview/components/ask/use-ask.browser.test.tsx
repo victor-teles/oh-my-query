@@ -110,6 +110,34 @@ describe("useAsk", () => {
     expect(hook.result.current.state.view).toBeNull();
   });
 
+  it.each([
+    ["postgresql", 1],
+    ["mongodb", 0],
+    ["redis", 0],
+  ] as const)(
+    "describes %s answers with polyglot %i times",
+    async (dialect, calls) => {
+      const described: unknown[] = [];
+      const asked: unknown[] = [];
+      mockIpc({
+        ask: (payload) => {
+          asked.push(payload.askId);
+          return null;
+        },
+        describeSql: (payload) => {
+          described.push(payload);
+          return null;
+        },
+      });
+      const hook = renderHook(() => useAsk());
+      await hook.result.current.start("q", TARGET);
+      emit(asked[0], { dialect, lines: 1, sql: "q", type: "sqlDone" });
+      await expect.poll(() => hook.result.current.state.dialect).toBe(dialect);
+      await Promise.resolve();
+      expect(described).toHaveLength(calls);
+    }
+  );
+
   it("ignores events for other asks", async () => {
     const { hook } = setup();
     await hook.result.current.start("q", TARGET);

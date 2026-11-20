@@ -1,3 +1,4 @@
+import { CARD_SPEC_VERSION } from "@conch/rpc";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { renderHook } from "@/test/render-hook";
@@ -10,7 +11,7 @@ import { usePhaseDisplay } from "./use-phase-display";
 const SPEC = {
   formats: {},
   title: "t",
-  version: 1 as const,
+  version: CARD_SPEC_VERSION,
   view: { kind: "table" as const },
 };
 const ANSWER = {

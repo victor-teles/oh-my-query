@@ -57,7 +57,7 @@ const COPY: Record<AskErrorCode, ErrorCopy> = {
   UNSUPPORTED_ENGINE: {
     action: null,
     showDetail: false,
-    title: "Asking questions works with SQL databases for now.",
+    title: "Asking questions doesn't work with this database yet.",
   },
 };
 
@@ -84,11 +84,21 @@ const ACTION_LABELS: Record<Exclude<ErrorAction, null>, string> = {
 };
 
 const OFFENDING_KEYWORD = /\b([A-Z]{3,}(?:\s+INTO)?)\b/;
+const LEADING_TOKEN = /^(\$[A-Za-z]+|[A-Z][A-Z_]{2,})(?=\s)/;
 
-export const offendingKeyword = (failure: AskFailure): string | null =>
-  failure.code === "NOT_READ_ONLY"
-    ? (OFFENDING_KEYWORD.exec(failure.message)?.[1]?.split(/\s+/)[0] ?? null)
-    : null;
+// Pipeline and command refusals name the token first ("$merge writes data");
+// SQL refusals name the statement anywhere in the sentence.
+export const offendingKeyword = (failure: AskFailure): string | null => {
+  if (failure.code !== "NOT_READ_ONLY") {
+    return null;
+  }
+  const leading = LEADING_TOKEN.exec(failure.message)?.[1];
+  return (
+    leading ??
+    OFFENDING_KEYWORD.exec(failure.message)?.[1]?.split(/\s+/)[0] ??
+    null
+  );
+};
 
 interface AskErrorProps {
   failure: AskFailure;

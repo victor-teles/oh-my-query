@@ -1,3 +1,4 @@
+import { CARD_SPEC_VERSION } from "@conch/rpc";
 import { describe, expect, it, vi } from "vitest";
 import { render } from "vitest-browser-react";
 import { userEvent } from "vitest/browser";
@@ -133,7 +134,7 @@ describe("askCard views", () => {
     const spec = {
       formats: { revenue: { currency: "USD", kind: "currency" as const } },
       title: "Revenue by order status",
-      version: 1 as const,
+      version: CARD_SPEC_VERSION,
       view: {
         kind: "chart" as const,
         mark: "bar" as const,

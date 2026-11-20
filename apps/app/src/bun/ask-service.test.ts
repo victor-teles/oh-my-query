@@ -9,6 +9,7 @@ import type {
 } from "@conch/rpc";
 
 import { appendHistory, getConnections } from "@conch/core";
+import { CARD_SPEC_VERSION } from "@conch/rpc";
 import { describe, expect, it, vi } from "vitest";
 
 import type { SchemaCache } from "./schema-cache.ts";
@@ -140,7 +141,7 @@ const REFINE = {
   spec: {
     formats: {},
     title: "Orders",
-    version: 1 as const,
+    version: CARD_SPEC_VERSION,
     view: { kind: "table" as const },
   },
   sql: "select count(*) as n from orders",
@@ -180,7 +181,7 @@ describe("createAskService", () => {
     expect(eventsFor(messages, "a1")).toMatchObject([
       {
         code: "UNSUPPORTED_ENGINE",
-        message: "Asking questions works with SQL databases for now.",
+        message: "Asking questions doesn't work with this database yet.",
       },
     ]);
   });
@@ -240,7 +241,7 @@ describe("createAskService", () => {
         dialect: "postgresql",
         id: "a1",
         prompt: "How many orders?",
-        spec: expect.objectContaining({ version: 1 }),
+        spec: expect.objectContaining({ version: CARD_SPEC_VERSION }),
         sql: "select 42 as n",
       })
     );

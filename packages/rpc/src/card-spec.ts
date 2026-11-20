@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const CARD_SPEC_VERSION = 1;
+export const CARD_SPEC_VERSION = 2;
 
 export const COLUMN_FORMAT_KINDS = [
   "number",
@@ -69,7 +69,9 @@ export const CardSpec = z.object({
   insight: z.string().max(280).optional(),
   subtitle: z.string().max(120).optional(),
   title: z.string().max(80),
-  version: z.literal(CARD_SPEC_VERSION),
+  version: z
+    .union([z.literal(1), z.literal(CARD_SPEC_VERSION)])
+    .transform(() => CARD_SPEC_VERSION),
   view: CardView,
 });
 

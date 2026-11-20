@@ -12,7 +12,7 @@ import type { HistoryMatch } from "./history-search";
 import type { HistoryState } from "./use-history";
 
 import { historyTarget } from "./history-actions";
-import { useHistorySave } from "./use-history-save";
+import { isSqlRecent, useHistorySave } from "./use-history-save";
 
 export interface HistoryAskActions {
   start: (prompt: string, target: AskTarget) => void;
@@ -108,9 +108,10 @@ export const useHistoryCommands = ({
     clear,
     copyPrompt: () => record && copy(record.prompt, "Copied prompt"),
     copySql: () => record && copy(record.sql, "Copied SQL"),
+    language: record?.dialect ?? null,
     remove,
     runSql: () => {
-      if (record && target?.fallback === null) {
+      if (record && isSqlRecent(record) && target?.fallback === null) {
         ask.startSql(record.sql, target.target);
       }
     },

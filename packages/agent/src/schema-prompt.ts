@@ -94,6 +94,22 @@ export interface SchemaPromptOptions {
   omittedTables?: number;
 }
 
+const finish = (lines: string[], options: SchemaPromptOptions): string => {
+  const omitted = options.omittedTables ?? 0;
+  if (omitted > 0) {
+    lines.push(
+      `(${omitted} more tables were omitted as unrelated to the question.)`
+    );
+  }
+
+  const text = lines.join("\n").trim();
+  if (!options.redact?.enabled) {
+    return text;
+  }
+  return redactPii(text, { customPatterns: options.redact.customPatterns })
+    .text;
+};
+
 export const formatSchemaForPrompt = (
   schema: SchemaInfo,
   dialect: DialectType,
@@ -114,17 +130,73 @@ export const formatSchemaForPrompt = (
     }
   }
 
-  const omitted = options.omittedTables ?? 0;
-  if (omitted > 0) {
-    lines.push(
-      `(${omitted} more tables were omitted as unrelated to the question.)`
-    );
-  }
+  return finish(lines, options);
+};
 
-  const text = lines.join("\n").trim();
-  if (!options.redact?.enabled) {
-    return text;
+const counts = new Intl.NumberFormat("en-US");
+
+const estimate = (rows: number | null, unit: string): string | null =>
+  rows === null
+    ? null
+    : `≈${counts.format(rows)} ${unit}${rows === 1 ? "" : "s"}`;
+
+const describedAs = (name: string, facts: (string | null)[]): string => {
+  const known = facts.filter((fact): fact is string => fact !== null);
+  return known.length > 0 ? `${name} (${known.join(", ")})` : name;
+};
+
+const mongoCollectionLine = (table: TableItem): string => {
+  const head = describedAs(table.name, [estimate(table.rowEstimate, "doc")]);
+  const fields = table.columns.map(
+    (column) => `${column.name} ${column.dataType}`
+  );
+  return fields.length > 0 ? `${head}: ${fields.join(", ")}` : head;
+};
+
+export const formatMongoSchema = (
+  schema: SchemaInfo,
+  options: SchemaPromptOptions = {}
+): string => {
+  const lines = ["Database type: MongoDB", ""];
+  for (const item of schema.schemas) {
+    for (const table of item.tables) {
+      lines.push(mongoCollectionLine(table));
+    }
+    for (const view of item.views) {
+      lines.push(`${view.name} (view)`);
+    }
   }
-  return redactPii(text, { customPatterns: options.redact.customPatterns })
-    .text;
+  return finish(lines, options);
+};
+
+const isRedisValue = (columns: readonly ColumnDetail[]): boolean =>
+  columns.length === 1 && columns[0]?.name === "value";
+
+const redisPatternLine = (table: TableItem): string => {
+  const { columns } = table;
+  const type = isRedisValue(columns) ? columns[0]?.dataType : "hash";
+  const head = describedAs(table.name, [
+    type ?? null,
+    estimate(table.rowEstimate, "key"),
+  ]);
+  if (isRedisValue(columns) || columns.length === 0) {
+    return head;
+  }
+  return `${head}: ${columns.map((column) => column.name).join(", ")}`;
+};
+
+export const formatRedisSchema = (
+  schema: SchemaInfo,
+  options: SchemaPromptOptions = {}
+): string => {
+  const lines = ["Database type: Redis", ""];
+  for (const item of schema.schemas) {
+    for (const table of item.tables) {
+      lines.push(redisPatternLine(table));
+    }
+  }
+  if (lines.length === 2) {
+    lines.push("(No keys were found.)");
+  }
+  return finish(lines, options);
 };

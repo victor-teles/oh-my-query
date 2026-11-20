@@ -1,8 +1,9 @@
+import type { CardResult } from "@conch/rpc";
 import type { RefObject } from "react";
 
 import { useCallback, useEffect, useRef, useState } from "react";
 
-import type { CardResult, CardViewKind } from "@/lib/card-data";
+import type { CardViewKind } from "@/lib/card-data";
 import type { CardSpec } from "@/lib/ipc";
 
 import { FLASH_FOR_MS } from "@/hooks/use-flash-message";

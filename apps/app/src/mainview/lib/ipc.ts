@@ -26,6 +26,7 @@ import type {
   ActiveConnection,
   AiSettingsInput,
   AiTestResult,
+  ApplyImportRequest,
   AskErrorCode,
   AskEvent,
   AskParams,
@@ -34,10 +35,20 @@ import type {
   Board,
   BoardDraft,
   BoardTile,
+  Bundle,
   CardSpec,
   CardView,
   ChartView,
   ColumnFormat,
+  ConnectionPlan,
+  ExportBundleResult,
+  ExportDestination,
+  ExportScope,
+  ImportIssue,
+  ImportPlan,
+  ImportPreview,
+  ImportResult,
+  ImportSource,
   LauncherNavigateView,
   LookupErrorCode,
   LookupEvent,
@@ -59,9 +70,17 @@ import type {
   TileSize,
   TimeGrain,
   UpdateChannel,
+  Watch,
+  WatchCondition,
+  WatchDraft,
+  WatchInterval,
+  WatchState,
+  WatchStatus,
   Widget,
   WidgetDraft,
+  WidgetPlan,
   WidgetRunResult,
+  WidgetTrend,
 } from "@conch/rpc";
 
 import { decodeRpcError } from "@conch/rpc";
@@ -127,9 +146,30 @@ export type {
   TileSize,
   UpdateChannel,
   ViewItem,
+  Watch,
+  WatchCondition,
+  WatchDraft,
+  WatchInterval,
+  WatchState,
+  WatchStatus,
   Widget,
   WidgetDraft,
   WidgetRunResult,
+  WidgetTrend,
+};
+export type {
+  ApplyImportRequest,
+  Bundle,
+  ConnectionPlan,
+  ExportBundleResult,
+  ExportDestination,
+  ExportScope,
+  ImportIssue,
+  ImportPlan,
+  ImportPreview,
+  ImportResult,
+  ImportSource,
+  WidgetPlan,
 };
 
 const IOS_UA_RE = /iPhone|iPad|iPod/i;
@@ -163,6 +203,8 @@ const messageHandlers: {
   launcherToggle: new Set(),
   lookupEvent: new Set(),
   updateProgress: new Set(),
+  watchesChanged: new Set(),
+  widgetSampled: new Set(),
 };
 
 const dispatchMessage = <M extends MessageName>(
@@ -199,6 +241,8 @@ const definedRpc = Electroview.defineRPC<AppRpcSchema>({
       launcherToggle: (payload) => dispatchMessage("launcherToggle", payload),
       lookupEvent: (payload) => dispatchMessage("lookupEvent", payload),
       updateProgress: (payload) => dispatchMessage("updateProgress", payload),
+      watchesChanged: (payload) => dispatchMessage("watchesChanged", payload),
+      widgetSampled: (payload) => dispatchMessage("widgetSampled", payload),
     },
     requests: {},
   },
@@ -312,6 +356,13 @@ export const onBoardChanged = (
 export const onUpdateProgress = (
   handler: (progress: RpcMessages["updateProgress"]) => void
 ): (() => void) => subscribe("updateProgress", handler);
+
+export const onWatchesChanged = (handler: () => void): (() => void) =>
+  subscribe("watchesChanged", handler);
+
+export const onWidgetSampled = (
+  handler: (sampled: RpcMessages["widgetSampled"]) => void
+): (() => void) => subscribe("widgetSampled", handler);
 
 function paramsFor(
   conn: Omit<
@@ -560,3 +611,40 @@ export const toggleLauncher = (fromBoardId: string | null): Promise<void> =>
 
 export const openWidgetInLauncher = (widgetId: string): Promise<void> =>
   callRpc(() => request.openWidgetInLauncher({ widgetId }));
+
+export const exportBundle = (
+  scope: ExportScope,
+  destination: ExportDestination
+): Promise<ExportBundleResult> =>
+  callRpc(() => request.exportBundle({ destination, scope }));
+
+export const previewImport = (source: ImportSource): Promise<ImportPreview> =>
+  callRpc(() => request.previewImport({ source }));
+
+export const applyImport = (input: ApplyImportRequest): Promise<ImportResult> =>
+  callRpc(() => request.applyImport(input));
+export const listWatches = (): Promise<Watch[]> =>
+  callRpc(() => request.listWatches({} as never));
+
+export const saveWatch = (watch: WatchDraft): Promise<Watch> =>
+  callRpc(() => request.saveWatch({ watch }));
+
+export const deleteWatch = (watchId: string): Promise<void> =>
+  callRpc(() => request.deleteWatch({ watchId }));
+
+export const listWatchStatuses = (): Promise<WatchStatus[]> =>
+  callRpc(() => request.listWatchStatuses({} as never));
+
+export const listWidgetTrends = (
+  widgetIds: string[]
+): Promise<Record<string, WidgetTrend>> =>
+  callRpc(() => request.listWidgetTrends({ widgetIds }));
+
+export const acknowledgeAlert = (watchId: string): Promise<void> =>
+  callRpc(() => request.acknowledgeAlert({ watchId }));
+
+export const setWatchingPaused = (paused: boolean): Promise<void> =>
+  callRpc(() => request.setWatchingPaused({ paused }));
+
+export const getWatchingPaused = (): Promise<boolean> =>
+  callRpc(() => request.getWatchingPaused({} as never));

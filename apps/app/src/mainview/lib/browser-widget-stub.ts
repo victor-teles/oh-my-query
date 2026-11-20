@@ -222,7 +222,7 @@ export const createWidgetEmulator = (now: () => Date = () => new Date()) => {
         askedAt: now().toISOString(),
         connectionId: params.connectionId,
         database: params.database,
-        dialect: "postgresql",
+        dialect: recorded.language ?? "postgresql",
         id,
         prompt,
         spec: recorded.spec,

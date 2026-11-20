@@ -1,3 +1,13 @@
+import type { CardResult, FormatContext } from "@conch/rpc";
+
+import {
+  columnValues,
+  formatContextFor,
+  formatFor,
+  isIsoDate,
+  toNumber,
+} from "@conch/rpc";
+
 import type {
   CardSpec,
   CardView,
@@ -7,13 +17,6 @@ import type {
 } from "@/lib/ipc";
 
 type PieView = Extract<CardView, { kind: "pie" }>;
-
-export interface CardResult {
-  columns: ColumnInfo[];
-  rows: unknown[][];
-  rowCount: number;
-  isTruncated: boolean;
-}
 
 export type CardViewKind = "bar" | "line" | "area" | "pie" | "kpi" | "table";
 
@@ -52,10 +55,6 @@ const SERIES_COLORS = [
 
 const NUMERIC_TYPE =
   /int|numeric|decimal|float|double|real|money|number|serial|hugeint/i;
-const ISO_DATE =
-  /^\d{4}-\d{2}-\d{2}(?:[T ][\d:.]+(?:Z|[+-]\d{2}(?::?\d{2})?)?)?$/;
-const MONTH_START =
-  /^\d{4}-\d{2}-01(?:[T ]00:00(?::00(?:\.0+)?)?(?:Z|[+-]00(?::?00)?)?)?$/;
 const ORDERED_NAME = /year|quarter|month|week|day|hour|minute|period|bucket/i;
 
 const VIEW_LABELS: Record<CardViewKind, string> = {
@@ -78,23 +77,7 @@ export const humanize = (name: string): string => {
   return spaced.charAt(0).toUpperCase() + spaced.slice(1);
 };
 
-export const toNumber = (value: unknown): number | null => {
-  if (typeof value === "number") {
-    return Number.isFinite(value) ? value : null;
-  }
-  if (typeof value === "string" && value.trim() !== "") {
-    const parsed = Number(value);
-    return Number.isFinite(parsed) ? parsed : null;
-  }
-  return null;
-};
-
 type ResultRows = Pick<CardResult, "columns" | "rows">;
-
-export const columnValues = (result: ResultRows, name: string): unknown[] => {
-  const index = result.columns.findIndex((column) => column.name === name);
-  return index === -1 ? [] : result.rows.map((row) => row[index]);
-};
 
 const present = (values: readonly unknown[]): unknown[] =>
   values.filter((value) => value !== null && value !== undefined);
@@ -112,207 +95,10 @@ const kindOf = (column: ColumnInfo, values: readonly unknown[]): ColumnKind => {
   if (numericType && known.every((value) => toNumber(value) !== null)) {
     return "numeric";
   }
-  const temporal = known.every(
-    (value) => typeof value === "string" && ISO_DATE.test(value)
-  );
-  return temporal ? "temporal" : "text";
-};
-
-const isMonthly = (values: readonly unknown[]): boolean =>
-  present(values).every(
-    (value) => typeof value === "string" && MONTH_START.test(value)
-  );
-
-export const formatFor = (
-  spec: Pick<CardSpec, "formats">,
-  name: string,
-  values: readonly unknown[]
-): ColumnFormat | undefined => {
-  const declared = spec.formats[name];
-  if (declared) {
-    return declared;
-  }
-  const known = present(values);
-  const temporal =
-    known.length > 0 &&
-    known.every((value) => typeof value === "string" && ISO_DATE.test(value));
-  if (!temporal) {
-    return undefined;
-  }
-  return { kind: isMonthly(values) ? "month" : "date" };
-};
-
-export interface FormatContext {
-  percentScale: 1 | 100;
-}
-
-const DEFAULT_CONTEXT: FormatContext = { percentScale: 1 };
-
-export const formatContextFor = (values: readonly unknown[]): FormatContext => {
-  const numbers = present(values)
-    .map(toNumber)
-    .filter((value): value is number => value !== null);
-  const fractions =
-    numbers.length > 0 && numbers.every((value) => Math.abs(value) <= 1);
-  return { percentScale: fractions ? 100 : 1 };
-};
-
-const UNITS: [number, string][] = [
-  [1e12, "T"],
-  [1e9, "B"],
-  [1e6, "M"],
-  [1e3, "k"],
-];
-
-const compact = (value: number): string => {
-  const magnitude = Math.abs(value);
-  for (const [size, suffix] of UNITS) {
-    if (magnitude >= size) {
-      const scaled = value / size;
-      const digits = Math.abs(scaled) < 100 ? 1 : 0;
-      return `${Number(scaled.toFixed(digits))}${suffix}`;
-    }
-  }
-  return plainNumber(value, 2);
-};
-
-const plainNumber = (value: number, maxDigits: number): string =>
-  new Intl.NumberFormat("en-US", { maximumFractionDigits: maxDigits }).format(
-    value
-  );
-
-const currencySymbol = (code: string): string => {
-  try {
-    const parts = new Intl.NumberFormat("en-US", {
-      currency: code,
-      currencyDisplay: "narrowSymbol",
-      style: "currency",
-    }).formatToParts(0);
-    return parts.find((part) => part.type === "currency")?.value ?? `${code} `;
-  } catch {
-    return `${code} `;
-  }
-};
-
-const COMPACT_CURRENCY_FROM = 10_000;
-
-const currency = (value: number, code: string, forceCompact: boolean) => {
-  const symbol = currencySymbol(code);
-  const sign = value < 0 ? "-" : "";
-  const magnitude = Math.abs(value);
-  const body =
-    forceCompact || magnitude >= COMPACT_CURRENCY_FROM
-      ? compact(magnitude)
-      : plainNumber(magnitude, 2);
-  return `${sign}${symbol}${body}`;
-};
-
-const MONTH = new Intl.DateTimeFormat("en-US", {
-  month: "short",
-  timeZone: "UTC",
-});
-const MONTH_YEAR = new Intl.DateTimeFormat("en-US", {
-  month: "short",
-  timeZone: "UTC",
-  year: "numeric",
-});
-const DAY = new Intl.DateTimeFormat("en-US", {
-  day: "numeric",
-  month: "short",
-  timeZone: "UTC",
-});
-const DAY_YEAR = new Intl.DateTimeFormat("en-US", {
-  day: "numeric",
-  month: "short",
-  timeZone: "UTC",
-  year: "numeric",
-});
-
-const asDate = (value: unknown): Date | null => {
-  if (typeof value !== "string" && typeof value !== "number") {
-    return null;
-  }
-  const date = new Date(value);
-  return Number.isNaN(date.getTime()) ? null : date;
+  return known.every(isIsoDate) ? "temporal" : "text";
 };
 
 const EMPTY = "—";
-
-const formatNumeric = (
-  value: number,
-  format: ColumnFormat | undefined,
-  context: FormatContext,
-  tick: boolean
-): string => {
-  switch (format?.kind) {
-    case "currency": {
-      return currency(value, format.currency ?? "USD", tick);
-    }
-    case "percent": {
-      const percent = value * context.percentScale;
-      return `${plainNumber(percent, tick ? 0 : 1)}%`;
-    }
-    case "integer": {
-      return tick ? compact(value) : plainNumber(Math.round(value), 0);
-    }
-    case "compact": {
-      return compact(value);
-    }
-    default: {
-      return tick ? compact(value) : plainNumber(value, 2);
-    }
-  }
-};
-
-const formatTemporal = (
-  value: unknown,
-  kind: "date" | "month",
-  tick: boolean
-): string => {
-  const date = asDate(value);
-  if (!date) {
-    return String(value);
-  }
-  if (kind === "month") {
-    return (tick ? MONTH : MONTH_YEAR).format(date);
-  }
-  return (tick ? DAY : DAY_YEAR).format(date);
-};
-
-const format = (
-  value: unknown,
-  columnFormat: ColumnFormat | undefined,
-  context: FormatContext,
-  tick: boolean
-): string => {
-  if (value === null || value === undefined || value === "") {
-    return EMPTY;
-  }
-  const kind = columnFormat?.kind;
-  if (kind === "date" || kind === "month") {
-    return formatTemporal(value, kind, tick);
-  }
-  if (kind === "text") {
-    return String(value);
-  }
-  const number = toNumber(value);
-  if (number === null || typeof value === "boolean") {
-    return String(value);
-  }
-  return formatNumeric(number, columnFormat, context, tick);
-};
-
-export const formatValue = (
-  value: unknown,
-  columnFormat?: ColumnFormat,
-  context: FormatContext = DEFAULT_CONTEXT
-): string => format(value, columnFormat, context, false);
-
-export const formatTick = (
-  value: unknown,
-  columnFormat?: ColumnFormat,
-  context: FormatContext = DEFAULT_CONTEXT
-): string => format(value, columnFormat, context, true);
 
 export const isNumericColumn = (result: ResultRows, name: string): boolean => {
   const column = result.columns.find((item) => item.name === name);

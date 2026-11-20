@@ -1,14 +1,16 @@
-import type { CardResult } from "@/lib/card-data";
-import type { CardSpec, CardView } from "@/lib/ipc";
+import type { CardResult } from "@conch/rpc";
 
 import {
   columnValues,
   formatContextFor,
   formatFor,
   formatValue,
-  humanize,
   toNumber,
-} from "@/lib/card-data";
+} from "@conch/rpc";
+
+import type { CardSpec, CardView } from "@/lib/ipc";
+
+import { humanize } from "@/lib/card-data";
 import { cn } from "@/lib/utils";
 
 type KpiView = Extract<CardView, { kind: "kpi" }>;

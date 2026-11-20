@@ -12,6 +12,8 @@ import {
 } from "@conch/core/client";
 import { z } from "zod";
 
+import type { WidgetTrend } from "./watch.ts";
+
 import { CardSpec } from "./card-spec.ts";
 
 export const MAX_WIDGET_PARAMS = 6;
@@ -41,6 +43,7 @@ export const DIALECTS = [
   "oracle",
 ] as const satisfies readonly DialectType[];
 export const Dialect = z.enum(DIALECTS);
+export const QueryLanguageSchema = z.enum([...DIALECTS, "mongodb", "redis"]);
 
 export const CARD_VIEW_KINDS = [
   "bar",
@@ -273,7 +276,7 @@ export const RecentAsk = z.object({
   askedAt: z.string(),
   connectionId: z.string(),
   database: z.string().nullable(),
-  dialect: Dialect,
+  dialect: QueryLanguageSchema,
   id: z.string(),
   prompt: z.string(),
   spec: CardSpec,
@@ -301,4 +304,5 @@ export interface WidgetRunResult {
   result: TabularResult;
   compiledSql: string;
   values: ParamValues;
+  trend?: WidgetTrend | null;
 }

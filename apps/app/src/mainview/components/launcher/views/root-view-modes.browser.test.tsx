@@ -50,9 +50,11 @@ function Harness({ initialQuery, startSql }: HarnessProps) {
           newBoard: vi.fn(),
           openBoard: vi.fn(),
           openHistory: vi.fn(),
+          openImport: vi.fn(),
           openSettings: vi.fn(),
           renameBoard: vi.fn(),
           runWidget: vi.fn(),
+          watchWidget: vi.fn(),
         }}
         onQueryChange={setQuery}
         query={query}

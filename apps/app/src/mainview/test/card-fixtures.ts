@@ -1,4 +1,7 @@
-import type { CardResult } from "@/lib/card-data";
+import type { CardResult } from "@conch/rpc";
+
+import { CARD_SPEC_VERSION } from "@conch/rpc";
+
 import type { CardSpec } from "@/lib/ipc";
 
 import { askStateAfter, REVENUE, SIGNUPS } from "@/test/ask-fixtures";
@@ -30,7 +33,7 @@ export const kpi: { spec: CardSpec; result: CardResult } = {
       total_mrr: { currency: "USD", kind: "currency" },
     },
     title: "Total MRR",
-    version: 1,
+    version: CARD_SPEC_VERSION,
     view: {
       delta: "change_pct",
       kind: "kpi",

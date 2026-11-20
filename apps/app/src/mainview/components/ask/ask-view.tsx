@@ -20,6 +20,7 @@ import { useCopyFeedback } from "@/hooks/use-copy-feedback";
 import { useMotionPreset } from "@/lib/motion";
 
 import type { ErrorAction } from "./ask-error";
+import type { SaveAvailability } from "./ask-footer-hints";
 import type { AskSession } from "./use-ask";
 
 import {
@@ -27,7 +28,7 @@ import {
   askCardSlots,
   askOverlayHeight,
 } from "./ask-actions-layer";
-import { answeredOf, viewsOf } from "./ask-answer";
+import { answeredOf, saveUnavailableOf, viewsOf } from "./ask-answer";
 import { AskBody } from "./ask-body";
 import { askFooterHints, chainHintOf } from "./ask-footer-hints";
 import { askAnnouncement, headerSegments, statusLabel } from "./ask-labels";
@@ -36,6 +37,7 @@ import { AskSqlSection, blockStateOf } from "./ask-sql-section";
 import { trailOf } from "./ask-trail";
 import { AssumptionsLine } from "./assumptions-line";
 import { DrillProvider } from "./drill-context";
+import { queryKindOf } from "./query-kind";
 import { QuestionTrail } from "./question-trail";
 import { RefineOverlay } from "./refine-overlay";
 import { useAskActionsMenu } from "./use-ask-actions-menu";
@@ -46,6 +48,16 @@ import { bodyKeyOf, usePhaseDisplay } from "./use-phase-display";
 import { useRefineInput } from "./use-refine-input";
 
 const NAME_LABELS = { board: "Name the widget to add", save: "Widget name" };
+
+const saveAvailabilityOf = (
+  canSave: boolean,
+  unavailable: boolean
+): SaveAvailability => {
+  if (canSave) {
+    return "available";
+  }
+  return unavailable ? "unavailable" : "none";
+};
 const CHIP = <ActiveConnectionChip />;
 const STATUS = <ConnectionStatus />;
 
@@ -78,10 +90,12 @@ export function AskView({
     () => (busy ? null : answeredOf(state, activeConnection?.id)),
     [activeConnection?.id, busy, state]
   );
+  const unavailable = !busy && saveUnavailableOf(state);
   const saving = useAskSave({
     answered,
     onReviewInputs,
     onSavedForBoard: onAddToBoard,
+    unavailable,
   });
   const { phase } = saving;
   const field = useAskInputFocus(inputRef, saving);
@@ -136,6 +150,8 @@ export function AskView({
   const handleReveal = menu.exporter.reveal;
   const idle = phase.kind === "idle" || phase.kind === "naming";
   const turn = shownTurn(state);
+  const kind = queryKindOf(state.dialect, activeConnection?.type);
+  const save = saveAvailabilityOf(answered !== null, unavailable);
 
   return (
     <div className="flex min-h-0 flex-col" onKeyDown={handleKeyDown}>
@@ -166,12 +182,14 @@ export function AskView({
         />
         <AskSqlSection
           copied={copied}
+          kind={kind}
           onCopy={copySql}
           onToggle={toggleSql}
           segments={headerSegments(
             state,
             activeConnection ? databaseTypeLabel(activeConnection.type) : "SQL",
-            name
+            name,
+            kind
           )}
           state={state}
         />
@@ -206,7 +224,7 @@ export function AskView({
                 <AskBody
                   card={card}
                   kind={body}
-                  label={statusLabel(state, name)}
+                  label={statusLabel(state, name, kind)}
                   onErrorAction={handleErrorAction}
                   onSelectView={selectView}
                   state={state}
@@ -224,10 +242,10 @@ export function AskView({
         actionLabel={input.actionLabel}
         hints={askFooterHints({
           busy,
-          canSave: answered !== null,
           chain: chainHintOf(state),
           hasSql: state.sql !== "",
           reporting: menu.exporter.status !== null,
+          save,
         })}
         status={
           <ResultStatus

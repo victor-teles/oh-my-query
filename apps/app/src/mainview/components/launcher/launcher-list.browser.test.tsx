@@ -9,8 +9,10 @@ import { rootCommands } from "./root-commands";
 const commands = rootCommands({
   addConnection: vi.fn(),
   dismiss: vi.fn(),
+  exportAll: vi.fn(),
   newBoard: vi.fn(),
   openHistory: vi.fn(),
+  openImport: vi.fn(),
   openSettings: vi.fn(),
 });
 
@@ -41,7 +43,7 @@ describe("launcher list", () => {
     await expect
       .element(screen.getByRole("group", { name: "Commands" }))
       .toBeVisible();
-    expect(screen.getByRole("option").all()).toHaveLength(5);
+    expect(screen.getByRole("option").all()).toHaveLength(7);
     expect(screen.getByRole("option", { name: /Settings/ }).element().id).toBe(
       optionId("settings")
     );

@@ -86,6 +86,7 @@ export type {
   ExecuteResult,
   ForeignKeyItem,
   IndexItem,
+  QueryLanguage,
   QueryParams,
   QueryResult,
   RedisDbInfo,
@@ -100,3 +101,31 @@ export type {
   TestConnectionResult,
   ViewItem,
 } from "./types.ts";
+export { isSqlDialect } from "./types.ts";
+export { flattenRecords } from "./flatten.ts";
+export type { FlattenOptions } from "./flatten.ts";
+export {
+  MONGO_MAX_QUERY_BYTES,
+  MONGO_MAX_STAGES,
+  MONGO_READ_STAGES,
+  parseMongoReadQuery,
+} from "./mongo-read-query.ts";
+export type {
+  MongoReadQuery,
+  MongoReadQueryParse,
+} from "./mongo-read-query.ts";
+export {
+  parseRedisReadPlan,
+  REDIS_MAX_ARG_LENGTH,
+  REDIS_MAX_ARGS,
+  REDIS_MAX_COMMANDS,
+  REDIS_MAX_RANGE,
+  REDIS_READ_COMMANDS,
+  redisCommandShape,
+} from "./redis-read-plan.ts";
+export type {
+  RedisCommandShape,
+  RedisReadCommand,
+  RedisReadPlan,
+  RedisReadPlanParse,
+} from "./redis-read-plan.ts";

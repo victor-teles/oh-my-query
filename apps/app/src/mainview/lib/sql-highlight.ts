@@ -78,9 +78,9 @@ export const tokenizeSql = (sql: string): Token[] => {
   return tokens;
 };
 
-export const highlightLines = (sql: string): Token[][] => {
+export const splitLines = (tokens: readonly Token[]): Token[][] => {
   const lines: Token[][] = [[]];
-  for (const token of tokenizeSql(sql)) {
+  for (const token of tokens) {
     const parts = token.text.split("\n");
     for (const [index, text] of parts.entries()) {
       if (index > 0) {
@@ -93,6 +93,9 @@ export const highlightLines = (sql: string): Token[][] => {
   }
   return lines;
 };
+
+export const highlightLines = (sql: string): Token[][] =>
+  splitLines(tokenizeSql(sql));
 
 export const SQL_TOKEN_CLASSES: Record<TokenKind, string> = {
   comment: "text-panel-muted italic",

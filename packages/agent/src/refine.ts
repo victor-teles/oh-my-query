@@ -1,7 +1,7 @@
 import type { CardSpec, RefineContext } from "@conch/rpc";
 import type { ModelMessage } from "ai";
 
-import { refineInstruction } from "./prompts.ts";
+import type { QueryEngine } from "./query-engine.ts";
 
 const viewLabel = (spec: CardSpec): string =>
   spec.view.kind === "chart" ? `${spec.view.mark} chart` : spec.view.kind;
@@ -13,12 +13,13 @@ const conversationOf = (turns: readonly string[]): string => {
 
 export const refineMessages = (
   refine: RefineContext,
-  prompt: string
+  prompt: string,
+  engine: Pick<QueryEngine, "refineInstruction">
 ): ModelMessage[] => [
   { content: conversationOf(refine.turns), role: "user" },
   { content: refine.sql, role: "assistant" },
   {
-    content: refineInstruction(prompt, {
+    content: engine.refineInstruction(prompt, {
       title: refine.spec.title,
       view: viewLabel(refine.spec),
     }),

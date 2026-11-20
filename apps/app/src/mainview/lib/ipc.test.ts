@@ -1,8 +1,17 @@
 import { describe, expect, it, vi } from "vitest";
 
-import type { AskEvent } from "@/lib/ipc";
+import type { AskEvent, Bundle, ImportPreview } from "@/lib/ipc";
 
+import { makeConnection } from "@/test/connection-fixture";
 import { emitIpcMessage, mockIpc } from "@/test/ipc-mock";
+import { makeWidget } from "@/test/widget-fixtures";
+
+const readyBundle = (preview: ImportPreview): Bundle => {
+  if (preview.status !== "ready") {
+    throw new Error(`expected a ready preview, got ${preview.status}`);
+  }
+  return preview.bundle;
+};
 
 const flushAsync = async (): Promise<void> => {
   await Promise.resolve();
@@ -273,6 +282,37 @@ describe("browser-mode IPC stub", () => {
     expect(events.at(-1)).toMatchObject({ code: "CANCELLED", type: "error" });
     expect(events.some((event) => event.type === "done")).toBeFalsy();
     vi.useRealTimers();
+    restore();
+  });
+
+  it("exports to an in-memory clipboard and imports from it", async () => {
+    const { restore } = await enterBrowserMode();
+    const ipc = await import("@/lib/ipc");
+    await ipc.saveConnections([
+      makeConnection({ id: "pg", name: "analytics" }),
+    ]);
+    await ipc.saveWidget({
+      ...makeWidget({ connectionId: "pg" }),
+      id: undefined,
+    });
+
+    await expect(
+      ipc.exportBundle({ kind: "all" }, "clipboard")
+    ).resolves.toMatchObject({
+      boards: 0,
+      widgets: 1,
+    });
+    const bundle = readyBundle(await ipc.previewImport("clipboard"));
+    await expect(
+      ipc.applyImport({
+        boards: true,
+        bundle,
+        connectionMap: { c1: "pg" },
+        skipWidgetRefs: [],
+      })
+    ).resolves.toMatchObject({ widgets: 1 });
+    await expect(ipc.listWidgets()).resolves.toHaveLength(2);
+
     restore();
   });
 
