@@ -4,7 +4,7 @@ import type {
   CardSpec,
   RpcSchema,
   RunSqlParams,
-} from "@oh-my-query/rpc";
+} from "@conch/rpc";
 
 import type { RecordedAsk } from "@/lib/browser-ask-recordings";
 

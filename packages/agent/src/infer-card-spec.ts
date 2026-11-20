@@ -1,6 +1,6 @@
-import type { CardSpec, CardView, ColumnFormat } from "@oh-my-query/rpc";
+import type { CardSpec, CardView, ColumnFormat } from "@conch/rpc";
 
-import { CARD_SPEC_VERSION } from "@oh-my-query/rpc";
+import { CARD_SPEC_VERSION } from "@conch/rpc";
 
 import type { ColumnStats, TabularData } from "./column-stats.ts";
 

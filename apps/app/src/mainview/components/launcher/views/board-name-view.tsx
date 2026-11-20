@@ -1,6 +1,6 @@
 import type { ChangeEvent, KeyboardEvent } from "react";
 
-import { draftOf, emptyBoard } from "@oh-my-query/rpc";
+import { draftOf, emptyBoard } from "@conch/rpc";
 import { useCallback, useState } from "react";
 
 import { LauncherFooter } from "@/components/launcher/launcher-footer";

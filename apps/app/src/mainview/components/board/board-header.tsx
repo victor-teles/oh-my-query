@@ -1,6 +1,6 @@
 import type { ChangeEvent, KeyboardEvent } from "react";
 
-import { REFRESH_INTERVALS, RefreshInterval } from "@oh-my-query/rpc";
+import { REFRESH_INTERVALS, RefreshInterval } from "@conch/rpc";
 import { PencilRulerIcon, RotateCwIcon } from "lucide-react";
 import { useCallback, useState } from "react";
 

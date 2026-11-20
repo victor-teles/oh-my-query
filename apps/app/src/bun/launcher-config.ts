@@ -1,10 +1,7 @@
-import type { ActiveConnection } from "@oh-my-query/rpc";
+import type { ActiveConnection } from "@conch/rpc";
 
-import { getConfig, saveConfig } from "@oh-my-query/core";
-import {
-  DEFAULT_CLIPBOARD_LOOKUPS,
-  DEFAULT_LAUNCHER_HOTKEY,
-} from "@oh-my-query/rpc";
+import { getConfig, saveConfig } from "@conch/core";
+import { DEFAULT_CLIPBOARD_LOOKUPS, DEFAULT_LAUNCHER_HOTKEY } from "@conch/rpc";
 import { z } from "zod";
 
 export const readLauncherHotkey = async (): Promise<string> => {

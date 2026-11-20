@@ -1,4 +1,4 @@
-import type { ColumnDetail, SchemaInfo, TableItem } from "@oh-my-query/core";
+import type { ColumnDetail, SchemaInfo, TableItem } from "@conch/core";
 
 export const PREFILTER_THRESHOLD = 150;
 export const RELEVANT_TABLES = 40;

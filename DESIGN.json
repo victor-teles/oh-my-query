@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2026-04-23T00:00:00Z",
-  "title": "Design System: oh-my-query",
+  "title": "Design System: Conch",
   "extensions": {
     "colorMeta": {
       "amber-primary": {
@@ -315,7 +315,7 @@
   ],
   "narrative": {
     "northStar": "The Amber Workshop",
-    "overview": "oh-my-query is a dark-first, keyboard-first database IDE built for developers who sit inside it for three-hour debugging sessions. The system feels like an evening workshop: warm amber under the task light, quiet neutrals everywhere else, tools that earn their place on the bench. Surfaces are flat and tonally layered — the kind of native-calm you feel in TablePlus, Postico, Things 3, Linear, and Arc. Vibrancy is real and physical, not decorative. Typography is tight and functional; density is the point, but every group breathes.\n\nThe amber accent is structural, not ornamental. It exists because long sessions need a single warm heartbeat to anchor trust — not because dark mode needs 'pop'. The Dynamic Island in the titlebar is the signature moment: a living status surface where connection health, query progress, and errors converge into one pill that users screenshot.\n\nThis system explicitly rejects: bureaucratic grey admin panels (DBeaver, phpMyAdmin, pgAdmin), the generic AI-tool aesthetic (purple/cyan gradients, neon on dark, sparkle icons, '✨ AI-powered' marketing voice), and the chatbot-drawer-bolted-onto-an-IDE pattern. It also rejects ambient typography choices that every other developer tool already made (Inter, IBM Plex, Space Grotesk, Fraunces, Instrument Sans).",
+    "overview": "Conch is a dark-first, keyboard-first database IDE built for developers who sit inside it for three-hour debugging sessions. The system feels like an evening workshop: warm amber under the task light, quiet neutrals everywhere else, tools that earn their place on the bench. Surfaces are flat and tonally layered — the kind of native-calm you feel in TablePlus, Postico, Things 3, Linear, and Arc. Vibrancy is real and physical, not decorative. Typography is tight and functional; density is the point, but every group breathes.\n\nThe amber accent is structural, not ornamental. It exists because long sessions need a single warm heartbeat to anchor trust — not because dark mode needs 'pop'. The Dynamic Island in the titlebar is the signature moment: a living status surface where connection health, query progress, and errors converge into one pill that users screenshot.\n\nThis system explicitly rejects: bureaucratic grey admin panels (DBeaver, phpMyAdmin, pgAdmin), the generic AI-tool aesthetic (purple/cyan gradients, neon on dark, sparkle icons, '✨ AI-powered' marketing voice), and the chatbot-drawer-bolted-onto-an-IDE pattern. It also rejects ambient typography choices that every other developer tool already made (Inter, IBM Plex, Space Grotesk, Fraunces, Instrument Sans).",
     "keyCharacteristics": [
       "Dark-first hero surface; light mode exists but is secondary",
       "Warm neutrals throughout — every grey tints toward 34–48° hue",

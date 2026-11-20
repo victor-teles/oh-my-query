@@ -3,7 +3,7 @@ import type {
   ForeignKeyItem,
   SchemaInfo,
   TableItem,
-} from "@oh-my-query/core";
+} from "@conch/core";
 
 export const column = (name: string, dataType = "text"): ColumnDetail => ({
   dataType,

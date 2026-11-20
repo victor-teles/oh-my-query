@@ -1,6 +1,6 @@
-import type { DialectType } from "@oh-my-query/core/client";
+import type { DialectType } from "@conch/core/client";
 
-import { MAX_ASK_TURNS } from "@oh-my-query/rpc";
+import { MAX_ASK_TURNS } from "@conch/rpc";
 
 import type { CardResult, CardViewKind } from "@/lib/card-data";
 import type {

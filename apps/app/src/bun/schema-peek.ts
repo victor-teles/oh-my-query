@@ -1,7 +1,7 @@
-import type { ConnectionPoolManager } from "@oh-my-query/drivers";
-import type { SchemaPeek } from "@oh-my-query/rpc";
+import type { ConnectionPoolManager } from "@conch/drivers";
+import type { SchemaPeek } from "@conch/rpc";
 
-import { DbError } from "@oh-my-query/core";
+import { DbError } from "@conch/core";
 import { z } from "zod";
 
 import type { SchemaCache } from "./schema-cache.ts";

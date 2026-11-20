@@ -1,5 +1,5 @@
-import type { SchemaInfo, TabularResult } from "@oh-my-query/core";
-import type { AskEvent, RefineContext } from "@oh-my-query/rpc";
+import type { SchemaInfo, TabularResult } from "@conch/core";
+import type { AskEvent, RefineContext } from "@conch/rpc";
 
 import { simulateReadableStream } from "ai";
 import { MockLanguageModelV3 } from "ai/test";

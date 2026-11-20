@@ -1,4 +1,4 @@
-import { chainPrompt } from "@oh-my-query/rpc";
+import { chainPrompt } from "@conch/rpc";
 
 import type { RefineContext } from "@/lib/ipc";
 

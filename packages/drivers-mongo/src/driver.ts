@@ -3,7 +3,7 @@ import type {
   Driver,
   Pool,
   TestConnectionResult,
-} from "@oh-my-query/core";
+} from "@conch/core";
 import type { MongoClientOptions } from "mongodb";
 
 import { MongoClient } from "mongodb";

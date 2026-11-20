@@ -21,7 +21,7 @@ import type {
   TabularResult,
   TestConnectionResult,
   ViewItem,
-} from "@oh-my-query/core/client";
+} from "@conch/core/client";
 import type {
   ActiveConnection,
   AiSettingsInput,
@@ -62,9 +62,9 @@ import type {
   Widget,
   WidgetDraft,
   WidgetRunResult,
-} from "@oh-my-query/rpc";
+} from "@conch/rpc";
 
-import { decodeRpcError } from "@oh-my-query/rpc";
+import { decodeRpcError } from "@conch/rpc";
 import { Electroview } from "electrobun/view";
 
 import { createBrowserIpcStub } from "@/lib/browser-ipc-stub";

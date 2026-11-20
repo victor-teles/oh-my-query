@@ -1,6 +1,6 @@
 import type { ChangeEvent, FormEvent } from "react";
 
-import { AI_PROVIDER_INFO } from "@oh-my-query/rpc";
+import { AI_PROVIDER_INFO } from "@conch/rpc";
 import { RotateCwIcon } from "lucide-react";
 import { useCallback } from "react";
 

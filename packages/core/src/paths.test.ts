@@ -22,12 +22,12 @@ const {
   updateChannelPath,
 } = await import("./paths.ts");
 
-const ROOT = "/fake/home/.config/oh-my-query";
+const ROOT = "/fake/home/.config/conch";
 
 describe("paths", () => {
   it.each([
     ["appDir", () => appDir(), ROOT],
-    ["configPath", () => configPath(), `${ROOT}/oh-my-query.json`],
+    ["configPath", () => configPath(), `${ROOT}/conch.json`],
     ["connectionsPath", () => connectionsPath(), `${ROOT}/connections.json`],
     ["keyPath", () => keyPath(), `${ROOT}/.key`],
     ["historyDir", () => historyDir(), `${ROOT}/history`],

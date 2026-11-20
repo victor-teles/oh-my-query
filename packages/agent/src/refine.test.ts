@@ -1,4 +1,4 @@
-import type { RefineContext } from "@oh-my-query/rpc";
+import type { RefineContext } from "@conch/rpc";
 
 import { describe, expect, it } from "vitest";
 

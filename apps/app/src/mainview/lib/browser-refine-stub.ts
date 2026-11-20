@@ -1,4 +1,4 @@
-import type { RefineContext, SqlAssumptions } from "@oh-my-query/rpc";
+import type { RefineContext, SqlAssumptions } from "@conch/rpc";
 
 import type { RecordedAsk } from "@/lib/browser-ask-recordings";
 

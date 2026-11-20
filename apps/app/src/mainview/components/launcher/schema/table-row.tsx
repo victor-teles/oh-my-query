@@ -1,4 +1,4 @@
-import type { TableItem } from "@oh-my-query/core/client";
+import type { TableItem } from "@conch/core/client";
 
 import { TableIcon } from "lucide-react";
 

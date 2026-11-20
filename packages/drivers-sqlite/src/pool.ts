@@ -12,10 +12,10 @@ import type {
   SchemaInfo,
   TableItem,
   ViewItem,
-} from "@oh-my-query/core";
+} from "@conch/core";
 import type { Database, Statement } from "bun:sqlite";
 
-import { DbError, validateSchemaName } from "@oh-my-query/core";
+import { DbError, validateSchemaName } from "@conch/core";
 
 const POOL_CLOSED = new DbError("POOL_CLOSED", "SQLite pool is closed");
 

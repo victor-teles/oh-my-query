@@ -1,5 +1,5 @@
 {
-  "name": "oh-my-query",
+  "name": "conch",
   "private": true,
   "workspaces": {
     "packages": [
@@ -31,12 +31,12 @@
     "test:watch": "turbo test:watch"
   },
   "dependencies": {
-    "@oh-my-query/env": "workspace:*",
+    "@conch/env": "workspace:*",
     "dotenv": "catalog:",
     "zod": "catalog:"
   },
   "devDependencies": {
-    "@oh-my-query/config": "workspace:*",
+    "@conch/config": "workspace:*",
     "@typescript/native-preview": "catalog:",
     "lefthook": "^2.1.6",
     "oxfmt": "latest",

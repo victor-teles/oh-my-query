@@ -1,7 +1,7 @@
-import type { ConnectionParams } from "@oh-my-query/core";
+import type { ConnectionParams } from "@conch/core";
 import type * as Mssql from "mssql";
 
-import { DbError } from "@oh-my-query/core";
+import { DbError } from "@conch/core";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 const ConnectionPoolMock = vi.hoisted(() => vi.fn());

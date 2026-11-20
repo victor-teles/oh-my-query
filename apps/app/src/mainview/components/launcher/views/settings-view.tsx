@@ -10,7 +10,7 @@ import { SettingsGroup } from "./settings/settings-group";
 import { ThemeControl } from "./settings/theme-control";
 
 const BACK_KEYS = ["esc"] as const;
-const STATUS = <span>oh-my-query</span>;
+const STATUS = <span>Conch</span>;
 
 interface SettingsViewProps {
   onBack: () => void;

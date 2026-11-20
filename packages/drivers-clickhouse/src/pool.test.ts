@@ -1,6 +1,6 @@
 import type { ClickHouseClient } from "@clickhouse/client";
 
-import { DbError } from "@oh-my-query/core";
+import { DbError } from "@conch/core";
 import { describe, expect, it, vi } from "vitest";
 
 import { ClickhousePool } from "./pool.ts";

@@ -1,5 +1,5 @@
 ---
-name: oh-my-query
+name: Conch
 description: Warm, native-calm database IDE — dark-first with an amber heartbeat.
 colors:
   amber-primary: "oklch(0.9247 0.0524 66.1732)"
@@ -143,13 +143,13 @@ components:
     height: "24px"
 ---
 
-# Design System: oh-my-query
+# Design System: Conch
 
 ## 1. Overview
 
 **Creative North Star: "The Amber Workshop"**
 
-oh-my-query is a dark-first, keyboard-first database IDE built for developers who sit inside it for three-hour debugging sessions. The system feels like an evening workshop: warm amber under the task light, quiet neutrals everywhere else, tools that earn their place on the bench. Surfaces are flat and tonally layered — the kind of native-calm you feel in TablePlus, Postico, Things 3, Linear, and Arc. Vibrancy is real and physical, not decorative. Typography is tight and functional; density is the point, but every group breathes.
+Conch is a dark-first, keyboard-first database IDE built for developers who sit inside it for three-hour debugging sessions. The system feels like an evening workshop: warm amber under the task light, quiet neutrals everywhere else, tools that earn their place on the bench. Surfaces are flat and tonally layered — the kind of native-calm you feel in TablePlus, Postico, Things 3, Linear, and Arc. Vibrancy is real and physical, not decorative. Typography is tight and functional; density is the point, but every group breathes.
 
 The amber accent is structural, not ornamental. It exists because long sessions need a single warm heartbeat to anchor trust — not because dark mode needs "pop". The Dynamic Island in the titlebar is the signature moment: a living status surface where connection health, query progress, and errors converge into one pill that users screenshot.
 

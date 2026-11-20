@@ -3,10 +3,10 @@ import type {
   DatabaseConnection,
   Pool,
   TabularResult,
-} from "@oh-my-query/core";
-import type { ConnectionPoolManager } from "@oh-my-query/drivers";
+} from "@conch/core";
+import type { ConnectionPoolManager } from "@conch/drivers";
 
-import { DbError, getConnections } from "@oh-my-query/core";
+import { DbError, getConnections } from "@conch/core";
 
 export const UNSUPPORTED_ENGINE_MESSAGE =
   "Asking questions works with SQL databases for now.";

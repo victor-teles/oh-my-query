@@ -1,4 +1,4 @@
-import type { RedactedAiSettings } from "@oh-my-query/rpc";
+import type { RedactedAiSettings } from "@conch/rpc";
 
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { render } from "vitest-browser-react";

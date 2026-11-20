@@ -1,6 +1,6 @@
-import type { LookupValue } from "@oh-my-query/core";
+import type { LookupValue } from "@conch/core";
 
-import { classifyLookupValue, MAX_LOOKUP_INPUT } from "@oh-my-query/core";
+import { classifyLookupValue, MAX_LOOKUP_INPUT } from "@conch/core";
 
 export interface ClipboardSource {
   enabled(): boolean;

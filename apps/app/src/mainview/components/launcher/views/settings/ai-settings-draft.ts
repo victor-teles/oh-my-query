@@ -2,9 +2,9 @@ import type {
   AiProvider,
   AiSettingsInput,
   RedactedAiSettings,
-} from "@oh-my-query/rpc";
+} from "@conch/rpc";
 
-import { AI_PROVIDER_INFO } from "@oh-my-query/rpc";
+import { AI_PROVIDER_INFO } from "@conch/rpc";
 
 export interface AiDraft {
   provider: AiProvider;

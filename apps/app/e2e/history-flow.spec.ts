@@ -21,16 +21,13 @@ const seedDemoWorkspace = async (page: Page) => {
       type: "postgresql",
       username: "postgres",
     };
+    localStorage.setItem("conch-connections", JSON.stringify([connection]));
     localStorage.setItem(
-      "oh-my-query-connections",
-      JSON.stringify([connection])
-    );
-    localStorage.setItem(
-      "oh-my-query-active-connection",
+      "conch-active-connection",
       JSON.stringify({ connectionId: "analytics", database: null })
     );
     localStorage.setItem(
-      "oh-my-query-ai-settings",
+      "conch-ai-settings",
       JSON.stringify({
         baseUrl: null,
         hasKey: true,

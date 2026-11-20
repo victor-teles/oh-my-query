@@ -1,4 +1,4 @@
-import type { CardSpec, CardView } from "@oh-my-query/rpc";
+import type { CardSpec, CardView } from "@conch/rpc";
 
 import type { ColumnStats } from "./column-stats.ts";
 

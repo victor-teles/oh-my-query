@@ -1,9 +1,5 @@
-import type {
-  ColumnDetail,
-  SchemaInfo,
-  TableItem,
-} from "@oh-my-query/core/client";
-import type { SchemaPeek } from "@oh-my-query/rpc";
+import type { ColumnDetail, SchemaInfo, TableItem } from "@conch/core/client";
+import type { SchemaPeek } from "@conch/rpc";
 
 const column = (
   name: string,

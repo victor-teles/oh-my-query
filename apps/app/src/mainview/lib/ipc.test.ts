@@ -133,7 +133,7 @@ describe("browser-mode IPC stub", () => {
       },
     ] as never);
 
-    const stored = localStorage.getItem("oh-my-query-connections");
+    const stored = localStorage.getItem("conch-connections");
     expect(stored).not.toBeNull();
     expect(stored).not.toContain("super-secret");
     const parsed = JSON.parse(String(stored)) as { password: string }[];

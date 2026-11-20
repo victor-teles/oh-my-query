@@ -1,5 +1,5 @@
 {
-  "name": "@oh-my-query/env",
+  "name": "@conch/env",
   "version": "0.0.0",
   "private": true,
   "type": "module",
@@ -17,7 +17,7 @@
     "zod": "catalog:"
   },
   "devDependencies": {
-    "@oh-my-query/config": "workspace:*",
+    "@conch/config": "workspace:*",
     "@types/node": "^25.6.0",
     "@typescript/native-preview": "catalog:",
     "vite": "^6.2.2",

@@ -1,6 +1,6 @@
 import type { KeyboardEvent } from "react";
 
-import { stepSize, TILE_SPANS } from "@oh-my-query/rpc";
+import { stepSize, TILE_SPANS } from "@conch/rpc";
 import { AnimatePresence, motion } from "motion/react";
 import { useCallback, useLayoutEffect, useMemo, useRef, useState } from "react";
 

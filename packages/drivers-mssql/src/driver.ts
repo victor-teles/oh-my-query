@@ -3,7 +3,7 @@ import type {
   Driver,
   Pool,
   TestConnectionResult,
-} from "@oh-my-query/core";
+} from "@conch/core";
 import type { config as MssqlConfig, ConnectionPool } from "mssql";
 
 import { ConnectionPool as MssqlConnectionPool } from "mssql";

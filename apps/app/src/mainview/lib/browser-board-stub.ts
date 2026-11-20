@@ -1,11 +1,11 @@
 import type {
   Board as BoardRecord,
   BoardDraft as BoardDraftRecord,
-} from "@oh-my-query/rpc";
+} from "@conch/rpc";
 
-import { addTile, Board, BoardDraft, sizeForView } from "@oh-my-query/rpc";
+import { addTile, Board, BoardDraft, sizeForView } from "@conch/rpc";
 
-const BOARDS_KEY = "oh-my-query-boards";
+const BOARDS_KEY = "conch-boards";
 
 const readBoards = (): BoardRecord[] => {
   try {

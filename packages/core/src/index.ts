@@ -1,4 +1,5 @@
 export * from "./ai-config.ts";
+export * from "./app-dir-migration.ts";
 export * from "./cancellation.ts";
 export * from "./pii-redactor.ts";
 export * from "./config.ts";

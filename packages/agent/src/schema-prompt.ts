@@ -4,9 +4,9 @@ import type {
   ForeignKeyItem,
   SchemaInfo,
   TableItem,
-} from "@oh-my-query/core";
+} from "@conch/core";
 
-import { redactPii } from "@oh-my-query/core/client";
+import { redactPii } from "@conch/core/client";
 
 export interface RedactOptions {
   enabled: boolean;

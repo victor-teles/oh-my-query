@@ -6,7 +6,7 @@ import os from "node:os";
 import path from "node:path";
 import { afterAll, beforeEach, describe, expect, it, vi } from "vitest";
 
-const TMP_HOME = mkdtempSync(path.join(os.tmpdir(), "omq-core-ai-config-"));
+const TMP_HOME = mkdtempSync(path.join(os.tmpdir(), "conch-core-ai-config-"));
 
 vi.mock<typeof NodeOs>(import("node:os"), async () => {
   const actual = await vi.importActual<typeof NodeOs>("node:os");
@@ -100,7 +100,7 @@ describe("ai-config", () => {
     await expect(clearAiKey()).resolves.toBeNull();
   });
 
-  it("migrates a plaintext key out of oh-my-query.json", async () => {
+  it("migrates a plaintext key out of conch.json", async () => {
     await saveConfig({
       ai: { apiKey: ANTHROPIC_KEY, provider: "anthropic" },
       launcherHotkey: "Control+Space",

@@ -1,11 +1,7 @@
-import type {
-  DatePreset,
-  IsoRange,
-  RangePreset,
-} from "@oh-my-query/core/client";
+import type { DatePreset, IsoRange, RangePreset } from "@conch/core/client";
 
-import { DATE_PRESETS, RANGE_PRESETS } from "@oh-my-query/core/client";
-import { editableParams } from "@oh-my-query/rpc";
+import { DATE_PRESETS, RANGE_PRESETS } from "@conch/core/client";
+import { editableParams } from "@conch/rpc";
 
 import type {
   ParamDef,

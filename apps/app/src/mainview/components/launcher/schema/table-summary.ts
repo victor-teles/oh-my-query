@@ -1,4 +1,4 @@
-import type { TableItem } from "@oh-my-query/core/client";
+import type { TableItem } from "@conch/core/client";
 
 const compact = new Intl.NumberFormat("en-US", {
   maximumFractionDigits: 1,

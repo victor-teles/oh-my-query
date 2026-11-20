@@ -10,7 +10,7 @@ import type {
   IndexItem,
   Pool,
   SchemaInfo,
-} from "@oh-my-query/core";
+} from "@conch/core";
 import type {
   FieldPacket,
   Pool as MysqlPoolType,
@@ -18,7 +18,7 @@ import type {
   RowDataPacket,
 } from "mysql2/promise";
 
-import { DbError, parseMysql, validateSchemaName } from "@oh-my-query/core";
+import { DbError, parseMysql, validateSchemaName } from "@conch/core";
 
 const TYPE_NAMES: Record<number, string> = {
   0: "DECIMAL",

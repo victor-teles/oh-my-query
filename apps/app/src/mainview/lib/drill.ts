@@ -1,4 +1,4 @@
-import { redactPii } from "@oh-my-query/core/client";
+import { redactPii } from "@conch/core/client";
 
 import type {
   CardResult,

@@ -1,5 +1,5 @@
-import type { LookupValue } from "@oh-my-query/core/client";
-import type { LauncherNavigateView } from "@oh-my-query/rpc";
+import type { LookupValue } from "@conch/core/client";
+import type { LauncherNavigateView } from "@conch/rpc";
 
 import Electrobun, {
   BrowserWindow,
@@ -66,7 +66,7 @@ export function createLauncher({
   const window = new BrowserWindow({
     frame: launcherFrame(cursorWorkArea(), contentHeight),
     rpc,
-    title: "oh-my-query",
+    title: "Conch",
     titleBarStyle: "hidden",
     transparent: true,
     url,
@@ -145,7 +145,7 @@ export function createLauncher({
     { action: TRAY_ACTIONS.open, label: "Open Launcher", type: "normal" },
     { action: TRAY_ACTIONS.settings, label: "Settings…", type: "normal" },
     { type: "separator" },
-    { action: TRAY_ACTIONS.quit, label: "Quit oh-my-query", type: "normal" },
+    { action: TRAY_ACTIONS.quit, label: "Quit Conch", type: "normal" },
   ]);
   tray.on("tray-clicked", (event) => {
     switch (actionOf(event)) {

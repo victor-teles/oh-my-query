@@ -1,5 +1,5 @@
-import { DbError } from "@oh-my-query/core";
-import { decodeRpcError, encodeRpcError } from "@oh-my-query/rpc";
+import { DbError } from "@conch/core";
+import { decodeRpcError, encodeRpcError } from "@conch/rpc";
 import { describe, expect, it } from "vitest";
 
 const sendOverWire = (err: unknown): Error => {
@@ -43,7 +43,7 @@ describe("rpc error round-trip", () => {
   });
 
   it("returns malformed-prefix errors unchanged", () => {
-    const malformed = new Error("__omq_err__not-json");
+    const malformed = new Error("__conch_err__not-json");
     expect(decodeRpcError(malformed)).toBe(malformed);
   });
 

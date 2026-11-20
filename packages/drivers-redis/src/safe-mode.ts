@@ -1,9 +1,9 @@
 import type {
   DestructiveClassifier,
   DestructiveRule,
-} from "@oh-my-query/core/client";
+} from "@conch/core/client";
 
-import { matchRule } from "@oh-my-query/core/client";
+import { matchRule } from "@conch/core/client";
 
 const RULES: DestructiveRule[] = [
   {

@@ -1,4 +1,4 @@
-import { tokenizeSqlTemplate } from "@oh-my-query/core/client";
+import { tokenizeSqlTemplate } from "@conch/core/client";
 
 const LINE_BREAKS = /\r\n|\r|\n/g;
 const LINE_COMMENT = /^--\s?/;

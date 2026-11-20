@@ -3,7 +3,7 @@ import type {
   Driver,
   Pool,
   TestConnectionResult,
-} from "@oh-my-query/core";
+} from "@conch/core";
 
 import { createPool } from "mysql2/promise";
 

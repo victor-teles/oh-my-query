@@ -1,6 +1,6 @@
 import type { LucideIcon } from "lucide-react";
 
-import { TILE_SIZES } from "@oh-my-query/rpc";
+import { TILE_SIZES } from "@conch/rpc";
 import {
   ClipboardCopyIcon,
   Maximize2Icon,

@@ -1,4 +1,4 @@
-import type { DialectType, SchemaInfo } from "@oh-my-query/core/client";
+import type { DialectType, SchemaInfo } from "@conch/core/client";
 
 import { z } from "zod";
 

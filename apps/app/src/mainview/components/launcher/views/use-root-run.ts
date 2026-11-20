@@ -1,6 +1,6 @@
-import type { DialectType } from "@oh-my-query/core/client";
+import type { DialectType } from "@conch/core/client";
 
-import { previewSql } from "@oh-my-query/core/client";
+import { previewSql } from "@conch/core/client";
 import { useCallback } from "react";
 
 import type { DatabaseConnection } from "@/lib/connections";

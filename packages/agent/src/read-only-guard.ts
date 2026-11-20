@@ -1,6 +1,6 @@
-import type { DialectType } from "@oh-my-query/core";
+import type { DialectType } from "@conch/core";
 
-import { classifyStandardSql } from "@oh-my-query/core/client";
+import { classifyStandardSql } from "@conch/core/client";
 
 export type ReadOnlyVerdict = { ok: true } | { ok: false; reason: string };
 

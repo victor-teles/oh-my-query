@@ -1,4 +1,3 @@
-import type { DuckDBConnection, DuckDBInstance } from "@duckdb/node-api";
 import type {
   BindValue,
   ColumnDetail,
@@ -11,14 +10,15 @@ import type {
   IndexItem,
   Pool,
   SchemaInfo,
-} from "@oh-my-query/core";
+} from "@conch/core";
+import type { DuckDBConnection, DuckDBInstance } from "@duckdb/node-api";
 
 import {
   DbError,
   guardDestructive,
   parseDuckdb,
   validateSchemaName,
-} from "@oh-my-query/core";
+} from "@conch/core";
 import { randomUUID } from "node:crypto";
 import { readFile, unlink } from "node:fs/promises";
 import { tmpdir } from "node:os";
@@ -296,7 +296,10 @@ async function runAnalyzeJson(
   conn: DuckDBConnection,
   trimmed: string
 ): Promise<{ raw: string; json: unknown }> {
-  const profilePath = join(tmpdir(), `omq_duckdb_profile_${randomUUID()}.json`);
+  const profilePath = join(
+    tmpdir(),
+    `conch_duckdb_profile_${randomUUID()}.json`
+  );
   await conn.run("PRAGMA enable_profiling = 'json'");
   await conn.run(
     `PRAGMA profiling_output = '${profilePath.replaceAll("'", "''")}'`

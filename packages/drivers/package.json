@@ -1,5 +1,5 @@
 {
-  "name": "@oh-my-query/drivers",
+  "name": "@conch/drivers",
   "version": "0.0.0",
   "private": true,
   "type": "module",
@@ -13,18 +13,18 @@
     "test:watch": "vitest"
   },
   "dependencies": {
-    "@oh-my-query/core": "workspace:*",
-    "@oh-my-query/drivers-clickhouse": "workspace:*",
-    "@oh-my-query/drivers-duckdb": "workspace:*",
-    "@oh-my-query/drivers-mongo": "workspace:*",
-    "@oh-my-query/drivers-mssql": "workspace:*",
-    "@oh-my-query/drivers-mysql": "workspace:*",
-    "@oh-my-query/drivers-pg": "workspace:*",
-    "@oh-my-query/drivers-redis": "workspace:*",
-    "@oh-my-query/drivers-sqlite": "workspace:*"
+    "@conch/core": "workspace:*",
+    "@conch/drivers-clickhouse": "workspace:*",
+    "@conch/drivers-duckdb": "workspace:*",
+    "@conch/drivers-mongo": "workspace:*",
+    "@conch/drivers-mssql": "workspace:*",
+    "@conch/drivers-mysql": "workspace:*",
+    "@conch/drivers-pg": "workspace:*",
+    "@conch/drivers-redis": "workspace:*",
+    "@conch/drivers-sqlite": "workspace:*"
   },
   "devDependencies": {
-    "@oh-my-query/config": "workspace:*",
+    "@conch/config": "workspace:*",
     "@types/bun": "catalog:",
     "@types/node": "^25.6.0",
     "@typescript/native-preview": "catalog:",

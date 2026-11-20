@@ -1,4 +1,4 @@
-import type { DialectType } from "@oh-my-query/core/client";
+import type { DialectType } from "@conch/core/client";
 
 import { useCallback, useEffect, useReducer, useRef } from "react";
 

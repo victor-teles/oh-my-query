@@ -1,7 +1,7 @@
+import type { ConnectionParams } from "@conch/core";
 import type * as DuckdbApi from "@duckdb/node-api";
-import type { ConnectionParams } from "@oh-my-query/core";
 
-import { DbError } from "@oh-my-query/core";
+import { DbError } from "@conch/core";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 const createMock = vi.hoisted(() => vi.fn());

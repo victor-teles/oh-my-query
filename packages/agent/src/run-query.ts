@@ -1,7 +1,7 @@
-import type { TabularResult } from "@oh-my-query/core";
-import type { AskErrorCode, AskEvent, AskPhase } from "@oh-my-query/rpc";
+import type { TabularResult } from "@conch/core";
+import type { AskErrorCode, AskEvent, AskPhase } from "@conch/rpc";
 
-import { DbError } from "@oh-my-query/core/client";
+import { DbError } from "@conch/core/client";
 
 export const QUERY_TIMEOUT_MS = 30_000;
 

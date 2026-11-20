@@ -1,4 +1,4 @@
-import type { LookupValue, TableItem } from "@oh-my-query/core/client";
+import type { LookupValue, TableItem } from "@conch/core/client";
 
 import type { LauncherCommand } from "@/components/launcher/root-commands";
 import type { DatabaseConnection } from "@/lib/connections";

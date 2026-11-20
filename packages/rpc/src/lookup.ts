@@ -1,9 +1,6 @@
-import type { LookupSkips, LookupValue } from "@oh-my-query/core/client";
+import type { LookupSkips, LookupValue } from "@conch/core/client";
 
-import {
-  classifyLookupValue,
-  MAX_LOOKUP_INPUT,
-} from "@oh-my-query/core/client";
+import { classifyLookupValue, MAX_LOOKUP_INPUT } from "@conch/core/client";
 import { z } from "zod";
 
 const sameAsClassified = (value: LookupValue): boolean => {

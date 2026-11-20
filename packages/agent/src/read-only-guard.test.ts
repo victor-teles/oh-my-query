@@ -1,4 +1,4 @@
-import type { DialectType } from "@oh-my-query/core";
+import type { DialectType } from "@conch/core";
 
 import { describe, expect, it } from "vitest";
 

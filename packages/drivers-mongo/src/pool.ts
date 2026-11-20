@@ -6,10 +6,10 @@ import type {
   SchemaInfo,
   TableItem,
   ViewItem,
-} from "@oh-my-query/core";
+} from "@conch/core";
 import type { MongoClient } from "mongodb";
 
-import { DbError } from "@oh-my-query/core";
+import { DbError } from "@conch/core";
 
 const POOL_CLOSED = new DbError("POOL_CLOSED", "MongoDB pool is closed");
 

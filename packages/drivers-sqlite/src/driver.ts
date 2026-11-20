@@ -3,7 +3,7 @@ import type {
   Driver,
   Pool,
   TestConnectionResult,
-} from "@oh-my-query/core";
+} from "@conch/core";
 import type { Database as BunDatabase } from "bun:sqlite";
 
 import { Database } from "bun:sqlite";

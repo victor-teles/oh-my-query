@@ -1,7 +1,7 @@
-import type { ExecuteResult, TabularResult } from "@oh-my-query/core";
+import type { ExecuteResult, TabularResult } from "@conch/core";
 import type { Database } from "bun:sqlite";
 
-import { DbError } from "@oh-my-query/core";
+import { DbError } from "@conch/core";
 import { describe, expect, it, vi } from "vitest";
 
 import { mapSqliteError, SqlitePool } from "./pool.ts";

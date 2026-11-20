@@ -1,4 +1,4 @@
-import type { LookupEventMessage } from "@oh-my-query/rpc";
+import type { LookupEventMessage } from "@conch/rpc";
 
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
@@ -95,9 +95,9 @@ describe("createClipboardEmulator", () => {
     const clipboard = createClipboardEmulator(() => setting.enabled);
     const setClipboard = (
       globalThis as unknown as {
-        __omqSetClipboard: (text: string) => void;
+        __conchSetClipboard: (text: string) => void;
       }
-    ).__omqSetClipboard;
+    ).__conchSetClipboard;
     setClipboard(" ada@example.com ");
     expect(clipboard.offer()).toStrictEqual({
       kind: "email",

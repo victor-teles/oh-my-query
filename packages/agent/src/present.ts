@@ -1,12 +1,12 @@
 import type { LanguageModel } from "ai";
 
-import { redactPii } from "@oh-my-query/core/client";
+import { redactPii } from "@conch/core/client";
 import {
   CARD_SPEC_VERSION,
   CardSpec,
   CHART_MARKS,
   COLUMN_FORMAT_KINDS,
-} from "@oh-my-query/rpc";
+} from "@conch/rpc";
 import { generateText, Output } from "ai";
 import { z } from "zod";
 

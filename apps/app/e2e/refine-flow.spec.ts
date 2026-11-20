@@ -13,9 +13,9 @@ const EUROPE_TITLE = "Monthly recurring revenue in Europe";
 const ipcCalls = (page: Page, name: string) =>
   page.evaluate(
     (wanted) =>
-      (globalThis as unknown as { __omqIpcLog: IpcCall[] }).__omqIpcLog.filter(
-        (call) => call.name === wanted
-      ),
+      (
+        globalThis as unknown as { __conchIpcLog: IpcCall[] }
+      ).__conchIpcLog.filter((call) => call.name === wanted),
     name
   );
 
@@ -34,16 +34,13 @@ const seedDemoWorkspace = async (page: Page) => {
       type: "postgresql",
       username: "postgres",
     };
+    localStorage.setItem("conch-connections", JSON.stringify([connection]));
     localStorage.setItem(
-      "oh-my-query-connections",
-      JSON.stringify([connection])
-    );
-    localStorage.setItem(
-      "oh-my-query-active-connection",
+      "conch-active-connection",
       JSON.stringify({ connectionId: "analytics", database: null })
     );
     localStorage.setItem(
-      "oh-my-query-ai-settings",
+      "conch-ai-settings",
       JSON.stringify({
         baseUrl: null,
         hasKey: true,

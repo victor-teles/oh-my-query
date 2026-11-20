@@ -3,15 +3,15 @@ import type {
   LanguageModel,
   SqlRunInput,
   SqlRunPorts,
-} from "@oh-my-query/agent";
+} from "@conch/agent";
 import type {
   BindValue,
   DatabaseConnection,
   Pool,
   SchemaInfo,
   TabularResult,
-} from "@oh-my-query/core";
-import type { ConnectionPoolManager } from "@oh-my-query/drivers";
+} from "@conch/core";
+import type { ConnectionPoolManager } from "@conch/drivers";
 import type {
   AskErrorCode,
   AskEvent,
@@ -20,9 +20,9 @@ import type {
   AskPhase,
   RecentAsk,
   SqlRunSource,
-} from "@oh-my-query/rpc";
+} from "@conch/rpc";
 
-import { ASK_MAX_ROWS, runAsk, runSql } from "@oh-my-query/agent";
+import { ASK_MAX_ROWS, runAsk, runSql } from "@conch/agent";
 import {
   appendHistory,
   CancellationRegistry,
@@ -34,8 +34,8 @@ import {
   PREVIEW_ROWS,
   qualifiedTable,
   quoteIdentifier,
-} from "@oh-my-query/core";
-import { chainPrompt, RefineContext, RunSqlParams } from "@oh-my-query/rpc";
+} from "@conch/core";
+import { chainPrompt, RefineContext, RunSqlParams } from "@conch/rpc";
 import { z } from "zod";
 
 import type { SchemaCache } from "./schema-cache.ts";

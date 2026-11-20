@@ -3,12 +3,12 @@ import type {
   DialectType,
   SchemaInfo,
   TabularResult,
-} from "@oh-my-query/core";
-import type { AskErrorCode, AskEvent, RefineContext } from "@oh-my-query/rpc";
+} from "@conch/core";
+import type { AskErrorCode, AskEvent, RefineContext } from "@conch/rpc";
 import type { LanguageModel, ModelMessage } from "ai";
 
-import { redactPii } from "@oh-my-query/core/client";
-import { chainPrompt } from "@oh-my-query/rpc";
+import { redactPii } from "@conch/core/client";
+import { chainPrompt } from "@conch/rpc";
 import { streamText } from "ai";
 
 import type { RunOutcome } from "./run-query.ts";

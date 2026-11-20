@@ -1,5 +1,5 @@
-import type { ColumnInfo } from "@oh-my-query/core/client";
-import type { CardSpec } from "@oh-my-query/rpc";
+import type { ColumnInfo } from "@conch/core/client";
+import type { CardSpec } from "@conch/rpc";
 
 export interface RecordedAsk {
   sql: string;

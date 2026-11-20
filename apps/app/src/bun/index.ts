@@ -1,9 +1,10 @@
-// Don't import @oh-my-query/core here: evaluating its WASM top-level await before electrobun/main deadlocks the worker.
+// Don't import @conch/core here: evaluating its WASM top-level await before electrobun/main deadlocks the worker.
 import { ApplicationMenu } from "electrobun/main";
 
 import type { BoardWindows } from "./board-windows.ts";
 import type { LauncherController } from "./launcher.ts";
 
+import { migrateAppData } from "./app-data.ts";
 import { createAppActivation } from "./app-hide-native.ts";
 import { createBoardWindows } from "./board-windows.ts";
 import { focusAfterLauncherHides } from "./focus-policy.ts";
@@ -17,6 +18,7 @@ const menuActionOf = (event: unknown): string | undefined =>
   (event as { data?: { action?: string } }).data?.action;
 
 async function main(): Promise<void> {
+  await migrateAppData();
   let launcher: LauncherController | null = null;
   let boards: BoardWindows | null = null;
   let returnBoardId: string | null = null;

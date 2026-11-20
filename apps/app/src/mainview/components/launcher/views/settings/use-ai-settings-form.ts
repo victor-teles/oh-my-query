@@ -1,4 +1,4 @@
-import type { AiProvider } from "@oh-my-query/rpc";
+import type { AiProvider } from "@conch/rpc";
 
 import { useCallback, useEffect, useMemo, useReducer, useState } from "react";
 

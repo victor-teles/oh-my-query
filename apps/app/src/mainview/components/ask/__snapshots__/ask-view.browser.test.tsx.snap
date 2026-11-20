@@ -2643,7 +2643,7 @@ exports[`askView designed states > matches the snapshot for the NOT_READ_ONLY er
                 <p
                   class="type-body text-foreground"
                 >
-                  This would change data. oh-my-query only runs read-only questions.
+                  This would change data. Conch only runs read-only questions.
                 </p>
                 <p
                   class="type-meta break-words text-panel-muted"

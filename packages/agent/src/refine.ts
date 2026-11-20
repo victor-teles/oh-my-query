@@ -1,4 +1,4 @@
-import type { CardSpec, RefineContext } from "@oh-my-query/rpc";
+import type { CardSpec, RefineContext } from "@conch/rpc";
 import type { ModelMessage } from "ai";
 
 import { refineInstruction } from "./prompts.ts";

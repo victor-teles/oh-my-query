@@ -1,6 +1,6 @@
-import type { AiProvider } from "@oh-my-query/rpc";
+import type { AiProvider } from "@conch/rpc";
 
-import { AI_PROVIDER_INFO, AI_PROVIDERS, isAiProvider } from "@oh-my-query/rpc";
+import { AI_PROVIDER_INFO, AI_PROVIDERS, isAiProvider } from "@conch/rpc";
 import { useCallback } from "react";
 
 import {

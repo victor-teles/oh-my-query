@@ -1,4 +1,4 @@
-import type { DialectType } from "@oh-my-query/core/client";
+import type { DialectType } from "@conch/core/client";
 
 import type { CardViewKind } from "@/lib/card-data";
 import type { CardSpec, ParamDef, Widget, WidgetDraft } from "@/lib/ipc";

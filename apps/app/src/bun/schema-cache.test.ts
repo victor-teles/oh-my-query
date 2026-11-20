@@ -1,4 +1,4 @@
-import type { ConnectionPoolManager } from "@oh-my-query/drivers";
+import type { ConnectionPoolManager } from "@conch/drivers";
 
 import { describe, expect, it, vi } from "vitest";
 

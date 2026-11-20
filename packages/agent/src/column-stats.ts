@@ -1,4 +1,4 @@
-import type { ColumnInfo } from "@oh-my-query/core";
+import type { ColumnInfo } from "@conch/core";
 
 interface BaseStats {
   name: string;

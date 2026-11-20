@@ -1,5 +1,5 @@
 {
-  "extends": "@oh-my-query/config/tsconfig.base.json",
+  "extends": "@conch/config/tsconfig.base.json",
   "compilerOptions": {
     "strictNullChecks": true
   },

@@ -8,8 +8,8 @@ import type {
   QueryParams,
   SchemaInfo,
   TestConnectionResult,
-} from "@oh-my-query/core";
-import type { LookupValue } from "@oh-my-query/core/client";
+} from "@conch/core";
+import type { LookupValue } from "@conch/core/client";
 
 import type {
   ActiveConnection,
