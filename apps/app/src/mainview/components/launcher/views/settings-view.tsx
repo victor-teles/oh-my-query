@@ -1,5 +1,8 @@
+import { ChevronRightIcon } from "lucide-react";
+
 import { LauncherFooter } from "@/components/launcher/launcher-footer";
 import { ViewHeader } from "@/components/launcher/view-header";
+import { Pressable } from "@/components/motion/pressable";
 
 import { AboutSection } from "./settings/about-section";
 import { AiSettingsSection } from "./settings/ai-settings-section";
@@ -14,9 +17,10 @@ const STATUS = <span>oh-my-query</span>;
 
 interface SettingsViewProps {
   onBack: () => void;
+  onOpenWatches: () => void;
 }
 
-export function SettingsView({ onBack }: SettingsViewProps) {
+export function SettingsView({ onBack, onOpenWatches }: SettingsViewProps) {
   return (
     <div className="flex min-h-0 flex-1 flex-col">
       <ViewHeader onBack={onBack} title="Settings" />
@@ -32,6 +36,21 @@ export function SettingsView({ onBack }: SettingsViewProps) {
             label="Appearance"
           >
             <ThemeControl />
+          </SettingRow>
+        </SettingsGroup>
+        <SettingsGroup title="Background">
+          <SettingRow
+            description="Widgets that refresh on their own, alert you, or sit in the menu bar."
+            label="Watching"
+          >
+            <Pressable
+              aria-label="Open watched widgets"
+              className="flex h-7 items-center gap-1 rounded-[8px] bg-row-hover px-2.5 type-meta text-foreground hover:bg-row-active focus-visible:ring-2 focus-visible:ring-primary/70 focus-visible:outline-none"
+              onClick={onOpenWatches}
+            >
+              Open
+              <ChevronRightIcon aria-hidden className="size-3" />
+            </Pressable>
           </SettingRow>
         </SettingsGroup>
         <AboutSection />

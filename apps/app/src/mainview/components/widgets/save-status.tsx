@@ -15,6 +15,9 @@ const labelFor = (phase: SavePhase, findingShown: boolean): string | null => {
     case "finding": {
       return findingShown ? "Finding inputs…" : null;
     }
+    case "unavailable": {
+      return "Saving works with SQL databases for now.";
+    }
     case "failed": {
       return phase.during === "inputs"
         ? `${phase.message} ⌘S saves without inputs.`

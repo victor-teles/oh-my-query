@@ -1,0 +1,1241 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`asking MongoDB and Redis with full motion > explains that saving needs SQL instead of saving 1`] = `
+<span
+  class="flex min-w-0 items-center gap-1.5"
+  role="status"
+>
+  <span
+    class="truncate"
+    data-slot="swap-text"
+  >
+    <span
+      class="inline-block"
+    >
+      Saving works with SQL databases for now.
+    </span>
+  </span>
+</span>
+`;
+
+exports[`asking MongoDB and Redis with full motion > streams a pipeline with the JSON highlighter and a caret 1`] = `
+<div
+  aria-label="Generated pipeline"
+  class="max-h-[220px] overflow-y-auto px-2 py-2 font-mono text-[12px] leading-[19px] outline-none focus-visible:ring-2 focus-visible:ring-ring/60 h-[220px]"
+  data-state="streaming"
+  role="region"
+  tabindex="0"
+>
+  <div
+    class="relative flex"
+  >
+    <span
+      aria-hidden="true"
+      class="w-9 shrink-0 pr-3 text-right text-panel-muted tabular-nums select-none"
+    >
+      1
+    </span>
+    <code
+      class="min-w-0 flex-1 break-words whitespace-pre-wrap"
+    >
+      <span
+        class="text-panel-muted"
+      >
+        {
+      </span>
+    </code>
+  </div>
+  <div
+    class="relative flex"
+  >
+    <span
+      aria-hidden="true"
+      class="w-9 shrink-0 pr-3 text-right text-panel-muted tabular-nums select-none"
+    >
+      2
+    </span>
+    <code
+      class="min-w-0 flex-1 break-words whitespace-pre-wrap"
+    >
+      <span
+        class="text-foreground"
+      >
+          
+      </span>
+      <span
+        class="text-panel-muted"
+      >
+        "
+      </span>
+      <span
+        class="text-foreground"
+      >
+        collection
+      </span>
+      <span
+        class="text-panel-muted"
+      >
+        "
+      </span>
+      <span
+        class="text-panel-muted"
+      >
+        :
+      </span>
+      <span
+        class="text-foreground"
+      >
+         
+      </span>
+      <span
+        class="text-panel-muted"
+      >
+        "
+      </span>
+      <span
+        class="text-chart-5"
+      >
+        orders
+      </span>
+      <span
+        class="text-panel-muted"
+      >
+        "
+      </span>
+      <span
+        class="text-panel-muted"
+      >
+        ,
+      </span>
+    </code>
+  </div>
+  <div
+    class="relative flex"
+  >
+    <span
+      aria-hidden="true"
+      class="w-9 shrink-0 pr-3 text-right text-panel-muted tabular-nums select-none"
+    >
+      3
+    </span>
+    <code
+      class="min-w-0 flex-1 break-words whitespace-pre-wrap"
+    >
+      <span
+        class="text-foreground"
+      >
+          
+      </span>
+      <span
+        class="text-panel-muted"
+      >
+        "
+      </span>
+      <span
+        class="text-foreground"
+      >
+        description
+      </span>
+      <span
+        class="text-panel-muted"
+      >
+        "
+      </span>
+      <span
+        class="text-panel-muted"
+      >
+        :
+      </span>
+      <span
+        class="text-foreground"
+      >
+         
+      </span>
+      <span
+        class="text-panel-muted"
+      >
+        "
+      </span>
+      <span
+        class="text-chart-5"
+      >
+        Orders by status in 2026
+      </span>
+      <span
+        class="text-panel-muted"
+      >
+        "
+      </span>
+      <span
+        class="text-panel-muted"
+      >
+        ,
+      </span>
+    </code>
+  </div>
+  <div
+    class="relative flex"
+  >
+    <span
+      aria-hidden="true"
+      class="w-9 shrink-0 pr-3 text-right text-panel-muted tabular-nums select-none"
+    >
+      4
+    </span>
+    <code
+      class="min-w-0 flex-1 break-words whitespace-pre-wrap"
+    >
+      <span
+        class="text-foreground"
+      >
+          
+      </span>
+      <span
+        class="text-panel-muted"
+      >
+        "
+      </span>
+      <span
+        class="text-chart-5"
+      >
+        pipeline
+      </span>
+      <span
+        aria-hidden="true"
+        class="ml-px inline-block h-[13px] w-[6px] translate-y-[2px] rounded-[1px] bg-chart-1 ask-caret"
+        data-testid="sql-caret"
+      />
+    </code>
+  </div>
+</div>
+`;
+
+exports[`asking MongoDB and Redis with full motion > underlines the refused Redis command 1`] = `
+<div
+  aria-label="Generated commands"
+  class="max-h-[220px] overflow-y-auto px-2 py-2 font-mono text-[12px] leading-[19px] outline-none focus-visible:ring-2 focus-visible:ring-ring/60"
+  data-state="settled"
+  role="region"
+  tabindex="0"
+>
+  <div
+    class="relative flex"
+  >
+    <span
+      aria-hidden="true"
+      class="w-9 shrink-0 pr-3 text-right text-panel-muted tabular-nums select-none"
+    >
+      1
+    </span>
+    <code
+      class="min-w-0 flex-1 break-words whitespace-pre-wrap"
+    >
+      <span
+        class="text-panel-muted"
+      >
+        {
+      </span>
+    </code>
+  </div>
+  <div
+    class="relative flex"
+  >
+    <span
+      aria-hidden="true"
+      class="w-9 shrink-0 pr-3 text-right text-panel-muted tabular-nums select-none"
+    >
+      2
+    </span>
+    <code
+      class="min-w-0 flex-1 break-words whitespace-pre-wrap"
+    >
+      <span
+        class="text-foreground"
+      >
+          
+      </span>
+      <span
+        class="text-panel-muted"
+      >
+        "
+      </span>
+      <span
+        class="text-foreground"
+      >
+        commands
+      </span>
+      <span
+        class="text-panel-muted"
+      >
+        "
+      </span>
+      <span
+        class="text-panel-muted"
+      >
+        :
+      </span>
+      <span
+        class="text-foreground"
+      >
+         
+      </span>
+      <span
+        class="text-panel-muted"
+      >
+        [
+      </span>
+    </code>
+  </div>
+  <div
+    class="relative flex"
+  >
+    <span
+      aria-hidden="true"
+      class="w-9 shrink-0 pr-3 text-right text-panel-muted tabular-nums select-none"
+    >
+      3
+    </span>
+    <code
+      class="min-w-0 flex-1 break-words whitespace-pre-wrap"
+    >
+      <span
+        class="text-foreground"
+      >
+            
+      </span>
+      <span
+        class="text-panel-muted"
+      >
+        [
+      </span>
+    </code>
+  </div>
+  <div
+    class="relative flex"
+  >
+    <span
+      aria-hidden="true"
+      class="w-9 shrink-0 pr-3 text-right text-panel-muted tabular-nums select-none"
+    >
+      4
+    </span>
+    <code
+      class="min-w-0 flex-1 break-words whitespace-pre-wrap"
+    >
+      <span
+        class="text-foreground"
+      >
+              
+      </span>
+      <span
+        class="text-panel-muted"
+      >
+        "
+      </span>
+      <span
+        class="text-chart-1 underline decoration-danger-ink decoration-2 underline-offset-[3px]"
+      >
+        SET
+      </span>
+      <span
+        class="text-panel-muted"
+      >
+        "
+      </span>
+      <span
+        class="text-panel-muted"
+      >
+        ,
+      </span>
+    </code>
+  </div>
+  <div
+    class="relative flex"
+  >
+    <span
+      aria-hidden="true"
+      class="w-9 shrink-0 pr-3 text-right text-panel-muted tabular-nums select-none"
+    >
+      5
+    </span>
+    <code
+      class="min-w-0 flex-1 break-words whitespace-pre-wrap"
+    >
+      <span
+        class="text-foreground"
+      >
+              
+      </span>
+      <span
+        class="text-panel-muted"
+      >
+        "
+      </span>
+      <span
+        class="text-chart-5"
+      >
+        feature:checkout
+      </span>
+      <span
+        class="text-panel-muted"
+      >
+        "
+      </span>
+      <span
+        class="text-panel-muted"
+      >
+        ,
+      </span>
+    </code>
+  </div>
+  <div
+    class="relative flex"
+  >
+    <span
+      aria-hidden="true"
+      class="w-9 shrink-0 pr-3 text-right text-panel-muted tabular-nums select-none"
+    >
+      6
+    </span>
+    <code
+      class="min-w-0 flex-1 break-words whitespace-pre-wrap"
+    >
+      <span
+        class="text-foreground"
+      >
+              
+      </span>
+      <span
+        class="text-panel-muted"
+      >
+        "
+      </span>
+      <span
+        class="text-chart-5"
+      >
+        off
+      </span>
+      <span
+        class="text-panel-muted"
+      >
+        "
+      </span>
+    </code>
+  </div>
+  <div
+    class="relative flex"
+  >
+    <span
+      aria-hidden="true"
+      class="w-9 shrink-0 pr-3 text-right text-panel-muted tabular-nums select-none"
+    >
+      7
+    </span>
+    <code
+      class="min-w-0 flex-1 break-words whitespace-pre-wrap"
+    >
+      <span
+        class="text-foreground"
+      >
+            
+      </span>
+      <span
+        class="text-panel-muted"
+      >
+        ]
+      </span>
+    </code>
+  </div>
+  <div
+    class="relative flex"
+  >
+    <span
+      aria-hidden="true"
+      class="w-9 shrink-0 pr-3 text-right text-panel-muted tabular-nums select-none"
+    >
+      8
+    </span>
+    <code
+      class="min-w-0 flex-1 break-words whitespace-pre-wrap"
+    >
+      <span
+        class="text-foreground"
+      >
+          
+      </span>
+      <span
+        class="text-panel-muted"
+      >
+        ]
+      </span>
+      <span
+        class="text-panel-muted"
+      >
+        ,
+      </span>
+    </code>
+  </div>
+  <div
+    class="relative flex"
+  >
+    <span
+      aria-hidden="true"
+      class="w-9 shrink-0 pr-3 text-right text-panel-muted tabular-nums select-none"
+    >
+      9
+    </span>
+    <code
+      class="min-w-0 flex-1 break-words whitespace-pre-wrap"
+    >
+      <span
+        class="text-foreground"
+      >
+          
+      </span>
+      <span
+        class="text-panel-muted"
+      >
+        "
+      </span>
+      <span
+        class="text-foreground"
+      >
+        description
+      </span>
+      <span
+        class="text-panel-muted"
+      >
+        "
+      </span>
+      <span
+        class="text-panel-muted"
+      >
+        :
+      </span>
+      <span
+        class="text-foreground"
+      >
+         
+      </span>
+      <span
+        class="text-panel-muted"
+      >
+        "
+      </span>
+      <span
+        class="text-chart-5"
+      >
+        Turn off the checkout flag
+      </span>
+      <span
+        class="text-panel-muted"
+      >
+        "
+      </span>
+      <span
+        class="text-panel-muted"
+      >
+        ,
+      </span>
+    </code>
+  </div>
+  <div
+    class="relative flex"
+  >
+    <span
+      aria-hidden="true"
+      class="w-9 shrink-0 pr-3 text-right text-panel-muted tabular-nums select-none"
+    >
+      10
+    </span>
+    <code
+      class="min-w-0 flex-1 break-words whitespace-pre-wrap"
+    >
+      <span
+        class="text-foreground"
+      >
+          
+      </span>
+      <span
+        class="text-panel-muted"
+      >
+        "
+      </span>
+      <span
+        class="text-foreground"
+      >
+        kind
+      </span>
+      <span
+        class="text-panel-muted"
+      >
+        "
+      </span>
+      <span
+        class="text-panel-muted"
+      >
+        :
+      </span>
+      <span
+        class="text-foreground"
+      >
+         
+      </span>
+      <span
+        class="text-panel-muted"
+      >
+        "
+      </span>
+      <span
+        class="text-chart-5"
+      >
+        commands
+      </span>
+      <span
+        class="text-panel-muted"
+      >
+        "
+      </span>
+    </code>
+  </div>
+  <div
+    class="relative flex"
+  >
+    <span
+      aria-hidden="true"
+      class="w-9 shrink-0 pr-3 text-right text-panel-muted tabular-nums select-none"
+    >
+      11
+    </span>
+    <code
+      class="min-w-0 flex-1 break-words whitespace-pre-wrap"
+    >
+      <span
+        class="text-panel-muted"
+      >
+        }
+      </span>
+    </code>
+  </div>
+</div>
+`;
+
+exports[`asking MongoDB and Redis with reduced motion > explains that saving needs SQL instead of saving 1`] = `
+<span
+  class="flex min-w-0 items-center gap-1.5"
+  role="status"
+>
+  <span
+    class="truncate"
+    data-slot="swap-text"
+  >
+    <span
+      class="inline-block"
+    >
+      Saving works with SQL databases for now.
+    </span>
+  </span>
+</span>
+`;
+
+exports[`asking MongoDB and Redis with reduced motion > streams a pipeline with the JSON highlighter and a caret 1`] = `
+<div
+  aria-label="Generated pipeline"
+  class="max-h-[220px] overflow-y-auto px-2 py-2 font-mono text-[12px] leading-[19px] outline-none focus-visible:ring-2 focus-visible:ring-ring/60 h-[220px]"
+  data-state="streaming"
+  role="region"
+  tabindex="0"
+>
+  <div
+    class="relative flex"
+  >
+    <span
+      aria-hidden="true"
+      class="w-9 shrink-0 pr-3 text-right text-panel-muted tabular-nums select-none"
+    >
+      1
+    </span>
+    <code
+      class="min-w-0 flex-1 break-words whitespace-pre-wrap"
+    >
+      <span
+        class="text-panel-muted"
+      >
+        {
+      </span>
+    </code>
+  </div>
+  <div
+    class="relative flex"
+  >
+    <span
+      aria-hidden="true"
+      class="w-9 shrink-0 pr-3 text-right text-panel-muted tabular-nums select-none"
+    >
+      2
+    </span>
+    <code
+      class="min-w-0 flex-1 break-words whitespace-pre-wrap"
+    >
+      <span
+        class="text-foreground"
+      >
+          
+      </span>
+      <span
+        class="text-panel-muted"
+      >
+        "
+      </span>
+      <span
+        class="text-foreground"
+      >
+        collection
+      </span>
+      <span
+        class="text-panel-muted"
+      >
+        "
+      </span>
+      <span
+        class="text-panel-muted"
+      >
+        :
+      </span>
+      <span
+        class="text-foreground"
+      >
+         
+      </span>
+      <span
+        class="text-panel-muted"
+      >
+        "
+      </span>
+      <span
+        class="text-chart-5"
+      >
+        orders
+      </span>
+      <span
+        class="text-panel-muted"
+      >
+        "
+      </span>
+      <span
+        class="text-panel-muted"
+      >
+        ,
+      </span>
+    </code>
+  </div>
+  <div
+    class="relative flex"
+  >
+    <span
+      aria-hidden="true"
+      class="w-9 shrink-0 pr-3 text-right text-panel-muted tabular-nums select-none"
+    >
+      3
+    </span>
+    <code
+      class="min-w-0 flex-1 break-words whitespace-pre-wrap"
+    >
+      <span
+        class="text-foreground"
+      >
+          
+      </span>
+      <span
+        class="text-panel-muted"
+      >
+        "
+      </span>
+      <span
+        class="text-foreground"
+      >
+        description
+      </span>
+      <span
+        class="text-panel-muted"
+      >
+        "
+      </span>
+      <span
+        class="text-panel-muted"
+      >
+        :
+      </span>
+      <span
+        class="text-foreground"
+      >
+         
+      </span>
+      <span
+        class="text-panel-muted"
+      >
+        "
+      </span>
+      <span
+        class="text-chart-5"
+      >
+        Orders by status in 2026
+      </span>
+      <span
+        class="text-panel-muted"
+      >
+        "
+      </span>
+      <span
+        class="text-panel-muted"
+      >
+        ,
+      </span>
+    </code>
+  </div>
+  <div
+    class="relative flex"
+  >
+    <span
+      aria-hidden="true"
+      class="w-9 shrink-0 pr-3 text-right text-panel-muted tabular-nums select-none"
+    >
+      4
+    </span>
+    <code
+      class="min-w-0 flex-1 break-words whitespace-pre-wrap"
+    >
+      <span
+        class="text-foreground"
+      >
+          
+      </span>
+      <span
+        class="text-panel-muted"
+      >
+        "
+      </span>
+      <span
+        class="text-chart-5"
+      >
+        pipeline
+      </span>
+      <span
+        aria-hidden="true"
+        class="ml-px inline-block h-[13px] w-[6px] translate-y-[2px] rounded-[1px] bg-chart-1"
+        data-testid="sql-caret"
+      />
+    </code>
+  </div>
+</div>
+`;
+
+exports[`asking MongoDB and Redis with reduced motion > underlines the refused Redis command 1`] = `
+<div
+  aria-label="Generated commands"
+  class="max-h-[220px] overflow-y-auto px-2 py-2 font-mono text-[12px] leading-[19px] outline-none focus-visible:ring-2 focus-visible:ring-ring/60"
+  data-state="settled"
+  role="region"
+  tabindex="0"
+>
+  <div
+    class="relative flex"
+  >
+    <span
+      aria-hidden="true"
+      class="w-9 shrink-0 pr-3 text-right text-panel-muted tabular-nums select-none"
+    >
+      1
+    </span>
+    <code
+      class="min-w-0 flex-1 break-words whitespace-pre-wrap"
+    >
+      <span
+        class="text-panel-muted"
+      >
+        {
+      </span>
+    </code>
+  </div>
+  <div
+    class="relative flex"
+  >
+    <span
+      aria-hidden="true"
+      class="w-9 shrink-0 pr-3 text-right text-panel-muted tabular-nums select-none"
+    >
+      2
+    </span>
+    <code
+      class="min-w-0 flex-1 break-words whitespace-pre-wrap"
+    >
+      <span
+        class="text-foreground"
+      >
+          
+      </span>
+      <span
+        class="text-panel-muted"
+      >
+        "
+      </span>
+      <span
+        class="text-foreground"
+      >
+        commands
+      </span>
+      <span
+        class="text-panel-muted"
+      >
+        "
+      </span>
+      <span
+        class="text-panel-muted"
+      >
+        :
+      </span>
+      <span
+        class="text-foreground"
+      >
+         
+      </span>
+      <span
+        class="text-panel-muted"
+      >
+        [
+      </span>
+    </code>
+  </div>
+  <div
+    class="relative flex"
+  >
+    <span
+      aria-hidden="true"
+      class="w-9 shrink-0 pr-3 text-right text-panel-muted tabular-nums select-none"
+    >
+      3
+    </span>
+    <code
+      class="min-w-0 flex-1 break-words whitespace-pre-wrap"
+    >
+      <span
+        class="text-foreground"
+      >
+            
+      </span>
+      <span
+        class="text-panel-muted"
+      >
+        [
+      </span>
+    </code>
+  </div>
+  <div
+    class="relative flex"
+  >
+    <span
+      aria-hidden="true"
+      class="w-9 shrink-0 pr-3 text-right text-panel-muted tabular-nums select-none"
+    >
+      4
+    </span>
+    <code
+      class="min-w-0 flex-1 break-words whitespace-pre-wrap"
+    >
+      <span
+        class="text-foreground"
+      >
+              
+      </span>
+      <span
+        class="text-panel-muted"
+      >
+        "
+      </span>
+      <span
+        class="text-chart-1 underline decoration-danger-ink decoration-2 underline-offset-[3px]"
+      >
+        SET
+      </span>
+      <span
+        class="text-panel-muted"
+      >
+        "
+      </span>
+      <span
+        class="text-panel-muted"
+      >
+        ,
+      </span>
+    </code>
+  </div>
+  <div
+    class="relative flex"
+  >
+    <span
+      aria-hidden="true"
+      class="w-9 shrink-0 pr-3 text-right text-panel-muted tabular-nums select-none"
+    >
+      5
+    </span>
+    <code
+      class="min-w-0 flex-1 break-words whitespace-pre-wrap"
+    >
+      <span
+        class="text-foreground"
+      >
+              
+      </span>
+      <span
+        class="text-panel-muted"
+      >
+        "
+      </span>
+      <span
+        class="text-chart-5"
+      >
+        feature:checkout
+      </span>
+      <span
+        class="text-panel-muted"
+      >
+        "
+      </span>
+      <span
+        class="text-panel-muted"
+      >
+        ,
+      </span>
+    </code>
+  </div>
+  <div
+    class="relative flex"
+  >
+    <span
+      aria-hidden="true"
+      class="w-9 shrink-0 pr-3 text-right text-panel-muted tabular-nums select-none"
+    >
+      6
+    </span>
+    <code
+      class="min-w-0 flex-1 break-words whitespace-pre-wrap"
+    >
+      <span
+        class="text-foreground"
+      >
+              
+      </span>
+      <span
+        class="text-panel-muted"
+      >
+        "
+      </span>
+      <span
+        class="text-chart-5"
+      >
+        off
+      </span>
+      <span
+        class="text-panel-muted"
+      >
+        "
+      </span>
+    </code>
+  </div>
+  <div
+    class="relative flex"
+  >
+    <span
+      aria-hidden="true"
+      class="w-9 shrink-0 pr-3 text-right text-panel-muted tabular-nums select-none"
+    >
+      7
+    </span>
+    <code
+      class="min-w-0 flex-1 break-words whitespace-pre-wrap"
+    >
+      <span
+        class="text-foreground"
+      >
+            
+      </span>
+      <span
+        class="text-panel-muted"
+      >
+        ]
+      </span>
+    </code>
+  </div>
+  <div
+    class="relative flex"
+  >
+    <span
+      aria-hidden="true"
+      class="w-9 shrink-0 pr-3 text-right text-panel-muted tabular-nums select-none"
+    >
+      8
+    </span>
+    <code
+      class="min-w-0 flex-1 break-words whitespace-pre-wrap"
+    >
+      <span
+        class="text-foreground"
+      >
+          
+      </span>
+      <span
+        class="text-panel-muted"
+      >
+        ]
+      </span>
+      <span
+        class="text-panel-muted"
+      >
+        ,
+      </span>
+    </code>
+  </div>
+  <div
+    class="relative flex"
+  >
+    <span
+      aria-hidden="true"
+      class="w-9 shrink-0 pr-3 text-right text-panel-muted tabular-nums select-none"
+    >
+      9
+    </span>
+    <code
+      class="min-w-0 flex-1 break-words whitespace-pre-wrap"
+    >
+      <span
+        class="text-foreground"
+      >
+          
+      </span>
+      <span
+        class="text-panel-muted"
+      >
+        "
+      </span>
+      <span
+        class="text-foreground"
+      >
+        description
+      </span>
+      <span
+        class="text-panel-muted"
+      >
+        "
+      </span>
+      <span
+        class="text-panel-muted"
+      >
+        :
+      </span>
+      <span
+        class="text-foreground"
+      >
+         
+      </span>
+      <span
+        class="text-panel-muted"
+      >
+        "
+      </span>
+      <span
+        class="text-chart-5"
+      >
+        Turn off the checkout flag
+      </span>
+      <span
+        class="text-panel-muted"
+      >
+        "
+      </span>
+      <span
+        class="text-panel-muted"
+      >
+        ,
+      </span>
+    </code>
+  </div>
+  <div
+    class="relative flex"
+  >
+    <span
+      aria-hidden="true"
+      class="w-9 shrink-0 pr-3 text-right text-panel-muted tabular-nums select-none"
+    >
+      10
+    </span>
+    <code
+      class="min-w-0 flex-1 break-words whitespace-pre-wrap"
+    >
+      <span
+        class="text-foreground"
+      >
+          
+      </span>
+      <span
+        class="text-panel-muted"
+      >
+        "
+      </span>
+      <span
+        class="text-foreground"
+      >
+        kind
+      </span>
+      <span
+        class="text-panel-muted"
+      >
+        "
+      </span>
+      <span
+        class="text-panel-muted"
+      >
+        :
+      </span>
+      <span
+        class="text-foreground"
+      >
+         
+      </span>
+      <span
+        class="text-panel-muted"
+      >
+        "
+      </span>
+      <span
+        class="text-chart-5"
+      >
+        commands
+      </span>
+      <span
+        class="text-panel-muted"
+      >
+        "
+      </span>
+    </code>
+  </div>
+  <div
+    class="relative flex"
+  >
+    <span
+      aria-hidden="true"
+      class="w-9 shrink-0 pr-3 text-right text-panel-muted tabular-nums select-none"
+    >
+      11
+    </span>
+    <code
+      class="min-w-0 flex-1 break-words whitespace-pre-wrap"
+    >
+      <span
+        class="text-panel-muted"
+      >
+        }
+      </span>
+    </code>
+  </div>
+</div>
+`;

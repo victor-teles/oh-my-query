@@ -1,8 +1,9 @@
 import { draftOf } from "@oh-my-query/rpc";
 import { useCallback, useState } from "react";
 
-import type { Board } from "@/lib/ipc";
+import type { Board, ExportScope, Widget } from "@/lib/ipc";
 
+import { useMenuBarToggle } from "@/components/watches/use-menu-bar-toggle";
 import { useArmedConfirm } from "@/hooks/use-armed-confirm";
 import { deleteBoard, saveBoard } from "@/lib/ipc";
 
@@ -13,6 +14,8 @@ export interface CatalogNavigation {
   renameBoard: (board: Board) => void;
   runWidget: (widgetId: string) => void;
   addToBoard: (widgetId: string) => void;
+  exportScope: (scope: ExportScope) => void;
+  watchWidget: (widgetId: string) => void;
 }
 
 interface UseCatalogMenuOptions {
@@ -20,6 +23,39 @@ interface UseCatalogMenuOptions {
   onChanged: () => void;
   onClosed: () => void;
 }
+
+const runWidgetAction = async (
+  action: CatalogAction,
+  widget: Widget,
+  navigate: CatalogNavigation,
+  toggleMenuBar: (widget: Widget) => Promise<boolean>
+) => {
+  switch (action.id) {
+    case "run-widget": {
+      navigate.runWidget(widget.id);
+      break;
+    }
+    case "add-to-board": {
+      navigate.addToBoard(widget.id);
+      break;
+    }
+    case "watch": {
+      navigate.watchWidget(widget.id);
+      break;
+    }
+    case "export-widget": {
+      navigate.exportScope({ kind: "widget", widgetId: widget.id });
+      break;
+    }
+    case "menu-bar": {
+      await toggleMenuBar(widget);
+      break;
+    }
+    default: {
+      break;
+    }
+  }
+};
 
 const duplicateOf = (board: Board) => {
   const { id: _id, ...draft } = draftOf(board);
@@ -33,6 +69,7 @@ export const useCatalogMenu = ({
 }: UseCatalogMenuOptions) => {
   const [item, setItem] = useState<CatalogItem | null>(null);
   const { arm, armed, disarm } = useArmedConfirm();
+  const toggleMenuBar = useMenuBarToggle();
 
   const close = useCallback(() => {
     disarm();
@@ -59,11 +96,7 @@ export const useCatalogMenu = ({
       }
       close();
       if (item.kind === "widget") {
-        if (action.id === "run-widget") {
-          navigate.runWidget(item.widget.id);
-        } else if (action.id === "add-to-board") {
-          navigate.addToBoard(item.widget.id);
-        }
+        await runWidgetAction(action, item.widget, navigate, toggleMenuBar);
         return;
       }
       switch (action.id) {
@@ -73,6 +106,10 @@ export const useCatalogMenu = ({
         }
         case "rename-board": {
           navigate.renameBoard(item.board);
+          break;
+        }
+        case "export-board": {
+          navigate.exportScope({ boardId: item.board.id, kind: "board" });
           break;
         }
         case "duplicate-board": {
@@ -90,7 +127,7 @@ export const useCatalogMenu = ({
         }
       }
     },
-    [arm, armed, close, item, navigate, onChanged]
+    [arm, armed, close, item, navigate, onChanged, toggleMenuBar]
   );
 
   return { armed, close, item, open, run };

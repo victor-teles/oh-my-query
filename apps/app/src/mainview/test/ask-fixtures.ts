@@ -45,6 +45,27 @@ export const askStateAfter = (
   return replayInto(state, scriptFor(prompt, "analytics"), stopAfter);
 };
 
+// Replays a recorded MongoDB or Redis ask, like askStateAfter.
+export const engineAskStateAfter = (
+  prompt: string,
+  language: "mongodb" | "redis",
+  stopAfter?: { type: EventType; nth?: number }
+): AskState => {
+  const state = askReducer(initialAskState, {
+    askId: "ask-1",
+    prompt,
+    source: "question",
+    type: "start",
+  });
+  const params = {
+    askId: "ask-1",
+    connectionId: language,
+    database: null,
+    prompt,
+  };
+  return replayInto(state, askScriptFor(params, language, language), stopAfter);
+};
+
 // Replays a recorded refine of the shown turn, like askStateAfter.
 export const refineStateAfter = (
   from: AskState,

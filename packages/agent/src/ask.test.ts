@@ -1,6 +1,7 @@
 import type { SchemaInfo, TabularResult } from "@oh-my-query/core";
 import type { AskEvent, RefineContext } from "@oh-my-query/rpc";
 
+import { CARD_SPEC_VERSION } from "@oh-my-query/rpc";
 import { simulateReadableStream } from "ai";
 import { MockLanguageModelV3 } from "ai/test";
 import { afterEach, describe, expect, it, vi } from "vitest";
@@ -8,7 +9,10 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import type { AskPorts } from "./ask.ts";
 
 import { runAsk } from "./ask.ts";
+import { mongoEngine } from "./mongo-engine.ts";
 import { PRESENT_TIMEOUT_MS } from "./present.ts";
+import { redisEngine } from "./redis-engine.ts";
+import { sqlEngine } from "./sql-engine.ts";
 import { column, largeSchema, table } from "./test-fixtures.ts";
 
 const usage = {
@@ -151,7 +155,7 @@ const makePorts = (
   overrides: Partial<AskPorts> & { execute?: ExecuteMock } = {}
 ): AskPorts & { execute: ExecuteMock } => ({
   connectionLabel: "analytics",
-  dialect: "postgresql",
+  engine: sqlEngine("postgresql"),
   loadSchema: vi.fn<AskPorts["loadSchema"]>().mockResolvedValue(smallSchema),
   model,
   now: () => new Date("2026-11-18T12:00:00Z"),
@@ -264,7 +268,7 @@ describe("runAsk", () => {
       spec: {
         formats: { mrr: { currency: "USD", kind: "currency" } },
         title: "Monthly recurring revenue by region",
-        version: 1,
+        version: CARD_SPEC_VERSION,
         view: { groupBy: "region", kind: "chart", mark: "line", y: ["mrr"] },
       },
     });
@@ -626,7 +630,7 @@ const REFINE: RefineContext = {
   spec: {
     formats: {},
     title: "Monthly recurring revenue by region",
-    version: 1,
+    version: CARD_SPEC_VERSION,
     view: {
       groupBy: "region",
       kind: "chart",
@@ -775,5 +779,241 @@ describe("runAsk with a refine", () => {
     expect(promptText(model.doGenerateCalls[0]?.prompt)).not.toContain(
       '\\"previousCard\\"'
     );
+  });
+});
+
+const ORDERS_PIPELINE = JSON.stringify({
+  collection: "orders",
+  description: "Orders by status",
+  pipeline: [
+    { $group: { _id: "$status", orders: { $sum: 1 } } },
+    { $project: { _id: 0, orders: 1, status: "$_id" } },
+  ],
+});
+
+const ordersResult = (): TabularResult => ({
+  columns: [
+    { name: "orders", typeName: "NUMERIC" },
+    { name: "status", typeName: "TEXT" },
+  ],
+  executionTimeMs: 0,
+  isTruncated: false,
+  resultType: "tabular",
+  rowCount: 2,
+  rows: [
+    [12, "paid"],
+    [3, "refunded"],
+  ],
+});
+
+const mongoSchema: SchemaInfo = {
+  schemas: [
+    {
+      name: "shop",
+      tables: [
+        table("orders", [], 12_400, [
+          column("_id", "objectId"),
+          column("status", "string"),
+          column("total", "number"),
+        ]),
+      ],
+      views: [],
+    },
+  ],
+};
+
+const redisSchema: SchemaInfo = {
+  schemas: [
+    {
+      name: "0",
+      tables: [
+        table("session:*", [], 3400, [column("user_id"), column("ip")]),
+        table("leaderboard", [], 1, [column("value", "zset")]),
+      ],
+      views: [],
+    },
+  ],
+};
+
+const halves = (text: string): string[] => [
+  text.slice(0, Math.floor(text.length / 2)),
+  text.slice(Math.floor(text.length / 2)),
+];
+
+describe("runAsk on MongoDB", () => {
+  const mongoPorts = (
+    model: MockLanguageModelV3,
+    overrides: Partial<AskPorts> & { execute?: ExecuteMock } = {}
+  ) =>
+    makePorts(model, {
+      engine: mongoEngine,
+      execute: vi.fn<AskPorts["execute"]>().mockResolvedValue(ordersResult()),
+      loadSchema: vi
+        .fn<AskPorts["loadSchema"]>()
+        .mockResolvedValue(mongoSchema),
+      ...overrides,
+    });
+
+  it("streams a pipeline, guards it, runs it and presents a card", async () => {
+    const model = scriptedModel([halves(ORDERS_PIPELINE)]);
+    const ports = mongoPorts(model);
+    const events = await collect("orders by status", ports);
+
+    expect(sqlText(events)).toBe(ORDERS_PIPELINE);
+    expect(ofType(events, "sqlDone")[0]).toMatchObject({
+      dialect: "mongodb",
+      sql: ORDERS_PIPELINE,
+    });
+    expect(ofType(events, "phase").map((event) => event.detail)).toStrictEqual([
+      "Reading the analytics schema",
+      "Writing the pipeline",
+      "Read only on analytics",
+      "Shaping the result",
+    ]);
+    expect(ports.execute.mock.calls[0]?.[0]).toBe(ORDERS_PIPELINE);
+    expect(shape(events).slice(-2)).toStrictEqual(["card", "done"]);
+  });
+
+  it("shows the sampled collections and tells the card step it read a pipeline", async () => {
+    const model = scriptedModel([[ORDERS_PIPELINE]]);
+    await collect("orders by status", mongoPorts(model));
+    const prompt = promptText(model.doStreamCalls[0]?.prompt);
+
+    expect(prompt).toContain("read-only MongoDB aggregation");
+    expect(prompt).toContain(
+      "orders (≈12,400 docs): _id objectId, status string, total number"
+    );
+    expect(promptText(model.doGenerateCalls[0]?.prompt)).toContain(
+      String.raw`\"language\": \"mongodb\"`
+    );
+  });
+
+  it("refuses $merge with the pipeline attached and never runs it", async () => {
+    const write = JSON.stringify({
+      collection: "orders",
+      pipeline: [{ $match: {} }, { $merge: { into: "orders_copy" } }],
+    });
+    const ports = mongoPorts(scriptedModel([[write]]));
+    const events = await collect("copy every order", ports);
+
+    expect(terminals(events)).toStrictEqual([
+      {
+        code: "NOT_READ_ONLY",
+        message: "$merge writes data; only read-only pipelines can run here.",
+        phase: "sql",
+        sql: write,
+        type: "error",
+      },
+    ]);
+    expect(ports.execute).not.toHaveBeenCalled();
+  });
+
+  it("repairs a failed pipeline with the MongoDB repair instruction", async () => {
+    const model = scriptedModel([[ORDERS_PIPELINE], [ORDERS_PIPELINE]]);
+    const execute = vi
+      .fn<AskPorts["execute"]>()
+      .mockRejectedValueOnce(new Error("unknown group operator '$summ'"))
+      .mockResolvedValue(ordersResult());
+    const events = await collect(
+      "orders by status",
+      mongoPorts(model, { execute })
+    );
+
+    expect(shape(events)).toContain("sqlReset");
+    const repair = promptText(model.doStreamCalls[1]?.prompt);
+    expect(repair).toContain("That pipeline failed with this error");
+    expect(repair).toContain("$summ");
+    expect(repair).toContain("reply with JSON only.");
+    expect(terminals(events)).toStrictEqual([{ type: "done" }]);
+  });
+
+  it("refines a MongoDB answer with the previous pipeline", async () => {
+    const model = scriptedModel([[ORDERS_PIPELINE]]);
+    const events: AskEvent[] = [];
+    for await (const event of runAsk(
+      "only this year",
+      mongoPorts(model),
+      new AbortController().signal,
+      { ...REFINE, sql: ORDERS_PIPELINE, turns: ["orders by status"] }
+    )) {
+      events.push(event);
+    }
+    const text = promptText(model.doStreamCalls[0]?.prompt);
+
+    expect(text).toContain("Change that pipeline");
+    expect(text).toContain("reply with JSON only.");
+    expect(terminals(events)).toStrictEqual([{ type: "done" }]);
+  });
+});
+
+describe("runAsk on Redis", () => {
+  const redisPorts = (model: MockLanguageModelV3, result: TabularResult) =>
+    makePorts(model, {
+      engine: redisEngine,
+      execute: vi.fn<AskPorts["execute"]>().mockResolvedValue(result),
+      loadSchema: vi
+        .fn<AskPorts["loadSchema"]>()
+        .mockResolvedValue(redisSchema),
+    });
+
+  it("runs a scan plan", async () => {
+    const plan = JSON.stringify({
+      groupBy: "pattern",
+      kind: "scan",
+      limit: 20,
+      match: "*",
+      measure: "count",
+    });
+    const ports = redisPorts(
+      scriptedModel([[plan]]),
+      singleColumnResult("keys", [[3400]], "NUMERIC")
+    );
+    const events = await collect("keys by pattern", ports);
+
+    expect(ofType(events, "sqlDone")[0]).toMatchObject({ dialect: "redis" });
+    expect(ports.execute.mock.calls[0]?.[0]).toBe(plan);
+    expect(terminals(events)).toStrictEqual([{ type: "done" }]);
+  });
+
+  it("runs a commands plan and shows the key patterns to the model", async () => {
+    const plan = JSON.stringify({
+      commands: [["ZREVRANGE", "leaderboard", "0", "9", "WITHSCORES"]],
+      kind: "commands",
+    });
+    const model = scriptedModel([[plan]]);
+    const ports = redisPorts(
+      model,
+      singleColumnResult("member", [["alice"], ["bob"]])
+    );
+    const events = await collect("top 10 on the leaderboard", ports);
+    const prompt = promptText(model.doStreamCalls[0]?.prompt);
+
+    expect(prompt).toContain("read-only Redis plan");
+    expect(prompt).toContain("session:* (hash, ≈3,400 keys): user_id, ip");
+    expect(prompt).toContain("leaderboard (zset, ≈1 key)");
+    expect(ofType(events, "phase")[1]?.detail).toBe("Writing the commands");
+    expect(terminals(events)).toStrictEqual([{ type: "done" }]);
+  });
+
+  it.each([
+    ["SET", ["SET", "k", "v"]],
+    ["DEL", ["DEL", "k"]],
+    ["EVAL", ["EVAL", "return 1", "0"]],
+    ["KEYS", ["KEYS", "*"]],
+    ["CONFIG", ["CONFIG", "SET", "maxmemory", "1"]],
+  ])("refuses %s before any execute", async (name, command) => {
+    const plan = JSON.stringify({ commands: [command], kind: "commands" });
+    const ports = redisPorts(scriptedModel([[plan]]), ordersResult());
+    const events = await collect("do it", ports);
+
+    expect(terminals(events)).toStrictEqual([
+      expect.objectContaining({
+        code: "NOT_READ_ONLY",
+        message: expect.stringMatching(new RegExp(`^${name} `)),
+        sql: plan,
+        type: "error",
+      }),
+    ]);
+    expect(ports.execute).not.toHaveBeenCalled();
   });
 });

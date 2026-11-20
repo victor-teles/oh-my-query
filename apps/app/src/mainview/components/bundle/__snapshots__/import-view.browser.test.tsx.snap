@@ -1,0 +1,3549 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`importView results > finishes on Enter with the first imported widget 1`] = `
+<div>
+  <script
+    nonce=""
+  >
+    ((e, i, s, u, m, a, l, h) =&gt; {
+  let d = document.documentElement, w = ["light", "dark"];
+  function p(n) {
+    (Array.isArray(e) ? e : [e]).forEach((y) =&gt; {
+      let k = y === "class", S = k && a ? m.map((f) =&gt; a[f] || f) : m;
+      k ? (d.classList.remove(...S), d.classList.add(a && a[n] ? a[n] : n)) : d.setAttribute(y, n);
+    }), R(n);
+  }
+  function R(n) {
+    h && w.includes(n) && (d.style.colorScheme = n);
+  }
+  function c() {
+    return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+  }
+  if (u) p(u);
+  else try {
+    let n = localStorage.getItem(i) || s, y = l && n === "system" ? c() : n;
+    p(y);
+  } catch (n) {
+  }
+})("class","vite-ui-theme","dark",null,["light","dark"],null,true,true)
+  </script>
+  <div
+    style="width: 760px"
+  >
+    <div
+      class="flex min-h-0 flex-col"
+    >
+      <header
+        class="flex h-14 shrink-0 items-center gap-2 px-3"
+      >
+        <button
+          aria-label="Back"
+          class="grid size-7 place-items-center rounded-[8px] text-panel-muted hover:bg-row-hover hover:text-foreground"
+          tabindex="0"
+          type="button"
+        >
+          <svg
+            aria-hidden="true"
+            class="lucide lucide-chevron-left size-4"
+            fill="none"
+            height="24"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="m15 18-6-6 6-6"
+            />
+          </svg>
+        </button>
+        <h1
+          class="min-w-0 flex-1 truncate type-title text-foreground"
+        >
+          Import Widgets and Boards
+        </h1>
+      </header>
+      <div
+        class="relative flex min-h-0 flex-1 flex-col border-t border-panel-border"
+      >
+        <div
+          class="flex min-h-0 flex-col"
+        >
+          <div
+            class="flex flex-col gap-3 px-4 pt-3 pb-4"
+          >
+            <p
+              class="flex items-center gap-2 type-body text-foreground"
+              role="status"
+            >
+              <svg
+                aria-label="Imported"
+                class="size-3.5 text-success-ink"
+                fill="none"
+                role="img"
+                viewBox="0 0 16 16"
+              >
+                <path
+                  d="M3.5 8.5 6.5 11.5 12.5 4.5"
+                  pathLength="1"
+                  stroke="currentColor"
+                  stroke-dasharray="1 1"
+                  stroke-dashoffset="0"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="1.75"
+                />
+              </svg>
+              Imported 1 widget and 1 board.
+            </p>
+            <button
+              class="h-7 self-start rounded-[7px] bg-row-hover px-2.5 type-meta text-foreground hover:bg-row-active focus-visible:ring-2 focus-visible:ring-ring/60 focus-visible:outline-none"
+              tabindex="0"
+              type="button"
+            >
+              Done
+            </button>
+          </div>
+        </div>
+      </div>
+      <footer
+        class="flex h-9 shrink-0 items-center justify-between gap-3 border-t border-panel-border px-4 type-meta text-panel-muted"
+      >
+        <div
+          class="flex min-w-0 items-center gap-2"
+        >
+          <span
+            class="flex min-w-0 items-center"
+            role="status"
+          />
+        </div>
+        <div
+          class="flex shrink-0 items-center gap-3"
+        >
+          <div
+            class="flex items-center gap-2"
+          >
+            <span
+              class="text-foreground"
+              data-slot="swap-text"
+            >
+              <span
+                class="inline-block"
+              >
+                Done
+              </span>
+            </span>
+            <kbd
+              aria-label="↩"
+              class="inline-flex items-center gap-0.5"
+              data-slot="kbd-group"
+            >
+              <kbd
+                class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+                data-slot="kbd"
+              >
+                ↩
+              </kbd>
+            </kbd>
+          </div>
+        </div>
+      </footer>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`importView results > lists what failed and what was skipped 1`] = `
+<div>
+  <script
+    nonce=""
+  >
+    ((e, i, s, u, m, a, l, h) =&gt; {
+  let d = document.documentElement, w = ["light", "dark"];
+  function p(n) {
+    (Array.isArray(e) ? e : [e]).forEach((y) =&gt; {
+      let k = y === "class", S = k && a ? m.map((f) =&gt; a[f] || f) : m;
+      k ? (d.classList.remove(...S), d.classList.add(a && a[n] ? a[n] : n)) : d.setAttribute(y, n);
+    }), R(n);
+  }
+  function R(n) {
+    h && w.includes(n) && (d.style.colorScheme = n);
+  }
+  function c() {
+    return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+  }
+  if (u) p(u);
+  else try {
+    let n = localStorage.getItem(i) || s, y = l && n === "system" ? c() : n;
+    p(y);
+  } catch (n) {
+  }
+})("class","vite-ui-theme","dark",null,["light","dark"],null,true,true)
+  </script>
+  <div
+    style="width: 760px"
+  >
+    <div
+      class="flex min-h-0 flex-col"
+    >
+      <header
+        class="flex h-14 shrink-0 items-center gap-2 px-3"
+      >
+        <button
+          aria-label="Back"
+          class="grid size-7 place-items-center rounded-[8px] text-panel-muted hover:bg-row-hover hover:text-foreground"
+          tabindex="0"
+          type="button"
+        >
+          <svg
+            aria-hidden="true"
+            class="lucide lucide-chevron-left size-4"
+            fill="none"
+            height="24"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="m15 18-6-6 6-6"
+            />
+          </svg>
+        </button>
+        <h1
+          class="min-w-0 flex-1 truncate type-title text-foreground"
+        >
+          Import Widgets and Boards
+        </h1>
+      </header>
+      <div
+        class="relative flex min-h-0 flex-1 flex-col border-t border-panel-border"
+      >
+        <div
+          class="flex min-h-0 flex-col"
+        >
+          <div
+            class="flex flex-col gap-3 px-4 pt-3 pb-4"
+          >
+            <p
+              class="flex items-center gap-2 type-body text-foreground"
+              role="status"
+            >
+              <svg
+                aria-label="Imported"
+                class="size-3.5 text-success-ink"
+                fill="none"
+                role="img"
+                viewBox="0 0 16 16"
+              >
+                <path
+                  d="M3.5 8.5 6.5 11.5 12.5 4.5"
+                  pathLength="1"
+                  stroke="currentColor"
+                  stroke-dasharray="1 1"
+                  stroke-dashoffset="0"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="1.75"
+                />
+              </svg>
+              Imported 1 widget and 1 board.
+            </p>
+            <section
+              aria-label="Didn't import"
+              class="flex flex-col gap-1"
+            >
+              <h2
+                class="type-micro text-panel-muted"
+              >
+                Didn't import
+              </h2>
+              <ul
+                class="flex flex-col gap-1"
+              >
+                <li
+                  class="flex min-w-0 items-baseline gap-2 type-meta"
+                >
+                  <span
+                    class="shrink-0 text-panel-muted"
+                  >
+                    Widget
+                  </span>
+                  <span
+                    class="truncate text-foreground"
+                  >
+                    Weekly signups
+                  </span>
+                  <span
+                    class="min-w-0 flex-1 break-words text-danger-ink"
+                  >
+                    Its SQL would change data, so it wasn't imported.
+                  </span>
+                </li>
+              </ul>
+            </section>
+            <section
+              aria-label="Skipped"
+              class="flex flex-col gap-1"
+            >
+              <h2
+                class="type-micro text-panel-muted"
+              >
+                Skipped
+              </h2>
+              <ul
+                class="flex flex-col gap-1"
+              >
+                <li
+                  class="flex min-w-0 items-baseline gap-2 type-meta"
+                >
+                  <span
+                    class="shrink-0 text-panel-muted"
+                  >
+                    Widget
+                  </span>
+                  <span
+                    class="truncate text-foreground"
+                  >
+                    Clicks today
+                  </span>
+                  <span
+                    class="min-w-0 flex-1 break-words text-panel-muted"
+                  >
+                    No connection chosen
+                  </span>
+                </li>
+              </ul>
+            </section>
+            <button
+              class="h-7 self-start rounded-[7px] bg-row-hover px-2.5 type-meta text-foreground hover:bg-row-active focus-visible:ring-2 focus-visible:ring-ring/60 focus-visible:outline-none"
+              tabindex="0"
+              type="button"
+            >
+              Done
+            </button>
+          </div>
+        </div>
+      </div>
+      <footer
+        class="flex h-9 shrink-0 items-center justify-between gap-3 border-t border-panel-border px-4 type-meta text-panel-muted"
+      >
+        <div
+          class="flex min-w-0 items-center gap-2"
+        >
+          <span
+            class="flex min-w-0 items-center"
+            role="status"
+          />
+        </div>
+        <div
+          class="flex shrink-0 items-center gap-3"
+        >
+          <div
+            class="flex items-center gap-2"
+          >
+            <span
+              class="text-foreground"
+              data-slot="swap-text"
+            >
+              <span
+                class="inline-block"
+              >
+                Done
+              </span>
+            </span>
+            <kbd
+              aria-label="↩"
+              class="inline-flex items-center gap-0.5"
+              data-slot="kbd-group"
+            >
+              <kbd
+                class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+                data-slot="kbd"
+              >
+                ↩
+              </kbd>
+            </kbd>
+          </div>
+        </div>
+      </footer>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`importView results > shows Importing… while a slow import runs 1`] = `
+<div>
+  <script
+    nonce=""
+  >
+    ((e, i, s, u, m, a, l, h) =&gt; {
+  let d = document.documentElement, w = ["light", "dark"];
+  function p(n) {
+    (Array.isArray(e) ? e : [e]).forEach((y) =&gt; {
+      let k = y === "class", S = k && a ? m.map((f) =&gt; a[f] || f) : m;
+      k ? (d.classList.remove(...S), d.classList.add(a && a[n] ? a[n] : n)) : d.setAttribute(y, n);
+    }), R(n);
+  }
+  function R(n) {
+    h && w.includes(n) && (d.style.colorScheme = n);
+  }
+  function c() {
+    return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+  }
+  if (u) p(u);
+  else try {
+    let n = localStorage.getItem(i) || s, y = l && n === "system" ? c() : n;
+    p(y);
+  } catch (n) {
+  }
+})("class","vite-ui-theme","dark",null,["light","dark"],null,true,true)
+  </script>
+  <div
+    style="width: 760px"
+  >
+    <div
+      class="flex min-h-0 flex-col"
+    >
+      <header
+        class="flex h-14 shrink-0 items-center gap-2 px-3"
+      >
+        <button
+          aria-label="Back"
+          class="grid size-7 place-items-center rounded-[8px] text-panel-muted hover:bg-row-hover hover:text-foreground"
+          tabindex="0"
+          type="button"
+        >
+          <svg
+            aria-hidden="true"
+            class="lucide lucide-chevron-left size-4"
+            fill="none"
+            height="24"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="m15 18-6-6 6-6"
+            />
+          </svg>
+        </button>
+        <h1
+          class="min-w-0 flex-1 truncate type-title text-foreground"
+        >
+          Import Widgets and Boards
+        </h1>
+      </header>
+      <div
+        class="relative flex min-h-0 flex-1 flex-col border-t border-panel-border"
+      >
+        <div
+          class="flex min-h-0 flex-col"
+        >
+          <div
+            class="max-h-[440px] min-h-0 overflow-y-auto px-2 pb-2"
+          >
+            <div
+              aria-label="Connections"
+              role="group"
+            >
+              <div
+                class="px-2.5 pt-2 pb-1 type-micro text-panel-muted"
+              >
+                Connections
+              </div>
+              <div>
+                <div
+                  aria-activedescendant="import-map-c1-conn-analytics"
+                  aria-label="analytics · PostgreSQL"
+                  class="flex min-h-10 flex-wrap items-center gap-x-3 gap-y-1.5 rounded-[10px] px-2.5 py-1.5 outline-none focus-visible:ring-2 focus-visible:ring-ring/60"
+                  data-import-row="true"
+                  data-row-focus="true"
+                  role="radiogroup"
+                  tabindex="0"
+                >
+                  <span
+                    class="flex min-w-0 flex-1 items-baseline gap-2"
+                  >
+                    <span
+                      class="truncate type-body text-foreground"
+                    >
+                      analytics
+                    </span>
+                    <span
+                      class="shrink-0 type-meta text-panel-muted"
+                    >
+                      PostgreSQL
+                    </span>
+                  </span>
+                  <span
+                    class="flex flex-wrap items-center gap-1"
+                  >
+                    <button
+                      aria-checked="true"
+                      class="relative flex h-7 items-center gap-1.5 rounded-[7px] px-2 type-meta text-foreground"
+                      id="import-map-c1-conn-analytics"
+                      role="radio"
+                      tabindex="-1"
+                      type="button"
+                    >
+                      <span
+                        class="absolute inset-0 rounded-[7px] bg-row-active"
+                      />
+                      <span
+                        aria-hidden="true"
+                        class="grid place-items-center bg-row-hover relative size-4 rounded-[5px] text-[10px]"
+                      >
+                        🐘
+                      </span>
+                      <span
+                        class="relative"
+                      >
+                        analytics
+                      </span>
+                    </button>
+                    <button
+                      aria-checked="false"
+                      class="relative flex h-7 items-center gap-1.5 rounded-[7px] px-2 type-meta text-panel-muted hover:text-foreground"
+                      id="import-map-c1-conn-staging"
+                      role="radio"
+                      tabindex="-1"
+                      type="button"
+                    >
+                      <span
+                        aria-hidden="true"
+                        class="grid place-items-center bg-[color-mix(in_oklab,var(--conn-denim)_14%,transparent)] relative size-4 rounded-[5px] text-[10px]"
+                      >
+                        <span
+                          class="size-2 rounded-full bg-[var(--conn-denim)]"
+                        />
+                      </span>
+                      <span
+                        class="relative"
+                      >
+                        staging
+                      </span>
+                    </button>
+                    <button
+                      aria-checked="false"
+                      class="relative flex h-7 items-center gap-1.5 rounded-[7px] px-2 type-meta text-panel-muted hover:text-foreground"
+                      id="import-map-c1-skip"
+                      role="radio"
+                      tabindex="-1"
+                      type="button"
+                    >
+                      <span
+                        class="relative"
+                      >
+                        Skip
+                      </span>
+                    </button>
+                  </span>
+                </div>
+              </div>
+              <div>
+                <div
+                  aria-activedescendant="import-map-c2-skip"
+                  aria-label="warehouse · ClickHouse"
+                  class="flex min-h-10 flex-wrap items-center gap-x-3 gap-y-1.5 rounded-[10px] px-2.5 py-1.5 outline-none focus-visible:ring-2 focus-visible:ring-ring/60"
+                  data-import-row="true"
+                  data-row-focus="true"
+                  role="radiogroup"
+                  tabindex="0"
+                >
+                  <span
+                    class="flex min-w-0 flex-1 items-baseline gap-2"
+                  >
+                    <span
+                      class="truncate type-body text-foreground"
+                    >
+                      warehouse
+                    </span>
+                    <span
+                      class="shrink-0 type-meta text-panel-muted"
+                    >
+                      ClickHouse
+                    </span>
+                  </span>
+                  <span
+                    class="flex flex-wrap items-center gap-1"
+                  >
+                    <span
+                      class="pr-1 type-meta text-panel-muted"
+                    >
+                      No 
+                      ClickHouse
+                       connection here
+                    </span>
+                    <button
+                      aria-checked="true"
+                      class="relative flex h-7 items-center gap-1.5 rounded-[7px] px-2 type-meta text-foreground"
+                      id="import-map-c2-skip"
+                      role="radio"
+                      tabindex="-1"
+                      type="button"
+                    >
+                      <span
+                        class="absolute inset-0 rounded-[7px] bg-row-active"
+                      />
+                      <span
+                        class="relative"
+                      >
+                        Skip
+                      </span>
+                    </button>
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div
+              aria-label="Widgets"
+              role="group"
+            >
+              <div
+                class="px-2.5 pt-2 pb-1 type-micro text-panel-muted"
+              >
+                Widgets
+              </div>
+              <div>
+                <div
+                  data-import-row="true"
+                  data-widget-ref="w1"
+                >
+                  <div
+                    class="flex items-center gap-1"
+                  >
+                    <label
+                      class="flex h-10 min-w-0 flex-1 cursor-default items-center gap-3 rounded-[10px] px-2.5 hover:bg-row-hover has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-ring/60"
+                    >
+                      <input
+                        aria-disabled="false"
+                        checked=""
+                        class="sr-only"
+                        data-row-focus="true"
+                        type="checkbox"
+                      />
+                      <span
+                        aria-hidden="true"
+                        class="relative grid size-4 shrink-0 place-items-center rounded-[5px] border border-panel-border"
+                        data-checked="true"
+                      >
+                        <span
+                          class="absolute -inset-px rounded-[5px] bg-primary"
+                        />
+                        <span
+                          class="relative text-primary-foreground"
+                        >
+                          <svg
+                            aria-hidden="true"
+                            class="lucide lucide-check size-3"
+                            fill="none"
+                            height="24"
+                            stroke="currentColor"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="3"
+                            viewBox="0 0 24 24"
+                            width="24"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              d="M20 6 9 17l-5-5"
+                            />
+                          </svg>
+                        </span>
+                      </span>
+                      <span
+                        class="flex min-w-0 flex-1 items-baseline gap-2"
+                      >
+                        <span
+                          class="truncate type-body text-foreground"
+                        >
+                          Revenue by region
+                        </span>
+                        <span
+                          class="truncate type-meta text-panel-muted"
+                        >
+                          analytics · Inputs: Region, Period
+                        </span>
+                      </span>
+                    </label>
+                    <button
+                      aria-expanded="false"
+                      aria-label="Show SQL for Revenue by region"
+                      class="flex h-7 shrink-0 items-center gap-1.5 rounded-[7px] px-2 type-meta text-panel-muted hover:bg-row-hover hover:text-foreground"
+                      tabindex="-1"
+                      type="button"
+                    >
+                      SQL
+                      <kbd
+                        aria-label="⌘ E"
+                        class="inline-flex items-center gap-0.5"
+                        data-slot="kbd-group"
+                      >
+                        <kbd
+                          class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+                          data-slot="kbd"
+                        >
+                          ⌘
+                        </kbd>
+                        <kbd
+                          class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+                          data-slot="kbd"
+                        >
+                          E
+                        </kbd>
+                      </kbd>
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div>
+                <div
+                  data-import-row="true"
+                  data-widget-ref="w2"
+                >
+                  <div
+                    class="flex items-center gap-1"
+                  >
+                    <label
+                      class="flex h-10 min-w-0 flex-1 cursor-default items-center gap-3 rounded-[10px] px-2.5 hover:bg-row-hover has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-ring/60"
+                    >
+                      <input
+                        aria-disabled="false"
+                        class="sr-only"
+                        data-row-focus="true"
+                        type="checkbox"
+                      />
+                      <span
+                        aria-hidden="true"
+                        class="relative grid size-4 shrink-0 place-items-center rounded-[5px] border border-panel-border"
+                        data-checked="false"
+                      >
+                        <span
+                          class="absolute -inset-px rounded-[5px] bg-primary"
+                        />
+                        <span
+                          class="relative text-primary-foreground"
+                        >
+                          <svg
+                            aria-hidden="true"
+                            class="lucide lucide-check size-3"
+                            fill="none"
+                            height="24"
+                            stroke="currentColor"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="3"
+                            viewBox="0 0 24 24"
+                            width="24"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              d="M20 6 9 17l-5-5"
+                            />
+                          </svg>
+                        </span>
+                      </span>
+                      <span
+                        class="flex min-w-0 flex-1 items-baseline gap-2"
+                      >
+                        <span
+                          class="truncate type-body text-foreground"
+                        >
+                          Weekly signups
+                        </span>
+                        <span
+                          class="truncate type-meta text-panel-muted"
+                        >
+                          analytics · No inputs
+                        </span>
+                      </span>
+                      <span
+                        class="shrink-0 rounded-[5px] bg-row-hover px-1.5 py-0.5 type-micro text-panel-muted"
+                      >
+                        Already here
+                      </span>
+                    </label>
+                    <button
+                      aria-expanded="false"
+                      aria-label="Show SQL for Weekly signups"
+                      class="flex h-7 shrink-0 items-center gap-1.5 rounded-[7px] px-2 type-meta text-panel-muted hover:bg-row-hover hover:text-foreground"
+                      tabindex="-1"
+                      type="button"
+                    >
+                      SQL
+                      <kbd
+                        aria-label="⌘ E"
+                        class="inline-flex items-center gap-0.5"
+                        data-slot="kbd-group"
+                      >
+                        <kbd
+                          class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+                          data-slot="kbd"
+                        >
+                          ⌘
+                        </kbd>
+                        <kbd
+                          class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+                          data-slot="kbd"
+                        >
+                          E
+                        </kbd>
+                      </kbd>
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div>
+                <div
+                  data-import-row="true"
+                  data-widget-ref="w3"
+                >
+                  <div
+                    class="flex items-center gap-1"
+                  >
+                    <label
+                      class="flex h-10 min-w-0 flex-1 cursor-default items-center gap-3 rounded-[10px] px-2.5 hover:bg-row-hover has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-ring/60"
+                    >
+                      <input
+                        aria-disabled="true"
+                        class="sr-only"
+                        data-row-focus="true"
+                        type="checkbox"
+                      />
+                      <span
+                        aria-hidden="true"
+                        class="relative grid size-4 shrink-0 place-items-center rounded-[5px] border border-panel-border"
+                        data-checked="false"
+                      >
+                        <span
+                          class="absolute -inset-px rounded-[5px] bg-primary"
+                        />
+                        <span
+                          class="relative text-primary-foreground"
+                        >
+                          <svg
+                            aria-hidden="true"
+                            class="lucide lucide-check size-3"
+                            fill="none"
+                            height="24"
+                            stroke="currentColor"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="3"
+                            viewBox="0 0 24 24"
+                            width="24"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              d="M20 6 9 17l-5-5"
+                            />
+                          </svg>
+                        </span>
+                      </span>
+                      <span
+                        class="flex min-w-0 flex-1 items-baseline gap-2"
+                      >
+                        <span
+                          class="truncate type-body text-foreground"
+                        >
+                          Clicks today
+                        </span>
+                        <span
+                          class="truncate type-meta text-panel-muted"
+                        >
+                          Choose a connection
+                        </span>
+                      </span>
+                    </label>
+                    <button
+                      aria-expanded="false"
+                      aria-label="Show SQL for Clicks today"
+                      class="flex h-7 shrink-0 items-center gap-1.5 rounded-[7px] px-2 type-meta text-panel-muted hover:bg-row-hover hover:text-foreground"
+                      tabindex="-1"
+                      type="button"
+                    >
+                      SQL
+                      <kbd
+                        aria-label="⌘ E"
+                        class="inline-flex items-center gap-0.5"
+                        data-slot="kbd-group"
+                      >
+                        <kbd
+                          class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+                          data-slot="kbd"
+                        >
+                          ⌘
+                        </kbd>
+                        <kbd
+                          class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+                          data-slot="kbd"
+                        >
+                          E
+                        </kbd>
+                      </kbd>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div
+              aria-label="Boards"
+              role="group"
+            >
+              <div
+                class="px-2.5 pt-2 pb-1 type-micro text-panel-muted"
+              >
+                Boards
+              </div>
+              <div>
+                <div
+                  data-import-row="true"
+                >
+                  <label
+                    class="flex h-10 min-w-0 flex-1 cursor-default items-center gap-3 rounded-[10px] px-2.5 hover:bg-row-hover has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-ring/60"
+                  >
+                    <input
+                      aria-disabled="false"
+                      checked=""
+                      class="sr-only"
+                      data-row-focus="true"
+                      type="checkbox"
+                    />
+                    <span
+                      aria-hidden="true"
+                      class="relative grid size-4 shrink-0 place-items-center rounded-[5px] border border-panel-border"
+                      data-checked="true"
+                    >
+                      <span
+                        class="absolute -inset-px rounded-[5px] bg-primary"
+                      />
+                      <span
+                        class="relative text-primary-foreground"
+                      >
+                        <svg
+                          aria-hidden="true"
+                          class="lucide lucide-check size-3"
+                          fill="none"
+                          height="24"
+                          stroke="currentColor"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="3"
+                          viewBox="0 0 24 24"
+                          width="24"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M20 6 9 17l-5-5"
+                          />
+                        </svg>
+                      </span>
+                    </span>
+                    <span
+                      class="flex-1 type-body text-foreground"
+                    >
+                      Import boards
+                    </span>
+                    <span
+                      class="type-meta text-panel-muted"
+                    >
+                      1 board
+                    </span>
+                  </label>
+                  <ul
+                    class="flex flex-col gap-0.5 pb-1.5 pl-[38px]"
+                  >
+                    <li
+                      class="flex min-w-0 items-baseline gap-2 type-meta"
+                    >
+                      <span
+                        class="truncate text-foreground"
+                      >
+                        📈 
+                        Weekly review
+                      </span>
+                      <span
+                        class="shrink-0 text-panel-muted"
+                      >
+                        1 of 3 tiles
+                      </span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <footer
+        class="flex h-9 shrink-0 items-center justify-between gap-3 border-t border-panel-border px-4 type-meta text-panel-muted"
+      >
+        <div
+          class="flex min-w-0 items-center gap-2"
+        >
+          <span
+            class="flex min-w-0 items-center"
+            role="status"
+          >
+            <span
+              class="truncate"
+              data-slot="swap-text"
+            >
+              <span
+                class="inline-block"
+              >
+                Importing…
+              </span>
+            </span>
+          </span>
+        </div>
+        <div
+          class="flex shrink-0 items-center gap-3"
+        />
+      </footer>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`importView review > maps connections by name, leaves duplicates off and disables an unmapped connection's widgets 1`] = `
+<div>
+  <script
+    nonce=""
+  >
+    ((e, i, s, u, m, a, l, h) =&gt; {
+  let d = document.documentElement, w = ["light", "dark"];
+  function p(n) {
+    (Array.isArray(e) ? e : [e]).forEach((y) =&gt; {
+      let k = y === "class", S = k && a ? m.map((f) =&gt; a[f] || f) : m;
+      k ? (d.classList.remove(...S), d.classList.add(a && a[n] ? a[n] : n)) : d.setAttribute(y, n);
+    }), R(n);
+  }
+  function R(n) {
+    h && w.includes(n) && (d.style.colorScheme = n);
+  }
+  function c() {
+    return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+  }
+  if (u) p(u);
+  else try {
+    let n = localStorage.getItem(i) || s, y = l && n === "system" ? c() : n;
+    p(y);
+  } catch (n) {
+  }
+})("class","vite-ui-theme","dark",null,["light","dark"],null,true,true)
+  </script>
+  <div
+    style="width: 760px"
+  >
+    <div
+      class="flex min-h-0 flex-col"
+    >
+      <header
+        class="flex h-14 shrink-0 items-center gap-2 px-3"
+      >
+        <button
+          aria-label="Back"
+          class="grid size-7 place-items-center rounded-[8px] text-panel-muted hover:bg-row-hover hover:text-foreground"
+          tabindex="0"
+          type="button"
+        >
+          <svg
+            aria-hidden="true"
+            class="lucide lucide-chevron-left size-4"
+            fill="none"
+            height="24"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="m15 18-6-6 6-6"
+            />
+          </svg>
+        </button>
+        <h1
+          class="min-w-0 flex-1 truncate type-title text-foreground"
+        >
+          Import Widgets and Boards
+        </h1>
+      </header>
+      <div
+        class="relative flex min-h-0 flex-1 flex-col border-t border-panel-border"
+      >
+        <div
+          class="flex min-h-0 flex-col"
+        >
+          <div
+            class="max-h-[440px] min-h-0 overflow-y-auto px-2 pb-2"
+          >
+            <div
+              aria-label="Connections"
+              role="group"
+            >
+              <div
+                class="px-2.5 pt-2 pb-1 type-micro text-panel-muted"
+              >
+                Connections
+              </div>
+              <div>
+                <div
+                  aria-activedescendant="import-map-c1-conn-analytics"
+                  aria-label="analytics · PostgreSQL"
+                  class="flex min-h-10 flex-wrap items-center gap-x-3 gap-y-1.5 rounded-[10px] px-2.5 py-1.5 outline-none focus-visible:ring-2 focus-visible:ring-ring/60"
+                  data-import-row="true"
+                  data-row-focus="true"
+                  role="radiogroup"
+                  tabindex="0"
+                >
+                  <span
+                    class="flex min-w-0 flex-1 items-baseline gap-2"
+                  >
+                    <span
+                      class="truncate type-body text-foreground"
+                    >
+                      analytics
+                    </span>
+                    <span
+                      class="shrink-0 type-meta text-panel-muted"
+                    >
+                      PostgreSQL
+                    </span>
+                  </span>
+                  <span
+                    class="flex flex-wrap items-center gap-1"
+                  >
+                    <button
+                      aria-checked="true"
+                      class="relative flex h-7 items-center gap-1.5 rounded-[7px] px-2 type-meta text-foreground"
+                      id="import-map-c1-conn-analytics"
+                      role="radio"
+                      tabindex="-1"
+                      type="button"
+                    >
+                      <span
+                        class="absolute inset-0 rounded-[7px] bg-row-active"
+                      />
+                      <span
+                        aria-hidden="true"
+                        class="grid place-items-center bg-row-hover relative size-4 rounded-[5px] text-[10px]"
+                      >
+                        🐘
+                      </span>
+                      <span
+                        class="relative"
+                      >
+                        analytics
+                      </span>
+                    </button>
+                    <button
+                      aria-checked="false"
+                      class="relative flex h-7 items-center gap-1.5 rounded-[7px] px-2 type-meta text-panel-muted hover:text-foreground"
+                      id="import-map-c1-conn-staging"
+                      role="radio"
+                      tabindex="-1"
+                      type="button"
+                    >
+                      <span
+                        aria-hidden="true"
+                        class="grid place-items-center bg-[color-mix(in_oklab,var(--conn-denim)_14%,transparent)] relative size-4 rounded-[5px] text-[10px]"
+                      >
+                        <span
+                          class="size-2 rounded-full bg-[var(--conn-denim)]"
+                        />
+                      </span>
+                      <span
+                        class="relative"
+                      >
+                        staging
+                      </span>
+                    </button>
+                    <button
+                      aria-checked="false"
+                      class="relative flex h-7 items-center gap-1.5 rounded-[7px] px-2 type-meta text-panel-muted hover:text-foreground"
+                      id="import-map-c1-skip"
+                      role="radio"
+                      tabindex="-1"
+                      type="button"
+                    >
+                      <span
+                        class="relative"
+                      >
+                        Skip
+                      </span>
+                    </button>
+                  </span>
+                </div>
+              </div>
+              <div>
+                <div
+                  aria-activedescendant="import-map-c2-skip"
+                  aria-label="warehouse · ClickHouse"
+                  class="flex min-h-10 flex-wrap items-center gap-x-3 gap-y-1.5 rounded-[10px] px-2.5 py-1.5 outline-none focus-visible:ring-2 focus-visible:ring-ring/60"
+                  data-import-row="true"
+                  data-row-focus="true"
+                  role="radiogroup"
+                  tabindex="0"
+                >
+                  <span
+                    class="flex min-w-0 flex-1 items-baseline gap-2"
+                  >
+                    <span
+                      class="truncate type-body text-foreground"
+                    >
+                      warehouse
+                    </span>
+                    <span
+                      class="shrink-0 type-meta text-panel-muted"
+                    >
+                      ClickHouse
+                    </span>
+                  </span>
+                  <span
+                    class="flex flex-wrap items-center gap-1"
+                  >
+                    <span
+                      class="pr-1 type-meta text-panel-muted"
+                    >
+                      No 
+                      ClickHouse
+                       connection here
+                    </span>
+                    <button
+                      aria-checked="true"
+                      class="relative flex h-7 items-center gap-1.5 rounded-[7px] px-2 type-meta text-foreground"
+                      id="import-map-c2-skip"
+                      role="radio"
+                      tabindex="-1"
+                      type="button"
+                    >
+                      <span
+                        class="absolute inset-0 rounded-[7px] bg-row-active"
+                      />
+                      <span
+                        class="relative"
+                      >
+                        Skip
+                      </span>
+                    </button>
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div
+              aria-label="Widgets"
+              role="group"
+            >
+              <div
+                class="px-2.5 pt-2 pb-1 type-micro text-panel-muted"
+              >
+                Widgets
+              </div>
+              <div>
+                <div
+                  data-import-row="true"
+                  data-widget-ref="w1"
+                >
+                  <div
+                    class="flex items-center gap-1"
+                  >
+                    <label
+                      class="flex h-10 min-w-0 flex-1 cursor-default items-center gap-3 rounded-[10px] px-2.5 hover:bg-row-hover has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-ring/60"
+                    >
+                      <input
+                        aria-disabled="false"
+                        checked=""
+                        class="sr-only"
+                        data-row-focus="true"
+                        type="checkbox"
+                      />
+                      <span
+                        aria-hidden="true"
+                        class="relative grid size-4 shrink-0 place-items-center rounded-[5px] border border-panel-border"
+                        data-checked="true"
+                      >
+                        <span
+                          class="absolute -inset-px rounded-[5px] bg-primary"
+                        />
+                        <span
+                          class="relative text-primary-foreground"
+                        >
+                          <svg
+                            aria-hidden="true"
+                            class="lucide lucide-check size-3"
+                            fill="none"
+                            height="24"
+                            stroke="currentColor"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="3"
+                            viewBox="0 0 24 24"
+                            width="24"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              d="M20 6 9 17l-5-5"
+                            />
+                          </svg>
+                        </span>
+                      </span>
+                      <span
+                        class="flex min-w-0 flex-1 items-baseline gap-2"
+                      >
+                        <span
+                          class="truncate type-body text-foreground"
+                        >
+                          Revenue by region
+                        </span>
+                        <span
+                          class="truncate type-meta text-panel-muted"
+                        >
+                          analytics · Inputs: Region, Period
+                        </span>
+                      </span>
+                    </label>
+                    <button
+                      aria-expanded="false"
+                      aria-label="Show SQL for Revenue by region"
+                      class="flex h-7 shrink-0 items-center gap-1.5 rounded-[7px] px-2 type-meta text-panel-muted hover:bg-row-hover hover:text-foreground"
+                      tabindex="-1"
+                      type="button"
+                    >
+                      SQL
+                      <kbd
+                        aria-label="⌘ E"
+                        class="inline-flex items-center gap-0.5"
+                        data-slot="kbd-group"
+                      >
+                        <kbd
+                          class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+                          data-slot="kbd"
+                        >
+                          ⌘
+                        </kbd>
+                        <kbd
+                          class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+                          data-slot="kbd"
+                        >
+                          E
+                        </kbd>
+                      </kbd>
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div>
+                <div
+                  data-import-row="true"
+                  data-widget-ref="w2"
+                >
+                  <div
+                    class="flex items-center gap-1"
+                  >
+                    <label
+                      class="flex h-10 min-w-0 flex-1 cursor-default items-center gap-3 rounded-[10px] px-2.5 hover:bg-row-hover has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-ring/60"
+                    >
+                      <input
+                        aria-disabled="false"
+                        class="sr-only"
+                        data-row-focus="true"
+                        type="checkbox"
+                      />
+                      <span
+                        aria-hidden="true"
+                        class="relative grid size-4 shrink-0 place-items-center rounded-[5px] border border-panel-border"
+                        data-checked="false"
+                      >
+                        <span
+                          class="absolute -inset-px rounded-[5px] bg-primary"
+                        />
+                        <span
+                          class="relative text-primary-foreground"
+                        >
+                          <svg
+                            aria-hidden="true"
+                            class="lucide lucide-check size-3"
+                            fill="none"
+                            height="24"
+                            stroke="currentColor"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="3"
+                            viewBox="0 0 24 24"
+                            width="24"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              d="M20 6 9 17l-5-5"
+                            />
+                          </svg>
+                        </span>
+                      </span>
+                      <span
+                        class="flex min-w-0 flex-1 items-baseline gap-2"
+                      >
+                        <span
+                          class="truncate type-body text-foreground"
+                        >
+                          Weekly signups
+                        </span>
+                        <span
+                          class="truncate type-meta text-panel-muted"
+                        >
+                          analytics · No inputs
+                        </span>
+                      </span>
+                      <span
+                        class="shrink-0 rounded-[5px] bg-row-hover px-1.5 py-0.5 type-micro text-panel-muted"
+                      >
+                        Already here
+                      </span>
+                    </label>
+                    <button
+                      aria-expanded="false"
+                      aria-label="Show SQL for Weekly signups"
+                      class="flex h-7 shrink-0 items-center gap-1.5 rounded-[7px] px-2 type-meta text-panel-muted hover:bg-row-hover hover:text-foreground"
+                      tabindex="-1"
+                      type="button"
+                    >
+                      SQL
+                      <kbd
+                        aria-label="⌘ E"
+                        class="inline-flex items-center gap-0.5"
+                        data-slot="kbd-group"
+                      >
+                        <kbd
+                          class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+                          data-slot="kbd"
+                        >
+                          ⌘
+                        </kbd>
+                        <kbd
+                          class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+                          data-slot="kbd"
+                        >
+                          E
+                        </kbd>
+                      </kbd>
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div>
+                <div
+                  data-import-row="true"
+                  data-widget-ref="w3"
+                >
+                  <div
+                    class="flex items-center gap-1"
+                  >
+                    <label
+                      class="flex h-10 min-w-0 flex-1 cursor-default items-center gap-3 rounded-[10px] px-2.5 hover:bg-row-hover has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-ring/60"
+                    >
+                      <input
+                        aria-disabled="true"
+                        class="sr-only"
+                        data-row-focus="true"
+                        type="checkbox"
+                      />
+                      <span
+                        aria-hidden="true"
+                        class="relative grid size-4 shrink-0 place-items-center rounded-[5px] border border-panel-border"
+                        data-checked="false"
+                      >
+                        <span
+                          class="absolute -inset-px rounded-[5px] bg-primary"
+                        />
+                        <span
+                          class="relative text-primary-foreground"
+                        >
+                          <svg
+                            aria-hidden="true"
+                            class="lucide lucide-check size-3"
+                            fill="none"
+                            height="24"
+                            stroke="currentColor"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="3"
+                            viewBox="0 0 24 24"
+                            width="24"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              d="M20 6 9 17l-5-5"
+                            />
+                          </svg>
+                        </span>
+                      </span>
+                      <span
+                        class="flex min-w-0 flex-1 items-baseline gap-2"
+                      >
+                        <span
+                          class="truncate type-body text-foreground"
+                        >
+                          Clicks today
+                        </span>
+                        <span
+                          class="truncate type-meta text-panel-muted"
+                        >
+                          Choose a connection
+                        </span>
+                      </span>
+                    </label>
+                    <button
+                      aria-expanded="false"
+                      aria-label="Show SQL for Clicks today"
+                      class="flex h-7 shrink-0 items-center gap-1.5 rounded-[7px] px-2 type-meta text-panel-muted hover:bg-row-hover hover:text-foreground"
+                      tabindex="-1"
+                      type="button"
+                    >
+                      SQL
+                      <kbd
+                        aria-label="⌘ E"
+                        class="inline-flex items-center gap-0.5"
+                        data-slot="kbd-group"
+                      >
+                        <kbd
+                          class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+                          data-slot="kbd"
+                        >
+                          ⌘
+                        </kbd>
+                        <kbd
+                          class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+                          data-slot="kbd"
+                        >
+                          E
+                        </kbd>
+                      </kbd>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div
+              aria-label="Boards"
+              role="group"
+            >
+              <div
+                class="px-2.5 pt-2 pb-1 type-micro text-panel-muted"
+              >
+                Boards
+              </div>
+              <div>
+                <div
+                  data-import-row="true"
+                >
+                  <label
+                    class="flex h-10 min-w-0 flex-1 cursor-default items-center gap-3 rounded-[10px] px-2.5 hover:bg-row-hover has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-ring/60"
+                  >
+                    <input
+                      aria-disabled="false"
+                      checked=""
+                      class="sr-only"
+                      data-row-focus="true"
+                      type="checkbox"
+                    />
+                    <span
+                      aria-hidden="true"
+                      class="relative grid size-4 shrink-0 place-items-center rounded-[5px] border border-panel-border"
+                      data-checked="true"
+                    >
+                      <span
+                        class="absolute -inset-px rounded-[5px] bg-primary"
+                      />
+                      <span
+                        class="relative text-primary-foreground"
+                      >
+                        <svg
+                          aria-hidden="true"
+                          class="lucide lucide-check size-3"
+                          fill="none"
+                          height="24"
+                          stroke="currentColor"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="3"
+                          viewBox="0 0 24 24"
+                          width="24"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M20 6 9 17l-5-5"
+                          />
+                        </svg>
+                      </span>
+                    </span>
+                    <span
+                      class="flex-1 type-body text-foreground"
+                    >
+                      Import boards
+                    </span>
+                    <span
+                      class="type-meta text-panel-muted"
+                    >
+                      1 board
+                    </span>
+                  </label>
+                  <ul
+                    class="flex flex-col gap-0.5 pb-1.5 pl-[38px]"
+                  >
+                    <li
+                      class="flex min-w-0 items-baseline gap-2 type-meta"
+                    >
+                      <span
+                        class="truncate text-foreground"
+                      >
+                        📈 
+                        Weekly review
+                      </span>
+                      <span
+                        class="shrink-0 text-panel-muted"
+                      >
+                        1 of 3 tiles
+                      </span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <footer
+        class="flex h-9 shrink-0 items-center justify-between gap-3 border-t border-panel-border px-4 type-meta text-panel-muted"
+      >
+        <div
+          class="flex min-w-0 items-center gap-2"
+        >
+          <span
+            class="flex min-w-0 items-center"
+            role="status"
+          >
+            <span
+              class="truncate"
+              data-slot="swap-text"
+            >
+              <span
+                class="inline-block"
+              >
+                Exported Nov 20, 2026
+              </span>
+            </span>
+          </span>
+        </div>
+        <div
+          class="flex shrink-0 items-center gap-3"
+        >
+          <div
+            class="flex items-center gap-2"
+          >
+            <span
+              class="text-foreground"
+              data-slot="swap-text"
+            >
+              <span
+                class="inline-block"
+              >
+                Import 1 widget, 1 board
+              </span>
+            </span>
+            <kbd
+              aria-label="⌘ ↩"
+              class="inline-flex items-center gap-0.5"
+              data-slot="kbd-group"
+            >
+              <kbd
+                class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+                data-slot="kbd"
+              >
+                ⌘
+              </kbd>
+              <kbd
+                class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+                data-slot="kbd"
+              >
+                ↩
+              </kbd>
+            </kbd>
+          </div>
+          <div
+            class="flex items-center gap-2 border-l border-panel-border pl-3"
+          >
+            <span>
+              Toggle
+            </span>
+            <kbd
+              aria-label="Space"
+              class="inline-flex items-center gap-0.5"
+              data-slot="kbd-group"
+            >
+              <kbd
+                class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+                data-slot="kbd"
+              >
+                Space
+              </kbd>
+            </kbd>
+          </div>
+          <div
+            class="flex items-center gap-2 border-l border-panel-border pl-3"
+          >
+            <span>
+              SQL
+            </span>
+            <kbd
+              aria-label="⌘ E"
+              class="inline-flex items-center gap-0.5"
+              data-slot="kbd-group"
+            >
+              <kbd
+                class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+                data-slot="kbd"
+              >
+                ⌘
+              </kbd>
+              <kbd
+                class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+                data-slot="kbd"
+              >
+                E
+              </kbd>
+            </kbd>
+          </div>
+        </div>
+      </footer>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`importView review > shows every widget on when each connection has a match 1`] = `
+<div>
+  <script
+    nonce=""
+  >
+    ((e, i, s, u, m, a, l, h) =&gt; {
+  let d = document.documentElement, w = ["light", "dark"];
+  function p(n) {
+    (Array.isArray(e) ? e : [e]).forEach((y) =&gt; {
+      let k = y === "class", S = k && a ? m.map((f) =&gt; a[f] || f) : m;
+      k ? (d.classList.remove(...S), d.classList.add(a && a[n] ? a[n] : n)) : d.setAttribute(y, n);
+    }), R(n);
+  }
+  function R(n) {
+    h && w.includes(n) && (d.style.colorScheme = n);
+  }
+  function c() {
+    return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+  }
+  if (u) p(u);
+  else try {
+    let n = localStorage.getItem(i) || s, y = l && n === "system" ? c() : n;
+    p(y);
+  } catch (n) {
+  }
+})("class","vite-ui-theme","dark",null,["light","dark"],null,true,true)
+  </script>
+  <div
+    style="width: 760px"
+  >
+    <div
+      class="flex min-h-0 flex-col"
+    >
+      <header
+        class="flex h-14 shrink-0 items-center gap-2 px-3"
+      >
+        <button
+          aria-label="Back"
+          class="grid size-7 place-items-center rounded-[8px] text-panel-muted hover:bg-row-hover hover:text-foreground"
+          tabindex="0"
+          type="button"
+        >
+          <svg
+            aria-hidden="true"
+            class="lucide lucide-chevron-left size-4"
+            fill="none"
+            height="24"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="m15 18-6-6 6-6"
+            />
+          </svg>
+        </button>
+        <h1
+          class="min-w-0 flex-1 truncate type-title text-foreground"
+        >
+          Import Widgets and Boards
+        </h1>
+      </header>
+      <div
+        class="relative flex min-h-0 flex-1 flex-col border-t border-panel-border"
+      >
+        <div
+          class="flex min-h-0 flex-col"
+        >
+          <div
+            class="max-h-[440px] min-h-0 overflow-y-auto px-2 pb-2"
+          >
+            <div
+              aria-label="Connections"
+              role="group"
+            >
+              <div
+                class="px-2.5 pt-2 pb-1 type-micro text-panel-muted"
+              >
+                Connections
+              </div>
+              <div>
+                <div
+                  aria-activedescendant="import-map-c1-conn-analytics"
+                  aria-label="analytics · PostgreSQL"
+                  class="flex min-h-10 flex-wrap items-center gap-x-3 gap-y-1.5 rounded-[10px] px-2.5 py-1.5 outline-none focus-visible:ring-2 focus-visible:ring-ring/60"
+                  data-import-row="true"
+                  data-row-focus="true"
+                  role="radiogroup"
+                  tabindex="0"
+                >
+                  <span
+                    class="flex min-w-0 flex-1 items-baseline gap-2"
+                  >
+                    <span
+                      class="truncate type-body text-foreground"
+                    >
+                      analytics
+                    </span>
+                    <span
+                      class="shrink-0 type-meta text-panel-muted"
+                    >
+                      PostgreSQL
+                    </span>
+                  </span>
+                  <span
+                    class="flex flex-wrap items-center gap-1"
+                  >
+                    <button
+                      aria-checked="true"
+                      class="relative flex h-7 items-center gap-1.5 rounded-[7px] px-2 type-meta text-foreground"
+                      id="import-map-c1-conn-analytics"
+                      role="radio"
+                      tabindex="-1"
+                      type="button"
+                    >
+                      <span
+                        class="absolute inset-0 rounded-[7px] bg-row-active"
+                      />
+                      <span
+                        aria-hidden="true"
+                        class="grid place-items-center bg-row-hover relative size-4 rounded-[5px] text-[10px]"
+                      >
+                        🐘
+                      </span>
+                      <span
+                        class="relative"
+                      >
+                        analytics
+                      </span>
+                    </button>
+                    <button
+                      aria-checked="false"
+                      class="relative flex h-7 items-center gap-1.5 rounded-[7px] px-2 type-meta text-panel-muted hover:text-foreground"
+                      id="import-map-c1-conn-staging"
+                      role="radio"
+                      tabindex="-1"
+                      type="button"
+                    >
+                      <span
+                        aria-hidden="true"
+                        class="grid place-items-center bg-[color-mix(in_oklab,var(--conn-denim)_14%,transparent)] relative size-4 rounded-[5px] text-[10px]"
+                      >
+                        <span
+                          class="size-2 rounded-full bg-[var(--conn-denim)]"
+                        />
+                      </span>
+                      <span
+                        class="relative"
+                      >
+                        staging
+                      </span>
+                    </button>
+                    <button
+                      aria-checked="false"
+                      class="relative flex h-7 items-center gap-1.5 rounded-[7px] px-2 type-meta text-panel-muted hover:text-foreground"
+                      id="import-map-c1-skip"
+                      role="radio"
+                      tabindex="-1"
+                      type="button"
+                    >
+                      <span
+                        class="relative"
+                      >
+                        Skip
+                      </span>
+                    </button>
+                  </span>
+                </div>
+              </div>
+              <div>
+                <div
+                  aria-activedescendant="import-map-c2-conn-ch"
+                  aria-label="warehouse · ClickHouse"
+                  class="flex min-h-10 flex-wrap items-center gap-x-3 gap-y-1.5 rounded-[10px] px-2.5 py-1.5 outline-none focus-visible:ring-2 focus-visible:ring-ring/60"
+                  data-import-row="true"
+                  data-row-focus="true"
+                  role="radiogroup"
+                  tabindex="0"
+                >
+                  <span
+                    class="flex min-w-0 flex-1 items-baseline gap-2"
+                  >
+                    <span
+                      class="truncate type-body text-foreground"
+                    >
+                      warehouse
+                    </span>
+                    <span
+                      class="shrink-0 type-meta text-panel-muted"
+                    >
+                      ClickHouse
+                    </span>
+                  </span>
+                  <span
+                    class="flex flex-wrap items-center gap-1"
+                  >
+                    <button
+                      aria-checked="true"
+                      class="relative flex h-7 items-center gap-1.5 rounded-[7px] px-2 type-meta text-foreground"
+                      id="import-map-c2-conn-ch"
+                      role="radio"
+                      tabindex="-1"
+                      type="button"
+                    >
+                      <span
+                        class="absolute inset-0 rounded-[7px] bg-row-active"
+                      />
+                      <span
+                        aria-hidden="true"
+                        class="grid place-items-center bg-row-hover relative size-4 rounded-[5px] text-[10px]"
+                      >
+                        📊
+                      </span>
+                      <span
+                        class="relative"
+                      >
+                        warehouse
+                      </span>
+                    </button>
+                    <button
+                      aria-checked="false"
+                      class="relative flex h-7 items-center gap-1.5 rounded-[7px] px-2 type-meta text-panel-muted hover:text-foreground"
+                      id="import-map-c2-skip"
+                      role="radio"
+                      tabindex="-1"
+                      type="button"
+                    >
+                      <span
+                        class="relative"
+                      >
+                        Skip
+                      </span>
+                    </button>
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div
+              aria-label="Widgets"
+              role="group"
+            >
+              <div
+                class="px-2.5 pt-2 pb-1 type-micro text-panel-muted"
+              >
+                Widgets
+              </div>
+              <div>
+                <div
+                  data-import-row="true"
+                  data-widget-ref="w1"
+                >
+                  <div
+                    class="flex items-center gap-1"
+                  >
+                    <label
+                      class="flex h-10 min-w-0 flex-1 cursor-default items-center gap-3 rounded-[10px] px-2.5 hover:bg-row-hover has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-ring/60"
+                    >
+                      <input
+                        aria-disabled="false"
+                        checked=""
+                        class="sr-only"
+                        data-row-focus="true"
+                        type="checkbox"
+                      />
+                      <span
+                        aria-hidden="true"
+                        class="relative grid size-4 shrink-0 place-items-center rounded-[5px] border border-panel-border"
+                        data-checked="true"
+                      >
+                        <span
+                          class="absolute -inset-px rounded-[5px] bg-primary"
+                        />
+                        <span
+                          class="relative text-primary-foreground"
+                        >
+                          <svg
+                            aria-hidden="true"
+                            class="lucide lucide-check size-3"
+                            fill="none"
+                            height="24"
+                            stroke="currentColor"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="3"
+                            viewBox="0 0 24 24"
+                            width="24"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              d="M20 6 9 17l-5-5"
+                            />
+                          </svg>
+                        </span>
+                      </span>
+                      <span
+                        class="flex min-w-0 flex-1 items-baseline gap-2"
+                      >
+                        <span
+                          class="truncate type-body text-foreground"
+                        >
+                          Revenue by region
+                        </span>
+                        <span
+                          class="truncate type-meta text-panel-muted"
+                        >
+                          analytics · Inputs: Region, Period
+                        </span>
+                      </span>
+                    </label>
+                    <button
+                      aria-expanded="false"
+                      aria-label="Show SQL for Revenue by region"
+                      class="flex h-7 shrink-0 items-center gap-1.5 rounded-[7px] px-2 type-meta text-panel-muted hover:bg-row-hover hover:text-foreground"
+                      tabindex="-1"
+                      type="button"
+                    >
+                      SQL
+                      <kbd
+                        aria-label="⌘ E"
+                        class="inline-flex items-center gap-0.5"
+                        data-slot="kbd-group"
+                      >
+                        <kbd
+                          class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+                          data-slot="kbd"
+                        >
+                          ⌘
+                        </kbd>
+                        <kbd
+                          class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+                          data-slot="kbd"
+                        >
+                          E
+                        </kbd>
+                      </kbd>
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div>
+                <div
+                  data-import-row="true"
+                  data-widget-ref="w2"
+                >
+                  <div
+                    class="flex items-center gap-1"
+                  >
+                    <label
+                      class="flex h-10 min-w-0 flex-1 cursor-default items-center gap-3 rounded-[10px] px-2.5 hover:bg-row-hover has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-ring/60"
+                    >
+                      <input
+                        aria-disabled="false"
+                        checked=""
+                        class="sr-only"
+                        data-row-focus="true"
+                        type="checkbox"
+                      />
+                      <span
+                        aria-hidden="true"
+                        class="relative grid size-4 shrink-0 place-items-center rounded-[5px] border border-panel-border"
+                        data-checked="true"
+                      >
+                        <span
+                          class="absolute -inset-px rounded-[5px] bg-primary"
+                        />
+                        <span
+                          class="relative text-primary-foreground"
+                        >
+                          <svg
+                            aria-hidden="true"
+                            class="lucide lucide-check size-3"
+                            fill="none"
+                            height="24"
+                            stroke="currentColor"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="3"
+                            viewBox="0 0 24 24"
+                            width="24"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              d="M20 6 9 17l-5-5"
+                            />
+                          </svg>
+                        </span>
+                      </span>
+                      <span
+                        class="flex min-w-0 flex-1 items-baseline gap-2"
+                      >
+                        <span
+                          class="truncate type-body text-foreground"
+                        >
+                          Weekly signups
+                        </span>
+                        <span
+                          class="truncate type-meta text-panel-muted"
+                        >
+                          analytics · No inputs
+                        </span>
+                      </span>
+                    </label>
+                    <button
+                      aria-expanded="false"
+                      aria-label="Show SQL for Weekly signups"
+                      class="flex h-7 shrink-0 items-center gap-1.5 rounded-[7px] px-2 type-meta text-panel-muted hover:bg-row-hover hover:text-foreground"
+                      tabindex="-1"
+                      type="button"
+                    >
+                      SQL
+                      <kbd
+                        aria-label="⌘ E"
+                        class="inline-flex items-center gap-0.5"
+                        data-slot="kbd-group"
+                      >
+                        <kbd
+                          class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+                          data-slot="kbd"
+                        >
+                          ⌘
+                        </kbd>
+                        <kbd
+                          class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+                          data-slot="kbd"
+                        >
+                          E
+                        </kbd>
+                      </kbd>
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div>
+                <div
+                  data-import-row="true"
+                  data-widget-ref="w3"
+                >
+                  <div
+                    class="flex items-center gap-1"
+                  >
+                    <label
+                      class="flex h-10 min-w-0 flex-1 cursor-default items-center gap-3 rounded-[10px] px-2.5 hover:bg-row-hover has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-ring/60"
+                    >
+                      <input
+                        aria-disabled="false"
+                        checked=""
+                        class="sr-only"
+                        data-row-focus="true"
+                        type="checkbox"
+                      />
+                      <span
+                        aria-hidden="true"
+                        class="relative grid size-4 shrink-0 place-items-center rounded-[5px] border border-panel-border"
+                        data-checked="true"
+                      >
+                        <span
+                          class="absolute -inset-px rounded-[5px] bg-primary"
+                        />
+                        <span
+                          class="relative text-primary-foreground"
+                        >
+                          <svg
+                            aria-hidden="true"
+                            class="lucide lucide-check size-3"
+                            fill="none"
+                            height="24"
+                            stroke="currentColor"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="3"
+                            viewBox="0 0 24 24"
+                            width="24"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              d="M20 6 9 17l-5-5"
+                            />
+                          </svg>
+                        </span>
+                      </span>
+                      <span
+                        class="flex min-w-0 flex-1 items-baseline gap-2"
+                      >
+                        <span
+                          class="truncate type-body text-foreground"
+                        >
+                          Clicks today
+                        </span>
+                        <span
+                          class="truncate type-meta text-panel-muted"
+                        >
+                          warehouse · No inputs
+                        </span>
+                      </span>
+                    </label>
+                    <button
+                      aria-expanded="false"
+                      aria-label="Show SQL for Clicks today"
+                      class="flex h-7 shrink-0 items-center gap-1.5 rounded-[7px] px-2 type-meta text-panel-muted hover:bg-row-hover hover:text-foreground"
+                      tabindex="-1"
+                      type="button"
+                    >
+                      SQL
+                      <kbd
+                        aria-label="⌘ E"
+                        class="inline-flex items-center gap-0.5"
+                        data-slot="kbd-group"
+                      >
+                        <kbd
+                          class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+                          data-slot="kbd"
+                        >
+                          ⌘
+                        </kbd>
+                        <kbd
+                          class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+                          data-slot="kbd"
+                        >
+                          E
+                        </kbd>
+                      </kbd>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div
+              aria-label="Boards"
+              role="group"
+            >
+              <div
+                class="px-2.5 pt-2 pb-1 type-micro text-panel-muted"
+              >
+                Boards
+              </div>
+              <div>
+                <div
+                  data-import-row="true"
+                >
+                  <label
+                    class="flex h-10 min-w-0 flex-1 cursor-default items-center gap-3 rounded-[10px] px-2.5 hover:bg-row-hover has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-ring/60"
+                  >
+                    <input
+                      aria-disabled="false"
+                      checked=""
+                      class="sr-only"
+                      data-row-focus="true"
+                      type="checkbox"
+                    />
+                    <span
+                      aria-hidden="true"
+                      class="relative grid size-4 shrink-0 place-items-center rounded-[5px] border border-panel-border"
+                      data-checked="true"
+                    >
+                      <span
+                        class="absolute -inset-px rounded-[5px] bg-primary"
+                      />
+                      <span
+                        class="relative text-primary-foreground"
+                      >
+                        <svg
+                          aria-hidden="true"
+                          class="lucide lucide-check size-3"
+                          fill="none"
+                          height="24"
+                          stroke="currentColor"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="3"
+                          viewBox="0 0 24 24"
+                          width="24"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M20 6 9 17l-5-5"
+                          />
+                        </svg>
+                      </span>
+                    </span>
+                    <span
+                      class="flex-1 type-body text-foreground"
+                    >
+                      Import boards
+                    </span>
+                    <span
+                      class="type-meta text-panel-muted"
+                    >
+                      1 board
+                    </span>
+                  </label>
+                  <ul
+                    class="flex flex-col gap-0.5 pb-1.5 pl-[38px]"
+                  >
+                    <li
+                      class="flex min-w-0 items-baseline gap-2 type-meta"
+                    >
+                      <span
+                        class="truncate text-foreground"
+                      >
+                        📈 
+                        Weekly review
+                      </span>
+                      <span
+                        class="shrink-0 text-panel-muted"
+                      >
+                        3 tiles
+                      </span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <footer
+        class="flex h-9 shrink-0 items-center justify-between gap-3 border-t border-panel-border px-4 type-meta text-panel-muted"
+      >
+        <div
+          class="flex min-w-0 items-center gap-2"
+        >
+          <span
+            class="flex min-w-0 items-center"
+            role="status"
+          >
+            <span
+              class="truncate"
+              data-slot="swap-text"
+            >
+              <span
+                class="inline-block"
+              >
+                Exported Nov 20, 2026
+              </span>
+            </span>
+          </span>
+        </div>
+        <div
+          class="flex shrink-0 items-center gap-3"
+        >
+          <div
+            class="flex items-center gap-2"
+          >
+            <span
+              class="text-foreground"
+              data-slot="swap-text"
+            >
+              <span
+                class="inline-block"
+              >
+                Import 3 widgets, 1 board
+              </span>
+            </span>
+            <kbd
+              aria-label="⌘ ↩"
+              class="inline-flex items-center gap-0.5"
+              data-slot="kbd-group"
+            >
+              <kbd
+                class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+                data-slot="kbd"
+              >
+                ⌘
+              </kbd>
+              <kbd
+                class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+                data-slot="kbd"
+              >
+                ↩
+              </kbd>
+            </kbd>
+          </div>
+          <div
+            class="flex items-center gap-2 border-l border-panel-border pl-3"
+          >
+            <span>
+              Toggle
+            </span>
+            <kbd
+              aria-label="Space"
+              class="inline-flex items-center gap-0.5"
+              data-slot="kbd-group"
+            >
+              <kbd
+                class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+                data-slot="kbd"
+              >
+                Space
+              </kbd>
+            </kbd>
+          </div>
+          <div
+            class="flex items-center gap-2 border-l border-panel-border pl-3"
+          >
+            <span>
+              SQL
+            </span>
+            <kbd
+              aria-label="⌘ E"
+              class="inline-flex items-center gap-0.5"
+              data-slot="kbd-group"
+            >
+              <kbd
+                class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+                data-slot="kbd"
+              >
+                ⌘
+              </kbd>
+              <kbd
+                class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+                data-slot="kbd"
+              >
+                E
+              </kbd>
+            </kbd>
+          </div>
+        </div>
+      </footer>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`importView sources > explains an empty clipboard 1`] = `
+<div>
+  <script
+    nonce=""
+  >
+    ((e, i, s, u, m, a, l, h) =&gt; {
+  let d = document.documentElement, w = ["light", "dark"];
+  function p(n) {
+    (Array.isArray(e) ? e : [e]).forEach((y) =&gt; {
+      let k = y === "class", S = k && a ? m.map((f) =&gt; a[f] || f) : m;
+      k ? (d.classList.remove(...S), d.classList.add(a && a[n] ? a[n] : n)) : d.setAttribute(y, n);
+    }), R(n);
+  }
+  function R(n) {
+    h && w.includes(n) && (d.style.colorScheme = n);
+  }
+  function c() {
+    return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+  }
+  if (u) p(u);
+  else try {
+    let n = localStorage.getItem(i) || s, y = l && n === "system" ? c() : n;
+    p(y);
+  } catch (n) {
+  }
+})("class","vite-ui-theme","dark",null,["light","dark"],null,true,true)
+  </script>
+  <div
+    style="width: 760px"
+  >
+    <div
+      class="flex min-h-0 flex-col"
+    >
+      <header
+        class="flex h-14 shrink-0 items-center gap-2 px-3"
+      >
+        <button
+          aria-label="Back"
+          class="grid size-7 place-items-center rounded-[8px] text-panel-muted hover:bg-row-hover hover:text-foreground"
+          tabindex="0"
+          type="button"
+        >
+          <svg
+            aria-hidden="true"
+            class="lucide lucide-chevron-left size-4"
+            fill="none"
+            height="24"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="m15 18-6-6 6-6"
+            />
+          </svg>
+        </button>
+        <h1
+          class="min-w-0 flex-1 truncate type-title text-foreground"
+        >
+          Import Widgets and Boards
+        </h1>
+      </header>
+      <div
+        class="relative flex min-h-0 flex-1 flex-col border-t border-panel-border"
+      >
+        <div
+          class="flex min-h-0 flex-col"
+        >
+          <div
+            aria-label="Import from"
+            class="flex flex-col gap-1 p-2"
+            role="group"
+          >
+            <button
+              aria-busy="false"
+              class="flex h-10 w-full cursor-default items-center gap-3 rounded-[10px] px-2.5 text-left outline-none hover:bg-row-hover focus-visible:bg-row-active focus-visible:ring-2 focus-visible:ring-ring/60"
+              data-import-row="true"
+              data-row-focus="true"
+              tabindex="0"
+              type="button"
+            >
+              <span
+                class="grid size-6 place-items-center rounded-[7px] bg-row-hover text-panel-muted"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="lucide lucide-clipboard-paste size-3.5"
+                  fill="none"
+                  height="24"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  viewBox="0 0 24 24"
+                  width="24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M11 14h10"
+                  />
+                  <path
+                    d="M16 4h2a2 2 0 0 1 2 2v1.344"
+                  />
+                  <path
+                    d="m17 18 4-4-4-4"
+                  />
+                  <path
+                    d="M8 4H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 1.793-1.113"
+                  />
+                  <rect
+                    height="4"
+                    rx="1"
+                    width="8"
+                    x="8"
+                    y="2"
+                  />
+                </svg>
+              </span>
+              <span
+                class="flex min-w-0 flex-1 items-baseline gap-2"
+              >
+                <span
+                  class="truncate type-body text-foreground"
+                >
+                  From Clipboard
+                </span>
+                <span
+                  class="truncate type-meta text-panel-muted"
+                >
+                  An export someone sent you
+                </span>
+              </span>
+              <span
+                class="relative h-0.5 w-8 shrink-0 overflow-hidden rounded-full"
+              />
+            </button>
+            <button
+              aria-busy="false"
+              class="flex h-10 w-full cursor-default items-center gap-3 rounded-[10px] px-2.5 text-left outline-none hover:bg-row-hover focus-visible:bg-row-active focus-visible:ring-2 focus-visible:ring-ring/60"
+              data-import-row="true"
+              data-row-focus="true"
+              tabindex="0"
+              type="button"
+            >
+              <span
+                class="grid size-6 place-items-center rounded-[7px] bg-row-hover text-panel-muted"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="lucide lucide-file-braces size-3.5"
+                  fill="none"
+                  height="24"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  viewBox="0 0 24 24"
+                  width="24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z"
+                  />
+                  <path
+                    d="M14 2v5a1 1 0 0 0 1 1h5"
+                  />
+                  <path
+                    d="M10 12a1 1 0 0 0-1 1v1a1 1 0 0 1-1 1 1 1 0 0 1 1 1v1a1 1 0 0 0 1 1"
+                  />
+                  <path
+                    d="M14 18a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1 1 1 0 0 1-1-1v-1a1 1 0 0 0-1-1"
+                  />
+                </svg>
+              </span>
+              <span
+                class="flex min-w-0 flex-1 items-baseline gap-2"
+              >
+                <span
+                  class="truncate type-body text-foreground"
+                >
+                  From File…
+                </span>
+                <span
+                  class="truncate type-meta text-panel-muted"
+                >
+                  A .omq.json file
+                </span>
+              </span>
+              <span
+                class="relative h-0.5 w-8 shrink-0 overflow-hidden rounded-full"
+              />
+            </button>
+          </div>
+          <div
+            class="px-4 pt-1 pb-4"
+          >
+            <div
+              class="flex gap-3 rounded-[10px] border border-danger-ink/25 bg-destructive/[0.07] px-3 py-2.5"
+              role="alert"
+            >
+              <svg
+                aria-hidden="true"
+                class="lucide lucide-circle-alert mt-0.5 size-4 shrink-0 text-danger-ink"
+                fill="none"
+                height="24"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+                width="24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <circle
+                  cx="12"
+                  cy="12"
+                  r="10"
+                />
+                <line
+                  x1="12"
+                  x2="12"
+                  y1="8"
+                  y2="12"
+                />
+                <line
+                  x1="12"
+                  x2="12.01"
+                  y1="16"
+                  y2="16"
+                />
+              </svg>
+              <div
+                class="flex min-w-0 flex-1 flex-col gap-1"
+              >
+                <p
+                  class="type-body text-foreground"
+                >
+                  Couldn't read the export.
+                </p>
+                <p
+                  class="type-meta break-words text-panel-muted"
+                >
+                  The clipboard has no oh-my-query export.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <footer
+        class="flex h-9 shrink-0 items-center justify-between gap-3 border-t border-panel-border px-4 type-meta text-panel-muted"
+      >
+        <div
+          class="flex min-w-0 items-center gap-2"
+        >
+          <span
+            class="flex min-w-0 items-center"
+            role="status"
+          />
+        </div>
+        <div
+          class="flex shrink-0 items-center gap-3"
+        >
+          <div
+            class="flex items-center gap-2"
+          >
+            <span
+              class="text-foreground"
+              data-slot="swap-text"
+            >
+              <span
+                class="inline-block"
+              >
+                Choose
+              </span>
+            </span>
+            <kbd
+              aria-label="↩"
+              class="inline-flex items-center gap-0.5"
+              data-slot="kbd-group"
+            >
+              <kbd
+                class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+                data-slot="kbd"
+              >
+                ↩
+              </kbd>
+            </kbd>
+          </div>
+        </div>
+      </footer>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`importView sources > names the first invalid field of a file 1`] = `
+<div>
+  <script
+    nonce=""
+  >
+    ((e, i, s, u, m, a, l, h) =&gt; {
+  let d = document.documentElement, w = ["light", "dark"];
+  function p(n) {
+    (Array.isArray(e) ? e : [e]).forEach((y) =&gt; {
+      let k = y === "class", S = k && a ? m.map((f) =&gt; a[f] || f) : m;
+      k ? (d.classList.remove(...S), d.classList.add(a && a[n] ? a[n] : n)) : d.setAttribute(y, n);
+    }), R(n);
+  }
+  function R(n) {
+    h && w.includes(n) && (d.style.colorScheme = n);
+  }
+  function c() {
+    return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+  }
+  if (u) p(u);
+  else try {
+    let n = localStorage.getItem(i) || s, y = l && n === "system" ? c() : n;
+    p(y);
+  } catch (n) {
+  }
+})("class","vite-ui-theme","dark",null,["light","dark"],null,true,true)
+  </script>
+  <div
+    style="width: 760px"
+  >
+    <div
+      class="flex min-h-0 flex-col"
+    >
+      <header
+        class="flex h-14 shrink-0 items-center gap-2 px-3"
+      >
+        <button
+          aria-label="Back"
+          class="grid size-7 place-items-center rounded-[8px] text-panel-muted hover:bg-row-hover hover:text-foreground"
+          tabindex="0"
+          type="button"
+        >
+          <svg
+            aria-hidden="true"
+            class="lucide lucide-chevron-left size-4"
+            fill="none"
+            height="24"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="m15 18-6-6 6-6"
+            />
+          </svg>
+        </button>
+        <h1
+          class="min-w-0 flex-1 truncate type-title text-foreground"
+        >
+          Import Widgets and Boards
+        </h1>
+      </header>
+      <div
+        class="relative flex min-h-0 flex-1 flex-col border-t border-panel-border"
+      >
+        <div
+          class="flex min-h-0 flex-col"
+        >
+          <div
+            aria-label="Import from"
+            class="flex flex-col gap-1 p-2"
+            role="group"
+          >
+            <button
+              aria-busy="false"
+              class="flex h-10 w-full cursor-default items-center gap-3 rounded-[10px] px-2.5 text-left outline-none hover:bg-row-hover focus-visible:bg-row-active focus-visible:ring-2 focus-visible:ring-ring/60"
+              data-import-row="true"
+              data-row-focus="true"
+              tabindex="0"
+              type="button"
+            >
+              <span
+                class="grid size-6 place-items-center rounded-[7px] bg-row-hover text-panel-muted"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="lucide lucide-clipboard-paste size-3.5"
+                  fill="none"
+                  height="24"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  viewBox="0 0 24 24"
+                  width="24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M11 14h10"
+                  />
+                  <path
+                    d="M16 4h2a2 2 0 0 1 2 2v1.344"
+                  />
+                  <path
+                    d="m17 18 4-4-4-4"
+                  />
+                  <path
+                    d="M8 4H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 1.793-1.113"
+                  />
+                  <rect
+                    height="4"
+                    rx="1"
+                    width="8"
+                    x="8"
+                    y="2"
+                  />
+                </svg>
+              </span>
+              <span
+                class="flex min-w-0 flex-1 items-baseline gap-2"
+              >
+                <span
+                  class="truncate type-body text-foreground"
+                >
+                  From Clipboard
+                </span>
+                <span
+                  class="truncate type-meta text-panel-muted"
+                >
+                  An export someone sent you
+                </span>
+              </span>
+              <span
+                class="relative h-0.5 w-8 shrink-0 overflow-hidden rounded-full"
+              />
+            </button>
+            <button
+              aria-busy="false"
+              class="flex h-10 w-full cursor-default items-center gap-3 rounded-[10px] px-2.5 text-left outline-none hover:bg-row-hover focus-visible:bg-row-active focus-visible:ring-2 focus-visible:ring-ring/60"
+              data-import-row="true"
+              data-row-focus="true"
+              tabindex="0"
+              type="button"
+            >
+              <span
+                class="grid size-6 place-items-center rounded-[7px] bg-row-hover text-panel-muted"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="lucide lucide-file-braces size-3.5"
+                  fill="none"
+                  height="24"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  viewBox="0 0 24 24"
+                  width="24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z"
+                  />
+                  <path
+                    d="M14 2v5a1 1 0 0 0 1 1h5"
+                  />
+                  <path
+                    d="M10 12a1 1 0 0 0-1 1v1a1 1 0 0 1-1 1 1 1 0 0 1 1 1v1a1 1 0 0 0 1 1"
+                  />
+                  <path
+                    d="M14 18a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1 1 1 0 0 1-1-1v-1a1 1 0 0 0-1-1"
+                  />
+                </svg>
+              </span>
+              <span
+                class="flex min-w-0 flex-1 items-baseline gap-2"
+              >
+                <span
+                  class="truncate type-body text-foreground"
+                >
+                  From File…
+                </span>
+                <span
+                  class="truncate type-meta text-panel-muted"
+                >
+                  A .omq.json file
+                </span>
+              </span>
+              <span
+                class="relative h-0.5 w-8 shrink-0 overflow-hidden rounded-full"
+              />
+            </button>
+          </div>
+          <div
+            class="px-4 pt-1 pb-4"
+          >
+            <div
+              class="flex gap-3 rounded-[10px] border border-danger-ink/25 bg-destructive/[0.07] px-3 py-2.5"
+              role="alert"
+            >
+              <svg
+                aria-hidden="true"
+                class="lucide lucide-circle-alert mt-0.5 size-4 shrink-0 text-danger-ink"
+                fill="none"
+                height="24"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+                width="24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <circle
+                  cx="12"
+                  cy="12"
+                  r="10"
+                />
+                <line
+                  x1="12"
+                  x2="12"
+                  y1="8"
+                  y2="12"
+                />
+                <line
+                  x1="12"
+                  x2="12.01"
+                  y1="16"
+                  y2="16"
+                />
+              </svg>
+              <div
+                class="flex min-w-0 flex-1 flex-col gap-1"
+              >
+                <p
+                  class="type-body text-foreground"
+                >
+                  Couldn't read the export.
+                </p>
+                <p
+                  class="type-meta break-words text-panel-muted"
+                >
+                  widgets[2].sqlTemplate: Too small: expected string to have &gt;=1 characters
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <footer
+        class="flex h-9 shrink-0 items-center justify-between gap-3 border-t border-panel-border px-4 type-meta text-panel-muted"
+      >
+        <div
+          class="flex min-w-0 items-center gap-2"
+        >
+          <span
+            class="flex min-w-0 items-center"
+            role="status"
+          />
+        </div>
+        <div
+          class="flex shrink-0 items-center gap-3"
+        >
+          <div
+            class="flex items-center gap-2"
+          >
+            <span
+              class="text-foreground"
+              data-slot="swap-text"
+            >
+              <span
+                class="inline-block"
+              >
+                Choose
+              </span>
+            </span>
+            <kbd
+              aria-label="↩"
+              class="inline-flex items-center gap-0.5"
+              data-slot="kbd-group"
+            >
+              <kbd
+                class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+                data-slot="kbd"
+              >
+                ↩
+              </kbd>
+            </kbd>
+          </div>
+        </div>
+      </footer>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`importView sources > offers the clipboard and a file, focusing the clipboard first 1`] = `
+<div>
+  <script
+    nonce=""
+  >
+    ((e, i, s, u, m, a, l, h) =&gt; {
+  let d = document.documentElement, w = ["light", "dark"];
+  function p(n) {
+    (Array.isArray(e) ? e : [e]).forEach((y) =&gt; {
+      let k = y === "class", S = k && a ? m.map((f) =&gt; a[f] || f) : m;
+      k ? (d.classList.remove(...S), d.classList.add(a && a[n] ? a[n] : n)) : d.setAttribute(y, n);
+    }), R(n);
+  }
+  function R(n) {
+    h && w.includes(n) && (d.style.colorScheme = n);
+  }
+  function c() {
+    return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+  }
+  if (u) p(u);
+  else try {
+    let n = localStorage.getItem(i) || s, y = l && n === "system" ? c() : n;
+    p(y);
+  } catch (n) {
+  }
+})("class","vite-ui-theme","dark",null,["light","dark"],null,true,true)
+  </script>
+  <div
+    style="width: 760px"
+  >
+    <div
+      class="flex min-h-0 flex-col"
+    >
+      <header
+        class="flex h-14 shrink-0 items-center gap-2 px-3"
+      >
+        <button
+          aria-label="Back"
+          class="grid size-7 place-items-center rounded-[8px] text-panel-muted hover:bg-row-hover hover:text-foreground"
+          tabindex="0"
+          type="button"
+        >
+          <svg
+            aria-hidden="true"
+            class="lucide lucide-chevron-left size-4"
+            fill="none"
+            height="24"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="m15 18-6-6 6-6"
+            />
+          </svg>
+        </button>
+        <h1
+          class="min-w-0 flex-1 truncate type-title text-foreground"
+        >
+          Import Widgets and Boards
+        </h1>
+      </header>
+      <div
+        class="relative flex min-h-0 flex-1 flex-col border-t border-panel-border"
+      >
+        <div
+          class="flex min-h-0 flex-col"
+        >
+          <div
+            aria-label="Import from"
+            class="flex flex-col gap-1 p-2"
+            role="group"
+          >
+            <button
+              aria-busy="false"
+              class="flex h-10 w-full cursor-default items-center gap-3 rounded-[10px] px-2.5 text-left outline-none hover:bg-row-hover focus-visible:bg-row-active focus-visible:ring-2 focus-visible:ring-ring/60"
+              data-import-row="true"
+              data-row-focus="true"
+              tabindex="0"
+              type="button"
+            >
+              <span
+                class="grid size-6 place-items-center rounded-[7px] bg-row-hover text-panel-muted"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="lucide lucide-clipboard-paste size-3.5"
+                  fill="none"
+                  height="24"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  viewBox="0 0 24 24"
+                  width="24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M11 14h10"
+                  />
+                  <path
+                    d="M16 4h2a2 2 0 0 1 2 2v1.344"
+                  />
+                  <path
+                    d="m17 18 4-4-4-4"
+                  />
+                  <path
+                    d="M8 4H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 1.793-1.113"
+                  />
+                  <rect
+                    height="4"
+                    rx="1"
+                    width="8"
+                    x="8"
+                    y="2"
+                  />
+                </svg>
+              </span>
+              <span
+                class="flex min-w-0 flex-1 items-baseline gap-2"
+              >
+                <span
+                  class="truncate type-body text-foreground"
+                >
+                  From Clipboard
+                </span>
+                <span
+                  class="truncate type-meta text-panel-muted"
+                >
+                  An export someone sent you
+                </span>
+              </span>
+              <span
+                class="relative h-0.5 w-8 shrink-0 overflow-hidden rounded-full"
+              />
+            </button>
+            <button
+              aria-busy="false"
+              class="flex h-10 w-full cursor-default items-center gap-3 rounded-[10px] px-2.5 text-left outline-none hover:bg-row-hover focus-visible:bg-row-active focus-visible:ring-2 focus-visible:ring-ring/60"
+              data-import-row="true"
+              data-row-focus="true"
+              tabindex="0"
+              type="button"
+            >
+              <span
+                class="grid size-6 place-items-center rounded-[7px] bg-row-hover text-panel-muted"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="lucide lucide-file-braces size-3.5"
+                  fill="none"
+                  height="24"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  viewBox="0 0 24 24"
+                  width="24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z"
+                  />
+                  <path
+                    d="M14 2v5a1 1 0 0 0 1 1h5"
+                  />
+                  <path
+                    d="M10 12a1 1 0 0 0-1 1v1a1 1 0 0 1-1 1 1 1 0 0 1 1 1v1a1 1 0 0 0 1 1"
+                  />
+                  <path
+                    d="M14 18a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1 1 1 0 0 1-1-1v-1a1 1 0 0 0-1-1"
+                  />
+                </svg>
+              </span>
+              <span
+                class="flex min-w-0 flex-1 items-baseline gap-2"
+              >
+                <span
+                  class="truncate type-body text-foreground"
+                >
+                  From File…
+                </span>
+                <span
+                  class="truncate type-meta text-panel-muted"
+                >
+                  A .omq.json file
+                </span>
+              </span>
+              <span
+                class="relative h-0.5 w-8 shrink-0 overflow-hidden rounded-full"
+              />
+            </button>
+          </div>
+        </div>
+      </div>
+      <footer
+        class="flex h-9 shrink-0 items-center justify-between gap-3 border-t border-panel-border px-4 type-meta text-panel-muted"
+      >
+        <div
+          class="flex min-w-0 items-center gap-2"
+        >
+          <span
+            class="flex min-w-0 items-center"
+            role="status"
+          />
+        </div>
+        <div
+          class="flex shrink-0 items-center gap-3"
+        >
+          <div
+            class="flex items-center gap-2"
+          >
+            <span
+              class="text-foreground"
+              data-slot="swap-text"
+            >
+              <span
+                class="inline-block"
+              >
+                Choose
+              </span>
+            </span>
+            <kbd
+              aria-label="↩"
+              class="inline-flex items-center gap-0.5"
+              data-slot="kbd-group"
+            >
+              <kbd
+                class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+                data-slot="kbd"
+              >
+                ↩
+              </kbd>
+            </kbd>
+          </div>
+        </div>
+      </footer>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`importView sources > shows a reading hairline when the read takes a while 1`] = `
+<div>
+  <script
+    nonce=""
+  >
+    ((e, i, s, u, m, a, l, h) =&gt; {
+  let d = document.documentElement, w = ["light", "dark"];
+  function p(n) {
+    (Array.isArray(e) ? e : [e]).forEach((y) =&gt; {
+      let k = y === "class", S = k && a ? m.map((f) =&gt; a[f] || f) : m;
+      k ? (d.classList.remove(...S), d.classList.add(a && a[n] ? a[n] : n)) : d.setAttribute(y, n);
+    }), R(n);
+  }
+  function R(n) {
+    h && w.includes(n) && (d.style.colorScheme = n);
+  }
+  function c() {
+    return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+  }
+  if (u) p(u);
+  else try {
+    let n = localStorage.getItem(i) || s, y = l && n === "system" ? c() : n;
+    p(y);
+  } catch (n) {
+  }
+})("class","vite-ui-theme","dark",null,["light","dark"],null,true,true)
+  </script>
+  <div
+    style="width: 760px"
+  >
+    <div
+      class="flex min-h-0 flex-col"
+    >
+      <header
+        class="flex h-14 shrink-0 items-center gap-2 px-3"
+      >
+        <button
+          aria-label="Back"
+          class="grid size-7 place-items-center rounded-[8px] text-panel-muted hover:bg-row-hover hover:text-foreground"
+          tabindex="0"
+          type="button"
+        >
+          <svg
+            aria-hidden="true"
+            class="lucide lucide-chevron-left size-4"
+            fill="none"
+            height="24"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="m15 18-6-6 6-6"
+            />
+          </svg>
+        </button>
+        <h1
+          class="min-w-0 flex-1 truncate type-title text-foreground"
+        >
+          Import Widgets and Boards
+        </h1>
+      </header>
+      <div
+        class="relative flex min-h-0 flex-1 flex-col border-t border-panel-border"
+      >
+        <div
+          class="flex min-h-0 flex-col"
+        >
+          <div
+            aria-label="Import from"
+            class="flex flex-col gap-1 p-2"
+            role="group"
+          >
+            <button
+              aria-busy="false"
+              class="flex h-10 w-full cursor-default items-center gap-3 rounded-[10px] px-2.5 text-left outline-none hover:bg-row-hover focus-visible:bg-row-active focus-visible:ring-2 focus-visible:ring-ring/60"
+              data-import-row="true"
+              data-row-focus="true"
+              tabindex="0"
+              type="button"
+            >
+              <span
+                class="grid size-6 place-items-center rounded-[7px] bg-row-hover text-panel-muted"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="lucide lucide-clipboard-paste size-3.5"
+                  fill="none"
+                  height="24"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  viewBox="0 0 24 24"
+                  width="24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M11 14h10"
+                  />
+                  <path
+                    d="M16 4h2a2 2 0 0 1 2 2v1.344"
+                  />
+                  <path
+                    d="m17 18 4-4-4-4"
+                  />
+                  <path
+                    d="M8 4H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 1.793-1.113"
+                  />
+                  <rect
+                    height="4"
+                    rx="1"
+                    width="8"
+                    x="8"
+                    y="2"
+                  />
+                </svg>
+              </span>
+              <span
+                class="flex min-w-0 flex-1 items-baseline gap-2"
+              >
+                <span
+                  class="truncate type-body text-foreground"
+                >
+                  From Clipboard
+                </span>
+                <span
+                  class="truncate type-meta text-panel-muted"
+                >
+                  An export someone sent you
+                </span>
+              </span>
+              <span
+                class="relative h-0.5 w-8 shrink-0 overflow-hidden rounded-full"
+              />
+            </button>
+            <button
+              aria-busy="true"
+              class="flex h-10 w-full cursor-default items-center gap-3 rounded-[10px] px-2.5 text-left outline-none hover:bg-row-hover focus-visible:bg-row-active focus-visible:ring-2 focus-visible:ring-ring/60"
+              data-import-row="true"
+              data-row-focus="true"
+              tabindex="0"
+              type="button"
+            >
+              <span
+                class="grid size-6 place-items-center rounded-[7px] bg-row-hover text-panel-muted"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="lucide lucide-file-braces size-3.5"
+                  fill="none"
+                  height="24"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  viewBox="0 0 24 24"
+                  width="24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z"
+                  />
+                  <path
+                    d="M14 2v5a1 1 0 0 0 1 1h5"
+                  />
+                  <path
+                    d="M10 12a1 1 0 0 0-1 1v1a1 1 0 0 1-1 1 1 1 0 0 1 1 1v1a1 1 0 0 0 1 1"
+                  />
+                  <path
+                    d="M14 18a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1 1 1 0 0 1-1-1v-1a1 1 0 0 0-1-1"
+                  />
+                </svg>
+              </span>
+              <span
+                class="flex min-w-0 flex-1 items-baseline gap-2"
+              >
+                <span
+                  class="truncate type-body text-foreground"
+                >
+                  From File…
+                </span>
+                <span
+                  class="truncate type-meta text-panel-muted"
+                >
+                  A .omq.json file
+                </span>
+              </span>
+              <span
+                class="relative h-0.5 w-8 shrink-0 overflow-hidden rounded-full"
+              >
+                <div
+                  aria-hidden="true"
+                  class="absolute inset-x-0 top-0 z-10 h-0.5 overflow-hidden"
+                  data-testid="run-progress"
+                >
+                  <div
+                    class="h-full w-2/5 bg-primary"
+                  />
+                </div>
+              </span>
+            </button>
+          </div>
+        </div>
+      </div>
+      <footer
+        class="flex h-9 shrink-0 items-center justify-between gap-3 border-t border-panel-border px-4 type-meta text-panel-muted"
+      >
+        <div
+          class="flex min-w-0 items-center gap-2"
+        >
+          <span
+            class="flex min-w-0 items-center"
+            role="status"
+          >
+            <span
+              class="truncate"
+              data-slot="swap-text"
+            >
+              <span
+                class="inline-block"
+              >
+                Reading…
+              </span>
+            </span>
+          </span>
+        </div>
+        <div
+          class="flex shrink-0 items-center gap-3"
+        />
+      </footer>
+    </div>
+  </div>
+</div>
+`;

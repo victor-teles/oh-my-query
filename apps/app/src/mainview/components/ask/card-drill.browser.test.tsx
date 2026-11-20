@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 
+import { CARD_SPEC_VERSION } from "@oh-my-query/rpc";
 import { describe, expect, it, vi } from "vitest";
 import { render } from "vitest-browser-react";
 import { userEvent } from "vitest/browser";
@@ -36,7 +37,7 @@ const groupedBars: CardSpec = {
 const statusPie: CardSpec = {
   formats: {},
   title: "Signups by plan",
-  version: 1,
+  version: CARD_SPEC_VERSION,
   view: { kind: "pie", label: "week", value: "free" },
 };
 

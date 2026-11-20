@@ -1,0 +1,131 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`root view watching with full motion > lists unseen alerts first and opens the widget on ↵ 1`] = `
+<div
+  aria-labelledby="_r_id_"
+  role="group"
+>
+  <div
+    class="px-2.5 pt-1 pb-1.5 type-micro text-panel-muted"
+    id="_r_id_"
+  >
+    Alerts
+  </div>
+  <div
+    aria-selected="true"
+    class="relative flex h-10 cursor-default items-center gap-3 px-2.5"
+    data-tone="default"
+    id="launcher-option-alert-watch-mrr"
+    role="option"
+    tabindex="0"
+  >
+    <div
+      class="absolute inset-0 rounded-[10px] bg-row-active"
+    />
+    <span
+      class="relative grid size-6 place-items-center rounded-[7px] bg-row-hover"
+    >
+      <svg
+        aria-label="Has an alert"
+        class="lucide lucide-bell size-3 shrink-0 text-panel-muted"
+        fill="none"
+        height="24"
+        role="img"
+        stroke="currentColor"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        viewBox="0 0 24 24"
+        width="24"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M10.268 21a2 2 0 0 0 3.464 0"
+        />
+        <path
+          d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326"
+        />
+      </svg>
+    </span>
+    <span
+      class="relative flex min-w-0 flex-1 items-baseline gap-2"
+    >
+      <span
+        class="truncate type-body text-foreground"
+      >
+        MRR below $50k
+      </span>
+      <span
+        class="shrink-0 type-meta text-panel-muted tabular-nums"
+      >
+        4m ago
+      </span>
+    </span>
+  </div>
+</div>
+`;
+
+exports[`root view watching with reduced motion > lists unseen alerts first and opens the widget on ↵ 1`] = `
+<div
+  aria-labelledby="_r_id_"
+  role="group"
+>
+  <div
+    class="px-2.5 pt-1 pb-1.5 type-micro text-panel-muted"
+    id="_r_id_"
+  >
+    Alerts
+  </div>
+  <div
+    aria-selected="true"
+    class="relative flex h-10 cursor-default items-center gap-3 px-2.5"
+    data-tone="default"
+    id="launcher-option-alert-watch-mrr"
+    role="option"
+    tabindex="0"
+  >
+    <div
+      class="absolute inset-0 rounded-[10px] bg-row-active"
+    />
+    <span
+      class="relative grid size-6 place-items-center rounded-[7px] bg-row-hover"
+    >
+      <svg
+        aria-label="Has an alert"
+        class="lucide lucide-bell size-3 shrink-0 text-panel-muted"
+        fill="none"
+        height="24"
+        role="img"
+        stroke="currentColor"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        viewBox="0 0 24 24"
+        width="24"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M10.268 21a2 2 0 0 0 3.464 0"
+        />
+        <path
+          d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326"
+        />
+      </svg>
+    </span>
+    <span
+      class="relative flex min-w-0 flex-1 items-baseline gap-2"
+    >
+      <span
+        class="truncate type-body text-foreground"
+      >
+        MRR below $50k
+      </span>
+      <span
+        class="shrink-0 type-meta text-panel-muted tabular-nums"
+      >
+        4m ago
+      </span>
+    </span>
+  </div>
+</div>
+`;

@@ -1,3 +1,5 @@
+import { isSqlDialect } from "@oh-my-query/core/client";
+
 import type { ExportSource } from "@/components/result-actions/use-result-export";
 import type { AnsweredAsk } from "@/components/widgets/widget-draft";
 import type { CardViewKind } from "@/lib/card-data";
@@ -23,18 +25,28 @@ export const answeredOf = (
   connectionId: string | undefined
 ): AnsweredAsk | null => {
   const turn = shownTurn(state);
+  const dialect = turn?.dialect;
   // Match SQL carries a native bind marker, which a widget template can't hold.
-  if (state.source === "match" || !(turn?.dialect && connectionId)) {
+  if (
+    state.source === "match" ||
+    !(turn && dialect && isSqlDialect(dialect) && connectionId)
+  ) {
     return null;
   }
   return {
     connectionId,
-    dialect: turn.dialect,
+    dialect,
     prompt: state.source === "sql" ? "" : chainPromptOf(state),
     spec: turn.answer.spec,
     sql: turn.sql,
     view: turn.view,
   };
+};
+
+// Widgets bind template values as SQL parameters, so only SQL answers save.
+export const saveUnavailableOf = (state: AskState): boolean => {
+  const dialect = shownTurn(state)?.dialect;
+  return dialect !== undefined && dialect !== null && !isSqlDialect(dialect);
 };
 
 export const exportSourceOf = (turn: AskTurn | null): ExportSource | null =>

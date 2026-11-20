@@ -1,0 +1,48 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`root view boards > exports everything from the command, then shows the file in Finder 1`] = `
+<span
+  class="flex min-w-0 items-center gap-1.5"
+  role="status"
+>
+  <svg
+    aria-label="Exported"
+    class="size-3.5 text-success-ink"
+    fill="none"
+    role="img"
+    viewBox="0 0 16 16"
+  >
+    <path
+      d="M3.5 8.5 6.5 11.5 12.5 4.5"
+      pathLength="1"
+      stroke="currentColor"
+      stroke-dasharray="1 1"
+      stroke-dashoffset="0"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      stroke-width="1.75"
+    />
+  </svg>
+  <span
+    class="truncate text-foreground"
+    data-slot="swap-text"
+  >
+    <span
+      class="inline-block"
+    >
+      Exported 1 widget, 1 board
+    </span>
+  </span>
+  <div
+    class="shrink-0"
+  >
+    <button
+      class="rounded-[6px] px-1.5 py-0.5 type-meta text-panel-muted underline-offset-2 hover:text-foreground hover:underline focus-visible:ring-2 focus-visible:ring-ring/60 focus-visible:outline-none"
+      tabindex="0"
+      type="button"
+    >
+      Show in Finder
+    </button>
+  </div>
+</span>
+`;

@@ -9,7 +9,7 @@ import type { ConnectionPoolManager } from "@oh-my-query/drivers";
 import { DbError, getConnections } from "@oh-my-query/core";
 
 export const UNSUPPORTED_ENGINE_MESSAGE =
-  "Asking questions works with SQL databases for now.";
+  "Asking questions doesn't work with this database yet.";
 export const SQL_RUN_UNSUPPORTED_MESSAGE =
   "Running SQL works with SQL databases for now.";
 const DEFAULT_SCHEMAS = ["public", "main", "dbo", "default"];

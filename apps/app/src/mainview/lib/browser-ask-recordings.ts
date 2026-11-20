@@ -1,5 +1,7 @@
-import type { ColumnInfo } from "@oh-my-query/core/client";
+import type { ColumnInfo, QueryLanguage } from "@oh-my-query/core/client";
 import type { CardSpec } from "@oh-my-query/rpc";
+
+import { CARD_SPEC_VERSION } from "@oh-my-query/rpc";
 
 export interface RecordedAsk {
   sql: string;
@@ -7,6 +9,7 @@ export interface RecordedAsk {
   rows: unknown[][];
   executionTimeMs: number;
   spec: CardSpec;
+  language?: QueryLanguage;
 }
 
 export const MONTHS = [
@@ -50,7 +53,7 @@ export const REVENUE_BY_REGION: RecordedAsk = {
       "Asia Pacific more than doubled this year, from $31k to $71k. Total MRR reached $475k in September, up 54% since January.",
     subtitle: "Jan to Sep 2026 · $475k in September",
     title: "Monthly recurring revenue by region",
-    version: 1,
+    version: CARD_SPEC_VERSION,
     view: {
       groupBy: "region",
       kind: "chart",
@@ -116,7 +119,7 @@ export const WEEKLY_SIGNUPS: RecordedAsk = {
       "Signups grew from 620 to 835 a week over the last two months. Pro and Team grew fastest.",
     subtitle: "Last 8 weeks · 835 in the week of Aug 24",
     title: "Weekly signups by plan",
-    version: 1,
+    version: CARD_SPEC_VERSION,
     view: {
       kind: "chart",
       mark: "bar",
@@ -162,7 +165,7 @@ export const REGION_REVENUE: RecordedAsk = {
     insight: "Europe grew every month this year, from $97k to $146k.",
     subtitle: "Jan to Sep 2026 · $146k in September",
     title: "Monthly recurring revenue in Europe",
-    version: 1,
+    version: CARD_SPEC_VERSION,
     view: {
       kind: "chart",
       mark: "line",
@@ -214,7 +217,7 @@ export const QUARTERLY_REVENUE: RecordedAsk = {
       "Every region grew each quarter. Asia Pacific grew fastest, from $103k to $193k.",
     subtitle: "Q1 to Q3 2026 · $1.3M in Q3",
     title: "Quarterly recurring revenue by region",
-    version: 1,
+    version: CARD_SPEC_VERSION,
     view: {
       groupBy: "region",
       kind: "chart",

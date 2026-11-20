@@ -68,8 +68,8 @@ export function HistoryView({ ask, inputRef }: HistoryViewProps) {
     setTyped(true);
     select(null);
   };
-  const { askAgain: handleSubmit, target } = commands;
-  const actions = historyActions(target);
+  const { askAgain: handleSubmit, target, language } = commands;
+  const actions = historyActions(target, language);
   const { close: handleCloseMenu, run: handleRunAction } = menu;
   const { retry: handleRetry } = history;
 

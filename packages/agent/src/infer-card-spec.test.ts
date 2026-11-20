@@ -1,5 +1,6 @@
 import type { ColumnInfo } from "@oh-my-query/core";
 
+import { CARD_SPEC_VERSION } from "@oh-my-query/rpc";
 import { describe, expect, it } from "vitest";
 
 import { checkCardAgainstResult } from "./check-card-spec.ts";
@@ -198,7 +199,7 @@ describe("checkCardAgainstResult", () => {
     rows: MONTHS.map((month) => [month, "EU", "10"]),
   };
   const stats = computeColumnStats(data);
-  const base = { formats: {}, title: "t", version: 1 as const };
+  const base = { formats: {}, title: "t", version: CARD_SPEC_VERSION };
 
   it("accepts a spec that references real numeric columns", () => {
     const spec = {

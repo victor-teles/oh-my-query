@@ -1,5 +1,5 @@
 // Don't import @oh-my-query/core here: evaluating its WASM top-level await before electrobun/main deadlocks the worker.
-import { ApplicationMenu } from "electrobun/main";
+import Electrobun, { ApplicationMenu } from "electrobun/main";
 
 import type { BoardWindows } from "./board-windows.ts";
 import type { LauncherController } from "./launcher.ts";
@@ -63,6 +63,7 @@ async function main(): Promise<void> {
   try {
     launcher = createLauncher({
       hotkey: await readLauncherHotkey(),
+      onWatchedOpened: rpcs.background.acknowledge,
       releaseFocus,
       rpc: rpcs.launcherRpc,
       summonOffer: rpcs.summonOffer,
@@ -79,6 +80,9 @@ async function main(): Promise<void> {
       launcher?.navigate("settings");
     }
   });
+
+  Electrobun.events.on("beforeQuit", rpcs.background.stop);
+  await rpcs.background.start();
 }
 
 // oxlint-disable-next-line jest/require-hook

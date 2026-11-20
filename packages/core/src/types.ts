@@ -10,6 +10,12 @@ export type DialectType =
   | "redshift"
   | "oracle";
 
+export type QueryLanguage = DialectType | "mongodb" | "redis";
+
+export const isSqlDialect = (
+  language: QueryLanguage
+): language is DialectType => language !== "mongodb" && language !== "redis";
+
 export type BindValue = string | number | boolean | null;
 
 export interface ConnectionParams {

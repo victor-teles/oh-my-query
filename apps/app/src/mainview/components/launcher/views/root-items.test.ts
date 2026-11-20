@@ -12,8 +12,10 @@ import { buildRootSections, flattenSections } from "./root-items";
 const commands = rootCommands({
   addConnection: vi.fn(),
   dismiss: vi.fn(),
+  exportAll: vi.fn(),
   newBoard: vi.fn(),
   openHistory: vi.fn(),
+  openImport: vi.fn(),
   openSettings: vi.fn(),
 });
 const aiSetup = aiSetupCommand(vi.fn());
@@ -44,6 +46,8 @@ describe("buildRootSections", () => {
       "new-board",
       "history",
       "settings",
+      "export-bundle",
+      "import-bundle",
       "hide",
     ]);
   });

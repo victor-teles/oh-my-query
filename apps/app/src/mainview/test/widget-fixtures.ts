@@ -1,3 +1,5 @@
+import { CARD_SPEC_VERSION } from "@oh-my-query/rpc";
+
 import type { RecentAsk, Widget, WidgetRunResult } from "@/lib/ipc";
 
 export const REGION_SQL = `select date_trunc('month', billed_at)::date as month, sum(mrr) as mrr
@@ -39,7 +41,7 @@ export const makeWidget = (overrides: Partial<Widget> = {}): Widget => ({
     insight: "Europe grew every month.",
     subtitle: "Jan to Sep 2026",
     title: "Monthly recurring revenue in Europe",
-    version: 1,
+    version: CARD_SPEC_VERSION,
     view: {
       kind: "chart",
       mark: "line",

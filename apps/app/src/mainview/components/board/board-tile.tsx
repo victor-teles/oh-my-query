@@ -15,6 +15,7 @@ import {
 } from "@/components/launcher/actions/actions-menu";
 import { Pressable } from "@/components/motion/pressable";
 import { Reveal } from "@/components/motion/reveal";
+import { WidgetTrend } from "@/components/watches/widget-trend";
 import { runSpec } from "@/components/widgets/run-spec";
 import { failureCopy } from "@/components/widgets/widget-error";
 import { WidgetRunBody } from "@/components/widgets/widget-run-body";
@@ -169,7 +170,18 @@ function TileBody({
     <WidgetRunBody
       onSelectView={onView}
       run={run}
-      slots={{ actions: controls }}
+      slots={{
+        actions: (
+          <>
+            <WidgetTrend
+              spec={widget.spec}
+              trend={run.outcome.trend}
+              widgetId={widget.id}
+            />
+            {controls}
+          </>
+        ),
+      }}
       spec={runSpec(widget, run.outcome.values)}
       view={view}
     />

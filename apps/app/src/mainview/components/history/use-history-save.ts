@@ -1,3 +1,6 @@
+import type { DialectType } from "@oh-my-query/core/client";
+
+import { isSqlDialect } from "@oh-my-query/core/client";
 import { useState } from "react";
 
 import type { RecentAsk, WidgetDraft } from "@/lib/ipc";
@@ -10,8 +13,13 @@ import { useWidgets } from "@/components/widgets/widgets-provider";
 import { viewKindOf } from "@/lib/card-data";
 import { getErrorMessage } from "@/lib/error-message";
 
+export type SqlRecentAsk = RecentAsk & { dialect: DialectType };
+
+export const isSqlRecent = (ask: RecentAsk): ask is SqlRecentAsk =>
+  isSqlDialect(ask.dialect);
+
 export const draftFromHistory = (
-  ask: RecentAsk,
+  ask: SqlRecentAsk,
   name: string
 ): WidgetDraft => ({
   ...draftFromAsk(
@@ -38,7 +46,7 @@ export const useHistorySave = ({
   onFailed,
 }: UseHistorySaveOptions) => {
   const { save, markFresh } = useWidgets();
-  const [naming, setNaming] = useState<RecentAsk | null>(null);
+  const [naming, setNaming] = useState<SqlRecentAsk | null>(null);
 
   const confirm = async (name: string) => {
     if (!naming) {
@@ -55,7 +63,11 @@ export const useHistorySave = ({
   };
 
   return {
-    begin: setNaming,
+    begin: (ask: RecentAsk) => {
+      if (isSqlRecent(ask)) {
+        setNaming(ask);
+      }
+    },
     cancel: () => setNaming(null),
     confirm,
     initialName: naming ? defaultWidgetName(naming.spec) : "",

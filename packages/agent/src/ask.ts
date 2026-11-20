@@ -1,9 +1,4 @@
-import type {
-  BindValue,
-  DialectType,
-  SchemaInfo,
-  TabularResult,
-} from "@oh-my-query/core";
+import type { BindValue, SchemaInfo, TabularResult } from "@oh-my-query/core";
 import type { AskErrorCode, AskEvent, RefineContext } from "@oh-my-query/rpc";
 import type { LanguageModel, ModelMessage } from "ai";
 
@@ -11,13 +6,12 @@ import { redactPii } from "@oh-my-query/core/client";
 import { chainPrompt } from "@oh-my-query/rpc";
 import { streamText } from "ai";
 
+import type { QueryEngine } from "./query-engine.ts";
 import type { RunOutcome } from "./run-query.ts";
 import type { RedactOptions } from "./schema-prompt.ts";
 
 import { classifyAIError } from "./ai-errors.ts";
 import { presentCard } from "./present.ts";
-import { repairInstruction, sqlSystemPrompt } from "./prompts.ts";
-import { assertReadOnly } from "./read-only-guard.ts";
 import { refineMessages, relevanceText } from "./refine.ts";
 import {
   AskFailure,
@@ -29,7 +23,6 @@ import {
   throwIfAborted,
 } from "./run-query.ts";
 import { selectRelevantSchema } from "./schema-filter.ts";
-import { formatSchemaForPrompt } from "./schema-prompt.ts";
 import { coalesceText, createFenceStripper } from "./sql-stream.ts";
 
 export const ASK_MAX_ROWS = 2000;
@@ -43,7 +36,7 @@ export interface AskPorts {
     signal: AbortSignal,
     params?: BindValue[]
   ): Promise<TabularResult>;
-  dialect: DialectType;
+  engine: QueryEngine;
   connectionLabel: string;
   redact: RedactOptions;
   now(): Date;
@@ -110,7 +103,12 @@ async function* streamSql(
     sql += rest;
     yield { text: rest, type: "sqlDelta" };
   }
-  yield { dialect: ports.dialect, lines: lineCount(sql), sql, type: "sqlDone" };
+  yield {
+    dialect: ports.engine.language,
+    lines: lineCount(sql),
+    sql,
+    type: "sqlDone",
+  };
   return sql;
 }
 
@@ -144,7 +142,7 @@ async function* loadSchemaText(
     await ports.loadSchema(),
     relevance
   );
-  return formatSchemaForPrompt(schema, ports.dialect, {
+  return ports.engine.formatSchema(schema, {
     omittedTables,
     redact: ports.redact,
   });
@@ -159,16 +157,16 @@ async function* writeAndRunSql(
   AskEvent,
   { sql: string; outcome: RunOutcome & { ok: true } }
 > {
-  const system = sqlSystemPrompt({
+  const { engine } = ports;
+  const system = engine.systemPrompt({
     connectionLabel: ports.connectionLabel,
-    dialect: ports.dialect,
     schemaText,
     today: ports.now(),
   });
-  yield { detail: "Writing SQL", phase: "sql", type: "phase" };
+  yield { detail: engine.writingDetail, phase: "sql", type: "phase" };
   for (let attempt = 0; ; attempt += 1) {
     const sql = yield* streamSql(ports, system, messages, signal);
-    const verdict = assertReadOnly(sql, ports.dialect);
+    const verdict = engine.guard(sql);
     if (!verdict.ok) {
       throw new AskFailure("NOT_READ_ONLY", verdict.reason, sql);
     }
@@ -191,7 +189,7 @@ async function* writeAndRunSql(
     messages.push(
       { content: sql, role: "assistant" },
       {
-        content: repairInstruction(redactFor(ports, outcome.message)),
+        content: engine.repairInstruction(redactFor(ports, outcome.message)),
         role: "user",
       }
     );
@@ -205,10 +203,14 @@ interface AskTurn {
   previous?: RefineContext["spec"];
 }
 
-const turnOf = (prompt: string, refine?: RefineContext): AskTurn =>
+const turnOf = (
+  prompt: string,
+  engine: QueryEngine,
+  refine?: RefineContext
+): AskTurn =>
   refine
     ? {
-        messages: refineMessages(refine, prompt),
+        messages: refineMessages(refine, prompt, engine),
         presentPrompt: chainPrompt(refine.turns, prompt),
         previous: refine.spec,
         relevance: relevanceText(refine, prompt),
@@ -237,6 +239,7 @@ async function* pipeline(
 
   yield { detail: "Shaping the result", phase: "present", type: "phase" };
   const card = await presentCard({
+    language: ports.engine.language,
     model: ports.model,
     previous: turn.previous,
     prompt: turn.presentPrompt,
@@ -256,7 +259,7 @@ export const runAsk = (
   refine?: RefineContext
 ): AsyncGenerator<AskEvent> =>
   runToCompletion(
-    pipeline(turnOf(prompt, refine), ports, signal),
+    pipeline(turnOf(prompt, ports.engine, refine), ports, signal),
     "schema",
     signal
   );

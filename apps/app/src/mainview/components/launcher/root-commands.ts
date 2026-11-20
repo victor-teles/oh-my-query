@@ -1,12 +1,14 @@
 import type { LucideIcon } from "lucide-react";
 
 import {
+  DownloadIcon,
   EyeOffIcon,
   HistoryIcon,
   KeyRoundIcon,
   LayoutGridIcon,
   PlusIcon,
   SlidersHorizontalIcon,
+  UploadIcon,
 } from "lucide-react";
 
 import { fuzzyMatch } from "@/lib/fuzzy-match";
@@ -27,6 +29,8 @@ interface RootCommandHandlers {
   newBoard: () => void;
   openHistory: () => void;
   openSettings: () => void;
+  exportAll: () => void;
+  openImport: () => void;
   dismiss: () => void;
 }
 
@@ -35,6 +39,8 @@ export const rootCommands = ({
   newBoard,
   openHistory,
   openSettings,
+  exportAll,
+  openImport,
   dismiss,
 }: RootCommandHandlers): LauncherCommand[] => [
   {
@@ -74,6 +80,24 @@ export const rootCommands = ({
     shortcut: ["⌘", ","],
     subtitle: "AI provider, hotkey and appearance",
     title: "Settings",
+  },
+  {
+    actionLabel: "Export",
+    icon: DownloadIcon,
+    id: "export-bundle",
+    keywords: ["share", "backup", "save", "file", "json"],
+    run: exportAll,
+    subtitle: "Saves a .omq.json to Downloads",
+    title: "Export Widgets and Boards",
+  },
+  {
+    actionLabel: "Import",
+    icon: UploadIcon,
+    id: "import-bundle",
+    keywords: ["share", "restore", "load", "file", "json", "clipboard"],
+    run: openImport,
+    subtitle: "From the clipboard or a .omq.json file",
+    title: "Import Widgets and Boards…",
   },
   {
     actionLabel: "Hide",

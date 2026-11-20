@@ -10,3 +10,7 @@ export type { ReadOnlyVerdict } from "./read-only-guard.ts";
 export { inferCardSpec } from "./infer-card-spec.ts";
 export { proposeParams } from "./propose-params.ts";
 export type { ProposeParamsInput } from "./propose-params.ts";
+export type { QueryEngine } from "./query-engine.ts";
+export { mongoEngine } from "./mongo-engine.ts";
+export { redisEngine } from "./redis-engine.ts";
+export { sqlEngine } from "./sql-engine.ts";

@@ -2,7 +2,12 @@ import type { SchemaInfo } from "@oh-my-query/core";
 
 import { describe, expect, it } from "vitest";
 
-import { formatSchemaForPrompt } from "./schema-prompt.ts";
+import {
+  formatMongoSchema,
+  formatRedisSchema,
+  formatSchemaForPrompt,
+} from "./schema-prompt.ts";
+import { column, table } from "./test-fixtures.ts";
 
 type Tables = SchemaInfo["schemas"][number]["tables"];
 
@@ -167,5 +172,77 @@ describe("formatSchemaForPrompt — content", () => {
     const plain = formatSchemaForPrompt(schema, "postgresql");
     expect(redacted).not.toContain("ops@example.com");
     expect(plain).toContain("ops@example.com");
+  });
+});
+
+describe("formatMongoSchema", () => {
+  it("lists collections with sampled field types and estimates", () => {
+    const schema: SchemaInfo = {
+      schemas: [
+        {
+          name: "shop",
+          tables: [
+            table("orders", [], 12_400, [
+              column("_id", "objectId"),
+              column("created_at", "date"),
+              column("items", "array<object>"),
+              column("items.sku", "string"),
+            ]),
+            table("events", [], null, []),
+            table("singletons", [], 1, []),
+          ],
+          views: [{ columns: [], name: "active_orders" }],
+        },
+      ],
+    };
+    expect(formatMongoSchema(schema, { omittedTables: 2 })).toBe(
+      [
+        "Database type: MongoDB",
+        "",
+        "orders (≈12,400 docs): _id objectId, created_at date, items array<object>, items.sku string",
+        "events",
+        "singletons (≈1 doc)",
+        "active_orders (view)",
+        "(2 more tables were omitted as unrelated to the question.)",
+      ].join("\n")
+    );
+  });
+
+  it("redacts field names that look like PII when asked", () => {
+    const schema = makeSchema([
+      table("users", [], 1, [column("ops@example.com", "string")]),
+    ]);
+    expect(
+      formatMongoSchema(schema, {
+        redact: { customPatterns: [], enabled: true },
+      })
+    ).not.toContain("ops@example.com");
+  });
+});
+
+describe("formatRedisSchema", () => {
+  it("lists key patterns with their type, estimate and hash fields", () => {
+    const schema = makeSchema([
+      table("session:*", [], 3400, [column("user_id"), column("ip")]),
+      table("leaderboard:*", [], 4, [column("value", "zset")]),
+      table("greeting", [], 1, [column("value", "string")]),
+      table("empty:*", [], 2, []),
+    ]);
+    expect(formatRedisSchema(schema)).toBe(
+      [
+        "Database type: Redis",
+        "",
+        "session:* (hash, ≈3,400 keys): user_id, ip",
+        "leaderboard:* (zset, ≈4 keys)",
+        "greeting (string, ≈1 key)",
+        "empty:* (hash, ≈2 keys)",
+      ].join("\n")
+    );
+  });
+
+  it("says when there are no keys", () => {
+    expect(formatRedisSchema(makeSchema([]))).toBe(
+      "Database type: Redis\n\n(No keys were found.)"
+    );
   });
 });

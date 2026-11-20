@@ -7,6 +7,8 @@ import {
   REVENUE,
 } from "@/test/ask-fixtures";
 
+import type { AskState } from "./ask-reducer";
+
 import { askFooterHints } from "./ask-footer-hints";
 import {
   askActionLabel,
@@ -17,6 +19,20 @@ import {
   statusLabel,
 } from "./ask-labels";
 import { initialAskState } from "./ask-reducer";
+
+const cappedAnswer = (): AskState => {
+  const answered = askStateAfter(REVENUE);
+  const { answer } = answered;
+  return answer
+    ? {
+        ...answered,
+        answer: {
+          ...answer,
+          result: { ...answer.result, isTruncated: true, rowCount: 2000 },
+        },
+      }
+    : answered;
+};
 
 describe("headerSegments", () => {
   it("shows the connection while writing, the line count once written, and rows with time after the result", () => {
@@ -37,6 +53,14 @@ describe("headerSegments", () => {
     expect(
       headerSegments(askStateAfter(REVENUE), "PostgreSQL", "analytics")
     ).toStrictEqual(["PostgreSQL", "27 rows", "386ms"]);
+  });
+
+  it("marks a capped result with a plus", () => {
+    expect(headerSegments(cappedAnswer(), "MongoDB", "shop")).toStrictEqual([
+      "MongoDB",
+      "2,000+ rows",
+      "386ms",
+    ]);
   });
 
   it.each([
@@ -133,6 +157,25 @@ describe("statusLabel", () => {
     });
   });
 
+  it.each([
+    ["mongodb", "Writing the pipeline"],
+    ["redis", "Writing the commands"],
+  ] as const)("says what a %s ask is writing", (kind, primary) => {
+    const writing = askStateAfter(REVENUE, { type: "sqlDelta" });
+    expect(statusLabel(writing, "shop", kind).primary).toBe(primary);
+    expect(
+      headerSegments(
+        refineStateAfter(askStateAfter(REVENUE), "only Europe", {
+          nth: 3,
+          type: "sqlDelta",
+        }),
+        "MongoDB",
+        "shop",
+        kind
+      )[1]
+    ).toBe(primary);
+  });
+
   it("falls back to the connection name before the schema detail arrives", () => {
     expect(
       statusLabel({ ...initialAskState, status: "schema" }, "billing").secondary
@@ -144,10 +187,10 @@ describe("askFooterHints", () => {
   const labels = (busy: boolean, canSave: boolean, hasSql: boolean) =>
     askFooterHints({
       busy,
-      canSave,
       chain: null,
       hasSql,
       reporting: false,
+      save: canSave ? "available" : "none",
     }).map((hint) => hint.label);
 
   it("offers stop while busy, and actions, save, copy and SQL once answered", () => {
@@ -170,10 +213,10 @@ describe("askFooterHints", () => {
     expect(
       askFooterHints({
         busy: false,
-        canSave: true,
         chain: null,
         hasSql: true,
         reporting: true,
+        save: "available",
       }).map((hint) => hint.label)
     ).toStrictEqual(["Actions"]);
   });
@@ -185,12 +228,41 @@ describe("askFooterHints", () => {
     expect(
       askFooterHints({
         busy: false,
-        canSave: true,
         chain: { turns },
         hasSql: true,
         reporting: false,
+        save: "available",
       }).map((hint) => hint.label)
     ).toStrictEqual(labels);
+  });
+
+  it("dims Save for an answer that can't become a widget", () => {
+    const hints = askFooterHints({
+      busy: false,
+      chain: { turns: 1 },
+      hasSql: true,
+      reporting: false,
+      save: "unavailable",
+    });
+    expect(hints.at(-1)).toStrictEqual({
+      disabled: true,
+      keys: ["⌘", "S"],
+      label: "Save",
+    });
+    expect(
+      askFooterHints({
+        busy: false,
+        chain: null,
+        hasSql: true,
+        reporting: false,
+        save: "unavailable",
+      })
+    ).toStrictEqual([
+      { keys: ["⌘", "K"], label: "Actions" },
+      { disabled: true, keys: ["⌘", "S"], label: "Save" },
+      { keys: ["⌘", "C"], label: "Copy SQL" },
+      { keys: ["⌘", "E"], label: "SQL" },
+    ]);
   });
 });
 
@@ -199,6 +271,15 @@ describe("source labels", () => {
     expect(sqlHeading("question")).toBe("Generated SQL");
     expect(sqlHeading("sql")).toBe("Your SQL");
     expect(sqlHeading("match")).toBe("Matching rows");
+  });
+
+  it.each([
+    ["sql", "Generated SQL"],
+    ["mongodb", "Generated pipeline"],
+    ["redis", "Generated commands"],
+  ] as const)("titles a generated %s query", (kind, heading) => {
+    expect(sqlHeading("question", kind)).toBe(heading);
+    expect(sqlHeading("sql", kind)).toBe("Your SQL");
   });
 
   it.each([

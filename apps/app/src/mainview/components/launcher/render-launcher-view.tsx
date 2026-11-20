@@ -2,6 +2,9 @@ import type { ReactNode } from "react";
 
 import type { Widget, WidgetDraft } from "@/lib/ipc";
 
+import { ImportView } from "@/components/bundle/import-view";
+import { WatchView } from "@/components/watches/watch-view";
+import { WatchesView } from "@/components/watches/watches-view";
 import { WidgetInputsView } from "@/components/widgets/widget-inputs-view";
 import { WidgetRunView } from "@/components/widgets/widget-run-view";
 
@@ -23,6 +26,9 @@ export interface ViewSlots {
   onAddToBoard: (widgetId: string) => void;
   onNewBoard: (widgetId: string) => void;
   onBoardDone: () => void;
+  onImportDone: (firstWidgetId: string | null) => void;
+  onWatch: (widgetId: string) => void;
+  onOpenWatches: () => void;
 }
 
 export const renderView = (view: LauncherView, slots: ViewSlots) => {
@@ -37,6 +43,9 @@ export const renderView = (view: LauncherView, slots: ViewSlots) => {
     onAddToBoard,
     onNewBoard,
     onBoardDone,
+    onImportDone,
+    onWatch,
+    onOpenWatches,
   } = slots;
   switch (view.kind) {
     case "ask": {
@@ -55,9 +64,16 @@ export const renderView = (view: LauncherView, slots: ViewSlots) => {
           onClose={onBack}
           onAddToBoard={onAddToBoard}
           onEditInputs={onEditInputs}
+          onWatch={onWatch}
           widgetId={view.widgetId}
         />
       );
+    }
+    case "watch": {
+      return <WatchView onBack={onBack} widgetId={view.widgetId} />;
+    }
+    case "watches": {
+      return <WatchesView onBack={onBack} onOpenWatch={onWatch} />;
     }
     case "widget-inputs": {
       return (
@@ -88,12 +104,15 @@ export const renderView = (view: LauncherView, slots: ViewSlots) => {
       );
     }
     case "settings": {
-      return <SettingsView onBack={onBack} />;
+      return <SettingsView onBack={onBack} onOpenWatches={onOpenWatches} />;
     }
     case "connection-edit": {
       return (
         <ConnectionEditView connectionId={view.connectionId} onBack={onBack} />
       );
+    }
+    case "import": {
+      return <ImportView onBack={onBack} onDone={onImportDone} />;
     }
     default: {
       return root;

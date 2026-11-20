@@ -1,3 +1,4 @@
+import { CARD_SPEC_VERSION } from "@oh-my-query/rpc";
 import { describe, expect, it } from "vitest";
 
 import type { AskEvent, CardSpec, SqlAssumptions } from "@/lib/ipc";
@@ -17,7 +18,7 @@ import {
 const specFor = (title: string, mark: "bar" | "line" = "bar"): CardSpec => ({
   formats: {},
   title,
-  version: 1,
+  version: CARD_SPEC_VERSION,
   view: { kind: "chart", mark, stacked: false, x: "region", y: ["mrr"] },
 });
 

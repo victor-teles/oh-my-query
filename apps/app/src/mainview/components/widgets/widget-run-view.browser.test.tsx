@@ -4,8 +4,10 @@ import { page, userEvent } from "vitest/browser";
 import type { WidgetRunResult } from "@/lib/ipc";
 
 import { makeConnection } from "@/test/connection-fixture";
+import { ipcHandlerRegistry } from "@/test/ipc-handler-registry";
 import { mockLauncherIpc, renderWithConnections } from "@/test/launcher-ipc";
 import { wait } from "@/test/wait";
+import { makeKpiWidget, makeWatch } from "@/test/watch-fixtures";
 import { makeWidget, runResult } from "@/test/widget-fixtures";
 
 import { WidgetRunView } from "./widget-run-view";
@@ -50,6 +52,7 @@ const setup = ({
   const onClose = vi.fn();
   const onEditInputs = vi.fn();
   const onAddToBoard = vi.fn();
+  const onWatch = vi.fn();
   renderWithConnections(
     <div data-testid="run-harness" style={{ width: 760 }}>
       <WidgetRunView
@@ -57,12 +60,13 @@ const setup = ({
         onAddToBoard={onAddToBoard}
         onClose={onClose}
         onEditInputs={onEditInputs}
+        onWatch={onWatch}
         widgetId={widget.id}
       />
     </div>
   );
   const screen = page.getByTestId("run-harness");
-  return { calls, onAddToBoard, onClose, onEditInputs, screen };
+  return { calls, onAddToBoard, onClose, onEditInputs, onWatch, screen };
 };
 
 const deferred = () => {
@@ -153,6 +157,15 @@ describe("widgetRunView states", () => {
         screen.element().querySelector('[data-slot="swap-text"] > span + span')
       )
       .toBeNull();
+    await expect
+      .poll(
+        () =>
+          screen
+            .getByRole("button", { name: "Stop" })
+            .element()
+            .querySelectorAll("svg").length
+      )
+      .toBe(1);
     expect(page.getByTestId("run-harness").element()).toMatchSnapshot();
     await run.resolveNext(runResult());
   });
@@ -242,6 +255,7 @@ describe("widgetRunView states", () => {
         onAddToBoard={vi.fn()}
         onClose={vi.fn()}
         onEditInputs={vi.fn()}
+        onWatch={vi.fn()}
         widgetId="missing"
       />
     );
@@ -260,6 +274,33 @@ describe("widgetRunView actions", () => {
     await userEvent.keyboard("{Meta>}k{/Meta}");
     return screen.getByRole("menu", { name: "Actions for Revenue by region" });
   };
+
+  it("opens the watch view from the actions", async () => {
+    const { onWatch, screen } = await setup();
+    const menu = await openMenu(screen);
+    expect(
+      menu.getByRole("menuitem", { name: "Show in Menu Bar" }).query()
+    ).toBeNull();
+    await menu.getByRole("menuitem", { name: "Watch…" }).click();
+    expect(onWatch).toHaveBeenCalledWith("w-revenue");
+  });
+
+  it("pins a KPI widget to the menu bar from the actions", async () => {
+    const saveWatch = vi.fn((payload: Record<string, unknown>) => ({
+      ...makeWatch({ widgetId: "w-revenue" }),
+      ...(payload.watch as object),
+    }));
+    const { screen } = await setup({
+      widget: makeKpiWidget({ id: "w-revenue", name: "Revenue by region" }),
+    });
+    ipcHandlerRegistry.saveWatch = saveWatch;
+    const menu = await openMenu(screen);
+    await menu.getByRole("menuitem", { name: "Show in Menu Bar" }).click();
+    expect(saveWatch).toHaveBeenCalledWith({
+      watch: expect.objectContaining({ menuBar: true, widgetId: "w-revenue" }),
+    });
+    await expect.element(screen.getByText("In the menu bar")).toBeVisible();
+  });
 
   it("adds the widget to a board from the actions", async () => {
     const { onAddToBoard, screen } = await setup();
@@ -287,6 +328,7 @@ describe("widgetRunView actions", () => {
       "Rename",
       "Duplicate",
       "Add to Board",
+      "Watch…",
       "Delete",
     ]);
     expect(menu.element()).toMatchSnapshot();

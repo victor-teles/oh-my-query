@@ -1,0 +1,55 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`widgetTrend > shows a falling delta with sign, arrow and a spoken label 1`] = `
+<span
+  class="relative flex shrink-0 items-center gap-1.5"
+  data-testid="widget-trend"
+>
+  <svg
+    aria-hidden="true"
+    class="shrink-0 overflow-visible text-panel-muted"
+    data-motion="draw"
+    data-testid="sparkline"
+    height="14"
+    viewBox="0 0 48 14"
+    width="48"
+  >
+    <g>
+      <path
+        d="M2.00 2.00 L24.00 7.00 L46.00 12.00"
+        fill="none"
+        pathLength="1"
+        stroke="currentColor"
+        stroke-dasharray="0 1"
+        stroke-dashoffset="0"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="1.25"
+      />
+      <circle
+        cx="46"
+        cy="12"
+        fill="currentColor"
+        opacity="0"
+        r="1"
+      />
+    </g>
+  </svg>
+  <span
+    aria-label="Down 2% since 9:02 AM"
+    class="type-meta tabular-nums text-danger-ink"
+    data-direction="down"
+    role="img"
+  >
+    <span
+      data-slot="swap-text"
+    >
+      <span
+        class="inline-block"
+      >
+        ▼ 2%
+      </span>
+    </span>
+  </span>
+</span>
+`;

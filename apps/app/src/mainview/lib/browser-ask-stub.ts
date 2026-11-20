@@ -1,3 +1,4 @@
+import type { QueryLanguage } from "@oh-my-query/core/client";
 import type {
   AskEvent,
   AskParams,
@@ -6,7 +7,10 @@ import type {
   RunSqlParams,
 } from "@oh-my-query/rpc";
 
+import { CARD_SPEC_VERSION } from "@oh-my-query/rpc";
+
 import type { RecordedAsk } from "@/lib/browser-ask-recordings";
+import type { RecordedRefusal } from "@/lib/browser-engine-recordings";
 
 import {
   MONTHS,
@@ -16,6 +20,13 @@ import {
   REVENUE_BY_REGION,
   WEEKLY_SIGNUPS,
 } from "@/lib/browser-ask-recordings";
+import {
+  MONGO_ORDERS_BY_STATUS,
+  MONGO_REFUSAL,
+  REDIS_KEYS_BY_PATTERN,
+  REDIS_LEADERBOARD,
+  REDIS_REFUSAL,
+} from "@/lib/browser-engine-recordings";
 import { matchRecordingFor } from "@/lib/browser-lookup-stub";
 import { refinedRecording } from "@/lib/browser-refine-stub";
 
@@ -42,6 +53,20 @@ const REGION_PROMPT = /europe|north america|asia/i;
 
 const REFUSED_SQL = "-- Remove every user\ndelete from users";
 const MUTATION = /\b(delete|drop|truncate|update|insert)\b/i;
+const ENGINE_MUTATION = /\b(merge|delete|drop|remove|set|flush)\b/i;
+
+const SQL_REFUSAL: RecordedRefusal = {
+  message: "Only read-only queries can run here, not DELETE.",
+  sql: REFUSED_SQL,
+};
+
+const WRITING: Partial<Record<QueryLanguage, string>> = {
+  mongodb: "Writing the pipeline",
+  redis: "Writing the commands",
+};
+
+export const languageForType = (type: string | undefined): QueryLanguage =>
+  type === "mongodb" || type === "redis" ? type : "postgresql";
 
 type Step = [delayMs: number, event: AskEvent];
 
@@ -54,17 +79,28 @@ const sqlSteps = (sql: string): Step[] =>
     },
   ]);
 
-const openingSteps = (label: string, sql: string): Step[] => [
+const openingSteps = (
+  label: string,
+  sql: string,
+  language: QueryLanguage = "postgresql"
+): Step[] => [
   [
     0,
     { detail: `Reading the ${label} schema`, phase: "schema", type: "phase" },
   ],
-  [SCHEMA_MS, { detail: "Writing SQL", phase: "sql", type: "phase" }],
+  [
+    SCHEMA_MS,
+    {
+      detail: WRITING[language] ?? "Writing SQL",
+      phase: "sql",
+      type: "phase",
+    },
+  ],
   ...sqlSteps(sql),
   [
     0,
     {
-      dialect: "postgresql",
+      dialect: language,
       lines: sql.split("\n").length,
       sql,
       type: "sqlDone",
@@ -73,7 +109,7 @@ const openingSteps = (label: string, sql: string): Step[] => [
 ];
 
 const answerSteps = (label: string, recorded: RecordedAsk): Step[] => [
-  ...openingSteps(label, recorded.sql),
+  ...openingSteps(label, recorded.sql, recorded.language),
   [0, { detail: `Read only on ${label}`, phase: "run", type: "phase" }],
   [
     RUN_MS,
@@ -91,19 +127,31 @@ const answerSteps = (label: string, recorded: RecordedAsk): Step[] => [
   [0, { type: "done" }],
 ];
 
-const refusalSteps = (label: string): Step[] => [
-  ...openingSteps(label, REFUSED_SQL),
-  [
-    0,
-    {
-      code: "NOT_READ_ONLY",
-      message: "Only read-only queries can run here, not DELETE.",
-      phase: "sql",
-      sql: REFUSED_SQL,
-      type: "error",
-    },
-  ],
+const refusalSteps = (
+  label: string,
+  { sql, message }: RecordedRefusal = SQL_REFUSAL,
+  language: QueryLanguage = "postgresql"
+): Step[] => [
+  ...openingSteps(label, sql, language),
+  [0, { code: "NOT_READ_ONLY", message, phase: "sql", sql, type: "error" }],
 ];
+
+const ENGINE_REFUSALS: Partial<Record<QueryLanguage, RecordedRefusal>> = {
+  mongodb: MONGO_REFUSAL,
+  redis: REDIS_REFUSAL,
+};
+
+const engineRecordingFor = (
+  prompt: string,
+  language: QueryLanguage
+): RecordedAsk => {
+  if (language === "mongodb") {
+    return MONGO_ORDERS_BY_STATUS;
+  }
+  return /leaderboard/i.test(prompt)
+    ? REDIS_LEADERBOARD
+    : REDIS_KEYS_BY_PATTERN;
+};
 
 export const recordedFor = (prompt: string): RecordedAsk => {
   if (REGION_PROMPT.test(prompt)) {
@@ -119,13 +167,31 @@ export const scriptFor = (prompt: string, label = "demo"): Step[] => {
   return answerSteps(label, recordedFor(prompt));
 };
 
-const recordingOf = ({ prompt, refine }: AskParams): RecordedAsk =>
-  refine ? refinedRecording(refine, prompt) : recordedFor(prompt);
+const recordingOf = (
+  { prompt, refine }: AskParams,
+  language: QueryLanguage = "postgresql"
+): RecordedAsk => {
+  if (language === "mongodb" || language === "redis") {
+    return engineRecordingFor(prompt, language);
+  }
+  return refine ? refinedRecording(refine, prompt) : recordedFor(prompt);
+};
 
-export const askScriptFor = (params: AskParams, label = "demo"): Step[] =>
-  MUTATION.test(params.prompt)
+export const askScriptFor = (
+  params: AskParams,
+  label = "demo",
+  language: QueryLanguage = "postgresql"
+): Step[] => {
+  const refusal = ENGINE_REFUSALS[language];
+  if (refusal) {
+    return ENGINE_MUTATION.test(params.prompt)
+      ? refusalSteps(label, refusal, language)
+      : answerSteps(label, recordingOf(params, language));
+  }
+  return MUTATION.test(params.prompt)
     ? refusalSteps(label)
     : answerSteps(label, recordingOf(params));
+};
 
 const RAW_WRITE = /^\s*(insert|update|delete|drop|alter|truncate|create)\b/i;
 const ORDER_STATUSES = ["paid", "pending", "refunded", "paid", "paid"];
@@ -146,7 +212,12 @@ export const ORDERS_PREVIEW: RecordedAsk = {
     String(((index * 37) % 400) + 20),
     `2026-10-${String((index % 28) + 1).padStart(2, "0")}T09:00:00Z`,
   ]),
-  spec: { formats: {}, title: "Orders", version: 1, view: { kind: "table" } },
+  spec: {
+    formats: {},
+    title: "Orders",
+    version: CARD_SPEC_VERSION,
+    view: { kind: "table" },
+  },
   sql: 'SELECT * FROM "public"."orders" LIMIT 50',
 };
 
@@ -196,7 +267,7 @@ const matchScriptFor = (source: MatchSource): Step[] => {
         spec: {
           formats: {},
           title: recording.title,
-          version: 1,
+          version: CARD_SPEC_VERSION,
           view: { kind: "table" },
         },
         type: "card",
@@ -268,12 +339,17 @@ const isTerminal = (event: AskEvent): boolean =>
 
 interface AskEmulatorOptions {
   labelFor?: (connectionId: string) => string;
+  languageFor?: (connectionId: string) => QueryLanguage;
   onAnswered?: (params: AskParams, recorded: RecordedAsk) => void;
 }
 
 export const createAskEmulator = (
   emit: EmitAskEvent,
-  { labelFor = () => "demo", onAnswered }: AskEmulatorOptions = {}
+  {
+    labelFor = () => "demo",
+    languageFor = () => "postgresql",
+    onAnswered,
+  }: AskEmulatorOptions = {}
 ) => {
   const timers = new Map<string, ReturnType<typeof setTimeout>[]>();
 
@@ -302,12 +378,14 @@ export const createAskEmulator = (
   };
 
   return {
-    ask: (params: AskParams): void =>
+    ask: (params: AskParams): void => {
+      const language = languageFor(params.connectionId);
       play(
         params.askId,
-        askScriptFor(params, labelFor(params.connectionId)),
-        () => onAnswered?.(params, recordingOf(params))
-      ),
+        askScriptFor(params, labelFor(params.connectionId), language),
+        () => onAnswered?.(params, recordingOf(params, language))
+      );
+    },
     cancel: (askId: string): void => {
       if (!timers.has(askId)) {
         return;

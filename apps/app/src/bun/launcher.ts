@@ -10,9 +10,11 @@ import Electrobun, {
 } from "electrobun/main";
 
 import type { AppRpc } from "./rpc.ts";
+import type { TrayStatus } from "./tray-status.ts";
 
 import { createMacAccessibility } from "./accessibility-native.ts";
 import { requireAccessibility } from "./accessibility.ts";
+import { blurResponse } from "./launcher-blur.ts";
 import {
   LAUNCHER_MIN_HEIGHT,
   launcherFrame,
@@ -20,12 +22,20 @@ import {
   workAreaForPoint,
 } from "./launcher-geometry.ts";
 import { summonPayload } from "./summon-payload.ts";
+import {
+  EMPTY_TRAY_STATUS,
+  trayActionOf,
+  trayMenu,
+  trayTitle,
+} from "./tray-status.ts";
 
 export interface LauncherController {
   hide(): void;
   markRendererReady(): void;
   navigate(view: LauncherNavigateView): void;
   resize(height: number): void;
+  runModal<T>(openPanel: () => Promise<T>): Promise<T>;
+  setTrayStatus(status: TrayStatus): void;
   show(): void;
   toggle(): void;
 }
@@ -36,13 +46,8 @@ interface CreateLauncherOptions {
   url: string;
   releaseFocus: () => void;
   summonOffer: () => LookupValue | null;
+  onWatchedOpened: (watchId: string) => void;
 }
-
-const TRAY_ACTIONS = {
-  open: "launcher:open",
-  quit: "launcher:quit",
-  settings: "launcher:settings",
-} as const;
 
 const cursorWorkArea = () => {
   const primary = Screen.getPrimaryDisplay().workArea;
@@ -50,18 +55,18 @@ const cursorWorkArea = () => {
   return workAreaForPoint(workAreas, Screen.getCursorScreenPoint(), primary);
 };
 
-const actionOf = (event: unknown): string | undefined =>
-  (event as { data?: { action?: string } }).data?.action;
-
 export function createLauncher({
   hotkey,
   rpc,
   url,
   releaseFocus,
   summonOffer,
+  onWatchedOpened,
 }: CreateLauncherOptions): LauncherController {
   let contentHeight = LAUNCHER_MIN_HEIGHT;
   let rendererReady = false;
+  let modal = false;
+  const shownTray = { menu: "", title: "" };
 
   const window = new BrowserWindow({
     frame: launcherFrame(cursorWorkArea(), contentHeight),
@@ -82,6 +87,28 @@ export function createLauncher({
     rpc.send.launcherShown(summonPayload(summonOffer));
   };
 
+  const tray = new Tray({
+    height: 18,
+    image: "views://assets/tray-template.png",
+    template: true,
+    width: 18,
+  });
+  // Native menu rebuilds are not free; skip them when nothing visible changed.
+  const setTrayStatus = (status: TrayStatus) => {
+    const title = trayTitle(status);
+    const menu = trayMenu(status);
+    const menuKey = JSON.stringify(menu);
+    if (title !== shownTray.title) {
+      tray.setTitle(title);
+      shownTray.title = title;
+    }
+    if (menuKey !== shownTray.menu) {
+      tray.setMenu(menu);
+      shownTray.menu = menuKey;
+    }
+  };
+  setTrayStatus(EMPTY_TRAY_STATUS);
+
   const controller: LauncherController = {
     hide: () => {
       window.hide();
@@ -101,6 +128,18 @@ export function createLauncher({
       contentHeight = frame.height;
       window.setFrame(frame.x, frame.y, frame.width, frame.height);
     },
+    runModal: async (openPanel) => {
+      modal = true;
+      window.setAlwaysOnTop(false);
+      try {
+        return await openPanel();
+      } finally {
+        window.setAlwaysOnTop(true);
+        window.activate();
+        modal = false;
+      }
+    },
+    setTrayStatus,
     show,
     toggle: () => {
       if (window.isVisible()) {
@@ -111,15 +150,15 @@ export function createLauncher({
     },
   };
 
-  // Before the renderer subscribes, a dismiss message would be lost, so the
-  // native window is hidden directly instead of animating out.
   window.on("blur", () => {
-    if (!window.isVisible()) {
-      return;
-    }
-    if (rendererReady) {
+    const response = blurResponse({
+      modal,
+      rendererReady,
+      visible: window.isVisible(),
+    });
+    if (response === "dismiss") {
       rpc.send.launcherDismiss({});
-    } else {
+    } else if (response === "hide") {
       controller.hide();
     }
   });
@@ -135,30 +174,28 @@ export function createLauncher({
     });
   }
 
-  const tray = new Tray({
-    height: 18,
-    image: "views://assets/tray-template.png",
-    template: true,
-    width: 18,
-  });
-  tray.setMenu([
-    { action: TRAY_ACTIONS.open, label: "Open Launcher", type: "normal" },
-    { action: TRAY_ACTIONS.settings, label: "Settings…", type: "normal" },
-    { type: "separator" },
-    { action: TRAY_ACTIONS.quit, label: "Quit oh-my-query", type: "normal" },
-  ]);
   tray.on("tray-clicked", (event) => {
-    switch (actionOf(event)) {
-      case TRAY_ACTIONS.open: {
+    const action = trayActionOf(event);
+    switch (action?.kind) {
+      case "open": {
         show();
         break;
       }
-      case TRAY_ACTIONS.settings: {
+      case "settings": {
         controller.navigate("settings");
         break;
       }
-      case TRAY_ACTIONS.quit: {
+      case "quit": {
         Utils.quit();
+        break;
+      }
+      case "watches": {
+        controller.navigate("watches");
+        break;
+      }
+      case "open-watched": {
+        controller.navigate({ kind: "widget-run", widgetId: action.widgetId });
+        onWatchedOpened(action.watchId);
         break;
       }
       default: {

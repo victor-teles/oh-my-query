@@ -1,11 +1,12 @@
 import { describe, expect, it } from "vitest";
 
+import { CARD_SPEC_VERSION } from "./card-spec.ts";
 import { chainPrompt, MAX_ASK_TURNS, RefineContext } from "./refine.ts";
 
 const SPEC = {
   formats: {},
   title: "Revenue by region",
-  version: 1,
+  version: CARD_SPEC_VERSION,
   view: { kind: "table" },
 };
 

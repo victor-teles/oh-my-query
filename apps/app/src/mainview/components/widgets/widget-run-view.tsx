@@ -15,6 +15,11 @@ import { LauncherFooter } from "@/components/launcher/launcher-footer";
 import { CopiedRing } from "@/components/result-actions/copied-ring";
 import { ResultStatus } from "@/components/result-actions/result-status";
 import { useResultExport } from "@/components/result-actions/use-result-export";
+import { watchActions } from "@/components/watches/watch-actions";
+import {
+  useWatches,
+  watchForWidget,
+} from "@/components/watches/watches-provider";
 
 import { WidgetArgumentsRow } from "./arguments/widget-arguments-row";
 import { NameField } from "./name-field";
@@ -41,6 +46,7 @@ const hasTextSelection = () => (window.getSelection()?.toString() ?? "") !== "";
 interface WidgetRunNavigation {
   onEditInputs: (draft: WidgetDraft) => void;
   onAddToBoard: (widgetId: string) => void;
+  onWatch: (widgetId: string) => void;
   onClose: () => void;
 }
 
@@ -54,9 +60,11 @@ function WidgetRunPanel({
   initialValues,
   onEditInputs,
   onAddToBoard,
+  onWatch,
   onClose,
 }: WidgetRunPanelProps) {
   const { save } = useWidgets();
+  const { watches } = useWatches();
   const { state: connections } = useConnections();
   const [values, setValues] = useState(() => ({
     ...currentValues(widget),
@@ -90,6 +98,7 @@ function WidgetRunPanel({
     onDeleted: onClose,
     onEditInputs,
     onRename: () => setRenaming(true),
+    onWatch,
     outcome: state.outcome,
     widget,
   });
@@ -98,11 +107,10 @@ function WidgetRunPanel({
   const connection =
     connections.connections.find((item) => item.id === widget.connectionId) ??
     null;
-  const actions = widgetActions({
-    hasRows: (result?.rows.length ?? 0) > 0,
-    hasSql: true,
-    view,
-  });
+  const actions = widgetActions(
+    { hasRows: (result?.rows.length ?? 0) > 0, hasSql: true, view },
+    watchActions(widget, watchForWidget(watches, widget.id))
+  );
 
   const selectView = useCallback(
     (next: CardViewKind) => {
@@ -255,6 +263,7 @@ export function WidgetRunView({
   initialValues,
   onEditInputs,
   onAddToBoard,
+  onWatch,
   onClose,
 }: WidgetRunViewProps) {
   const { widgets, status } = useWidgets();
@@ -276,6 +285,7 @@ export function WidgetRunView({
       onAddToBoard={onAddToBoard}
       onClose={onClose}
       onEditInputs={onEditInputs}
+      onWatch={onWatch}
       widget={widget}
     />
   );

@@ -54,3 +54,14 @@ export const writeClipboardLookups = async (
   await saveConfig({ ...config, clipboardLookups: next });
   return next;
 };
+
+export const readWatchingPaused = async (): Promise<boolean> => {
+  const config = await getConfig();
+  return config.watchingPaused ?? false;
+};
+
+export const writeWatchingPaused = async (paused: boolean): Promise<void> => {
+  const next = z.boolean().parse(paused);
+  const config = await getConfig();
+  await saveConfig({ ...config, watchingPaused: next });
+};

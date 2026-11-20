@@ -65,6 +65,17 @@ describe("history actions", () => {
     ).toStrictEqual(["run-sql"]);
   });
 
+  it.each(["mongodb", "redis"] as const)(
+    "only asks a %s recent again",
+    (language) => {
+      expect(
+        historyActions(historyTarget(ask, [analytics], null), language)
+          .filter((action) => action.disabled)
+          .map((action) => action.id)
+      ).toStrictEqual(["run-sql", "save-widget"]);
+    }
+  );
+
   it("disables asking and running without a connection", () => {
     expect(disabledIds(null)).toStrictEqual(["ask-again", "run-sql"]);
   });

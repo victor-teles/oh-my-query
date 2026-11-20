@@ -3,6 +3,7 @@ import type Redis from "ioredis";
 import { DbError } from "@oh-my-query/core";
 import { describe, expect, it, vi } from "vitest";
 
+import { fakeRedis, replyTable } from "./fake-redis.ts";
 import {
   deleteRedisKey,
   isRedisPool,
@@ -201,15 +202,68 @@ describe("redisPool > metadata", () => {
 });
 
 describe("redisPool > fetchSchema", () => {
-  it("returns an empty schema using the database name and issues no commands", async () => {
-    const { client, pool } = buildPool();
-    const result = await pool.fetchSchema("3");
-    expect(result).toStrictEqual({
-      schemas: [{ name: "3", tables: [], views: [] }],
+  it("reads key patterns on a duplicated client without values", async () => {
+    const keys = [
+      "session:aaaaaaaaaaaa1",
+      "session:aaaaaaaaaaaa2",
+      "leaderboard",
+    ];
+    const fake = fakeRedis({
+      keys,
+      reply: replyTable({
+        "HKEYS session:aaaaaaaaaaaa1": ["user_id", "ip"],
+        "TYPE leaderboard": "zset",
+        "TYPE session:aaaaaaaaaaaa1": "hash",
+      }),
     });
-    expect(client.info).not.toHaveBeenCalled();
-    expect(client.config).not.toHaveBeenCalled();
-    expect(client.scan).not.toHaveBeenCalled();
+    fake.dbsize.mockResolvedValue(30);
+
+    const result = await fake.pool.fetchSchema("2");
+
+    expect(fake.duplicate).toHaveBeenCalledWith({ db: 2, lazyConnect: true });
+    expect(fake.select).not.toHaveBeenCalled();
+    expect(fake.quit).toHaveBeenCalledOnce();
+    expect(result.schemas[0]?.name).toBe("2");
+    expect(
+      result.schemas[0]?.tables.map((table) => ({
+        columns: table.columns.map(
+          (column) => `${column.name}:${column.dataType}`
+        ),
+        name: table.name,
+        rowEstimate: table.rowEstimate,
+      }))
+    ).toStrictEqual([
+      {
+        columns: ["user_id:string", "ip:string"],
+        name: "session:*",
+        rowEstimate: 20,
+      },
+      { columns: ["value:zset"], name: "leaderboard", rowEstimate: 10 },
+    ]);
+  });
+
+  it("returns no tables for an empty database", async () => {
+    const fake = fakeRedis();
+    const result = await fake.pool.fetchSchema("0");
+    expect(result).toStrictEqual({
+      schemas: [{ name: "0", tables: [], views: [] }],
+    });
+  });
+
+  it("maps connection failures and closes the duplicate", async () => {
+    const fake = fakeRedis();
+    fake.scan.mockRejectedValueOnce(new Error("NOPERM scan"));
+    await expect(fake.pool.fetchSchema("0")).rejects.toBeInstanceOf(DbError);
+    expect(fake.quit).toHaveBeenCalledOnce();
+  });
+
+  it("disconnects a duplicate that fails to connect", async () => {
+    const fake = fakeRedis();
+    fake.connect.mockRejectedValueOnce(new Error("ECONNREFUSED"));
+    await expect(fake.pool.fetchSchema("0")).rejects.toMatchObject({
+      message: "ECONNREFUSED",
+    });
+    expect(fake.disconnect).toHaveBeenCalledOnce();
   });
 });
 

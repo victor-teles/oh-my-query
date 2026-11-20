@@ -3,41 +3,48 @@ import { describe, expect, it, vi } from "vitest";
 
 import { aiSetupCommand, filterCommands, rootCommands } from "./root-commands";
 
-const commands = () =>
-  rootCommands({
-    addConnection: vi.fn(),
-    dismiss: vi.fn(),
-    newBoard: vi.fn(),
-    openHistory: vi.fn(),
-    openSettings: vi.fn(),
-  });
+const handlers = () => ({
+  addConnection: vi.fn(),
+  dismiss: vi.fn(),
+  exportAll: vi.fn(),
+  newBoard: vi.fn(),
+  openHistory: vi.fn(),
+  openImport: vi.fn(),
+  openSettings: vi.fn(),
+});
+
+const commands = () => rootCommands(handlers());
 
 describe("rootCommands", () => {
   it("wires each command to its handler", () => {
-    const addConnection = vi.fn();
-    const openSettings = vi.fn();
-    const dismiss = vi.fn();
-    const newBoard = vi.fn();
-    const openHistory = vi.fn();
-    const [add, board, history, settings, hide] = rootCommands({
-      addConnection,
-      dismiss,
-      newBoard,
-      openHistory,
-      openSettings,
+    const wired = handlers();
+    for (const command of rootCommands(wired)) {
+      command.run();
+    }
+    for (const handler of Object.values(wired)) {
+      expect(handler).toHaveBeenCalledOnce();
+    }
+  });
+
+  it("offers export and import of widgets and boards", () => {
+    const wired = handlers();
+    const byId = new Map(rootCommands(wired).map((c) => [c.id, c]));
+    expect(byId.get("export-bundle")).toMatchObject({
+      actionLabel: "Export",
+      subtitle: "Saves a .omq.json to Downloads",
+      title: "Export Widgets and Boards",
     });
+    byId.get("import-bundle")?.run();
+    expect(wired.openImport).toHaveBeenCalledOnce();
+  });
 
-    add?.run();
-    board?.run();
-    history?.run();
-    settings?.run();
-    hide?.run();
-
-    expect(addConnection).toHaveBeenCalledOnce();
-    expect(newBoard).toHaveBeenCalledOnce();
-    expect(openHistory).toHaveBeenCalledOnce();
-    expect(openSettings).toHaveBeenCalledOnce();
-    expect(dismiss).toHaveBeenCalledOnce();
+  it("finds export and import by their keywords", () => {
+    expect(filterCommands(commands(), "backup").map((c) => c.id)).toStrictEqual(
+      ["export-bundle"]
+    );
+    expect(
+      filterCommands(commands(), "restore").map((c) => c.id)
+    ).toStrictEqual(["import-bundle"]);
   });
 
   it("offers AI setup through Settings", () => {
@@ -49,8 +56,8 @@ describe("rootCommands", () => {
 
 describe("filterCommands", () => {
   it("returns every command for an empty or blank query", () => {
-    expect(filterCommands(commands(), "")).toHaveLength(5);
-    expect(filterCommands(commands(), "   ")).toHaveLength(5);
+    expect(filterCommands(commands(), "")).toHaveLength(7);
+    expect(filterCommands(commands(), "   ")).toHaveLength(7);
   });
 
   it("matches titles fuzzily", () => {

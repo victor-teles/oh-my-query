@@ -1,7 +1,10 @@
+import type { CardResult } from "@oh-my-query/rpc";
+
+import { CARD_SPEC_VERSION } from "@oh-my-query/rpc";
 import { describe, expect, it, vi } from "vitest";
 import { render } from "vitest-browser-react";
 
-import type { CardResult, CardViewKind } from "@/lib/card-data";
+import type { CardViewKind } from "@/lib/card-data";
 import type { CardSpec } from "@/lib/ipc";
 
 import { AskCard } from "@/components/ask/ask-card";
@@ -40,7 +43,7 @@ const share: Fixture = {
   spec: {
     formats: {},
     title: "MRR share by region",
-    version: 1,
+    version: CARD_SPEC_VERSION,
     view: { kind: "pie", label: "region", value: "mrr" },
   },
 };

@@ -2,15 +2,18 @@ import { useCallback, useEffect, useRef, useState } from "react";
 
 export const FLASH_FOR_MS = 1600;
 
-export const useFlashMessage = () => {
-  const [message, setMessage] = useState<string | null>(null);
+export const useFlashMessage = <T = string>(durationMs = FLASH_FOR_MS) => {
+  const [message, setMessage] = useState<T | null>(null);
   const timer = useRef(0);
 
-  const flash = useCallback((next: string) => {
-    window.clearTimeout(timer.current);
-    setMessage(next);
-    timer.current = window.setTimeout(() => setMessage(null), FLASH_FOR_MS);
-  }, []);
+  const flash = useCallback(
+    (next: T) => {
+      window.clearTimeout(timer.current);
+      setMessage(next);
+      timer.current = window.setTimeout(() => setMessage(null), durationMs);
+    },
+    [durationMs]
+  );
 
   useEffect(() => () => window.clearTimeout(timer.current), []);
 

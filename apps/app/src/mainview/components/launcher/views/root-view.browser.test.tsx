@@ -51,9 +51,11 @@ function Harness({
         newBoard: vi.fn(),
         openBoard: vi.fn(),
         openHistory: onOpenHistory,
+        openImport: vi.fn(),
         openSettings: onOpenSettings,
         renameBoard: vi.fn(),
         runWidget: onRunWidget,
+        watchWidget: vi.fn(),
       }}
       onQueryChange={setQuery}
       query={query}

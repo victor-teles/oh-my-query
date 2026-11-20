@@ -1,5 +1,6 @@
 import type { ReactElement } from "react";
 
+import { formatTick } from "@oh-my-query/rpc";
 import { useCallback } from "react";
 import {
   Area,
@@ -19,7 +20,7 @@ import type { ChartModel } from "@/lib/card-data";
 import type { ChartView } from "@/lib/ipc";
 
 import { ChartContainer, ChartTooltip } from "@/components/ui/chart";
-import { formatTick, X_KEY } from "@/lib/card-data";
+import { X_KEY } from "@/lib/card-data";
 
 import type { ChartDrill } from "./use-chart-drill";
 

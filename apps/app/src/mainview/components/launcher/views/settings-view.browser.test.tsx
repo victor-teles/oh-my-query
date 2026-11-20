@@ -30,7 +30,7 @@ const renderSettings = (handlers: CommandHandlers = {}, onBack = vi.fn()) => {
   mockLauncherIpc({ handlers });
   return render(
     <AppProviders>
-      <SettingsView onBack={onBack} />
+      <SettingsView onBack={onBack} onOpenWatches={vi.fn()} />
     </AppProviders>
   );
 };
@@ -345,5 +345,24 @@ describe("settings view — about", () => {
     });
     await screen.getByRole("button", { name: "Check Now" }).click();
     await expect.element(screen.getByText("Offline")).toBeVisible();
+  });
+});
+
+describe("settings view — background", () => {
+  beforeEach(resetMotion);
+
+  it("opens the watched widgets", async () => {
+    mockLauncherIpc();
+    const onOpenWatches = vi.fn();
+    const screen = render(
+      <AppProviders>
+        <SettingsView onBack={vi.fn()} onOpenWatches={onOpenWatches} />
+      </AppProviders>
+    );
+    await expect
+      .element(screen.getByRole("region", { name: "Background" }))
+      .toBeVisible();
+    await screen.getByRole("button", { name: "Open watched widgets" }).click();
+    expect(onOpenWatches).toHaveBeenCalledOnce();
   });
 });

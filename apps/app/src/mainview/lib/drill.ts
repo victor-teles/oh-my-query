@@ -1,18 +1,14 @@
-import { redactPii } from "@oh-my-query/core/client";
+import type { CardResult } from "@oh-my-query/rpc";
 
-import type {
-  CardResult,
-  CardViewKind,
-  ChartModel,
-  ChartRow,
-} from "@/lib/card-data";
+import { redactPii } from "@oh-my-query/core/client";
+import { formatFor, formatValue } from "@oh-my-query/rpc";
+
+import type { CardViewKind, ChartModel, ChartRow } from "@/lib/card-data";
 import type { CardSpec, CardView, ChartView } from "@/lib/ipc";
 
 import {
   alternatesFor,
   chartModelOf,
-  formatFor,
-  formatValue,
   isNumericColumn,
   OTHER_LABEL,
   pieModelOf,
