@@ -3,11 +3,22 @@ import path from "node:path";
 
 import { decryptLine, encryptLine, resetCryptoCache } from "./crypto.ts";
 import {
+  atomicWrite,
+  ensureParentDir,
+  pathExists,
+  unlinkIfExists,
+  withFileLock,
+} from "./fs-utils.ts";
+import {
+  aiConfigPath,
   connectionsPath,
   historyDir,
   historyPath,
   keyPath,
+  boardsPath,
+  recentAsksPath,
   tabsPath,
+  widgetsPath,
 } from "./paths.ts";
 
 const MAX_HISTORY_ENTRIES = 10_000;
@@ -74,59 +85,6 @@ export interface DatabaseConnection {
   piiRedaction?: boolean;
   customPiiPatterns?: string[];
   runConfig?: PersistedRunConfig;
-}
-
-const fileLocks = new Map<string, Promise<unknown>>();
-
-async function awaitQuietly(p: Promise<unknown> | undefined): Promise<void> {
-  if (!p) {
-    return;
-  }
-  try {
-    await p;
-  } catch {
-    // best-effort: prior holder failure or swallowed error
-  }
-}
-
-function withFileLock<T>(filePath: string, fn: () => Promise<T>): Promise<T> {
-  const prev = fileLocks.get(filePath);
-  const work = async (): Promise<T> => {
-    await awaitQuietly(prev);
-    try {
-      return await fn();
-    } finally {
-      // best-effort cleanup; only the latest holder gets to clear the slot
-      if (fileLocks.get(filePath) === slot) {
-        fileLocks.delete(filePath);
-      }
-    }
-  };
-  const slot: Promise<T> = work();
-  fileLocks.set(filePath, slot);
-  return slot;
-}
-
-async function ensureParentDir(filePath: string): Promise<void> {
-  await fs.mkdir(path.dirname(filePath), { recursive: true });
-}
-
-async function atomicWrite(
-  filePath: string,
-  data: string | Uint8Array
-): Promise<void> {
-  const tmp = `${filePath}.tmp`;
-  await fs.writeFile(tmp, data);
-  await fs.rename(tmp, filePath);
-}
-
-async function pathExists(filePath: string): Promise<boolean> {
-  try {
-    await fs.access(filePath);
-    return true;
-  } catch {
-    return false;
-  }
 }
 
 type DecodedLine =
@@ -396,19 +354,13 @@ export async function saveConnections(
   await writeEncryptedConnections(connectionsPath(), connections);
 }
 
-async function unlinkIfExists(filePath: string): Promise<void> {
-  try {
-    await fs.unlink(filePath);
-  } catch (error) {
-    if ((error as NodeJS.ErrnoException).code !== "ENOENT") {
-      throw error;
-    }
-  }
-}
-
 export async function resetSecrets(): Promise<void> {
   await unlinkIfExists(keyPath());
   await unlinkIfExists(connectionsPath());
+  await unlinkIfExists(aiConfigPath());
+  await unlinkIfExists(widgetsPath());
+  await unlinkIfExists(recentAsksPath());
+  await unlinkIfExists(boardsPath());
   await fs.rm(historyDir(), { force: true, recursive: true });
   resetCryptoCache();
 }

@@ -34,3 +34,23 @@ export function historyPath(connectionId: string): string {
 export function updateChannelPath(): string {
   return path.join(appDir(), "update-channel.txt");
 }
+
+export function aiConfigPath(): string {
+  return path.join(appDir(), "ai.enc");
+}
+
+export function widgetsPath(): string {
+  return path.join(appDir(), "widgets.enc");
+}
+
+export function recentAsksPath(): string {
+  return path.join(appDir(), "recent-asks.enc");
+}
+
+export function boardsPath(): string {
+  return path.join(appDir(), "boards.enc");
+}
+
+export function boardFramesPath(): string {
+  return path.join(appDir(), "board-frames.json");
+}

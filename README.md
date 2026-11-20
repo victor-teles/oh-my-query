@@ -8,7 +8,7 @@ A modern database client for querying with AI.
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg?style=flat)](LICENSE)
 [![macOS](https://img.shields.io/badge/platform-macOS-000000.svg?style=flat&logo=apple&logoColor=white)](https://github.com)
-[![Electrobun](https://img.shields.io/badge/Electrobun-1.16-FBF0DF.svg?style=flat&logo=bun&logoColor=black)](https://electrobun.dev)
+[![Electrobun](https://img.shields.io/badge/Electrobun-2-FBF0DF.svg?style=flat&logo=bun&logoColor=black)](https://electrobun.dev)
 [![React](https://img.shields.io/badge/React-19-61DAFB.svg?style=flat&logo=react&logoColor=white)](https://react.dev)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6.svg?style=flat&logo=typescript&logoColor=white)](https://www.typescriptlang.org)
 
@@ -21,89 +21,77 @@ A modern database client for querying with AI.
 
 <br />
 
-oh-my-query is a native desktop database client with a built-in AI assistant. Connect to eight different database engines, explore schemas, write queries with schema-aware autocomplete, and let AI help when you want it — all in a keyboard-first interface designed for long debugging sessions.
+oh-my-query is a database launcher for macOS. Press a hotkey, ask a question in plain words, and get a chart or a table from your own database. It works with eight database engines and is built for the keyboard.
 
 <br />
 
 ## Features
 
+### One panel, summoned by a hotkey
+
+Press `Option + Shift + Space` from any app to open the launcher. It shows your recent answers, saved widgets, boards and connections. Press `Esc` and the focus goes back to the app you were using. The app lives in the menu bar and has no Dock icon.
+
+### Ask, and see the answer
+
+Type a question and press `Enter`. The panel shows the SQL as it is written, runs it read-only, and turns the result into a chart, a KPI or a table. Statements that change data are refused before they run. The AI reads your schema and works with **OpenAI**, **Anthropic**, **OpenRouter** and **local models** through Ollama or any OpenAI-compatible endpoint.
+
+### Widgets: answers you keep
+
+Save an answer as a widget with typed inputs: a region, a date range, a limit. Running a widget again uses the saved SQL and does not call the AI. Input values always go to the database as bind parameters, never as SQL text.
+
+### Boards: widgets that stay on screen
+
+A board is a separate window with a grid of widgets that refreshes on a schedule you choose. Inputs that widgets share, such as the same date range, appear once at the top of the board. When you change one, only the tiles that use it run again. Boards pause their refresh while they are hidden or minimized.
+
 ### Multi-database engines, one client
 
-Connect to **PostgreSQL**, **MySQL**, **SQLite**, **Microsoft SQL Server**, **DuckDB**, **ClickHouse**, **MongoDB**, and **Redis** — all from the same app. Browse schemas, inspect tables and columns, run queries, and jump between connections without juggling tools.
+Connect to **PostgreSQL**, **MySQL**, **SQLite**, **Microsoft SQL Server**, **DuckDB**, **ClickHouse**, **MongoDB** and **Redis** from the same app.
 
 ### Write any dialect, run anywhere
 
-Powered by [polyglot-sql](https://github.com/polyglot-sql/polyglot-sql), queries are transpiled between dialects at execution time. Write PostgreSQL against a MySQL database if that's how your brain works. The built-in formatter is dialect-aware across 30+ SQL variants including BigQuery, Snowflake, DuckDB, ClickHouse, and Spark.
-
-### AI that knows your schema
-
-A chat assistant that sees your tables, columns, types, and relationships, then generates SQL you can drop straight into the editor. Works with **OpenAI**, **Anthropic**, **OpenRouter**, and **local models** via Ollama or any OpenAI-compatible endpoint.
-
-### Smart editor
-
-CodeMirror-powered SQL editor with schema-aware autocomplete, syntax highlighting, a syntax tree inspector, and multi-tab support with closed-tab restore. Every query tab is independent — run, format, and inspect results side by side.
-
-### Results, not just rows
-
-A virtualized results grid with keyboard navigation, multi-cell selection, row detail drawer, JSON document viewer, and CSV export. Built for pro users who live in the grid.
-
-### Signature connection indicator
-
-A Dynamic Island-style connection indicator lives in the titlebar, showing live connection status, query execution progress, and errors without stealing focus from your work.
+[polyglot-sql](https://github.com/polyglot-sql/polyglot-sql) transpiles queries between dialects when they run, across 30+ SQL variants including BigQuery, Snowflake, DuckDB, ClickHouse and Spark.
 
 ### Native experience
 
-Built with Electrobun. macOS vibrancy effects, `prefers-reduced-motion` respected throughout, dark mode by default, and iOS-style spring animations that stay out of your way.
+Built with Electrobun. A translucent panel, dark mode by default, spring animations that you can interrupt, and full support for `prefers-reduced-motion`.
 
 <br />
 
 ## Keyboard Shortcuts
 
-### Query & editor
+### Launcher
 
-| Shortcut          | Action                   |
-| ----------------- | ------------------------ |
-| `Cmd + Enter`     | Run query (or selection) |
-| `Cmd + Shift + E` | Explain query            |
-| `Cmd + Shift + F` | Format SQL               |
-| `F5`              | Refresh schema           |
+| Shortcut                 | Action                                             |
+| ------------------------ | -------------------------------------------------- |
+| `Option + Shift + Space` | Open or close the launcher (change it in Settings) |
+| `Up` / `Down`            | Move through the list                              |
+| `Enter`                  | Ask, run the widget, or open the board             |
+| `Tab`                    | Edit a widget's inputs before it runs              |
+| `Cmd + K`                | Actions for the selected row                       |
+| `Up` on an empty field   | Reopen the last answer                             |
+| `Cmd + ,`                | Settings                                           |
+| `Esc`                    | Go back, clear the field, then close               |
 
-### Tabs
+### Answers
 
-| Shortcut          | Action                 |
-| ----------------- | ---------------------- |
-| `Cmd + T`         | New query tab          |
-| `Cmd + W`         | Close current tab      |
-| `Cmd + Shift + T` | Reopen last closed tab |
-| `Cmd + 1-9`       | Switch to tab          |
+| Shortcut          | Action                            |
+| ----------------- | --------------------------------- |
+| `Cmd + number`    | Switch between the answer's views |
+| `Cmd + E`         | Show or hide the SQL              |
+| `Cmd + C`         | Copy the SQL                      |
+| `Cmd + S`         | Save as a widget                  |
+| `Cmd + Shift + S` | Save as a widget with inputs      |
+| `Esc`             | Stop a running answer             |
 
-### Layout
+### Boards
 
-| Shortcut          | Action                |
-| ----------------- | --------------------- |
-| `Cmd + B`         | Toggle schema sidebar |
-| `Cmd + Shift + C` | Toggle AI chat        |
-| `Cmd + Shift + 1` | Editor mode           |
-| `Cmd + Shift + 2` | Split mode            |
-| `Cmd + Shift + 3` | Chat mode             |
-
-### Results grid
-
-| Shortcut         | Action           |
-| ---------------- | ---------------- |
-| `Cmd + A`        | Select all       |
-| `Arrows`         | Navigate cells   |
-| `Shift + Arrows` | Extend selection |
-| `Enter`          | Open row detail  |
-| `Cmd + C`        | Copy selection   |
-
-### Home & global
-
-| Shortcut  | Action             |
-| --------- | ------------------ |
-| `Cmd + N` | New connection     |
-| `Cmd + ,` | Settings           |
-| `Cmd + /` | Show all shortcuts |
+| Shortcut                  | Action                                              |
+| ------------------------- | --------------------------------------------------- |
+| `Cmd + R`                 | Refresh every tile                                  |
+| `Cmd + E`                 | Enter or leave edit mode                            |
+| `Option + Left` / `Right` | Move the focused tile (edit mode)                   |
+| `Option + Up` / `Down`    | Make the focused tile larger or smaller (edit mode) |
+| `Esc`                     | Leave edit mode                                     |
 
 <br />
 
@@ -172,10 +160,11 @@ oh-my-query/
 │       │   │   ├── routes/        # File-based routing (TanStack Router)
 │       │   │   ├── components/    # UI components
 │       │   │   ├── hooks/         # Shared React hooks
-│       │   │   └── lib/           # Utilities, IPC bridge, AI providers
-│       │   └── bun/               # Bun-side process (RPC handlers, window, menus)
+│       │   │   └── lib/           # Utilities, IPC bridge, browser stubs
+│       │   └── bun/               # Bun-side process (launcher, board windows, RPC)
 │       └── electrobun.config.ts
 ├── packages/
+│   ├── agent/                     # AI ask pipeline (runs in the bun process)
 │   ├── config/                    # Shared TypeScript config
 │   ├── core/                      # Persistence, transpile, traits
 │   ├── drivers/                   # SQL driver adapters
@@ -191,9 +180,9 @@ oh-my-query/
 
 ## Tech Stack
 
-**Frontend** — React 19, TanStack Router, TanStack Form, TanStack Table/Virtual, Tailwind CSS v4, shadcn/ui, CodeMirror 6, Motion, Recharts, Vercel AI SDK
+**Frontend** — React 19, TanStack Router, Tailwind CSS v4, shadcn/ui, Motion, Recharts
 
-**Desktop** — Electrobun, Bun runtime, TypeScript drivers for PostgreSQL/MySQL/SQLite/SQL Server/DuckDB/ClickHouse/MongoDB/Redis, polyglot-sql
+**Desktop** — Electrobun, Bun runtime, Vercel AI SDK, TypeScript drivers for PostgreSQL/MySQL/SQLite/SQL Server/DuckDB/ClickHouse/MongoDB/Redis, polyglot-sql
 
 **Tooling** — Turborepo, Bun, TypeScript 5, Vitest, Ultracite (Oxlint + Oxfmt)
 

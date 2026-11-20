@@ -1,0 +1,628 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`askCard views > matches the populated line card snapshot 1`] = `
+<section
+  aria-label="Monthly recurring revenue by region"
+  class="relative flex flex-col"
+>
+  <div
+    class="flex flex-wrap items-start justify-between gap-x-4 gap-y-2 px-4 pt-3 pb-3"
+  >
+    <div
+      class="flex min-w-[9rem] flex-1 flex-col gap-0.5"
+    >
+      <h3
+        class="truncate type-title text-foreground"
+      >
+        <span
+          data-slot="swap-text"
+        >
+          <span
+            class="inline-block"
+          >
+            Monthly recurring revenue by region
+          </span>
+        </span>
+      </h3>
+      <p
+        class="truncate type-meta text-panel-muted"
+      >
+        <span
+          data-slot="swap-text"
+        >
+          <span
+            class="inline-block"
+          >
+            Jan to Sep 2026 · $475k in September
+          </span>
+        </span>
+      </p>
+    </div>
+    <div
+      class="flex shrink-0 items-center gap-1"
+    >
+      <div
+        aria-label="Chart view"
+        class="flex rounded-[9px] bg-row-hover p-0.5"
+        role="radiogroup"
+      >
+        <button
+          aria-checked="false"
+          class="relative h-7 rounded-[7px] px-3 type-meta text-panel-muted"
+          data-segment="bar"
+          role="radio"
+          tabindex="-1"
+          type="button"
+        >
+          <span
+            class="relative"
+          >
+            Bar
+          </span>
+        </button>
+        <button
+          aria-checked="true"
+          class="relative h-7 rounded-[7px] px-3 type-meta text-foreground"
+          data-segment="line"
+          role="radio"
+          tabindex="0"
+          type="button"
+        >
+          <span
+            class="absolute inset-0 rounded-[7px] bg-control-thumb shadow-sm"
+          />
+          <span
+            class="relative"
+          >
+            Line
+          </span>
+        </button>
+        <button
+          aria-checked="false"
+          class="relative h-7 rounded-[7px] px-3 type-meta text-panel-muted"
+          data-segment="table"
+          role="radio"
+          tabindex="-1"
+          type="button"
+        >
+          <span
+            class="relative"
+          >
+            Table
+          </span>
+        </button>
+      </div>
+    </div>
+  </div>
+  <div>
+    <ul
+      aria-label="Latest values"
+      class="flex flex-wrap gap-x-4 gap-y-1 px-4 pb-2"
+    >
+      <li
+        class="flex items-center gap-1.5 type-meta"
+      >
+        <span
+          aria-hidden="true"
+          class="size-2 shrink-0 rounded-full"
+          style="background-color: var(--chart-1)"
+        />
+        <span
+          class="text-panel-muted"
+        >
+          North America
+        </span>
+        <span
+          class="text-foreground tabular-nums"
+          data-slot="swap-text"
+        >
+          <span
+            class="inline-block"
+          >
+            $258k
+          </span>
+        </span>
+      </li>
+      <li
+        class="flex items-center gap-1.5 type-meta"
+      >
+        <span
+          aria-hidden="true"
+          class="size-2 shrink-0 rounded-full"
+          style="background-color: var(--chart-2)"
+        />
+        <span
+          class="text-panel-muted"
+        >
+          Europe
+        </span>
+        <span
+          class="text-foreground tabular-nums"
+          data-slot="swap-text"
+        >
+          <span
+            class="inline-block"
+          >
+            $146k
+          </span>
+        </span>
+      </li>
+      <li
+        class="flex items-center gap-1.5 type-meta"
+      >
+        <span
+          aria-hidden="true"
+          class="size-2 shrink-0 rounded-full"
+          style="background-color: var(--chart-3)"
+        />
+        <span
+          class="text-panel-muted"
+        >
+          Asia Pacific
+        </span>
+        <span
+          class="text-foreground tabular-nums"
+          data-slot="swap-text"
+        >
+          <span
+            class="inline-block"
+          >
+            $71k
+          </span>
+        </span>
+      </li>
+    </ul>
+    <figure
+      aria-label="Line chart: Monthly recurring revenue by region. Series: North America, Europe, Asia Pacific."
+      class="px-2"
+      role="img"
+    >
+      <div
+        class="flex justify-center text-xs [&_.recharts-cartesian-axis-tick_text]:fill-muted-foreground [&_.recharts-cartesian-grid_line[stroke='#ccc']]:stroke-border/50 [&_.recharts-curve.recharts-tooltip-cursor]:stroke-border [&_.recharts-dot[stroke='#fff']]:stroke-transparent [&_.recharts-layer]:outline-hidden [&_.recharts-polar-grid_[stroke='#ccc']]:stroke-border [&_.recharts-radial-bar-background-sector]:fill-muted [&_.recharts-rectangle.recharts-tooltip-cursor]:fill-muted [&_.recharts-reference-line_[stroke='#ccc']]:stroke-border [&_.recharts-sector]:outline-hidden [&_.recharts-sector[stroke='#fff']]:stroke-transparent [&_.recharts-surface]:outline-hidden aspect-auto w-full"
+        data-chart="chart-_r_id_"
+        data-slot="chart"
+        style="height: 200px"
+      >
+        <style>
+          
+.dark [data-chart=chart-_r_id_] {
+  --color-s0: var(--chart-1);
+  --color-s1: var(--chart-2);
+  --color-s2: var(--chart-3);
+}
+
+
+ [data-chart=chart-_r_id_] {
+  --color-s0: var(--chart-1);
+  --color-s1: var(--chart-2);
+  --color-s2: var(--chart-3);
+}
+
+        </style>
+        <div
+          class="recharts-responsive-container"
+          style="width: 100%; height: 100%; min-width: 0px"
+        >
+          <div
+            class="recharts-wrapper"
+            style="position: relative; cursor: default; width: 100%; height: 100%; max-height: 200px; max-width: 744px"
+          >
+            <svg
+              class="recharts-surface"
+              height="200"
+              role="application"
+              style="width: 100%; height: 100%"
+              tabindex="0"
+              viewBox="0 0 744 200"
+              width="744"
+            >
+              <title />
+              <desc />
+              <defs>
+                <clippath
+                  id="rechartsN-clip"
+                >
+                  <rect
+                    height="162"
+                    width="684"
+                    x="52"
+                    y="8"
+                  />
+                </clippath>
+              </defs>
+              <g
+                class="recharts-cartesian-grid"
+              >
+                <g
+                  class="recharts-cartesian-grid-horizontal"
+                >
+                  <line
+                    class="text-foreground"
+                    fill="none"
+                    height="162"
+                    stroke="currentColor"
+                    stroke-opacity="0.07"
+                    width="684"
+                    x="52"
+                    x1="52"
+                    x2="736"
+                    y="8"
+                    y1="170"
+                    y2="170"
+                  />
+                  <line
+                    class="text-foreground"
+                    fill="none"
+                    height="162"
+                    stroke="currentColor"
+                    stroke-opacity="0.07"
+                    width="684"
+                    x="52"
+                    x1="52"
+                    x2="736"
+                    y="8"
+                    y1="116.00000000000001"
+                    y2="116.00000000000001"
+                  />
+                  <line
+                    class="text-foreground"
+                    fill="none"
+                    height="162"
+                    stroke="currentColor"
+                    stroke-opacity="0.07"
+                    width="684"
+                    x="52"
+                    x1="52"
+                    x2="736"
+                    y="8"
+                    y1="62.00000000000001"
+                    y2="62.00000000000001"
+                  />
+                  <line
+                    class="text-foreground"
+                    fill="none"
+                    height="162"
+                    stroke="currentColor"
+                    stroke-opacity="0.07"
+                    width="684"
+                    x="52"
+                    x1="52"
+                    x2="736"
+                    y="8"
+                    y1="8"
+                    y2="8"
+                  />
+                </g>
+              </g>
+              <g
+                class="recharts-layer recharts-cartesian-axis recharts-xAxis xAxis"
+              >
+                <g
+                  class="recharts-cartesian-axis-ticks"
+                >
+                  <g
+                    class="recharts-layer recharts-cartesian-axis-tick"
+                  >
+                    <text
+                      class="recharts-text recharts-cartesian-axis-tick-value"
+                      fill="#666"
+                      height="30"
+                      orientation="bottom"
+                      stroke="none"
+                      text-anchor="middle"
+                      width="684"
+                    >
+                      <tspan>
+                        Jan
+                      </tspan>
+                    </text>
+                  </g>
+                  <g
+                    class="recharts-layer recharts-cartesian-axis-tick"
+                  >
+                    <text
+                      class="recharts-text recharts-cartesian-axis-tick-value"
+                      fill="#666"
+                      height="30"
+                      orientation="bottom"
+                      stroke="none"
+                      text-anchor="middle"
+                      width="684"
+                    >
+                      <tspan>
+                        Feb
+                      </tspan>
+                    </text>
+                  </g>
+                  <g
+                    class="recharts-layer recharts-cartesian-axis-tick"
+                  >
+                    <text
+                      class="recharts-text recharts-cartesian-axis-tick-value"
+                      fill="#666"
+                      height="30"
+                      orientation="bottom"
+                      stroke="none"
+                      text-anchor="middle"
+                      width="684"
+                    >
+                      <tspan>
+                        Mar
+                      </tspan>
+                    </text>
+                  </g>
+                  <g
+                    class="recharts-layer recharts-cartesian-axis-tick"
+                  >
+                    <text
+                      class="recharts-text recharts-cartesian-axis-tick-value"
+                      fill="#666"
+                      height="30"
+                      orientation="bottom"
+                      stroke="none"
+                      text-anchor="middle"
+                      width="684"
+                    >
+                      <tspan>
+                        Apr
+                      </tspan>
+                    </text>
+                  </g>
+                  <g
+                    class="recharts-layer recharts-cartesian-axis-tick"
+                  >
+                    <text
+                      class="recharts-text recharts-cartesian-axis-tick-value"
+                      fill="#666"
+                      height="30"
+                      orientation="bottom"
+                      stroke="none"
+                      text-anchor="middle"
+                      width="684"
+                    >
+                      <tspan>
+                        May
+                      </tspan>
+                    </text>
+                  </g>
+                  <g
+                    class="recharts-layer recharts-cartesian-axis-tick"
+                  >
+                    <text
+                      class="recharts-text recharts-cartesian-axis-tick-value"
+                      fill="#666"
+                      height="30"
+                      orientation="bottom"
+                      stroke="none"
+                      text-anchor="middle"
+                      width="684"
+                    >
+                      <tspan>
+                        Jun
+                      </tspan>
+                    </text>
+                  </g>
+                  <g
+                    class="recharts-layer recharts-cartesian-axis-tick"
+                  >
+                    <text
+                      class="recharts-text recharts-cartesian-axis-tick-value"
+                      fill="#666"
+                      height="30"
+                      orientation="bottom"
+                      stroke="none"
+                      text-anchor="middle"
+                      width="684"
+                    >
+                      <tspan>
+                        Jul
+                      </tspan>
+                    </text>
+                  </g>
+                  <g
+                    class="recharts-layer recharts-cartesian-axis-tick"
+                  >
+                    <text
+                      class="recharts-text recharts-cartesian-axis-tick-value"
+                      fill="#666"
+                      height="30"
+                      orientation="bottom"
+                      stroke="none"
+                      text-anchor="middle"
+                      width="684"
+                    >
+                      <tspan>
+                        Aug
+                      </tspan>
+                    </text>
+                  </g>
+                  <g
+                    class="recharts-layer recharts-cartesian-axis-tick"
+                  >
+                    <text
+                      class="recharts-text recharts-cartesian-axis-tick-value"
+                      fill="#666"
+                      height="30"
+                      orientation="bottom"
+                      stroke="none"
+                      text-anchor="middle"
+                      width="684"
+                    >
+                      <tspan>
+                        Sep
+                      </tspan>
+                    </text>
+                  </g>
+                </g>
+              </g>
+              <g
+                class="recharts-layer recharts-cartesian-axis recharts-yAxis yAxis"
+              >
+                <g
+                  class="recharts-cartesian-axis-ticks"
+                >
+                  <g
+                    class="recharts-layer recharts-cartesian-axis-tick"
+                  >
+                    <text
+                      class="recharts-text recharts-cartesian-axis-tick-value"
+                      fill="#666"
+                      height="162"
+                      orientation="left"
+                      stroke="none"
+                      text-anchor="end"
+                      width="48"
+                    >
+                      <tspan>
+                        $0
+                      </tspan>
+                    </text>
+                  </g>
+                  <g
+                    class="recharts-layer recharts-cartesian-axis-tick"
+                  >
+                    <text
+                      class="recharts-text recharts-cartesian-axis-tick-value"
+                      fill="#666"
+                      height="162"
+                      orientation="left"
+                      stroke="none"
+                      text-anchor="end"
+                      width="48"
+                    >
+                      <tspan>
+                        $90k
+                      </tspan>
+                    </text>
+                  </g>
+                  <g
+                    class="recharts-layer recharts-cartesian-axis-tick"
+                  >
+                    <text
+                      class="recharts-text recharts-cartesian-axis-tick-value"
+                      fill="#666"
+                      height="162"
+                      orientation="left"
+                      stroke="none"
+                      text-anchor="end"
+                      width="48"
+                    >
+                      <tspan>
+                        $180k
+                      </tspan>
+                    </text>
+                  </g>
+                  <g
+                    class="recharts-layer recharts-cartesian-axis-tick"
+                  >
+                    <text
+                      class="recharts-text recharts-cartesian-axis-tick-value"
+                      fill="#666"
+                      height="162"
+                      orientation="left"
+                      stroke="none"
+                      text-anchor="end"
+                      width="48"
+                    >
+                      <tspan>
+                        $270k
+                      </tspan>
+                    </text>
+                  </g>
+                </g>
+              </g>
+              <g
+                class="recharts-layer recharts-line"
+              >
+                <path
+                  class="recharts-curve recharts-line-curve"
+                  d="M52,62C80.5,60.95,109,59.9,137.5,58.4C166,56.9,194.5,54.7,223,53C251.5,51.3,280,50.1,308.5,48.2C337,46.3,365.5,43.5,394,41.6C422.5,39.7,451,38.8,479.5,36.8C508,34.8,536.5,32,565,29.6C593.5,27.2,622,24.8,650.5,22.4C679,20,707.5,17.6,736,15.2"
+                  fill="none"
+                  height="162"
+                  name="North America"
+                  stroke="var(--chart-1)"
+                  stroke-width="2"
+                  width="684"
+                />
+                <g
+                  class="recharts-layer"
+                />
+              </g>
+              <g
+                class="recharts-layer recharts-line"
+              >
+                <path
+                  class="recharts-curve recharts-line-curve"
+                  d="M52,111.8C80.5,111.05,109,110.3,137.5,109.4C166,108.5,194.5,107.3,223,106.4C251.5,105.5,280,105.1,308.5,104C337,102.9,365.5,101.1,394,99.8C422.5,98.5,451,97.6,479.5,96.2C508,94.8,536.5,93,565,91.4C593.5,89.8,622,88.1,650.5,86.6C679,85.1,707.5,83.75,736,82.4"
+                  fill="none"
+                  height="162"
+                  name="Europe"
+                  stroke="var(--chart-2)"
+                  stroke-width="2"
+                  width="684"
+                />
+                <g
+                  class="recharts-layer"
+                />
+              </g>
+              <g
+                class="recharts-layer recharts-line"
+              >
+                <path
+                  class="recharts-curve recharts-line-curve"
+                  d="M52,151.4C80.5,150.85,109,150.3,137.5,149.6C166,148.9,194.5,148,223,147.2C251.5,146.4,280,145.7,308.5,144.8C337,143.9,365.5,142.8,394,141.8C422.5,140.8,451,139.9,479.5,138.8C508,137.7,536.5,136.4,565,135.2C593.5,134,622,132.9,650.5,131.6C679,130.3,707.5,128.85,736,127.4"
+                  fill="none"
+                  height="162"
+                  name="Asia Pacific"
+                  stroke="var(--chart-3)"
+                  stroke-width="2"
+                  width="684"
+                />
+                <g
+                  class="recharts-layer"
+                />
+              </g>
+            </svg>
+            <div
+              class="recharts-tooltip-wrapper"
+              style="visibility: hidden; pointer-events: none; position: absolute; top: 0px; left: 0px"
+              tabindex="-1"
+            />
+          </div>
+        </div>
+      </div>
+    </figure>
+  </div>
+  <div>
+    <div
+      class="flex gap-2 px-4 pt-1 pb-4"
+    >
+      <svg
+        aria-hidden="true"
+        class="lucide lucide-trending-up mt-0.5 size-3.5 shrink-0 text-panel-muted"
+        fill="none"
+        height="24"
+        stroke="currentColor"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        viewBox="0 0 24 24"
+        width="24"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M16 7h6v6"
+        />
+        <path
+          d="m22 7-8.5 8.5-5-5L2 17"
+        />
+      </svg>
+      <p
+        class="line-clamp-2 type-body text-panel-muted"
+      >
+        Asia Pacific more than doubled this year, from $31k to $71k. Total MRR reached $475k in September, up 54% since January.
+      </p>
+    </div>
+  </div>
+</section>
+`;

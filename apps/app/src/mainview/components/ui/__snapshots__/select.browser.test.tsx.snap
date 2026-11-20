@@ -3,7 +3,7 @@
 exports[`select > default 1`] = `
 <div
   class="base-ui-disable-scrollbar"
-  id="base-ui-_r_0_-list"
+  id="base-ui-_r_id_-list"
   role="listbox"
 >
   <div
@@ -97,7 +97,7 @@ exports[`select > small 1`] = `
     class="flex items-center justify-between gap-1.5 rounded-md border border-input bg-input/20 px-2 py-1.5 text-xs/relaxed whitespace-nowrap transition-all duration-150 ease-out outline-none focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-2 aria-invalid:ring-destructive/20 data-placeholder:text-muted-foreground data-[size=default]:h-7 data-[size=sm]:h-6 *:data-[slot=select-value]:line-clamp-1 *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-1.5 dark:bg-input/30 dark:hover:bg-input/50 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-3.5 w-24"
     data-size="sm"
     data-slot="select-trigger"
-    id="base-ui-_r_f_"
+    id="base-ui-_r_id_"
     role="combobox"
     tabindex="0"
     type="button"
@@ -139,11 +139,11 @@ exports[`select > small 1`] = `
 exports[`select > withGroups 1`] = `
 <div
   class="base-ui-disable-scrollbar"
-  id="base-ui-_r_8_-list"
+  id="base-ui-_r_id_-list"
   role="listbox"
 >
   <div
-    aria-labelledby="base-ui-_r_d_"
+    aria-labelledby="base-ui-_r_id_"
     class="scroll-my-1 p-1"
     data-slot="select-group"
     role="group"
@@ -151,7 +151,7 @@ exports[`select > withGroups 1`] = `
     <div
       class="px-2 py-1.5 text-xs text-muted-foreground"
       data-slot="select-label"
-      id="base-ui-_r_d_"
+      id="base-ui-_r_id_"
     >
       SQL
     </div>
@@ -203,7 +203,7 @@ exports[`select > withGroups 1`] = `
     role="separator"
   />
   <div
-    aria-labelledby="base-ui-_r_e_"
+    aria-labelledby="base-ui-_r_id_"
     class="scroll-my-1 p-1"
     data-slot="select-group"
     role="group"
@@ -211,7 +211,7 @@ exports[`select > withGroups 1`] = `
     <div
       class="px-2 py-1.5 text-xs text-muted-foreground"
       data-slot="select-label"
-      id="base-ui-_r_e_"
+      id="base-ui-_r_id_"
     >
       NoSQL
     </div>
@@ -263,7 +263,7 @@ exports[`select > withLabel 1`] = `
       data-placeholder=""
       data-size="default"
       data-slot="select-trigger"
-      id="base-ui-_r_5_"
+      id="base-ui-_r_id_"
       role="combobox"
       tabindex="0"
       type="button"

@@ -15,7 +15,10 @@
     "esModuleInterop": true,
     "types": ["bun", "vite/client"],
     "paths": {
-      "@/*": ["./src/mainview/*"]
+      "@/*": ["./src/mainview/*"],
+      "electrobun": ["./.hutch/types/sdks/main/index.d.ts"],
+      "electrobun/main": ["./.hutch/types/sdks/main/index.d.ts"],
+      "electrobun/view": ["./.hutch/types/browser/index.d.ts"]
     }
   },
   "include": ["src/**/*", "electrobun.config.ts", "vite.config.ts"],

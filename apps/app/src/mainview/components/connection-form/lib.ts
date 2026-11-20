@@ -4,7 +4,7 @@ import type {
   DatabaseType,
 } from "@/lib/connections";
 
-import { testConnection } from "@/lib/tauri";
+import { testConnection } from "@/lib/ipc";
 
 import type { FormState, TestStatus } from "./connection-form-state";
 
@@ -40,7 +40,7 @@ export const getDatabaseLabel = (type: DatabaseType): string => {
 
 export const getDatabaseHint = (type: DatabaseType): string | null => {
   if (type === "redis") {
-    return "Redis DBs are numbered 0–15. You can switch DBs inside the workspace after connecting.";
+    return "Redis databases are numbered 0–15.";
   }
   if (type === "duckdb") {
     return "Use :memory: for an in-process database, or an absolute path to a .duckdb file.";

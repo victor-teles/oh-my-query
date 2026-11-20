@@ -1,8 +1,12 @@
-import { RouterProvider, createRouter } from "@tanstack/react-router";
+import {
+  RouterProvider,
+  createHashHistory,
+  createRouter,
+} from "@tanstack/react-router";
 import ReactDOM from "react-dom/client";
 
 import Loader from "./components/loader";
-import { isMacOS } from "./lib/tauri";
+import { isMacOS } from "./lib/ipc";
 import { routeTree } from "./routeTree.gen";
 
 if (isMacOS()) {
@@ -13,6 +17,8 @@ const router = createRouter({
   context: {},
   defaultPendingComponent: () => <Loader />,
   defaultPreload: "intent",
+  // Packaged builds load views://mainview/index.html, whose pathname matches no route.
+  history: createHashHistory(),
   routeTree,
 });
 

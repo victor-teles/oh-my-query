@@ -1,10 +1,16 @@
-import type { ApplicationMenuItemConfig } from "electrobun/bun";
+import type { ApplicationMenuItemConfig } from "electrobun/main";
+
+export const MENU_ACTIONS = { settings: "settings" } as const;
 
 export const APPLICATION_MENU: ApplicationMenuItemConfig[] = [
   {
     label: "oh-my-query",
     submenu: [
-      { accelerator: "CmdOrCtrl+,", action: "settings", label: "Settings…" },
+      {
+        accelerator: "CmdOrCtrl+,",
+        action: MENU_ACTIONS.settings,
+        label: "Settings…",
+      },
       { type: "separator" },
       { role: "hide" },
       { role: "hideOthers" },
@@ -24,13 +30,5 @@ export const APPLICATION_MENU: ApplicationMenuItemConfig[] = [
       { role: "paste" },
       { role: "selectAll" },
     ],
-  },
-  {
-    label: "View",
-    submenu: [{ role: "toggleFullScreen" }],
-  },
-  {
-    label: "Window",
-    submenu: [{ role: "minimize" }, { role: "zoom" }, { role: "close" }],
   },
 ];

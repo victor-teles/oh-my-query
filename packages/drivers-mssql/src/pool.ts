@@ -1,7 +1,9 @@
 import type {
+  BindValue,
   ColumnDetail,
   ColumnInfo,
   DialectType,
+  ExecuteOptions,
   ExecuteResult,
   ExplainResult,
   ForeignKeyItem,
@@ -22,6 +24,12 @@ import type {
 import { DbError, validateSchemaName } from "@oh-my-query/core";
 
 const POOL_CLOSED = new DbError("POOL_CLOSED", "MSSQL pool is closed");
+
+function bindParams(request: MssqlRequest, params: BindValue[] = []): void {
+  for (const [index, value] of params.entries()) {
+    request.input(`p${index + 1}`, value);
+  }
+}
 
 export function mapMssqlError(err: unknown): DbError {
   if (err instanceof DbError) {
@@ -177,7 +185,8 @@ export class MssqlPool implements Pool {
     sql: string,
     maxRows: number,
     schema: string | null,
-    signal: AbortSignal
+    signal: AbortSignal,
+    options: ExecuteOptions = {}
   ): Promise<ExecuteResult> {
     if (signal.aborted) {
       throw signal.reason instanceof DbError
@@ -201,7 +210,10 @@ export class MssqlPool implements Pool {
       if (schema) {
         await request.query(`USE ${quoteIdentifier(schema)}`);
       }
-      const result = await request.query(sql);
+      bindParams(request, options.params);
+      const result = await request.query(
+        options.readOnly ? inRolledBackTransaction(sql) : sql
+      );
       return shapeExecuteResult(result, maxRows);
     } catch (error) {
       if (signal.aborted) {
@@ -245,6 +257,12 @@ export class MssqlPool implements Pool {
     }
     return this.#pool;
   }
+}
+
+// SQL Server has no read-only transactions; one batch keeps BEGIN and ROLLBACK on one connection.
+function inRolledBackTransaction(sql: string): string {
+  const statement = sql.trim().replace(/;[\s;]*$/, "");
+  return `BEGIN TRANSACTION;\n${statement}\n;\nIF @@TRANCOUNT > 0 ROLLBACK TRANSACTION;`;
 }
 
 function shapeExecuteResult(

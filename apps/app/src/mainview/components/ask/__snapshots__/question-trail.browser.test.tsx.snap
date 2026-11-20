@@ -1,0 +1,165 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`questionTrail with full motion > marks the shown step and steps when a crumb is pressed 1`] = `
+<nav
+  aria-label="Question steps"
+  class="flex h-8 shrink-0 items-center gap-0.5 overflow-hidden px-2.5 type-meta"
+>
+  <button
+    aria-label="Show step 1: Monthly MRR by region"
+    class="relative rounded-[6px] px-1.5 py-0.5 outline-none focus-visible:ring-2 focus-visible:ring-ring/60 text-panel-muted hover:text-foreground"
+    tabindex="0"
+    type="button"
+  >
+    <span
+      class="relative block max-w-48 truncate"
+    >
+      Monthly MRR by region
+    </span>
+  </button>
+  <svg
+    aria-hidden="true"
+    class="lucide lucide-chevron-right size-3 shrink-0 text-panel-muted/70"
+    fill="none"
+    height="24"
+    stroke="currentColor"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    stroke-width="2"
+    viewBox="0 0 24 24"
+    width="24"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      d="m9 18 6-6-6-6"
+    />
+  </svg>
+  <button
+    aria-label="Show step 2: only Europe"
+    class="relative rounded-[6px] px-1.5 py-0.5 outline-none focus-visible:ring-2 focus-visible:ring-ring/60 text-panel-muted hover:text-foreground"
+    tabindex="0"
+    type="button"
+  >
+    <span
+      class="relative block max-w-48 truncate"
+    >
+      only Europe
+    </span>
+  </button>
+  <svg
+    aria-hidden="true"
+    class="lucide lucide-chevron-right size-3 shrink-0 text-panel-muted/70"
+    fill="none"
+    height="24"
+    stroke="currentColor"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    stroke-width="2"
+    viewBox="0 0 24 24"
+    width="24"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      d="m9 18 6-6-6-6"
+    />
+  </svg>
+  <button
+    aria-current="step"
+    aria-label="Show step 3: by quarter"
+    class="relative rounded-[6px] px-1.5 py-0.5 outline-none focus-visible:ring-2 focus-visible:ring-ring/60 text-foreground"
+    tabindex="0"
+    type="button"
+  >
+    <span
+      class="absolute inset-0 rounded-[6px] bg-row-active"
+    />
+    <span
+      class="relative block max-w-48 truncate"
+    >
+      by quarter
+    </span>
+  </button>
+</nav>
+`;
+
+exports[`questionTrail with reduced motion > marks the shown step and steps when a crumb is pressed 1`] = `
+<nav
+  aria-label="Question steps"
+  class="flex h-8 shrink-0 items-center gap-0.5 overflow-hidden px-2.5 type-meta"
+>
+  <button
+    aria-label="Show step 1: Monthly MRR by region"
+    class="relative rounded-[6px] px-1.5 py-0.5 outline-none focus-visible:ring-2 focus-visible:ring-ring/60 text-panel-muted hover:text-foreground"
+    tabindex="0"
+    type="button"
+  >
+    <span
+      class="relative block max-w-48 truncate"
+    >
+      Monthly MRR by region
+    </span>
+  </button>
+  <svg
+    aria-hidden="true"
+    class="lucide lucide-chevron-right size-3 shrink-0 text-panel-muted/70"
+    fill="none"
+    height="24"
+    stroke="currentColor"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    stroke-width="2"
+    viewBox="0 0 24 24"
+    width="24"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      d="m9 18 6-6-6-6"
+    />
+  </svg>
+  <button
+    aria-label="Show step 2: only Europe"
+    class="relative rounded-[6px] px-1.5 py-0.5 outline-none focus-visible:ring-2 focus-visible:ring-ring/60 text-panel-muted hover:text-foreground"
+    tabindex="0"
+    type="button"
+  >
+    <span
+      class="relative block max-w-48 truncate"
+    >
+      only Europe
+    </span>
+  </button>
+  <svg
+    aria-hidden="true"
+    class="lucide lucide-chevron-right size-3 shrink-0 text-panel-muted/70"
+    fill="none"
+    height="24"
+    stroke="currentColor"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    stroke-width="2"
+    viewBox="0 0 24 24"
+    width="24"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      d="m9 18 6-6-6-6"
+    />
+  </svg>
+  <button
+    aria-current="step"
+    aria-label="Show step 3: by quarter"
+    class="relative rounded-[6px] px-1.5 py-0.5 outline-none focus-visible:ring-2 focus-visible:ring-ring/60 text-foreground"
+    tabindex="0"
+    type="button"
+  >
+    <span
+      class="absolute inset-0 rounded-[6px] bg-row-active"
+    />
+    <span
+      class="relative block max-w-48 truncate"
+    >
+      by quarter
+    </span>
+  </button>
+</nav>
+`;

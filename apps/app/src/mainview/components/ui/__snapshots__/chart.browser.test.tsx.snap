@@ -4,18 +4,18 @@ exports[`chart > bar Chart 1`] = `
 <div>
   <div
     class="flex aspect-video justify-center text-xs [&_.recharts-cartesian-axis-tick_text]:fill-muted-foreground [&_.recharts-cartesian-grid_line[stroke='#ccc']]:stroke-border/50 [&_.recharts-curve.recharts-tooltip-cursor]:stroke-border [&_.recharts-dot[stroke='#fff']]:stroke-transparent [&_.recharts-layer]:outline-hidden [&_.recharts-polar-grid_[stroke='#ccc']]:stroke-border [&_.recharts-radial-bar-background-sector]:fill-muted [&_.recharts-rectangle.recharts-tooltip-cursor]:fill-muted [&_.recharts-reference-line_[stroke='#ccc']]:stroke-border [&_.recharts-sector]:outline-hidden [&_.recharts-sector[stroke='#fff']]:stroke-transparent [&_.recharts-surface]:outline-hidden h-64 w-full max-w-lg"
-    data-chart="chart-_r_0_"
+    data-chart="chart-_r_id_"
     data-slot="chart"
   >
     <style>
       
-.dark [data-chart=chart-_r_0_] {
+.dark [data-chart=chart-_r_id_] {
   --color-errors: oklch(0.65 0.2 25);
   --color-queries: oklch(0.7 0.15 160);
 }
 
 
- [data-chart=chart-_r_0_] {
+ [data-chart=chart-_r_id_] {
   --color-errors: oklch(0.65 0.2 25);
   --color-queries: oklch(0.7 0.15 160);
 }
@@ -42,7 +42,7 @@ exports[`chart > bar Chart 1`] = `
           <desc />
           <defs>
             <clippath
-              id="recharts1-clip"
+              id="rechartsN-clip"
             >
               <rect
                 height="188"
@@ -640,17 +640,17 @@ exports[`chart > line Chart 1`] = `
 <div>
   <div
     class="flex aspect-video justify-center text-xs [&_.recharts-cartesian-axis-tick_text]:fill-muted-foreground [&_.recharts-cartesian-grid_line[stroke='#ccc']]:stroke-border/50 [&_.recharts-curve.recharts-tooltip-cursor]:stroke-border [&_.recharts-dot[stroke='#fff']]:stroke-transparent [&_.recharts-layer]:outline-hidden [&_.recharts-polar-grid_[stroke='#ccc']]:stroke-border [&_.recharts-radial-bar-background-sector]:fill-muted [&_.recharts-rectangle.recharts-tooltip-cursor]:fill-muted [&_.recharts-reference-line_[stroke='#ccc']]:stroke-border [&_.recharts-sector]:outline-hidden [&_.recharts-sector[stroke='#fff']]:stroke-transparent [&_.recharts-surface]:outline-hidden h-64 w-full max-w-lg"
-    data-chart="chart-_r_1_"
+    data-chart="chart-_r_id_"
     data-slot="chart"
   >
     <style>
       
-.dark [data-chart=chart-_r_1_] {
+.dark [data-chart=chart-_r_id_] {
   --color-latency: oklch(0.75 0.12 250);
 }
 
 
- [data-chart=chart-_r_1_] {
+ [data-chart=chart-_r_id_] {
   --color-latency: oklch(0.75 0.12 250);
 }
 
@@ -676,7 +676,7 @@ exports[`chart > line Chart 1`] = `
           <desc />
           <defs>
             <clippath
-              id="recharts8-clip"
+              id="rechartsN-clip"
             >
               <rect
                 height="216"

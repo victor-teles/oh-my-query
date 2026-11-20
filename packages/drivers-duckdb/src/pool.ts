@@ -1,8 +1,10 @@
 import type { DuckDBConnection, DuckDBInstance } from "@duckdb/node-api";
 import type {
+  BindValue,
   ColumnDetail,
   ColumnInfo,
   DialectType,
+  ExecuteOptions,
   ExecuteResult,
   ExplainResult,
   ForeignKeyItem,
@@ -98,7 +100,8 @@ export class DuckdbPool implements Pool {
     sql: string,
     maxRows: number,
     schema: string | null,
-    signal: AbortSignal
+    signal: AbortSignal,
+    options: ExecuteOptions = {}
   ): Promise<ExecuteResult> {
     const conn = await this.#connect();
     const release = bindAbort(conn, signal);
@@ -107,7 +110,10 @@ export class DuckdbPool implements Pool {
         validateSchemaName(schema);
         await conn.run(`SET search_path = '${schema}'`);
       }
-      const reader = await conn.runAndReadAll(sql);
+      const run = () => runStatement(conn, sql, options.params);
+      const reader = options.readOnly
+        ? await readOnly(conn, signal, run)
+        : await run();
       const allRows = reader.getRowsJson() as unknown[][];
       const isTruncated = allRows.length > maxRows;
       const rows = isTruncated ? allRows.slice(0, maxRows) : allRows;
@@ -207,6 +213,36 @@ function tryDisconnect(conn: DuckDBConnection): void {
     conn.disconnect();
   } catch {
     // already closed
+  }
+}
+
+function runStatement(
+  conn: DuckDBConnection,
+  sql: string,
+  params?: BindValue[]
+): Promise<ReaderLike> {
+  if (!params || params.length === 0) {
+    return conn.runAndReadAll(sql);
+  }
+  return conn.runAndReadAll(sql, params);
+}
+
+async function readOnly<T>(
+  conn: DuckDBConnection,
+  signal: AbortSignal,
+  work: () => Promise<T>
+): Promise<T> {
+  await conn.run("BEGIN TRANSACTION READ ONLY");
+  try {
+    return await work();
+  } finally {
+    if (!signal.aborted) {
+      try {
+        await conn.run("ROLLBACK");
+      } catch {
+        // best-effort
+      }
+    }
   }
 }
 

@@ -3,6 +3,8 @@ import { CheckCircle2, Loader2, XCircle } from "lucide-react";
 import type { DatabaseConnection } from "@/lib/connections";
 
 import { DATABASE_ICON_MAP } from "@/components/icons/database-icons";
+import { Reveal } from "@/components/motion/reveal";
+import { SwapText } from "@/components/motion/swap-text";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
@@ -110,7 +112,7 @@ export const ConnectionForm = ({
       </div>
 
       {form.environment === "prod" && (
-        <p className="-mt-2 text-xs text-destructive">
+        <p className="-mt-2 text-xs text-danger-ink">
           Destructive queries will require typing the connection name to
           confirm.
         </p>
@@ -201,29 +203,32 @@ export const ConnectionForm = ({
         </Button>
 
         {testStatus.state === "success" && (
-          <span className="flex items-center gap-1 text-xs text-emerald-500">
-            <CheckCircle2 className="size-3.5" />
-            Connected ({testStatus.latencyMs}ms)
-          </span>
+          <Reveal className="flex items-center gap-1 text-xs text-success-ink">
+            <CheckCircle2 aria-hidden className="size-3.5" />
+            <span role="status">Connected</span>
+            <SwapText value={`${testStatus.latencyMs} ms`} />
+          </Reveal>
         )}
 
         {testStatus.state === "error" && (
-          <span className="flex items-center gap-1 text-xs text-destructive">
-            <XCircle className="size-3.5" />
-            {testStatus.message}
-          </span>
+          <Reveal className="flex min-w-0 items-center gap-1 text-xs text-danger-ink">
+            <XCircle aria-hidden className="size-3.5 shrink-0" />
+            <span role="status">{testStatus.message}</span>
+          </Reveal>
         )}
       </div>
 
       {formError && (
-        <p
-          aria-live="polite"
-          className="flex items-center gap-1 text-xs text-destructive"
-          role="alert"
-        >
-          <XCircle className="size-3.5" />
-          {formError}
-        </p>
+        <Reveal>
+          <p
+            aria-live="polite"
+            className="flex items-center gap-1 text-xs text-danger-ink"
+            role="alert"
+          >
+            <XCircle aria-hidden className="size-3.5" />
+            {formError}
+          </p>
+        </Reveal>
       )}
 
       <Button type="submit">

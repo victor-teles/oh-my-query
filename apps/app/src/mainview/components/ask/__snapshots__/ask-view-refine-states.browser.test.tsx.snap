@@ -1,0 +1,4843 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`refine states > matches the refine error over the restored card snapshot 1`] = `
+<div
+  data-testid="ask-harness"
+  style="width: 760px"
+>
+  <div
+    class="flex min-h-0 flex-col"
+  >
+    <div
+      class="relative z-20 flex h-14 shrink-0 items-center gap-2.5 px-4"
+    >
+      <span
+        aria-label="Active connection: analytics"
+        class="relative flex h-8 max-w-56 shrink-0 items-center pr-2.5 pl-1"
+        data-tone="active"
+        role="img"
+      >
+        <span
+          class="absolute inset-0 rounded-[9px] bg-row-hover"
+        />
+        <span
+          class="relative flex min-w-0 items-center gap-3"
+        >
+          <span
+            aria-hidden="true"
+            class="grid size-6 place-items-center rounded-[7px] text-[13px] leading-none bg-row-hover"
+          >
+            🐘
+          </span>
+          <span
+            class="truncate type-body text-foreground"
+          >
+            analytics
+          </span>
+        </span>
+      </span>
+      <div
+        class="flex min-w-0 flex-1 items-center"
+      >
+        <div
+          class="relative flex min-w-0 flex-1 items-center"
+        >
+          <input
+            aria-label="Ask a question"
+            aria-placeholder="Refine — by month, only Europe, as a table…"
+            autocomplete="off"
+            class="min-w-0 flex-1 bg-transparent type-input text-foreground outline-none placeholder:text-panel-muted placeholder:opacity-80 focus-visible:outline-none"
+            spellcheck="false"
+            type="text"
+            value="only Europe"
+          />
+          <div
+            aria-hidden="true"
+            class="pointer-events-none absolute inset-0 flex items-center overflow-hidden type-input"
+          />
+        </div>
+      </div>
+      <button
+        aria-label="Run"
+        class="grid size-7 shrink-0 place-items-center bg-row-hover text-panel-muted hover:text-foreground"
+        style="border-radius: 8px"
+        tabindex="0"
+        type="button"
+      >
+        <span
+          class="grid place-items-center"
+        >
+          <svg
+            aria-hidden="true"
+            class="lucide lucide-corner-down-left size-3.5"
+            fill="none"
+            height="24"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M20 4v7a4 4 0 0 1-4 4H4"
+            />
+            <path
+              d="m9 10-5 5 5 5"
+            />
+          </svg>
+        </span>
+      </button>
+    </div>
+    <div
+      class="relative flex min-h-0 flex-1 flex-col overflow-y-auto border-t border-panel-border"
+      style="min-height: 0px"
+    >
+      <div
+        class="flex h-9 shrink-0 items-center gap-2 px-4"
+      >
+        <svg
+          aria-hidden="true"
+          class="lucide lucide-database size-3.5 shrink-0 text-panel-muted"
+          fill="none"
+          height="24"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+          width="24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <ellipse
+            cx="12"
+            cy="5"
+            rx="9"
+            ry="3"
+          />
+          <path
+            d="M3 5V19A9 3 0 0 0 21 19V5"
+          />
+          <path
+            d="M3 12A9 3 0 0 0 21 12"
+          />
+        </svg>
+        <h2
+          class="type-meta font-semibold text-foreground"
+        >
+          Generated SQL
+        </h2>
+        <p
+          class="flex min-w-0 items-center gap-1.5 truncate type-meta text-panel-muted tabular-nums"
+        >
+          <span
+            aria-hidden="true"
+          >
+            ·
+          </span>
+          <span
+            data-slot="swap-text"
+          >
+            <span
+              class="inline-block"
+            >
+              PostgreSQL
+            </span>
+          </span>
+          <span
+            aria-hidden="true"
+          >
+            ·
+          </span>
+          <span
+            data-slot="swap-text"
+          >
+            <span
+              class="inline-block"
+            >
+              analytics
+            </span>
+          </span>
+        </p>
+        <div
+          class="ml-auto flex items-center gap-0.5"
+        >
+          <span
+            class="grid size-5 place-items-center"
+          >
+            <span
+              class="grid place-items-center"
+            >
+              <svg
+                aria-label="Failed"
+                class="lucide lucide-circle-alert size-3.5 text-danger-ink"
+                fill="none"
+                height="24"
+                role="img"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+                width="24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <circle
+                  cx="12"
+                  cy="12"
+                  r="10"
+                />
+                <line
+                  x1="12"
+                  x2="12"
+                  y1="8"
+                  y2="12"
+                />
+                <line
+                  x1="12"
+                  x2="12.01"
+                  y1="16"
+                  y2="16"
+                />
+              </svg>
+            </span>
+          </span>
+          <button
+            aria-label="Copy SQL"
+            class="grid size-6 place-items-center rounded-[6px] text-panel-muted hover:bg-row-hover hover:text-foreground disabled:opacity-40"
+            disabled=""
+            tabindex="0"
+            type="button"
+          >
+            <span>
+              <svg
+                aria-hidden="true"
+                class="lucide lucide-copy size-3.5"
+                fill="none"
+                height="24"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+                width="24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <rect
+                  height="14"
+                  rx="2"
+                  ry="2"
+                  width="14"
+                  x="8"
+                  y="8"
+                />
+                <path
+                  d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"
+                />
+              </svg>
+            </span>
+          </button>
+          <span
+            aria-live="polite"
+            class="sr-only"
+          />
+          <button
+            aria-expanded="false"
+            aria-label="Show SQL"
+            class="grid size-6 place-items-center rounded-[6px] text-panel-muted hover:bg-row-hover hover:text-foreground disabled:opacity-40"
+            disabled=""
+            tabindex="0"
+            type="button"
+          >
+            <span
+              class="grid place-items-center"
+            >
+              <svg
+                aria-hidden="true"
+                class="lucide lucide-chevron-down size-3.5"
+                fill="none"
+                height="24"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+                width="24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="m6 9 6 6 6-6"
+                />
+              </svg>
+            </span>
+          </button>
+        </div>
+      </div>
+      <ul
+        aria-label="Assumptions"
+        class="flex flex-wrap items-center gap-1.5 px-4 pt-1 pb-2"
+      >
+        <li
+          class="max-w-full"
+        >
+          <span
+            class="relative flex h-6 max-w-full items-center overflow-hidden rounded-[6px] border border-panel-border px-2 type-meta tabular-nums text-panel-muted"
+          >
+            <span
+              class="relative truncate"
+              data-slot="swap-text"
+            >
+              <span
+                class="inline-block"
+              >
+                subscriptions, accounts, regions
+              </span>
+            </span>
+          </span>
+        </li>
+        <li
+          class="max-w-full"
+        >
+          <button
+            aria-label="Group by week instead of month"
+            class="relative flex h-6 max-w-full items-center overflow-hidden rounded-[6px] border border-panel-border px-2 type-meta tabular-nums text-foreground outline-none hover:bg-row-hover focus-visible:ring-2 focus-visible:ring-ring/60"
+            tabindex="0"
+            type="button"
+          >
+            <span
+              class="relative truncate"
+              data-slot="swap-text"
+            >
+              <span
+                class="inline-block"
+              >
+                subscriptions.billed_at · by month
+              </span>
+            </span>
+          </button>
+        </li>
+        <li
+          class="max-w-full"
+        >
+          <button
+            aria-label="Refine without s.billed_at >= CAST('2026-01-01' AS DATE)"
+            class="relative flex h-6 max-w-full items-center overflow-hidden rounded-[6px] border border-panel-border px-2 type-meta tabular-nums text-foreground outline-none hover:bg-row-hover focus-visible:ring-2 focus-visible:ring-ring/60"
+            tabindex="0"
+            type="button"
+          >
+            <span
+              class="relative truncate"
+              data-slot="swap-text"
+            >
+              <span
+                class="inline-block"
+              >
+                s.billed_at &gt;= CAST('2026-01-01' AS DATE)
+              </span>
+            </span>
+          </button>
+        </li>
+        <li
+          class="max-w-full"
+        >
+          <button
+            aria-label="Refine without s.status = 'active'"
+            class="relative flex h-6 max-w-full items-center overflow-hidden rounded-[6px] border border-panel-border px-2 type-meta tabular-nums text-foreground outline-none hover:bg-row-hover focus-visible:ring-2 focus-visible:ring-ring/60"
+            tabindex="0"
+            type="button"
+          >
+            <span
+              class="relative truncate"
+              data-slot="swap-text"
+            >
+              <span
+                class="inline-block"
+              >
+                s.status = 'active'
+              </span>
+            </span>
+          </button>
+        </li>
+        <li
+          class="max-w-full"
+        >
+          <button
+            aria-label="Refine to show all rows"
+            class="relative flex h-6 max-w-full items-center overflow-hidden rounded-[6px] border border-panel-border px-2 type-meta tabular-nums text-foreground outline-none hover:bg-row-hover focus-visible:ring-2 focus-visible:ring-ring/60"
+            tabindex="0"
+            type="button"
+          >
+            <span
+              class="relative truncate"
+              data-slot="swap-text"
+            >
+              <span
+                class="inline-block"
+              >
+                top 500
+              </span>
+            </span>
+          </button>
+        </li>
+      </ul>
+      <div>
+        <div>
+          <div>
+            <div
+              class="px-4 pt-1 pb-4"
+            >
+              <div
+                class="flex gap-3 rounded-[10px] border border-danger-ink/25 bg-destructive/[0.07] px-3 py-2.5"
+                role="alert"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="lucide lucide-circle-alert mt-0.5 size-4 shrink-0 text-danger-ink"
+                  fill="none"
+                  height="24"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  viewBox="0 0 24 24"
+                  width="24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <circle
+                    cx="12"
+                    cy="12"
+                    r="10"
+                  />
+                  <line
+                    x1="12"
+                    x2="12"
+                    y1="8"
+                    y2="12"
+                  />
+                  <line
+                    x1="12"
+                    x2="12.01"
+                    y1="16"
+                    y2="16"
+                  />
+                </svg>
+                <div
+                  class="flex min-w-0 flex-1 flex-col gap-1"
+                >
+                  <p
+                    class="type-body text-foreground"
+                  >
+                    The query failed.
+                  </p>
+                  <p
+                    class="type-meta break-words text-panel-muted"
+                  >
+                    column "plan" does not exist
+                  </p>
+                </div>
+                <button
+                  class="h-7 shrink-0 self-start rounded-[7px] bg-row-hover px-2.5 type-meta text-foreground hover:bg-row-active"
+                  tabindex="0"
+                  type="button"
+                >
+                  Retry
+                </button>
+              </div>
+            </div>
+          </div>
+          <div
+            class="relative"
+          >
+            <div
+              aria-busy="false"
+              data-testid="answer-stage"
+            >
+              <section
+                aria-label="Monthly recurring revenue by region"
+                class="relative flex flex-col"
+              >
+                <div
+                  class="flex flex-wrap items-start justify-between gap-x-4 gap-y-2 px-4 pt-3 pb-3"
+                >
+                  <div
+                    class="flex min-w-[9rem] flex-1 flex-col gap-0.5"
+                  >
+                    <h3
+                      class="truncate type-title text-foreground"
+                    >
+                      <span
+                        data-slot="swap-text"
+                      >
+                        <span
+                          class="inline-block"
+                        >
+                          Monthly recurring revenue by region
+                        </span>
+                      </span>
+                    </h3>
+                    <p
+                      class="truncate type-meta text-panel-muted"
+                    >
+                      <span
+                        data-slot="swap-text"
+                      >
+                        <span
+                          class="inline-block"
+                        >
+                          Jan to Sep 2026 · $475k in September
+                        </span>
+                      </span>
+                    </p>
+                  </div>
+                  <div
+                    class="flex shrink-0 items-center gap-1"
+                  >
+                    <div
+                      aria-label="Chart view"
+                      class="flex rounded-[9px] bg-row-hover p-0.5"
+                      role="radiogroup"
+                    >
+                      <button
+                        aria-checked="false"
+                        class="relative h-7 rounded-[7px] px-3 type-meta text-panel-muted"
+                        data-segment="bar"
+                        role="radio"
+                        tabindex="-1"
+                        type="button"
+                      >
+                        <span
+                          class="relative"
+                        >
+                          Bar
+                        </span>
+                      </button>
+                      <button
+                        aria-checked="true"
+                        class="relative h-7 rounded-[7px] px-3 type-meta text-foreground"
+                        data-segment="line"
+                        role="radio"
+                        tabindex="0"
+                        type="button"
+                      >
+                        <span
+                          class="absolute inset-0 rounded-[7px] bg-control-thumb shadow-sm"
+                        />
+                        <span
+                          class="relative"
+                        >
+                          Line
+                        </span>
+                      </button>
+                      <button
+                        aria-checked="false"
+                        class="relative h-7 rounded-[7px] px-3 type-meta text-panel-muted"
+                        data-segment="table"
+                        role="radio"
+                        tabindex="-1"
+                        type="button"
+                      >
+                        <span
+                          class="relative"
+                        >
+                          Table
+                        </span>
+                      </button>
+                    </div>
+                    <button
+                      aria-expanded="false"
+                      aria-haspopup="menu"
+                      aria-label="Actions"
+                      class="grid size-6 place-items-center rounded-[6px] text-panel-muted hover:bg-row-hover hover:text-foreground aria-expanded:bg-row-active aria-expanded:text-foreground"
+                      id="ask-card-actions"
+                      tabindex="0"
+                      type="button"
+                    >
+                      <svg
+                        aria-hidden="true"
+                        class="lucide lucide-ellipsis size-3.5"
+                        fill="none"
+                        height="24"
+                        stroke="currentColor"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        viewBox="0 0 24 24"
+                        width="24"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <circle
+                          cx="12"
+                          cy="12"
+                          r="1"
+                        />
+                        <circle
+                          cx="19"
+                          cy="12"
+                          r="1"
+                        />
+                        <circle
+                          cx="5"
+                          cy="12"
+                          r="1"
+                        />
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+                <div>
+                  <ul
+                    aria-label="Latest values"
+                    class="flex flex-wrap gap-x-4 gap-y-1 px-4 pb-2"
+                  >
+                    <li
+                      class="flex items-center gap-1.5 type-meta"
+                    >
+                      <span
+                        aria-hidden="true"
+                        class="size-2 shrink-0 rounded-full"
+                        style="background-color: var(--chart-1)"
+                      />
+                      <span
+                        class="text-panel-muted"
+                      >
+                        North America
+                      </span>
+                      <span
+                        class="text-foreground tabular-nums"
+                        data-slot="swap-text"
+                      >
+                        <span
+                          class="inline-block"
+                        >
+                          $258k
+                        </span>
+                      </span>
+                    </li>
+                    <li
+                      class="flex items-center gap-1.5 type-meta"
+                    >
+                      <span
+                        aria-hidden="true"
+                        class="size-2 shrink-0 rounded-full"
+                        style="background-color: var(--chart-2)"
+                      />
+                      <span
+                        class="text-panel-muted"
+                      >
+                        Europe
+                      </span>
+                      <span
+                        class="text-foreground tabular-nums"
+                        data-slot="swap-text"
+                      >
+                        <span
+                          class="inline-block"
+                        >
+                          $146k
+                        </span>
+                      </span>
+                    </li>
+                    <li
+                      class="flex items-center gap-1.5 type-meta"
+                    >
+                      <span
+                        aria-hidden="true"
+                        class="size-2 shrink-0 rounded-full"
+                        style="background-color: var(--chart-3)"
+                      />
+                      <span
+                        class="text-panel-muted"
+                      >
+                        Asia Pacific
+                      </span>
+                      <span
+                        class="text-foreground tabular-nums"
+                        data-slot="swap-text"
+                      >
+                        <span
+                          class="inline-block"
+                        >
+                          $71k
+                        </span>
+                      </span>
+                    </li>
+                  </ul>
+                  <figure
+                    aria-label="Line chart: Monthly recurring revenue by region. Series: North America, Europe, Asia Pacific."
+                    class="px-2"
+                    data-drill=""
+                    role="img"
+                  >
+                    <div
+                      class="flex justify-center text-xs [&_.recharts-cartesian-axis-tick_text]:fill-muted-foreground [&_.recharts-cartesian-grid_line[stroke='#ccc']]:stroke-border/50 [&_.recharts-curve.recharts-tooltip-cursor]:stroke-border [&_.recharts-dot[stroke='#fff']]:stroke-transparent [&_.recharts-layer]:outline-hidden [&_.recharts-polar-grid_[stroke='#ccc']]:stroke-border [&_.recharts-radial-bar-background-sector]:fill-muted [&_.recharts-rectangle.recharts-tooltip-cursor]:fill-muted [&_.recharts-reference-line_[stroke='#ccc']]:stroke-border [&_.recharts-sector]:outline-hidden [&_.recharts-sector[stroke='#fff']]:stroke-transparent [&_.recharts-surface]:outline-hidden aspect-auto w-full"
+                      data-chart="chart-_r_id_"
+                      data-slot="chart"
+                      style="height: 200px"
+                    >
+                      <style>
+                        
+.dark [data-chart=chart-_r_id_] {
+  --color-s0: var(--chart-1);
+  --color-s1: var(--chart-2);
+  --color-s2: var(--chart-3);
+}
+
+
+ [data-chart=chart-_r_id_] {
+  --color-s0: var(--chart-1);
+  --color-s1: var(--chart-2);
+  --color-s2: var(--chart-3);
+}
+
+                      </style>
+                      <div
+                        class="recharts-responsive-container"
+                        style="width: 100%; height: 100%; min-width: 0px"
+                      >
+                        <div
+                          class="recharts-wrapper"
+                          style="position: relative; cursor: default; width: 100%; height: 100%; max-height: 200px; max-width: 744px"
+                        >
+                          <svg
+                            class="recharts-surface"
+                            height="200"
+                            role="application"
+                            style="width: 100%; height: 100%"
+                            tabindex="0"
+                            viewBox="0 0 744 200"
+                            width="744"
+                          >
+                            <title />
+                            <desc />
+                            <defs>
+                              <clippath
+                                id="rechartsN-clip"
+                              >
+                                <rect
+                                  height="162"
+                                  width="684"
+                                  x="52"
+                                  y="8"
+                                />
+                              </clippath>
+                            </defs>
+                            <g
+                              class="recharts-cartesian-grid"
+                            >
+                              <g
+                                class="recharts-cartesian-grid-horizontal"
+                              >
+                                <line
+                                  class="text-foreground"
+                                  fill="none"
+                                  height="162"
+                                  stroke="currentColor"
+                                  stroke-opacity="0.07"
+                                  width="684"
+                                  x="52"
+                                  x1="52"
+                                  x2="736"
+                                  y="8"
+                                  y1="170"
+                                  y2="170"
+                                />
+                                <line
+                                  class="text-foreground"
+                                  fill="none"
+                                  height="162"
+                                  stroke="currentColor"
+                                  stroke-opacity="0.07"
+                                  width="684"
+                                  x="52"
+                                  x1="52"
+                                  x2="736"
+                                  y="8"
+                                  y1="116.00000000000001"
+                                  y2="116.00000000000001"
+                                />
+                                <line
+                                  class="text-foreground"
+                                  fill="none"
+                                  height="162"
+                                  stroke="currentColor"
+                                  stroke-opacity="0.07"
+                                  width="684"
+                                  x="52"
+                                  x1="52"
+                                  x2="736"
+                                  y="8"
+                                  y1="62.00000000000001"
+                                  y2="62.00000000000001"
+                                />
+                                <line
+                                  class="text-foreground"
+                                  fill="none"
+                                  height="162"
+                                  stroke="currentColor"
+                                  stroke-opacity="0.07"
+                                  width="684"
+                                  x="52"
+                                  x1="52"
+                                  x2="736"
+                                  y="8"
+                                  y1="8"
+                                  y2="8"
+                                />
+                              </g>
+                            </g>
+                            <g
+                              class="recharts-layer recharts-cartesian-axis recharts-xAxis xAxis"
+                            >
+                              <g
+                                class="recharts-cartesian-axis-ticks"
+                              >
+                                <g
+                                  class="recharts-layer recharts-cartesian-axis-tick"
+                                >
+                                  <text
+                                    class="recharts-text recharts-cartesian-axis-tick-value"
+                                    fill="#666"
+                                    height="30"
+                                    orientation="bottom"
+                                    stroke="none"
+                                    text-anchor="middle"
+                                    width="684"
+                                  >
+                                    <tspan>
+                                      Jan
+                                    </tspan>
+                                  </text>
+                                </g>
+                                <g
+                                  class="recharts-layer recharts-cartesian-axis-tick"
+                                >
+                                  <text
+                                    class="recharts-text recharts-cartesian-axis-tick-value"
+                                    fill="#666"
+                                    height="30"
+                                    orientation="bottom"
+                                    stroke="none"
+                                    text-anchor="middle"
+                                    width="684"
+                                  >
+                                    <tspan>
+                                      Feb
+                                    </tspan>
+                                  </text>
+                                </g>
+                                <g
+                                  class="recharts-layer recharts-cartesian-axis-tick"
+                                >
+                                  <text
+                                    class="recharts-text recharts-cartesian-axis-tick-value"
+                                    fill="#666"
+                                    height="30"
+                                    orientation="bottom"
+                                    stroke="none"
+                                    text-anchor="middle"
+                                    width="684"
+                                  >
+                                    <tspan>
+                                      Mar
+                                    </tspan>
+                                  </text>
+                                </g>
+                                <g
+                                  class="recharts-layer recharts-cartesian-axis-tick"
+                                >
+                                  <text
+                                    class="recharts-text recharts-cartesian-axis-tick-value"
+                                    fill="#666"
+                                    height="30"
+                                    orientation="bottom"
+                                    stroke="none"
+                                    text-anchor="middle"
+                                    width="684"
+                                  >
+                                    <tspan>
+                                      Apr
+                                    </tspan>
+                                  </text>
+                                </g>
+                                <g
+                                  class="recharts-layer recharts-cartesian-axis-tick"
+                                >
+                                  <text
+                                    class="recharts-text recharts-cartesian-axis-tick-value"
+                                    fill="#666"
+                                    height="30"
+                                    orientation="bottom"
+                                    stroke="none"
+                                    text-anchor="middle"
+                                    width="684"
+                                  >
+                                    <tspan>
+                                      May
+                                    </tspan>
+                                  </text>
+                                </g>
+                                <g
+                                  class="recharts-layer recharts-cartesian-axis-tick"
+                                >
+                                  <text
+                                    class="recharts-text recharts-cartesian-axis-tick-value"
+                                    fill="#666"
+                                    height="30"
+                                    orientation="bottom"
+                                    stroke="none"
+                                    text-anchor="middle"
+                                    width="684"
+                                  >
+                                    <tspan>
+                                      Jun
+                                    </tspan>
+                                  </text>
+                                </g>
+                                <g
+                                  class="recharts-layer recharts-cartesian-axis-tick"
+                                >
+                                  <text
+                                    class="recharts-text recharts-cartesian-axis-tick-value"
+                                    fill="#666"
+                                    height="30"
+                                    orientation="bottom"
+                                    stroke="none"
+                                    text-anchor="middle"
+                                    width="684"
+                                  >
+                                    <tspan>
+                                      Jul
+                                    </tspan>
+                                  </text>
+                                </g>
+                                <g
+                                  class="recharts-layer recharts-cartesian-axis-tick"
+                                >
+                                  <text
+                                    class="recharts-text recharts-cartesian-axis-tick-value"
+                                    fill="#666"
+                                    height="30"
+                                    orientation="bottom"
+                                    stroke="none"
+                                    text-anchor="middle"
+                                    width="684"
+                                  >
+                                    <tspan>
+                                      Aug
+                                    </tspan>
+                                  </text>
+                                </g>
+                                <g
+                                  class="recharts-layer recharts-cartesian-axis-tick"
+                                >
+                                  <text
+                                    class="recharts-text recharts-cartesian-axis-tick-value"
+                                    fill="#666"
+                                    height="30"
+                                    orientation="bottom"
+                                    stroke="none"
+                                    text-anchor="middle"
+                                    width="684"
+                                  >
+                                    <tspan>
+                                      Sep
+                                    </tspan>
+                                  </text>
+                                </g>
+                              </g>
+                            </g>
+                            <g
+                              class="recharts-layer recharts-cartesian-axis recharts-yAxis yAxis"
+                            >
+                              <g
+                                class="recharts-cartesian-axis-ticks"
+                              >
+                                <g
+                                  class="recharts-layer recharts-cartesian-axis-tick"
+                                >
+                                  <text
+                                    class="recharts-text recharts-cartesian-axis-tick-value"
+                                    fill="#666"
+                                    height="162"
+                                    orientation="left"
+                                    stroke="none"
+                                    text-anchor="end"
+                                    width="48"
+                                  >
+                                    <tspan>
+                                      $0
+                                    </tspan>
+                                  </text>
+                                </g>
+                                <g
+                                  class="recharts-layer recharts-cartesian-axis-tick"
+                                >
+                                  <text
+                                    class="recharts-text recharts-cartesian-axis-tick-value"
+                                    fill="#666"
+                                    height="162"
+                                    orientation="left"
+                                    stroke="none"
+                                    text-anchor="end"
+                                    width="48"
+                                  >
+                                    <tspan>
+                                      $90k
+                                    </tspan>
+                                  </text>
+                                </g>
+                                <g
+                                  class="recharts-layer recharts-cartesian-axis-tick"
+                                >
+                                  <text
+                                    class="recharts-text recharts-cartesian-axis-tick-value"
+                                    fill="#666"
+                                    height="162"
+                                    orientation="left"
+                                    stroke="none"
+                                    text-anchor="end"
+                                    width="48"
+                                  >
+                                    <tspan>
+                                      $180k
+                                    </tspan>
+                                  </text>
+                                </g>
+                                <g
+                                  class="recharts-layer recharts-cartesian-axis-tick"
+                                >
+                                  <text
+                                    class="recharts-text recharts-cartesian-axis-tick-value"
+                                    fill="#666"
+                                    height="162"
+                                    orientation="left"
+                                    stroke="none"
+                                    text-anchor="end"
+                                    width="48"
+                                  >
+                                    <tspan>
+                                      $270k
+                                    </tspan>
+                                  </text>
+                                </g>
+                              </g>
+                            </g>
+                            <g
+                              class="recharts-layer recharts-line"
+                            >
+                              <path
+                                class="recharts-curve recharts-line-curve"
+                                d="M52,62C80.5,60.95,109,59.9,137.5,58.4C166,56.9,194.5,54.7,223,53C251.5,51.3,280,50.1,308.5,48.2C337,46.3,365.5,43.5,394,41.6C422.5,39.7,451,38.8,479.5,36.8C508,34.8,536.5,32,565,29.6C593.5,27.2,622,24.8,650.5,22.4C679,20,707.5,17.6,736,15.2"
+                                fill="none"
+                                height="162"
+                                name="North America"
+                                stroke="var(--chart-1)"
+                                stroke-width="2"
+                                width="684"
+                              />
+                              <g
+                                class="recharts-layer"
+                              />
+                            </g>
+                            <g
+                              class="recharts-layer recharts-line"
+                            >
+                              <path
+                                class="recharts-curve recharts-line-curve"
+                                d="M52,111.8C80.5,111.05,109,110.3,137.5,109.4C166,108.5,194.5,107.3,223,106.4C251.5,105.5,280,105.1,308.5,104C337,102.9,365.5,101.1,394,99.8C422.5,98.5,451,97.6,479.5,96.2C508,94.8,536.5,93,565,91.4C593.5,89.8,622,88.1,650.5,86.6C679,85.1,707.5,83.75,736,82.4"
+                                fill="none"
+                                height="162"
+                                name="Europe"
+                                stroke="var(--chart-2)"
+                                stroke-width="2"
+                                width="684"
+                              />
+                              <g
+                                class="recharts-layer"
+                              />
+                            </g>
+                            <g
+                              class="recharts-layer recharts-line"
+                            >
+                              <path
+                                class="recharts-curve recharts-line-curve"
+                                d="M52,151.4C80.5,150.85,109,150.3,137.5,149.6C166,148.9,194.5,148,223,147.2C251.5,146.4,280,145.7,308.5,144.8C337,143.9,365.5,142.8,394,141.8C422.5,140.8,451,139.9,479.5,138.8C508,137.7,536.5,136.4,565,135.2C593.5,134,622,132.9,650.5,131.6C679,130.3,707.5,128.85,736,127.4"
+                                fill="none"
+                                height="162"
+                                name="Asia Pacific"
+                                stroke="var(--chart-3)"
+                                stroke-width="2"
+                                width="684"
+                              />
+                              <g
+                                class="recharts-layer"
+                              />
+                            </g>
+                          </svg>
+                          <div
+                            class="recharts-tooltip-wrapper"
+                            style="visibility: hidden; pointer-events: none; position: absolute; top: 0px; left: 0px"
+                            tabindex="-1"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </figure>
+                </div>
+                <div>
+                  <div
+                    class="flex gap-2 px-4 pt-1 pb-4"
+                  >
+                    <svg
+                      aria-hidden="true"
+                      class="lucide lucide-trending-up mt-0.5 size-3.5 shrink-0 text-panel-muted"
+                      fill="none"
+                      height="24"
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      viewBox="0 0 24 24"
+                      width="24"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M16 7h6v6"
+                      />
+                      <path
+                        d="m22 7-8.5 8.5-5-5L2 17"
+                      />
+                    </svg>
+                    <p
+                      class="line-clamp-2 type-body text-panel-muted"
+                    >
+                      Asia Pacific more than doubled this year, from $31k to $71k. Total MRR reached $475k in September, up 54% since January.
+                    </p>
+                  </div>
+                </div>
+              </section>
+            </div>
+          </div>
+        </div>
+      </div>
+      <p
+        aria-live="polite"
+        class="sr-only"
+      />
+    </div>
+    <footer
+      class="flex h-9 shrink-0 items-center justify-between gap-3 border-t border-panel-border px-4 type-meta text-panel-muted"
+    >
+      <div
+        class="flex min-w-0 items-center gap-2"
+      >
+        <span
+          aria-hidden="true"
+          class="size-1.5 shrink-0 rounded-full bg-panel-muted opacity-60"
+        />
+        <span
+          class="min-w-0 truncate"
+          data-slot="swap-text"
+        >
+          <span
+            class="inline-block"
+          >
+            analytics
+          </span>
+        </span>
+      </div>
+      <div
+        class="flex shrink-0 items-center gap-3"
+      >
+        <div
+          class="flex items-center gap-2"
+        >
+          <span
+            class="text-foreground"
+            data-slot="swap-text"
+          >
+            <span
+              class="inline-block"
+            >
+              Refine
+            </span>
+          </span>
+          <kbd
+            aria-label="↩"
+            class="inline-flex items-center gap-0.5"
+            data-slot="kbd-group"
+          >
+            <kbd
+              class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+              data-slot="kbd"
+            >
+              ↩
+            </kbd>
+          </kbd>
+        </div>
+        <div
+          class="flex items-center gap-2 border-l border-panel-border pl-3"
+        >
+          <span>
+            New question
+          </span>
+          <kbd
+            aria-label="⌘ ↩"
+            class="inline-flex items-center gap-0.5"
+            data-slot="kbd-group"
+          >
+            <kbd
+              class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+              data-slot="kbd"
+            >
+              ⌘
+            </kbd>
+            <kbd
+              class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+              data-slot="kbd"
+            >
+              ↩
+            </kbd>
+          </kbd>
+        </div>
+        <div
+          class="flex items-center gap-2 border-l border-panel-border pl-3"
+        >
+          <span>
+            Actions
+          </span>
+          <kbd
+            aria-label="⌘ K"
+            class="inline-flex items-center gap-0.5"
+            data-slot="kbd-group"
+          >
+            <kbd
+              class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+              data-slot="kbd"
+            >
+              ⌘
+            </kbd>
+            <kbd
+              class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+              data-slot="kbd"
+            >
+              K
+            </kbd>
+          </kbd>
+        </div>
+        <div
+          class="flex items-center gap-2 border-l border-panel-border pl-3"
+        >
+          <span>
+            Save
+          </span>
+          <kbd
+            aria-label="⌘ S"
+            class="inline-flex items-center gap-0.5"
+            data-slot="kbd-group"
+          >
+            <kbd
+              class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+              data-slot="kbd"
+            >
+              ⌘
+            </kbd>
+            <kbd
+              class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+              data-slot="kbd"
+            >
+              S
+            </kbd>
+          </kbd>
+        </div>
+      </div>
+    </footer>
+  </div>
+</div>
+`;
+
+exports[`refine states > matches the refined with trail and assumptions snapshot 1`] = `
+<div
+  data-testid="ask-harness"
+  style="width: 760px"
+>
+  <div
+    class="flex min-h-0 flex-col"
+  >
+    <div
+      class="relative z-20 flex h-14 shrink-0 items-center gap-2.5 px-4"
+    >
+      <span
+        aria-label="Active connection: analytics"
+        class="relative flex h-8 max-w-56 shrink-0 items-center pr-2.5 pl-1"
+        data-tone="active"
+        role="img"
+      >
+        <span
+          class="absolute inset-0 rounded-[9px] bg-row-hover"
+        />
+        <span
+          class="relative flex min-w-0 items-center gap-3"
+        >
+          <span
+            aria-hidden="true"
+            class="grid size-6 place-items-center rounded-[7px] text-[13px] leading-none bg-row-hover"
+          >
+            🐘
+          </span>
+          <span
+            class="truncate type-body text-foreground"
+          >
+            analytics
+          </span>
+        </span>
+      </span>
+      <div
+        class="flex min-w-0 flex-1 items-center"
+      >
+        <div
+          class="relative flex min-w-0 flex-1 items-center"
+        >
+          <input
+            aria-label="Ask a question"
+            aria-placeholder="Refine — by month, only Europe, as a table…"
+            autocomplete="off"
+            class="min-w-0 flex-1 bg-transparent type-input text-foreground outline-none placeholder:text-panel-muted placeholder:opacity-80 focus-visible:outline-none"
+            spellcheck="false"
+            type="text"
+            value=""
+          />
+          <div
+            aria-hidden="true"
+            class="pointer-events-none absolute inset-0 flex items-center overflow-hidden type-input"
+          >
+            <span
+              class="truncate text-panel-muted opacity-80"
+              data-slot="swap-text"
+            >
+              <span
+                class="inline-block"
+              >
+                Refine — by month, only Europe, as a table…
+              </span>
+            </span>
+          </div>
+        </div>
+      </div>
+      <button
+        aria-label="Run"
+        class="grid size-7 shrink-0 place-items-center bg-row-hover text-panel-muted hover:text-foreground"
+        style="border-radius: 8px"
+        tabindex="0"
+        type="button"
+      >
+        <span
+          class="grid place-items-center"
+        >
+          <svg
+            aria-hidden="true"
+            class="lucide lucide-corner-down-left size-3.5"
+            fill="none"
+            height="24"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M20 4v7a4 4 0 0 1-4 4H4"
+            />
+            <path
+              d="m9 10-5 5 5 5"
+            />
+          </svg>
+        </span>
+      </button>
+    </div>
+    <div
+      class="relative flex min-h-0 flex-1 flex-col overflow-y-auto border-t border-panel-border"
+      style="min-height: 0px"
+    >
+      <nav
+        aria-label="Question steps"
+        class="flex h-8 shrink-0 items-center gap-0.5 overflow-hidden px-2.5 type-meta"
+      >
+        <button
+          aria-label="Show step 1: Revenue by region"
+          class="relative rounded-[6px] px-1.5 py-0.5 outline-none focus-visible:ring-2 focus-visible:ring-ring/60 text-panel-muted hover:text-foreground"
+          tabindex="0"
+          type="button"
+        >
+          <span
+            class="relative block max-w-48 truncate"
+          >
+            Revenue by region
+          </span>
+        </button>
+        <svg
+          aria-hidden="true"
+          class="lucide lucide-chevron-right size-3 shrink-0 text-panel-muted/70"
+          fill="none"
+          height="24"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+          width="24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="m9 18 6-6-6-6"
+          />
+        </svg>
+        <button
+          aria-current="step"
+          aria-label="Show step 2: only Europe"
+          class="relative rounded-[6px] px-1.5 py-0.5 outline-none focus-visible:ring-2 focus-visible:ring-ring/60 text-foreground"
+          tabindex="0"
+          type="button"
+        >
+          <span
+            class="absolute inset-0 rounded-[6px] bg-row-active"
+          />
+          <span
+            class="relative block max-w-48 truncate"
+          >
+            only Europe
+          </span>
+        </button>
+      </nav>
+      <div
+        class="flex h-9 shrink-0 items-center gap-2 px-4"
+      >
+        <svg
+          aria-hidden="true"
+          class="lucide lucide-database size-3.5 shrink-0 text-panel-muted"
+          fill="none"
+          height="24"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+          width="24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <ellipse
+            cx="12"
+            cy="5"
+            rx="9"
+            ry="3"
+          />
+          <path
+            d="M3 5V19A9 3 0 0 0 21 19V5"
+          />
+          <path
+            d="M3 12A9 3 0 0 0 21 12"
+          />
+        </svg>
+        <h2
+          class="type-meta font-semibold text-foreground"
+        >
+          Generated SQL
+        </h2>
+        <p
+          class="flex min-w-0 items-center gap-1.5 truncate type-meta text-panel-muted tabular-nums"
+        >
+          <span
+            aria-hidden="true"
+          >
+            ·
+          </span>
+          <span
+            data-slot="swap-text"
+          >
+            <span
+              class="inline-block"
+            >
+              PostgreSQL
+            </span>
+          </span>
+          <span
+            aria-hidden="true"
+          >
+            ·
+          </span>
+          <span
+            data-slot="swap-text"
+          >
+            <span
+              class="inline-block"
+            >
+              9 rows
+            </span>
+          </span>
+          <span
+            aria-hidden="true"
+          >
+            ·
+          </span>
+          <span
+            data-slot="swap-text"
+          >
+            <span
+              class="inline-block"
+            >
+              214ms
+            </span>
+          </span>
+        </p>
+        <div
+          class="ml-auto flex items-center gap-0.5"
+        >
+          <span
+            class="grid size-5 place-items-center"
+          >
+            <span
+              class="grid place-items-center"
+            >
+              <svg
+                aria-label="Done"
+                class="size-3.5 text-success-ink"
+                fill="none"
+                role="img"
+                viewBox="0 0 16 16"
+              >
+                <path
+                  d="M3.5 8.5 6.5 11.5 12.5 4.5"
+                  pathLength="1"
+                  stroke="currentColor"
+                  stroke-dasharray="1 1"
+                  stroke-dashoffset="0"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="1.75"
+                />
+              </svg>
+            </span>
+          </span>
+          <button
+            aria-label="Copy SQL"
+            class="grid size-6 place-items-center rounded-[6px] text-panel-muted hover:bg-row-hover hover:text-foreground disabled:opacity-40"
+            tabindex="0"
+            type="button"
+          >
+            <span>
+              <svg
+                aria-hidden="true"
+                class="lucide lucide-copy size-3.5"
+                fill="none"
+                height="24"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+                width="24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <rect
+                  height="14"
+                  rx="2"
+                  ry="2"
+                  width="14"
+                  x="8"
+                  y="8"
+                />
+                <path
+                  d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"
+                />
+              </svg>
+            </span>
+          </button>
+          <span
+            aria-live="polite"
+            class="sr-only"
+          />
+          <button
+            aria-expanded="false"
+            aria-label="Show SQL"
+            class="grid size-6 place-items-center rounded-[6px] text-panel-muted hover:bg-row-hover hover:text-foreground disabled:opacity-40"
+            tabindex="0"
+            type="button"
+          >
+            <span
+              class="grid place-items-center"
+            >
+              <svg
+                aria-hidden="true"
+                class="lucide lucide-chevron-down size-3.5"
+                fill="none"
+                height="24"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+                width="24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="m6 9 6 6 6-6"
+                />
+              </svg>
+            </span>
+          </button>
+        </div>
+      </div>
+      <ul
+        aria-label="Assumptions"
+        class="flex flex-wrap items-center gap-1.5 px-4 pt-1 pb-2"
+      >
+        <li
+          class="max-w-full"
+        >
+          <span
+            class="relative flex h-6 max-w-full items-center overflow-hidden rounded-[6px] border border-panel-border px-2 type-meta tabular-nums text-panel-muted"
+          >
+            <span
+              class="relative truncate"
+              data-slot="swap-text"
+            >
+              <span
+                class="inline-block"
+              >
+                subscriptions, accounts, regions
+              </span>
+            </span>
+          </span>
+        </li>
+        <li
+          class="max-w-full"
+        >
+          <button
+            aria-label="Group by week instead of month"
+            class="relative flex h-6 max-w-full items-center overflow-hidden rounded-[6px] border border-panel-border px-2 type-meta tabular-nums text-foreground outline-none hover:bg-row-hover focus-visible:ring-2 focus-visible:ring-ring/60"
+            tabindex="0"
+            type="button"
+          >
+            <span
+              class="relative truncate"
+              data-slot="swap-text"
+            >
+              <span
+                class="inline-block"
+              >
+                subscriptions.billed_at · by month
+              </span>
+            </span>
+          </button>
+        </li>
+        <li
+          class="max-w-full"
+        >
+          <button
+            aria-label="Refine without r.name = 'Europe'"
+            class="relative flex h-6 max-w-full items-center overflow-hidden rounded-[6px] border border-panel-border px-2 type-meta tabular-nums text-foreground outline-none hover:bg-row-hover focus-visible:ring-2 focus-visible:ring-ring/60"
+            tabindex="0"
+            type="button"
+          >
+            <span
+              class="relative truncate"
+              data-slot="swap-text"
+            >
+              <span
+                class="inline-block"
+              >
+                r.name = 'Europe'
+              </span>
+            </span>
+          </button>
+        </li>
+        <li
+          class="max-w-full"
+        >
+          <button
+            aria-label="Refine without s.billed_at >= CAST('2026-01-01' AS DATE)"
+            class="relative flex h-6 max-w-full items-center overflow-hidden rounded-[6px] border border-panel-border px-2 type-meta tabular-nums text-foreground outline-none hover:bg-row-hover focus-visible:ring-2 focus-visible:ring-ring/60"
+            tabindex="0"
+            type="button"
+          >
+            <span
+              class="relative truncate"
+              data-slot="swap-text"
+            >
+              <span
+                class="inline-block"
+              >
+                s.billed_at &gt;= CAST('2026-01-01' AS DATE)
+              </span>
+            </span>
+          </button>
+        </li>
+        <li
+          class="max-w-full"
+        >
+          <button
+            aria-label="Refine without s.billed_at < CAST('2026-10-01' AS DATE)"
+            class="relative flex h-6 max-w-full items-center overflow-hidden rounded-[6px] border border-panel-border px-2 type-meta tabular-nums text-foreground outline-none hover:bg-row-hover focus-visible:ring-2 focus-visible:ring-ring/60"
+            tabindex="0"
+            type="button"
+          >
+            <span
+              class="relative truncate"
+              data-slot="swap-text"
+            >
+              <span
+                class="inline-block"
+              >
+                s.billed_at &lt; CAST('2026-10-01' AS DATE)
+              </span>
+            </span>
+          </button>
+        </li>
+      </ul>
+      <div>
+        <div>
+          <div
+            class="relative"
+          >
+            <div
+              aria-busy="false"
+              data-testid="answer-stage"
+            >
+              <section
+                aria-label="Monthly recurring revenue in Europe"
+                class="relative flex flex-col"
+              >
+                <div
+                  class="flex flex-wrap items-start justify-between gap-x-4 gap-y-2 px-4 pt-3 pb-3"
+                >
+                  <div
+                    class="flex min-w-[9rem] flex-1 flex-col gap-0.5"
+                  >
+                    <h3
+                      class="truncate type-title text-foreground"
+                    >
+                      <span
+                        data-slot="swap-text"
+                      >
+                        <span
+                          class="inline-block"
+                        >
+                          Monthly recurring revenue in Europe
+                        </span>
+                      </span>
+                    </h3>
+                    <p
+                      class="truncate type-meta text-panel-muted"
+                    >
+                      <span
+                        data-slot="swap-text"
+                      >
+                        <span
+                          class="inline-block"
+                        >
+                          Jan to Sep 2026 · $146k in September
+                        </span>
+                      </span>
+                    </p>
+                  </div>
+                  <div
+                    class="flex shrink-0 items-center gap-1"
+                  >
+                    <div
+                      aria-label="Chart view"
+                      class="flex rounded-[9px] bg-row-hover p-0.5"
+                      role="radiogroup"
+                    >
+                      <button
+                        aria-checked="false"
+                        class="relative h-7 rounded-[7px] px-3 type-meta text-panel-muted"
+                        data-segment="bar"
+                        role="radio"
+                        tabindex="-1"
+                        type="button"
+                      >
+                        <span
+                          class="relative"
+                        >
+                          Bar
+                        </span>
+                      </button>
+                      <button
+                        aria-checked="true"
+                        class="relative h-7 rounded-[7px] px-3 type-meta text-foreground"
+                        data-segment="line"
+                        role="radio"
+                        tabindex="0"
+                        type="button"
+                      >
+                        <span
+                          class="absolute inset-0 rounded-[7px] bg-control-thumb shadow-sm"
+                        />
+                        <span
+                          class="relative"
+                        >
+                          Line
+                        </span>
+                      </button>
+                      <button
+                        aria-checked="false"
+                        class="relative h-7 rounded-[7px] px-3 type-meta text-panel-muted"
+                        data-segment="table"
+                        role="radio"
+                        tabindex="-1"
+                        type="button"
+                      >
+                        <span
+                          class="relative"
+                        >
+                          Table
+                        </span>
+                      </button>
+                    </div>
+                    <button
+                      aria-expanded="false"
+                      aria-haspopup="menu"
+                      aria-label="Actions"
+                      class="grid size-6 place-items-center rounded-[6px] text-panel-muted hover:bg-row-hover hover:text-foreground aria-expanded:bg-row-active aria-expanded:text-foreground"
+                      id="ask-card-actions"
+                      tabindex="0"
+                      type="button"
+                    >
+                      <svg
+                        aria-hidden="true"
+                        class="lucide lucide-ellipsis size-3.5"
+                        fill="none"
+                        height="24"
+                        stroke="currentColor"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        viewBox="0 0 24 24"
+                        width="24"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <circle
+                          cx="12"
+                          cy="12"
+                          r="1"
+                        />
+                        <circle
+                          cx="19"
+                          cy="12"
+                          r="1"
+                        />
+                        <circle
+                          cx="5"
+                          cy="12"
+                          r="1"
+                        />
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+                <div>
+                  <ul
+                    aria-label="Latest values"
+                    class="flex flex-wrap gap-x-4 gap-y-1 px-4 pb-2"
+                  >
+                    <li
+                      class="flex items-center gap-1.5 type-meta"
+                    >
+                      <span
+                        aria-hidden="true"
+                        class="size-2 shrink-0 rounded-full"
+                        style="background-color: var(--chart-1)"
+                      />
+                      <span
+                        class="text-panel-muted"
+                      >
+                        Mrr
+                      </span>
+                      <span
+                        class="text-foreground tabular-nums"
+                        data-slot="swap-text"
+                      >
+                        <span
+                          class="inline-block"
+                        >
+                          $146k
+                        </span>
+                      </span>
+                    </li>
+                  </ul>
+                  <figure
+                    aria-label="Line chart: Monthly recurring revenue in Europe. Series: Mrr."
+                    class="px-2"
+                    data-drill=""
+                    role="img"
+                  >
+                    <div
+                      class="flex justify-center text-xs [&_.recharts-cartesian-axis-tick_text]:fill-muted-foreground [&_.recharts-cartesian-grid_line[stroke='#ccc']]:stroke-border/50 [&_.recharts-curve.recharts-tooltip-cursor]:stroke-border [&_.recharts-dot[stroke='#fff']]:stroke-transparent [&_.recharts-layer]:outline-hidden [&_.recharts-polar-grid_[stroke='#ccc']]:stroke-border [&_.recharts-radial-bar-background-sector]:fill-muted [&_.recharts-rectangle.recharts-tooltip-cursor]:fill-muted [&_.recharts-reference-line_[stroke='#ccc']]:stroke-border [&_.recharts-sector]:outline-hidden [&_.recharts-sector[stroke='#fff']]:stroke-transparent [&_.recharts-surface]:outline-hidden aspect-auto w-full"
+                      data-chart="chart-_r_id_"
+                      data-slot="chart"
+                      style="height: 200px"
+                    >
+                      <style>
+                        
+.dark [data-chart=chart-_r_id_] {
+  --color-s0: var(--chart-1);
+}
+
+
+ [data-chart=chart-_r_id_] {
+  --color-s0: var(--chart-1);
+}
+
+                      </style>
+                      <div
+                        class="recharts-responsive-container"
+                        style="width: 100%; height: 100%; min-width: 0px"
+                      >
+                        <div
+                          class="recharts-wrapper"
+                          style="position: relative; cursor: default; width: 100%; height: 100%; max-height: 200px; max-width: 744px"
+                        >
+                          <svg
+                            class="recharts-surface"
+                            height="200"
+                            role="application"
+                            style="width: 100%; height: 100%"
+                            tabindex="0"
+                            viewBox="0 0 744 200"
+                            width="744"
+                          >
+                            <title />
+                            <desc />
+                            <defs>
+                              <clippath
+                                id="rechartsN-clip"
+                              >
+                                <rect
+                                  height="162"
+                                  width="684"
+                                  x="52"
+                                  y="8"
+                                />
+                              </clippath>
+                            </defs>
+                            <g
+                              class="recharts-cartesian-grid"
+                            >
+                              <g
+                                class="recharts-cartesian-grid-horizontal"
+                              >
+                                <line
+                                  class="text-foreground"
+                                  fill="none"
+                                  height="162"
+                                  stroke="currentColor"
+                                  stroke-opacity="0.07"
+                                  width="684"
+                                  x="52"
+                                  x1="52"
+                                  x2="736"
+                                  y="8"
+                                  y1="170"
+                                  y2="170"
+                                />
+                                <line
+                                  class="text-foreground"
+                                  fill="none"
+                                  height="162"
+                                  stroke="currentColor"
+                                  stroke-opacity="0.07"
+                                  width="684"
+                                  x="52"
+                                  x1="52"
+                                  x2="736"
+                                  y="8"
+                                  y1="116.00000000000001"
+                                  y2="116.00000000000001"
+                                />
+                                <line
+                                  class="text-foreground"
+                                  fill="none"
+                                  height="162"
+                                  stroke="currentColor"
+                                  stroke-opacity="0.07"
+                                  width="684"
+                                  x="52"
+                                  x1="52"
+                                  x2="736"
+                                  y="8"
+                                  y1="62.00000000000001"
+                                  y2="62.00000000000001"
+                                />
+                                <line
+                                  class="text-foreground"
+                                  fill="none"
+                                  height="162"
+                                  stroke="currentColor"
+                                  stroke-opacity="0.07"
+                                  width="684"
+                                  x="52"
+                                  x1="52"
+                                  x2="736"
+                                  y="8"
+                                  y1="8"
+                                  y2="8"
+                                />
+                              </g>
+                            </g>
+                            <g
+                              class="recharts-layer recharts-cartesian-axis recharts-xAxis xAxis"
+                            >
+                              <g
+                                class="recharts-cartesian-axis-ticks"
+                              >
+                                <g
+                                  class="recharts-layer recharts-cartesian-axis-tick"
+                                >
+                                  <text
+                                    class="recharts-text recharts-cartesian-axis-tick-value"
+                                    fill="#666"
+                                    height="30"
+                                    orientation="bottom"
+                                    stroke="none"
+                                    text-anchor="middle"
+                                    width="684"
+                                  >
+                                    <tspan>
+                                      Jan
+                                    </tspan>
+                                  </text>
+                                </g>
+                                <g
+                                  class="recharts-layer recharts-cartesian-axis-tick"
+                                >
+                                  <text
+                                    class="recharts-text recharts-cartesian-axis-tick-value"
+                                    fill="#666"
+                                    height="30"
+                                    orientation="bottom"
+                                    stroke="none"
+                                    text-anchor="middle"
+                                    width="684"
+                                  >
+                                    <tspan>
+                                      Feb
+                                    </tspan>
+                                  </text>
+                                </g>
+                                <g
+                                  class="recharts-layer recharts-cartesian-axis-tick"
+                                >
+                                  <text
+                                    class="recharts-text recharts-cartesian-axis-tick-value"
+                                    fill="#666"
+                                    height="30"
+                                    orientation="bottom"
+                                    stroke="none"
+                                    text-anchor="middle"
+                                    width="684"
+                                  >
+                                    <tspan>
+                                      Mar
+                                    </tspan>
+                                  </text>
+                                </g>
+                                <g
+                                  class="recharts-layer recharts-cartesian-axis-tick"
+                                >
+                                  <text
+                                    class="recharts-text recharts-cartesian-axis-tick-value"
+                                    fill="#666"
+                                    height="30"
+                                    orientation="bottom"
+                                    stroke="none"
+                                    text-anchor="middle"
+                                    width="684"
+                                  >
+                                    <tspan>
+                                      Apr
+                                    </tspan>
+                                  </text>
+                                </g>
+                                <g
+                                  class="recharts-layer recharts-cartesian-axis-tick"
+                                >
+                                  <text
+                                    class="recharts-text recharts-cartesian-axis-tick-value"
+                                    fill="#666"
+                                    height="30"
+                                    orientation="bottom"
+                                    stroke="none"
+                                    text-anchor="middle"
+                                    width="684"
+                                  >
+                                    <tspan>
+                                      May
+                                    </tspan>
+                                  </text>
+                                </g>
+                                <g
+                                  class="recharts-layer recharts-cartesian-axis-tick"
+                                >
+                                  <text
+                                    class="recharts-text recharts-cartesian-axis-tick-value"
+                                    fill="#666"
+                                    height="30"
+                                    orientation="bottom"
+                                    stroke="none"
+                                    text-anchor="middle"
+                                    width="684"
+                                  >
+                                    <tspan>
+                                      Jun
+                                    </tspan>
+                                  </text>
+                                </g>
+                                <g
+                                  class="recharts-layer recharts-cartesian-axis-tick"
+                                >
+                                  <text
+                                    class="recharts-text recharts-cartesian-axis-tick-value"
+                                    fill="#666"
+                                    height="30"
+                                    orientation="bottom"
+                                    stroke="none"
+                                    text-anchor="middle"
+                                    width="684"
+                                  >
+                                    <tspan>
+                                      Jul
+                                    </tspan>
+                                  </text>
+                                </g>
+                                <g
+                                  class="recharts-layer recharts-cartesian-axis-tick"
+                                >
+                                  <text
+                                    class="recharts-text recharts-cartesian-axis-tick-value"
+                                    fill="#666"
+                                    height="30"
+                                    orientation="bottom"
+                                    stroke="none"
+                                    text-anchor="middle"
+                                    width="684"
+                                  >
+                                    <tspan>
+                                      Aug
+                                    </tspan>
+                                  </text>
+                                </g>
+                                <g
+                                  class="recharts-layer recharts-cartesian-axis-tick"
+                                >
+                                  <text
+                                    class="recharts-text recharts-cartesian-axis-tick-value"
+                                    fill="#666"
+                                    height="30"
+                                    orientation="bottom"
+                                    stroke="none"
+                                    text-anchor="middle"
+                                    width="684"
+                                  >
+                                    <tspan>
+                                      Sep
+                                    </tspan>
+                                  </text>
+                                </g>
+                              </g>
+                            </g>
+                            <g
+                              class="recharts-layer recharts-cartesian-axis recharts-yAxis yAxis"
+                            >
+                              <g
+                                class="recharts-cartesian-axis-ticks"
+                              >
+                                <g
+                                  class="recharts-layer recharts-cartesian-axis-tick"
+                                >
+                                  <text
+                                    class="recharts-text recharts-cartesian-axis-tick-value"
+                                    fill="#666"
+                                    height="162"
+                                    orientation="left"
+                                    stroke="none"
+                                    text-anchor="end"
+                                    width="48"
+                                  >
+                                    <tspan>
+                                      $0
+                                    </tspan>
+                                  </text>
+                                </g>
+                                <g
+                                  class="recharts-layer recharts-cartesian-axis-tick"
+                                >
+                                  <text
+                                    class="recharts-text recharts-cartesian-axis-tick-value"
+                                    fill="#666"
+                                    height="162"
+                                    orientation="left"
+                                    stroke="none"
+                                    text-anchor="end"
+                                    width="48"
+                                  >
+                                    <tspan>
+                                      $50k
+                                    </tspan>
+                                  </text>
+                                </g>
+                                <g
+                                  class="recharts-layer recharts-cartesian-axis-tick"
+                                >
+                                  <text
+                                    class="recharts-text recharts-cartesian-axis-tick-value"
+                                    fill="#666"
+                                    height="162"
+                                    orientation="left"
+                                    stroke="none"
+                                    text-anchor="end"
+                                    width="48"
+                                  >
+                                    <tspan>
+                                      $100k
+                                    </tspan>
+                                  </text>
+                                </g>
+                                <g
+                                  class="recharts-layer recharts-cartesian-axis-tick"
+                                >
+                                  <text
+                                    class="recharts-text recharts-cartesian-axis-tick-value"
+                                    fill="#666"
+                                    height="162"
+                                    orientation="left"
+                                    stroke="none"
+                                    text-anchor="end"
+                                    width="48"
+                                  >
+                                    <tspan>
+                                      $150k
+                                    </tspan>
+                                  </text>
+                                </g>
+                              </g>
+                            </g>
+                            <g
+                              class="recharts-layer recharts-line"
+                            >
+                              <path
+                                class="recharts-curve recharts-line-curve"
+                                d="M52,65.24C80.5,63.89,109,62.54,137.5,60.92C166,59.3,194.5,57.14,223,55.52C251.5,53.9,280,53.18,308.5,51.2C337,49.22,365.5,45.98,394,43.64C422.5,41.3,451,39.68,479.5,37.16C508,34.64,536.5,31.4,565,28.52C593.5,25.64,622,22.58,650.5,19.88C679,17.18,707.5,14.75,736,12.32"
+                                fill="none"
+                                height="162"
+                                name="Mrr"
+                                stroke="var(--chart-1)"
+                                stroke-width="2"
+                                width="684"
+                              />
+                              <g
+                                class="recharts-layer"
+                              />
+                            </g>
+                          </svg>
+                          <div
+                            class="recharts-tooltip-wrapper"
+                            style="visibility: hidden; pointer-events: none; position: absolute; top: 0px; left: 0px"
+                            tabindex="-1"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </figure>
+                </div>
+                <div>
+                  <div
+                    class="flex gap-2 px-4 pt-1 pb-4"
+                  >
+                    <svg
+                      aria-hidden="true"
+                      class="lucide lucide-trending-up mt-0.5 size-3.5 shrink-0 text-panel-muted"
+                      fill="none"
+                      height="24"
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      viewBox="0 0 24 24"
+                      width="24"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M16 7h6v6"
+                      />
+                      <path
+                        d="m22 7-8.5 8.5-5-5L2 17"
+                      />
+                    </svg>
+                    <p
+                      class="line-clamp-2 type-body text-panel-muted"
+                    >
+                      Europe grew every month this year, from $97k to $146k.
+                    </p>
+                  </div>
+                </div>
+              </section>
+            </div>
+          </div>
+        </div>
+      </div>
+      <p
+        aria-live="polite"
+        class="sr-only"
+      >
+        Updated: Monthly recurring revenue in Europe
+      </p>
+    </div>
+    <footer
+      class="flex h-9 shrink-0 items-center justify-between gap-3 border-t border-panel-border px-4 type-meta text-panel-muted"
+    >
+      <div
+        class="flex min-w-0 items-center gap-2"
+      >
+        <span
+          aria-hidden="true"
+          class="size-1.5 shrink-0 rounded-full bg-panel-muted opacity-60"
+        />
+        <span
+          class="min-w-0 truncate"
+          data-slot="swap-text"
+        >
+          <span
+            class="inline-block"
+          >
+            analytics
+          </span>
+        </span>
+      </div>
+      <div
+        class="flex shrink-0 items-center gap-3"
+      >
+        <div
+          class="flex items-center gap-2"
+        >
+          <span
+            class="text-foreground"
+            data-slot="swap-text"
+          >
+            <span
+              class="inline-block"
+            >
+              Refine
+            </span>
+          </span>
+          <kbd
+            aria-label="↩"
+            class="inline-flex items-center gap-0.5"
+            data-slot="kbd-group"
+          >
+            <kbd
+              class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+              data-slot="kbd"
+            >
+              ↩
+            </kbd>
+          </kbd>
+        </div>
+        <div
+          class="flex items-center gap-2 border-l border-panel-border pl-3"
+        >
+          <span>
+            New question
+          </span>
+          <kbd
+            aria-label="⌘ ↩"
+            class="inline-flex items-center gap-0.5"
+            data-slot="kbd-group"
+          >
+            <kbd
+              class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+              data-slot="kbd"
+            >
+              ⌘
+            </kbd>
+            <kbd
+              class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+              data-slot="kbd"
+            >
+              ↩
+            </kbd>
+          </kbd>
+        </div>
+        <div
+          class="flex items-center gap-2 border-l border-panel-border pl-3"
+        >
+          <span>
+            Steps
+          </span>
+          <kbd
+            aria-label="↑ ↓"
+            class="inline-flex items-center gap-0.5"
+            data-slot="kbd-group"
+          >
+            <kbd
+              class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+              data-slot="kbd"
+            >
+              ↑
+            </kbd>
+            <kbd
+              class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+              data-slot="kbd"
+            >
+              ↓
+            </kbd>
+          </kbd>
+        </div>
+        <div
+          class="flex items-center gap-2 border-l border-panel-border pl-3"
+        >
+          <span>
+            Actions
+          </span>
+          <kbd
+            aria-label="⌘ K"
+            class="inline-flex items-center gap-0.5"
+            data-slot="kbd-group"
+          >
+            <kbd
+              class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+              data-slot="kbd"
+            >
+              ⌘
+            </kbd>
+            <kbd
+              class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+              data-slot="kbd"
+            >
+              K
+            </kbd>
+          </kbd>
+        </div>
+        <div
+          class="flex items-center gap-2 border-l border-panel-border pl-3"
+        >
+          <span>
+            Save
+          </span>
+          <kbd
+            aria-label="⌘ S"
+            class="inline-flex items-center gap-0.5"
+            data-slot="kbd-group"
+          >
+            <kbd
+              class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+              data-slot="kbd"
+            >
+              ⌘
+            </kbd>
+            <kbd
+              class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+              data-slot="kbd"
+            >
+              S
+            </kbd>
+          </kbd>
+        </div>
+      </div>
+    </footer>
+  </div>
+</div>
+`;
+
+exports[`refine states > matches the refining snapshot 1`] = `
+<div
+  data-testid="ask-harness"
+  style="width: 760px"
+>
+  <div
+    class="flex min-h-0 flex-col"
+  >
+    <div
+      class="relative z-20 flex h-14 shrink-0 items-center gap-2.5 px-4"
+    >
+      <span
+        aria-label="Active connection: analytics"
+        class="relative flex h-8 max-w-56 shrink-0 items-center pr-2.5 pl-1"
+        data-tone="active"
+        role="img"
+      >
+        <span
+          class="absolute inset-0 rounded-[9px] bg-row-hover"
+        />
+        <span
+          class="relative flex min-w-0 items-center gap-3"
+        >
+          <span
+            aria-hidden="true"
+            class="grid size-6 place-items-center rounded-[7px] text-[13px] leading-none bg-row-hover"
+          >
+            🐘
+          </span>
+          <span
+            class="truncate type-body text-foreground"
+          >
+            analytics
+          </span>
+        </span>
+      </span>
+      <div
+        class="flex min-w-0 flex-1 items-center"
+      >
+        <div
+          class="relative flex min-w-0 flex-1 items-center"
+        >
+          <input
+            aria-label="Ask a question"
+            aria-placeholder="Refine — by month, only Europe, as a table…"
+            autocomplete="off"
+            class="min-w-0 flex-1 bg-transparent type-input text-foreground outline-none placeholder:text-panel-muted placeholder:opacity-80 focus-visible:outline-none"
+            spellcheck="false"
+            type="text"
+            value=""
+          />
+          <div
+            aria-hidden="true"
+            class="pointer-events-none absolute inset-0 flex items-center overflow-hidden type-input"
+          >
+            <span
+              class="truncate text-panel-muted opacity-80"
+              data-slot="swap-text"
+            >
+              <span
+                class="inline-block"
+              >
+                Refine — by month, only Europe, as a table…
+              </span>
+            </span>
+          </div>
+        </div>
+      </div>
+      <button
+        aria-label="Stop"
+        class="grid size-7 shrink-0 place-items-center bg-row-hover text-panel-muted hover:text-foreground"
+        style="border-radius: 6px"
+        tabindex="0"
+        type="button"
+      >
+        <span
+          class="grid place-items-center"
+        >
+          <svg
+            aria-hidden="true"
+            class="lucide lucide-square size-3 fill-current"
+            fill="none"
+            height="24"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <rect
+              height="18"
+              rx="2"
+              width="18"
+              x="3"
+              y="3"
+            />
+          </svg>
+        </span>
+      </button>
+    </div>
+    <div
+      class="relative flex min-h-0 flex-1 flex-col overflow-y-auto border-t border-panel-border"
+      style="min-height: 0px"
+    >
+      <nav
+        aria-label="Question steps"
+        class="flex h-8 shrink-0 items-center gap-0.5 overflow-hidden px-2.5 type-meta"
+      >
+        <button
+          aria-current="step"
+          aria-label="Show step 1: Revenue by region"
+          class="relative rounded-[6px] px-1.5 py-0.5 outline-none focus-visible:ring-2 focus-visible:ring-ring/60 text-foreground"
+          tabindex="0"
+          type="button"
+        >
+          <span
+            class="absolute inset-0 rounded-[6px] bg-row-active"
+          />
+          <span
+            class="relative block max-w-48 truncate"
+          >
+            Revenue by region
+          </span>
+        </button>
+        <svg
+          aria-hidden="true"
+          class="lucide lucide-chevron-right size-3 shrink-0 text-panel-muted/70"
+          fill="none"
+          height="24"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+          width="24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="m9 18 6-6-6-6"
+          />
+        </svg>
+        <span
+          class="px-1.5 text-panel-muted"
+        >
+          <span
+            class="relative block max-w-48 truncate"
+          >
+            only Europe
+          </span>
+        </span>
+      </nav>
+      <div
+        class="flex h-9 shrink-0 items-center gap-2 px-4"
+      >
+        <svg
+          aria-hidden="true"
+          class="lucide lucide-database size-3.5 shrink-0 text-panel-muted"
+          fill="none"
+          height="24"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+          width="24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <ellipse
+            cx="12"
+            cy="5"
+            rx="9"
+            ry="3"
+          />
+          <path
+            d="M3 5V19A9 3 0 0 0 21 19V5"
+          />
+          <path
+            d="M3 12A9 3 0 0 0 21 12"
+          />
+        </svg>
+        <h2
+          class="type-meta font-semibold text-foreground"
+        >
+          Generated SQL
+        </h2>
+        <p
+          class="flex min-w-0 items-center gap-1.5 truncate type-meta text-panel-muted tabular-nums"
+        >
+          <span
+            aria-hidden="true"
+          >
+            ·
+          </span>
+          <span
+            data-slot="swap-text"
+          >
+            <span
+              class="inline-block"
+            >
+              PostgreSQL
+            </span>
+          </span>
+          <span
+            aria-hidden="true"
+          >
+            ·
+          </span>
+          <span
+            data-slot="swap-text"
+          >
+            <span
+              class="inline-block"
+            >
+              Writing SQL
+            </span>
+          </span>
+          <span
+            aria-hidden="true"
+          >
+            ·
+          </span>
+          <span
+            data-slot="swap-text"
+          >
+            <span
+              class="inline-block"
+            >
+              1 line
+            </span>
+          </span>
+        </p>
+        <div
+          class="ml-auto flex items-center gap-0.5"
+        >
+          <span
+            class="grid size-5 place-items-center"
+          >
+            <span
+              class="grid place-items-center"
+            >
+              <span
+                aria-label="Working"
+                class="block size-1.5 rounded-full bg-panel-muted"
+                role="img"
+              />
+            </span>
+          </span>
+          <button
+            aria-label="Copy SQL"
+            class="grid size-6 place-items-center rounded-[6px] text-panel-muted hover:bg-row-hover hover:text-foreground disabled:opacity-40"
+            tabindex="0"
+            type="button"
+          >
+            <span>
+              <svg
+                aria-hidden="true"
+                class="lucide lucide-copy size-3.5"
+                fill="none"
+                height="24"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+                width="24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <rect
+                  height="14"
+                  rx="2"
+                  ry="2"
+                  width="14"
+                  x="8"
+                  y="8"
+                />
+                <path
+                  d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"
+                />
+              </svg>
+            </span>
+          </button>
+          <span
+            aria-live="polite"
+            class="sr-only"
+          />
+          <button
+            aria-expanded="false"
+            aria-label="Show SQL"
+            class="grid size-6 place-items-center rounded-[6px] text-panel-muted hover:bg-row-hover hover:text-foreground disabled:opacity-40"
+            tabindex="0"
+            type="button"
+          >
+            <span
+              class="grid place-items-center"
+            >
+              <svg
+                aria-hidden="true"
+                class="lucide lucide-chevron-down size-3.5"
+                fill="none"
+                height="24"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+                width="24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="m6 9 6 6 6-6"
+                />
+              </svg>
+            </span>
+          </button>
+        </div>
+      </div>
+      <ul
+        aria-label="Assumptions"
+        class="flex flex-wrap items-center gap-1.5 px-4 pt-1 pb-2"
+      >
+        <li
+          class="max-w-full"
+        >
+          <span
+            class="relative flex h-6 max-w-full items-center overflow-hidden rounded-[6px] border border-panel-border px-2 type-meta tabular-nums text-panel-muted"
+          >
+            <span
+              class="relative truncate"
+              data-slot="swap-text"
+            >
+              <span
+                class="inline-block"
+              >
+                subscriptions, accounts, regions
+              </span>
+            </span>
+          </span>
+        </li>
+        <li
+          class="max-w-full"
+        >
+          <button
+            aria-label="Group by week instead of month"
+            class="relative flex h-6 max-w-full items-center overflow-hidden rounded-[6px] border border-panel-border px-2 type-meta tabular-nums text-foreground outline-none hover:bg-row-hover focus-visible:ring-2 focus-visible:ring-ring/60"
+            tabindex="0"
+            type="button"
+          >
+            <span
+              class="relative truncate"
+              data-slot="swap-text"
+            >
+              <span
+                class="inline-block"
+              >
+                subscriptions.billed_at · by month
+              </span>
+            </span>
+          </button>
+        </li>
+        <li
+          class="max-w-full"
+        >
+          <button
+            aria-label="Refine without s.billed_at >= CAST('2026-01-01' AS DATE)"
+            class="relative flex h-6 max-w-full items-center overflow-hidden rounded-[6px] border border-panel-border px-2 type-meta tabular-nums text-foreground outline-none hover:bg-row-hover focus-visible:ring-2 focus-visible:ring-ring/60"
+            tabindex="0"
+            type="button"
+          >
+            <span
+              class="relative truncate"
+              data-slot="swap-text"
+            >
+              <span
+                class="inline-block"
+              >
+                s.billed_at &gt;= CAST('2026-01-01' AS DATE)
+              </span>
+            </span>
+          </button>
+        </li>
+        <li
+          class="max-w-full"
+        >
+          <button
+            aria-label="Refine without s.status = 'active'"
+            class="relative flex h-6 max-w-full items-center overflow-hidden rounded-[6px] border border-panel-border px-2 type-meta tabular-nums text-foreground outline-none hover:bg-row-hover focus-visible:ring-2 focus-visible:ring-ring/60"
+            tabindex="0"
+            type="button"
+          >
+            <span
+              class="relative truncate"
+              data-slot="swap-text"
+            >
+              <span
+                class="inline-block"
+              >
+                s.status = 'active'
+              </span>
+            </span>
+          </button>
+        </li>
+        <li
+          class="max-w-full"
+        >
+          <button
+            aria-label="Refine to show all rows"
+            class="relative flex h-6 max-w-full items-center overflow-hidden rounded-[6px] border border-panel-border px-2 type-meta tabular-nums text-foreground outline-none hover:bg-row-hover focus-visible:ring-2 focus-visible:ring-ring/60"
+            tabindex="0"
+            type="button"
+          >
+            <span
+              class="relative truncate"
+              data-slot="swap-text"
+            >
+              <span
+                class="inline-block"
+              >
+                top 500
+              </span>
+            </span>
+          </button>
+        </li>
+      </ul>
+      <div>
+        <div>
+          <div
+            class="relative"
+          >
+            <div
+              aria-hidden="true"
+              class="absolute inset-x-0 top-0 z-10 h-0.5 overflow-hidden"
+              data-testid="run-progress"
+            >
+              <div
+                class="h-full w-full bg-primary/40"
+              />
+            </div>
+            <div
+              aria-busy="true"
+              data-testid="answer-stage"
+            >
+              <section
+                aria-label="Monthly recurring revenue by region"
+                class="relative flex flex-col"
+              >
+                <div
+                  class="flex flex-wrap items-start justify-between gap-x-4 gap-y-2 px-4 pt-3 pb-3"
+                >
+                  <div
+                    class="flex min-w-[9rem] flex-1 flex-col gap-0.5"
+                  >
+                    <h3
+                      class="truncate type-title text-foreground"
+                    >
+                      <span
+                        data-slot="swap-text"
+                      >
+                        <span
+                          class="inline-block"
+                        >
+                          Monthly recurring revenue by region
+                        </span>
+                      </span>
+                    </h3>
+                    <p
+                      class="truncate type-meta text-panel-muted"
+                    >
+                      <span
+                        data-slot="swap-text"
+                      >
+                        <span
+                          class="inline-block"
+                        >
+                          Jan to Sep 2026 · $475k in September
+                        </span>
+                      </span>
+                    </p>
+                  </div>
+                  <div
+                    class="flex shrink-0 items-center gap-1"
+                  >
+                    <div
+                      aria-label="Chart view"
+                      class="flex rounded-[9px] bg-row-hover p-0.5"
+                      role="radiogroup"
+                    >
+                      <button
+                        aria-checked="false"
+                        class="relative h-7 rounded-[7px] px-3 type-meta text-panel-muted"
+                        data-segment="bar"
+                        role="radio"
+                        tabindex="-1"
+                        type="button"
+                      >
+                        <span
+                          class="relative"
+                        >
+                          Bar
+                        </span>
+                      </button>
+                      <button
+                        aria-checked="true"
+                        class="relative h-7 rounded-[7px] px-3 type-meta text-foreground"
+                        data-segment="line"
+                        role="radio"
+                        tabindex="0"
+                        type="button"
+                      >
+                        <span
+                          class="absolute inset-0 rounded-[7px] bg-control-thumb shadow-sm"
+                        />
+                        <span
+                          class="relative"
+                        >
+                          Line
+                        </span>
+                      </button>
+                      <button
+                        aria-checked="false"
+                        class="relative h-7 rounded-[7px] px-3 type-meta text-panel-muted"
+                        data-segment="table"
+                        role="radio"
+                        tabindex="-1"
+                        type="button"
+                      >
+                        <span
+                          class="relative"
+                        >
+                          Table
+                        </span>
+                      </button>
+                    </div>
+                    <button
+                      aria-expanded="false"
+                      aria-haspopup="menu"
+                      aria-label="Actions"
+                      class="grid size-6 place-items-center rounded-[6px] text-panel-muted hover:bg-row-hover hover:text-foreground aria-expanded:bg-row-active aria-expanded:text-foreground"
+                      id="ask-card-actions"
+                      tabindex="0"
+                      type="button"
+                    >
+                      <svg
+                        aria-hidden="true"
+                        class="lucide lucide-ellipsis size-3.5"
+                        fill="none"
+                        height="24"
+                        stroke="currentColor"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        viewBox="0 0 24 24"
+                        width="24"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <circle
+                          cx="12"
+                          cy="12"
+                          r="1"
+                        />
+                        <circle
+                          cx="19"
+                          cy="12"
+                          r="1"
+                        />
+                        <circle
+                          cx="5"
+                          cy="12"
+                          r="1"
+                        />
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+                <div>
+                  <ul
+                    aria-label="Latest values"
+                    class="flex flex-wrap gap-x-4 gap-y-1 px-4 pb-2"
+                  >
+                    <li
+                      class="flex items-center gap-1.5 type-meta"
+                    >
+                      <span
+                        aria-hidden="true"
+                        class="size-2 shrink-0 rounded-full"
+                        style="background-color: var(--chart-1)"
+                      />
+                      <span
+                        class="text-panel-muted"
+                      >
+                        North America
+                      </span>
+                      <span
+                        class="text-foreground tabular-nums"
+                        data-slot="swap-text"
+                      >
+                        <span
+                          class="inline-block"
+                        >
+                          $258k
+                        </span>
+                      </span>
+                    </li>
+                    <li
+                      class="flex items-center gap-1.5 type-meta"
+                    >
+                      <span
+                        aria-hidden="true"
+                        class="size-2 shrink-0 rounded-full"
+                        style="background-color: var(--chart-2)"
+                      />
+                      <span
+                        class="text-panel-muted"
+                      >
+                        Europe
+                      </span>
+                      <span
+                        class="text-foreground tabular-nums"
+                        data-slot="swap-text"
+                      >
+                        <span
+                          class="inline-block"
+                        >
+                          $146k
+                        </span>
+                      </span>
+                    </li>
+                    <li
+                      class="flex items-center gap-1.5 type-meta"
+                    >
+                      <span
+                        aria-hidden="true"
+                        class="size-2 shrink-0 rounded-full"
+                        style="background-color: var(--chart-3)"
+                      />
+                      <span
+                        class="text-panel-muted"
+                      >
+                        Asia Pacific
+                      </span>
+                      <span
+                        class="text-foreground tabular-nums"
+                        data-slot="swap-text"
+                      >
+                        <span
+                          class="inline-block"
+                        >
+                          $71k
+                        </span>
+                      </span>
+                    </li>
+                  </ul>
+                  <figure
+                    aria-label="Line chart: Monthly recurring revenue by region. Series: North America, Europe, Asia Pacific."
+                    class="px-2"
+                    data-drill=""
+                    role="img"
+                  >
+                    <div
+                      class="flex justify-center text-xs [&_.recharts-cartesian-axis-tick_text]:fill-muted-foreground [&_.recharts-cartesian-grid_line[stroke='#ccc']]:stroke-border/50 [&_.recharts-curve.recharts-tooltip-cursor]:stroke-border [&_.recharts-dot[stroke='#fff']]:stroke-transparent [&_.recharts-layer]:outline-hidden [&_.recharts-polar-grid_[stroke='#ccc']]:stroke-border [&_.recharts-radial-bar-background-sector]:fill-muted [&_.recharts-rectangle.recharts-tooltip-cursor]:fill-muted [&_.recharts-reference-line_[stroke='#ccc']]:stroke-border [&_.recharts-sector]:outline-hidden [&_.recharts-sector[stroke='#fff']]:stroke-transparent [&_.recharts-surface]:outline-hidden aspect-auto w-full"
+                      data-chart="chart-_r_id_"
+                      data-slot="chart"
+                      style="height: 200px"
+                    >
+                      <style>
+                        
+.dark [data-chart=chart-_r_id_] {
+  --color-s0: var(--chart-1);
+  --color-s1: var(--chart-2);
+  --color-s2: var(--chart-3);
+}
+
+
+ [data-chart=chart-_r_id_] {
+  --color-s0: var(--chart-1);
+  --color-s1: var(--chart-2);
+  --color-s2: var(--chart-3);
+}
+
+                      </style>
+                      <div
+                        class="recharts-responsive-container"
+                        style="width: 100%; height: 100%; min-width: 0px"
+                      >
+                        <div
+                          class="recharts-wrapper"
+                          style="position: relative; cursor: default; width: 100%; height: 100%; max-height: 200px; max-width: 744px"
+                        >
+                          <svg
+                            class="recharts-surface"
+                            height="200"
+                            role="application"
+                            style="width: 100%; height: 100%"
+                            tabindex="0"
+                            viewBox="0 0 744 200"
+                            width="744"
+                          >
+                            <title />
+                            <desc />
+                            <defs>
+                              <clippath
+                                id="rechartsN-clip"
+                              >
+                                <rect
+                                  height="162"
+                                  width="684"
+                                  x="52"
+                                  y="8"
+                                />
+                              </clippath>
+                            </defs>
+                            <g
+                              class="recharts-cartesian-grid"
+                            >
+                              <g
+                                class="recharts-cartesian-grid-horizontal"
+                              >
+                                <line
+                                  class="text-foreground"
+                                  fill="none"
+                                  height="162"
+                                  stroke="currentColor"
+                                  stroke-opacity="0.07"
+                                  width="684"
+                                  x="52"
+                                  x1="52"
+                                  x2="736"
+                                  y="8"
+                                  y1="170"
+                                  y2="170"
+                                />
+                                <line
+                                  class="text-foreground"
+                                  fill="none"
+                                  height="162"
+                                  stroke="currentColor"
+                                  stroke-opacity="0.07"
+                                  width="684"
+                                  x="52"
+                                  x1="52"
+                                  x2="736"
+                                  y="8"
+                                  y1="116.00000000000001"
+                                  y2="116.00000000000001"
+                                />
+                                <line
+                                  class="text-foreground"
+                                  fill="none"
+                                  height="162"
+                                  stroke="currentColor"
+                                  stroke-opacity="0.07"
+                                  width="684"
+                                  x="52"
+                                  x1="52"
+                                  x2="736"
+                                  y="8"
+                                  y1="62.00000000000001"
+                                  y2="62.00000000000001"
+                                />
+                                <line
+                                  class="text-foreground"
+                                  fill="none"
+                                  height="162"
+                                  stroke="currentColor"
+                                  stroke-opacity="0.07"
+                                  width="684"
+                                  x="52"
+                                  x1="52"
+                                  x2="736"
+                                  y="8"
+                                  y1="8"
+                                  y2="8"
+                                />
+                              </g>
+                            </g>
+                            <g
+                              class="recharts-layer recharts-cartesian-axis recharts-xAxis xAxis"
+                            >
+                              <g
+                                class="recharts-cartesian-axis-ticks"
+                              >
+                                <g
+                                  class="recharts-layer recharts-cartesian-axis-tick"
+                                >
+                                  <text
+                                    class="recharts-text recharts-cartesian-axis-tick-value"
+                                    fill="#666"
+                                    height="30"
+                                    orientation="bottom"
+                                    stroke="none"
+                                    text-anchor="middle"
+                                    width="684"
+                                  >
+                                    <tspan>
+                                      Jan
+                                    </tspan>
+                                  </text>
+                                </g>
+                                <g
+                                  class="recharts-layer recharts-cartesian-axis-tick"
+                                >
+                                  <text
+                                    class="recharts-text recharts-cartesian-axis-tick-value"
+                                    fill="#666"
+                                    height="30"
+                                    orientation="bottom"
+                                    stroke="none"
+                                    text-anchor="middle"
+                                    width="684"
+                                  >
+                                    <tspan>
+                                      Feb
+                                    </tspan>
+                                  </text>
+                                </g>
+                                <g
+                                  class="recharts-layer recharts-cartesian-axis-tick"
+                                >
+                                  <text
+                                    class="recharts-text recharts-cartesian-axis-tick-value"
+                                    fill="#666"
+                                    height="30"
+                                    orientation="bottom"
+                                    stroke="none"
+                                    text-anchor="middle"
+                                    width="684"
+                                  >
+                                    <tspan>
+                                      Mar
+                                    </tspan>
+                                  </text>
+                                </g>
+                                <g
+                                  class="recharts-layer recharts-cartesian-axis-tick"
+                                >
+                                  <text
+                                    class="recharts-text recharts-cartesian-axis-tick-value"
+                                    fill="#666"
+                                    height="30"
+                                    orientation="bottom"
+                                    stroke="none"
+                                    text-anchor="middle"
+                                    width="684"
+                                  >
+                                    <tspan>
+                                      Apr
+                                    </tspan>
+                                  </text>
+                                </g>
+                                <g
+                                  class="recharts-layer recharts-cartesian-axis-tick"
+                                >
+                                  <text
+                                    class="recharts-text recharts-cartesian-axis-tick-value"
+                                    fill="#666"
+                                    height="30"
+                                    orientation="bottom"
+                                    stroke="none"
+                                    text-anchor="middle"
+                                    width="684"
+                                  >
+                                    <tspan>
+                                      May
+                                    </tspan>
+                                  </text>
+                                </g>
+                                <g
+                                  class="recharts-layer recharts-cartesian-axis-tick"
+                                >
+                                  <text
+                                    class="recharts-text recharts-cartesian-axis-tick-value"
+                                    fill="#666"
+                                    height="30"
+                                    orientation="bottom"
+                                    stroke="none"
+                                    text-anchor="middle"
+                                    width="684"
+                                  >
+                                    <tspan>
+                                      Jun
+                                    </tspan>
+                                  </text>
+                                </g>
+                                <g
+                                  class="recharts-layer recharts-cartesian-axis-tick"
+                                >
+                                  <text
+                                    class="recharts-text recharts-cartesian-axis-tick-value"
+                                    fill="#666"
+                                    height="30"
+                                    orientation="bottom"
+                                    stroke="none"
+                                    text-anchor="middle"
+                                    width="684"
+                                  >
+                                    <tspan>
+                                      Jul
+                                    </tspan>
+                                  </text>
+                                </g>
+                                <g
+                                  class="recharts-layer recharts-cartesian-axis-tick"
+                                >
+                                  <text
+                                    class="recharts-text recharts-cartesian-axis-tick-value"
+                                    fill="#666"
+                                    height="30"
+                                    orientation="bottom"
+                                    stroke="none"
+                                    text-anchor="middle"
+                                    width="684"
+                                  >
+                                    <tspan>
+                                      Aug
+                                    </tspan>
+                                  </text>
+                                </g>
+                                <g
+                                  class="recharts-layer recharts-cartesian-axis-tick"
+                                >
+                                  <text
+                                    class="recharts-text recharts-cartesian-axis-tick-value"
+                                    fill="#666"
+                                    height="30"
+                                    orientation="bottom"
+                                    stroke="none"
+                                    text-anchor="middle"
+                                    width="684"
+                                  >
+                                    <tspan>
+                                      Sep
+                                    </tspan>
+                                  </text>
+                                </g>
+                              </g>
+                            </g>
+                            <g
+                              class="recharts-layer recharts-cartesian-axis recharts-yAxis yAxis"
+                            >
+                              <g
+                                class="recharts-cartesian-axis-ticks"
+                              >
+                                <g
+                                  class="recharts-layer recharts-cartesian-axis-tick"
+                                >
+                                  <text
+                                    class="recharts-text recharts-cartesian-axis-tick-value"
+                                    fill="#666"
+                                    height="162"
+                                    orientation="left"
+                                    stroke="none"
+                                    text-anchor="end"
+                                    width="48"
+                                  >
+                                    <tspan>
+                                      $0
+                                    </tspan>
+                                  </text>
+                                </g>
+                                <g
+                                  class="recharts-layer recharts-cartesian-axis-tick"
+                                >
+                                  <text
+                                    class="recharts-text recharts-cartesian-axis-tick-value"
+                                    fill="#666"
+                                    height="162"
+                                    orientation="left"
+                                    stroke="none"
+                                    text-anchor="end"
+                                    width="48"
+                                  >
+                                    <tspan>
+                                      $90k
+                                    </tspan>
+                                  </text>
+                                </g>
+                                <g
+                                  class="recharts-layer recharts-cartesian-axis-tick"
+                                >
+                                  <text
+                                    class="recharts-text recharts-cartesian-axis-tick-value"
+                                    fill="#666"
+                                    height="162"
+                                    orientation="left"
+                                    stroke="none"
+                                    text-anchor="end"
+                                    width="48"
+                                  >
+                                    <tspan>
+                                      $180k
+                                    </tspan>
+                                  </text>
+                                </g>
+                                <g
+                                  class="recharts-layer recharts-cartesian-axis-tick"
+                                >
+                                  <text
+                                    class="recharts-text recharts-cartesian-axis-tick-value"
+                                    fill="#666"
+                                    height="162"
+                                    orientation="left"
+                                    stroke="none"
+                                    text-anchor="end"
+                                    width="48"
+                                  >
+                                    <tspan>
+                                      $270k
+                                    </tspan>
+                                  </text>
+                                </g>
+                              </g>
+                            </g>
+                            <g
+                              class="recharts-layer recharts-line"
+                            >
+                              <path
+                                class="recharts-curve recharts-line-curve"
+                                d="M52,62C80.5,60.95,109,59.9,137.5,58.4C166,56.9,194.5,54.7,223,53C251.5,51.3,280,50.1,308.5,48.2C337,46.3,365.5,43.5,394,41.6C422.5,39.7,451,38.8,479.5,36.8C508,34.8,536.5,32,565,29.6C593.5,27.2,622,24.8,650.5,22.4C679,20,707.5,17.6,736,15.2"
+                                fill="none"
+                                height="162"
+                                name="North America"
+                                stroke="var(--chart-1)"
+                                stroke-width="2"
+                                width="684"
+                              />
+                              <g
+                                class="recharts-layer"
+                              />
+                            </g>
+                            <g
+                              class="recharts-layer recharts-line"
+                            >
+                              <path
+                                class="recharts-curve recharts-line-curve"
+                                d="M52,111.8C80.5,111.05,109,110.3,137.5,109.4C166,108.5,194.5,107.3,223,106.4C251.5,105.5,280,105.1,308.5,104C337,102.9,365.5,101.1,394,99.8C422.5,98.5,451,97.6,479.5,96.2C508,94.8,536.5,93,565,91.4C593.5,89.8,622,88.1,650.5,86.6C679,85.1,707.5,83.75,736,82.4"
+                                fill="none"
+                                height="162"
+                                name="Europe"
+                                stroke="var(--chart-2)"
+                                stroke-width="2"
+                                width="684"
+                              />
+                              <g
+                                class="recharts-layer"
+                              />
+                            </g>
+                            <g
+                              class="recharts-layer recharts-line"
+                            >
+                              <path
+                                class="recharts-curve recharts-line-curve"
+                                d="M52,151.4C80.5,150.85,109,150.3,137.5,149.6C166,148.9,194.5,148,223,147.2C251.5,146.4,280,145.7,308.5,144.8C337,143.9,365.5,142.8,394,141.8C422.5,140.8,451,139.9,479.5,138.8C508,137.7,536.5,136.4,565,135.2C593.5,134,622,132.9,650.5,131.6C679,130.3,707.5,128.85,736,127.4"
+                                fill="none"
+                                height="162"
+                                name="Asia Pacific"
+                                stroke="var(--chart-3)"
+                                stroke-width="2"
+                                width="684"
+                              />
+                              <g
+                                class="recharts-layer"
+                              />
+                            </g>
+                          </svg>
+                          <div
+                            class="recharts-tooltip-wrapper"
+                            style="visibility: hidden; pointer-events: none; position: absolute; top: 0px; left: 0px"
+                            tabindex="-1"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </figure>
+                </div>
+                <div>
+                  <div
+                    class="flex gap-2 px-4 pt-1 pb-4"
+                  >
+                    <svg
+                      aria-hidden="true"
+                      class="lucide lucide-trending-up mt-0.5 size-3.5 shrink-0 text-panel-muted"
+                      fill="none"
+                      height="24"
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      viewBox="0 0 24 24"
+                      width="24"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M16 7h6v6"
+                      />
+                      <path
+                        d="m22 7-8.5 8.5-5-5L2 17"
+                      />
+                    </svg>
+                    <p
+                      class="line-clamp-2 type-body text-panel-muted"
+                    >
+                      Asia Pacific more than doubled this year, from $31k to $71k. Total MRR reached $475k in September, up 54% since January.
+                    </p>
+                  </div>
+                </div>
+              </section>
+            </div>
+          </div>
+        </div>
+      </div>
+      <p
+        aria-live="polite"
+        class="sr-only"
+      />
+    </div>
+    <footer
+      class="flex h-9 shrink-0 items-center justify-between gap-3 border-t border-panel-border px-4 type-meta text-panel-muted"
+    >
+      <div
+        class="flex min-w-0 items-center gap-2"
+      >
+        <span
+          aria-hidden="true"
+          class="size-1.5 shrink-0 rounded-full bg-panel-muted opacity-60"
+        />
+        <span
+          class="min-w-0 truncate"
+          data-slot="swap-text"
+        >
+          <span
+            class="inline-block"
+          >
+            analytics
+          </span>
+        </span>
+      </div>
+      <div
+        class="flex shrink-0 items-center gap-3"
+      >
+        <div
+          class="flex items-center gap-2"
+        >
+          <span
+            class="text-foreground"
+            data-slot="swap-text"
+          >
+            <span
+              class="inline-block"
+            >
+              Refine
+            </span>
+          </span>
+          <kbd
+            aria-label="↩"
+            class="inline-flex items-center gap-0.5"
+            data-slot="kbd-group"
+          >
+            <kbd
+              class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+              data-slot="kbd"
+            >
+              ↩
+            </kbd>
+          </kbd>
+        </div>
+        <div
+          class="flex items-center gap-2 border-l border-panel-border pl-3"
+        >
+          <span>
+            Stop
+          </span>
+          <kbd
+            aria-label="esc"
+            class="inline-flex items-center gap-0.5"
+            data-slot="kbd-group"
+          >
+            <kbd
+              class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+              data-slot="kbd"
+            >
+              esc
+            </kbd>
+          </kbd>
+        </div>
+      </div>
+    </footer>
+  </div>
+</div>
+`;
+
+exports[`refine states > matches the turn limit reached snapshot 1`] = `
+<div
+  data-testid="ask-harness"
+  style="width: 760px"
+>
+  <div
+    class="flex min-h-0 flex-col"
+  >
+    <div
+      class="relative z-20 flex h-14 shrink-0 items-center gap-2.5 px-4"
+    >
+      <span
+        aria-label="Active connection: analytics"
+        class="relative flex h-8 max-w-56 shrink-0 items-center pr-2.5 pl-1"
+        data-tone="active"
+        role="img"
+      >
+        <span
+          class="absolute inset-0 rounded-[9px] bg-row-hover"
+        />
+        <span
+          class="relative flex min-w-0 items-center gap-3"
+        >
+          <span
+            aria-hidden="true"
+            class="grid size-6 place-items-center rounded-[7px] text-[13px] leading-none bg-row-hover"
+          >
+            🐘
+          </span>
+          <span
+            class="truncate type-body text-foreground"
+          >
+            analytics
+          </span>
+        </span>
+      </span>
+      <div
+        class="flex min-w-0 flex-1 items-center"
+      >
+        <div
+          class="relative flex min-w-0 flex-1 items-center"
+        >
+          <input
+            aria-label="Ask a question"
+            aria-placeholder="Start a new question with ⌘↵"
+            autocomplete="off"
+            class="min-w-0 flex-1 bg-transparent type-input text-foreground outline-none placeholder:text-panel-muted placeholder:opacity-80 focus-visible:outline-none"
+            spellcheck="false"
+            type="text"
+            value=""
+          />
+          <div
+            aria-hidden="true"
+            class="pointer-events-none absolute inset-0 flex items-center overflow-hidden type-input"
+          >
+            <span
+              class="truncate text-panel-muted opacity-80"
+              data-slot="swap-text"
+            >
+              <span
+                class="inline-block"
+              >
+                Start a new question with ⌘↵
+              </span>
+            </span>
+          </div>
+        </div>
+      </div>
+      <button
+        aria-label="Run"
+        class="grid size-7 shrink-0 place-items-center bg-row-hover text-panel-muted hover:text-foreground"
+        style="border-radius: 8px"
+        tabindex="0"
+        type="button"
+      >
+        <span
+          class="grid place-items-center"
+        >
+          <svg
+            aria-hidden="true"
+            class="lucide lucide-corner-down-left size-3.5"
+            fill="none"
+            height="24"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M20 4v7a4 4 0 0 1-4 4H4"
+            />
+            <path
+              d="m9 10-5 5 5 5"
+            />
+          </svg>
+        </span>
+      </button>
+    </div>
+    <div
+      class="relative flex min-h-0 flex-1 flex-col overflow-y-auto border-t border-panel-border"
+      style="min-height: 0px"
+    >
+      <nav
+        aria-label="Question steps"
+        class="flex h-8 shrink-0 items-center gap-0.5 overflow-hidden px-2.5 type-meta"
+      >
+        <button
+          aria-label="Show step 1: Revenue by region"
+          class="relative rounded-[6px] px-1.5 py-0.5 outline-none focus-visible:ring-2 focus-visible:ring-ring/60 text-panel-muted hover:text-foreground"
+          tabindex="0"
+          type="button"
+        >
+          <span
+            class="relative block max-w-48 truncate"
+          >
+            Revenue by region
+          </span>
+        </button>
+        <svg
+          aria-hidden="true"
+          class="lucide lucide-chevron-right size-3 shrink-0 text-panel-muted/70"
+          fill="none"
+          height="24"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+          width="24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="m9 18 6-6-6-6"
+          />
+        </svg>
+        <span
+          aria-label="3 more steps: by week, by month, sorted"
+          class="px-1 text-panel-muted"
+          role="img"
+          title="by week › by month › sorted"
+        >
+          …
+        </span>
+        <svg
+          aria-hidden="true"
+          class="lucide lucide-chevron-right size-3 shrink-0 text-panel-muted/70"
+          fill="none"
+          height="24"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+          width="24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="m9 18 6-6-6-6"
+          />
+        </svg>
+        <button
+          aria-label="Show step 5: top five"
+          class="relative rounded-[6px] px-1.5 py-0.5 outline-none focus-visible:ring-2 focus-visible:ring-ring/60 text-panel-muted hover:text-foreground"
+          tabindex="0"
+          type="button"
+        >
+          <span
+            class="relative block max-w-48 truncate"
+          >
+            top five
+          </span>
+        </button>
+        <svg
+          aria-hidden="true"
+          class="lucide lucide-chevron-right size-3 shrink-0 text-panel-muted/70"
+          fill="none"
+          height="24"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+          width="24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="m9 18 6-6-6-6"
+          />
+        </svg>
+        <button
+          aria-current="step"
+          aria-label="Show step 6: 2025"
+          class="relative rounded-[6px] px-1.5 py-0.5 outline-none focus-visible:ring-2 focus-visible:ring-ring/60 text-foreground"
+          tabindex="0"
+          type="button"
+        >
+          <span
+            class="absolute inset-0 rounded-[6px] bg-row-active"
+          />
+          <span
+            class="relative block max-w-48 truncate"
+          >
+            2025
+          </span>
+        </button>
+      </nav>
+      <div
+        class="flex h-9 shrink-0 items-center gap-2 px-4"
+      >
+        <svg
+          aria-hidden="true"
+          class="lucide lucide-database size-3.5 shrink-0 text-panel-muted"
+          fill="none"
+          height="24"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+          width="24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <ellipse
+            cx="12"
+            cy="5"
+            rx="9"
+            ry="3"
+          />
+          <path
+            d="M3 5V19A9 3 0 0 0 21 19V5"
+          />
+          <path
+            d="M3 12A9 3 0 0 0 21 12"
+          />
+        </svg>
+        <h2
+          class="type-meta font-semibold text-foreground"
+        >
+          Generated SQL
+        </h2>
+        <p
+          class="flex min-w-0 items-center gap-1.5 truncate type-meta text-panel-muted tabular-nums"
+        >
+          <span
+            aria-hidden="true"
+          >
+            ·
+          </span>
+          <span
+            data-slot="swap-text"
+          >
+            <span
+              class="inline-block"
+            >
+              PostgreSQL
+            </span>
+          </span>
+          <span
+            aria-hidden="true"
+          >
+            ·
+          </span>
+          <span
+            data-slot="swap-text"
+          >
+            <span
+              class="inline-block"
+            >
+              27 rows
+            </span>
+          </span>
+          <span
+            aria-hidden="true"
+          >
+            ·
+          </span>
+          <span
+            data-slot="swap-text"
+          >
+            <span
+              class="inline-block"
+            >
+              402ms
+            </span>
+          </span>
+        </p>
+        <div
+          class="ml-auto flex items-center gap-0.5"
+        >
+          <span
+            class="grid size-5 place-items-center"
+          >
+            <span
+              class="grid place-items-center"
+            >
+              <svg
+                aria-label="Done"
+                class="size-3.5 text-success-ink"
+                fill="none"
+                role="img"
+                viewBox="0 0 16 16"
+              >
+                <path
+                  d="M3.5 8.5 6.5 11.5 12.5 4.5"
+                  pathLength="1"
+                  stroke="currentColor"
+                  stroke-dasharray="1 1"
+                  stroke-dashoffset="0"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="1.75"
+                />
+              </svg>
+            </span>
+          </span>
+          <button
+            aria-label="Copy SQL"
+            class="grid size-6 place-items-center rounded-[6px] text-panel-muted hover:bg-row-hover hover:text-foreground disabled:opacity-40"
+            tabindex="0"
+            type="button"
+          >
+            <span>
+              <svg
+                aria-hidden="true"
+                class="lucide lucide-copy size-3.5"
+                fill="none"
+                height="24"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+                width="24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <rect
+                  height="14"
+                  rx="2"
+                  ry="2"
+                  width="14"
+                  x="8"
+                  y="8"
+                />
+                <path
+                  d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"
+                />
+              </svg>
+            </span>
+          </button>
+          <span
+            aria-live="polite"
+            class="sr-only"
+          />
+          <button
+            aria-expanded="false"
+            aria-label="Show SQL"
+            class="grid size-6 place-items-center rounded-[6px] text-panel-muted hover:bg-row-hover hover:text-foreground disabled:opacity-40"
+            tabindex="0"
+            type="button"
+          >
+            <span
+              class="grid place-items-center"
+            >
+              <svg
+                aria-hidden="true"
+                class="lucide lucide-chevron-down size-3.5"
+                fill="none"
+                height="24"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+                width="24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="m6 9 6 6 6-6"
+                />
+              </svg>
+            </span>
+          </button>
+        </div>
+      </div>
+      <div>
+        <div>
+          <div
+            class="relative"
+          >
+            <div
+              aria-busy="false"
+              data-testid="answer-stage"
+            >
+              <section
+                aria-label="Monthly recurring revenue by region"
+                class="relative flex flex-col"
+              >
+                <div
+                  class="flex flex-wrap items-start justify-between gap-x-4 gap-y-2 px-4 pt-3 pb-3"
+                >
+                  <div
+                    class="flex min-w-[9rem] flex-1 flex-col gap-0.5"
+                  >
+                    <h3
+                      class="truncate type-title text-foreground"
+                    >
+                      <span
+                        data-slot="swap-text"
+                      >
+                        <span
+                          class="inline-block"
+                        >
+                          Monthly recurring revenue by region
+                        </span>
+                      </span>
+                    </h3>
+                    <p
+                      class="truncate type-meta text-panel-muted"
+                    >
+                      <span
+                        data-slot="swap-text"
+                      >
+                        <span
+                          class="inline-block"
+                        >
+                          Refined: 2025
+                        </span>
+                      </span>
+                    </p>
+                  </div>
+                  <div
+                    class="flex shrink-0 items-center gap-1"
+                  >
+                    <div
+                      aria-label="Chart view"
+                      class="flex rounded-[9px] bg-row-hover p-0.5"
+                      role="radiogroup"
+                    >
+                      <button
+                        aria-checked="false"
+                        class="relative h-7 rounded-[7px] px-3 type-meta text-panel-muted"
+                        data-segment="bar"
+                        role="radio"
+                        tabindex="-1"
+                        type="button"
+                      >
+                        <span
+                          class="relative"
+                        >
+                          Bar
+                        </span>
+                      </button>
+                      <button
+                        aria-checked="true"
+                        class="relative h-7 rounded-[7px] px-3 type-meta text-foreground"
+                        data-segment="line"
+                        role="radio"
+                        tabindex="0"
+                        type="button"
+                      >
+                        <span
+                          class="absolute inset-0 rounded-[7px] bg-control-thumb shadow-sm"
+                        />
+                        <span
+                          class="relative"
+                        >
+                          Line
+                        </span>
+                      </button>
+                      <button
+                        aria-checked="false"
+                        class="relative h-7 rounded-[7px] px-3 type-meta text-panel-muted"
+                        data-segment="table"
+                        role="radio"
+                        tabindex="-1"
+                        type="button"
+                      >
+                        <span
+                          class="relative"
+                        >
+                          Table
+                        </span>
+                      </button>
+                    </div>
+                    <button
+                      aria-expanded="false"
+                      aria-haspopup="menu"
+                      aria-label="Actions"
+                      class="grid size-6 place-items-center rounded-[6px] text-panel-muted hover:bg-row-hover hover:text-foreground aria-expanded:bg-row-active aria-expanded:text-foreground"
+                      id="ask-card-actions"
+                      tabindex="0"
+                      type="button"
+                    >
+                      <svg
+                        aria-hidden="true"
+                        class="lucide lucide-ellipsis size-3.5"
+                        fill="none"
+                        height="24"
+                        stroke="currentColor"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        viewBox="0 0 24 24"
+                        width="24"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <circle
+                          cx="12"
+                          cy="12"
+                          r="1"
+                        />
+                        <circle
+                          cx="19"
+                          cy="12"
+                          r="1"
+                        />
+                        <circle
+                          cx="5"
+                          cy="12"
+                          r="1"
+                        />
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+                <div>
+                  <ul
+                    aria-label="Latest values"
+                    class="flex flex-wrap gap-x-4 gap-y-1 px-4 pb-2"
+                  >
+                    <li
+                      class="flex items-center gap-1.5 type-meta"
+                    >
+                      <span
+                        aria-hidden="true"
+                        class="size-2 shrink-0 rounded-full"
+                        style="background-color: var(--chart-1)"
+                      />
+                      <span
+                        class="text-panel-muted"
+                      >
+                        North America
+                      </span>
+                      <span
+                        class="text-foreground tabular-nums"
+                        data-slot="swap-text"
+                      >
+                        <span
+                          class="inline-block"
+                        >
+                          $258k
+                        </span>
+                      </span>
+                    </li>
+                    <li
+                      class="flex items-center gap-1.5 type-meta"
+                    >
+                      <span
+                        aria-hidden="true"
+                        class="size-2 shrink-0 rounded-full"
+                        style="background-color: var(--chart-2)"
+                      />
+                      <span
+                        class="text-panel-muted"
+                      >
+                        Europe
+                      </span>
+                      <span
+                        class="text-foreground tabular-nums"
+                        data-slot="swap-text"
+                      >
+                        <span
+                          class="inline-block"
+                        >
+                          $146k
+                        </span>
+                      </span>
+                    </li>
+                    <li
+                      class="flex items-center gap-1.5 type-meta"
+                    >
+                      <span
+                        aria-hidden="true"
+                        class="size-2 shrink-0 rounded-full"
+                        style="background-color: var(--chart-3)"
+                      />
+                      <span
+                        class="text-panel-muted"
+                      >
+                        Asia Pacific
+                      </span>
+                      <span
+                        class="text-foreground tabular-nums"
+                        data-slot="swap-text"
+                      >
+                        <span
+                          class="inline-block"
+                        >
+                          $71k
+                        </span>
+                      </span>
+                    </li>
+                  </ul>
+                  <figure
+                    aria-label="Line chart: Monthly recurring revenue by region. Series: North America, Europe, Asia Pacific."
+                    class="px-2"
+                    role="img"
+                  >
+                    <div
+                      class="flex justify-center text-xs [&_.recharts-cartesian-axis-tick_text]:fill-muted-foreground [&_.recharts-cartesian-grid_line[stroke='#ccc']]:stroke-border/50 [&_.recharts-curve.recharts-tooltip-cursor]:stroke-border [&_.recharts-dot[stroke='#fff']]:stroke-transparent [&_.recharts-layer]:outline-hidden [&_.recharts-polar-grid_[stroke='#ccc']]:stroke-border [&_.recharts-radial-bar-background-sector]:fill-muted [&_.recharts-rectangle.recharts-tooltip-cursor]:fill-muted [&_.recharts-reference-line_[stroke='#ccc']]:stroke-border [&_.recharts-sector]:outline-hidden [&_.recharts-sector[stroke='#fff']]:stroke-transparent [&_.recharts-surface]:outline-hidden aspect-auto w-full"
+                      data-chart="chart-_r_id_"
+                      data-slot="chart"
+                      style="height: 200px"
+                    >
+                      <style>
+                        
+.dark [data-chart=chart-_r_id_] {
+  --color-s0: var(--chart-1);
+  --color-s1: var(--chart-2);
+  --color-s2: var(--chart-3);
+}
+
+
+ [data-chart=chart-_r_id_] {
+  --color-s0: var(--chart-1);
+  --color-s1: var(--chart-2);
+  --color-s2: var(--chart-3);
+}
+
+                      </style>
+                      <div
+                        class="recharts-responsive-container"
+                        style="width: 100%; height: 100%; min-width: 0px"
+                      >
+                        <div
+                          class="recharts-wrapper"
+                          style="position: relative; cursor: default; width: 100%; height: 100%; max-height: 200px; max-width: 744px"
+                        >
+                          <svg
+                            class="recharts-surface"
+                            height="200"
+                            role="application"
+                            style="width: 100%; height: 100%"
+                            tabindex="0"
+                            viewBox="0 0 744 200"
+                            width="744"
+                          >
+                            <title />
+                            <desc />
+                            <defs>
+                              <clippath
+                                id="rechartsN-clip"
+                              >
+                                <rect
+                                  height="162"
+                                  width="684"
+                                  x="52"
+                                  y="8"
+                                />
+                              </clippath>
+                            </defs>
+                            <g
+                              class="recharts-cartesian-grid"
+                            >
+                              <g
+                                class="recharts-cartesian-grid-horizontal"
+                              >
+                                <line
+                                  class="text-foreground"
+                                  fill="none"
+                                  height="162"
+                                  stroke="currentColor"
+                                  stroke-opacity="0.07"
+                                  width="684"
+                                  x="52"
+                                  x1="52"
+                                  x2="736"
+                                  y="8"
+                                  y1="170"
+                                  y2="170"
+                                />
+                                <line
+                                  class="text-foreground"
+                                  fill="none"
+                                  height="162"
+                                  stroke="currentColor"
+                                  stroke-opacity="0.07"
+                                  width="684"
+                                  x="52"
+                                  x1="52"
+                                  x2="736"
+                                  y="8"
+                                  y1="116.00000000000001"
+                                  y2="116.00000000000001"
+                                />
+                                <line
+                                  class="text-foreground"
+                                  fill="none"
+                                  height="162"
+                                  stroke="currentColor"
+                                  stroke-opacity="0.07"
+                                  width="684"
+                                  x="52"
+                                  x1="52"
+                                  x2="736"
+                                  y="8"
+                                  y1="62.00000000000001"
+                                  y2="62.00000000000001"
+                                />
+                                <line
+                                  class="text-foreground"
+                                  fill="none"
+                                  height="162"
+                                  stroke="currentColor"
+                                  stroke-opacity="0.07"
+                                  width="684"
+                                  x="52"
+                                  x1="52"
+                                  x2="736"
+                                  y="8"
+                                  y1="8"
+                                  y2="8"
+                                />
+                              </g>
+                            </g>
+                            <g
+                              class="recharts-layer recharts-cartesian-axis recharts-xAxis xAxis"
+                            >
+                              <g
+                                class="recharts-cartesian-axis-ticks"
+                              >
+                                <g
+                                  class="recharts-layer recharts-cartesian-axis-tick"
+                                >
+                                  <text
+                                    class="recharts-text recharts-cartesian-axis-tick-value"
+                                    fill="#666"
+                                    height="30"
+                                    orientation="bottom"
+                                    stroke="none"
+                                    text-anchor="middle"
+                                    width="684"
+                                  >
+                                    <tspan>
+                                      Jan
+                                    </tspan>
+                                  </text>
+                                </g>
+                                <g
+                                  class="recharts-layer recharts-cartesian-axis-tick"
+                                >
+                                  <text
+                                    class="recharts-text recharts-cartesian-axis-tick-value"
+                                    fill="#666"
+                                    height="30"
+                                    orientation="bottom"
+                                    stroke="none"
+                                    text-anchor="middle"
+                                    width="684"
+                                  >
+                                    <tspan>
+                                      Feb
+                                    </tspan>
+                                  </text>
+                                </g>
+                                <g
+                                  class="recharts-layer recharts-cartesian-axis-tick"
+                                >
+                                  <text
+                                    class="recharts-text recharts-cartesian-axis-tick-value"
+                                    fill="#666"
+                                    height="30"
+                                    orientation="bottom"
+                                    stroke="none"
+                                    text-anchor="middle"
+                                    width="684"
+                                  >
+                                    <tspan>
+                                      Mar
+                                    </tspan>
+                                  </text>
+                                </g>
+                                <g
+                                  class="recharts-layer recharts-cartesian-axis-tick"
+                                >
+                                  <text
+                                    class="recharts-text recharts-cartesian-axis-tick-value"
+                                    fill="#666"
+                                    height="30"
+                                    orientation="bottom"
+                                    stroke="none"
+                                    text-anchor="middle"
+                                    width="684"
+                                  >
+                                    <tspan>
+                                      Apr
+                                    </tspan>
+                                  </text>
+                                </g>
+                                <g
+                                  class="recharts-layer recharts-cartesian-axis-tick"
+                                >
+                                  <text
+                                    class="recharts-text recharts-cartesian-axis-tick-value"
+                                    fill="#666"
+                                    height="30"
+                                    orientation="bottom"
+                                    stroke="none"
+                                    text-anchor="middle"
+                                    width="684"
+                                  >
+                                    <tspan>
+                                      May
+                                    </tspan>
+                                  </text>
+                                </g>
+                                <g
+                                  class="recharts-layer recharts-cartesian-axis-tick"
+                                >
+                                  <text
+                                    class="recharts-text recharts-cartesian-axis-tick-value"
+                                    fill="#666"
+                                    height="30"
+                                    orientation="bottom"
+                                    stroke="none"
+                                    text-anchor="middle"
+                                    width="684"
+                                  >
+                                    <tspan>
+                                      Jun
+                                    </tspan>
+                                  </text>
+                                </g>
+                                <g
+                                  class="recharts-layer recharts-cartesian-axis-tick"
+                                >
+                                  <text
+                                    class="recharts-text recharts-cartesian-axis-tick-value"
+                                    fill="#666"
+                                    height="30"
+                                    orientation="bottom"
+                                    stroke="none"
+                                    text-anchor="middle"
+                                    width="684"
+                                  >
+                                    <tspan>
+                                      Jul
+                                    </tspan>
+                                  </text>
+                                </g>
+                                <g
+                                  class="recharts-layer recharts-cartesian-axis-tick"
+                                >
+                                  <text
+                                    class="recharts-text recharts-cartesian-axis-tick-value"
+                                    fill="#666"
+                                    height="30"
+                                    orientation="bottom"
+                                    stroke="none"
+                                    text-anchor="middle"
+                                    width="684"
+                                  >
+                                    <tspan>
+                                      Aug
+                                    </tspan>
+                                  </text>
+                                </g>
+                                <g
+                                  class="recharts-layer recharts-cartesian-axis-tick"
+                                >
+                                  <text
+                                    class="recharts-text recharts-cartesian-axis-tick-value"
+                                    fill="#666"
+                                    height="30"
+                                    orientation="bottom"
+                                    stroke="none"
+                                    text-anchor="middle"
+                                    width="684"
+                                  >
+                                    <tspan>
+                                      Sep
+                                    </tspan>
+                                  </text>
+                                </g>
+                              </g>
+                            </g>
+                            <g
+                              class="recharts-layer recharts-cartesian-axis recharts-yAxis yAxis"
+                            >
+                              <g
+                                class="recharts-cartesian-axis-ticks"
+                              >
+                                <g
+                                  class="recharts-layer recharts-cartesian-axis-tick"
+                                >
+                                  <text
+                                    class="recharts-text recharts-cartesian-axis-tick-value"
+                                    fill="#666"
+                                    height="162"
+                                    orientation="left"
+                                    stroke="none"
+                                    text-anchor="end"
+                                    width="48"
+                                  >
+                                    <tspan>
+                                      $0
+                                    </tspan>
+                                  </text>
+                                </g>
+                                <g
+                                  class="recharts-layer recharts-cartesian-axis-tick"
+                                >
+                                  <text
+                                    class="recharts-text recharts-cartesian-axis-tick-value"
+                                    fill="#666"
+                                    height="162"
+                                    orientation="left"
+                                    stroke="none"
+                                    text-anchor="end"
+                                    width="48"
+                                  >
+                                    <tspan>
+                                      $90k
+                                    </tspan>
+                                  </text>
+                                </g>
+                                <g
+                                  class="recharts-layer recharts-cartesian-axis-tick"
+                                >
+                                  <text
+                                    class="recharts-text recharts-cartesian-axis-tick-value"
+                                    fill="#666"
+                                    height="162"
+                                    orientation="left"
+                                    stroke="none"
+                                    text-anchor="end"
+                                    width="48"
+                                  >
+                                    <tspan>
+                                      $180k
+                                    </tspan>
+                                  </text>
+                                </g>
+                                <g
+                                  class="recharts-layer recharts-cartesian-axis-tick"
+                                >
+                                  <text
+                                    class="recharts-text recharts-cartesian-axis-tick-value"
+                                    fill="#666"
+                                    height="162"
+                                    orientation="left"
+                                    stroke="none"
+                                    text-anchor="end"
+                                    width="48"
+                                  >
+                                    <tspan>
+                                      $270k
+                                    </tspan>
+                                  </text>
+                                </g>
+                              </g>
+                            </g>
+                            <g
+                              class="recharts-layer recharts-line"
+                            >
+                              <path
+                                class="recharts-curve recharts-line-curve"
+                                d="M52,62C80.5,60.95,109,59.9,137.5,58.4C166,56.9,194.5,54.7,223,53C251.5,51.3,280,50.1,308.5,48.2C337,46.3,365.5,43.5,394,41.6C422.5,39.7,451,38.8,479.5,36.8C508,34.8,536.5,32,565,29.6C593.5,27.2,622,24.8,650.5,22.4C679,20,707.5,17.6,736,15.2"
+                                fill="none"
+                                height="162"
+                                name="North America"
+                                stroke="var(--chart-1)"
+                                stroke-width="2"
+                                width="684"
+                              />
+                              <g
+                                class="recharts-layer"
+                              />
+                            </g>
+                            <g
+                              class="recharts-layer recharts-line"
+                            >
+                              <path
+                                class="recharts-curve recharts-line-curve"
+                                d="M52,111.8C80.5,111.05,109,110.3,137.5,109.4C166,108.5,194.5,107.3,223,106.4C251.5,105.5,280,105.1,308.5,104C337,102.9,365.5,101.1,394,99.8C422.5,98.5,451,97.6,479.5,96.2C508,94.8,536.5,93,565,91.4C593.5,89.8,622,88.1,650.5,86.6C679,85.1,707.5,83.75,736,82.4"
+                                fill="none"
+                                height="162"
+                                name="Europe"
+                                stroke="var(--chart-2)"
+                                stroke-width="2"
+                                width="684"
+                              />
+                              <g
+                                class="recharts-layer"
+                              />
+                            </g>
+                            <g
+                              class="recharts-layer recharts-line"
+                            >
+                              <path
+                                class="recharts-curve recharts-line-curve"
+                                d="M52,151.4C80.5,150.85,109,150.3,137.5,149.6C166,148.9,194.5,148,223,147.2C251.5,146.4,280,145.7,308.5,144.8C337,143.9,365.5,142.8,394,141.8C422.5,140.8,451,139.9,479.5,138.8C508,137.7,536.5,136.4,565,135.2C593.5,134,622,132.9,650.5,131.6C679,130.3,707.5,128.85,736,127.4"
+                                fill="none"
+                                height="162"
+                                name="Asia Pacific"
+                                stroke="var(--chart-3)"
+                                stroke-width="2"
+                                width="684"
+                              />
+                              <g
+                                class="recharts-layer"
+                              />
+                            </g>
+                          </svg>
+                          <div
+                            class="recharts-tooltip-wrapper"
+                            style="visibility: hidden; pointer-events: none; position: absolute; top: 0px; left: 0px"
+                            tabindex="-1"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </figure>
+                </div>
+                <div>
+                  <div
+                    class="flex gap-2 px-4 pt-1 pb-4"
+                  >
+                    <svg
+                      aria-hidden="true"
+                      class="lucide lucide-trending-up mt-0.5 size-3.5 shrink-0 text-panel-muted"
+                      fill="none"
+                      height="24"
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      viewBox="0 0 24 24"
+                      width="24"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M16 7h6v6"
+                      />
+                      <path
+                        d="m22 7-8.5 8.5-5-5L2 17"
+                      />
+                    </svg>
+                    <p
+                      class="line-clamp-2 type-body text-panel-muted"
+                    >
+                      Asia Pacific more than doubled this year, from $31k to $71k. Total MRR reached $475k in September, up 54% since January.
+                    </p>
+                  </div>
+                </div>
+              </section>
+            </div>
+          </div>
+        </div>
+      </div>
+      <p
+        aria-live="polite"
+        class="sr-only"
+      >
+        Updated: Monthly recurring revenue by region
+      </p>
+    </div>
+    <footer
+      class="flex h-9 shrink-0 items-center justify-between gap-3 border-t border-panel-border px-4 type-meta text-panel-muted"
+    >
+      <div
+        class="flex min-w-0 items-center gap-2"
+      >
+        <span
+          aria-hidden="true"
+          class="size-1.5 shrink-0 rounded-full bg-panel-muted opacity-60"
+        />
+        <span
+          class="min-w-0 truncate"
+          data-slot="swap-text"
+        >
+          <span
+            class="inline-block"
+          >
+            analytics
+          </span>
+        </span>
+      </div>
+      <div
+        class="flex shrink-0 items-center gap-3"
+      >
+        <div
+          class="flex items-center gap-2 border-l border-panel-border pl-3"
+        >
+          <span>
+            New question
+          </span>
+          <kbd
+            aria-label="⌘ ↩"
+            class="inline-flex items-center gap-0.5"
+            data-slot="kbd-group"
+          >
+            <kbd
+              class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+              data-slot="kbd"
+            >
+              ⌘
+            </kbd>
+            <kbd
+              class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+              data-slot="kbd"
+            >
+              ↩
+            </kbd>
+          </kbd>
+        </div>
+        <div
+          class="flex items-center gap-2 border-l border-panel-border pl-3"
+        >
+          <span>
+            Steps
+          </span>
+          <kbd
+            aria-label="↑ ↓"
+            class="inline-flex items-center gap-0.5"
+            data-slot="kbd-group"
+          >
+            <kbd
+              class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+              data-slot="kbd"
+            >
+              ↑
+            </kbd>
+            <kbd
+              class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+              data-slot="kbd"
+            >
+              ↓
+            </kbd>
+          </kbd>
+        </div>
+        <div
+          class="flex items-center gap-2 border-l border-panel-border pl-3"
+        >
+          <span>
+            Actions
+          </span>
+          <kbd
+            aria-label="⌘ K"
+            class="inline-flex items-center gap-0.5"
+            data-slot="kbd-group"
+          >
+            <kbd
+              class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+              data-slot="kbd"
+            >
+              ⌘
+            </kbd>
+            <kbd
+              class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+              data-slot="kbd"
+            >
+              K
+            </kbd>
+          </kbd>
+        </div>
+        <div
+          class="flex items-center gap-2 border-l border-panel-border pl-3"
+        >
+          <span>
+            Save
+          </span>
+          <kbd
+            aria-label="⌘ S"
+            class="inline-flex items-center gap-0.5"
+            data-slot="kbd-group"
+          >
+            <kbd
+              class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+              data-slot="kbd"
+            >
+              ⌘
+            </kbd>
+            <kbd
+              class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+              data-slot="kbd"
+            >
+              S
+            </kbd>
+          </kbd>
+        </div>
+      </div>
+    </footer>
+  </div>
+</div>
+`;

@@ -10,6 +10,8 @@ export type DialectType =
   | "redshift"
   | "oracle";
 
+export type BindValue = string | number | boolean | null;
+
 export interface ConnectionParams {
   type: string;
   host: string;

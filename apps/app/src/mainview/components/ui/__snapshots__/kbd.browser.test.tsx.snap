@@ -10,17 +10,17 @@ exports[`kbd > commonShortcuts 1`] = `
     >
       Save
       <kbd
-        class="inline-flex items-center gap-1"
+        class="inline-flex items-center gap-0.5"
         data-slot="kbd-group"
       >
         <kbd
-          class="pointer-events-none inline-flex h-5 w-fit min-w-5 items-center justify-center gap-1 rounded-xs bg-muted px-1 font-sans text-[0.625rem] font-medium text-muted-foreground select-none [&_svg:not([class*='size-'])]:size-3"
+          class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
           data-slot="kbd"
         >
           ⌘
         </kbd>
         <kbd
-          class="pointer-events-none inline-flex h-5 w-fit min-w-5 items-center justify-center gap-1 rounded-xs bg-muted px-1 font-sans text-[0.625rem] font-medium text-muted-foreground select-none [&_svg:not([class*='size-'])]:size-3"
+          class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
           data-slot="kbd"
         >
           S
@@ -32,17 +32,17 @@ exports[`kbd > commonShortcuts 1`] = `
     >
       Run query
       <kbd
-        class="inline-flex items-center gap-1"
+        class="inline-flex items-center gap-0.5"
         data-slot="kbd-group"
       >
         <kbd
-          class="pointer-events-none inline-flex h-5 w-fit min-w-5 items-center justify-center gap-1 rounded-xs bg-muted px-1 font-sans text-[0.625rem] font-medium text-muted-foreground select-none [&_svg:not([class*='size-'])]:size-3"
+          class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
           data-slot="kbd"
         >
           ⌘
         </kbd>
         <kbd
-          class="pointer-events-none inline-flex h-5 w-fit min-w-5 items-center justify-center gap-1 rounded-xs bg-muted px-1 font-sans text-[0.625rem] font-medium text-muted-foreground select-none [&_svg:not([class*='size-'])]:size-3"
+          class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
           data-slot="kbd"
         >
           ↵
@@ -54,17 +54,17 @@ exports[`kbd > commonShortcuts 1`] = `
     >
       Command palette
       <kbd
-        class="inline-flex items-center gap-1"
+        class="inline-flex items-center gap-0.5"
         data-slot="kbd-group"
       >
         <kbd
-          class="pointer-events-none inline-flex h-5 w-fit min-w-5 items-center justify-center gap-1 rounded-xs bg-muted px-1 font-sans text-[0.625rem] font-medium text-muted-foreground select-none [&_svg:not([class*='size-'])]:size-3"
+          class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
           data-slot="kbd"
         >
           ⌘
         </kbd>
         <kbd
-          class="pointer-events-none inline-flex h-5 w-fit min-w-5 items-center justify-center gap-1 rounded-xs bg-muted px-1 font-sans text-[0.625rem] font-medium text-muted-foreground select-none [&_svg:not([class*='size-'])]:size-3"
+          class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
           data-slot="kbd"
         >
           K
@@ -77,7 +77,7 @@ exports[`kbd > commonShortcuts 1`] = `
 
 exports[`kbd > default 1`] = `
 <kbd
-  class="pointer-events-none inline-flex h-5 w-fit min-w-5 items-center justify-center gap-1 rounded-xs bg-muted px-1 font-sans text-[0.625rem] font-medium text-muted-foreground select-none [&_svg:not([class*='size-'])]:size-3"
+  class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
   data-slot="kbd"
 >
   ⌘
@@ -87,17 +87,17 @@ exports[`kbd > default 1`] = `
 exports[`kbd > group 1`] = `
 <div>
   <kbd
-    class="inline-flex items-center gap-1"
+    class="inline-flex items-center gap-0.5"
     data-slot="kbd-group"
   >
     <kbd
-      class="pointer-events-none inline-flex h-5 w-fit min-w-5 items-center justify-center gap-1 rounded-xs bg-muted px-1 font-sans text-[0.625rem] font-medium text-muted-foreground select-none [&_svg:not([class*='size-'])]:size-3"
+      class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
       data-slot="kbd"
     >
       ⌘
     </kbd>
     <kbd
-      class="pointer-events-none inline-flex h-5 w-fit min-w-5 items-center justify-center gap-1 rounded-xs bg-muted px-1 font-sans text-[0.625rem] font-medium text-muted-foreground select-none [&_svg:not([class*='size-'])]:size-3"
+      class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
       data-slot="kbd"
     >
       K
@@ -108,7 +108,7 @@ exports[`kbd > group 1`] = `
 
 exports[`kbd > withText 1`] = `
 <kbd
-  class="pointer-events-none inline-flex h-5 w-fit min-w-5 items-center justify-center gap-1 rounded-xs bg-muted px-1 font-sans text-[0.625rem] font-medium text-muted-foreground select-none [&_svg:not([class*='size-'])]:size-3"
+  class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
   data-slot="kbd"
 >
   Enter

@@ -6,6 +6,7 @@ const VOLATILE_STYLE_PROPS = new Set([
   "transform",
   "transform-origin",
   "opacity",
+  "filter",
   "will-change",
   "--front-toast-height",
   "--initial-height",
@@ -15,7 +16,23 @@ const VOLATILE_STYLE_PROPS = new Set([
 
 const VOLATILE_SVG_TEXT_ATTRS = ["x", "y", "dx", "dy"];
 
-const VOLATILE_DATA_ATTRS = ["data-mounted"];
+const VOLATILE_DATA_ATTRS = ["data-mounted", "data-motion-pop-id"];
+
+// React useId values depend on how many components rendered before, so they
+// change with test order; snapshots keep the reference shape, not the value.
+const REACT_ID = /_r_[0-9a-z]+_/g;
+// Recharts numbers clip paths with a global counter, which also depends on order.
+const RECHARTS_CLIP = /recharts\d+-clip/g;
+const CLIP_ATTRS = ["id", "clip-path"];
+const ID_REFERENCE_ATTRS = [
+  "id",
+  "for",
+  "aria-labelledby",
+  "aria-describedby",
+  "aria-controls",
+  "aria-activedescendant",
+  "data-chart",
+];
 
 function stripVolatileStyle(value: string): string | null {
   const cleaned = value
@@ -49,6 +66,24 @@ function normalize(node: Node): Node {
     }
     for (const attr of VOLATILE_DATA_ATTRS) {
       el.removeAttribute(attr);
+    }
+    if (tag === "style" && el.textContent?.match(REACT_ID)) {
+      el.textContent = el.textContent.replaceAll(REACT_ID, "_r_id_");
+    }
+    for (const attr of CLIP_ATTRS) {
+      const value = el.getAttribute(attr);
+      if (value?.match(RECHARTS_CLIP)) {
+        el.setAttribute(
+          attr,
+          value.replaceAll(RECHARTS_CLIP, "rechartsN-clip")
+        );
+      }
+    }
+    for (const attr of ID_REFERENCE_ATTRS) {
+      const reference = el.getAttribute(attr);
+      if (reference?.match(REACT_ID)) {
+        el.setAttribute(attr, reference.replaceAll(REACT_ID, "_r_id_"));
+      }
     }
   }
   for (const child of node.childNodes) {

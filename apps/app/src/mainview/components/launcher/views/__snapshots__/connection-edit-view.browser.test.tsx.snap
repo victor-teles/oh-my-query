@@ -1,0 +1,484 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`connectionEditView > edits an existing connection 1`] = `
+<div>
+  <script
+    nonce=""
+  >
+    ((e, i, s, u, m, a, l, h) =&gt; {
+  let d = document.documentElement, w = ["light", "dark"];
+  function p(n) {
+    (Array.isArray(e) ? e : [e]).forEach((y) =&gt; {
+      let k = y === "class", S = k && a ? m.map((f) =&gt; a[f] || f) : m;
+      k ? (d.classList.remove(...S), d.classList.add(a && a[n] ? a[n] : n)) : d.setAttribute(y, n);
+    }), R(n);
+  }
+  function R(n) {
+    h && w.includes(n) && (d.style.colorScheme = n);
+  }
+  function c() {
+    return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+  }
+  if (u) p(u);
+  else try {
+    let n = localStorage.getItem(i) || s, y = l && n === "system" ? c() : n;
+    p(y);
+  } catch (n) {
+  }
+})("class","vite-ui-theme","dark",null,["light","dark"],null,true,true)
+  </script>
+  <div
+    class="flex min-h-0 flex-1 flex-col"
+  >
+    <header
+      class="flex h-14 shrink-0 items-center gap-2 px-3"
+    >
+      <button
+        aria-label="Back"
+        class="grid size-7 place-items-center rounded-[8px] text-panel-muted hover:bg-row-hover hover:text-foreground"
+        tabindex="0"
+        type="button"
+      >
+        <svg
+          aria-hidden="true"
+          class="lucide lucide-chevron-left size-4"
+          fill="none"
+          height="24"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+          width="24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="m15 18-6-6 6-6"
+          />
+        </svg>
+      </button>
+      <h1
+        class="min-w-0 flex-1 truncate type-title text-foreground"
+      >
+        Edit analytics
+      </h1>
+    </header>
+    <div
+      class="min-h-0 flex-1 overflow-y-auto border-t border-panel-border px-4 pt-3 pb-4"
+    >
+      <form
+        class="grid gap-4"
+      >
+        <div
+          class="grid gap-1.5"
+        >
+          <label
+            class="flex items-center gap-2 text-xs/relaxed leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50"
+            data-slot="label"
+            for="conn-name"
+          >
+            Connection name
+          </label>
+          <input
+            autocapitalize="off"
+            autocomplete="off"
+            autocorrect="off"
+            class="h-7 w-full min-w-0 rounded-md border border-input bg-input/20 px-2 py-0.5 text-sm transition-all duration-150 ease-out outline-none file:inline-flex file:h-6 file:border-0 file:bg-transparent file:text-xs/relaxed file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-2 aria-invalid:ring-destructive/20 md:text-xs/relaxed dark:bg-input/30 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40"
+            data-1p-ignore="true"
+            data-form-type="other"
+            data-lpignore="true"
+            data-slot="input"
+            id="conn-name"
+            placeholder="My Database"
+            required=""
+            spellcheck="false"
+            value="analytics"
+          />
+        </div>
+        <div
+          class="grid grid-cols-[1fr_1fr] gap-3"
+        >
+          <div
+            class="grid gap-1.5"
+          >
+            <label
+              class="flex items-center gap-2 text-xs/relaxed leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50"
+              data-slot="label"
+              for="conn-type"
+            >
+              Database type
+            </label>
+            <button
+              aria-expanded="false"
+              aria-haspopup="listbox"
+              class="flex items-center justify-between gap-1.5 rounded-md border border-input bg-input/20 px-2 py-1.5 text-xs/relaxed whitespace-nowrap transition-all duration-150 ease-out outline-none focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-2 aria-invalid:ring-destructive/20 data-placeholder:text-muted-foreground data-[size=default]:h-7 data-[size=sm]:h-6 *:data-[slot=select-value]:line-clamp-1 *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-1.5 dark:bg-input/30 dark:hover:bg-input/50 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-3.5 w-full"
+              data-size="default"
+              data-slot="select-trigger"
+              id="conn-type"
+              role="combobox"
+              tabindex="0"
+              type="button"
+            >
+              <span
+                class="flex flex-1 text-left"
+                data-slot="select-value"
+              >
+                postgresql
+              </span>
+              <svg
+                aria-hidden="true"
+                class="lucide lucide-chevron-down pointer-events-none size-3.5 text-muted-foreground"
+                fill="none"
+                height="24"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+                width="24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="m6 9 6 6 6-6"
+                />
+                ▼
+              </svg>
+            </button>
+            <input
+              aria-hidden="true"
+              style="clip-path: inset(50%); overflow: hidden; white-space: nowrap; border: 0px; padding: 0px; width: 1px; height: 1px; margin: -1px; position: fixed; top: 0px; left: 0px"
+              tabindex="-1"
+              value="postgresql"
+            />
+          </div>
+          <div
+            class="grid gap-1.5"
+          >
+            <label
+              class="flex items-center gap-2 text-xs/relaxed leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50"
+              data-slot="label"
+              for="conn-env"
+            >
+              Environment
+            </label>
+            <button
+              aria-expanded="false"
+              aria-haspopup="listbox"
+              class="flex items-center justify-between gap-1.5 rounded-md border border-input bg-input/20 px-2 py-1.5 text-xs/relaxed whitespace-nowrap transition-all duration-150 ease-out outline-none focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-2 aria-invalid:ring-destructive/20 data-placeholder:text-muted-foreground data-[size=default]:h-7 data-[size=sm]:h-6 *:data-[slot=select-value]:line-clamp-1 *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-1.5 dark:bg-input/30 dark:hover:bg-input/50 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-3.5 w-full"
+              data-size="default"
+              data-slot="select-trigger"
+              id="conn-env"
+              role="combobox"
+              tabindex="0"
+              type="button"
+            >
+              <span
+                class="flex flex-1 text-left"
+                data-slot="select-value"
+              >
+                none
+              </span>
+              <svg
+                aria-hidden="true"
+                class="lucide lucide-chevron-down pointer-events-none size-3.5 text-muted-foreground"
+                fill="none"
+                height="24"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+                width="24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="m6 9 6 6 6-6"
+                />
+                ▼
+              </svg>
+            </button>
+            <input
+              aria-hidden="true"
+              style="clip-path: inset(50%); overflow: hidden; white-space: nowrap; border: 0px; padding: 0px; width: 1px; height: 1px; margin: -1px; position: fixed; top: 0px; left: 0px"
+              tabindex="-1"
+              value="none"
+            />
+          </div>
+        </div>
+        <div
+          class="grid grid-cols-[1fr_100px] gap-3"
+        >
+          <div
+            class="grid gap-1.5"
+          >
+            <label
+              class="flex items-center gap-2 text-xs/relaxed leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50"
+              data-slot="label"
+              for="conn-host"
+            >
+              Host
+            </label>
+            <input
+              autocapitalize="off"
+              autocomplete="off"
+              autocorrect="off"
+              class="h-7 w-full min-w-0 rounded-md border border-input bg-input/20 px-2 py-0.5 text-sm transition-all duration-150 ease-out outline-none file:inline-flex file:h-6 file:border-0 file:bg-transparent file:text-xs/relaxed file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-2 aria-invalid:ring-destructive/20 md:text-xs/relaxed dark:bg-input/30 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40"
+              data-1p-ignore="true"
+              data-form-type="other"
+              data-lpignore="true"
+              data-slot="input"
+              id="conn-host"
+              placeholder="localhost"
+              required=""
+              spellcheck="false"
+              value="localhost"
+            />
+          </div>
+          <div
+            class="grid gap-1.5"
+          >
+            <label
+              class="flex items-center gap-2 text-xs/relaxed leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50"
+              data-slot="label"
+              for="conn-port"
+            >
+              Port
+            </label>
+            <input
+              autocapitalize="off"
+              autocomplete="off"
+              autocorrect="off"
+              class="h-7 w-full min-w-0 rounded-md border border-input bg-input/20 px-2 py-0.5 text-sm transition-all duration-150 ease-out outline-none file:inline-flex file:h-6 file:border-0 file:bg-transparent file:text-xs/relaxed file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-2 aria-invalid:ring-destructive/20 md:text-xs/relaxed dark:bg-input/30 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40"
+              data-1p-ignore="true"
+              data-form-type="other"
+              data-lpignore="true"
+              data-slot="input"
+              id="conn-port"
+              placeholder="5432"
+              required=""
+              spellcheck="false"
+              type="number"
+              value="5432"
+            />
+          </div>
+        </div>
+        <div
+          class="grid gap-1.5"
+        >
+          <label
+            class="flex items-center gap-2 text-xs/relaxed leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50"
+            data-slot="label"
+            for="conn-username"
+          >
+            Username
+          </label>
+          <input
+            autocapitalize="off"
+            autocomplete="off"
+            autocorrect="off"
+            class="h-7 w-full min-w-0 rounded-md border border-input bg-input/20 px-2 py-0.5 text-sm transition-all duration-150 ease-out outline-none file:inline-flex file:h-6 file:border-0 file:bg-transparent file:text-xs/relaxed file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-2 aria-invalid:ring-destructive/20 md:text-xs/relaxed dark:bg-input/30 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40"
+            data-1p-ignore="true"
+            data-form-type="other"
+            data-lpignore="true"
+            data-slot="input"
+            id="conn-username"
+            placeholder="postgres"
+            spellcheck="false"
+            value="postgres"
+          />
+        </div>
+        <div
+          class="grid gap-1.5"
+        >
+          <label
+            class="flex items-center gap-2 text-xs/relaxed leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50"
+            data-slot="label"
+            for="conn-password"
+          >
+            Password
+          </label>
+          <input
+            autocapitalize="off"
+            autocomplete="off"
+            autocorrect="off"
+            class="h-7 w-full min-w-0 rounded-md border border-input bg-input/20 px-2 py-0.5 text-sm transition-all duration-150 ease-out outline-none file:inline-flex file:h-6 file:border-0 file:bg-transparent file:text-xs/relaxed file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-2 aria-invalid:ring-destructive/20 md:text-xs/relaxed dark:bg-input/30 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40"
+            data-1p-ignore="true"
+            data-form-type="other"
+            data-lpignore="true"
+            data-slot="input"
+            id="conn-password"
+            placeholder="••••••••"
+            spellcheck="false"
+            type="password"
+            value=""
+          />
+        </div>
+        <div
+          class="grid gap-1.5"
+        >
+          <label
+            class="flex items-center gap-2 text-xs/relaxed leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50"
+            data-slot="label"
+            for="conn-database"
+          >
+            Database
+          </label>
+          <input
+            autocapitalize="off"
+            autocomplete="off"
+            autocorrect="off"
+            class="h-7 w-full min-w-0 rounded-md border border-input bg-input/20 px-2 py-0.5 text-sm transition-all duration-150 ease-out outline-none file:inline-flex file:h-6 file:border-0 file:bg-transparent file:text-xs/relaxed file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-2 aria-invalid:ring-destructive/20 md:text-xs/relaxed dark:bg-input/30 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40"
+            data-1p-ignore="true"
+            data-form-type="other"
+            data-lpignore="true"
+            data-slot="input"
+            id="conn-database"
+            placeholder="my_database"
+            required=""
+            spellcheck="false"
+            type="text"
+            value="analytics"
+          />
+        </div>
+        <div
+          data-closed=""
+          data-slot="collapsible"
+        >
+          <button
+            aria-disabled="false"
+            aria-expanded="false"
+            class="
+            text-section-label flex w-full items-center gap-1.5
+            hover:text-foreground
+          "
+            data-slot="collapsible-trigger"
+            tabindex="0"
+            type="button"
+          >
+            <svg
+              aria-hidden="true"
+              class="lucide lucide-chevron-down size-3 transition-transform"
+              fill="none"
+              height="24"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+              width="24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="m6 9 6 6 6-6"
+              />
+            </svg>
+            Appearance
+          </button>
+        </div>
+        <div
+          data-closed=""
+          data-slot="collapsible"
+        >
+          <button
+            aria-disabled="false"
+            aria-expanded="false"
+            class="
+              text-section-label flex w-full items-center gap-1.5
+              hover:text-foreground
+            "
+            data-slot="collapsible-trigger"
+            tabindex="0"
+            type="button"
+          >
+            <svg
+              aria-hidden="true"
+              class="lucide lucide-chevron-down size-3 transition-transform"
+              fill="none"
+              height="24"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+              width="24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="m6 9 6 6 6-6"
+              />
+            </svg>
+            AI context
+          </button>
+        </div>
+        <div
+          class="flex items-center gap-2"
+        >
+          <button
+            class="group/button inline-flex shrink-0 items-center justify-center rounded-md border bg-clip-padding font-medium whitespace-nowrap transition-all duration-150 ease-out outline-none select-none focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-2 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 h-7 gap-1 px-2 text-xs/relaxed has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 [&_svg:not([class*='size-'])]:size-3.5 border-border hover:bg-input/50 hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:bg-input/30"
+            data-slot="button"
+            tabindex="0"
+            type="button"
+          >
+            Test connection
+          </button>
+        </div>
+        <button
+          class="group/button inline-flex shrink-0 items-center justify-center rounded-md border border-transparent bg-clip-padding font-medium whitespace-nowrap transition-all duration-150 ease-out outline-none select-none focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-2 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 h-7 gap-1 px-2 text-xs/relaxed has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 [&_svg:not([class*='size-'])]:size-3.5 bg-primary text-primary-foreground hover:bg-primary/80"
+          data-slot="button"
+          tabindex="0"
+          type="submit"
+        >
+          Update connection
+        </button>
+      </form>
+    </div>
+    <footer
+      class="flex h-9 shrink-0 items-center justify-between gap-3 border-t border-panel-border px-4 type-meta text-panel-muted"
+    >
+      <div
+        class="flex min-w-0 items-center gap-2"
+      >
+        <span>
+          esc to go back
+        </span>
+      </div>
+      <div
+        class="flex shrink-0 items-center gap-3"
+      >
+        <div
+          class="flex items-center gap-2"
+        >
+          <span
+            class="text-foreground"
+            data-slot="swap-text"
+          >
+            <span
+              class="inline-block"
+            >
+              Save
+            </span>
+          </span>
+          <kbd
+            aria-label="⌘ ↩"
+            class="inline-flex items-center gap-0.5"
+            data-slot="kbd-group"
+          >
+            <kbd
+              class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+              data-slot="kbd"
+            >
+              ⌘
+            </kbd>
+            <kbd
+              class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+              data-slot="kbd"
+            >
+              ↩
+            </kbd>
+          </kbd>
+        </div>
+      </div>
+    </footer>
+  </div>
+</div>
+`;

@@ -12,7 +12,8 @@
     "test:watch": "vitest"
   },
   "dependencies": {
-    "@oh-my-query/core": "workspace:*"
+    "@oh-my-query/core": "workspace:*",
+    "zod": "catalog:"
   },
   "devDependencies": {
     "@oh-my-query/config": "workspace:*",

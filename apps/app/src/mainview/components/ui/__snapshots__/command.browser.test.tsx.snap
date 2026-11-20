@@ -10,8 +10,8 @@ exports[`command > default 1`] = `
   >
     <label
       cmdk-label=""
-      for="radix-_r_2_"
-      id="radix-_r_1_"
+      for="radix-_r_id_"
+      id="radix-_r_id_"
       style="position: absolute; width: 1px; height: 1px; padding: 0px; margin: -1px; overflow: hidden; clip: rect(0px, 0px, 0px, 0px); white-space: nowrap; border-width: 0px"
     />
     <div
@@ -25,15 +25,15 @@ exports[`command > default 1`] = `
       >
         <input
           aria-autocomplete="list"
-          aria-controls="radix-_r_0_"
+          aria-controls="radix-_r_id_"
           aria-expanded="true"
-          aria-labelledby="radix-_r_1_"
+          aria-labelledby="radix-_r_id_"
           autocomplete="off"
           autocorrect="off"
           class="w-full text-xs/relaxed outline-none disabled:cursor-not-allowed disabled:opacity-50"
           cmdk-input=""
           data-slot="input-group-control"
-          id="radix-_r_2_"
+          id="radix-_r_id_"
           placeholder="Type a command or search..."
           role="combobox"
           spellcheck="false"
@@ -75,7 +75,7 @@ exports[`command > default 1`] = `
       class="no-scrollbar max-h-72 scroll-py-1 overflow-x-hidden overflow-y-auto outline-none"
       cmdk-list=""
       data-slot="command-list"
-      id="radix-_r_0_"
+      id="radix-_r_id_"
       role="listbox"
       tabindex="-1"
     >
@@ -93,12 +93,12 @@ exports[`command > default 1`] = `
           <div
             aria-hidden="true"
             cmdk-group-heading=""
-            id="radix-_r_4_"
+            id="radix-_r_id_"
           >
             Actions
           </div>
           <div
-            aria-labelledby="radix-_r_4_"
+            aria-labelledby="radix-_r_id_"
             cmdk-group-items=""
             role="group"
           />
@@ -113,12 +113,12 @@ exports[`command > default 1`] = `
           <div
             aria-hidden="true"
             cmdk-group-heading=""
-            id="radix-_r_8_"
+            id="radix-_r_id_"
           >
             Navigation
           </div>
           <div
-            aria-labelledby="radix-_r_8_"
+            aria-labelledby="radix-_r_id_"
             cmdk-group-items=""
             role="group"
           >
@@ -131,7 +131,7 @@ exports[`command > default 1`] = `
               data-selected="true"
               data-slot="command-item"
               data-value="Settings⌘,"
-              id="radix-_r_a_"
+              id="radix-_r_id_"
               role="option"
             >
               <svg
@@ -202,8 +202,8 @@ exports[`command > empty 1`] = `
   >
     <label
       cmdk-label=""
-      for="radix-_r_d_"
-      id="radix-_r_c_"
+      for="radix-_r_id_"
+      id="radix-_r_id_"
       style="position: absolute; width: 1px; height: 1px; padding: 0px; margin: -1px; overflow: hidden; clip: rect(0px, 0px, 0px, 0px); white-space: nowrap; border-width: 0px"
     />
     <div
@@ -217,15 +217,15 @@ exports[`command > empty 1`] = `
       >
         <input
           aria-autocomplete="list"
-          aria-controls="radix-_r_b_"
+          aria-controls="radix-_r_id_"
           aria-expanded="true"
-          aria-labelledby="radix-_r_c_"
+          aria-labelledby="radix-_r_id_"
           autocomplete="off"
           autocorrect="off"
           class="w-full text-xs/relaxed outline-none disabled:cursor-not-allowed disabled:opacity-50"
           cmdk-input=""
           data-slot="input-group-control"
-          id="radix-_r_d_"
+          id="radix-_r_id_"
           placeholder="Search..."
           role="combobox"
           spellcheck="false"
@@ -267,7 +267,7 @@ exports[`command > empty 1`] = `
       class="no-scrollbar max-h-72 scroll-py-1 overflow-x-hidden overflow-y-auto outline-none"
       cmdk-list=""
       data-slot="command-list"
-      id="radix-_r_b_"
+      id="radix-_r_id_"
       role="listbox"
       tabindex="-1"
     >

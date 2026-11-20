@@ -65,3 +65,8 @@ dev-dist
 *storybook.log
 storybook-static
 
+
+# Electrobun 2 devkit (projected by Hutch)
+/.hutch/
+/artifacts/
+/.cottontail-tmp/

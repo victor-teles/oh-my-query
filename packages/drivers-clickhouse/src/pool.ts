@@ -1,8 +1,10 @@
 import type { ClickHouseClient } from "@clickhouse/client";
 import type {
+  BindValue,
   ColumnDetail,
   ColumnInfo,
   DialectType,
+  ExecuteOptions,
   ExecuteResult,
   ExplainResult,
   ForeignKeyItem,
@@ -14,6 +16,16 @@ import type {
 import { DbError, validateSchemaName } from "@oh-my-query/core";
 
 const VIEW_ENGINES = new Set(["View", "MaterializedView", "LiveView"]);
+
+function queryParams(params: BindValue[] = []): {
+  query_params?: Record<string, BindValue>;
+} {
+  if (params.length === 0) {
+    return {};
+  }
+  const entries = params.map((value, index) => [`p${index + 1}`, value]);
+  return { query_params: Object.fromEntries(entries) };
+}
 
 interface TableRow {
   name: string;
@@ -142,7 +154,8 @@ export class ClickhousePool implements Pool {
     sql: string,
     maxRows: number,
     schema: string | null,
-    signal: AbortSignal
+    signal: AbortSignal,
+    options: ExecuteOptions = {}
   ): Promise<ExecuteResult> {
     if (signal.aborted) {
       throw DbError.cancelled();
@@ -153,6 +166,8 @@ export class ClickhousePool implements Pool {
         abort_signal: signal,
         format: "JSONCompact",
         query: sql,
+        ...(options.readOnly ? { clickhouse_settings: { readonly: "1" } } : {}),
+        ...queryParams(options.params),
       });
       const json = (await rs.json()) as JsonCompactResult;
       const allRows = json.data ?? [];

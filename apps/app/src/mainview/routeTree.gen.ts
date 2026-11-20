@@ -9,115 +9,68 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as DefaultRouteImport } from './routes/_default'
-import { Route as DefaultIndexRouteImport } from './routes/_default/index'
-import { Route as WorkspaceConnectionIdRouteImport } from './routes/workspace/$connectionId'
-import { Route as DefaultSettingsRouteImport } from './routes/_default/settings'
+import { Route as IndexRouteImport } from './routes/index'
+import { Route as BoardBoardIdRouteImport } from './routes/board.$boardId'
 
-const DefaultRoute = DefaultRouteImport.update({
-  id: '/_default',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const DefaultIndexRoute = DefaultIndexRouteImport.update({
+const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => DefaultRoute,
-} as any)
-const WorkspaceConnectionIdRoute = WorkspaceConnectionIdRouteImport.update({
-  id: '/workspace/$connectionId',
-  path: '/workspace/$connectionId',
   getParentRoute: () => rootRouteImport,
 } as any)
-const DefaultSettingsRoute = DefaultSettingsRouteImport.update({
-  id: '/settings',
-  path: '/settings',
-  getParentRoute: () => DefaultRoute,
+const BoardBoardIdRoute = BoardBoardIdRouteImport.update({
+  id: '/board/$boardId',
+  path: '/board/$boardId',
+  getParentRoute: () => rootRouteImport,
 } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof DefaultIndexRoute
-  '/settings': typeof DefaultSettingsRoute
-  '/workspace/$connectionId': typeof WorkspaceConnectionIdRoute
+  '/': typeof IndexRoute
+  '/board/$boardId': typeof BoardBoardIdRoute
 }
 export interface FileRoutesByTo {
-  '/settings': typeof DefaultSettingsRoute
-  '/workspace/$connectionId': typeof WorkspaceConnectionIdRoute
-  '/': typeof DefaultIndexRoute
+  '/': typeof IndexRoute
+  '/board/$boardId': typeof BoardBoardIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/_default': typeof DefaultRouteWithChildren
-  '/_default/settings': typeof DefaultSettingsRoute
-  '/workspace/$connectionId': typeof WorkspaceConnectionIdRoute
-  '/_default/': typeof DefaultIndexRoute
+  '/': typeof IndexRoute
+  '/board/$boardId': typeof BoardBoardIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/settings' | '/workspace/$connectionId'
+  fullPaths: '/' | '/board/$boardId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/settings' | '/workspace/$connectionId' | '/'
-  id:
-    | '__root__'
-    | '/_default'
-    | '/_default/settings'
-    | '/workspace/$connectionId'
-    | '/_default/'
+  to: '/' | '/board/$boardId'
+  id: '__root__' | '/' | '/board/$boardId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  DefaultRoute: typeof DefaultRouteWithChildren
-  WorkspaceConnectionIdRoute: typeof WorkspaceConnectionIdRoute
+  IndexRoute: typeof IndexRoute
+  BoardBoardIdRoute: typeof BoardBoardIdRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/_default': {
-      id: '/_default'
-      path: ''
-      fullPath: '/'
-      preLoaderRoute: typeof DefaultRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/_default/': {
-      id: '/_default/'
+    '/': {
+      id: '/'
       path: '/'
       fullPath: '/'
-      preLoaderRoute: typeof DefaultIndexRouteImport
-      parentRoute: typeof DefaultRoute
-    }
-    '/workspace/$connectionId': {
-      id: '/workspace/$connectionId'
-      path: '/workspace/$connectionId'
-      fullPath: '/workspace/$connectionId'
-      preLoaderRoute: typeof WorkspaceConnectionIdRouteImport
+      preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_default/settings': {
-      id: '/_default/settings'
-      path: '/settings'
-      fullPath: '/settings'
-      preLoaderRoute: typeof DefaultSettingsRouteImport
-      parentRoute: typeof DefaultRoute
+    '/board/$boardId': {
+      id: '/board/$boardId'
+      path: '/board/$boardId'
+      fullPath: '/board/$boardId'
+      preLoaderRoute: typeof BoardBoardIdRouteImport
+      parentRoute: typeof rootRouteImport
     }
   }
 }
 
-interface DefaultRouteChildren {
-  DefaultSettingsRoute: typeof DefaultSettingsRoute
-  DefaultIndexRoute: typeof DefaultIndexRoute
-}
-
-const DefaultRouteChildren: DefaultRouteChildren = {
-  DefaultSettingsRoute: DefaultSettingsRoute,
-  DefaultIndexRoute: DefaultIndexRoute,
-}
-
-const DefaultRouteWithChildren =
-  DefaultRoute._addFileChildren(DefaultRouteChildren)
-
 const rootRouteChildren: RootRouteChildren = {
-  DefaultRoute: DefaultRouteWithChildren,
-  WorkspaceConnectionIdRoute: WorkspaceConnectionIdRoute,
+  IndexRoute: IndexRoute,
+  BoardBoardIdRoute: BoardBoardIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

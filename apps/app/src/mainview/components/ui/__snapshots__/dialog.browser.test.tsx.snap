@@ -2,13 +2,13 @@
 
 exports[`dialog > default 1`] = `
 <div
-  aria-describedby="base-ui-_r_5_"
-  aria-labelledby="base-ui-_r_4_"
+  aria-describedby="base-ui-_r_id_"
+  aria-labelledby="base-ui-_r_id_"
   class="fixed top-1/2 left-1/2 z-50 grid w-full max-w-[calc(100%-2rem)] -translate-1/2 gap-4 rounded-xl bg-background p-4 text-xs/relaxed ring-1 ring-foreground/10 transition-all duration-100 ease-out outline-none focus-visible:ring-2 focus-visible:ring-ring/50 sm:max-w-sm data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95"
   data-base-ui-focusable=""
   data-open=""
   data-slot="dialog-content"
-  id="_r_0_"
+  id="_r_id_"
   role="dialog"
   style="--nested-dialogs: 0"
   tabindex="-1"
@@ -20,14 +20,14 @@ exports[`dialog > default 1`] = `
     <h2
       class="text-sm font-medium"
       data-slot="dialog-title"
-      id="base-ui-_r_4_"
+      id="base-ui-_r_id_"
     >
       New Connection
     </h2>
     <p
       class="text-xs/relaxed text-muted-foreground *:[a]:underline *:[a]:underline-offset-3 *:[a]:hover:text-foreground"
       data-slot="dialog-description"
-      id="base-ui-_r_5_"
+      id="base-ui-_r_id_"
     >
       Add a new database connection to your workspace.
     </p>
@@ -134,13 +134,13 @@ exports[`dialog > default 1`] = `
 
 exports[`dialog > withFooterClose 1`] = `
 <div
-  aria-describedby="base-ui-_r_d_"
-  aria-labelledby="base-ui-_r_c_"
+  aria-describedby="base-ui-_r_id_"
+  aria-labelledby="base-ui-_r_id_"
   class="fixed top-1/2 left-1/2 z-50 grid w-full max-w-[calc(100%-2rem)] -translate-1/2 gap-4 rounded-xl bg-background p-4 text-xs/relaxed ring-1 ring-foreground/10 transition-all duration-100 ease-out outline-none focus-visible:ring-2 focus-visible:ring-ring/50 sm:max-w-sm data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95"
   data-base-ui-focusable=""
   data-open=""
   data-slot="dialog-content"
-  id="_r_8_"
+  id="_r_id_"
   role="dialog"
   style="--nested-dialogs: 0"
   tabindex="-1"
@@ -152,14 +152,14 @@ exports[`dialog > withFooterClose 1`] = `
     <h2
       class="text-sm font-medium"
       data-slot="dialog-title"
-      id="base-ui-_r_c_"
+      id="base-ui-_r_id_"
     >
       Are you sure?
     </h2>
     <p
       class="text-xs/relaxed text-muted-foreground *:[a]:underline *:[a]:underline-offset-3 *:[a]:hover:text-foreground"
       data-slot="dialog-description"
-      id="base-ui-_r_d_"
+      id="base-ui-_r_id_"
     >
       This action cannot be undone. This will permanently delete the connection and all associated query history.
     </p>
@@ -222,13 +222,13 @@ exports[`dialog > withFooterClose 1`] = `
 
 exports[`dialog > withoutCloseButton 1`] = `
 <div
-  aria-describedby="base-ui-_r_j_"
-  aria-labelledby="base-ui-_r_i_"
+  aria-describedby="base-ui-_r_id_"
+  aria-labelledby="base-ui-_r_id_"
   class="fixed top-1/2 left-1/2 z-50 grid w-full max-w-[calc(100%-2rem)] -translate-1/2 gap-4 rounded-xl bg-background p-4 text-xs/relaxed ring-1 ring-foreground/10 transition-all duration-100 ease-out outline-none focus-visible:ring-2 focus-visible:ring-ring/50 sm:max-w-sm data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95"
   data-base-ui-focusable=""
   data-open=""
   data-slot="dialog-content"
-  id="_r_e_"
+  id="_r_id_"
   role="dialog"
   style="--nested-dialogs: 0"
   tabindex="0"
@@ -240,14 +240,14 @@ exports[`dialog > withoutCloseButton 1`] = `
     <h2
       class="text-sm font-medium"
       data-slot="dialog-title"
-      id="base-ui-_r_i_"
+      id="base-ui-_r_id_"
     >
       Notice
     </h2>
     <p
       class="text-xs/relaxed text-muted-foreground *:[a]:underline *:[a]:underline-offset-3 *:[a]:hover:text-foreground"
       data-slot="dialog-description"
-      id="base-ui-_r_j_"
+      id="base-ui-_r_id_"
     >
       Click outside to dismiss this dialog.
     </p>
