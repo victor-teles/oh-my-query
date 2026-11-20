@@ -1,10 +1,14 @@
 <div align="center">
 
-<img src=".github/banner.webp" alt="oh-my-query" width="100%" />
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset=".github/logo-dark.png" />
+  <source media="(prefers-color-scheme: light)" srcset=".github/logo-light.png" />
+  <img src=".github/logo-light.png" alt="Conch" width="360" />
+</picture>
 
-# oh-my-query
+<br />
 
-A modern database client for querying with AI.
+Ask your database a question without leaving what you're doing.
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg?style=flat)](LICENSE)
 [![macOS](https://img.shields.io/badge/platform-macOS-000000.svg?style=flat&logo=apple&logoColor=white)](https://github.com)
@@ -21,7 +25,9 @@ A modern database client for querying with AI.
 
 <br />
 
-oh-my-query is a database launcher for macOS. Press a hotkey, ask a question in plain words, and get a chart or a table from your own database. It works with eight database engines and is built for the keyboard.
+Conch is a database launcher for macOS. Press a hotkey, ask a question in plain words, and get a chart or a table from your own database. It works with eight database engines and is built for the keyboard.
+
+A conch is the shell you blow to call people together, and whoever holds it gets to speak. Conch works the same way: one hotkey calls the panel, and then you ask.
 
 <br />
 
@@ -152,7 +158,7 @@ See [`TESTING.md`](TESTING.md) for the full story — coverage gates and fixture
 ## Project Structure
 
 ```
-oh-my-query/
+conch/
 ├── apps/
 │   └── app/                       # Electrobun desktop app
 │       ├── src/
