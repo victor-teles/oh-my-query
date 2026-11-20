@@ -22,7 +22,7 @@
   },
   "devDependencies": {
     "@oh-my-query/config": "workspace:*",
-    "@types/bun": "latest",
+    "@types/bun": "catalog:",
     "@typescript/native-preview": "catalog:",
     "vitest": "catalog:"
   }
