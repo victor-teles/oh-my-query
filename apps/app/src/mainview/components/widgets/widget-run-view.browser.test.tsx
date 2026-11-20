@@ -158,12 +158,16 @@ describe("widgetRunView states", () => {
   });
 
   it("matches the snapshot for a populated run", async () => {
+    reduced.value = true;
     // A pointer left over the chart by an earlier file would open its tooltip.
     await page
       .elementLocator(document.body)
       .hover({ position: { x: 0, y: 0 } });
     const { screen } = await setup();
     await expect.element(screen.getByText("3 rows · 386 ms")).toBeVisible();
+    await expect
+      .poll(() => screen.element().querySelector(".recharts-surface"))
+      .not.toBeNull();
     await expect
       .poll(() =>
         screen.element().querySelector('[data-slot="swap-text"] > span + span')
